@@ -1,0 +1,30 @@
+@import models.nonresident.AcquisitionCostsModel
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import views.html.helpers._
+
+@(acquisitionCostsForm: Form[AcquisitionCostsModel], backLink: String)(implicit request: Request[_])
+
+@main_template(Messages("calc.acquisitionCosts.question")) {
+
+    <a id="back-link" class="back-link" href="@backLink">@Messages("calc.base.back")</a>
+
+    @errorSummary(acquisitionCostsForm, "acquisition-costs")
+
+    <h1 class="heading-xlarge">@Messages("calc.acquisitionCosts.question")</h1>
+
+    <p id="bulletTitle">@Messages("calc.acquisitionCosts.bulletTitle")</p>
+    <ul class="list list-bullet" id="helpList">
+        <li>@Messages("calc.acquisitionCosts.bulletOne")</li>
+        <li>@Messages("calc.acquisitionCosts.bulletTwo")</li>
+        <li>@Messages("calc.acquisitionCosts.bulletThree")</li>
+    </ul>
+
+    @form(action = controllers.nonresident.routes.AcquisitionCostsController.submitAcquisitionCosts) {
+
+        @formInputMoney(acquisitionCostsForm, "acquisitionCosts",Messages("calc.acquisitionCosts.question"), hideLabel=true)
+
+        <button class="button" type="submit" id="continue-button">@Messages("calc.base.continue")</button>
+
+    }
+
+}

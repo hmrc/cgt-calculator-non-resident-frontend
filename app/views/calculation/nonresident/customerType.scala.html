@@ -1,0 +1,34 @@
+@import models.nonresident.CustomerTypeModel
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import views.html.helpers._
+
+@(customerTypeForm: Form[CustomerTypeModel], backUrl: String)(implicit request: Request[_])
+
+@import common.nonresident.CustomerTypeKeys
+
+@main_template(title = Messages("calc.customerType.question")) {
+
+    <a id="back-link" class="back-link" href="@backUrl">@Messages("calc.base.back")</a>
+
+  @errorSummary(customerTypeForm, "customer-type")
+
+  <h1 class="heading-xlarge">@Messages("calc.customerType.question")</h1>
+
+  @form(action = controllers.nonresident.routes.CustomerTypeController.submitCustomerType) {
+
+    <div class="form-group">
+        @formInputRadioGroup(
+            field = customerTypeForm("customerType"),
+            Seq(
+                CustomerTypeKeys.individual ->Messages("calc.customerType.individual"),
+                CustomerTypeKeys.trustee ->Messages("calc.customerType.trustee"),
+                CustomerTypeKeys.personalRep ->Messages("calc.customerType.personalRep")),
+            '_legend -> Messages("calc.customerType.question"),
+            '_labelClass -> "block-label",
+            '_legendClass -> "visuallyhidden"
+        )
+    </div>
+
+    <button class="button" type="submit" id="continue-button">@Messages("calc.base.continue")</button>
+  }
+}

@@ -1,0 +1,64 @@
+@import models.nonresident.BroughtForwardLossesModel
+@import uk.gov.hmrc.play.views.html.helpers.{form, input}
+@import views.html.helpers._
+
+@(broughtForwardLossesForm: Form[BroughtForwardLossesModel], backLink: String)(implicit request: Request[_])
+
+@hiddenContent = {
+    <div class="form-group">
+        @formInputMoneyHTML(
+            broughtForwardLossesForm,
+            "broughtForwardLoss",
+            Messages("calc.broughtForwardLosses.inputQuestion"),
+            hideLabel = true
+        )
+    </div>
+}
+
+@sidebar = {
+    <ul>
+        <li>
+            <a id="helpLink1" class="external-link" rel="external" href="https://www.gov.uk/capital-gains-tax" target="_blank">
+                @Messages("calc.broughtForwardLosses.linkOne")
+                <span>@Messages("calc.base.externalLink")</span>
+            </a>
+        </li>
+        <li>
+            <a id="helpLink2" class="external-link" rel="external" href="https://www.gov.uk/income-tax-rates/previous-tax-years"
+               target="_blank">
+                @Messages("calc.broughtForwardLosses.linkTwo")
+                <span>@Messages("calc.base.externalLink")</span>
+            </a>
+        </li>
+    </ul>
+}
+
+@main_template(Messages("calc.broughtForwardLosses.question"), sidebarLinks = Some(sidebar)) {
+
+    <a id="back-link" class="back-link" href="@backLink">@Messages("calc.base.back")</a>
+
+    @errorSummary(broughtForwardLossesForm, "broughtForwardLoss")
+
+    <h1 class="heading-xlarge">@Messages("calc.broughtForwardLosses.question")</h1>
+
+    @form(action = controllers.nonresident.routes.BroughtForwardLossesController.submitBroughtForwardLosses) {
+
+        <div class="form-hint">
+            <div>@Messages("calc.broughtForwardLosses.helpTitle")</div>
+
+            <ul class="list list-bullet">
+                <li>@Messages("calc.broughtForwardLosses.helpListOne")</li>
+                <li>@Messages("calc.broughtForwardLosses.helpListTwo")</li>
+                <li>@Messages("calc.broughtForwardLosses.helpListThree")</li>
+            </ul>
+        </div>
+
+        @formHiddenYesNoRadio(broughtForwardLossesForm,
+                                "isClaiming",
+                                Messages("calc.broughtForwardLosses.question"),
+                                hiddenContent,
+                                hideLegend = true)
+
+        <button class="button" type="submit" id="continue-button">@Messages("calc.base.continue")</button>
+    }
+}

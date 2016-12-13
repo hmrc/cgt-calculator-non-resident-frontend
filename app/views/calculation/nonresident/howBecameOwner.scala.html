@@ -1,0 +1,37 @@
+@import models.nonresident.HowBecameOwnerModel
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import views.html.helpers._
+
+@(howBecameOwnerForm: Form[HowBecameOwnerModel])(implicit request: Request[_])
+
+@main_template(title = Messages("calc.howBecameOwner.question")) {
+
+    <a id="back-link" class="back-link" href="@controllers.nonresident.routes.AcquisitionDateController.acquisitionDate.url">@Messages("calc.base.back")</a>
+
+    @errorSummary(howBecameOwnerForm, "gainedBy")
+
+    <h1 class="heading-xlarge">@Messages("calc.howBecameOwner.question")</h1>
+
+    @form(action = controllers.nonresident.routes.HowBecameOwnerController.submitHowBecameOwner) {
+
+        <div class="form-group">
+            @formInputRadioGroup(
+                field = howBecameOwnerForm("gainedBy"),
+                Seq(
+                    "Bought" -> Messages("calc.howBecameOwner.bought"),
+                    "Inherited" -> Messages("calc.howBecameOwner.inherited"),
+                    "Gifted" -> Messages("calc.howBecameOwner.gifted")
+                ),
+                '_legend -> Messages("calc.howBecameOwner.question"),
+                '_legendID -> "gainedBy",
+                '_legendClass -> "visuallyhidden",
+                '_labelAfter -> true,
+                '_labelClass -> "block-label",
+                '_groupClass -> "form-group radio-list",
+                '_fieldsetAttributes -> "aria-details = help"
+            )
+        </div>
+
+        <button class="button" type="submit" id="continue-button">@Messages("calc.base.continue")</button>
+    }
+}

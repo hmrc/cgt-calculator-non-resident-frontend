@@ -1,0 +1,21 @@
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import models.nonresident.HowMuchLossModel
+@import views.html.helpers._
+
+@(howMuchLossForm: Form[HowMuchLossModel])(implicit request: Request[_])
+
+@main_template(Messages("calc.howMuchLoss.question")) {
+
+    <a id="back-link" class="back-link" href="@controllers.nonresident.routes.PreviousGainOrLossController.previousGainOrLoss">Back</a>
+
+    @errorSummary(howMuchLossForm, "loss")
+
+    <h1 class="heading-xlarge">@Messages("calc.howMuchLoss.question")</h1>
+
+    @form(action = controllers.nonresident.routes.HowMuchLossController.submitHowMuchLoss) {
+
+        @formInputMoney(howMuchLossForm, "loss", Messages("calc.howMuchLoss.question"), hideLabel = true)
+
+        <button class="button" type="submit" id="continue-button">@Messages("calc.base.continue")</button>
+    }
+}

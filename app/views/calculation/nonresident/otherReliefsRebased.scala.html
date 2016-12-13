@@ -1,0 +1,53 @@
+@import models.nonresident._
+@import constructors.nonresident.SummaryConstructor
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import uk.gov.hmrc.play.views.helpers.MoneyPounds
+@import views.html.helpers._
+
+@(otherReliefsForm: Form[OtherReliefsModel], hasExistingReliefAmount: Boolean, chargeableGain: BigDecimal, gain: BigDecimal)(implicit request: Request[_])
+
+@main_template(Messages("calc.otherReliefs.question")) {
+
+    <a id="back-link" class="back-link" href="@controllers.nonresident.routes.CalculationElectionController.calculationElection">@Messages("calc.base.back")</a>
+
+    @errorSummary(otherReliefsForm, "other-reliefs-rebased")
+
+    <h1 class="heading-xlarge">@Messages("calc.otherReliefs.question")</h1>
+
+    @form(action = controllers.nonresident.routes.OtherReliefsRebasedController.submitOtherReliefsRebased) {
+
+        <label for="otherReliefs" class="visuallyhidden">@Messages("calc.otherReliefs.question")</label>
+
+        <span class="form-hint">@Messages("calc.otherReliefs.help")</span>
+
+        <div class="panel-indent gain-padding">
+            <ul class="list">
+                <li id="totalGain">
+                    @if(gain < 0) {
+                        @Messages("calc.otherReliefs.totalLoss")
+                    } else {
+                        @Messages("calc.otherReliefs.totalGain")
+                    }
+                    <b>&pound;@{MoneyPounds(gain, 0).quantity}</b>
+                </li>
+
+                <li id="taxableGain">
+                    @if(chargeableGain >= 0) {
+                        @Messages("calc.otherReliefs.taxableGain")
+                    } else {
+                        @Messages("calc.summary.calculation.details.lossCarriedForward")
+                    }
+                    <b>&pound;@{MoneyPounds(chargeableGain, 0).quantity}</b>
+                </li>
+            </ul>
+        </div>
+
+        @formInputMoney(otherReliefsForm, "otherReliefs", "")
+
+        @if(hasExistingReliefAmount) {
+            <button id="add-relief-button" class="button">@Messages("calc.otherReliefs.button.updateRelief")</button>
+        } else {
+            <button id="add-relief-button" class="button">@Messages("calc.otherReliefs.button.addRelief")</button>
+        }
+    }
+}

@@ -1,0 +1,13 @@
+@import models.nonresident.QuestionAnswerModel
+@import uk.gov.hmrc.play.views.helpers._
+
+@(amount: BigDecimal, decimalPlaces: Int)
+
+<div class="grid-layout grid-layout--stacked form-group non-resident-summary-padding-above">
+    <div id="amount-you-owe-question" class="grid-layout__column grid-layout__column--1-2">
+        <span class="heading-large">@Messages("calc.summary.amount.you.owe")</span>
+    </div>
+    <div id="amount-you-owe-value" class="grid-layout__column grid-layout__column--1-2">
+        <span class="heading-large">£@MoneyPounds(amount, decimalPlaces).quantity</span>
+    </div>
+</div>

@@ -1,0 +1,35 @@
+@import views.html.helpers._
+@import common.Dates
+@import models.nonresident._
+
+@(data: DisposalDateModel)(implicit request: Request[_])
+
+@date = {
+    @Dates.datePageFormatNoZero.format(Dates.constructDate(data.day, data.month, data.year))
+}
+
+@sidebar = {
+    <ul>
+        <li>
+            <a href="https://www.gov.uk/guidance/capital-gains-tax-for-non-residents-uk-residential-property" target="_blank"
+               rel="external">@Messages("nocgt.sidebar.linkone")
+                <span>@Messages("calc.base.externalLink")</span>
+            </a>
+        </li>
+    </ul>
+}
+
+@main_template(Messages("nocgt.invaliddate.title"), sidebarLinks = Some(sidebar)) {
+
+    <a id="back-link" class="back-link" href="@controllers.nonresident.routes.DisposalDateController.disposalDate">Back</a>
+
+    <h1 class="heading-xlarge">@Messages("nocgt.invaliddate.title")</h1>
+    <p>@Messages("nocgt.content.one")</p>
+    <p>
+        @Messages("nocgt.content.two")
+        <span class="no-wrap">
+            <span class="bold-small">@date</span>
+            <a id="change-link" href="@controllers.nonresident.routes.DisposalDateController.disposalDate">@Messages("nocgt.content.change")</a>
+        </span>
+    </p>
+}

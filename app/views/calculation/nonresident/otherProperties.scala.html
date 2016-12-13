@@ -1,0 +1,51 @@
+@import models.nonresident.OtherPropertiesModel
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import views.html.helpers._
+
+@(otherPropertiesForm: Form[OtherPropertiesModel], backUrl: String)(implicit request: Request[_])
+
+@sidebar = {
+    <ul>
+        <li>
+            <a id="helpLink1" class="external-link" rel="external" href="https://www.gov.uk/capital-gains-tax" target="_blank">
+                @Messages("calc.otherProperties.link.one")
+                <span>@Messages("calc.base.externalLink")</span>
+            </a>
+        </li>
+        <li>
+            <a id="helpLink2" class="external-link" rel="external" href="https://www.gov.uk/income-tax-rates/previous-tax-years" target="_blank">
+                @Messages("calc.otherProperties.link.two")
+                <span>@Messages("calc.base.externalLink")</span>
+            </a>
+        </li>
+    </ul>
+}
+
+@main_template(Messages("calc.otherProperties.question"), sidebarLinks = Some(sidebar)) {
+
+    <a id="back-link" class="back-link" href="@backUrl">@Messages("calc.base.back")</a>
+
+    @errorSummary(otherPropertiesForm, "other-properties", "otherPropertiesAmt")
+
+    <h1 class="heading-xlarge">@Messages("calc.otherProperties.question")</h1>
+
+    @form(action = controllers.nonresident.routes.OtherPropertiesController.submitOtherProperties) {
+
+        <fieldset>
+            <div class="inline form-group">
+                @formInputRadioGroup(
+                    field = otherPropertiesForm("otherProperties"),
+                    Seq(
+                    "Yes"->Messages("calc.base.yes"),
+                    "No"->Messages("calc.base.no")),
+                    '_legend -> Messages("calc.otherProperties.question"),
+                    '_legendClass -> "visuallyhidden",
+                    '_labelAfter -> true,
+                    '_labelClass -> "block-label",
+                    '_legendID -> "otherProperties"
+                )
+            </div>
+        </fieldset>
+        <button class="button" type="submit" id="continue-button" >@Messages("calc.base.continue")</button>
+    }
+}

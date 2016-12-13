@@ -1,0 +1,182 @@
+# microservice specific routes
+
+#Assets routes
+GET         /assets/*file           controllers.Assets.at(path="/public", file)
+
+#Feedback routes
+GET         /feedback               controllers.FeedbackController.show
+POST        /feedback               controllers.FeedbackController.submit
+GET         /thankyou               controllers.FeedbackController.thankyou
+
+#Session Timeout route
+GET         /session-timeout        controllers.TimeoutController.timeout(restartUrl: String, homeLink: String)
+
+#Redirect routes
+GET         /                       controllers.StartController.start
+
+#Non Resident Calculation controller routes
+########################################################
+
+#Sold or Given Away
+GET         /sold-or-given-away                 controllers.nonresident.SoldOrGivenAwayController.soldOrGivenAway
+POST        /sold-or-given-away                 controllers.nonresident.SoldOrGivenAwayController.submitSoldOrGivenAway
+
+#Sold for Less
+GET         /sold-for-less                      controllers.nonresident.SoldForLessController.soldForLess
+POST        /sold-for-less                      controllers.nonresident.SoldForLessController.submitSoldForLess
+
+#How Became Owner
+GET         /how-became-owner                   controllers.nonresident.HowBecameOwnerController.howBecameOwner
+POST        /how-became-owner                   controllers.nonresident.HowBecameOwnerController.submitHowBecameOwner
+
+#Bought for Less
+GET         /bought-for-less                    controllers.nonresident.BoughtForLessController.boughtForLess
+POST        /bought-for-less                    controllers.nonresident.BoughtForLessController.submitBoughtForLess
+
+#Check Your Answers
+GET         /check-your-answers                 controllers.nonresident.CheckYourAnswersController.checkYourAnswers
+POST        /check-your-answers                 controllers.nonresident.CheckYourAnswersController.submitCheckYourAnswers
+
+#Market Value When Sold
+GET         /market-value-when-sold              controllers.nonresident.MarketValueWhenSoldOrGaveAwayController.marketValueWhenSold
+POST        /market-value-when-sold              controllers.nonresident.MarketValueWhenSoldOrGaveAwayController.submitMarketValueWhenSold
+
+#Market Value When Gave Away
+
+GET         /market-value-when-gave-away        controllers.nonresident.MarketValueWhenSoldOrGaveAwayController.marketValueWhenGaveAway
+POST        /market-value-when-gave-away        controllers.nonresident.MarketValueWhenSoldOrGaveAwayController.submitMarketValueWhenGaveAway
+
+#Worth When Bought for Less
+GET         /worth-when-bought-for-less          controllers.nonresident.WorthWhenBoughtForLessController.worthWhenBoughtForLess
+POST        /worth-when-bought-for-less          controllers.nonresident.WorthWhenBoughtForLessController.submitWorthWhenBoughtForLess
+
+#Worth When Gifted To
+GET         /worth-when-gifted-to                controllers.nonresident.WorthWhenGiftedToController.worthWhenGiftedTo
+POST        /worth-when-gifted-to                controllers.nonresident.WorthWhenGiftedToController.submitWorthWhenGiftedTo
+
+#Worth When Inherited
+GET         /worth-when-inherited                controllers.nonresident.WorthWhenInheritedController.worthWhenInherited
+POST        /worth-when-inherited                controllers.nonresident.WorthWhenInheritedController.submitWorthWhenInherited
+
+#Worth Before Legislation Start
+GET         /worth-before-legislation-start      controllers.nonresident.WorthBeforeLegislationStartController.worthBeforeLegislationStart
+POST        /worth-before-legislation-start      controllers.nonresident.WorthBeforeLegislationStartController.submitWorthBeforeLegislationStart
+
+#Rebased Valuation Cost
+GET         /rebased-valuation-cost              controllers.nonresident.RebasedValuationCostController.rebasedValuationCost
+POST        /rebased-valuation-cost              controllers.nonresident.RebasedValuationCostController.submitRebasedValuationCost
+
+#Customer Type
+GET         /customer-type                      controllers.nonresident.CustomerTypeController.customerType
+POST        /customer-type                      controllers.nonresident.CustomerTypeController.submitCustomerType
+
+#Disabled Trustee
+GET         /disabled-trustee                   controllers.nonresident.DisabledTrusteeController.disabledTrustee
+POST        /disabled-trustee                   controllers.nonresident.DisabledTrusteeController.submitDisabledTrustee
+
+#Current Income
+GET         /current-income                     controllers.nonresident.CurrentIncomeController.currentIncome
+POST        /current-income                     controllers.nonresident.CurrentIncomeController.submitCurrentIncome
+
+#Personal Allowance
+GET         /personal-allowance                 controllers.nonresident.PersonalAllowanceController.personalAllowance
+POST        /personal-allowance                 controllers.nonresident.PersonalAllowanceController.submitPersonalAllowance
+
+#Other Properties
+GET         /other-properties                   controllers.nonresident.OtherPropertiesController.otherProperties
+POST        /other-properties                   controllers.nonresident.OtherPropertiesController.submitOtherProperties
+
+#Allowance
+GET         /allowance                          controllers.nonresident.AnnualExemptAmountController.annualExemptAmount
+POST        /allowance                          controllers.nonresident.AnnualExemptAmountController.submitAnnualExemptAmount
+
+#Acquisition Date
+GET         /acquisition-date                   controllers.nonresident.AcquisitionDateController.acquisitionDate
+POST        /acquisition-date                   controllers.nonresident.AcquisitionDateController.submitAcquisitionDate
+
+#Acquisition Value
+GET         /acquisition-value                  controllers.nonresident.AcquisitionValueController.acquisitionValue
+POST        /acquisition-value                  controllers.nonresident.AcquisitionValueController.submitAcquisitionValue
+
+#Rebased Value
+GET         /rebased-value                      controllers.nonresident.RebasedValueController.rebasedValue
+POST        /rebased-value                      controllers.nonresident.RebasedValueController.submitRebasedValue
+
+#Rebased Costs
+GET         /rebased-costs                      controllers.nonresident.RebasedCostsController.rebasedCosts
+POST        /rebased-costs                      controllers.nonresident.RebasedCostsController.submitRebasedCosts
+
+#Improvements
+GET         /improvements                       controllers.nonresident.ImprovementsController.improvements
+POST        /improvements                       controllers.nonresident.ImprovementsController.submitImprovements
+
+#Disposal Date
+GET         /                                   controllers.nonresident.DisposalDateController.disposalDate
+GET         /disposal-date                      controllers.nonresident.DisposalDateController.disposalDate
+POST        /disposal-date                      controllers.nonresident.DisposalDateController.submitDisposalDate
+
+#No Capital Gains Tax
+GET         /no-capital-gains-tax               controllers.nonresident.NoCapitalGainsTaxController.noCapitalGainsTax
+
+#Disposal Value
+GET         /disposal-value                     controllers.nonresident.DisposalValueController.disposalValue
+POST        /disposal-value                     controllers.nonresident.DisposalValueController.submitDisposalValue
+
+#Acquisition Costs
+GET         /acquisition-costs                  controllers.nonresident.AcquisitionCostsController.acquisitionCosts
+POST        /acquisition-costs                  controllers.nonresident.AcquisitionCostsController.submitAcquisitionCosts
+
+#Disposal Costs
+GET         /disposal-costs                     controllers.nonresident.DisposalCostsController.disposalCosts
+POST        /disposal-costs                     controllers.nonresident.DisposalCostsController.submitDisposalCosts
+
+#Private Residence Relief
+GET         /private-residence-relief           controllers.nonresident.PrivateResidenceReliefController.privateResidenceRelief
+POST        /private-residence-relief           controllers.nonresident.PrivateResidenceReliefController.submitPrivateResidenceRelief
+
+#Previous Gain Or Loss
+GET         /previous-gain-or-loss              controllers.nonresident.PreviousGainOrLossController.previousGainOrLoss
+POST        /previous-gain-or-loss              controllers.nonresident.PreviousGainOrLossController.submitPreviousGainOrLoss
+
+#How Much Loss
+GET         /how-much-loss                      controllers.nonresident.HowMuchLossController.howMuchLoss
+POST        /how-much-loss                      controllers.nonresident.HowMuchLossController.submitHowMuchLoss
+
+#How Much Gain
+GET         /how-much-gain                      controllers.nonresident.HowMuchGainController.howMuchGain
+POST        /how-much-gain                      controllers.nonresident.HowMuchGainController.submitHowMuchGain
+
+#Brought Forward Losses
+GET         /brought-forward-losses             controllers.nonresident.BroughtForwardLossesController.broughtForwardLosses
+POST        /brought-forward-losses             controllers.nonresident.BroughtForwardLossesController.submitBroughtForwardLosses
+
+#Allowable Losses
+GET         /allowable-losses                   controllers.nonresident.AllowableLossesController.allowableLosses
+POST        /allowable-losses                   controllers.nonresident.AllowableLossesController.submitAllowableLosses
+
+#Calculation Election
+GET         /calculation-election               controllers.nonresident.CalculationElectionController.calculationElection
+POST        /calculation-election               controllers.nonresident.CalculationElectionController.submitCalculationElection
+
+#Other Reliefs
+GET         /other-reliefs                      controllers.nonresident.OtherReliefsController.otherReliefs
+POST        /other-reliefs                      controllers.nonresident.OtherReliefsController.submitOtherReliefs
+
+GET         /other-reliefs-flat                 controllers.nonresident.OtherReliefsFlatController.otherReliefsFlat
+POST        /other-reliefs-flat                 controllers.nonresident.OtherReliefsFlatController.submitOtherReliefsFlat
+
+GET         /other-reliefs-time-apportioned     controllers.nonresident.OtherReliefsTAController.otherReliefsTA
+POST        /other-reliefs-time-apportioned     controllers.nonresident.OtherReliefsTAController.submitOtherReliefsTA
+
+GET         /other-reliefs-rebased              controllers.nonresident.OtherReliefsRebasedController.otherReliefsRebased
+POST        /other-reliefs-rebased              controllers.nonresident.OtherReliefsRebasedController.submitOtherReliefsRebased
+########################################################
+
+#Report screen route
+GET         /summary-report                     controllers.nonresident.ReportController.summaryReport
+
+#Summary screen route
+########################################################
+GET         /summary                            controllers.nonresident.SummaryController.summary
+GET         /restart                            controllers.nonresident.SummaryController.restart
+########################################################

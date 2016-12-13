@@ -1,0 +1,35 @@
+@import models.nonresident.ImprovementsModel
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import views.html.helpers._
+@import constructors.nonresident.ImprovementsConstructor
+
+@(improvementsForm: Form[ImprovementsModel], improvementsOptions: Boolean, backUrl: String)(implicit request: Request[_])
+
+@exampleContent = {
+    <p>@Messages("calc.improvements.exampleOne")
+        @Messages("calc.improvements.exampleTwo")</p>
+}
+
+@main_template(Messages("calc.improvements.question")) {
+
+    <a id="back-link" class="back-link" href="@backUrl">@Messages("calc.base.back")</a>
+
+    @errorSummary(improvementsForm, "improvements", "improvementsAmt")
+
+    <h1 class="heading-xlarge">@Messages("calc.improvements.question")</h1>
+
+    <span id="input-hint" class="form-hint">
+        <p>@Messages("calc.improvements.helpOne")
+            @Messages("calc.improvements.helpTwo")</p>
+    </span>
+
+    @expandableHelpTextHelper(Messages("calc.improvements.exampleTitle"), exampleContent)
+
+    @form(action = controllers.nonresident.routes.ImprovementsController.submitImprovements) {
+
+        @ImprovementsConstructor.generateImprovements(improvementsForm, improvementsOptions)
+
+        <button class="button" type="submit" id="continue-button">@Messages("calc.base.continue")</button>
+    }
+
+}

@@ -1,0 +1,25 @@
+@import models.nonresident.QuestionAnswerModel
+@import java.time._
+@import uk.gov.hmrc.play.views.helpers._
+@import common.Dates._
+
+@(questionAnswer: QuestionAnswerModel[Any], decimalPlaces: Int)
+
+<div id="@{s"${questionAnswer.id}-question"}" class="grid-layout__column grid-layout__column--1-2">
+    <span class="lede">@questionAnswer.question</span>
+</div>
+<div id="@questionAnswer.id-answer" class="grid-layout__column grid-layout__column--1-2">
+    <span class="lede summary-answer">@{questionAnswer.data match {
+        case string: String => string
+        case int: Int => int.toString
+        case bigDecimal: BigDecimal => s"£${MoneyPounds(bigDecimal, decimalPlaces).quantity}"
+        case date: LocalDate => datePageFormatNoZero.format(date)
+        case boolean: Boolean => if (boolean) "Yes" else "No"
+        case (taxGain: BigDecimal, taxRate: Int, additionalGain: BigDecimal, additionalRate: Int) => {
+            <p class="lede">{Messages("calc.summary.calculation.details.taxRateValue", s"£${MoneyPounds(taxGain, 2).quantity}", taxRate)}</p>
+            <p class="lede">{Messages("calc.summary.calculation.details.taxRateValue", s"£${MoneyPounds(additionalGain, 2).quantity}", additionalRate)}</p>
+        }
+        case _ => ""
+        }
+    }</span>
+</div>
