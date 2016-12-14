@@ -14,23 +14,24 @@
  * limitations under the License.
  */
 
-package views.helpers.nonresident
+package views.helpers
 
 import models.QuestionAnswerModel
 import org.jsoup.Jsoup
 import uk.gov.hmrc.play.test.UnitSpec
-import views.html.helpers.nonresident.summarySection
+import views.html.helpers.summaryOfCalcSection
 
-class SummarySectionViewSpec extends UnitSpec {
+class SummaryOfCalcSectionPartialSpec extends UnitSpec {
+
 
   "Creating a summary section" when {
     val firstItem = QuestionAnswerModel[String]("firstID", "firstData", "firstQuestion", Some("first-link"))
-    val secondItem = QuestionAnswerModel[BigDecimal]("secondID", BigDecimal(2), "secondQuestion", Some("second-link"))
+    val secondItem = QuestionAnswerModel[BigDecimal]("secondID", BigDecimal(2), "secondQuestion", None)
     val thirdItem = QuestionAnswerModel[Int]("thirdID", 2, "thirdQuestion", Some("third-link"))
 
     "passing in a sequence of one item" should {
       val sequence = Seq(firstItem)
-      val result = summarySection("sectionID", "sectionTitle", sequence)
+      val result = summaryOfCalcSection("sectionID", sequence)
       val doc = Jsoup.parse(result.body)
 
       "contain a section with the ID 'sectionID' and the class 'summary-section'" in {
@@ -47,23 +48,19 @@ class SummarySectionViewSpec extends UnitSpec {
 
       "have a summary row" which {
 
-        "has a sectionTitle" in {
-          doc.select("div.form-group span.heading-large").text() shouldBe "sectionTitle"
-        }
-
         "contains the question and answer for 'firstID'" in {
-          doc.select("div.form-group > div").size shouldBe 3
+          doc.select("div.form-group > div").size shouldBe 2
         }
 
-        "should have internal divs for title, question and answer with class 'grid-layout__column grid-layout__column--1-3'" in {
-          doc.select("div.form-group > div").attr("class") shouldBe "grid-layout__column grid-layout__column--1-3"
+        "should have internal divs for title, question and answer with class 'grid-layout__column grid-layout__column--1-2'" in {
+          doc.select("div.form-group > div").attr("class") shouldBe "grid-layout__column grid-layout__column--1-2"
         }
       }
     }
 
     "passing in a sequence of two items" should {
       val sequence = Seq(firstItem, secondItem)
-      val result = summarySection("sectionID-two", "sectionTitle-two", sequence)
+      val result = summaryOfCalcSection("sectionID-two", sequence)
       val doc = Jsoup.parse(result.body)
 
       "contain a section with the ID 'sectionID-two' and the class 'summary-section'" in {
@@ -80,50 +77,40 @@ class SummarySectionViewSpec extends UnitSpec {
 
       "have summary rows" which {
 
-        "have a sectionTitle" in {
-          doc.select("div.form-group span.heading-large").text() shouldBe "sectionTitle-two"
-        }
-
-        "have only one sectionTitle" in {
-          doc.select("div.form-group span.heading-large").size() shouldBe 1
-        }
-
         "contains the question and answer for two rows" in {
-          doc.select("div.form-group > div").size shouldBe 6
+          doc.select("div.form-group > div").size shouldBe 4
         }
 
-        "should have internal divs for title, question and answer with class 'grid-layout__column grid-layout__column--1-3'" in {
-          doc.select("div.form-group > div").attr("class") shouldBe "grid-layout__column grid-layout__column--1-3"
+        "should have internal divs for title, question and answer with class 'grid-layout__column grid-layout__column--1-2'" in {
+          doc.select("div.form-group > div").attr("class") shouldBe "grid-layout__column grid-layout__column--1-2"
         }
       }
     }
 
-    "passing in a sequence of three items" should {
+    "passing in a sequence of 3 items" should {
       val sequence = Seq(firstItem, secondItem, thirdItem)
-      val result = summarySection("sectionID", "sectionTitle", sequence)
+      val result = summaryOfCalcSection("sectionID", sequence)
       val doc = Jsoup.parse(result.body)
 
       "contain three divs for the three summaryRow" in {
         doc.select("div.form-group").size() shouldBe 3
       }
 
-      "have only one sectionTitle" in {
-        doc.select("div.form-group span.heading-large").size() shouldBe 1
-      }
-
       "contains the question and answer for three rows" in {
-        doc.select("div.form-group > div").size shouldBe 9
+        doc.select("div.form-group > div").size shouldBe 6
       }
     }
 
     "passing in an empty sequence" should {
       val sequence = Seq()
-      val result = summarySection("sectionID", "sectionTitle", sequence)
+      val result = summaryOfCalcSection("sectionID", sequence)
       val doc = Jsoup.parse(result.body)
 
       "not have any content" in {
-        doc.body().children().isEmpty() shouldBe true
+        doc.body().children().isEmpty shouldBe true
       }
     }
   }
+
+
 }

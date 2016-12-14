@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package views.helpers.nonresident
+package views.helpers
 
 import assets.MessageLookup.NonResident.{Summary => messages}
 import org.jsoup.Jsoup
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
-import views.html.helpers.nonresident.amountYouOweRow
+import views.html.helpers.amountYouOweRow
 
 class AmountYouOwePartialSpec extends UnitSpec with WithFakeApplication {
 

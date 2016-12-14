@@ -14,23 +14,23 @@
  * limitations under the License.
  */
 
-package views.helpers.nonresident
+package views.helpers
 
 import models.QuestionAnswerModel
 import org.jsoup.Jsoup
 import uk.gov.hmrc.play.test.UnitSpec
-import views.html.helpers.nonresident.summarySectionNoLink
+import views.html.helpers.summarySection
 
-class SummarySectionNoLinkViewSpec extends UnitSpec {
+class SummarySectionViewSpec extends UnitSpec {
 
   "Creating a summary section" when {
     val firstItem = QuestionAnswerModel[String]("firstID", "firstData", "firstQuestion", Some("first-link"))
-    val secondItem = QuestionAnswerModel[BigDecimal]("secondID", BigDecimal(2), "secondQuestion", None)
+    val secondItem = QuestionAnswerModel[BigDecimal]("secondID", BigDecimal(2), "secondQuestion", Some("second-link"))
     val thirdItem = QuestionAnswerModel[Int]("thirdID", 2, "thirdQuestion", Some("third-link"))
 
     "passing in a sequence of one item" should {
       val sequence = Seq(firstItem)
-      val result = summarySectionNoLink("sectionID", "sectionTitle", sequence)
+      val result = summarySection("sectionID", "sectionTitle", sequence)
       val doc = Jsoup.parse(result.body)
 
       "contain a section with the ID 'sectionID' and the class 'summary-section'" in {
@@ -55,15 +55,15 @@ class SummarySectionNoLinkViewSpec extends UnitSpec {
           doc.select("div.form-group > div").size shouldBe 3
         }
 
-        "should have internal divs for title, question and answer with class 'grid-layout__column grid-layout__column--1-3 pdf-header'" in {
-          doc.select("div.form-group > div").attr("class") shouldBe "grid-layout__column grid-layout__column--1-3 pdf-header"
+        "should have internal divs for title, question and answer with class 'grid-layout__column grid-layout__column--1-3'" in {
+          doc.select("div.form-group > div").attr("class") shouldBe "grid-layout__column grid-layout__column--1-3"
         }
       }
     }
 
     "passing in a sequence of two items" should {
       val sequence = Seq(firstItem, secondItem)
-      val result = summarySectionNoLink("sectionID-two", "sectionTitle-two", sequence)
+      val result = summarySection("sectionID-two", "sectionTitle-two", sequence)
       val doc = Jsoup.parse(result.body)
 
       "contain a section with the ID 'sectionID-two' and the class 'summary-section'" in {
@@ -92,15 +92,15 @@ class SummarySectionNoLinkViewSpec extends UnitSpec {
           doc.select("div.form-group > div").size shouldBe 6
         }
 
-        "should have internal divs for title, question and answer with class 'grid-layout__column grid-layout__column--1-3 pdf-header'" in {
-          doc.select("div.form-group > div").attr("class") shouldBe "grid-layout__column grid-layout__column--1-3 pdf-header"
+        "should have internal divs for title, question and answer with class 'grid-layout__column grid-layout__column--1-3'" in {
+          doc.select("div.form-group > div").attr("class") shouldBe "grid-layout__column grid-layout__column--1-3"
         }
       }
     }
 
     "passing in a sequence of three items" should {
       val sequence = Seq(firstItem, secondItem, thirdItem)
-      val result = summarySectionNoLink("sectionID", "sectionTitle", sequence)
+      val result = summarySection("sectionID", "sectionTitle", sequence)
       val doc = Jsoup.parse(result.body)
 
       "contain three divs for the three summaryRow" in {
@@ -118,7 +118,7 @@ class SummarySectionNoLinkViewSpec extends UnitSpec {
 
     "passing in an empty sequence" should {
       val sequence = Seq()
-      val result = summarySectionNoLink("sectionID", "sectionTitle", sequence)
+      val result = summarySection("sectionID", "sectionTitle", sequence)
       val doc = Jsoup.parse(result.body)
 
       "not have any content" in {
