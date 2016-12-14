@@ -25,7 +25,7 @@ import models._
 import play.api.mvc.Result
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import uk.gov.hmrc.play.http.HeaderCarrier
-import views.calculation
+import views.html.calculation
 
 import scala.concurrent.Future
 
@@ -37,8 +37,8 @@ object CheckYourAnswersController extends CheckYourAnswersController {
 
 trait CheckYourAnswersController extends FrontendController with ValidActiveSession {
 
-  override val sessionTimeoutUrl = controllers.nonresident.routes.SummaryController.restart().url
-  override val homeLink = controllers.nonresident.routes.DisposalDateController.disposalDate().url
+  override val sessionTimeoutUrl = controllers.routes.SummaryController.restart().url
+  override val homeLink = controllers.routes.DisposalDateController.disposalDate().url
 
   val answersConstructor: AnswersConstructor
   val calculatorConnector: CalculatorConnector
@@ -48,14 +48,14 @@ trait CheckYourAnswersController extends FrontendController with ValidActiveSess
                   totalTaxOwedAnswers: Option[TotalPersonalDetailsCalculationModel]): Future[String] = totalTaxOwedAnswers match {
 
     case Some(data) =>
-      Future.successful(controllers.nonresident.routes.BroughtForwardLossesController.broughtForwardLosses().url)
+      Future.successful(controllers.routes.BroughtForwardLossesController.broughtForwardLosses().url)
     case _ =>
       val optionSeq = Seq(totalGainResultsModel.rebasedGain, totalGainResultsModel.timeApportionedGain).flatten
       val finalSeq = Seq(totalGainResultsModel.flatGain) ++ optionSeq
       if (!finalSeq.forall(_ <= 0))
-        Future.successful(controllers.nonresident.routes.PrivateResidenceReliefController.privateResidenceRelief().url)
+        Future.successful(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief().url)
       else
-        Future.successful(controllers.nonresident.routes.ImprovementsController.improvements().url)
+        Future.successful(controllers.routes.ImprovementsController.improvements().url)
 
   }
 

@@ -17,7 +17,7 @@
 package connectors
 
 import config.{CalculatorSessionCache, WSHttp}
-import constructors.{nonresident => _, _}
+import constructors._
 import models._
 import play.api.libs.json.Format
 import uk.gov.hmrc.http.cache.client.{CacheMap, SessionCache}

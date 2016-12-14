@@ -16,10 +16,10 @@
 
 package controllers.predicates
 
-import controllers.routes
+import controllers.utils.routes
 import play.api.mvc._
 import uk.gov.hmrc.play.frontend.controller.FrontendController
-import uk.gov.hmrc.play.http.{HeaderCarrier, SessionKeys}
+import uk.gov.hmrc.play.http.SessionKeys
 
 import scala.concurrent.Future
 

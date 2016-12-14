@@ -50,8 +50,8 @@ class WorthWhenInheritedActionSpec extends UnitSpec with WithFakeApplication wit
   }
 
   "WorthWhenInheritedController" should {
-    s"have a session timeout home link of '${controllers.nonresident.routes.DisposalDateController.disposalDate().url}'" in {
-      WorthWhenInheritedController.homeLink shouldEqual controllers.nonresident.routes.DisposalDateController.disposalDate().url
+    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+      WorthWhenInheritedController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
     }
   }
 

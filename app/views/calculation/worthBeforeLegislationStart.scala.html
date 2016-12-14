@@ -10,7 +10,7 @@
 }
 @main_template(Messages("calc.worthBeforeLegislationStart.question")) {
 
-    <a id="back-link" class="back-link" href="@controllers.nonresident.routes.AcquisitionDateController.acquisitionDate">@Messages("calc.base.back")</a>
+    <a id="back-link" class="back-link" href="@controllers.routes.AcquisitionDateController.acquisitionDate">@Messages("calc.base.back")</a>
 
     @errorSummary(worthBeforeLegislationStart, "worthBeforeLegislationStart")
 
@@ -20,7 +20,7 @@
 
     @expandableHelpTextHelper(Messages("calc.worthBeforeLegislationStart.expandableTitle"), exampleContent)
 
-    @form(action = controllers.nonresident.routes.WorthBeforeLegislationStartController.submitWorthBeforeLegislationStart) {
+    @form(action = controllers.routes.WorthBeforeLegislationStartController.submitWorthBeforeLegislationStart) {
 
         @formInputMoney(worthBeforeLegislationStart, "worthBeforeLegislationStart", Messages("calc.worthBeforeLegislationStart.question"), hideLabel = true)
 

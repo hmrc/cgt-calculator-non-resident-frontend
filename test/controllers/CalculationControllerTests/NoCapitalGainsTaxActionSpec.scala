@@ -49,8 +49,8 @@ class NoCapitalGainsTaxActionSpec extends UnitSpec with WithFakeApplication with
   }
 
   "NoCapitalGainsTaxController" should {
-    s"have a session timeout home link of '${controllers.nonresident.routes.DisposalDateController.disposalDate().url}'" in {
-      NoCapitalGainsTaxController.homeLink shouldEqual controllers.nonresident.routes.DisposalDateController.disposalDate().url
+    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+      NoCapitalGainsTaxController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
     }
   }
 

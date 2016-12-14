@@ -20,8 +20,10 @@ import assets.MessageLookup.NonResident.{DisposalDate => messages}
 import assets.MessageLookup.{NonResident => commonMessages}
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
+import forms.DisposalDateForm._
 import play.api.i18n.Messages
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import views.html.calculation.disposalDate
 
 class DisposalDateViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
 
@@ -48,8 +50,8 @@ class DisposalDateViewSpec extends UnitSpec with WithFakeApplication with FakeRe
         document.body().select("input[type=number]").attr("id") should include ("disposalDate")
       }
 
-      s"have a home link to '${controllers.nonresident.routes.DisposalDateController.disposalDate().url}'" in {
-        document.select("#homeNavHref").attr("href") shouldEqual controllers.nonresident.routes.DisposalDateController.disposalDate().url
+      s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+        document.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
       }
 
       "have a button" which {

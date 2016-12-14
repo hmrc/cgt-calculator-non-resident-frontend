@@ -22,6 +22,7 @@ import controllers.helpers.FakeRequestHelper
 import models._
 import org.jsoup.Jsoup
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import views.html.calculation.summaryReport
 
 class SummaryReportViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
 

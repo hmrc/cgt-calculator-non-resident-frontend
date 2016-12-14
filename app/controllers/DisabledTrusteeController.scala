@@ -19,7 +19,8 @@ package controllers
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
-import forms.DisabledTrusteeForm
+import forms.DisabledTrusteeForm._
+import views.html.calculation
 import models.DisabledTrusteeModel
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 
@@ -32,19 +33,19 @@ object DisabledTrusteeController extends DisabledTrusteeController {
 trait DisabledTrusteeController extends FrontendController with ValidActiveSession {
 
   val calcConnector: CalculatorConnector
-  override val sessionTimeoutUrl = controllers.nonresident.routes.SummaryController.restart().url
-  override val homeLink = controllers.nonresident.routes.DisposalDateController.disposalDate().url
+  override val sessionTimeoutUrl = controllers.routes.SummaryController.restart().url
+  override val homeLink = controllers.routes.DisposalDateController.disposalDate().url
 
   val disabledTrustee = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[DisabledTrusteeModel](KeystoreKeys.disabledTrustee).map {
-      case Some(data) => Ok(calculation.nonresident.disabledTrustee(disabledTrusteeForm.fill(data)))
-      case None => Ok(calculation.nonresident.disabledTrustee(disabledTrusteeForm))
+      case Some(data) => Ok(calculation.disabledTrustee(disabledTrusteeForm.fill(data)))
+      case None => Ok(calculation.disabledTrustee(disabledTrusteeForm))
     }
   }
 
   val submitDisabledTrustee = ValidateSession.async { implicit request =>
     disabledTrusteeForm.bindFromRequest.fold(
-      errors => Future.successful(BadRequest(calculation.nonresident.disabledTrustee(errors))),
+      errors => Future.successful(BadRequest(calculation.disabledTrustee(errors))),
       success => {
         calcConnector.saveFormData(KeystoreKeys.disabledTrustee, success)
         Future.successful(Redirect(routes.OtherPropertiesController.otherProperties()))

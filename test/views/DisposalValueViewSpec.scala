@@ -19,8 +19,10 @@ package views
 import assets.MessageLookup.{NonResident => messages}
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
+import forms.DisposalValueForm._
 import org.scalatest.mock.MockitoSugar
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import views.html.calculation.disposalValue
 
 class DisposalValueViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
@@ -42,7 +44,7 @@ class DisposalValueViewSpec extends UnitSpec with WithFakeApplication with Mocki
         }
 
         s"has a route to 'sold-for-less'" in {
-          backLink.attr("href") shouldBe controllers.nonresident.routes.SoldForLessController.soldForLess().url
+          backLink.attr("href") shouldBe controllers.routes.SoldForLessController.soldForLess().url
         }
       }
 
@@ -58,8 +60,8 @@ class DisposalValueViewSpec extends UnitSpec with WithFakeApplication with Mocki
         }
       }
 
-      s"have a home link to '${controllers.nonresident.routes.DisposalDateController.disposalDate().url}'" in {
-        document.select("#homeNavHref").attr("href") shouldEqual controllers.nonresident.routes.DisposalDateController.disposalDate().url
+      s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+        document.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
       }
 
       s"have a label" which {
@@ -86,8 +88,8 @@ class DisposalValueViewSpec extends UnitSpec with WithFakeApplication with Mocki
           form.attr("method") shouldBe "POST"
         }
 
-        s"has an action of '${controllers.nonresident.routes.DisposalValueController.submitDisposalValue().url}'" in {
-          form.attr("action") shouldBe controllers.nonresident.routes.DisposalValueController.submitDisposalValue().url
+        s"has an action of '${controllers.routes.DisposalValueController.submitDisposalValue().url}'" in {
+          form.attr("action") shouldBe controllers.routes.DisposalValueController.submitDisposalValue().url
         }
       }
 

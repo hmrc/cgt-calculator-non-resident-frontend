@@ -19,7 +19,8 @@ package controllers
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
-import forms.CurrentIncomeForm
+import forms.CurrentIncomeForm._
+import views.html.calculation
 import models.CurrentIncomeModel
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 
@@ -31,14 +32,14 @@ object CurrentIncomeController extends CurrentIncomeController {
 
 trait CurrentIncomeController extends FrontendController with ValidActiveSession {
 
-  override val sessionTimeoutUrl = controllers.nonresident.routes.SummaryController.restart().url
-  override val homeLink = controllers.nonresident.routes.DisposalDateController.disposalDate().url
+  override val sessionTimeoutUrl = controllers.routes.SummaryController.restart().url
+  override val homeLink = controllers.routes.DisposalDateController.disposalDate().url
   val calcConnector: CalculatorConnector
 
   val currentIncome = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[CurrentIncomeModel](KeystoreKeys.currentIncome).map {
-      case Some(data) => Ok(calculation.nonresident.currentIncome(currentIncomeForm.fill(data)))
-      case None => Ok(calculation.nonresident.currentIncome(currentIncomeForm))
+      case Some(data) => Ok(calculation.currentIncome(currentIncomeForm.fill(data)))
+      case None => Ok(calculation.currentIncome(currentIncomeForm))
     }
   }
 
@@ -57,7 +58,7 @@ trait CurrentIncomeController extends FrontendController with ValidActiveSession
     }
 
     currentIncomeForm.bindFromRequest.fold(
-      errors => Future.successful(BadRequest(calculation.nonresident.currentIncome(errors))),
+      errors => Future.successful(BadRequest(calculation.currentIncome(errors))),
       success => successAction(success)
     )
   }

@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-package forms.nonResident
+package forms
 
-import models.AcquisitionValueModel
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
-import common.Constants
 import assets.MessageLookup.NonResident.{AcquisitionValue => messages}
+import common.Constants
 import assets.MessageLookup.{NonResident => common}
-import forms.AcquisitionValueForm
+import models.AcquisitionValueModel
+import forms.AcquisitionValueForm._
+import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import uk.gov.hmrc.play.views.helpers.MoneyPounds
-
 
 class AcquisitionValueFormSpec extends UnitSpec with WithFakeApplication{
 

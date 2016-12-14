@@ -22,7 +22,7 @@ import models._
 import connectors.CalculatorConnector
 import controllers.DisposalCostsController
 import controllers.helpers.FakeRequestHelper
-import controllers.nonresident.routes
+import controllers.routes
 import org.jsoup._
 import org.mockito.Matchers
 import org.mockito.Mockito._
@@ -58,8 +58,8 @@ class DisposalCostsActionSpec extends UnitSpec with WithFakeApplication with Moc
   }
 
   "DisposalCostsController" should {
-    s"have a session timeout home link of '${controllers.nonresident.routes.DisposalDateController.disposalDate().url}'" in {
-      DisposalCostsController.homeLink shouldEqual controllers.nonresident.routes.DisposalDateController.disposalDate().url
+    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+      DisposalCostsController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
     }
   }
 

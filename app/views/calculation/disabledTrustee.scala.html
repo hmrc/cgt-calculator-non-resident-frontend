@@ -18,13 +18,13 @@
 
 @main_template(Messages("calc.disabledTrustee.question"), sidebarLinks = Some(sidebar)) {
 
-    <a id="back-link" class="back-link" href="@controllers.nonresident.routes.CustomerTypeController.customerType">Back</a>
+    <a id="back-link" class="back-link" href="@controllers.routes.CustomerTypeController.customerType">Back</a>
 
     @errorSummary(disabledTrusteeForm, "disabled-trustee")
 
     <h1 class="heading-xlarge">@Messages("calc.disabledTrustee.question")</h1>
 
-        @form(action = controllers.nonresident.routes.DisabledTrusteeController.submitDisabledTrustee) {
+        @form(action = controllers.routes.DisabledTrusteeController.submitDisabledTrustee) {
 
         <div class="form-group">
             @formInputRadioGroup(

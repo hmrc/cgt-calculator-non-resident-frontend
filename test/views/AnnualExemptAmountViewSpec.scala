@@ -21,7 +21,9 @@ import assets.MessageLookup.{NonResident => commonMessages}
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
 import org.scalatest.mock.MockitoSugar
+import forms.AnnualExemptAmountForm._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import views.html.calculation.annualExemptAmount
 
 class AnnualExemptAmountViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
@@ -47,8 +49,8 @@ class AnnualExemptAmountViewSpec extends UnitSpec with WithFakeApplication with 
         }
       }
 
-      s"have a home link to '${controllers.nonresident.routes.DisposalDateController.disposalDate().url}'" in {
-        document.select("#homeNavHref").attr("href") shouldEqual controllers.nonresident.routes.DisposalDateController.disposalDate().url
+      s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+        document.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
       }
 
       "have a title" which {
@@ -99,8 +101,8 @@ class AnnualExemptAmountViewSpec extends UnitSpec with WithFakeApplication with 
           form.attr("method") shouldBe "POST"
         }
 
-        s"has an action of '${controllers.nonresident.routes.AnnualExemptAmountController.submitAnnualExemptAmount().url}'" in {
-          form.attr("action") shouldBe controllers.nonresident.routes.AnnualExemptAmountController.submitAnnualExemptAmount().url
+        s"has an action of '${controllers.routes.AnnualExemptAmountController.submitAnnualExemptAmount().url}'" in {
+          form.attr("action") shouldBe controllers.routes.AnnualExemptAmountController.submitAnnualExemptAmount().url
         }
       }
 

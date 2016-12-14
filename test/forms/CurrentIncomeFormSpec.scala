@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package forms.nonResident
+package forms
 
-import models.CurrentIncomeModel
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import assets.MessageLookup.{NonResident => messages}
-import forms.CurrentIncomeForm
+import models.CurrentIncomeModel
+import forms.CurrentIncomeForm._
+import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 class CurrentIncomeFormSpec extends UnitSpec with WithFakeApplication {
 

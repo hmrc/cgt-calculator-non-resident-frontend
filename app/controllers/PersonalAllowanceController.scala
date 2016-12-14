@@ -20,7 +20,8 @@ import common.Dates
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
-import forms.PersonalAllowanceForm
+import forms.PersonalAllowanceForm._
+import views.html.calculation
 import models.{DisposalDateModel, PersonalAllowanceModel}
 import play.api.data.Form
 import uk.gov.hmrc.play.frontend.controller.FrontendController
@@ -33,14 +34,14 @@ object PersonalAllowanceController extends PersonalAllowanceController {
 
 trait PersonalAllowanceController extends FrontendController with ValidActiveSession {
 
-  override val sessionTimeoutUrl = controllers.nonresident.routes.SummaryController.restart().url
-  override val homeLink = controllers.nonresident.routes.DisposalDateController.disposalDate().url
+  override val sessionTimeoutUrl = controllers.routes.SummaryController.restart().url
+  override val homeLink = controllers.routes.DisposalDateController.disposalDate().url
   val calcConnector: CalculatorConnector
 
   val personalAllowance = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[PersonalAllowanceModel](KeystoreKeys.personalAllowance).map {
-      case Some(data) => Ok(calculation.nonresident.personalAllowance(personalAllowanceForm().fill(data)))
-      case None => Ok(calculation.nonresident.personalAllowance(personalAllowanceForm()))
+      case Some(data) => Ok(calculation.personalAllowance(personalAllowanceForm().fill(data)))
+      case None => Ok(calculation.personalAllowance(personalAllowanceForm()))
     }
   }
 
@@ -55,7 +56,7 @@ trait PersonalAllowanceController extends FrontendController with ValidActiveSes
     }
 
     def errorAction(form: Form[PersonalAllowanceModel]) = {
-      Future.successful(BadRequest(calculation.nonresident.personalAllowance(form)))
+      Future.successful(BadRequest(calculation.personalAllowance(form)))
     }
 
     def successAction(model: PersonalAllowanceModel) = {

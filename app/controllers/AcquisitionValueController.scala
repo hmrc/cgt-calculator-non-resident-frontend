@@ -20,7 +20,7 @@ import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import forms.AcquisitionValueForm._
-import views.calculation
+import views.html.calculation
 import models.AcquisitionValueModel
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 
@@ -32,8 +32,8 @@ object AcquisitionValueController extends AcquisitionValueController {
 
 trait AcquisitionValueController extends FrontendController with ValidActiveSession {
 
-  override val sessionTimeoutUrl = controllers.nonresident.routes.SummaryController.restart().url
-  override val homeLink = controllers.nonresident.routes.DisposalDateController.disposalDate().url
+  override val sessionTimeoutUrl = controllers.routes.SummaryController.restart().url
+  override val homeLink = controllers.routes.DisposalDateController.disposalDate().url
   val calcConnector: CalculatorConnector
 
   val acquisitionValue = ValidateSession.async { implicit request =>

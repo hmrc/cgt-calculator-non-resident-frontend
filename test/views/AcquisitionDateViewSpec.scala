@@ -20,7 +20,9 @@ import assets.MessageLookup.{NonResident => messages}
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
 import org.scalatest.mock.MockitoSugar
+import forms.AcquisitionDateForm._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import views.html.calculation.acquisitionDate
 
 class AcquisitionDateViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
@@ -41,12 +43,12 @@ class AcquisitionDateViewSpec extends UnitSpec with WithFakeApplication with Moc
         }
 
         s"should have a route to 'back-link'" in {
-          document.body.getElementById("back-link").attr("href") shouldEqual controllers.nonresident.routes.DisposalCostsController.disposalCosts().url
+          document.body.getElementById("back-link").attr("href") shouldEqual controllers.routes.DisposalCostsController.disposalCosts().url
         }
       }
 
-      s"have a home link to '${controllers.nonresident.routes.DisposalDateController.disposalDate().url}'" in {
-        document.select("#homeNavHref").attr("href") shouldEqual controllers.nonresident.routes.DisposalDateController.disposalDate().url
+      s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+        document.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
       }
 
       "have a heading" which {
@@ -81,8 +83,8 @@ class AcquisitionDateViewSpec extends UnitSpec with WithFakeApplication with Moc
           form.attr("method") shouldBe "POST"
         }
 
-        s"has an action of '${controllers.nonresident.routes.AcquisitionDateController.submitAcquisitionDate().url}'" in {
-          form.attr("action") shouldBe controllers.nonresident.routes.AcquisitionDateController.submitAcquisitionDate().url
+        s"has an action of '${controllers.routes.AcquisitionDateController.submitAcquisitionDate().url}'" in {
+          form.attr("action") shouldBe controllers.routes.AcquisitionDateController.submitAcquisitionDate().url
         }
       }
 

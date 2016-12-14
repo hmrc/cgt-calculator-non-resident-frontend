@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package forms.nonResident
+package forms
 
-import models.CalculationElectionModel
 import assets.MessageLookup.{NonResident => messages}
-import forms.CalculationElectionForm
+import models.CalculationElectionModel
+import forms.CalculationElectionForm._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 class CalculationElectionFormSpec extends UnitSpec with WithFakeApplication {

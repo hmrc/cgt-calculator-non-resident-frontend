@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package helpers
+package constructors.helpers
 
 import org.jsoup.select.Elements
 import org.scalatest.Assertions.cancel

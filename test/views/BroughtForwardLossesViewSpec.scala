@@ -17,9 +17,12 @@
 package views
 
 import assets.MessageLookup.{NonResident => messages}
+import constructors.helpers.AssertHelpers
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
+import forms.BroughtForwardLossesForm._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import views.html.calculation.broughtForwardLosses
 
 class BroughtForwardLossesViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper with AssertHelpers {
 
@@ -76,8 +79,8 @@ class BroughtForwardLossesViewSpec extends UnitSpec with WithFakeApplication wit
           form.attr("method") shouldBe "POST"
         }
 
-        s"has an action of '${controllers.nonresident.routes.BroughtForwardLossesController.submitBroughtForwardLosses().url}'" in {
-          form.attr("action") shouldBe controllers.nonresident.routes.BroughtForwardLossesController.submitBroughtForwardLosses().url
+        s"has an action of '${controllers.routes.BroughtForwardLossesController.submitBroughtForwardLosses().url}'" in {
+          form.attr("action") shouldBe controllers.routes.BroughtForwardLossesController.submitBroughtForwardLosses().url
         }
       }
 

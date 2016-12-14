@@ -20,8 +20,10 @@ import assets.MessageLookup.NonResident.{WorthBeforeLegislationStart, Acquisitio
 import assets.MessageLookup.{NonResident => commonMessages}
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
+import forms.WorthBeforeLegislationStartForm._
 import org.scalatest.mock.MockitoSugar
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import views.html.calculation.worthBeforeLegislationStart
 
 class WorthBeforeLegislationStartViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
@@ -48,12 +50,12 @@ class WorthBeforeLegislationStartViewSpec extends UnitSpec with WithFakeApplicat
         }
 
         s"has a route to 'acquisition-date'" in {
-          backLink.attr("href") shouldBe controllers.nonresident.routes.AcquisitionDateController.acquisitionDate().url
+          backLink.attr("href") shouldBe controllers.routes.AcquisitionDateController.acquisitionDate().url
         }
       }
 
-      s"have a home link to '${controllers.nonresident.routes.DisposalDateController.disposalDate().url}'" in {
-        document.select("#homeNavHref").attr("href") shouldEqual controllers.nonresident.routes.DisposalDateController.disposalDate().url
+      s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+        document.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
       }
 
       "have a heading" which {
@@ -112,8 +114,8 @@ class WorthBeforeLegislationStartViewSpec extends UnitSpec with WithFakeApplicat
           form.attr("method") shouldBe "POST"
         }
 
-        s"has an action of '${controllers.nonresident.routes.WorthBeforeLegislationStartController.submitWorthBeforeLegislationStart().url}'" in {
-          form.attr("action") shouldBe controllers.nonresident.routes.WorthBeforeLegislationStartController.submitWorthBeforeLegislationStart().url
+        s"has an action of '${controllers.routes.WorthBeforeLegislationStartController.submitWorthBeforeLegislationStart().url}'" in {
+          form.attr("action") shouldBe controllers.routes.WorthBeforeLegislationStartController.submitWorthBeforeLegislationStart().url
         }
       }
 

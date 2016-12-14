@@ -17,7 +17,7 @@
 package constructors
 
 import assets.MessageLookup.{NonResident => messages}
-import controllers.nonresident.{routes => routes}
+import controllers.{routes => routes}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.TestModels._
 import common.nonresident.{CustomerTypeKeys, PreviousGainOrLossKeys}

@@ -28,7 +28,7 @@ import play.api.i18n.Messages
 import play.api.mvc.RequestHeader
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import uk.gov.hmrc.play.http.HeaderCarrier
-import views.html.calculation.nonresident.{summaryReport => summaryView}
+import views.html.calculation.{summaryReport => summaryView}
 
 import scala.concurrent.Future
 

@@ -7,13 +7,13 @@
 
 @main_template(Messages("calc.otherReliefs.question")) {
 
-    <a id="back-link" class="back-link" href="@controllers.nonresident.routes.CalculationElectionController.calculationElection">@Messages("calc.base.back")</a>
+    <a id="back-link" class="back-link" href="@controllers.routes.CalculationElectionController.calculationElection">@Messages("calc.base.back")</a>
 
     @errorSummary(otherReliefsForm, "other-reliefs-rebased")
 
     <h1 class="heading-xlarge">@Messages("calc.otherReliefs.question")</h1>
 
-    @form(action = controllers.nonresident.routes.OtherReliefsRebasedController.submitOtherReliefsRebased) {
+    @form(action = controllers.routes.OtherReliefsRebasedController.submitOtherReliefsRebased) {
 
         <label for="otherReliefs" class="visuallyhidden">@Messages("calc.otherReliefs.question")</label>
 

@@ -22,7 +22,8 @@ import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.TaxDates
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
-import forms.DisposalDateForm
+import forms.DisposalDateForm._
+import views.html.calculation
 import models.DisposalDateModel
 import play.api.data.Form
 import play.api.mvc.Action
@@ -38,27 +39,27 @@ object DisposalDateController extends DisposalDateController {
 trait DisposalDateController extends FrontendController with ValidActiveSession {
 
   val calcConnector: CalculatorConnector
-  override val sessionTimeoutUrl = controllers.nonresident.routes.SummaryController.restart().url
-  override val homeLink = controllers.nonresident.routes.DisposalDateController.disposalDate().url
+  override val sessionTimeoutUrl = controllers.routes.SummaryController.restart().url
+  override val homeLink = controllers.routes.DisposalDateController.disposalDate().url
 
   val disposalDate = Action.async { implicit request =>
     if (request.session.get(SessionKeys.sessionId).isEmpty) {
       val sessionId = UUID.randomUUID.toString
-      Future.successful(Ok(views.html.calculation.nonresident.
+      Future.successful(Ok(views.html.calculation.
         disposalDate(disposalDateForm)).withSession(request.session +
         (SessionKeys.sessionId -> s"session-$sessionId")))
     }
     else {
       calcConnector.fetchAndGetFormData[DisposalDateModel](KeystoreKeys.disposalDate).map {
-        case Some(data) => Ok(calculation.nonresident.disposalDate(disposalDateForm.fill(data)))
-        case None => Ok(calculation.nonresident.disposalDate(disposalDateForm))
+        case Some(data) => Ok(calculation.disposalDate(disposalDateForm.fill(data)))
+        case None => Ok(calculation.disposalDate(disposalDateForm))
       }
     }
   }
 
   val submitDisposalDate = ValidateSession.async { implicit request =>
 
-    def errorAction(form: Form[DisposalDateModel]) = Future.successful(BadRequest(calculation.nonresident.disposalDate(form)))
+    def errorAction(form: Form[DisposalDateModel]) = Future.successful(BadRequest(calculation.disposalDate(form)))
 
     def successAction(model: DisposalDateModel) = {
       calcConnector.saveFormData(KeystoreKeys.disposalDate, model)

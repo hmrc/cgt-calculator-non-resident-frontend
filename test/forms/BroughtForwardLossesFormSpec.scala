@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package forms.nonResident
+package forms
 
-import models.BroughtForwardLossesModel
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import assets.MessageLookup.{NonResident => messages}
-import forms.BroughtForwardLossesForm
+import models.BroughtForwardLossesModel
+import forms.BroughtForwardLossesForm._
+import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 class BroughtForwardLossesFormSpec extends UnitSpec with WithFakeApplication {
 

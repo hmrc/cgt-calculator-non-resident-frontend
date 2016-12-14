@@ -7,7 +7,7 @@
 
 @main_template(Messages("calc.worthWhenInherited.question")) {
 
-    <a id="back-link" class="back-link" href="@controllers.nonresident.routes.HowBecameOwnerController.howBecameOwner">@Messages("calc.base.back")</a>
+    <a id="back-link" class="back-link" href="@controllers.routes.HowBecameOwnerController.howBecameOwner">@Messages("calc.base.back")</a>
 
     @errorSummary(acquisitionMarketValue, "acquisitionMarketValue")
 
@@ -15,7 +15,7 @@
 
     <p id="helpText" class="form-hint">@Messages("calc.acquisitionMarketValue.hintOne")<br>@Messages("calc.acquisitionMarketValue.hintTwo")</p>
 
-    @form(action = controllers.nonresident.routes.WorthWhenInheritedController.submitWorthWhenInherited) {
+    @form(action = controllers.routes.WorthWhenInheritedController.submitWorthWhenInherited) {
 
         @formInputMoney(acquisitionMarketValue, "acquisitionMarketValue", Messages("calc.worthWhenInherited.question"), hideLabel = true)
 

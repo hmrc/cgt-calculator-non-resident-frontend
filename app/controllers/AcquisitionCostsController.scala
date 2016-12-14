@@ -27,7 +27,7 @@ import play.api.data.Form
 import play.api.mvc.Result
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import uk.gov.hmrc.play.http.HeaderCarrier
-import views.calculation
+import views.html.calculation
 
 import scala.concurrent.Future
 
@@ -37,8 +37,8 @@ object AcquisitionCostsController extends AcquisitionCostsController{
 
 trait AcquisitionCostsController extends FrontendController with ValidActiveSession {
 
-  override val sessionTimeoutUrl = controllers.nonresident.routes.SummaryController.restart().url
-  override val homeLink = controllers.nonresident.routes.DisposalDateController.disposalDate().url
+  override val sessionTimeoutUrl = controllers.routes.SummaryController.restart().url
+  override val homeLink = controllers.routes.DisposalDateController.disposalDate().url
   val calcConnector: CalculatorConnector
   val calcElectionConstructor = CalculationElectionConstructor
 
@@ -50,14 +50,14 @@ trait AcquisitionCostsController extends FrontendController with ValidActiveSess
                howBecameOwnerModel: Option[HowBecameOwnerModel],
                boughtForLessModel: Option[BoughtForLessModel]) = (acquisitionDateModel, howBecameOwnerModel, boughtForLessModel) match {
       case (Some(AcquisitionDateModel("Yes",_,_,_)),_,_) if TaxDates.dateBeforeLegislationStart(acquisitionDateModel.get.get) =>
-        Future.successful(controllers.nonresident.routes.WorthBeforeLegislationStartController.worthBeforeLegislationStart().url)
+        Future.successful(controllers.routes.WorthBeforeLegislationStartController.worthBeforeLegislationStart().url)
       case (_,Some(HowBecameOwnerModel("Inherited")),_) =>
-        Future.successful(controllers.nonresident.routes.WorthWhenInheritedController.worthWhenInherited().url)
+        Future.successful(controllers.routes.WorthWhenInheritedController.worthWhenInherited().url)
       case (_,Some(HowBecameOwnerModel("Gifted")),_) =>
-        Future.successful(controllers.nonresident.routes.WorthWhenGiftedToController.worthWhenGiftedTo().url)
+        Future.successful(controllers.routes.WorthWhenGiftedToController.worthWhenGiftedTo().url)
       case (_, _, Some(BoughtForLessModel(true))) =>
-        Future.successful(controllers.nonresident.routes.WorthWhenBoughtForLessController.worthWhenBoughtForLess().url)
-      case _ => Future.successful(controllers.nonresident.routes.AcquisitionValueController.acquisitionValue().url)
+        Future.successful(controllers.routes.WorthWhenBoughtForLessController.worthWhenBoughtForLess().url)
+      case _ => Future.successful(controllers.routes.AcquisitionValueController.acquisitionValue().url)
     }
 
     for {

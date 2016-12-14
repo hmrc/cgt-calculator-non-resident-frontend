@@ -49,8 +49,8 @@ class SoldOrGivenAwayActionSpec extends UnitSpec with WithFakeApplication with M
   }
 
   "SoldOrGivenAwayController" should {
-    s"have a session timeout home link of '${controllers.nonresident.routes.DisposalDateController.disposalDate().url}'" in {
-      SoldOrGivenAwayController.homeLink shouldEqual controllers.nonresident.routes.DisposalDateController.disposalDate().url
+    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+      SoldOrGivenAwayController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
     }
   }
 
@@ -113,7 +113,7 @@ class SoldOrGivenAwayActionSpec extends UnitSpec with WithFakeApplication with M
       }
 
       "redirect to the Sold For Less Page" in{
-        redirectLocation(result).get shouldBe controllers.nonresident.routes.SoldForLessController.soldForLess().url
+        redirectLocation(result).get shouldBe controllers.routes.SoldForLessController.soldForLess().url
       }
     }
 
@@ -127,7 +127,7 @@ class SoldOrGivenAwayActionSpec extends UnitSpec with WithFakeApplication with M
       }
 
       "redirect to the Market Value When Gave Away Page" in{
-        redirectLocation(result).get shouldBe controllers.nonresident.routes.MarketValueWhenSoldOrGaveAwayController.marketValueWhenGaveAway().url
+        redirectLocation(result).get shouldBe controllers.routes.MarketValueWhenSoldOrGaveAwayController.marketValueWhenGaveAway().url
       }
     }
 

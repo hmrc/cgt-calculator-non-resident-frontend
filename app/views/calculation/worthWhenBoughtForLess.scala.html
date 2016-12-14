@@ -7,7 +7,7 @@
 
 @main_template(Messages("calc.worthWhenBoughtForLess.question")) {
 
-    <a id="back-link" class="back-link" href="@controllers.nonresident.routes.BoughtForLessController.boughtForLess">@Messages("calc.base.back")</a>
+    <a id="back-link" class="back-link" href="@controllers.routes.BoughtForLessController.boughtForLess">@Messages("calc.base.back")</a>
 
     @errorSummary(acquisitionMarketValue, "acquisitionMarketValue")
 
@@ -15,7 +15,7 @@
 
     <p id="helpText" class="form-hint">@Messages("calc.acquisitionMarketValue.hintOne")<br>@Messages("calc.acquisitionMarketValue.hintTwo")</p>
 
-    @form(action = controllers.nonresident.routes.WorthWhenBoughtForLessController.submitWorthWhenBoughtForLess) {
+    @form(action = controllers.routes.WorthWhenBoughtForLessController.submitWorthWhenBoughtForLess) {
 
         @formInputMoney(acquisitionMarketValue, "acquisitionMarketValue", Messages("calc.worthWhenBoughtForLess.question"), hideLabel = true)
 

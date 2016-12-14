@@ -20,7 +20,9 @@ import assets.MessageLookup.NonResident.{DisposalCosts => messages}
 import assets.MessageLookup.{NonResident => commonMessages}
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
+import forms.DisposalCostsForm._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import views.html.calculation.disposalCosts
 
 class DisposalCostsViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
 
@@ -62,8 +64,8 @@ class DisposalCostsViewSpec extends UnitSpec with WithFakeApplication with FakeR
         }
       }
 
-      s"have a home link to '${controllers.nonresident.routes.DisposalDateController.disposalDate().url}'" in {
-        document.select("#homeNavHref").attr("href") shouldEqual controllers.nonresident.routes.DisposalDateController.disposalDate().url
+      s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+        document.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
       }
 
       "have a hint" which {
@@ -105,8 +107,8 @@ class DisposalCostsViewSpec extends UnitSpec with WithFakeApplication with FakeR
           form.attr("method") shouldBe "POST"
         }
 
-        s"has an action of '${controllers.nonresident.routes.DisposalCostsController.submitDisposalCosts().url}'" in {
-          form.attr("action") shouldBe controllers.nonresident.routes.DisposalCostsController.submitDisposalCosts().url
+        s"has an action of '${controllers.routes.DisposalCostsController.submitDisposalCosts().url}'" in {
+          form.attr("action") shouldBe controllers.routes.DisposalCostsController.submitDisposalCosts().url
         }
       }
 

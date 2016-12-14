@@ -29,7 +29,7 @@ import play.api.data.Form
 import play.api.mvc.Result
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import uk.gov.hmrc.play.http.HeaderCarrier
-import views.calculation
+import views.html.calculation
 
 import scala.concurrent.Future
 
@@ -39,8 +39,8 @@ object AnnualExemptAmountController extends AnnualExemptAmountController{
 
 trait AnnualExemptAmountController extends FrontendController with ValidActiveSession {
 
-  override val sessionTimeoutUrl = controllers.nonresident.routes.SummaryController.restart().url
-  override val homeLink = controllers.nonresident.routes.DisposalDateController.disposalDate().url
+  override val sessionTimeoutUrl = controllers.routes.SummaryController.restart().url
+  override val homeLink = controllers.routes.DisposalDateController.disposalDate().url
   val calcConnector: CalculatorConnector
   val calcElectionConstructor = CalculationElectionConstructor
 

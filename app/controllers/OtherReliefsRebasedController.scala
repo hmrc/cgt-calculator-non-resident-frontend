@@ -21,7 +21,8 @@ import common.nonresident.TaxableGainCalculation._
 import connectors.CalculatorConnector
 import constructors.AnswersConstructor
 import controllers.predicates.ValidActiveSession
-import forms.OtherReliefsForm
+import forms.OtherReliefsForm._
+import views.html.calculation
 import models.{CalculationResultsWithTaxOwedModel, OtherReliefsModel, TotalGainResultsModel}
 import play.api.data.Form
 import play.api.mvc.{Action, AnyContent}
@@ -35,8 +36,8 @@ object OtherReliefsRebasedController extends OtherReliefsRebasedController{
 }
 
 trait OtherReliefsRebasedController extends FrontendController with ValidActiveSession {
-  override val sessionTimeoutUrl = controllers.nonresident.routes.SummaryController.restart().url
-  override val homeLink = controllers.nonresident.routes.DisposalDateController.disposalDate().url
+  override val sessionTimeoutUrl = controllers.routes.SummaryController.restart().url
+  override val homeLink = controllers.routes.DisposalDateController.disposalDate().url
   val calcConnector: CalculatorConnector
   val answersConstructor: AnswersConstructor
 
@@ -49,8 +50,8 @@ trait OtherReliefsRebasedController extends FrontendController with ValidActiveS
       val gain = totalGain.fold(BigDecimal(0))(_.rebasedGain.get)
       val chargeableGain = chargeableGainResult.fold(BigDecimal(0))(_.rebasedResult.get.taxableGain)
 
-      val result = model.fold(calculation.nonresident.otherReliefsRebased(otherReliefsForm, hasExistingRelief, chargeableGain, gain)) { data =>
-        calculation.nonresident.otherReliefsRebased(otherReliefsForm.fill(data), hasExistingRelief, chargeableGain, gain)
+      val result = model.fold(calculation.otherReliefsRebased(otherReliefsForm, hasExistingRelief, chargeableGain, gain)) { data =>
+        calculation.otherReliefsRebased(otherReliefsForm.fill(data), hasExistingRelief, chargeableGain, gain)
       }
 
       Ok(result)
@@ -91,8 +92,8 @@ trait OtherReliefsRebasedController extends FrontendController with ValidActiveS
       val chargeableGain = chargeableGainResult.fold(BigDecimal(0))(_.rebasedResult.get.taxableGain)
       calcConnector.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsRebased).map {
 
-        case Some(data) => BadRequest(calculation.nonresident.otherReliefsRebased(form, hasExistingReliefAmount = true, chargeableGain, gain))
-        case _ => BadRequest(calculation.nonresident.otherReliefsRebased(form, hasExistingReliefAmount = false, chargeableGain, gain))
+        case Some(data) => BadRequest(calculation.otherReliefsRebased(form, hasExistingReliefAmount = true, chargeableGain, gain))
+        case _ => BadRequest(calculation.otherReliefsRebased(form, hasExistingReliefAmount = false, chargeableGain, gain))
       }
     }
 

@@ -19,10 +19,11 @@ package controllers
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
-import forms.BoughtForLessForm
+import forms.BoughtForLessForm._
 import models.BoughtForLessModel
 import play.api.data.Form
 import uk.gov.hmrc.play.frontend.controller.FrontendController
+import views.html.calculation
 
 import scala.concurrent.Future
 
@@ -32,20 +33,20 @@ object BoughtForLessController extends BoughtForLessController {
 
 trait BoughtForLessController extends FrontendController with ValidActiveSession {
 
-  override val sessionTimeoutUrl = controllers.nonresident.routes.SummaryController.restart().url
-  override val homeLink = controllers.nonresident.routes.DisposalDateController.disposalDate().url
+  override val sessionTimeoutUrl = controllers.routes.SummaryController.restart().url
+  override val homeLink = controllers.routes.DisposalDateController.disposalDate().url
   val calcConnector: CalculatorConnector
 
   val boughtForLess = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[BoughtForLessModel](KeystoreKeys.boughtForLess).map {
-      case Some(data) => Ok(calculation.nonresident.boughtForLess(boughtForLessForm.fill(data)))
-      case None => Ok(calculation.nonresident.boughtForLess(boughtForLessForm))
+      case Some(data) => Ok(calculation.boughtForLess(boughtForLessForm.fill(data)))
+      case None => Ok(calculation.boughtForLess(boughtForLessForm))
     }
   }
 
   val submitBoughtForLess = ValidateSession.async {implicit request =>
 
-    def errorAction(errors: Form[BoughtForLessModel]) = Future.successful(BadRequest(calculation.nonresident.boughtForLess(errors)))
+    def errorAction(errors: Form[BoughtForLessModel]) = Future.successful(BadRequest(calculation.boughtForLess(errors)))
 
     def routeRequest(model: BoughtForLessModel) = {
       if (model.boughtForLess) Future.successful(Redirect(routes.WorthWhenBoughtForLessController.worthWhenBoughtForLess()))

@@ -21,7 +21,7 @@
 
 @main_template(Messages("nocgt.invaliddate.title"), sidebarLinks = Some(sidebar)) {
 
-    <a id="back-link" class="back-link" href="@controllers.nonresident.routes.DisposalDateController.disposalDate">Back</a>
+    <a id="back-link" class="back-link" href="@controllers.routes.DisposalDateController.disposalDate">Back</a>
 
     <h1 class="heading-xlarge">@Messages("nocgt.invaliddate.title")</h1>
     <p>@Messages("nocgt.content.one")</p>
@@ -29,7 +29,7 @@
         @Messages("nocgt.content.two")
         <span class="no-wrap">
             <span class="bold-small">@date</span>
-            <a id="change-link" href="@controllers.nonresident.routes.DisposalDateController.disposalDate">@Messages("nocgt.content.change")</a>
+            <a id="change-link" href="@controllers.routes.DisposalDateController.disposalDate">@Messages("nocgt.content.change")</a>
         </span>
     </p>
 }

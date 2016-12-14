@@ -19,7 +19,8 @@ package controllers
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
-import forms.HowMuchLossForm
+import forms.HowMuchLossForm._
+import views.html.calculation
 import models.HowMuchLossModel
 import play.api.data.Form
 import uk.gov.hmrc.play.frontend.controller.FrontendController
@@ -34,20 +35,20 @@ trait HowMuchLossController extends FrontendController with ValidActiveSession {
 
   val calcConnector: CalculatorConnector
 
-  override val sessionTimeoutUrl = controllers.nonresident.routes.SummaryController.restart().url
-  override val homeLink = controllers.nonresident.routes.DisposalDateController.disposalDate().url
+  override val sessionTimeoutUrl = controllers.routes.SummaryController.restart().url
+  override val homeLink = controllers.routes.DisposalDateController.disposalDate().url
 
   val howMuchLoss = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[HowMuchLossModel](KeystoreKeys.howMuchLoss).map {
-      case Some(data) => Ok(calculation.nonresident.howMuchLoss(howMuchLossForm.fill(data)))
-      case _ => Ok(calculation.nonresident.howMuchLoss(howMuchLossForm))
+      case Some(data) => Ok(calculation.howMuchLoss(howMuchLossForm.fill(data)))
+      case _ => Ok(calculation.howMuchLoss(howMuchLossForm))
     }
   }
 
   val submitHowMuchLoss = ValidateSession.async { implicit request =>
 
     def errorAction(form: Form[HowMuchLossModel]) = {
-      Future.successful(BadRequest(calculation.nonresident.howMuchLoss(form)))
+      Future.successful(BadRequest(calculation.howMuchLoss(form)))
     }
 
     def successAction(model: HowMuchLossModel) = {

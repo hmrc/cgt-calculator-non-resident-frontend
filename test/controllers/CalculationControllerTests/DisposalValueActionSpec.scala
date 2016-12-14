@@ -48,8 +48,8 @@ class DisposalValueActionSpec extends UnitSpec with WithFakeApplication with Moc
   }
 
   "DisposalValueController" should {
-    s"have a session timeout home link of '${controllers.nonresident.routes.DisposalDateController.disposalDate().url}'" in {
-      DisposalValueController.homeLink shouldEqual controllers.nonresident.routes.DisposalDateController.disposalDate().url
+    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+      DisposalValueController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
     }
   }
 
@@ -110,7 +110,7 @@ class DisposalValueActionSpec extends UnitSpec with WithFakeApplication with Moc
       }
 
       "redirect to the Disposal Costs page" in {
-        redirectLocation(result) shouldBe Some(controllers.nonresident.routes.DisposalCostsController.disposalCosts().url)
+        redirectLocation(result) shouldBe Some(controllers.routes.DisposalCostsController.disposalCosts().url)
       }
     }
 

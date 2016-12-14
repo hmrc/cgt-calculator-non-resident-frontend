@@ -21,7 +21,8 @@ import common.nonresident.TaxableGainCalculation._
 import connectors.CalculatorConnector
 import constructors.AnswersConstructor
 import controllers.predicates.ValidActiveSession
-import forms.OtherReliefsForm
+import forms.OtherReliefsForm._
+import views.html.calculation
 import models.{CalculationResultsWithTaxOwedModel, OtherReliefsModel, TotalGainResultsModel}
 import play.api.data.Form
 import uk.gov.hmrc.play.frontend.controller.FrontendController
@@ -35,8 +36,8 @@ object OtherReliefsTAController extends OtherReliefsTAController {
 
 trait OtherReliefsTAController extends FrontendController with ValidActiveSession {
 
-  override val sessionTimeoutUrl = controllers.nonresident.routes.SummaryController.restart().url
-  override val homeLink = controllers.nonresident.routes.DisposalDateController.disposalDate().url
+  override val sessionTimeoutUrl = controllers.routes.SummaryController.restart().url
+  override val homeLink = controllers.routes.DisposalDateController.disposalDate().url
   val answersConstructor: AnswersConstructor
   val calcConnector: CalculatorConnector
 
@@ -49,8 +50,8 @@ trait OtherReliefsTAController extends FrontendController with ValidActiveSessio
       val gain = totalGain.fold(BigDecimal(0))(_.timeApportionedGain.get)
       val chargeableGain = chargeableGainResult.fold(BigDecimal(0))(_.timeApportionedResult.get.taxableGain)
 
-      val result = model.fold(calculation.nonresident.otherReliefsTA(otherReliefsForm, hasExistingRelief, chargeableGain, gain)) { data =>
-        calculation.nonresident.otherReliefsTA(otherReliefsForm.fill(data), hasExistingRelief, chargeableGain, gain)
+      val result = model.fold(calculation.otherReliefsTA(otherReliefsForm, hasExistingRelief, chargeableGain, gain)) { data =>
+        calculation.otherReliefsTA(otherReliefsForm.fill(data), hasExistingRelief, chargeableGain, gain)
       }
 
       Ok(result)
@@ -97,8 +98,8 @@ trait OtherReliefsTAController extends FrontendController with ValidActiveSessio
 
 
       calcConnector.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsTA).map {
-        case Some(data) => BadRequest(calculation.nonresident.otherReliefsTA(form, hasExistingReliefAmount = true, chargeableGain, gain))
-        case _ => BadRequest(calculation.nonresident.otherReliefsTA(form, hasExistingReliefAmount = false, chargeableGain, gain))
+        case Some(data) => BadRequest(calculation.otherReliefsTA(form, hasExistingReliefAmount = true, chargeableGain, gain))
+        case _ => BadRequest(calculation.otherReliefsTA(form, hasExistingReliefAmount = false, chargeableGain, gain))
       }
     }
 

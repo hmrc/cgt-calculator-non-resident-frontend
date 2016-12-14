@@ -19,7 +19,9 @@ package controllers
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
-import forms.{MarketValueGaveAwayForm, MarketValueWhenSoldForm}
+import forms.MarketValueGaveAwayForm._
+import forms.MarketValueWhenSoldForm._
+import views.html.calculation
 import models.DisposalValueModel
 import play.api.data.Form
 import uk.gov.hmrc.play.frontend.controller.FrontendController
@@ -32,26 +34,26 @@ object MarketValueWhenSoldOrGaveAwayController extends MarketValueWhenSoldOrGave
 
 trait MarketValueWhenSoldOrGaveAwayController extends FrontendController with ValidActiveSession {
   val calcConnector: CalculatorConnector
-  override val sessionTimeoutUrl = controllers.nonresident.routes.SummaryController.restart().url
-  override val homeLink = controllers.nonresident.routes.DisposalDateController.disposalDate().url
+  override val sessionTimeoutUrl = controllers.routes.SummaryController.restart().url
+  override val homeLink = controllers.routes.DisposalDateController.disposalDate().url
 
   val marketValueWhenSold = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[DisposalValueModel](KeystoreKeys.disposalMarketValue).map {
-      case Some(data) => Ok(calculation.nonresident.marketValueSold(marketValueWhenSoldForm.fill(data)))
-      case None => Ok(calculation.nonresident.marketValueSold(marketValueWhenSoldForm))
+      case Some(data) => Ok(calculation.marketValueSold(marketValueWhenSoldForm.fill(data)))
+      case None => Ok(calculation.marketValueSold(marketValueWhenSoldForm))
     }
   }
 
   val marketValueWhenGaveAway = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[DisposalValueModel](KeystoreKeys.disposalMarketValue).map {
-      case Some(data) => Ok(calculation.nonresident.marketValueGaveAway(marketValueWhenGaveAwayForm.fill(data)))
-      case None => Ok(calculation.nonresident.marketValueGaveAway(marketValueWhenGaveAwayForm))
+      case Some(data) => Ok(calculation.marketValueGaveAway(marketValueWhenGaveAwayForm.fill(data)))
+      case None => Ok(calculation.marketValueGaveAway(marketValueWhenGaveAwayForm))
     }
   }
 
   val submitMarketValueWhenSold = ValidateSession.async { implicit request =>
 
-    def errorAction(form: Form[DisposalValueModel]) = Future.successful(BadRequest(calculation.nonresident.marketValueSold(form)))
+    def errorAction(form: Form[DisposalValueModel]) = Future.successful(BadRequest(calculation.marketValueSold(form)))
 
     def successAction(model: DisposalValueModel) = {
       calcConnector.saveFormData(KeystoreKeys.disposalMarketValue, model)
@@ -63,7 +65,7 @@ trait MarketValueWhenSoldOrGaveAwayController extends FrontendController with Va
 
   val submitMarketValueWhenGaveAway = ValidateSession.async { implicit request =>
 
-    def errorAction(form: Form[DisposalValueModel]) = Future.successful(BadRequest(calculation.nonresident.marketValueGaveAway(form)))
+    def errorAction(form: Form[DisposalValueModel]) = Future.successful(BadRequest(calculation.marketValueGaveAway(form)))
 
     def successAction(model: DisposalValueModel) = {
       calcConnector.saveFormData(KeystoreKeys.disposalMarketValue, model)

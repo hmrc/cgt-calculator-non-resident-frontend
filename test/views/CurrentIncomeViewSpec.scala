@@ -20,7 +20,9 @@ import assets.MessageLookup.{NonResident => messages}
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
 import org.scalatest.mock.MockitoSugar
+import forms.CurrentIncomeForm._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import views.html.calculation.currentIncome
 
 class CurrentIncomeViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
@@ -46,12 +48,12 @@ class CurrentIncomeViewSpec extends UnitSpec with WithFakeApplication with Mocki
         }
 
         s"has a route to 'customer-type'" in {
-          backLink.attr("href") shouldBe controllers.nonresident.routes.CustomerTypeController.customerType().url
+          backLink.attr("href") shouldBe controllers.routes.CustomerTypeController.customerType().url
         }
       }
 
       s"have a home link to the disposal date view'" in {
-        document.select("#homeNavHref").attr("href") shouldEqual controllers.nonresident.routes.DisposalDateController.disposalDate().url
+        document.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
       }
 
       "have a form" which {
@@ -62,7 +64,7 @@ class CurrentIncomeViewSpec extends UnitSpec with WithFakeApplication with Mocki
         }
 
         s"has a the correct action" in {
-          form.attr("action") shouldBe controllers.nonresident.routes.CurrentIncomeController.submitCurrentIncome().url
+          form.attr("action") shouldBe controllers.routes.CurrentIncomeController.submitCurrentIncome().url
         }
       }
 

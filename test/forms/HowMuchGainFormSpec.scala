@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package forms.nonResident
+package forms
 
-import models.HowMuchGainModel
 import assets.MessageLookup.{NonResident => messages}
-import forms.HowMuchGainForm
+import models.HowMuchGainModel
+import forms.HowMuchGainForm._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 class HowMuchGainFormSpec extends UnitSpec with WithFakeApplication {

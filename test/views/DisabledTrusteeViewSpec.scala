@@ -19,8 +19,10 @@ package views
 import assets.MessageLookup.{NonResident => messages}
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
+import forms.DisabledTrusteeForm._
 import org.scalatest.mock.MockitoSugar
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import views.html.calculation.disabledTrustee
 
 class DisabledTrusteeViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
@@ -42,7 +44,7 @@ class DisabledTrusteeViewSpec extends UnitSpec with WithFakeApplication with Moc
         }
 
         s"has a route to 'customer-type'" in {
-          backLink.attr("href") shouldBe controllers.nonresident.routes.CustomerTypeController.customerType().url
+          backLink.attr("href") shouldBe controllers.routes.CustomerTypeController.customerType().url
         }
       }
 
@@ -58,8 +60,8 @@ class DisabledTrusteeViewSpec extends UnitSpec with WithFakeApplication with Moc
         }
       }
 
-      s"have a home link to '${controllers.nonresident.routes.DisposalDateController.disposalDate().url}'" in {
-        document.select("#homeNavHref").attr("href") shouldEqual controllers.nonresident.routes.DisposalDateController.disposalDate().url
+      s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+        document.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
       }
 
       "have a sidebar" which {
@@ -114,8 +116,8 @@ class DisabledTrusteeViewSpec extends UnitSpec with WithFakeApplication with Moc
           form.attr("method") shouldBe "POST"
         }
 
-        s"has an action of '${controllers.nonresident.routes.DisabledTrusteeController.submitDisabledTrustee().url}'" in {
-          form.attr("action") shouldBe controllers.nonresident.routes.DisabledTrusteeController.submitDisabledTrustee().url
+        s"has an action of '${controllers.routes.DisabledTrusteeController.submitDisabledTrustee().url}'" in {
+          form.attr("action") shouldBe controllers.routes.DisabledTrusteeController.submitDisabledTrustee().url
         }
       }
 

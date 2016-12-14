@@ -24,7 +24,7 @@
 
     <div class="grid-layout__column grid-layout__column--2-3">
 
-        <a type="submit" class="button nr save-pdf-button" href="@controllers.nonresident.routes.ReportController.summaryReport.toString" data-journey-click="nr-summary:pdf:save">@Messages("calc.resident.summary.saveAsPdf")</a>
+        <a type="submit" class="button nr save-pdf-button" href="@controllers.routes.ReportController.summaryReport.toString" data-journey-click="nr-summary:pdf:save">@Messages("calc.resident.summary.saveAsPdf")</a>
 
         <div id="whatToDoNext" class="form-group">
             <h2 class="heading-medium">@Messages("calc.common.next.actions.heading")</h2>
@@ -36,7 +36,7 @@
             </p>
         </div>
 
-        <a id="startAgain" class="bold-medium" href="@controllers.nonresident.routes.SummaryController.restart" data-journey-click="nav:calc:restart">@Messages("calc.summary.startAgain")</a>
+        <a id="startAgain" class="bold-medium" href="@controllers.routes.SummaryController.restart" data-journey-click="nav:calc:restart">@Messages("calc.summary.startAgain")</a>
 
     </div>
 }

@@ -32,7 +32,7 @@ import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 import scala.concurrent.Future
 
-class SoldForLessControllerSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper with MockitoSugar {
+class SoldForLessActionSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper with MockitoSugar {
 
   def setupTarget(getData: Option[SoldForLessModel]): SoldForLessController = {
 
@@ -50,8 +50,8 @@ class SoldForLessControllerSpec extends UnitSpec with WithFakeApplication with F
   }
 
   "SoldForLessController" should {
-    s"have a session timeout home link of '${controllers.nonresident.routes.DisposalDateController.disposalDate().url}'" in {
-      SoldForLessController.homeLink shouldEqual controllers.nonresident.routes.DisposalDateController.disposalDate().url
+    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+      SoldForLessController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
     }
   }
 
@@ -115,7 +115,7 @@ class SoldForLessControllerSpec extends UnitSpec with WithFakeApplication with F
       }
 
       "redirect to the market value when sold page" in {
-        redirectLocation(result).get shouldBe controllers.nonresident.routes.MarketValueWhenSoldOrGaveAwayController.marketValueWhenSold().url
+        redirectLocation(result).get shouldBe controllers.routes.MarketValueWhenSoldOrGaveAwayController.marketValueWhenSold().url
 
       }
     }

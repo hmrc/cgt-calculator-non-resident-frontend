@@ -20,8 +20,10 @@ import assets.MessageLookup.NonResident.{SoldForLess => messages}
 import assets.MessageLookup.{NonResident => commonMessages}
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
+import forms.SoldForLessForm._
 import org.scalatest.mock.MockitoSugar
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import views.html.calculation.soldForLess
 
 class SoldForLessViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
@@ -48,12 +50,12 @@ class SoldForLessViewSpec extends UnitSpec with WithFakeApplication with Mockito
         }
 
         s"has a route to 'sold-or-given-away'" in {
-          backLink.attr("href") shouldBe controllers.nonresident.routes.SoldOrGivenAwayController.soldOrGivenAway().url
+          backLink.attr("href") shouldBe controllers.routes.SoldOrGivenAwayController.soldOrGivenAway().url
         }
       }
 
-      s"have a home link to '${controllers.nonresident.routes.DisposalDateController.disposalDate().url}'" in {
-        document.select("#homeNavHref").attr("href") shouldEqual controllers.nonresident.routes.DisposalDateController.disposalDate().url
+      s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+        document.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
       }
 
       "have a heading" which {
@@ -93,8 +95,8 @@ class SoldForLessViewSpec extends UnitSpec with WithFakeApplication with Mockito
           form.attr("method") shouldBe "POST"
         }
 
-        s"has an action of '${controllers.nonresident.routes.SoldForLessController.submitSoldForLess().url}'" in {
-          form.attr("action") shouldBe controllers.nonresident.routes.SoldForLessController.submitSoldForLess().url
+        s"has an action of '${controllers.routes.SoldForLessController.submitSoldForLess().url}'" in {
+          form.attr("action") shouldBe controllers.routes.SoldForLessController.submitSoldForLess().url
         }
       }
 

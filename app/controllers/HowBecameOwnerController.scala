@@ -19,13 +19,13 @@ package controllers
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
-import forms.HowBecameOwnerForm
+import forms.HowBecameOwnerForm._
 import models.{AcquisitionDateModel, HowBecameOwnerModel, RebasedValueModel}
 import play.api.data.Form
 import play.api.mvc.Result
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import uk.gov.hmrc.play.http.HeaderCarrier
-import views.html.calculation.{nonresident => views}
+import views.html.{calculation => views}
 
 import scala.concurrent.Future
 
@@ -36,8 +36,8 @@ object HowBecameOwnerController extends HowBecameOwnerController {
 trait HowBecameOwnerController extends FrontendController with ValidActiveSession {
 
   val calcConnector: CalculatorConnector
-  override val sessionTimeoutUrl = controllers.nonresident.routes.SummaryController.restart().url
-  override val homeLink = controllers.nonresident.routes.DisposalDateController.disposalDate().url
+  override val sessionTimeoutUrl = controllers.routes.SummaryController.restart().url
+  override val homeLink = controllers.routes.DisposalDateController.disposalDate().url
 
   def getAcquisitionDate(implicit hc: HeaderCarrier): Future[Option[AcquisitionDateModel]] = {
     calcConnector.fetchAndGetFormData[AcquisitionDateModel](KeystoreKeys.acquisitionDate)

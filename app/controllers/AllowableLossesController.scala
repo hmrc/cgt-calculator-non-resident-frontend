@@ -21,7 +21,7 @@ import common.TaxDates
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import forms.AllowableLossesForm._
-import views.calculation
+import views.html.calculation
 import models.{AcquisitionDateModel, AllowableLossesModel, CalculationElectionModel, RebasedValueModel}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import uk.gov.hmrc.play.http.HeaderCarrier
@@ -35,8 +35,8 @@ object AllowableLossesController extends AllowableLossesController {
 
 trait AllowableLossesController extends FrontendController with ValidActiveSession {
 
-  override val sessionTimeoutUrl = controllers.nonresident.routes.SummaryController.restart().url
-  override val homeLink = controllers.nonresident.routes.DisposalDateController.disposalDate().url
+  override val sessionTimeoutUrl = controllers.routes.SummaryController.restart().url
+  override val homeLink = controllers.routes.DisposalDateController.disposalDate().url
   val calcConnector: CalculatorConnector
 
   def allowableLossesBackLink(implicit hc: HeaderCarrier): Future[String] = {

@@ -48,8 +48,8 @@ class HowMuchGainActionSpec extends UnitSpec with WithFakeApplication with Mocki
   }
 
   "HowMuchGainController" should {
-    s"have a session timeout home link of '${controllers.nonresident.routes.DisposalDateController.disposalDate().url}'" in {
-      HowMuchGainController.homeLink shouldEqual controllers.nonresident.routes.DisposalDateController.disposalDate().url
+    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+      HowMuchGainController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
     }
   }
 
@@ -110,7 +110,7 @@ class HowMuchGainActionSpec extends UnitSpec with WithFakeApplication with Mocki
       }
 
       "redirect to the Brought Forward Losses page" in {
-        redirectLocation(result) shouldBe Some(controllers.nonresident.routes.BroughtForwardLossesController.broughtForwardLosses().url)
+        redirectLocation(result) shouldBe Some(controllers.routes.BroughtForwardLossesController.broughtForwardLosses().url)
       }
     }
 
@@ -124,7 +124,7 @@ class HowMuchGainActionSpec extends UnitSpec with WithFakeApplication with Mocki
       }
 
       "redirect to the Annual Exempt Amount page" in {
-        redirectLocation(result) shouldBe Some(controllers.nonresident.routes.AnnualExemptAmountController.annualExemptAmount().url)
+        redirectLocation(result) shouldBe Some(controllers.routes.AnnualExemptAmountController.annualExemptAmount().url)
       }
     }
 

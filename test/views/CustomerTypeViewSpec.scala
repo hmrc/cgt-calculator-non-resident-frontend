@@ -21,12 +21,14 @@ import assets.MessageLookup.{NonResident => commonMessages}
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
 import org.scalatest.mock.MockitoSugar
+import forms.CustomerTypeForm._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import views.html.calculation.customerType
 
 class CustomerTypeViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
   "The Customer Type View" should {
-    val dummyBackLink = controllers.nonresident.routes.PrivateResidenceReliefController.privateResidenceRelief().url
+    val dummyBackLink = controllers.routes.PrivateResidenceReliefController.privateResidenceRelief().url
     lazy val view = customerType(customerTypeForm, dummyBackLink)(fakeRequest)
     lazy val document = Jsoup.parse(view.body)
 
@@ -48,8 +50,8 @@ class CustomerTypeViewSpec extends UnitSpec with WithFakeApplication with Mockit
         }
       }
 
-      s"have a home link to '${controllers.nonresident.routes.DisposalDateController.disposalDate().url}'" in {
-        document.select("#homeNavHref").attr("href") shouldEqual controllers.nonresident.routes.DisposalDateController.disposalDate().url
+      s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+        document.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
       }
 
       "have a form" which {
@@ -59,8 +61,8 @@ class CustomerTypeViewSpec extends UnitSpec with WithFakeApplication with Mockit
           form.attr("method") shouldBe "POST"
         }
 
-        s"has an action of '${controllers.nonresident.routes.CustomerTypeController.submitCustomerType().url}'" in {
-          form.attr("action") shouldBe controllers.nonresident.routes.CustomerTypeController.submitCustomerType().url
+        s"has an action of '${controllers.routes.CustomerTypeController.submitCustomerType().url}'" in {
+          form.attr("action") shouldBe controllers.routes.CustomerTypeController.submitCustomerType().url
         }
       }
 

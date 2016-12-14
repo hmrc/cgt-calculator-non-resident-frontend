@@ -14,7 +14,7 @@
 
 @main_template(Messages("calc.nonResident.rebasedValue.questionAndDate")) {
 
-    <a id="back-link" class="back-link" href="@controllers.nonresident.routes.AcquisitionCostsController.acquisitionCosts">@Messages("calc.base.back")</a>
+    <a id="back-link" class="back-link" href="@controllers.routes.AcquisitionCostsController.acquisitionCosts">@Messages("calc.base.back")</a>
 
     @errorSummary(rebasedValueForm, "rebased-value", "rebasedValueAmt")
 
@@ -26,7 +26,7 @@
 
     @hiddenHelpText("rebasedValue", Messages("calc.nonResident.rebasedValue.helpHidden.title"), hiddenHelpTextContent)
 
-    @form(action = controllers.nonresident.routes.RebasedValueController.submitRebasedValue) {
+    @form(action = controllers.routes.RebasedValueController.submitRebasedValue) {
 
         @formInputMoney(rebasedValueForm, "rebasedValueAmt", Messages("calc.nonResident.rebasedValue.questionAndDate"), hideLabel = true)
 

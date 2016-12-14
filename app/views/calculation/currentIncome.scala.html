@@ -7,13 +7,13 @@
 
 @main_template(Messages("calc.currentIncome.question")) {
 
-    <a id="back-link" class="back-link" href="@controllers.nonresident.routes.CustomerTypeController.customerType">Back</a>
+    <a id="back-link" class="back-link" href="@controllers.routes.CustomerTypeController.customerType">Back</a>
 
     @errorSummary(currentIncomeForm, "current-income")
 
     <h1 class="heading-xlarge">@Messages("calc.currentIncome.question")</h1>
 
-    @form(action = controllers.nonresident.routes.CurrentIncomeController.submitCurrentIncome) {
+    @form(action = controllers.routes.CurrentIncomeController.submitCurrentIncome) {
 
         <span class="form-hint">@Messages("calc.currentIncome.helpText.line1")</span>
         <span class="form-hint">@Messages("calc.currentIncome.helpText.line2")</span>

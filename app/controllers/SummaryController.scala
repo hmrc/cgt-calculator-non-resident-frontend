@@ -26,6 +26,7 @@ import models.{CalculationResultsWithPRRModel, TaxYearModel, _}
 import play.api.mvc.{Action, AnyContent, Result}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import uk.gov.hmrc.play.http.HeaderCarrier
+import views.html.calculation
 
 import scala.concurrent.Future
 
@@ -36,8 +37,8 @@ object SummaryController extends SummaryController {
 
 trait SummaryController extends FrontendController with ValidActiveSession {
 
-  override val sessionTimeoutUrl = controllers.nonresident.routes.SummaryController.restart().url
-  override val homeLink = controllers.nonresident.routes.DisposalDateController.disposalDate().url
+  override val sessionTimeoutUrl = controllers.routes.SummaryController.restart().url
+  override val homeLink = controllers.routes.DisposalDateController.disposalDate().url
   val calcConnector: CalculatorConnector
   val answersConstructor: AnswersConstructor
 
@@ -151,7 +152,7 @@ trait SummaryController extends FrontendController with ValidActiveSession {
                      backUrl: String, displayDateWarning: Boolean,
                      calculationType: String,
                      taxOwed: Option[BigDecimal]): Future[Result] = {
-      Future.successful(Ok(calculation.nonresident.summary(result,
+      Future.successful(Ok(calculation.summary(result,
         backUrl, displayDateWarning, calculationType, taxOwed)))
     }
 

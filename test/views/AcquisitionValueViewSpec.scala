@@ -20,8 +20,10 @@ import assets.MessageLookup.NonResident.{AcquisitionValue => messages}
 import assets.MessageLookup.{NonResident => commonMessages}
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
+import forms.AcquisitionValueForm._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
-import views.html.calculation.{nonresident => views}
+import views.html.{calculation => views}
+import controllers.routes
 
 
 class AcquisitionValueViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper{
@@ -43,8 +45,8 @@ class AcquisitionValueViewSpec extends UnitSpec with WithFakeApplication with Fa
       }
     }
 
-    s"have a home link to '${controllers.nonresident.routes.DisposalDateController.disposalDate().url}'" in {
-      document.select("#homeNavHref").attr("href") shouldEqual controllers.nonresident.routes.DisposalDateController.disposalDate().url
+    s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+      document.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
     }
 
     "have a 'Back link' that" should{

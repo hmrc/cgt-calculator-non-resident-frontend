@@ -22,7 +22,7 @@ import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.nonresident.{CustomerTypeKeys, PreviousGainOrLossKeys}
 import models._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
-import controllers.nonresident.routes
+import controllers.routes
 
 class PersonalAndPreviousDetailsConstructorSpec extends UnitSpec with WithFakeApplication {
 

@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package forms.nonResident
+package forms
 
 import java.time.LocalDate
 
-import models.DisposalDateModel
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import assets.MessageLookup.{NonResident => messages}
-import forms.DisposalDateForm
+import models.DisposalDateModel
+import forms.DisposalDateForm._
+import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 class DisposalDateFormSpec extends UnitSpec with WithFakeApplication {
 

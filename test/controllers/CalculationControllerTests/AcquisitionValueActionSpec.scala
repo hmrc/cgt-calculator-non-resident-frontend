@@ -30,7 +30,7 @@ import controllers.AcquisitionValueController
 import controllers.helpers.FakeRequestHelper
 
 import scala.concurrent.Future
-import controllers.nonresident.routes
+import controllers.routes
 import models.AcquisitionValueModel
 
 class AcquisitionValueActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
@@ -50,8 +50,8 @@ class AcquisitionValueActionSpec extends UnitSpec with WithFakeApplication with 
   }
 
   "AcquisitionValueController" should {
-    s"have a session timeout home link of '${controllers.nonresident.routes.DisposalDateController.disposalDate().url}'" in {
-      AcquisitionValueController.homeLink shouldEqual controllers.nonresident.routes.DisposalDateController.disposalDate().url
+    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+      AcquisitionValueController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
     }
   }
 

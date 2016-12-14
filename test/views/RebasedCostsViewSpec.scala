@@ -19,7 +19,9 @@ package views
 import assets.MessageLookup.{NonResident => messages}
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
+import forms.RebasedCostsForm._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import views.html.calculation.rebasedCosts
 
 class RebasedCostsViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
 
@@ -45,7 +47,7 @@ class RebasedCostsViewSpec extends UnitSpec with WithFakeApplication with FakeRe
         }
 
         s"has a route to 'rebased-value'" in {
-          backLink.attr("href") shouldBe controllers.nonresident.routes.RebasedValueController.rebasedValue().url
+          backLink.attr("href") shouldBe controllers.routes.RebasedValueController.rebasedValue().url
         }
       }
 
@@ -61,8 +63,8 @@ class RebasedCostsViewSpec extends UnitSpec with WithFakeApplication with FakeRe
         }
       }
 
-      s"have a home link to '${controllers.nonresident.routes.DisposalDateController.disposalDate().url}'" in {
-        document.select("#homeNavHref").attr("href") shouldEqual controllers.nonresident.routes.DisposalDateController.disposalDate().url
+      s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+        document.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
       }
 
       "have a form" which {
@@ -72,8 +74,8 @@ class RebasedCostsViewSpec extends UnitSpec with WithFakeApplication with FakeRe
           form.attr("method") shouldBe "POST"
         }
 
-        s"has an action of '${controllers.nonresident.routes.RebasedCostsController.rebasedCosts().url}'" in {
-          form.attr("action") shouldBe controllers.nonresident.routes.RebasedCostsController.rebasedCosts().url
+        s"has an action of '${controllers.routes.RebasedCostsController.rebasedCosts().url}'" in {
+          form.attr("action") shouldBe controllers.routes.RebasedCostsController.rebasedCosts().url
         }
       }
 

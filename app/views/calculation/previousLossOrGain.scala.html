@@ -23,13 +23,13 @@
 
 @main_template(Messages("calc.previousLossOrGain.question"), sidebarLinks = Some(sidebar)) {
 
-    <a id="back-link" class="back-link" href="@controllers.nonresident.routes.OtherPropertiesController.otherProperties()">@Messages("calc.base.back")</a>
+    <a id="back-link" class="back-link" href="@controllers.routes.OtherPropertiesController.otherProperties()">@Messages("calc.base.back")</a>
 
     @errorSummary(previousLossOrGainForm, "previousLossOrGain")
 
     <h1 class="heading-xlarge">@Messages("calc.previousLossOrGain.question")</h1>
 
-    @form(action = controllers.nonresident.routes.PreviousGainOrLossController.submitPreviousGainOrLoss()) {
+    @form(action = controllers.routes.PreviousGainOrLossController.submitPreviousGainOrLoss()) {
         @formInputRadioGroup(
             field = previousLossOrGainForm("previousLossOrGain"),
             Seq(

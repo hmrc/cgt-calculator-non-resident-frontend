@@ -6,7 +6,7 @@
 
 @main_template(Messages("calc.marketValue.gaveItAway.question")) {
 
-    <a id="back-link" class="back-link" href="@controllers.nonresident.routes.SoldOrGivenAwayController.soldOrGivenAway">@Messages("calc.base.back")</a>
+    <a id="back-link" class="back-link" href="@controllers.routes.SoldOrGivenAwayController.soldOrGivenAway">@Messages("calc.base.back")</a>
 
     @errorSummary(marketValueForm, "disposalValue")
 
@@ -16,7 +16,7 @@
         @Messages("calc.marketValue.helpTextAdditional")
     </p>
 
-    @form(action = controllers.nonresident.routes.MarketValueWhenSoldOrGaveAwayController.submitMarketValueWhenGaveAway()) {
+    @form(action = controllers.routes.MarketValueWhenSoldOrGaveAwayController.submitMarketValueWhenGaveAway()) {
         @formInputMoney(marketValueForm, "disposalValue", Messages("calc.marketValue.gaveItAway.question"), hideLabel = true)
 
         <button id="continue-button" type="submit" class="button">@Messages("calc.base.button.continue")</button>

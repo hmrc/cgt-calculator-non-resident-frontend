@@ -21,7 +21,8 @@ import common.TaxDates
 import connectors.CalculatorConnector
 import constructors.AnswersConstructor
 import controllers.predicates.ValidActiveSession
-import forms.ImprovementsForm
+import forms.ImprovementsForm._
+import views.html.calculation
 import models._
 import play.api.data.Form
 import play.api.mvc.Result
@@ -39,8 +40,8 @@ trait ImprovementsController extends FrontendController with ValidActiveSession 
 
   val calcConnector: CalculatorConnector
   val answersConstructor: AnswersConstructor
-  override val sessionTimeoutUrl = controllers.nonresident.routes.SummaryController.restart().url
-  override val homeLink = controllers.nonresident.routes.DisposalDateController.disposalDate().url
+  override val sessionTimeoutUrl = controllers.routes.SummaryController.restart().url
+  override val homeLink = controllers.routes.DisposalDateController.disposalDate().url
 
   private def improvementsBackUrl(rebasedValue: Option[RebasedValueModel], acquisitionDate: Option[AcquisitionDateModel])
                                  (implicit hc: HeaderCarrier): Future[String] = (rebasedValue, acquisitionDate) match {
@@ -88,10 +89,10 @@ trait ImprovementsController extends FrontendController with ValidActiveSession 
     def routeRequest(backUrl: String, improvementsModel: Option[ImprovementsModel], improvementsOptions: Boolean): Future[Result] = {
       improvementsModel match {
         case Some(data) =>
-          Future.successful(Ok(calculation.nonresident.improvements(improvementsForm(improvementsOptions).fill(data),
+          Future.successful(Ok(calculation.improvements(improvementsForm(improvementsOptions).fill(data),
             improvementsOptions, backUrl)))
         case None =>
-          Future.successful(Ok(calculation.nonresident.improvements(improvementsForm(improvementsOptions),
+          Future.successful(Ok(calculation.improvements(improvementsForm(improvementsOptions),
             improvementsOptions, backUrl)))
       }
     }
@@ -123,14 +124,14 @@ trait ImprovementsController extends FrontendController with ValidActiveSession 
 
         (!finalSeq.forall(_ <= 0), skipPRR) match {
           case (true, false) => Redirect(routes.PrivateResidenceReliefController.privateResidenceRelief())
-          case (true, true) => Redirect(controllers.nonresident.routes.CustomerTypeController.customerType())
+          case (true, true) => Redirect(controllers.routes.CustomerTypeController.customerType())
           case (_, _) => Redirect(routes.CheckYourAnswersController.checkYourAnswers())
         }
       }
     }
 
     def errorAction(errors: Form[ImprovementsModel], backUrl: String, improvementsOptions: Boolean) = {
-      Future.successful(BadRequest(calculation.nonresident.improvements(errors, improvementsOptions, backUrl)))
+      Future.successful(BadRequest(calculation.improvements(errors, improvementsOptions, backUrl)))
     }
 
     def successAction(rebasedValue: Option[RebasedValueModel],

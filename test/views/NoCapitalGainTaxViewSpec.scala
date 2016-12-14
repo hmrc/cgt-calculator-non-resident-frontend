@@ -22,6 +22,7 @@ import models.DisposalDateModel
 import org.jsoup.Jsoup
 import org.scalatest.mock.MockitoSugar
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import views.html.calculation.noCapitalGainsTax
 
 class NoCapitalGainTaxViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
@@ -43,12 +44,12 @@ class NoCapitalGainTaxViewSpec extends UnitSpec with WithFakeApplication with Mo
         }
 
         s"has a route to 'disposal-costs'" in {
-          backLink.attr("href") shouldBe controllers.nonresident.routes.DisposalDateController.disposalDate().url
+          backLink.attr("href") shouldBe controllers.routes.DisposalDateController.disposalDate().url
         }
       }
 
-      s"have a home link to '${controllers.nonresident.routes.DisposalDateController.disposalDate().url}'" in {
-        document.select("#homeNavHref").attr("href") shouldEqual controllers.nonresident.routes.DisposalDateController.disposalDate().url
+      s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+        document.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
       }
 
       "have a heading" which {
@@ -94,7 +95,7 @@ class NoCapitalGainTaxViewSpec extends UnitSpec with WithFakeApplication with Mo
           lazy val changeLink = span.select("a")
 
           "has an href to disposal-date page" in {
-            changeLink.attr("href") shouldBe controllers.nonresident.routes.DisposalDateController.disposalDate().url
+            changeLink.attr("href") shouldBe controllers.routes.DisposalDateController.disposalDate().url
           }
 
           s"has the text ${messages.NoCapitalGainsTax.change}" in {

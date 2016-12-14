@@ -31,7 +31,7 @@ import org.jsoup._
 import org.scalatest.mock.MockitoSugar
 
 import scala.concurrent.Future
-import controllers.nonresident.routes
+import controllers.routes
 import models._
 
 class AnnualExemptAmountActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
@@ -83,8 +83,8 @@ class AnnualExemptAmountActionSpec extends UnitSpec with WithFakeApplication wit
   }
 
   "AnnualExemptAmountController" should {
-    s"have a session timeout home link of '${controllers.nonresident.routes.DisposalDateController.disposalDate().url}'" in {
-      AnnualExemptAmountController.homeLink shouldEqual controllers.nonresident.routes.DisposalDateController.disposalDate().url
+    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+      AnnualExemptAmountController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
     }
   }
 
@@ -266,7 +266,7 @@ class AnnualExemptAmountActionSpec extends UnitSpec with WithFakeApplication wit
       }
 
       "should redirect to the Brought Forward Losses page" in {
-        redirectLocation(result) shouldBe Some(controllers.nonresident.routes.BroughtForwardLossesController.broughtForwardLosses().url)
+        redirectLocation(result) shouldBe Some(controllers.routes.BroughtForwardLossesController.broughtForwardLosses().url)
       }
     }
 
@@ -280,7 +280,7 @@ class AnnualExemptAmountActionSpec extends UnitSpec with WithFakeApplication wit
       }
 
       "should redirect to the Brought Forward Losses page" in {
-        redirectLocation(result) shouldBe Some(controllers.nonresident.routes.BroughtForwardLossesController.broughtForwardLosses().url)
+        redirectLocation(result) shouldBe Some(controllers.routes.BroughtForwardLossesController.broughtForwardLosses().url)
       }
     }
 
@@ -294,7 +294,7 @@ class AnnualExemptAmountActionSpec extends UnitSpec with WithFakeApplication wit
       }
 
       "should redirect to the Brought Forward Losses page" in {
-        redirectLocation(result) shouldBe Some(controllers.nonresident.routes.BroughtForwardLossesController.broughtForwardLosses().url)
+        redirectLocation(result) shouldBe Some(controllers.routes.BroughtForwardLossesController.broughtForwardLosses().url)
       }
     }
 

@@ -44,7 +44,7 @@
 
 @main_template(Messages("calc.privateResidenceRelief.question"), sidebarLinks = Some(sidebar)) {
 
-    <a id="back-link" class="back-link" href="@controllers.nonresident.routes.ImprovementsController.improvements">@Messages("calc.base.back")</a>
+    <a id="back-link" class="back-link" href="@controllers.routes.ImprovementsController.improvements">@Messages("calc.base.back")</a>
 
     @if(daysBeforeShow){@errorSummary(privateResidenceReliefForm, "private-residence-relief", "daysClaimed")
     } else {
@@ -55,7 +55,7 @@
 
     <h1 class="heading-xlarge">@Messages("calc.privateResidenceRelief.question")</h1>
 
-    @form(action = controllers.nonresident.routes.PrivateResidenceReliefController.submitPrivateResidenceRelief) {
+    @form(action = controllers.routes.PrivateResidenceReliefController.submitPrivateResidenceRelief) {
 
         @if(!(daysBeforeShow || daysBetweenShow)){
             <div class="inline form-group">

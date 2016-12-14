@@ -22,7 +22,7 @@ import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
 import controllers.AllowableLossesController
 import controllers.helpers.FakeRequestHelper
-import controllers.nonresident.routes
+import controllers.routes
 import models.{AcquisitionDateModel, AllowableLossesModel, RebasedValueModel}
 import org.jsoup.Jsoup
 import org.mockito.Matchers
@@ -38,7 +38,7 @@ import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 import scala.concurrent.Future
 
-class AllowableLossesSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper with MockitoSugar {
+class AllowableLossesActionSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper with MockitoSugar {
 
   implicit val hc = new HeaderCarrier()
 
@@ -69,8 +69,8 @@ class AllowableLossesSpec extends UnitSpec with WithFakeApplication with FakeReq
   }
 
   "AllowableLossesController" should {
-    s"have a session timeout home link of '${controllers.nonresident.routes.DisposalDateController.disposalDate().url}'" in {
-      AllowableLossesController.homeLink shouldEqual controllers.nonresident.routes.DisposalDateController.disposalDate().url
+    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+      AllowableLossesController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
     }
   }
 

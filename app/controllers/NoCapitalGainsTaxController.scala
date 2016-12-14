@@ -21,6 +21,7 @@ import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import models.DisposalDateModel
 import uk.gov.hmrc.play.frontend.controller.FrontendController
+import views.html.calculation
 
 object NoCapitalGainsTaxController extends NoCapitalGainsTaxController {
   val calcConnector = CalculatorConnector
@@ -28,13 +29,13 @@ object NoCapitalGainsTaxController extends NoCapitalGainsTaxController {
 
 trait NoCapitalGainsTaxController extends FrontendController with ValidActiveSession {
 
-  override val sessionTimeoutUrl = controllers.nonresident.routes.SummaryController.restart().url
-  override val homeLink = controllers.nonresident.routes.DisposalDateController.disposalDate().url
+  override val sessionTimeoutUrl = controllers.routes.SummaryController.restart().url
+  override val homeLink = controllers.routes.DisposalDateController.disposalDate().url
   val calcConnector: CalculatorConnector
 
   val noCapitalGainsTax = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[DisposalDateModel](KeystoreKeys.disposalDate).map {
-      result => Ok(calculation.nonresident.noCapitalGainsTax(result.get))
+      result => Ok(calculation.noCapitalGainsTax(result.get))
     }
   }
 }

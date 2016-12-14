@@ -19,8 +19,10 @@ package views
 import assets.MessageLookup.{NonResident => messages}
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
+import forms.PrivateResidenceReliefForm._
 import org.scalatest.mock.MockitoSugar
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import views.html.calculation.privateResidenceRelief
 
 class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
@@ -46,7 +48,7 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
         }
 
         s"has a route to 'improvements'" in {
-          backLink.attr("href") shouldBe controllers.nonresident.routes.ImprovementsController.improvements().url
+          backLink.attr("href") shouldBe controllers.routes.ImprovementsController.improvements().url
         }
       }
 
@@ -62,8 +64,8 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
         }
       }
 
-      s"have a home link to '${controllers.nonresident.routes.DisposalDateController.disposalDate().url}'" in {
-        document.select("#homeNavHref").attr("href") shouldEqual controllers.nonresident.routes.DisposalDateController.disposalDate().url
+      s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+        document.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
       }
 
       "have a form" which {
@@ -73,8 +75,8 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
           form.attr("method") shouldBe "POST"
         }
 
-        s"has an action of '${controllers.nonresident.routes.PrivateResidenceReliefController.submitPrivateResidenceRelief().url}'" in {
-          form.attr("action") shouldBe controllers.nonresident.routes.PrivateResidenceReliefController.submitPrivateResidenceRelief().url
+        s"has an action of '${controllers.routes.PrivateResidenceReliefController.submitPrivateResidenceRelief().url}'" in {
+          form.attr("action") shouldBe controllers.routes.PrivateResidenceReliefController.submitPrivateResidenceRelief().url
         }
       }
 

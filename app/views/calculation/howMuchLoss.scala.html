@@ -6,13 +6,13 @@
 
 @main_template(Messages("calc.howMuchLoss.question")) {
 
-    <a id="back-link" class="back-link" href="@controllers.nonresident.routes.PreviousGainOrLossController.previousGainOrLoss">Back</a>
+    <a id="back-link" class="back-link" href="@controllers.routes.PreviousGainOrLossController.previousGainOrLoss">Back</a>
 
     @errorSummary(howMuchLossForm, "loss")
 
     <h1 class="heading-xlarge">@Messages("calc.howMuchLoss.question")</h1>
 
-    @form(action = controllers.nonresident.routes.HowMuchLossController.submitHowMuchLoss) {
+    @form(action = controllers.routes.HowMuchLossController.submitHowMuchLoss) {
 
         @formInputMoney(howMuchLossForm, "loss", Messages("calc.howMuchLoss.question"), hideLabel = true)
 

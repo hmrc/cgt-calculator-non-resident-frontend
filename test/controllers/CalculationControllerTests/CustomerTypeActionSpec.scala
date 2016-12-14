@@ -65,8 +65,8 @@ class CustomerTypeActionSpec extends UnitSpec with WithFakeApplication with Mock
   }
 
   "CustomerTypeController" should {
-    s"have a session timeout home link of '${controllers.nonresident.routes.DisposalDateController.disposalDate().url}'" in {
-      CustomerTypeController.homeLink shouldEqual controllers.nonresident.routes.DisposalDateController.disposalDate().url
+    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+      CustomerTypeController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
     }
   }
 
@@ -114,7 +114,7 @@ class CustomerTypeActionSpec extends UnitSpec with WithFakeApplication with Mock
       lazy val document = Jsoup.parse(bodyOf(result))
 
       "have a back link that links to improvements" in {
-        document.getElementById("back-link").attr("href") shouldBe controllers.nonresident.routes.ImprovementsController.improvements().url
+        document.getElementById("back-link").attr("href") shouldBe controllers.routes.ImprovementsController.improvements().url
       }
     }
 
@@ -124,7 +124,7 @@ class CustomerTypeActionSpec extends UnitSpec with WithFakeApplication with Mock
       lazy val document = Jsoup.parse(bodyOf(result))
 
       "have a back link that links to PRR" in {
-        document.getElementById("back-link").attr("href") shouldBe controllers.nonresident.routes.
+        document.getElementById("back-link").attr("href") shouldBe controllers.routes.
           PrivateResidenceReliefController.privateResidenceRelief().url
       }
     }
@@ -135,7 +135,7 @@ class CustomerTypeActionSpec extends UnitSpec with WithFakeApplication with Mock
       lazy val document = Jsoup.parse(bodyOf(result))
 
       "have a back link that links to PRR" in {
-        document.getElementById("back-link").attr("href") shouldBe controllers.nonresident.routes.
+        document.getElementById("back-link").attr("href") shouldBe controllers.routes.
           PrivateResidenceReliefController.privateResidenceRelief().url
       }
     }
@@ -146,7 +146,7 @@ class CustomerTypeActionSpec extends UnitSpec with WithFakeApplication with Mock
       lazy val document = Jsoup.parse(bodyOf(result))
 
       "have a back link that links to PRR" in {
-        document.getElementById("back-link").attr("href") shouldBe controllers.nonresident.routes.
+        document.getElementById("back-link").attr("href") shouldBe controllers.routes.
           PrivateResidenceReliefController.privateResidenceRelief().url
       }
     }

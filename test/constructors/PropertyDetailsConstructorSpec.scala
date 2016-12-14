@@ -117,7 +117,7 @@ class PropertyDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
       }
 
       "have a link to the improvements page" in {
-        result.link shouldBe Some(controllers.nonresident.routes.ImprovementsController.improvements().url)
+        result.link shouldBe Some(controllers.routes.ImprovementsController.improvements().url)
       }
     }
 
@@ -152,7 +152,7 @@ class PropertyDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
       }
 
       "have a link to the improvements page" in {
-        assertExpectedResult(result)(_.link shouldBe Some(controllers.nonresident.routes.ImprovementsController.improvements().url))
+        assertExpectedResult(result)(_.link shouldBe Some(controllers.routes.ImprovementsController.improvements().url))
       }
     }
 
@@ -203,7 +203,7 @@ class PropertyDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
       }
 
       "have a link to the improvements page" in {
-        assertExpectedResult(result)(_.link shouldBe Some(controllers.nonresident.routes.ImprovementsController.improvements().url))
+        assertExpectedResult(result)(_.link shouldBe Some(controllers.routes.ImprovementsController.improvements().url))
       }
     }
 

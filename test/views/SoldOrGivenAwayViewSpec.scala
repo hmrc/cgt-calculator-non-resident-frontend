@@ -20,7 +20,9 @@ import assets.MessageLookup.NonResident.{SoldOrGivenAway => messages}
 import assets.MessageLookup.{NonResident => commonMessages}
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
+import forms.SoldOrGivenAwayForm._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import views.html.calculation.soldOrGivenAway
 
 class SoldOrGivenAwayViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper{
 
@@ -42,7 +44,7 @@ class SoldOrGivenAwayViewSpec extends UnitSpec with WithFakeApplication with Fak
         }
 
         "has the route to Disposal Date" in {
-          backLink.attr("href") shouldBe controllers.nonresident.routes.DisposalDateController.disposalDate().url
+          backLink.attr("href") shouldBe controllers.routes.DisposalDateController.disposalDate().url
         }
       }
 
@@ -58,8 +60,8 @@ class SoldOrGivenAwayViewSpec extends UnitSpec with WithFakeApplication with Fak
         }
       }
 
-      s"have a home link to '${controllers.nonresident.routes.DisposalDateController.disposalDate().url}'" in {
-        document.select("#homeNavHref").attr("href") shouldEqual controllers.nonresident.routes.DisposalDateController.disposalDate().url
+      s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+        document.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
       }
 
       "have a form that" should {
@@ -69,8 +71,8 @@ class SoldOrGivenAwayViewSpec extends UnitSpec with WithFakeApplication with Fak
           form.attr("method") shouldBe "POST"
         }
 
-        s"have an action of ${controllers.nonresident.routes.SoldOrGivenAwayController.soldOrGivenAway().url}" in {
-          form.attr("action") shouldBe controllers.nonresident.routes.SoldOrGivenAwayController.soldOrGivenAway().url
+        s"have an action of ${controllers.routes.SoldOrGivenAwayController.soldOrGivenAway().url}" in {
+          form.attr("action") shouldBe controllers.routes.SoldOrGivenAwayController.soldOrGivenAway().url
         }
       }
 

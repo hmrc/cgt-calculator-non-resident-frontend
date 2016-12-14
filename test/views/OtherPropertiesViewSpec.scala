@@ -20,7 +20,9 @@ import assets.MessageLookup.NonResident.{OtherProperties => messages}
 import assets.MessageLookup.{NonResident => commonMessages}
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
+import forms.OtherPropertiesForm._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import views.html.calculation.otherProperties
 
 class OtherPropertiesViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
 
@@ -50,8 +52,8 @@ class OtherPropertiesViewSpec extends UnitSpec with WithFakeApplication with Fak
         }
       }
 
-      s"have a home link to '${controllers.nonresident.routes.DisposalDateController.disposalDate().url}'" in {
-        document.select("#homeNavHref").attr("href") shouldEqual controllers.nonresident.routes.DisposalDateController.disposalDate().url
+      s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+        document.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
       }
 
       s"have a legend of the input" which {

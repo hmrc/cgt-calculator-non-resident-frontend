@@ -4,177 +4,173 @@
 GET         /assets/*file           controllers.Assets.at(path="/public", file)
 
 #Feedback routes
-GET         /feedback               controllers.FeedbackController.show
-POST        /feedback               controllers.FeedbackController.submit
-GET         /thankyou               controllers.FeedbackController.thankyou
+GET         /feedback               controllers.utils.FeedbackController.show
+POST        /feedback               controllers.utils.FeedbackController.submit
+GET         /thankyou               controllers.utils.FeedbackController.thankyou
 
 #Session Timeout route
-GET         /session-timeout        controllers.TimeoutController.timeout(restartUrl: String, homeLink: String)
+GET         /session-timeout        controllers.utils.TimeoutController.timeout(restartUrl: String, homeLink: String)
 
 
 #Non Resident Calculation controller routes
 ########################################################
 
 #Sold or Given Away
-GET         /sold-or-given-away                 controllers.nonresident.SoldOrGivenAwayController.soldOrGivenAway
-POST        /sold-or-given-away                 controllers.nonresident.SoldOrGivenAwayController.submitSoldOrGivenAway
+GET         /sold-or-given-away                 controllers.SoldOrGivenAwayController.soldOrGivenAway
+POST        /sold-or-given-away                 controllers.SoldOrGivenAwayController.submitSoldOrGivenAway
 
 #Sold for Less
-GET         /sold-for-less                      controllers.nonresident.SoldForLessController.soldForLess
-POST        /sold-for-less                      controllers.nonresident.SoldForLessController.submitSoldForLess
+GET         /sold-for-less                      controllers.SoldForLessController.soldForLess
+POST        /sold-for-less                      controllers.SoldForLessController.submitSoldForLess
 
 #How Became Owner
-GET         /how-became-owner                   controllers.nonresident.HowBecameOwnerController.howBecameOwner
-POST        /how-became-owner                   controllers.nonresident.HowBecameOwnerController.submitHowBecameOwner
+GET         /how-became-owner                   controllers.HowBecameOwnerController.howBecameOwner
+POST        /how-became-owner                   controllers.HowBecameOwnerController.submitHowBecameOwner
 
 #Bought for Less
-GET         /bought-for-less                    controllers.nonresident.BoughtForLessController.boughtForLess
-POST        /bought-for-less                    controllers.nonresident.BoughtForLessController.submitBoughtForLess
+GET         /bought-for-less                    controllers.BoughtForLessController.boughtForLess
+POST        /bought-for-less                    controllers.BoughtForLessController.submitBoughtForLess
 
 #Check Your Answers
-GET         /check-your-answers                 controllers.nonresident.CheckYourAnswersController.checkYourAnswers
-POST        /check-your-answers                 controllers.nonresident.CheckYourAnswersController.submitCheckYourAnswers
+GET         /check-your-answers                 controllers.CheckYourAnswersController.checkYourAnswers
+POST        /check-your-answers                 controllers.CheckYourAnswersController.submitCheckYourAnswers
 
 #Market Value When Sold
-GET         /market-value-when-sold              controllers.nonresident.MarketValueWhenSoldOrGaveAwayController.marketValueWhenSold
-POST        /market-value-when-sold              controllers.nonresident.MarketValueWhenSoldOrGaveAwayController.submitMarketValueWhenSold
+GET         /market-value-when-sold              controllers.MarketValueWhenSoldOrGaveAwayController.marketValueWhenSold
+POST        /market-value-when-sold              controllers.MarketValueWhenSoldOrGaveAwayController.submitMarketValueWhenSold
 
 #Market Value When Gave Away
 
-GET         /market-value-when-gave-away        controllers.nonresident.MarketValueWhenSoldOrGaveAwayController.marketValueWhenGaveAway
-POST        /market-value-when-gave-away        controllers.nonresident.MarketValueWhenSoldOrGaveAwayController.submitMarketValueWhenGaveAway
+GET         /market-value-when-gave-away        controllers.MarketValueWhenSoldOrGaveAwayController.marketValueWhenGaveAway
+POST        /market-value-when-gave-away        controllers.MarketValueWhenSoldOrGaveAwayController.submitMarketValueWhenGaveAway
 
 #Worth When Bought for Less
-GET         /worth-when-bought-for-less          controllers.nonresident.WorthWhenBoughtForLessController.worthWhenBoughtForLess
-POST        /worth-when-bought-for-less          controllers.nonresident.WorthWhenBoughtForLessController.submitWorthWhenBoughtForLess
+GET         /worth-when-bought-for-less          controllers.WorthWhenBoughtForLessController.worthWhenBoughtForLess
+POST        /worth-when-bought-for-less          controllers.WorthWhenBoughtForLessController.submitWorthWhenBoughtForLess
 
 #Worth When Gifted To
-GET         /worth-when-gifted-to                controllers.nonresident.WorthWhenGiftedToController.worthWhenGiftedTo
-POST        /worth-when-gifted-to                controllers.nonresident.WorthWhenGiftedToController.submitWorthWhenGiftedTo
+GET         /worth-when-gifted-to                controllers.WorthWhenGiftedToController.worthWhenGiftedTo
+POST        /worth-when-gifted-to                controllers.WorthWhenGiftedToController.submitWorthWhenGiftedTo
 
 #Worth When Inherited
-GET         /worth-when-inherited                controllers.nonresident.WorthWhenInheritedController.worthWhenInherited
-POST        /worth-when-inherited                controllers.nonresident.WorthWhenInheritedController.submitWorthWhenInherited
+GET         /worth-when-inherited                controllers.WorthWhenInheritedController.worthWhenInherited
+POST        /worth-when-inherited                controllers.WorthWhenInheritedController.submitWorthWhenInherited
 
 #Worth Before Legislation Start
-GET         /worth-before-legislation-start      controllers.nonresident.WorthBeforeLegislationStartController.worthBeforeLegislationStart
-POST        /worth-before-legislation-start      controllers.nonresident.WorthBeforeLegislationStartController.submitWorthBeforeLegislationStart
-
-#Rebased Valuation Cost
-GET         /rebased-valuation-cost              controllers.nonresident.RebasedValuationCostController.rebasedValuationCost
-POST        /rebased-valuation-cost              controllers.nonresident.RebasedValuationCostController.submitRebasedValuationCost
+GET         /worth-before-legislation-start      controllers.WorthBeforeLegislationStartController.worthBeforeLegislationStart
+POST        /worth-before-legislation-start      controllers.WorthBeforeLegislationStartController.submitWorthBeforeLegislationStart
 
 #Customer Type
-GET         /customer-type                      controllers.nonresident.CustomerTypeController.customerType
-POST        /customer-type                      controllers.nonresident.CustomerTypeController.submitCustomerType
+GET         /customer-type                      controllers.CustomerTypeController.customerType
+POST        /customer-type                      controllers.CustomerTypeController.submitCustomerType
 
 #Disabled Trustee
-GET         /disabled-trustee                   controllers.nonresident.DisabledTrusteeController.disabledTrustee
-POST        /disabled-trustee                   controllers.nonresident.DisabledTrusteeController.submitDisabledTrustee
+GET         /disabled-trustee                   controllers.DisabledTrusteeController.disabledTrustee
+POST        /disabled-trustee                   controllers.DisabledTrusteeController.submitDisabledTrustee
 
 #Current Income
-GET         /current-income                     controllers.nonresident.CurrentIncomeController.currentIncome
-POST        /current-income                     controllers.nonresident.CurrentIncomeController.submitCurrentIncome
+GET         /current-income                     controllers.CurrentIncomeController.currentIncome
+POST        /current-income                     controllers.CurrentIncomeController.submitCurrentIncome
 
 #Personal Allowance
-GET         /personal-allowance                 controllers.nonresident.PersonalAllowanceController.personalAllowance
-POST        /personal-allowance                 controllers.nonresident.PersonalAllowanceController.submitPersonalAllowance
+GET         /personal-allowance                 controllers.PersonalAllowanceController.personalAllowance
+POST        /personal-allowance                 controllers.PersonalAllowanceController.submitPersonalAllowance
 
 #Other Properties
-GET         /other-properties                   controllers.nonresident.OtherPropertiesController.otherProperties
-POST        /other-properties                   controllers.nonresident.OtherPropertiesController.submitOtherProperties
+GET         /other-properties                   controllers.OtherPropertiesController.otherProperties
+POST        /other-properties                   controllers.OtherPropertiesController.submitOtherProperties
 
 #Allowance
-GET         /allowance                          controllers.nonresident.AnnualExemptAmountController.annualExemptAmount
-POST        /allowance                          controllers.nonresident.AnnualExemptAmountController.submitAnnualExemptAmount
+GET         /allowance                          controllers.AnnualExemptAmountController.annualExemptAmount
+POST        /allowance                          controllers.AnnualExemptAmountController.submitAnnualExemptAmount
 
 #Acquisition Date
-GET         /acquisition-date                   controllers.nonresident.AcquisitionDateController.acquisitionDate
-POST        /acquisition-date                   controllers.nonresident.AcquisitionDateController.submitAcquisitionDate
+GET         /acquisition-date                   controllers.AcquisitionDateController.acquisitionDate
+POST        /acquisition-date                   controllers.AcquisitionDateController.submitAcquisitionDate
 
 #Acquisition Value
-GET         /acquisition-value                  controllers.nonresident.AcquisitionValueController.acquisitionValue
-POST        /acquisition-value                  controllers.nonresident.AcquisitionValueController.submitAcquisitionValue
+GET         /acquisition-value                  controllers.AcquisitionValueController.acquisitionValue
+POST        /acquisition-value                  controllers.AcquisitionValueController.submitAcquisitionValue
 
 #Rebased Value
-GET         /rebased-value                      controllers.nonresident.RebasedValueController.rebasedValue
-POST        /rebased-value                      controllers.nonresident.RebasedValueController.submitRebasedValue
+GET         /rebased-value                      controllers.RebasedValueController.rebasedValue
+POST        /rebased-value                      controllers.RebasedValueController.submitRebasedValue
 
 #Rebased Costs
-GET         /rebased-costs                      controllers.nonresident.RebasedCostsController.rebasedCosts
-POST        /rebased-costs                      controllers.nonresident.RebasedCostsController.submitRebasedCosts
+GET         /rebased-costs                      controllers.RebasedCostsController.rebasedCosts
+POST        /rebased-costs                      controllers.RebasedCostsController.submitRebasedCosts
 
 #Improvements
-GET         /improvements                       controllers.nonresident.ImprovementsController.improvements
-POST        /improvements                       controllers.nonresident.ImprovementsController.submitImprovements
+GET         /improvements                       controllers.ImprovementsController.improvements
+POST        /improvements                       controllers.ImprovementsController.submitImprovements
 
 #Disposal Date
-GET         /                                   controllers.nonresident.DisposalDateController.disposalDate
-GET         /disposal-date                      controllers.nonresident.DisposalDateController.disposalDate
-POST        /disposal-date                      controllers.nonresident.DisposalDateController.submitDisposalDate
+GET         /                                   controllers.DisposalDateController.disposalDate
+GET         /disposal-date                      controllers.DisposalDateController.disposalDate
+POST        /disposal-date                      controllers.DisposalDateController.submitDisposalDate
 
 #No Capital Gains Tax
-GET         /no-capital-gains-tax               controllers.nonresident.NoCapitalGainsTaxController.noCapitalGainsTax
+GET         /no-capital-gains-tax               controllers.NoCapitalGainsTaxController.noCapitalGainsTax
 
 #Disposal Value
-GET         /disposal-value                     controllers.nonresident.DisposalValueController.disposalValue
-POST        /disposal-value                     controllers.nonresident.DisposalValueController.submitDisposalValue
+GET         /disposal-value                     controllers.DisposalValueController.disposalValue
+POST        /disposal-value                     controllers.DisposalValueController.submitDisposalValue
 
 #Acquisition Costs
-GET         /acquisition-costs                  controllers.nonresident.AcquisitionCostsController.acquisitionCosts
-POST        /acquisition-costs                  controllers.nonresident.AcquisitionCostsController.submitAcquisitionCosts
+GET         /acquisition-costs                  controllers.AcquisitionCostsController.acquisitionCosts
+POST        /acquisition-costs                  controllers.AcquisitionCostsController.submitAcquisitionCosts
 
 #Disposal Costs
-GET         /disposal-costs                     controllers.nonresident.DisposalCostsController.disposalCosts
-POST        /disposal-costs                     controllers.nonresident.DisposalCostsController.submitDisposalCosts
+GET         /disposal-costs                     controllers.DisposalCostsController.disposalCosts
+POST        /disposal-costs                     controllers.DisposalCostsController.submitDisposalCosts
 
 #Private Residence Relief
-GET         /private-residence-relief           controllers.nonresident.PrivateResidenceReliefController.privateResidenceRelief
-POST        /private-residence-relief           controllers.nonresident.PrivateResidenceReliefController.submitPrivateResidenceRelief
+GET         /private-residence-relief           controllers.PrivateResidenceReliefController.privateResidenceRelief
+POST        /private-residence-relief           controllers.PrivateResidenceReliefController.submitPrivateResidenceRelief
 
 #Previous Gain Or Loss
-GET         /previous-gain-or-loss              controllers.nonresident.PreviousGainOrLossController.previousGainOrLoss
-POST        /previous-gain-or-loss              controllers.nonresident.PreviousGainOrLossController.submitPreviousGainOrLoss
+GET         /previous-gain-or-loss              controllers.PreviousGainOrLossController.previousGainOrLoss
+POST        /previous-gain-or-loss              controllers.PreviousGainOrLossController.submitPreviousGainOrLoss
 
 #How Much Loss
-GET         /how-much-loss                      controllers.nonresident.HowMuchLossController.howMuchLoss
-POST        /how-much-loss                      controllers.nonresident.HowMuchLossController.submitHowMuchLoss
+GET         /how-much-loss                      controllers.HowMuchLossController.howMuchLoss
+POST        /how-much-loss                      controllers.HowMuchLossController.submitHowMuchLoss
 
 #How Much Gain
-GET         /how-much-gain                      controllers.nonresident.HowMuchGainController.howMuchGain
-POST        /how-much-gain                      controllers.nonresident.HowMuchGainController.submitHowMuchGain
+GET         /how-much-gain                      controllers.HowMuchGainController.howMuchGain
+POST        /how-much-gain                      controllers.HowMuchGainController.submitHowMuchGain
 
 #Brought Forward Losses
-GET         /brought-forward-losses             controllers.nonresident.BroughtForwardLossesController.broughtForwardLosses
-POST        /brought-forward-losses             controllers.nonresident.BroughtForwardLossesController.submitBroughtForwardLosses
+GET         /brought-forward-losses             controllers.BroughtForwardLossesController.broughtForwardLosses
+POST        /brought-forward-losses             controllers.BroughtForwardLossesController.submitBroughtForwardLosses
 
 #Allowable Losses
-GET         /allowable-losses                   controllers.nonresident.AllowableLossesController.allowableLosses
-POST        /allowable-losses                   controllers.nonresident.AllowableLossesController.submitAllowableLosses
+GET         /allowable-losses                   controllers.AllowableLossesController.allowableLosses
+POST        /allowable-losses                   controllers.AllowableLossesController.submitAllowableLosses
 
 #Calculation Election
-GET         /calculation-election               controllers.nonresident.CalculationElectionController.calculationElection
-POST        /calculation-election               controllers.nonresident.CalculationElectionController.submitCalculationElection
+GET         /calculation-election               controllers.CalculationElectionController.calculationElection
+POST        /calculation-election               controllers.CalculationElectionController.submitCalculationElection
 
 #Other Reliefs
-GET         /other-reliefs                      controllers.nonresident.OtherReliefsController.otherReliefs
-POST        /other-reliefs                      controllers.nonresident.OtherReliefsController.submitOtherReliefs
+GET         /other-reliefs                      controllers.OtherReliefsController.otherReliefs
+POST        /other-reliefs                      controllers.OtherReliefsController.submitOtherReliefs
 
-GET         /other-reliefs-flat                 controllers.nonresident.OtherReliefsFlatController.otherReliefsFlat
-POST        /other-reliefs-flat                 controllers.nonresident.OtherReliefsFlatController.submitOtherReliefsFlat
+GET         /other-reliefs-flat                 controllers.OtherReliefsFlatController.otherReliefsFlat
+POST        /other-reliefs-flat                 controllers.OtherReliefsFlatController.submitOtherReliefsFlat
 
-GET         /other-reliefs-time-apportioned     controllers.nonresident.OtherReliefsTAController.otherReliefsTA
-POST        /other-reliefs-time-apportioned     controllers.nonresident.OtherReliefsTAController.submitOtherReliefsTA
+GET         /other-reliefs-time-apportioned     controllers.OtherReliefsTAController.otherReliefsTA
+POST        /other-reliefs-time-apportioned     controllers.OtherReliefsTAController.submitOtherReliefsTA
 
-GET         /other-reliefs-rebased              controllers.nonresident.OtherReliefsRebasedController.otherReliefsRebased
-POST        /other-reliefs-rebased              controllers.nonresident.OtherReliefsRebasedController.submitOtherReliefsRebased
+GET         /other-reliefs-rebased              controllers.OtherReliefsRebasedController.otherReliefsRebased
+POST        /other-reliefs-rebased              controllers.OtherReliefsRebasedController.submitOtherReliefsRebased
 ########################################################
 
 #Report screen route
-GET         /summary-report                     controllers.nonresident.ReportController.summaryReport
+GET         /summary-report                     controllers.ReportController.summaryReport
 
 #Summary screen route
 ########################################################
-GET         /summary                            controllers.nonresident.SummaryController.summary
-GET         /restart                            controllers.nonresident.SummaryController.restart
+GET         /summary                            controllers.SummaryController.summary
+GET         /restart                            controllers.SummaryController.restart
 ########################################################

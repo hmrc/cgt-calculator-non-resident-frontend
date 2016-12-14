@@ -21,7 +21,7 @@ import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
 import controllers.RebasedValueController
 import controllers.helpers.FakeRequestHelper
-import controllers.nonresident.routes
+import controllers.routes
 import models.{AcquisitionDateModel, RebasedValueModel}
 import org.jsoup._
 import org.mockito.Matchers
@@ -59,8 +59,8 @@ class RebasedValueActionSpec extends UnitSpec with WithFakeApplication with Mock
   }
 
   "RebasedValueController" should {
-    s"have a session timeout home link of '${controllers.nonresident.routes.DisposalDateController.disposalDate().url}'" in {
-      RebasedValueController.homeLink shouldEqual controllers.nonresident.routes.DisposalDateController.disposalDate().url
+    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+      RebasedValueController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
     }
   }
 

@@ -92,7 +92,7 @@ object PersonalAndPreviousDetailsConstructor {
       s"${KeystoreKeys.customerType}-question",
       message,
       Messages("calc.customerType.question"),
-      Some(controllers.nonresident.routes.CustomerTypeController.customerType().url)
+      Some(controllers.routes.CustomerTypeController.customerType().url)
     ))
   }
 
@@ -104,7 +104,7 @@ object PersonalAndPreviousDetailsConstructor {
           s"${KeystoreKeys.currentIncome}-question",
           data.currentIncome,
           Messages("calc.currentIncome.question"),
-          Some(controllers.nonresident.routes.CurrentIncomeController.currentIncome().url)
+          Some(controllers.routes.CurrentIncomeController.currentIncome().url)
         ))
       case (_, _) => None
     }
@@ -119,7 +119,7 @@ object PersonalAndPreviousDetailsConstructor {
           s"${KeystoreKeys.personalAllowance}-question",
           data.personalAllowanceAmt,
           Messages("calc.personalAllowance.question"),
-          Some(controllers.nonresident.routes.PersonalAllowanceController.personalAllowance().url)
+          Some(controllers.routes.PersonalAllowanceController.personalAllowance().url)
         ))
       case (_, _) => None
     }
@@ -134,7 +134,7 @@ object PersonalAndPreviousDetailsConstructor {
           s"${KeystoreKeys.disabledTrustee}-question",
           data.isVulnerable,
           Messages("calc.disabledTrustee.question"),
-          Some(controllers.nonresident.routes.DisabledTrusteeController.disabledTrustee().url)
+          Some(controllers.routes.DisabledTrusteeController.disabledTrustee().url)
         ))
       case (_, _) => None
     }
@@ -146,7 +146,7 @@ object PersonalAndPreviousDetailsConstructor {
       s"${KeystoreKeys.otherProperties}-question",
       otherPropertiesModel.otherProperties,
       Messages("calc.otherProperties.question"),
-      Some(controllers.nonresident.routes.OtherPropertiesController.otherProperties().url)
+      Some(controllers.routes.OtherPropertiesController.otherProperties().url)
     ))
   }
 
@@ -166,7 +166,7 @@ object PersonalAndPreviousDetailsConstructor {
           s"${KeystoreKeys.previousLossOrGain}-question",
           message,
           Messages("calc.previousLossOrGain.question"),
-          Some(controllers.nonresident.routes.PreviousGainOrLossController.previousGainOrLoss().url)
+          Some(controllers.routes.PreviousGainOrLossController.previousGainOrLoss().url)
         ))
       case _ => None
     }
@@ -182,7 +182,7 @@ object PersonalAndPreviousDetailsConstructor {
           s"${KeystoreKeys.howMuchLoss}-question",
           howMuchLossModel.get.loss,
           Messages("calc.howMuchLoss.question"),
-          Some(controllers.nonresident.routes.HowMuchLossController.howMuchLoss().url)
+          Some(controllers.routes.HowMuchLossController.howMuchLoss().url)
         ))
       case (_, _) => None
     }
@@ -198,7 +198,7 @@ object PersonalAndPreviousDetailsConstructor {
           s"${KeystoreKeys.howMuchGain}-question",
           howMuchGainModel.get.howMuchGain,
           Messages("calc.howMuchGain.question"),
-          Some(controllers.nonresident.routes.HowMuchGainController.howMuchGain().url)
+          Some(controllers.routes.HowMuchGainController.howMuchGain().url)
         ))
       case (_, _) => None
     }
@@ -215,7 +215,7 @@ object PersonalAndPreviousDetailsConstructor {
         s"${KeystoreKeys.annualExemptAmount}-question",
         annualExemptAmountModel.get.annualExemptAmount,
         Messages("calc.annualExemptAmount.question"),
-        Some(controllers.nonresident.routes.AnnualExemptAmountController.annualExemptAmount().url)
+        Some(controllers.routes.AnnualExemptAmountController.annualExemptAmount().url)
       ))
     }
 
@@ -237,7 +237,7 @@ object PersonalAndPreviousDetailsConstructor {
       s"${KeystoreKeys.broughtForwardLosses}-question",
       Transformers.booleanToString(broughtForwardLossesModel.isClaiming),
       Messages("calc.broughtForwardLosses.question"),
-      Some(controllers.nonresident.routes.BroughtForwardLossesController.broughtForwardLosses().url)
+      Some(controllers.routes.BroughtForwardLossesController.broughtForwardLosses().url)
     ))
   }
 
@@ -248,7 +248,7 @@ object PersonalAndPreviousDetailsConstructor {
         s"${KeystoreKeys.broughtForwardLosses}-value-question",
         broughtForwardLossesModel.broughtForwardLoss.get,
         Messages("calc.broughtForwardLosses.inputQuestion"),
-        Some(controllers.nonresident.routes.BroughtForwardLossesController.broughtForwardLosses().url)
+        Some(controllers.routes.BroughtForwardLossesController.broughtForwardLosses().url)
       ))
     }
     else {

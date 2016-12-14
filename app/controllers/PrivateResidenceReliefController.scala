@@ -23,7 +23,8 @@ import common.{Dates, TaxDates}
 import connectors.CalculatorConnector
 import constructors.AnswersConstructor
 import controllers.predicates.ValidActiveSession
-import forms.PrivateResidenceReliefForm
+import forms.PrivateResidenceReliefForm._
+import views.html.calculation
 import models._
 import play.api.data.Form
 import play.api.mvc.Result
@@ -39,8 +40,8 @@ object PrivateResidenceReliefController extends PrivateResidenceReliefController
 
 trait PrivateResidenceReliefController extends FrontendController with ValidActiveSession {
 
-  override val sessionTimeoutUrl = controllers.nonresident.routes.SummaryController.restart().url
-  override val homeLink = controllers.nonresident.routes.DisposalDateController.disposalDate().url
+  override val sessionTimeoutUrl = controllers.routes.SummaryController.restart().url
+  override val homeLink = controllers.routes.DisposalDateController.disposalDate().url
   val calcConnector: CalculatorConnector
   val answersConstructor: AnswersConstructor
 
@@ -85,9 +86,9 @@ trait PrivateResidenceReliefController extends FrontendController with ValidActi
       val disposalDateLess18Months = Dates.dateMinusMonths(disposalDate, 18)
 
       calcConnector.fetchAndGetFormData[PrivateResidenceReliefModel](KeystoreKeys.privateResidenceRelief).map {
-        case Some(data) => Ok(calculation.nonresident.privateResidenceRelief(privateResidenceReliefForm(showBeforeQuestion,
+        case Some(data) => Ok(calculation.privateResidenceRelief(privateResidenceReliefForm(showBeforeQuestion,
           showBetweenQuestion).fill(data), showBetweenQuestion, showBeforeQuestion, disposalDateLess18Months))
-        case None => Ok(calculation.nonresident.privateResidenceRelief(privateResidenceReliefForm(showBeforeQuestion, showBetweenQuestion),
+        case None => Ok(calculation.privateResidenceRelief(privateResidenceReliefForm(showBeforeQuestion, showBetweenQuestion),
           showBetweenQuestion, showBeforeQuestion, disposalDateLess18Months))
       }
     }
@@ -115,12 +116,12 @@ trait PrivateResidenceReliefController extends FrontendController with ValidActi
       }
 
       def routeDestination(taxableGainsZeroOrLess: Boolean) = {
-        if (taxableGainsZeroOrLess) Future.successful(Redirect(controllers.nonresident.routes.CheckYourAnswersController.checkYourAnswers().url))
-        else Future.successful(Redirect(controllers.nonresident.routes.CustomerTypeController.customerType().url))
+        if (taxableGainsZeroOrLess) Future.successful(Redirect(controllers.routes.CheckYourAnswersController.checkYourAnswers().url))
+        else Future.successful(Redirect(controllers.routes.CustomerTypeController.customerType().url))
       }
 
       def errorAction(form: Form[PrivateResidenceReliefModel]) = {
-        Future.successful(BadRequest(calculation.nonresident.privateResidenceRelief(form, showBetweenQuestion,
+        Future.successful(BadRequest(calculation.privateResidenceRelief(form, showBetweenQuestion,
           showBeforeQuestion, disposalDateLess18Months)))
       }
 

@@ -18,7 +18,7 @@ package constructors
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.nonresident.CalculationType
-import controllers.nonresident.routes
+import controllers.routes
 import models.{CalculationResultsWithPRRModel, QuestionAnswerModel}
 import play.api.i18n.Messages
 

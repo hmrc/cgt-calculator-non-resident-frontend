@@ -6,13 +6,13 @@
 
 @main_template(title = Messages("calc.howBecameOwner.question")) {
 
-    <a id="back-link" class="back-link" href="@controllers.nonresident.routes.AcquisitionDateController.acquisitionDate.url">@Messages("calc.base.back")</a>
+    <a id="back-link" class="back-link" href="@controllers.routes.AcquisitionDateController.acquisitionDate.url">@Messages("calc.base.back")</a>
 
     @errorSummary(howBecameOwnerForm, "gainedBy")
 
     <h1 class="heading-xlarge">@Messages("calc.howBecameOwner.question")</h1>
 
-    @form(action = controllers.nonresident.routes.HowBecameOwnerController.submitHowBecameOwner) {
+    @form(action = controllers.routes.HowBecameOwnerController.submitHowBecameOwner) {
 
         <div class="form-group">
             @formInputRadioGroup(

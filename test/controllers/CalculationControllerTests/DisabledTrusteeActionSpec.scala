@@ -48,8 +48,8 @@ class DisabledTrusteeActionSpec extends UnitSpec with WithFakeApplication with M
   }
 
   "DisabledTrusteeController" should {
-    s"have a session timeout home link of '${controllers.nonresident.routes.DisposalDateController.disposalDate().url}'" in {
-      DisabledTrusteeController.homeLink shouldEqual controllers.nonresident.routes.DisposalDateController.disposalDate().url
+    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+      DisabledTrusteeController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
     }
   }
 
@@ -111,7 +111,7 @@ class DisabledTrusteeActionSpec extends UnitSpec with WithFakeApplication with M
       }
 
       "redirect to the Other Properties page" in {
-        redirectLocation(result) shouldBe Some(controllers.nonresident.routes.OtherPropertiesController.otherProperties().url)
+        redirectLocation(result) shouldBe Some(controllers.routes.OtherPropertiesController.otherProperties().url)
       }
     }
 

@@ -51,8 +51,8 @@ class BoughtForLessActionSpec extends UnitSpec with WithFakeApplication with Moc
   }
 
   "BoughtForLessController" should {
-    s"have a session timeout home link of '${controllers.nonresident.routes.DisposalDateController.disposalDate().url}'" in {
-      BoughtForLessController.homeLink shouldEqual controllers.nonresident.routes.DisposalDateController.disposalDate().url
+    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+      BoughtForLessController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
     }
   }
 
@@ -112,7 +112,7 @@ class BoughtForLessActionSpec extends UnitSpec with WithFakeApplication with Moc
       }
 
       "redirect to the worthWhenBoughtForLess page" in {
-        redirectLocation(result) shouldBe Some(controllers.nonresident.routes.WorthWhenBoughtForLessController.worthWhenBoughtForLess().url)
+        redirectLocation(result) shouldBe Some(controllers.routes.WorthWhenBoughtForLessController.worthWhenBoughtForLess().url)
       }
     }
 
@@ -126,7 +126,7 @@ class BoughtForLessActionSpec extends UnitSpec with WithFakeApplication with Moc
       }
 
       "redirect to the acquisitionValue page" in {
-        redirectLocation(result) shouldBe Some(controllers.nonresident.routes.AcquisitionValueController.acquisitionValue().url)
+        redirectLocation(result) shouldBe Some(controllers.routes.AcquisitionValueController.acquisitionValue().url)
       }
     }
 

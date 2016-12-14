@@ -20,7 +20,7 @@ import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import org.jsoup.Jsoup
 import views.html.helpers._
 import assets.MessageLookup.{NonResident => messages}
-import forms.AcquisitionCostsForm
+import forms.AcquisitionCostsForm._
 
 class formYesNoRadioSpec extends UnitSpec with WithFakeApplication {
 

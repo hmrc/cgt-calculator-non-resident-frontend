@@ -25,7 +25,7 @@
 
     @expandableHelpTextHelper(Messages("calc.improvements.exampleTitle"), exampleContent)
 
-    @form(action = controllers.nonresident.routes.ImprovementsController.submitImprovements) {
+    @form(action = controllers.routes.ImprovementsController.submitImprovements) {
 
         @ImprovementsConstructor.generateImprovements(improvementsForm, improvementsOptions)
 

@@ -16,7 +16,7 @@
 
 package common
 
-import controllers.nonresident.routes
+import controllers.routes
 
 object DefaultRoutes {
 

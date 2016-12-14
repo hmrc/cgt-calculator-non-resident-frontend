@@ -24,7 +24,7 @@
        <p>@Messages("calc.annualExemptAmount.helpOne") £@MoneyPounds(maxAEA, 0).quantity @Messages("calc.annualExemptAmount.helpTwo")</p>
     </div>
 
-    @form(action = controllers.nonresident.routes.AnnualExemptAmountController.submitAnnualExemptAmount) {
+    @form(action = controllers.routes.AnnualExemptAmountController.submitAnnualExemptAmount) {
 
         @formInputMoney(annualExemptAmountForm, "annualExemptAmount", Messages("calc.annualExemptAmount.question"), hideLabel = true)
 

@@ -32,7 +32,7 @@ import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 import scala.concurrent.Future
 
-class AcquisitionCostsSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
+class AcquisitionCostsActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
   implicit val hc = new HeaderCarrier()
 
@@ -61,8 +61,8 @@ class AcquisitionCostsSpec extends UnitSpec with WithFakeApplication with Mockit
   }
 
   "AcquisitionCostsController" should {
-    s"have a session timeout home link of '${controllers.nonresident.routes.DisposalDateController.disposalDate().url}'" in {
-      AcquisitionCostsController.homeLink shouldEqual controllers.nonresident.routes.DisposalDateController.disposalDate().url
+    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+      AcquisitionCostsController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
     }
   }
 
@@ -72,7 +72,7 @@ class AcquisitionCostsSpec extends UnitSpec with WithFakeApplication with Mockit
       val target = setupTarget(None, acquisitionDateData = Some(AcquisitionDateModel("Yes", Some(10), Some(5), Some(1972))))
       val result = target.getBackLink
 
-      await(result) shouldBe controllers.nonresident.routes.WorthBeforeLegislationStartController.worthBeforeLegislationStart().url
+      await(result) shouldBe controllers.routes.WorthBeforeLegislationStartController.worthBeforeLegislationStart().url
     }
 
     "return a link to WorthWhenGifted page with an acquisition date after legislation start and gifted option" in {
@@ -81,21 +81,21 @@ class AcquisitionCostsSpec extends UnitSpec with WithFakeApplication with Mockit
         howBecameOwnerData = Some(HowBecameOwnerModel("Gifted")))
       val result = target.getBackLink
 
-      await(result) shouldBe controllers.nonresident.routes.WorthWhenGiftedToController.worthWhenGiftedTo().url
+      await(result) shouldBe controllers.routes.WorthWhenGiftedToController.worthWhenGiftedTo().url
     }
 
     "return a link to WorthWhenInherited when property was inherited" in {
       val target = setupTarget(None, howBecameOwnerData = Some(HowBecameOwnerModel("Inherited")))
       val result = target.getBackLink
 
-      await(result) shouldBe controllers.nonresident.routes.WorthWhenInheritedController.worthWhenInherited().url
+      await(result) shouldBe controllers.routes.WorthWhenInheritedController.worthWhenInherited().url
     }
 
     "return a link to BoughtForLess when property was bought for less" in {
       val target = setupTarget(None, howBecameOwnerData = Some(HowBecameOwnerModel("Bought")), boughtForLessData = Some(BoughtForLessModel(true)))
       val result = target.getBackLink
 
-      await(result) shouldBe controllers.nonresident.routes.WorthWhenBoughtForLessController.worthWhenBoughtForLess().url
+      await(result) shouldBe controllers.routes.WorthWhenBoughtForLessController.worthWhenBoughtForLess().url
     }
 
     "return a link to acquisition value when not bought for less" in {
@@ -104,7 +104,7 @@ class AcquisitionCostsSpec extends UnitSpec with WithFakeApplication with Mockit
         boughtForLessData = Some(BoughtForLessModel(false)))
       val result = target.getBackLink
 
-      await(result) shouldBe controllers.nonresident.routes.AcquisitionValueController.acquisitionValue().url
+      await(result) shouldBe controllers.routes.AcquisitionValueController.acquisitionValue().url
     }
   }
 
@@ -124,7 +124,7 @@ class AcquisitionCostsSpec extends UnitSpec with WithFakeApplication with Mockit
       }
 
       "have a back link to the WorthWhenGiftedTo page" in {
-        document.select("#back-link").attr("href") shouldBe controllers.nonresident.routes.WorthWhenGiftedToController.worthWhenGiftedTo().url
+        document.select("#back-link").attr("href") shouldBe controllers.routes.WorthWhenGiftedToController.worthWhenGiftedTo().url
       }
     }
 
@@ -168,8 +168,8 @@ class AcquisitionCostsSpec extends UnitSpec with WithFakeApplication with Mockit
         status(result) shouldBe 303
       }
 
-      s"redirect to '${controllers.nonresident.routes.RebasedValueController.rebasedValue().url}'" in {
-        redirectLocation(result).get shouldBe controllers.nonresident.routes.RebasedValueController.rebasedValue().url
+      s"redirect to '${controllers.routes.RebasedValueController.rebasedValue().url}'" in {
+        redirectLocation(result).get shouldBe controllers.routes.RebasedValueController.rebasedValue().url
       }
     }
 
@@ -182,8 +182,8 @@ class AcquisitionCostsSpec extends UnitSpec with WithFakeApplication with Mockit
         status(result) shouldBe 303
       }
 
-      s"redirect to '${controllers.nonresident.routes.ImprovementsController.improvements().url}'" in {
-        redirectLocation(result).get shouldBe controllers.nonresident.routes.ImprovementsController.improvements().url
+      s"redirect to '${controllers.routes.ImprovementsController.improvements().url}'" in {
+        redirectLocation(result).get shouldBe controllers.routes.ImprovementsController.improvements().url
       }
     }
 
@@ -196,8 +196,8 @@ class AcquisitionCostsSpec extends UnitSpec with WithFakeApplication with Mockit
         status(result) shouldBe 303
       }
 
-      s"redirect to '${controllers.nonresident.routes.RebasedValueController.rebasedValue().url}'" in {
-        redirectLocation(result).get shouldBe controllers.nonresident.routes.RebasedValueController.rebasedValue().url
+      s"redirect to '${controllers.routes.RebasedValueController.rebasedValue().url}'" in {
+        redirectLocation(result).get shouldBe controllers.routes.RebasedValueController.rebasedValue().url
       }
     }
 
@@ -216,7 +216,7 @@ class AcquisitionCostsSpec extends UnitSpec with WithFakeApplication with Mockit
       }
 
       "have a back link to the WorthWhenInherited page" in {
-        document.select("#back-link").attr("href") shouldBe controllers.nonresident.routes.WorthWhenInheritedController.worthWhenInherited().url
+        document.select("#back-link").attr("href") shouldBe controllers.routes.WorthWhenInheritedController.worthWhenInherited().url
       }
     }
   }

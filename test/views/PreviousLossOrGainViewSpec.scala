@@ -20,8 +20,10 @@ import assets.MessageLookup.NonResident.{PreviousLossOrGain => messages}
 import assets.MessageLookup.{NonResident => commonMessages}
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
+import forms.PreviousLossOrGainForm._
 import org.scalatest.mock.MockitoSugar
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import views.html.calculation.previousLossOrGain
 
 class PreviousLossOrGainViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
@@ -68,15 +70,15 @@ class PreviousLossOrGainViewSpec extends UnitSpec with WithFakeApplication with 
       }
 
       "have a link to Other Properties" in {
-        backLink.attr("href") shouldBe controllers.nonresident.routes.OtherPropertiesController.otherProperties().url
+        backLink.attr("href") shouldBe controllers.routes.OtherPropertiesController.otherProperties().url
       }
     }
 
     "has a form" which {
       lazy val form = document.getElementsByTag("form")
 
-      s"has the action '${controllers.nonresident.routes.PreviousGainOrLossController.submitPreviousGainOrLoss().toString}" in {
-        form.attr("action") shouldBe controllers.nonresident.routes.PreviousGainOrLossController.submitPreviousGainOrLoss().toString()
+      s"has the action '${controllers.routes.PreviousGainOrLossController.submitPreviousGainOrLoss().toString}" in {
+        form.attr("action") shouldBe controllers.routes.PreviousGainOrLossController.submitPreviousGainOrLoss().toString()
       }
 
       "has the method of POST" in {

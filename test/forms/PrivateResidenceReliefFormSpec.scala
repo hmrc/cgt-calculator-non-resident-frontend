@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package forms.nonResident
+package forms
 
 import assets.MessageLookup.{NonResident => messages}
-import forms.PrivateResidenceReliefForm
 import models.PrivateResidenceReliefModel
+import forms.PrivateResidenceReliefForm._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 class PrivateResidenceReliefFormSpec extends UnitSpec with WithFakeApplication {

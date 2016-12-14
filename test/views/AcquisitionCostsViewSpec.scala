@@ -21,7 +21,9 @@ import assets.MessageLookup.{NonResident => messages}
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
 import org.scalatest.mock.MockitoSugar
+import forms.AcquisitionCostsForm._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import views.html.calculation.acquisitionCosts
 
 class AcquisitionCostsViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
@@ -51,8 +53,8 @@ class AcquisitionCostsViewSpec extends UnitSpec with WithFakeApplication with Mo
         }
       }
 
-      s"have a home link to '${controllers.nonresident.routes.DisposalDateController.disposalDate().url}'" in {
-        document.select("#homeNavHref").attr("href") shouldEqual controllers.nonresident.routes.DisposalDateController.disposalDate().url
+      s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+        document.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
       }
 
       "have a heading" which {
@@ -107,8 +109,8 @@ class AcquisitionCostsViewSpec extends UnitSpec with WithFakeApplication with Mo
           form.attr("method") shouldBe "POST"
         }
 
-        s"has an action of '${controllers.nonresident.routes.AcquisitionCostsController.submitAcquisitionCosts().url}'" in {
-          form.attr("action") shouldBe controllers.nonresident.routes.AcquisitionCostsController.submitAcquisitionCosts().url
+        s"has an action of '${controllers.routes.AcquisitionCostsController.submitAcquisitionCosts().url}'" in {
+          form.attr("action") shouldBe controllers.routes.AcquisitionCostsController.submitAcquisitionCosts().url
         }
       }
 

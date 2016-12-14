@@ -50,8 +50,8 @@ class WorthWhenGiftedToActionSpec extends UnitSpec with WithFakeApplication with
   }
 
   "WorthWhenGiftedToController" should {
-    s"have a session timeout home link of '${controllers.nonresident.routes.DisposalDateController.disposalDate().url}'" in {
-      WorthWhenGiftedToController.homeLink shouldEqual controllers.nonresident.routes.DisposalDateController.disposalDate().url
+    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+      WorthWhenGiftedToController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
     }
   }
 

@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package forms.nonResident
+package forms
 
 import assets.MessageLookup.{NonResident => messages}
-import forms.RebasedCostsForm
 import models.RebasedCostsModel
+import forms.RebasedCostsForm._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 class RebasedCostsFormSpec extends UnitSpec with WithFakeApplication {

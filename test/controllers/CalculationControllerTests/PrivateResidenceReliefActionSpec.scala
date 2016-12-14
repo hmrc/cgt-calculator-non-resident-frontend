@@ -81,8 +81,8 @@ class PrivateResidenceReliefActionSpec extends UnitSpec with WithFakeApplication
   }
 
   "PrivateResidenceReliefController" should {
-    s"have a session timeout home link of '${controllers.nonresident.routes.DisposalDateController.disposalDate().url}'" in {
-      PrivateResidenceReliefController.homeLink shouldEqual controllers.nonresident.routes.DisposalDateController.disposalDate().url
+    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+      PrivateResidenceReliefController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
     }
   }
 
@@ -373,7 +373,7 @@ class PrivateResidenceReliefActionSpec extends UnitSpec with WithFakeApplication
       }
 
       "redirect to the Check Your Answers page" in {
-        redirectLocation(result).get shouldBe controllers.nonresident.routes.CheckYourAnswersController.checkYourAnswers().url
+        redirectLocation(result).get shouldBe controllers.routes.CheckYourAnswersController.checkYourAnswers().url
       }
     }
 
@@ -393,7 +393,7 @@ class PrivateResidenceReliefActionSpec extends UnitSpec with WithFakeApplication
       }
 
       "redirect to the How Became Owner page" in {
-        redirectLocation(result).get shouldBe controllers.nonresident.routes.CustomerTypeController.customerType().url
+        redirectLocation(result).get shouldBe controllers.routes.CustomerTypeController.customerType().url
       }
     }
 

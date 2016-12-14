@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package forms.nonResident
+package forms
 
 import assets.MessageLookup.NonResident.{AcquisitionMarketValue => messages}
 import assets.MessageLookup.{NonResident => commonMessages}
-import forms.AcquisitionMarketValueForm
 import models.AcquisitionValueModel
+import forms.AcquisitionMarketValueForm._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 class AcquisitionMarketValueFormSpec extends UnitSpec with WithFakeApplication {

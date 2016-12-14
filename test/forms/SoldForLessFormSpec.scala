@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package forms.nonResident
+package forms
 
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import assets.MessageLookup.{NonResident => commonMessages}
-import forms.SoldForLessForm
+import forms.SoldForLessForm._
+import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 class SoldForLessFormSpec extends UnitSpec with WithFakeApplication {
 

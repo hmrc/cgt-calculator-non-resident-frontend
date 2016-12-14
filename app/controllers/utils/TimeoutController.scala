@@ -14,26 +14,19 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.utils
 
-import connectors.CalculatorConnector
-import controllers.predicates.ValidActiveSession
-import play.api.mvc.Action
+import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
+import views.html.warnings._
 
 import scala.concurrent.Future
 
-trait StartController extends FrontendController with ValidActiveSession {
+object TimeoutController extends TimeoutController
 
-  val calcConnector: CalculatorConnector
-  override val sessionTimeoutUrl = controllers.nonresident.routes.SummaryController.restart().url
-  override val homeLink = controllers.nonresident.routes.CustomerTypeController.customerType().url
+trait TimeoutController extends FrontendController {
 
-  val start = Action.async {implicit request =>
-    Future.successful(Redirect(nonresident.routes.DisposalDateController.disposalDate()))
+  def timeout(restartUrl: String, homeLink: String) : Action[AnyContent] = Action.async { implicit request =>
+    Future.successful(Ok(sessionTimeout(restartUrl, homeLink)))
   }
-}
-
-object StartController extends StartController {
-  lazy val calcConnector = CalculatorConnector
 }

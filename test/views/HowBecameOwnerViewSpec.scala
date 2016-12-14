@@ -20,8 +20,10 @@ import assets.MessageLookup.NonResident.{HowBecameOwner => messages}
 import assets.MessageLookup.{NonResident => commonMessages}
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
+import forms.HowBecameOwnerForm._
 import org.scalatest.mock.MockitoSugar
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import views.html.calculation.howBecameOwner
 
 class HowBecameOwnerViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
@@ -48,12 +50,12 @@ class HowBecameOwnerViewSpec extends UnitSpec with WithFakeApplication with Mock
         }
 
         s"has a route to acquisition date" in {
-          backLink.attr("href") shouldBe controllers.nonresident.routes.AcquisitionDateController.acquisitionDate().url
+          backLink.attr("href") shouldBe controllers.routes.AcquisitionDateController.acquisitionDate().url
         }
       }
 
-      s"have a home link to '${controllers.nonresident.routes.DisposalDateController.disposalDate().url}'" in {
-        document.select("#homeNavHref").attr("href") shouldEqual controllers.nonresident.routes.DisposalDateController.disposalDate().url
+      s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+        document.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
       }
 
       "have a heading" which {
@@ -93,8 +95,8 @@ class HowBecameOwnerViewSpec extends UnitSpec with WithFakeApplication with Mock
           form.attr("method") shouldBe "POST"
         }
 
-        s"has an action of '${controllers.nonresident.routes.HowBecameOwnerController.submitHowBecameOwner().url}'" in {
-          form.attr("action") shouldBe controllers.nonresident.routes.HowBecameOwnerController.submitHowBecameOwner().url
+        s"has an action of '${controllers.routes.HowBecameOwnerController.submitHowBecameOwner().url}'" in {
+          form.attr("action") shouldBe controllers.routes.HowBecameOwnerController.submitHowBecameOwner().url
         }
       }
 

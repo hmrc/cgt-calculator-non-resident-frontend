@@ -16,6 +16,7 @@
 
 package controllers
 
+import utils.FeedbackController
 import config.AppConfig
 import org.mockito.Matchers
 import org.mockito.Mockito._
@@ -93,7 +94,7 @@ class FeedbackControllerSpec extends UnitSpec with MockitoSugar with WithFakeApp
         Future.successful(HttpResponse(Status.OK, responseString = Some("1234"))))
 
       val result = target.submit(fakePostRequest)
-      redirectLocation(result) shouldBe Some(routes.FeedbackController.thankyou().url)
+      redirectLocation(result) shouldBe Some(utils.routes.FeedbackController.thankyou().url)
     }
 
     "return form with errors for invalid selections" in {

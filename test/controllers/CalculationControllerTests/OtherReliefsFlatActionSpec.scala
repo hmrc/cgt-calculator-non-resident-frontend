@@ -87,8 +87,8 @@ class OtherReliefsFlatActionSpec extends UnitSpec with WithFakeApplication with 
   }
 
   "OtherReliefsFlatController" should {
-    s"have a session timeout home link of '${controllers.nonresident.routes.DisposalDateController.disposalDate().url}'" in {
-      OtherReliefsFlatController.homeLink shouldEqual controllers.nonresident.routes.DisposalDateController.disposalDate().url
+    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+      OtherReliefsFlatController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
     }
   }
 
@@ -174,7 +174,7 @@ class OtherReliefsFlatActionSpec extends UnitSpec with WithFakeApplication with 
       }
 
       "redirect to the calculation election page" in {
-        redirectLocation(result) shouldBe Some(controllers.nonresident.routes.CalculationElectionController.calculationElection().url)
+        redirectLocation(result) shouldBe Some(controllers.routes.CalculationElectionController.calculationElection().url)
       }
     }
 

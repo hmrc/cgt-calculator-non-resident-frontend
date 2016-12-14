@@ -51,7 +51,7 @@ object FrontendGlobal
     val url = """^(.*[\/])""".r findFirstIn rh.path
     val homeNavLink = url match {
       case Some(path) if path == "/calculate-your-capital-gains/non-resident/" =>
-        controllers.nonresident.routes.CustomerTypeController.customerType().url
+        controllers.routes.CustomerTypeController.customerType().url
       case _ => "/calculate-your-capital-gains/"
     }
     views.html.error_template(pageTitle, heading, message, homeNavLink)

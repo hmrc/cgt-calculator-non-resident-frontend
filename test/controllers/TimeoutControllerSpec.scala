@@ -16,9 +16,10 @@
 
 package controllers
 
+import controllers.utils.TimeoutController
 import org.jsoup.Jsoup
 import play.api.i18n.Messages
-import play.api.mvc.{AnyContent, Action}
+import play.api.mvc.{Action, AnyContent}
 import play.api.test.FakeRequest
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 

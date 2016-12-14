@@ -6,13 +6,13 @@
 
 @main_template(Messages("calc.acquisitionValue.question")) {
 
-    <a id="back-link" class="back-link" href="@controllers.nonresident.routes.BoughtForLessController.boughtForLess">@Messages("calc.base.back")</a>
+    <a id="back-link" class="back-link" href="@controllers.routes.BoughtForLessController.boughtForLess">@Messages("calc.base.back")</a>
 
     @errorSummary(acquisitionValueForm, "acquisition-value")
 
     <h1 class="heading-xlarge">@Messages("calc.acquisitionValue.question")</h1>
 
-    @form(action = controllers.nonresident.routes.AcquisitionValueController.submitAcquisitionValue) {
+    @form(action = controllers.routes.AcquisitionValueController.submitAcquisitionValue) {
 
         @formInputMoney(acquisitionValueForm, "acquisitionValue", Messages("calc.acquisitionValue.question"), None, None, true)
 

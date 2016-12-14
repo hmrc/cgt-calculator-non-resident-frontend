@@ -32,7 +32,7 @@ import controllers.ImprovementsController
 import controllers.helpers.FakeRequestHelper
 
 import scala.concurrent.Future
-import controllers.nonresident.routes
+import controllers.routes
 import models._
 import uk.gov.hmrc.http.cache.client.CacheMap
 
@@ -74,8 +74,8 @@ class ImprovementsActionSpec extends UnitSpec with WithFakeApplication with Mock
   }
 
   "ImprovementsController" should {
-    s"have a session timeout home link of '${controllers.nonresident.routes.DisposalDateController.disposalDate().url}'" in {
-      ImprovementsController.homeLink shouldEqual controllers.nonresident.routes.DisposalDateController.disposalDate().url
+    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+      ImprovementsController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
     }
   }
 
@@ -182,8 +182,8 @@ class ImprovementsActionSpec extends UnitSpec with WithFakeApplication with Mock
           document.body.getElementById("back-link").text shouldEqual commonMessages.back
         }
 
-        s"have a 'Back' link to a missing data route ${controllers.nonresident.routes.DisposalDateController.disposalDate().url} " in {
-          document.body.getElementById("back-link").attr("href") shouldEqual controllers.nonresident.routes.DisposalDateController.disposalDate().url
+        s"have a 'Back' link to a missing data route ${controllers.routes.DisposalDateController.disposalDate().url} " in {
+          document.body.getElementById("back-link").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
         }
       }
     }
@@ -202,8 +202,8 @@ class ImprovementsActionSpec extends UnitSpec with WithFakeApplication with Mock
         status(result) shouldBe 303
       }
 
-      s"redirect to ${controllers.nonresident.routes.CustomerTypeController.customerType()}" in {
-        redirectLocation(result) shouldBe Some(s"${controllers.nonresident.routes.CustomerTypeController.customerType()}")
+      s"redirect to ${controllers.routes.CustomerTypeController.customerType()}" in {
+        redirectLocation(result) shouldBe Some(s"${controllers.routes.CustomerTypeController.customerType()}")
       }
     }
 
@@ -250,8 +250,8 @@ class ImprovementsActionSpec extends UnitSpec with WithFakeApplication with Mock
         status(result) shouldBe 303
       }
 
-      s"redirect to ${controllers.nonresident.routes.PrivateResidenceReliefController.privateResidenceRelief()}" in {
-        redirectLocation(result) shouldBe Some(s"${controllers.nonresident.routes.PrivateResidenceReliefController.privateResidenceRelief()}")
+      s"redirect to ${controllers.routes.PrivateResidenceReliefController.privateResidenceRelief()}" in {
+        redirectLocation(result) shouldBe Some(s"${controllers.routes.PrivateResidenceReliefController.privateResidenceRelief()}")
       }
     }
 

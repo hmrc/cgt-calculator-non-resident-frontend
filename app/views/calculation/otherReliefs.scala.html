@@ -33,7 +33,7 @@
 
 @main_template(Messages("calc.otherReliefs.question")) {
 
-    <a id="back-link" class="back-link" href="@controllers.nonresident.routes.CheckYourAnswersController.checkYourAnswers()">@Messages("calc.base.back")</a>
+    <a id="back-link" class="back-link" href="@controllers.routes.CheckYourAnswersController.checkYourAnswers()">@Messages("calc.base.back")</a>
 
     @errorSummary(otherReliefsForm, "other-reliefs", "otherReliefs")
 
@@ -43,7 +43,7 @@
 
         @helpContent
 
-        @form(action = controllers.nonresident.routes.OtherReliefsController.submitOtherReliefs) {
+        @form(action = controllers.routes.OtherReliefsController.submitOtherReliefs) {
 
             @formInputMoney(otherReliefsForm,
                 "otherReliefs",

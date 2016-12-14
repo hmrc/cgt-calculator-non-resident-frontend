@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package forms.nonResident
+package forms
 
-import models.CustomerTypeModel
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import assets.MessageLookup.{NonResident => messages}
-import forms.CustomerTypeForm
+import models.CustomerTypeModel
+import forms.CustomerTypeForm._
+import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 class CustomerTypeFormSpec extends UnitSpec with WithFakeApplication {
 

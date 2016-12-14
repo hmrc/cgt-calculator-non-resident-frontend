@@ -19,11 +19,11 @@ package controllers
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
-import forms.SoldForLessForm
+import forms.SoldForLessForm._
 import models.SoldForLessModel
 import play.api.data.Form
 import uk.gov.hmrc.play.frontend.controller.FrontendController
-import views.html.calculation.{nonresident => views}
+import views.html.{calculation => views}
 
 import scala.concurrent.Future
 
@@ -34,8 +34,8 @@ object SoldForLessController extends SoldForLessController {
 trait SoldForLessController extends FrontendController with ValidActiveSession {
 
   val calcConnector: CalculatorConnector
-  override val sessionTimeoutUrl = controllers.nonresident.routes.SummaryController.restart().url
-  override val homeLink = controllers.nonresident.routes.DisposalDateController.disposalDate().url
+  override val sessionTimeoutUrl = controllers.routes.SummaryController.restart().url
+  override val homeLink = controllers.routes.DisposalDateController.disposalDate().url
 
   val soldForLess = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[SoldForLessModel](KeystoreKeys.soldForLess).map {

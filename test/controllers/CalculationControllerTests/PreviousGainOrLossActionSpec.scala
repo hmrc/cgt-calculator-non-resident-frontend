@@ -100,7 +100,7 @@ class PreviousGainOrLossActionSpec extends UnitSpec with WithFakeApplication wit
       }
 
       "redirect to the how much loss page" in {
-        redirectLocation(result).get shouldBe controllers.nonresident.routes.HowMuchLossController.howMuchLoss().url
+        redirectLocation(result).get shouldBe controllers.routes.HowMuchLossController.howMuchLoss().url
       }
     }
 
@@ -113,7 +113,7 @@ class PreviousGainOrLossActionSpec extends UnitSpec with WithFakeApplication wit
       }
 
       "redirect to the how much gained page" in {
-        redirectLocation(result).get shouldBe controllers.nonresident.routes.HowMuchGainController.howMuchGain().url
+        redirectLocation(result).get shouldBe controllers.routes.HowMuchGainController.howMuchGain().url
       }
     }
 
@@ -126,7 +126,7 @@ class PreviousGainOrLossActionSpec extends UnitSpec with WithFakeApplication wit
       }
 
       "redirect to the AEA page" in {
-        redirectLocation(result).get shouldBe controllers.nonresident.routes.AnnualExemptAmountController.annualExemptAmount().url
+        redirectLocation(result).get shouldBe controllers.routes.AnnualExemptAmountController.annualExemptAmount().url
       }
     }
 

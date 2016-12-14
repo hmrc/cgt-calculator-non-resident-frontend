@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package forms.nonResident
+package forms
 
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
-import models.DisabledTrusteeModel
 import assets.MessageLookup.{NonResident => messages}
-import forms.DisabledTrusteeForm
+import models.DisabledTrusteeModel
+import forms.DisabledTrusteeForm._
+import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 class DisabledTrusteeFormSpec extends UnitSpec with WithFakeApplication {
 

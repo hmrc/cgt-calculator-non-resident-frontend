@@ -19,7 +19,7 @@ package constructors
 import assets.MessageLookup.NonResident.{Summary => messages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.nonresident.CalculationType
-import controllers.nonresident.routes
+import controllers.routes
 import helpers.AssertHelpers
 import models.{CalculationResultsWithPRRModel, GainsAfterPRRModel}
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}

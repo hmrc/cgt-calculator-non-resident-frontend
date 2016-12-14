@@ -21,8 +21,9 @@ import assets.MessageLookup.{NonResident => commonMessages}
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
 import play.api.i18n.Messages
+import forms.CalculationElectionForm._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
-import views.html.calculation.{nonresident => views}
+import views.html.{calculation => views}
 
 class CalculationElectionViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
 
@@ -45,8 +46,8 @@ class CalculationElectionViewSpec extends UnitSpec with WithFakeApplication with
       }
     }
 
-    s"have a home link to '${controllers.nonresident.routes.DisposalDateController.disposalDate().url}'" in {
-      doc.select("#homeNavHref").attr("href") shouldEqual controllers.nonresident.routes.DisposalDateController.disposalDate().url
+    s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+      doc.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
     }
 
     "have a back button" which {

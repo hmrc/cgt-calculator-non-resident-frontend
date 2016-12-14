@@ -9,13 +9,13 @@
     title = Messages("calc.nonResident.soldForLess.question")
     ) {
 
-    <a id="back-link" class="back-link" href="@controllers.nonresident.routes.SoldOrGivenAwayController.soldOrGivenAway">@Messages("calc.base.back")</a>
+    <a id="back-link" class="back-link" href="@controllers.routes.SoldOrGivenAwayController.soldOrGivenAway">@Messages("calc.base.back")</a>
 
     @errorSummary(soldForLessForm, "soldForLess")
 
     <h1 class="heading-xlarge">@Messages("calc.nonResident.soldForLess.question")</h1>
 
-    @form(action = controllers.nonresident.routes.SoldForLessController.submitSoldForLess) {
+    @form(action = controllers.routes.SoldForLessController.submitSoldForLess) {
 
         @formInputRadioGroup(
             field = soldForLessForm("soldForLess"),

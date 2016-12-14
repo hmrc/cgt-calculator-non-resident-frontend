@@ -20,7 +20,8 @@ import common.DefaultRoutes._
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
-import forms.DisposalCostsForm
+import forms.DisposalCostsForm._
+import views.html.calculation
 import models.{DisposalCostsModel, SoldForLessModel, SoldOrGivenAwayModel}
 import play.api.data.Form
 import play.api.mvc.Result
@@ -36,8 +37,8 @@ object DisposalCostsController extends DisposalCostsController {
 trait DisposalCostsController extends FrontendController with ValidActiveSession {
 
   val calcConnector: CalculatorConnector
-  override val sessionTimeoutUrl = controllers.nonresident.routes.SummaryController.restart().url
-  override val homeLink = controllers.nonresident.routes.DisposalDateController.disposalDate().url
+  override val sessionTimeoutUrl = controllers.routes.SummaryController.restart().url
+  override val homeLink = controllers.routes.DisposalDateController.disposalDate().url
 
   private def backUrl(soldOrGivenAwayModel: Option[SoldOrGivenAwayModel], soldForLessModel: Option[SoldForLessModel]): Future[String] =
     (soldOrGivenAwayModel, soldForLessModel) match {
@@ -61,8 +62,8 @@ trait DisposalCostsController extends FrontendController with ValidActiveSession
 
     def routeRequest(backLink: String): Future[Result] = {
       calcConnector.fetchAndGetFormData[DisposalCostsModel](KeystoreKeys.disposalCosts).map {
-        case Some(data) => Ok(calculation.nonresident.disposalCosts(disposalCostsForm.fill(data), backLink))
-        case None => Ok(calculation.nonresident.disposalCosts(disposalCostsForm, backLink))
+        case Some(data) => Ok(calculation.disposalCosts(disposalCostsForm.fill(data), backLink))
+        case None => Ok(calculation.disposalCosts(disposalCostsForm, backLink))
       }
     }
 
@@ -77,7 +78,7 @@ trait DisposalCostsController extends FrontendController with ValidActiveSession
   val submitDisposalCosts = ValidateSession.async { implicit request =>
 
     def errorAction(errors: Form[DisposalCostsModel], backLink: String) = {
-      Future.successful(BadRequest(calculation.nonresident.disposalCosts(errors, backLink)))
+      Future.successful(BadRequest(calculation.disposalCosts(errors, backLink)))
     }
 
     def successAction(model: DisposalCostsModel) = {

@@ -19,8 +19,10 @@ package views
 import assets.MessageLookup.{NonResident => messages}
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
+import forms.OtherReliefsForm._
 import org.scalatest.mock.MockitoSugar
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import views.html.calculation.otherReliefsRebased
 
 class OtherReliefsRebasedViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
@@ -43,7 +45,7 @@ class OtherReliefsRebasedViewSpec extends UnitSpec with WithFakeApplication with
 
         s"should have a route to 'calculation-election'" in {
           backLink.attr("href") shouldEqual
-            controllers.nonresident.routes.CalculationElectionController.calculationElection().url
+            controllers.routes.CalculationElectionController.calculationElection().url
         }
       }
 
@@ -59,8 +61,8 @@ class OtherReliefsRebasedViewSpec extends UnitSpec with WithFakeApplication with
         }
       }
 
-      s"have a home link to '${controllers.nonresident.routes.DisposalDateController.disposalDate().url}'" in {
-        document.select("#homeNavHref").attr("href") shouldEqual controllers.nonresident.routes.DisposalDateController.disposalDate().url
+      s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+        document.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
       }
 
       "have a form" which {
@@ -70,8 +72,8 @@ class OtherReliefsRebasedViewSpec extends UnitSpec with WithFakeApplication with
           form.attr("method") shouldBe "POST"
         }
 
-        s"has an action of '${controllers.nonresident.routes.OtherReliefsRebasedController.otherReliefsRebased().url}'" in {
-          form.attr("action") shouldBe controllers.nonresident.routes.OtherReliefsRebasedController.otherReliefsRebased().url
+        s"has an action of '${controllers.routes.OtherReliefsRebasedController.otherReliefsRebased().url}'" in {
+          form.attr("action") shouldBe controllers.routes.OtherReliefsRebasedController.otherReliefsRebased().url
         }
       }
 

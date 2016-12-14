@@ -19,12 +19,12 @@ package controllers
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
-import forms.PreviousLossOrGainForm
+import forms.PreviousLossOrGainForm._
 import models.PreviousLossOrGainModel
 import play.api.data.Form
 import play.api.mvc.Result
 import uk.gov.hmrc.play.frontend.controller.FrontendController
-import views.html.calculation.{nonresident => views}
+import views.html.{calculation => views}
 
 import scala.concurrent.Future
 object PreviousGainOrLossController extends PreviousGainOrLossController {
@@ -33,8 +33,8 @@ object PreviousGainOrLossController extends PreviousGainOrLossController {
 
 trait PreviousGainOrLossController extends FrontendController with ValidActiveSession {
 
-  override val sessionTimeoutUrl = controllers.nonresident.routes.SummaryController.restart().url
-  override val homeLink = controllers.nonresident.routes.DisposalDateController.disposalDate().url
+  override val sessionTimeoutUrl = controllers.routes.SummaryController.restart().url
+  override val homeLink = controllers.routes.DisposalDateController.disposalDate().url
   val calcConnector: CalculatorConnector
 
   val previousGainOrLoss = ValidateSession.async { implicit request =>

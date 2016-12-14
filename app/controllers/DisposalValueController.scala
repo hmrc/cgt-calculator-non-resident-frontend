@@ -19,7 +19,8 @@ package controllers
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
-import forms.DisposalValueForm
+import forms.DisposalValueForm._
+import views.html.calculation
 import models.DisposalValueModel
 import play.api.data.Form
 import uk.gov.hmrc.play.frontend.controller.FrontendController
@@ -33,19 +34,19 @@ object DisposalValueController extends DisposalValueController {
 trait DisposalValueController extends FrontendController with ValidActiveSession {
 
   val calcConnector: CalculatorConnector
-  override val sessionTimeoutUrl = controllers.nonresident.routes.SummaryController.restart().url
-  override val homeLink = controllers.nonresident.routes.DisposalDateController.disposalDate().url
+  override val sessionTimeoutUrl = controllers.routes.SummaryController.restart().url
+  override val homeLink = controllers.routes.DisposalDateController.disposalDate().url
 
   val disposalValue = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[DisposalValueModel](KeystoreKeys.disposalValue).map {
-      case Some(data) => Ok(calculation.nonresident.disposalValue(disposalValueForm.fill(data)))
-      case None => Ok(calculation.nonresident.disposalValue(disposalValueForm))
+      case Some(data) => Ok(calculation.disposalValue(disposalValueForm.fill(data)))
+      case None => Ok(calculation.disposalValue(disposalValueForm))
     }
   }
 
   val submitDisposalValue = ValidateSession.async { implicit request =>
 
-    def errorAction(form: Form[DisposalValueModel]) = Future.successful(BadRequest(calculation.nonresident.disposalValue(form)))
+    def errorAction(form: Form[DisposalValueModel]) = Future.successful(BadRequest(calculation.disposalValue(form)))
 
     def successAction(model: DisposalValueModel) = {
       calcConnector.saveFormData(KeystoreKeys.disposalValue, model)

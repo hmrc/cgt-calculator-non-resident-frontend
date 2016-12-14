@@ -25,7 +25,7 @@ import forms.AcquisitionDateForm._
 import models.AcquisitionDateModel
 import play.api.data.Form
 import uk.gov.hmrc.play.frontend.controller.FrontendController
-import views.calculation
+import views.html.calculation
 
 import scala.concurrent.Future
 
@@ -35,8 +35,8 @@ object AcquisitionDateController extends AcquisitionDateController {
 
 trait AcquisitionDateController extends FrontendController with ValidActiveSession {
 
-  override val sessionTimeoutUrl = controllers.nonresident.routes.SummaryController.restart().url
-  override val homeLink = controllers.nonresident.routes.DisposalDateController.disposalDate().url
+  override val sessionTimeoutUrl = controllers.routes.SummaryController.restart().url
+  override val homeLink = controllers.routes.DisposalDateController.disposalDate().url
   val calcConnector: CalculatorConnector
   val calcElectionConstructor = CalculationElectionConstructor
 

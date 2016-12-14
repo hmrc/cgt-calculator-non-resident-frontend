@@ -44,7 +44,7 @@ object SalesDetailsConstructor {
     Some(QuestionAnswerModel[LocalDate](keys.disposalDate,
       date,
       Messages("calc.disposalDate.question"),
-      Some(controllers.nonresident.routes.DisposalDateController.disposalDate().url)))
+      Some(controllers.routes.DisposalDateController.disposalDate().url)))
   }
 
   def soldOrGivenAwayRow(answers: TotalGainAnswersModel): Option[QuestionAnswerModel[String]] = {
@@ -52,14 +52,14 @@ object SalesDetailsConstructor {
       Some(QuestionAnswerModel[String](keys.soldOrGivenAway,
         Messages("calc.soldOrGivenAway.sold"),
         Messages("calc.soldOrGivenAway.question"),
-        Some(controllers.nonresident.routes.SoldOrGivenAwayController.soldOrGivenAway().url)
+        Some(controllers.routes.SoldOrGivenAwayController.soldOrGivenAway().url)
       ))
     }
     else {
       Some(QuestionAnswerModel[String](keys.soldOrGivenAway,
         Messages("calc.soldOrGivenAway.gave"),
         Messages("calc.soldOrGivenAway.question"),
-        Some(controllers.nonresident.routes.SoldOrGivenAwayController.soldOrGivenAway().url)
+        Some(controllers.routes.SoldOrGivenAwayController.soldOrGivenAway().url)
       ))
     }
   }
@@ -69,7 +69,7 @@ object SalesDetailsConstructor {
       Some(QuestionAnswerModel[Boolean](keys.soldForLess,
         answers.soldForLessModel.get.soldForLess,
         Messages("calc.nonResident.soldForLess.question"),
-        Some(controllers.nonresident.routes.SoldForLessController.soldForLess().url)
+        Some(controllers.routes.SoldForLessController.soldForLess().url)
       ))
     }
     else None
@@ -85,9 +85,9 @@ object SalesDetailsConstructor {
 
     val route = (answers.soldOrGivenAwayModel.soldIt, answers.soldForLessModel) match {
       case (true, Some(SoldForLessModel(true))) =>
-        controllers.nonresident.routes.MarketValueWhenSoldOrGaveAwayController.marketValueWhenSold().url
-      case (true, Some(_)) => controllers.nonresident.routes.DisposalValueController.disposalValue().url
-      case _ => controllers.nonresident.routes.MarketValueWhenSoldOrGaveAwayController.marketValueWhenGaveAway().url
+        controllers.routes.MarketValueWhenSoldOrGaveAwayController.marketValueWhenSold().url
+      case (true, Some(_)) => controllers.routes.DisposalValueController.disposalValue().url
+      case _ => controllers.routes.MarketValueWhenSoldOrGaveAwayController.marketValueWhenGaveAway().url
     }
 
     Some(QuestionAnswerModel[BigDecimal](keys.disposalValue,
@@ -100,6 +100,6 @@ object SalesDetailsConstructor {
     Some(QuestionAnswerModel[BigDecimal](keys.disposalCosts,
       answers.disposalCostsModel.disposalCosts,
       Messages("calc.disposalCosts.question"),
-      Some(controllers.nonresident.routes.DisposalCostsController.disposalCosts().url)))
+      Some(controllers.routes.DisposalCostsController.disposalCosts().url)))
   }
 }

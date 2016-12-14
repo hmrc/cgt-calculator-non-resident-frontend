@@ -48,8 +48,8 @@ class MarketValueWhenSoldOrGaveAwayActionSpec extends UnitSpec with WithFakeAppl
   }
 
   "MarketValueController" should {
-    s"have a session timeout home link of '${controllers.nonresident.routes.DisposalDateController.disposalDate().url}'" in {
-      MarketValueWhenSoldOrGaveAwayController.homeLink shouldEqual controllers.nonresident.routes.DisposalDateController.disposalDate().url
+    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+      MarketValueWhenSoldOrGaveAwayController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
     }
   }
 
@@ -165,7 +165,7 @@ class MarketValueWhenSoldOrGaveAwayActionSpec extends UnitSpec with WithFakeAppl
       }
 
       "redirect to the DisposalCosts page" in {
-        redirectLocation(result) shouldBe Some(controllers.nonresident.routes.DisposalCostsController.disposalCosts().url)
+        redirectLocation(result) shouldBe Some(controllers.routes.DisposalCostsController.disposalCosts().url)
       }
     }
   }
@@ -181,7 +181,7 @@ class MarketValueWhenSoldOrGaveAwayActionSpec extends UnitSpec with WithFakeAppl
       }
 
       "redirect to the DisposalCosts page" in {
-        redirectLocation(result) shouldBe Some(controllers.nonresident.routes.DisposalCostsController.disposalCosts().url)
+        redirectLocation(result) shouldBe Some(controllers.routes.DisposalCostsController.disposalCosts().url)
       }
     }
 

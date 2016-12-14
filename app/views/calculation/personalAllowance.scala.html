@@ -18,13 +18,13 @@
 
 @main_template(Messages("calc.personalAllowance.question")) {
 
-    <a id="back-link" class="back-link" href="@controllers.nonresident.routes.CurrentIncomeController.currentIncome">@Messages("calc.base.back")</a>
+    <a id="back-link" class="back-link" href="@controllers.routes.CurrentIncomeController.currentIncome">@Messages("calc.base.back")</a>
 
     @errorSummary(personalAllowanceForm, "personal-allowance")
 
     <h1 class="heading-xlarge">@Messages("calc.personalAllowance.question")</h1>
 
-    @form(action = controllers.nonresident.routes.PersonalAllowanceController.submitPersonalAllowance) {
+    @form(action = controllers.routes.PersonalAllowanceController.submitPersonalAllowance) {
 
         @formInputMoneyHTML(personalAllowanceForm, "personalAllowance", Messages("calc.personalAllowance.question"), helpText = Some(helpAndLink), hideLabel = true)
 

@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package forms.nonResident
+package forms
 
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
-import models.PreviousLossOrGainModel
 import assets.MessageLookup.NonResident.{PreviousLossOrGain => messages}
-import forms.PreviousLossOrGainForm
+import models.PreviousLossOrGainModel
+import forms.PreviousLossOrGainForm._
+import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 class PreviousLossOrGainFormSpec extends UnitSpec with WithFakeApplication{
   "Creating the form from a model" should {

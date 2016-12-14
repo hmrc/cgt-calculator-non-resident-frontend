@@ -24,6 +24,7 @@ import controllers.helpers.FakeRequestHelper
 import models.QuestionAnswerModel
 import org.jsoup.Jsoup
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import views.html.calculation.checkYourAnswers
 
 
 class CheckYourAnswersViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {

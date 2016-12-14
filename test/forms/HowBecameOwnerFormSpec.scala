@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package forms.nonResident
+package forms
 
 
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
-import models.HowBecameOwnerModel
 import assets.MessageLookup.NonResident.{HowBecameOwner => messages}
-import forms.HowBecameOwnerForm
-
+import models.HowBecameOwnerModel
+import forms.HowBecameOwnerForm._
+import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 class HowBecameOwnerFormSpec extends UnitSpec with WithFakeApplication {
 

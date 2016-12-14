@@ -23,7 +23,7 @@ import connectors.CalculatorConnector
 import constructors.{AnswersConstructor, CalculationElectionConstructor}
 import controllers.CalculationElectionController
 import controllers.helpers.FakeRequestHelper
-import controllers.nonresident.routes
+import controllers.routes
 import models.{TaxYearModel, _}
 import org.jsoup._
 import org.mockito.Matchers
@@ -86,8 +86,8 @@ class CalculationElectionActionSpec extends UnitSpec with WithFakeApplication wi
   }
 
   "CalculationElectionController" should {
-    s"have a session timeout home link of '${controllers.nonresident.routes.DisposalDateController.disposalDate().url}'" in {
-      CalculationElectionController.homeLink shouldEqual controllers.nonresident.routes.DisposalDateController.disposalDate().url
+    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+      CalculationElectionController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
     }
   }
 

@@ -18,7 +18,7 @@
 
 @main_template(Messages("calc.calculationElection.question"), sidebarLinks = Some(sidebar)) {
 
-    <a id="back-link" class="back-link" href="@controllers.nonresident.routes.CheckYourAnswersController.checkYourAnswers">@Messages("calc.base.back")</a>
+    <a id="back-link" class="back-link" href="@controllers.routes.CheckYourAnswersController.checkYourAnswers">@Messages("calc.base.back")</a>
 
     @errorSummary(calculationElectionForm, "calculation-election")
 
@@ -42,7 +42,7 @@
         </div>
     </details>
 
-    @form(action = controllers.nonresident.routes.CalculationElectionController.submitCalculationElection) {
+    @form(action = controllers.routes.CalculationElectionController.submitCalculationElection) {
 
         <div class="form-group">
             @calculationElectionHelperForm(

@@ -21,7 +21,8 @@ import common.nonresident.TaxableGainCalculation._
 import connectors.CalculatorConnector
 import constructors.AnswersConstructor
 import controllers.predicates.ValidActiveSession
-import forms.OtherReliefsForm
+import forms.OtherReliefsForm._
+import views.html.calculation
 import models._
 import play.api.data.Form
 import uk.gov.hmrc.play.frontend.controller.FrontendController
@@ -38,8 +39,8 @@ trait OtherReliefsController extends FrontendController with ValidActiveSession 
   val calcConnector: CalculatorConnector
   val answersConstructor: AnswersConstructor
 
-  override val sessionTimeoutUrl = controllers.nonresident.routes.SummaryController.restart().url
-  override val homeLink = controllers.nonresident.routes.DisposalDateController.disposalDate().url
+  override val sessionTimeoutUrl = controllers.routes.SummaryController.restart().url
+  override val homeLink = controllers.routes.DisposalDateController.disposalDate().url
 
   val otherReliefs = ValidateSession.async { implicit request =>
 
@@ -49,8 +50,8 @@ trait OtherReliefsController extends FrontendController with ValidActiveSession 
       val gain = totalGain.fold(BigDecimal(0))(_.flatGain)
       val chargeableGain = chargeableGainResult.fold(BigDecimal(0))(_.flatResult.taxableGain)
 
-      val result = model.fold(calculation.nonresident.otherReliefs(otherReliefsForm, chargeableGain, gain)) { data =>
-        calculation.nonresident.otherReliefs(otherReliefsForm.fill(data), chargeableGain, gain)
+      val result = model.fold(calculation.otherReliefs(otherReliefsForm, chargeableGain, gain)) { data =>
+        calculation.otherReliefs(otherReliefsForm.fill(data), chargeableGain, gain)
       }
 
       Ok(result)
@@ -78,7 +79,7 @@ trait OtherReliefsController extends FrontendController with ValidActiveSession 
         val gain = totalGain.fold(BigDecimal(0))(_.flatGain)
         val chargeableGain = chargeableGainResult.fold(BigDecimal(0))(_.flatResult.taxableGain)
 
-        BadRequest(calculation.nonresident.otherReliefs(form, chargeableGain, gain))
+        BadRequest(calculation.otherReliefs(form, chargeableGain, gain))
       }
 
       for {

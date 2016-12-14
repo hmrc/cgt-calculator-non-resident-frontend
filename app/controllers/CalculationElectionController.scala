@@ -27,7 +27,7 @@ import models.{TaxYearModel, TotalGainAnswersModel, _}
 import play.api.data.Form
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import uk.gov.hmrc.play.http.HeaderCarrier
-import views.calculation
+import views.html.calculation
 
 import scala.concurrent.Future
 
@@ -39,8 +39,8 @@ object CalculationElectionController extends CalculationElectionController {
 
 trait CalculationElectionController extends FrontendController with ValidActiveSession {
 
-  override val sessionTimeoutUrl: String = controllers.nonresident.routes.SummaryController.restart().url
-  override val homeLink: String = controllers.nonresident.routes.DisposalDateController.disposalDate().url
+  override val sessionTimeoutUrl: String = controllers.routes.SummaryController.restart().url
+  override val homeLink: String = controllers.routes.DisposalDateController.disposalDate().url
   val calcConnector: CalculatorConnector
   val calcElectionConstructor: CalculationElectionConstructor
   val calcAnswersConstructor: AnswersConstructor

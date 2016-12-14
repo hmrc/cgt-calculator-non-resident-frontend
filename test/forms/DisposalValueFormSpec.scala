@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package forms.nonResident
+package forms
 
 import assets.MessageLookup.{NonResident => messages}
-import forms.DisposalValueForm
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import models.DisposalValueModel
+import forms.DisposalValueForm._
+import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 class DisposalValueFormSpec extends UnitSpec with WithFakeApplication {
 

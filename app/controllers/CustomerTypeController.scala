@@ -21,13 +21,13 @@ import common.nonresident.CustomerTypeKeys
 import connectors.CalculatorConnector
 import constructors.CalculationElectionConstructor
 import controllers.predicates.ValidActiveSession
-import forms.CustomerTypeForm
+import forms.CustomerTypeForm._
 import models.{AcquisitionDateModel, CustomerTypeModel, RebasedValueModel}
 import play.api.data.Form
 import play.api.mvc.{Action, Result}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import uk.gov.hmrc.play.http.HeaderCarrier
-import views.html.calculation.{nonresident => views}
+import views.html.calculation
 
 import scala.concurrent.Future
 
@@ -37,8 +37,8 @@ object CustomerTypeController extends CustomerTypeController {
 
 trait CustomerTypeController extends FrontendController with ValidActiveSession {
 
-  override val sessionTimeoutUrl: String = controllers.nonresident.routes.SummaryController.restart().url
-  override val homeLink: String = controllers.nonresident.routes.DisposalDateController.disposalDate().url
+  override val sessionTimeoutUrl: String = controllers.routes.SummaryController.restart().url
+  override val homeLink: String = controllers.routes.DisposalDateController.disposalDate().url
   val calcConnector: CalculatorConnector
   val calcElectionConstructor = CalculationElectionConstructor
 
@@ -67,8 +67,8 @@ trait CustomerTypeController extends FrontendController with ValidActiveSession 
 
     def routeRequest(backUrl: String): Future[Result] =
       calcConnector.fetchAndGetFormData[CustomerTypeModel](KeystoreKeys.customerType).map {
-        case Some(data) => Ok(views.customerType(customerTypeForm.fill(data), backUrl))
-        case None => Ok(views.customerType(customerTypeForm, backUrl))
+        case Some(data) => Ok(calculation.customerType(customerTypeForm.fill(data), backUrl))
+        case None => Ok(calculation.customerType(customerTypeForm, backUrl))
       }
 
     for {
@@ -82,7 +82,7 @@ trait CustomerTypeController extends FrontendController with ValidActiveSession 
     def errorAction(form: Form[CustomerTypeModel]) = {
       for {
         backUrl <- customerTypeBackUrl
-        result <- Future.successful(BadRequest(views.customerType(form, backUrl)))
+        result <- Future.successful(BadRequest(calculation.customerType(form, backUrl)))
       } yield result
     }
 

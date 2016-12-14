@@ -184,7 +184,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
       }
 
       "have a link to the acquisition date page" in {
-        result.link shouldBe Some(controllers.nonresident.routes.AcquisitionDateController.acquisitionDate().url)
+        result.link shouldBe Some(controllers.routes.AcquisitionDateController.acquisitionDate().url)
       }
     }
 
@@ -228,7 +228,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
 
       "have a link to the acquisition date page" in {
         assertExpectedResult[QuestionAnswerModel[LocalDate]](result)(_.link shouldBe
-          Some(controllers.nonresident.routes.AcquisitionDateController.acquisitionDate().url))
+          Some(controllers.routes.AcquisitionDateController.acquisitionDate().url))
       }
     }
   }
@@ -251,7 +251,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
       }
 
       "have a link to the how became owner page" in {
-        result.link shouldBe Some(controllers.nonresident.routes.HowBecameOwnerController.howBecameOwner().url)
+        result.link shouldBe Some(controllers.routes.HowBecameOwnerController.howBecameOwner().url)
       }
     }
 
@@ -303,7 +303,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
 
       "have a link to the bought for less page" in {
         assertExpectedResult[QuestionAnswerModel[Boolean]](result)(_.link
-          shouldBe Some(controllers.nonresident.routes.BoughtForLessController.boughtForLess().url))
+          shouldBe Some(controllers.routes.BoughtForLessController.boughtForLess().url))
       }
     }
 
@@ -338,7 +338,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
       }
 
       "have a link to the acquisition date page" in {
-        result.link shouldBe Some(controllers.nonresident.routes.AcquisitionValueController.acquisitionValue().url)
+        result.link shouldBe Some(controllers.routes.AcquisitionValueController.acquisitionValue().url)
       }
     }
 
@@ -401,7 +401,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
       }
 
       "have a link to the acquisition date page" in {
-        result.link shouldBe Some(controllers.nonresident.routes.AcquisitionCostsController.acquisitionCosts().url)
+        result.link shouldBe Some(controllers.routes.AcquisitionCostsController.acquisitionCosts().url)
       }
     }
 
@@ -437,7 +437,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
 
       "have a link to the rebased value page" in {
         assertExpectedResult[QuestionAnswerModel[BigDecimal]](result)(_.link
-          shouldBe Some(controllers.nonresident.routes.RebasedValueController.rebasedValue().url))
+          shouldBe Some(controllers.routes.RebasedValueController.rebasedValue().url))
       }
     }
 
@@ -489,7 +489,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
 
       "have a link to the rebased costs page" in {
         assertExpectedResult[QuestionAnswerModel[String]](result)(_.link
-          shouldBe Some(controllers.nonresident.routes.RebasedCostsController.rebasedCosts().url))
+          shouldBe Some(controllers.routes.RebasedCostsController.rebasedCosts().url))
       }
     }
 
@@ -533,7 +533,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
 
       "have a link to the rebased costs page" in {
         assertExpectedResult[QuestionAnswerModel[BigDecimal]](result)(_.link
-          shouldBe Some(controllers.nonresident.routes.RebasedCostsController.rebasedCosts().url))
+          shouldBe Some(controllers.routes.RebasedCostsController.rebasedCosts().url))
       }
     }
 

@@ -19,10 +19,11 @@ package controllers
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
-import forms.HowMuchGainForm
+import forms.HowMuchGainForm._
 import models.HowMuchGainModel
 import play.api.data.Form
 import uk.gov.hmrc.play.frontend.controller.FrontendController
+import views.html.calculation
 
 import scala.concurrent.Future
 
@@ -33,19 +34,19 @@ object HowMuchGainController extends HowMuchGainController {
 trait HowMuchGainController extends FrontendController with ValidActiveSession {
 
   val calcConnector: CalculatorConnector
-  override val sessionTimeoutUrl = controllers.nonresident.routes.SummaryController.restart().url
-  override val homeLink = controllers.nonresident.routes.DisposalDateController.disposalDate().url
+  override val sessionTimeoutUrl = controllers.routes.SummaryController.restart().url
+  override val homeLink = controllers.routes.DisposalDateController.disposalDate().url
 
   val howMuchGain = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[HowMuchGainModel](KeystoreKeys.howMuchGain).map {
-      case Some(data) => Ok(calculation.nonresident.howMuchGain(howMuchGainForm.fill(data)))
-      case None => Ok(calculation.nonresident.howMuchGain(howMuchGainForm))
+      case Some(data) => Ok(calculation.howMuchGain(howMuchGainForm.fill(data)))
+      case None => Ok(calculation.howMuchGain(howMuchGainForm))
     }
   }
 
   val submitHowMuchGain = ValidateSession.async { implicit request =>
 
-    def errorAction(form: Form[HowMuchGainModel]) = Future.successful(BadRequest(calculation.nonresident.howMuchGain(form)))
+    def errorAction(form: Form[HowMuchGainModel]) = Future.successful(BadRequest(calculation.howMuchGain(form)))
 
     def successAction(model: HowMuchGainModel) = {
       calcConnector.saveFormData(KeystoreKeys.howMuchGain, model)

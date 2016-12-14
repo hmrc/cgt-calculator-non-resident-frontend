@@ -21,6 +21,7 @@ import controllers.helpers.FakeRequestHelper
 import models.QuestionAnswerModel
 import org.jsoup.Jsoup
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import views.html.calculation.summary
 
 class SummaryViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
 
@@ -53,8 +54,8 @@ class SummaryViewSpec extends UnitSpec with WithFakeApplication with FakeRequest
         }
       }
 
-      s"have a home link to '${controllers.nonresident.routes.DisposalDateController.disposalDate().url}'" in {
-        document.select("#homeNavHref").attr("href") shouldEqual controllers.nonresident.routes.DisposalDateController.disposalDate().url
+      s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+        document.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
       }
 
       "have a heading" which {
@@ -120,7 +121,7 @@ class SummaryViewSpec extends UnitSpec with WithFakeApplication with FakeRequest
         }
 
         "have a link to /calculate-your-capital-gains/non-resident/restart" in {
-          startAgain.attr("href") shouldBe controllers.nonresident.routes.SummaryController.restart().url
+          startAgain.attr("href") shouldBe controllers.routes.SummaryController.restart().url
         }
       }
 
@@ -136,7 +137,7 @@ class SummaryViewSpec extends UnitSpec with WithFakeApplication with FakeRequest
         }
 
         "which has the link to the summary report" in {
-          savePDF.attr("href") shouldBe controllers.nonresident.routes.ReportController.summaryReport().url
+          savePDF.attr("href") shouldBe controllers.routes.ReportController.summaryReport().url
         }
       }
     }

@@ -6,13 +6,13 @@
 
 @main_template(Messages("calc.soldOrGivenAway.question")){
 
-    <a id="back-link" class="back-link" href="@controllers.nonresident.routes.DisposalDateController.disposalDate()">@Messages("calc.base.back")</a>
+    <a id="back-link" class="back-link" href="@controllers.routes.DisposalDateController.disposalDate()">@Messages("calc.base.back")</a>
 
     @errorSummary(soldOrGivenAway, "soldIt")
 
     <h1 class="heading-xlarge">@Messages("calc.soldOrGivenAway.question")</h1>
 
-    @form(action = controllers.nonresident.routes.SoldOrGivenAwayController.submitSoldOrGivenAway) {
+    @form(action = controllers.routes.SoldOrGivenAwayController.submitSoldOrGivenAway) {
 
         @formInputRadioGroup(
             field = soldOrGivenAway("soldIt"),

@@ -31,7 +31,7 @@ import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 import scala.concurrent.Future
 
-class AcquisitionDateSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
+class AcquisitionDateActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
   implicit val hc = new HeaderCarrier()
 
@@ -49,8 +49,8 @@ class AcquisitionDateSpec extends UnitSpec with WithFakeApplication with Mockito
   }
 
   "AcquisitionDateController" should {
-    s"have a session timeout home link of '${controllers.nonresident.routes.DisposalDateController.disposalDate().url}'" in {
-      AcquisitionDateController.homeLink shouldEqual controllers.nonresident.routes.DisposalDateController.disposalDate().url
+    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+      AcquisitionDateController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
     }
   }
 
@@ -64,7 +64,7 @@ class AcquisitionDateSpec extends UnitSpec with WithFakeApplication with Mockito
         status(result) shouldBe 303
       }
 
-      s"redirect to ${controllers.TimeoutController.timeout("restart", "home")}" in {
+      s"redirect to ${controllers.utils.TimeoutController.timeout("restart", "home")}" in {
         redirectLocation(result).get should include("/calculate-your-capital-gains/non-resident/session-timeout")
       }
     }
@@ -112,8 +112,8 @@ class AcquisitionDateSpec extends UnitSpec with WithFakeApplication with Mockito
         status(result) shouldBe 303
       }
 
-      s"redirect to ${controllers.nonresident.routes.HowBecameOwnerController.howBecameOwner().url}" in {
-        redirectLocation(result).get shouldBe controllers.nonresident.routes.HowBecameOwnerController.howBecameOwner().url
+      s"redirect to ${controllers.routes.HowBecameOwnerController.howBecameOwner().url}" in {
+        redirectLocation(result).get shouldBe controllers.routes.HowBecameOwnerController.howBecameOwner().url
       }
     }
 
@@ -127,8 +127,8 @@ class AcquisitionDateSpec extends UnitSpec with WithFakeApplication with Mockito
         status(result) shouldBe 303
       }
 
-      s"redirect to ${controllers.nonresident.routes.WorthBeforeLegislationStartController.worthBeforeLegislationStart().url}" in {
-        redirectLocation(result).get shouldBe controllers.nonresident.routes.WorthBeforeLegislationStartController.worthBeforeLegislationStart().url
+      s"redirect to ${controllers.routes.WorthBeforeLegislationStartController.worthBeforeLegislationStart().url}" in {
+        redirectLocation(result).get shouldBe controllers.routes.WorthBeforeLegislationStartController.worthBeforeLegislationStart().url
       }
     }
 
@@ -142,8 +142,8 @@ class AcquisitionDateSpec extends UnitSpec with WithFakeApplication with Mockito
         status(result) shouldBe 303
       }
 
-      s"redirect to ${controllers.nonresident.routes.HowBecameOwnerController.howBecameOwner().url}" in {
-        redirectLocation(result).get shouldBe controllers.nonresident.routes.HowBecameOwnerController.howBecameOwner().url
+      s"redirect to ${controllers.routes.HowBecameOwnerController.howBecameOwner().url}" in {
+        redirectLocation(result).get shouldBe controllers.routes.HowBecameOwnerController.howBecameOwner().url
       }
     }
 

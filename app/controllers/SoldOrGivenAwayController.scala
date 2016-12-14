@@ -19,7 +19,8 @@ package controllers
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
-import forms.SoldOrGivenAwayForm
+import forms.SoldOrGivenAwayForm._
+import views.html.calculation
 import models.SoldOrGivenAwayModel
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 
@@ -32,20 +33,20 @@ object SoldOrGivenAwayController extends SoldOrGivenAwayController {
 trait SoldOrGivenAwayController extends FrontendController with ValidActiveSession  {
 
   val calcConnector: CalculatorConnector
-  override val sessionTimeoutUrl = controllers.nonresident.routes.SummaryController.restart().url
-  override val homeLink = controllers.nonresident.routes.DisposalDateController.disposalDate().url
+  override val sessionTimeoutUrl = controllers.routes.SummaryController.restart().url
+  override val homeLink = controllers.routes.DisposalDateController.disposalDate().url
 
   val soldOrGivenAway = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[SoldOrGivenAwayModel](KeystoreKeys.soldOrGivenAway).map {
-      case Some(data) => Ok(calculation.nonresident.soldOrGivenAway(soldOrGivenAwayForm.fill(data)))
-      case None => Ok(calculation.nonresident.soldOrGivenAway(soldOrGivenAwayForm))
+      case Some(data) => Ok(calculation.soldOrGivenAway(soldOrGivenAwayForm.fill(data)))
+      case None => Ok(calculation.soldOrGivenAway(soldOrGivenAwayForm))
     }
   }
 
   val submitSoldOrGivenAway = ValidateSession.async { implicit request =>
 
     soldOrGivenAwayForm.bindFromRequest.fold(
-      errors => Future.successful(BadRequest(calculation.nonresident.soldOrGivenAway(errors))),
+      errors => Future.successful(BadRequest(calculation.soldOrGivenAway(errors))),
       success => {
         calcConnector.saveFormData[SoldOrGivenAwayModel](KeystoreKeys.soldOrGivenAway, success)
         success match {

@@ -30,7 +30,7 @@ import org.jsoup._
 import org.scalatest.mock.MockitoSugar
 
 import scala.concurrent.Future
-import controllers.nonresident.routes
+import controllers.routes
 import models.{DisposalDateModel, PersonalAllowanceModel}
 
 class PersonalAllowanceActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
@@ -56,8 +56,8 @@ class PersonalAllowanceActionSpec extends UnitSpec with WithFakeApplication with
   }
 
   "PersonalAllowanceController" should {
-    s"have a session timeout home link of '${controllers.nonresident.routes.DisposalDateController.disposalDate().url}'" in {
-      PersonalAllowanceController.homeLink shouldEqual controllers.nonresident.routes.DisposalDateController.disposalDate().url
+    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+      PersonalAllowanceController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
     }
   }
 

@@ -85,8 +85,8 @@ class OtherReliefsActionSpec extends UnitSpec with WithFakeApplication with Mock
   }
 
   "OtherReliefsController" should {
-    s"have a session timeout home link of '${controllers.nonresident.routes.DisposalDateController.disposalDate().url}'" in {
-      OtherReliefsController.homeLink shouldEqual controllers.nonresident.routes.DisposalDateController.disposalDate().url
+    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+      OtherReliefsController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
     }
   }
 
@@ -178,7 +178,7 @@ class OtherReliefsActionSpec extends UnitSpec with WithFakeApplication with Mock
       }
 
       "redirect to the summary page" in {
-        redirectLocation(result).get shouldBe controllers.nonresident.routes.SummaryController.summary().url
+        redirectLocation(result).get shouldBe controllers.routes.SummaryController.summary().url
       }
     }
 

@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package forms.nonResident
+package forms
 
-import models.WorthBeforeLegislationStartModel
-import assets.MessageLookup.{NonResident => commonMessages}
 import assets.MessageLookup.NonResident.{AcquisitionMarketValue => messages}
-import forms.WorthBeforeLegislationStartForm
+import assets.MessageLookup.{NonResident => commonMessages}
+import models.WorthBeforeLegislationStartModel
+import forms.WorthBeforeLegislationStartForm._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 class WorthBeforeLegislationStartFormSpec extends UnitSpec with WithFakeApplication {

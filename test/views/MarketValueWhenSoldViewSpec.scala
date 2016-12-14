@@ -21,8 +21,10 @@ import assets.MessageLookup.NonResident.{MarketValue => MarketValueMessages}
 import assets.MessageLookup.{NonResident => commonMessages}
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
+import forms.MarketValueWhenSoldForm._
 import org.scalatest.mock.MockitoSugar
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import views.html.calculation.marketValueSold
 
 class MarketValueWhenSoldViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper{
   "The market value when gave away page" should {
@@ -69,7 +71,7 @@ class MarketValueWhenSoldViewSpec extends UnitSpec with WithFakeApplication with
         }
 
         s"has a route to 'sold-for-less'" in {
-          backLink.attr("href") shouldBe controllers.nonresident.routes.SoldForLessController.soldForLess().url
+          backLink.attr("href") shouldBe controllers.routes.SoldForLessController.soldForLess().url
         }
       }
 
@@ -80,8 +82,8 @@ class MarketValueWhenSoldViewSpec extends UnitSpec with WithFakeApplication with
           form.attr("method") shouldBe "POST"
         }
 
-        s"has an action of '${controllers.nonresident.routes.MarketValueWhenSoldOrGaveAwayController.submitMarketValueWhenSold()}'" in {
-          form.attr("action") shouldBe controllers.nonresident.routes.MarketValueWhenSoldOrGaveAwayController.submitMarketValueWhenSold().url
+        s"has an action of '${controllers.routes.MarketValueWhenSoldOrGaveAwayController.submitMarketValueWhenSold()}'" in {
+          form.attr("action") shouldBe controllers.routes.MarketValueWhenSoldOrGaveAwayController.submitMarketValueWhenSold().url
         }
 
         s"has the hidden text ${MessageLookup.NonResident.MarketValue.disposalSoldQuestion}" in {

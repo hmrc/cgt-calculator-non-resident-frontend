@@ -127,8 +127,8 @@ class SummaryActionSpec extends UnitSpec with WithFakeApplication with MockitoSu
   )
 
   "SummaryController" should {
-    s"have a session timeout home link of '${controllers.nonresident.routes.DisposalDateController.disposalDate().url}'" in {
-      SummaryController.homeLink shouldEqual controllers.nonresident.routes.DisposalDateController.disposalDate().url
+    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+      SummaryController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
     }
   }
 
@@ -156,7 +156,7 @@ class SummaryActionSpec extends UnitSpec with WithFakeApplication with MockitoSu
       }
 
       "has a back-link to the calculation election page" in {
-        document.select("#back-link").attr("href") shouldEqual controllers.nonresident.routes.CalculationElectionController.calculationElection().url
+        document.select("#back-link").attr("href") shouldEqual controllers.routes.CalculationElectionController.calculationElection().url
       }
     }
 
@@ -181,7 +181,7 @@ class SummaryActionSpec extends UnitSpec with WithFakeApplication with MockitoSu
       }
 
       "has a back-link to the check your answers page" in {
-        document.select("#back-link").attr("href") shouldEqual controllers.nonresident.routes.CheckYourAnswersController.checkYourAnswers().url
+        document.select("#back-link").attr("href") shouldEqual controllers.routes.CheckYourAnswersController.checkYourAnswers().url
       }
     }
 
@@ -222,7 +222,7 @@ class SummaryActionSpec extends UnitSpec with WithFakeApplication with MockitoSu
     }
 
     "redirect to the start page" in {
-      redirectLocation(result).get shouldBe controllers.nonresident.routes.DisposalDateController.disposalDate().url
+      redirectLocation(result).get shouldBe controllers.routes.DisposalDateController.disposalDate().url
     }
   }
 }

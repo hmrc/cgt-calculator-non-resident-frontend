@@ -19,8 +19,10 @@ package views
 import assets.MessageLookup.{NonResident => messages}
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
+import forms.OtherReliefsForm._
 import org.scalatest.mock.MockitoSugar
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import views.html.calculation.otherReliefs
 
 class OtherReliefsViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
@@ -49,7 +51,7 @@ class OtherReliefsViewSpec extends UnitSpec with WithFakeApplication with Mockit
 
         s"should have a route to 'check-your-answers'" in {
           backLink.attr("href") shouldEqual
-            controllers.nonresident.routes.CheckYourAnswersController.checkYourAnswers().url
+            controllers.routes.CheckYourAnswersController.checkYourAnswers().url
         }
       }
 
@@ -65,8 +67,8 @@ class OtherReliefsViewSpec extends UnitSpec with WithFakeApplication with Mockit
         }
       }
 
-      s"have a home link to '${controllers.nonresident.routes.DisposalDateController.disposalDate().url}'" in {
-        document.select("#homeNavHref").attr("href") shouldEqual controllers.nonresident.routes.DisposalDateController.disposalDate().url
+      s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+        document.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
       }
 
       "have a form" which {
@@ -76,8 +78,8 @@ class OtherReliefsViewSpec extends UnitSpec with WithFakeApplication with Mockit
           form.attr("method") shouldBe "POST"
         }
 
-        s"has an action of '${controllers.nonresident.routes.OtherReliefsController.otherReliefs().url}'" in {
-          form.attr("action") shouldBe controllers.nonresident.routes.OtherReliefsController.otherReliefs().url
+        s"has an action of '${controllers.routes.OtherReliefsController.otherReliefs().url}'" in {
+          form.attr("action") shouldBe controllers.routes.OtherReliefsController.otherReliefs().url
         }
       }
 

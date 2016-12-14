@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package forms.nonResident
+package forms
 
 import assets.MessageLookup
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
-import models.AllowableLossesModel
 import assets.MessageLookup.NonResident.{AllowableLosses => messages}
-import forms.AllowableLossesForm
+import models.AllowableLossesModel
 import play.api.i18n.Messages
+import forms.AllowableLossesForm._
+import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 class AllowableLossesFormSpec extends UnitSpec with WithFakeApplication {
 

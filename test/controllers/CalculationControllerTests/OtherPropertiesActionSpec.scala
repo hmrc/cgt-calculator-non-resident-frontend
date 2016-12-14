@@ -32,7 +32,7 @@ import org.jsoup._
 import org.scalatest.mock.MockitoSugar
 
 import scala.concurrent.Future
-import controllers.nonresident.routes
+import controllers.routes
 import models.{CurrentIncomeModel, CustomerTypeModel, OtherPropertiesModel}
 import uk.gov.hmrc.http.cache.client.CacheMap
 
@@ -63,8 +63,8 @@ class OtherPropertiesActionSpec extends UnitSpec with WithFakeApplication with M
   }
 
   "OtherPropertiesController" should {
-    s"have a session timeout home link of '${controllers.nonresident.routes.DisposalDateController.disposalDate().url}'" in {
-      OtherPropertiesController.homeLink shouldEqual controllers.nonresident.routes.DisposalDateController.disposalDate().url
+    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+      OtherPropertiesController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
     }
   }
 
@@ -79,7 +79,7 @@ class OtherPropertiesActionSpec extends UnitSpec with WithFakeApplication with M
         status(result) shouldBe 303
       }
 
-      s"redirect to ${controllers.TimeoutController.timeout("restart", "home")}" in {
+      s"redirect to ${controllers.utils.TimeoutController.timeout("restart", "home")}" in {
         redirectLocation(result).get should include("/calculate-your-capital-gains/non-resident/session-timeout")
       }
     }

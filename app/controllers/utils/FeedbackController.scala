@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.utils
 
 import java.net.URLEncoder
 
+import config.{AppConfig, ApplicationConfig, WSHttp}
 import play.api.Logger
 import play.api.http.{Status => HttpStatus}
 import play.api.mvc.{Action, AnyContent, Request, RequestHeader}
 import play.twirl.api.Html
-import config.{AppConfig, ApplicationConfig, WSHttp}
-import views.html.feedback.feedback_thankyou
 import uk.gov.hmrc.play.frontend.auth.Actions
 import uk.gov.hmrc.play.frontend.auth.connectors.AuthConnector
 import uk.gov.hmrc.play.frontend.controller.{FrontendController, UnauthorisedAction}
 import uk.gov.hmrc.play.frontend.filters.SessionCookieCryptoFilter
 import uk.gov.hmrc.play.http.{HeaderCarrier, HttpGet, HttpPost, _}
 import uk.gov.hmrc.play.partials._
+import views.html.feedback.feedback_thankyou
 
 import scala.concurrent.Future
 

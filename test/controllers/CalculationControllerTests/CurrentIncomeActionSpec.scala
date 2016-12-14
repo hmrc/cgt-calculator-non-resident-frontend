@@ -20,7 +20,7 @@ import assets.MessageLookup.NonResident.{CurrentIncome => messages}
 import connectors.CalculatorConnector
 import controllers.CurrentIncomeController
 import controllers.helpers.FakeRequestHelper
-import controllers.nonresident.routes
+import controllers.routes
 import models.CurrentIncomeModel
 import org.jsoup.Jsoup
 import org.mockito.Matchers
@@ -52,8 +52,8 @@ class CurrentIncomeActionSpec extends UnitSpec with WithFakeApplication with Moc
   }
 
   "CurrentIncomeController" should {
-    s"have a session timeout home link of '${controllers.nonresident.routes.DisposalDateController.disposalDate().url}'" in {
-      CurrentIncomeController.homeLink shouldEqual controllers.nonresident.routes.DisposalDateController.disposalDate().url
+    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+      CurrentIncomeController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
     }
   }
 

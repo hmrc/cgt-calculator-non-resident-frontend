@@ -20,12 +20,13 @@ import common.DefaultRoutes._
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
-import forms.OtherPropertiesForm
+import forms.OtherPropertiesForm._
 import models.{CurrentIncomeModel, CustomerTypeModel, OtherPropertiesModel}
 import play.api.data.Form
 import play.api.mvc.Result
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import uk.gov.hmrc.play.http.HeaderCarrier
+import views.html.calculation
 
 import scala.concurrent.Future
 
@@ -36,8 +37,8 @@ object OtherPropertiesController extends OtherPropertiesController {
 trait OtherPropertiesController extends FrontendController with ValidActiveSession {
 
   val calcConnector: CalculatorConnector
-  override val sessionTimeoutUrl = controllers.nonresident.routes.SummaryController.restart().url
-  override val homeLink = controllers.nonresident.routes.DisposalDateController.disposalDate().url
+  override val sessionTimeoutUrl = controllers.routes.SummaryController.restart().url
+  override val homeLink = controllers.routes.DisposalDateController.disposalDate().url
 
   private def otherPropertiesBackUrl(implicit hc: HeaderCarrier): Future[String] =
     calcConnector.fetchAndGetFormData[CustomerTypeModel](KeystoreKeys.customerType).flatMap {
@@ -55,8 +56,8 @@ trait OtherPropertiesController extends FrontendController with ValidActiveSessi
 
     def routeRequest(backUrl: String): Future[Result] = {
       calcConnector.fetchAndGetFormData[OtherPropertiesModel](KeystoreKeys.otherProperties).map {
-        case Some(data) => Ok(calculation.nonresident.otherProperties(otherPropertiesForm.fill(data), backUrl))
-        case _ => Ok(calculation.nonresident.otherProperties(otherPropertiesForm, backUrl))
+        case Some(data) => Ok(calculation.otherProperties(otherPropertiesForm.fill(data), backUrl))
+        case _ => Ok(calculation.otherProperties(otherPropertiesForm, backUrl))
       }
     }
 
@@ -70,7 +71,7 @@ trait OtherPropertiesController extends FrontendController with ValidActiveSessi
     def errorAction(form: Form[OtherPropertiesModel]) = {
       for {
         url <- otherPropertiesBackUrl
-        result <- Future.successful(BadRequest(calculation.nonresident.otherProperties(form, url)))
+        result <- Future.successful(BadRequest(calculation.otherProperties(form, url)))
       } yield result
     }
 

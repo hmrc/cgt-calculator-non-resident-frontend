@@ -70,7 +70,7 @@ object PurchaseDetailsConstructor {
       s"${KeystoreKeys.acquisitionDate}-question",
       totalGainAnswersModel.acquisitionDateModel.hasAcquisitionDate,
       Messages("calc.acquisitionDate.question"),
-      Some(controllers.nonresident.routes.AcquisitionDateController.acquisitionDate().url)
+      Some(controllers.routes.AcquisitionDateController.acquisitionDate().url)
     ))
   }
 
@@ -80,7 +80,7 @@ object PurchaseDetailsConstructor {
         s"${KeystoreKeys.acquisitionDate}",
         totalGainAnswersModel.acquisitionDateModel.get,
         Messages("calc.acquisitionDate.questionTwo"),
-        Some(controllers.nonresident.routes.AcquisitionDateController.acquisitionDate().url)
+        Some(controllers.routes.AcquisitionDateController.acquisitionDate().url)
       ))
     } else None
   }
@@ -98,7 +98,7 @@ object PurchaseDetailsConstructor {
         s"${KeystoreKeys.howBecameOwner}",
         answer,
         Messages("calc.howBecameOwner.question"),
-        Some(controllers.nonresident.routes.HowBecameOwnerController.howBecameOwner().url)
+        Some(controllers.routes.HowBecameOwnerController.howBecameOwner().url)
       ))
       case _ => None
     }
@@ -110,7 +110,7 @@ object PurchaseDetailsConstructor {
         s"${KeystoreKeys.boughtForLess}",
         totalGainAnswersModel.boughtForLessModel.get.boughtForLess,
         Messages("calc.boughtForLess.question"),
-        Some(controllers.nonresident.routes.BoughtForLessController.boughtForLess().url)
+        Some(controllers.routes.BoughtForLessController.boughtForLess().url)
       ))
       case _ => None
     }
@@ -129,7 +129,7 @@ object PurchaseDetailsConstructor {
       KeystoreKeys.acquisitionValue,
       totalGainAnswersModel.acquisitionValueModel.acquisitionValueAmt,
       question,
-      Some(controllers.nonresident.routes.AcquisitionValueController.acquisitionValue().url)
+      Some(controllers.routes.AcquisitionValueController.acquisitionValue().url)
     ))
   }
 
@@ -138,7 +138,7 @@ object PurchaseDetailsConstructor {
       KeystoreKeys.acquisitionCosts,
       totalGainAnswersModel.acquisitionCostsModel.acquisitionCostsAmt,
       Messages("calc.acquisitionCosts.question"),
-      Some(controllers.nonresident.routes.AcquisitionCostsController.acquisitionCosts().url)
+      Some(controllers.routes.AcquisitionCostsController.acquisitionCosts().url)
     ))
   }
 
@@ -148,7 +148,7 @@ object PurchaseDetailsConstructor {
         KeystoreKeys.rebasedValue,
         rebasedValueModel.get.rebasedValueAmt.get,
         s"${Messages("calc.nonResident.rebasedValue.question")} ${Messages("calc.nonResident.rebasedValue.date")}",
-        Some(controllers.nonresident.routes.RebasedValueController.rebasedValue().url)
+        Some(controllers.routes.RebasedValueController.rebasedValue().url)
       ))
     }
     else None
@@ -160,7 +160,7 @@ object PurchaseDetailsConstructor {
         s"${KeystoreKeys.rebasedCosts}-question",
         rebasedCostsModel.get.hasRebasedCosts,
         Messages("calc.rebasedCosts.question"),
-        Some(controllers.nonresident.routes.RebasedCostsController.rebasedCosts().url)
+        Some(controllers.routes.RebasedCostsController.rebasedCosts().url)
       ))
     } else None
   }
@@ -171,7 +171,7 @@ object PurchaseDetailsConstructor {
         KeystoreKeys.rebasedCosts,
         value,
         Messages("calc.rebasedCosts.questionTwo"),
-        Some(controllers.nonresident.routes.RebasedCostsController.rebasedCosts().url)
+        Some(controllers.routes.RebasedCostsController.rebasedCosts().url)
       ))
       case _ => None
     }

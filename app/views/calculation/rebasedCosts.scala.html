@@ -6,13 +6,13 @@
 
 @main_template(Messages("calc.rebasedCosts.question")) {
 
-    <a id="back-link" class="back-link" href="@controllers.nonresident.routes.RebasedValueController.rebasedValue">Back</a>
+    <a id="back-link" class="back-link" href="@controllers.routes.RebasedValueController.rebasedValue">Back</a>
 
     @errorSummary(rebasedCosts, "rebased-costs", "rebasedCosts")
 
     <h1 class="heading-xlarge">@Messages("calc.rebasedCosts.question")</h1>
 
-    @form(action = controllers.nonresident.routes.RebasedCostsController.submitRebasedCosts) {
+    @form(action = controllers.routes.RebasedCostsController.submitRebasedCosts) {
 
         @formHiddenYesNoRadio(rebasedCosts,
                               "hasRebasedCosts",

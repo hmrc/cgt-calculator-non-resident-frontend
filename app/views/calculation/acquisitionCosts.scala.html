@@ -19,7 +19,7 @@
         <li>@Messages("calc.acquisitionCosts.bulletThree")</li>
     </ul>
 
-    @form(action = controllers.nonresident.routes.AcquisitionCostsController.submitAcquisitionCosts) {
+    @form(action = controllers.routes.AcquisitionCostsController.submitAcquisitionCosts) {
 
         @formInputMoney(acquisitionCostsForm, "acquisitionCosts",Messages("calc.acquisitionCosts.question"), hideLabel=true)
 

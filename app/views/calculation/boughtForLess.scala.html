@@ -6,13 +6,13 @@
 
 @main_template(Messages("calc.boughtForLess.question")) {
 
-    <a id="back-link" class="back-link" href="@controllers.nonresident.routes.HowBecameOwnerController.howBecameOwner">@Messages("calc.base.back")</a>
+    <a id="back-link" class="back-link" href="@controllers.routes.HowBecameOwnerController.howBecameOwner">@Messages("calc.base.back")</a>
 
     @errorSummary(boughtForLessForm, "boughtForLess")
 
     <h1 class="heading-xlarge">@Messages("calc.boughtForLess.question")</h1>
 
-    @form(action = controllers.nonresident.routes.BoughtForLessController.submitBoughtForLess) {
+    @form(action = controllers.routes.BoughtForLessController.submitBoughtForLess) {
 
         @formYesNoRadio(
             field = boughtForLessForm("boughtForLess"),

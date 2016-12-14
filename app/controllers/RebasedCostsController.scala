@@ -19,7 +19,8 @@ package controllers
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
-import forms.RebasedCostsForm
+import forms.RebasedCostsForm._
+import views.html.calculation
 import models.RebasedCostsModel
 import play.api.data.Form
 import uk.gov.hmrc.play.frontend.controller.FrontendController
@@ -32,21 +33,21 @@ object RebasedCostsController extends RebasedCostsController {
 
 trait RebasedCostsController extends FrontendController with ValidActiveSession {
 
-  override val sessionTimeoutUrl = controllers.nonresident.routes.SummaryController.restart().url
-  override val homeLink = controllers.nonresident.routes.DisposalDateController.disposalDate().url
+  override val sessionTimeoutUrl = controllers.routes.SummaryController.restart().url
+  override val homeLink = controllers.routes.DisposalDateController.disposalDate().url
   val calcConnector: CalculatorConnector
 
   val rebasedCosts = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[RebasedCostsModel](KeystoreKeys.rebasedCosts).map {
-      case Some(data) => Ok(calculation.nonresident.rebasedCosts(rebasedCostsForm.fill(data)))
-      case None => Ok(calculation.nonresident.rebasedCosts(rebasedCostsForm))
+      case Some(data) => Ok(calculation.rebasedCosts(rebasedCostsForm.fill(data)))
+      case None => Ok(calculation.rebasedCosts(rebasedCostsForm))
     }
   }
 
   val submitRebasedCosts = ValidateSession.async { implicit request =>
 
     def errorAction(form: Form[RebasedCostsModel]) = {
-      Future.successful(BadRequest(calculation.nonresident.rebasedCosts(form)))
+      Future.successful(BadRequest(calculation.rebasedCosts(form)))
     }
 
     def successAction(model: RebasedCostsModel) = {

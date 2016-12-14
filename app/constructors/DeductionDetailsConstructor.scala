@@ -51,7 +51,7 @@ object DeductionDetailsConstructor {
         keys.privateResidenceRelief,
         answer,
         Messages("calc.privateResidenceRelief.question"),
-        Some(controllers.nonresident.routes.PrivateResidenceReliefController.privateResidenceRelief().url)
+        Some(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief().url)
       ))
       case _ => None
     }
@@ -66,7 +66,7 @@ object DeductionDetailsConstructor {
           value.toString(),
           s"${Messages("calc.privateResidenceRelief.questionBefore.partOne")} ${Dates.dateMinusMonths(answers.disposalDateModel, 18)}" +
             s" ${Messages("calc.privateResidenceRelief.questionBefore.partTwo")}",
-          Some(controllers.nonresident.routes.PrivateResidenceReliefController.privateResidenceRelief().url)
+          Some(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief().url)
         ))
       case _ => None
     }
@@ -82,7 +82,7 @@ object DeductionDetailsConstructor {
           value.toString(),
           s"${Messages("calc.privateResidenceRelief.questionBetween.partOne")} ${Dates.dateMinusMonths(answers.disposalDateModel, 18)}" +
             s" ${Messages("calc.privateResidenceRelief.questionBetween.partTwo")}",
-          Some(controllers.nonresident.routes.PrivateResidenceReliefController.privateResidenceRelief().url)
+          Some(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief().url)
         ))
       case (Some(PrivateResidenceReliefModel("Yes", _, Some(value))), _, Some(RebasedValueModel(Some(_))))
       if TaxDates.dateAfterOctober(answers.disposalDateModel.get) =>
@@ -91,7 +91,7 @@ object DeductionDetailsConstructor {
           value.toString(),
           s"${Messages("calc.privateResidenceRelief.questionBetween.partOne")} ${Dates.dateMinusMonths(answers.disposalDateModel, 18)}" +
             s" ${Messages("calc.privateResidenceRelief.questionBetween.partTwo")}",
-          Some(controllers.nonresident.routes.PrivateResidenceReliefController.privateResidenceRelief().url)
+          Some(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief().url)
         ))
       case _ => None
     }

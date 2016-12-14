@@ -19,6 +19,7 @@ package views
 import assets.MessageLookup.{NonResident => messages}
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
+import forms.HowMuchLossForm._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 class HowMuchLossViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
@@ -26,7 +27,7 @@ class HowMuchLossViewSpec extends UnitSpec with WithFakeApplication with FakeReq
   "Previous Loss view" when {
 
     "provided with no errors" should {
-      lazy val view = views.html.calculation.nonresident.howMuchLoss(howMuchLossForm)(fakeRequest)
+      lazy val view = views.html.calculation.howMuchLoss(howMuchLossForm)(fakeRequest)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of ${messages.HowMuchLoss.question}" in {
@@ -45,7 +46,7 @@ class HowMuchLossViewSpec extends UnitSpec with WithFakeApplication with FakeReq
         }
 
         s"has a route to 'Previous Gain Or Loss'" in {
-          backLink.attr("href") shouldBe controllers.nonresident.routes.PreviousGainOrLossController.previousGainOrLoss().url
+          backLink.attr("href") shouldBe controllers.routes.PreviousGainOrLossController.previousGainOrLoss().url
         }
       }
 
@@ -68,8 +69,8 @@ class HowMuchLossViewSpec extends UnitSpec with WithFakeApplication with FakeReq
           form.attr("method") shouldBe "POST"
         }
 
-        s"has an action of '${controllers.nonresident.routes.HowMuchLossController.submitHowMuchLoss().url}'" in {
-          form.attr("action") shouldBe controllers.nonresident.routes.HowMuchLossController.submitHowMuchLoss().url
+        s"has an action of '${controllers.routes.HowMuchLossController.submitHowMuchLoss().url}'" in {
+          form.attr("action") shouldBe controllers.routes.HowMuchLossController.submitHowMuchLoss().url
         }
       }
 
@@ -109,7 +110,7 @@ class HowMuchLossViewSpec extends UnitSpec with WithFakeApplication with FakeReq
 
     "provided with some errors" should {
       lazy val form = howMuchLossForm.bind(Map("loss" -> ""))
-      lazy val view = views.html.calculation.nonresident.howMuchLoss(form)(fakeRequest)
+      lazy val view = views.html.calculation.howMuchLoss(form)(fakeRequest)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

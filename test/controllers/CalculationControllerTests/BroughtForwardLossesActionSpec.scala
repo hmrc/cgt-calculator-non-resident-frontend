@@ -81,7 +81,7 @@ class BroughtForwardLossesActionSpec extends UnitSpec with WithFakeApplication w
       }
 
       "have a back link to Annual Exempt Amount page" in {
-        document.select("#back-link").attr("href") shouldBe controllers.nonresident.routes.AnnualExemptAmountController.annualExemptAmount().url
+        document.select("#back-link").attr("href") shouldBe controllers.routes.AnnualExemptAmountController.annualExemptAmount().url
       }
     }
 
@@ -125,7 +125,7 @@ class BroughtForwardLossesActionSpec extends UnitSpec with WithFakeApplication w
       }
 
       "redirect to the Check Your Answers page" in {
-        redirectLocation(result) shouldBe Some(controllers.nonresident.routes.CheckYourAnswersController.checkYourAnswers().url)
+        redirectLocation(result) shouldBe Some(controllers.routes.CheckYourAnswersController.checkYourAnswers().url)
       }
     }
 
@@ -165,7 +165,7 @@ class BroughtForwardLossesActionSpec extends UnitSpec with WithFakeApplication w
       lazy val result = target.broughtForwardLosses(fakeRequestWithSession)
       lazy val document = Jsoup.parse(bodyOf(result))
 
-      document.select("#back-link").attr("href") shouldBe controllers.nonresident.routes.OtherPropertiesController.otherProperties().url
+      document.select("#back-link").attr("href") shouldBe controllers.routes.OtherPropertiesController.otherProperties().url
     }
 
     "return a back link to the HowMuchGain page when there is a previous positive gain" in {
@@ -173,7 +173,7 @@ class BroughtForwardLossesActionSpec extends UnitSpec with WithFakeApplication w
       lazy val result = target.broughtForwardLosses(fakeRequestWithSession)
       lazy val document = Jsoup.parse(bodyOf(result))
 
-      document.select("#back-link").attr("href") shouldBe controllers.nonresident.routes.HowMuchGainController.howMuchGain().url
+      document.select("#back-link").attr("href") shouldBe controllers.routes.HowMuchGainController.howMuchGain().url
     }
 
     "return a back link to the AnnualExemptAmount page when there is a previous gain of 0" in {
@@ -181,7 +181,7 @@ class BroughtForwardLossesActionSpec extends UnitSpec with WithFakeApplication w
       lazy val result = target.broughtForwardLosses(fakeRequestWithSession)
       lazy val document = Jsoup.parse(bodyOf(result))
 
-      document.select("#back-link").attr("href") shouldBe controllers.nonresident.routes.AnnualExemptAmountController.annualExemptAmount().url
+      document.select("#back-link").attr("href") shouldBe controllers.routes.AnnualExemptAmountController.annualExemptAmount().url
     }
 
     "return a back link to the HowMuchLoss page when there is a previous positive loss" in {
@@ -189,7 +189,7 @@ class BroughtForwardLossesActionSpec extends UnitSpec with WithFakeApplication w
       lazy val result = target.broughtForwardLosses(fakeRequestWithSession)
       lazy val document = Jsoup.parse(bodyOf(result))
 
-      document.select("#back-link").attr("href") shouldBe controllers.nonresident.routes.HowMuchLossController.howMuchLoss().url
+      document.select("#back-link").attr("href") shouldBe controllers.routes.HowMuchLossController.howMuchLoss().url
     }
 
     "return a back link to the AnnualExemptAmount page when there is a previous loss of 0" in {
@@ -197,7 +197,7 @@ class BroughtForwardLossesActionSpec extends UnitSpec with WithFakeApplication w
       lazy val result = target.broughtForwardLosses(fakeRequestWithSession)
       lazy val document = Jsoup.parse(bodyOf(result))
 
-      document.select("#back-link").attr("href") shouldBe controllers.nonresident.routes.AnnualExemptAmountController.annualExemptAmount().url
+      document.select("#back-link").attr("href") shouldBe controllers.routes.AnnualExemptAmountController.annualExemptAmount().url
     }
 
     "return a back link to the AnnualExemptAmount page when there is a previous disposal that breaks even" in {
@@ -205,7 +205,7 @@ class BroughtForwardLossesActionSpec extends UnitSpec with WithFakeApplication w
       lazy val result = target.broughtForwardLosses(fakeRequestWithSession)
       lazy val document = Jsoup.parse(bodyOf(result))
 
-      document.select("#back-link").attr("href") shouldBe controllers.nonresident.routes.AnnualExemptAmountController.annualExemptAmount().url
+      document.select("#back-link").attr("href") shouldBe controllers.routes.AnnualExemptAmountController.annualExemptAmount().url
     }
   }
 }

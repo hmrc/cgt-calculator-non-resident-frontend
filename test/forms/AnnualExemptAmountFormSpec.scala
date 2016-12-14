@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package forms.nonResident
+package forms
 
-import models.AnnualExemptAmountModel
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import assets.MessageLookup.{NonResident => messages}
-import forms.AnnualExemptAmountForm
+import models.AnnualExemptAmountModel
+import forms.AnnualExemptAmountForm._
+import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import uk.gov.hmrc.play.views.helpers.MoneyPounds
 
 class AnnualExemptAmountFormSpec extends UnitSpec with WithFakeApplication {

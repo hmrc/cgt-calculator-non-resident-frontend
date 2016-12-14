@@ -102,7 +102,7 @@ class HowMuchLossActionSpec extends UnitSpec with WithFakeApplication with Mocki
       }
 
       "redirect to the Brought Forward Losses page" in {
-        redirectLocation(result) shouldBe Some(controllers.nonresident.routes.BroughtForwardLossesController.broughtForwardLosses().url)
+        redirectLocation(result) shouldBe Some(controllers.routes.BroughtForwardLossesController.broughtForwardLosses().url)
       }
     }
 
@@ -116,7 +116,7 @@ class HowMuchLossActionSpec extends UnitSpec with WithFakeApplication with Mocki
       }
 
       "redirect to the Annual Exempt Amount page" in {
-        redirectLocation(result) shouldBe Some(controllers.nonresident.routes.AnnualExemptAmountController.annualExemptAmount().url)
+        redirectLocation(result) shouldBe Some(controllers.routes.AnnualExemptAmountController.annualExemptAmount().url)
       }
     }
 

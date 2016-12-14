@@ -20,8 +20,10 @@ import assets.MessageLookup.NonResident.{WorthWhenBoughtForLess, AcquisitionMark
 import assets.MessageLookup.{NonResident => commonMessages}
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
+import forms.AcquisitionMarketValueForm._
 import org.scalatest.mock.MockitoSugar
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import views.html.calculation.worthWhenBoughtForLess
 
 class WorthWhenBoughtForLessViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
@@ -48,12 +50,12 @@ class WorthWhenBoughtForLessViewSpec extends UnitSpec with WithFakeApplication w
         }
 
         s"has a route to 'bought-for-less'" in {
-          backLink.attr("href") shouldBe controllers.nonresident.routes.BoughtForLessController.boughtForLess().url
+          backLink.attr("href") shouldBe controllers.routes.BoughtForLessController.boughtForLess().url
         }
       }
 
-      s"have a home link to '${controllers.nonresident.routes.DisposalDateController.disposalDate().url}'" in {
-        document.select("#homeNavHref").attr("href") shouldEqual controllers.nonresident.routes.DisposalDateController.disposalDate().url
+      s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+        document.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
       }
 
       "have a heading" which {
@@ -93,8 +95,8 @@ class WorthWhenBoughtForLessViewSpec extends UnitSpec with WithFakeApplication w
           form.attr("method") shouldBe "POST"
         }
 
-        s"has an action of '${controllers.nonresident.routes.WorthWhenBoughtForLessController.submitWorthWhenBoughtForLess().url}'" in {
-          form.attr("action") shouldBe controllers.nonresident.routes.WorthWhenBoughtForLessController.submitWorthWhenBoughtForLess().url
+        s"has an action of '${controllers.routes.WorthWhenBoughtForLessController.submitWorthWhenBoughtForLess().url}'" in {
+          form.attr("action") shouldBe controllers.routes.WorthWhenBoughtForLessController.submitWorthWhenBoughtForLess().url
         }
       }
 

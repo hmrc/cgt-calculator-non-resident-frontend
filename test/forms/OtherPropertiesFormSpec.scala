@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package forms.nonResident
+package forms
 
+import assets.MessageLookup.{NonResident => commonMessages}
+import forms.OtherPropertiesForm._
 import models.OtherPropertiesModel
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
-import assets.MessageLookup.NonResident.{OtherProperties => messages}
-import assets.MessageLookup.{NonResident => commonMessages}
-import forms.OtherPropertiesForm
 
 class OtherPropertiesFormSpec extends UnitSpec with WithFakeApplication {
 

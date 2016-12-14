@@ -20,7 +20,7 @@ import assets.MessageLookup.NonResident.{DisposalDate => messages}
 import connectors.CalculatorConnector
 import controllers.DisposalDateController
 import controllers.helpers.FakeRequestHelper
-import controllers.nonresident.routes
+import controllers.routes
 import models.DisposalDateModel
 import org.jsoup._
 import org.mockito.Matchers
@@ -50,8 +50,8 @@ class DisposalDateActionSpec extends UnitSpec with WithFakeApplication with Mock
   }
 
   "DisposalDateController" should {
-    s"have a session timeout home link of '${controllers.nonresident.routes.DisposalDateController.disposalDate().url}'" in {
-      DisposalDateController.homeLink shouldEqual controllers.nonresident.routes.DisposalDateController.disposalDate().url
+    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+      DisposalDateController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
     }
   }
 

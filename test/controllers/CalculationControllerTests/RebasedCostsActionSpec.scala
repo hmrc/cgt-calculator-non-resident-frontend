@@ -32,7 +32,7 @@ import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 import scala.concurrent.Future
 
-class RebasedCostsSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
+class RebasedCostsActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
   implicit val hc = new HeaderCarrier()
 
@@ -49,8 +49,8 @@ class RebasedCostsSpec extends UnitSpec with WithFakeApplication with MockitoSug
   }
 
   "RebasedCostsController" should {
-    s"have a session timeout home link of '${controllers.nonresident.routes.DisposalDateController.disposalDate().url}'" in {
-      RebasedCostsController.homeLink shouldEqual controllers.nonresident.routes.DisposalDateController.disposalDate().url
+    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+      RebasedCostsController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
     }
   }
 
@@ -112,7 +112,7 @@ class RebasedCostsSpec extends UnitSpec with WithFakeApplication with MockitoSug
       }
 
       "redirect to the improvements page" in {
-        redirectLocation(result).get shouldBe controllers.nonresident.routes.ImprovementsController.improvements().url
+        redirectLocation(result).get shouldBe controllers.routes.ImprovementsController.improvements().url
       }
     }
 
