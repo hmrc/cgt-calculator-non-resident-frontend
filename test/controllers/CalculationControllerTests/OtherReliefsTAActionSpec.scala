@@ -17,13 +17,10 @@
 package controllers.CalculationControllerTests
 
 import assets.MessageLookup.NonResident.{OtherReliefs => messages}
-import common.KeystoreKeys
+import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
-import constructors.nonresident.AnswersConstructor
 import controllers.helpers.FakeRequestHelper
-import controllers.nonresident.OtherReliefsTAController
-import models.nonresident._
-import models.resident.TaxYearModel
+import models.{TaxYearModel, _}
 import org.jsoup.Jsoup
 import org.mockito.Matchers
 import org.mockito.Mockito._
@@ -32,6 +29,8 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import common.TestModels
+import constructors.AnswersConstructor
+import controllers.OtherReliefsTAController
 
 import scala.concurrent.Future
 

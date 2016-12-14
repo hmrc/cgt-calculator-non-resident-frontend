@@ -18,7 +18,7 @@ package views.helpers.nonresident
 
 import java.time.LocalDate
 
-import models.nonresident.QuestionAnswerModel
+import models.QuestionAnswerModel
 import org.jsoup.Jsoup
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.helpers.nonresident.questionAnswerRowNoLink

@@ -16,9 +16,8 @@
 
 package controllers.CalculationControllerTests
 
-import common.KeystoreKeys
+import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
-import constructors.nonresident.CalculationElectionConstructor
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import play.api.test.Helpers._
@@ -27,11 +26,12 @@ import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import org.jsoup._
 import org.scalatest.mock.MockitoSugar
 import assets.MessageLookup.NonResident.{AcquisitionValue => messages}
+import controllers.AcquisitionValueController
 import controllers.helpers.FakeRequestHelper
 
 import scala.concurrent.Future
-import controllers.nonresident.{AcquisitionValueController, routes}
-import models.nonresident.{AcquisitionDateModel, AcquisitionValueModel}
+import controllers.nonresident.routes
+import models.AcquisitionValueModel
 
 class AcquisitionValueActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 

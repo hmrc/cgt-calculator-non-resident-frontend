@@ -17,18 +17,17 @@
 package controllers.CalculationControllerTests
 
 import assets.MessageLookup.NonResident.{WorthWhenInherited => messages}
-import common.KeystoreKeys
+import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
+import controllers.WorthWhenInheritedController
 import controllers.helpers.FakeRequestHelper
-import controllers.nonresident.WorthWhenInheritedController
-import models.nonresident.AcquisitionValueModel
+import models.AcquisitionValueModel
 import org.jsoup.Jsoup
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap
-import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 import scala.concurrent.Future

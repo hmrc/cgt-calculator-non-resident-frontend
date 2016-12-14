@@ -18,6 +18,7 @@ package controllers.CalculationControllerTests
 
 import assets.MessageLookup.NonResident.{DisabledTrustee => messages}
 import connectors.CalculatorConnector
+import controllers.DisabledTrusteeController
 import controllers.helpers.FakeRequestHelper
 import org.mockito.Matchers
 import org.mockito.Mockito._
@@ -26,9 +27,9 @@ import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import org.jsoup._
 import org.scalatest.mock.MockitoSugar
+
 import scala.concurrent.Future
-import controllers.nonresident.DisabledTrusteeController
-import models.nonresident.DisabledTrusteeModel
+import models.DisabledTrusteeModel
 
 class DisabledTrusteeActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 

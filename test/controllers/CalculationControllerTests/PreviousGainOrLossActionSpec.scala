@@ -17,8 +17,7 @@
 package controllers.CalculationControllerTests
 
 import connectors.CalculatorConnector
-import controllers.nonresident.PreviousGainOrLossController
-import models.nonresident.PreviousLossOrGainModel
+import models.PreviousLossOrGainModel
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap
 import config.AppConfig
@@ -29,6 +28,7 @@ import org.mockito.Matchers
 import org.scalatest.mock.MockitoSugar
 import common.KeystoreKeys.{NonResidentKeys => keystoreKeys}
 import assets.MessageLookup.NonResident.{PreviousLossOrGain => messages}
+import controllers.PreviousGainOrLossController
 import org.jsoup.Jsoup
 
 import scala.concurrent.Future

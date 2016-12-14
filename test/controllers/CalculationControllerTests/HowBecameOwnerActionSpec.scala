@@ -17,15 +17,14 @@
 package controllers.CalculationControllerTests
 
 import assets.MessageLookup.NonResident.{HowBecameOwner => messages}
-import common.KeystoreKeys
+import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
+import controllers.HowBecameOwnerController
 import controllers.helpers.FakeRequestHelper
-import controllers.nonresident.HowBecameOwnerController
-import models.nonresident.{AcquisitionDateModel, HowBecameOwnerModel, RebasedValueModel}
+import models.{AcquisitionDateModel, HowBecameOwnerModel, RebasedValueModel}
 import org.jsoup._
 import org.mockito.Matchers
 import org.mockito.Mockito._
-import org.openqa.selenium.Keys
 import org.scalatest.mock.MockitoSugar
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap

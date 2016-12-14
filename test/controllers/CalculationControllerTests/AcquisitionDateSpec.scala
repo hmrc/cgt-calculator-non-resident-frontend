@@ -18,16 +18,14 @@ package controllers.CalculationControllerTests
 
 import assets.MessageLookup.NonResident.{AcquisitionDate => messages}
 import connectors.CalculatorConnector
-import constructors.nonresident.CalculationElectionConstructor
+import controllers.AcquisitionDateController
 import controllers.helpers.FakeRequestHelper
-import controllers.nonresident.AcquisitionDateController
-import models.nonresident.{AcquisitionDateModel, BoughtForLessModel}
+import models.AcquisitionDateModel
 import org.jsoup._
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
 import play.api.test.Helpers._
-import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 

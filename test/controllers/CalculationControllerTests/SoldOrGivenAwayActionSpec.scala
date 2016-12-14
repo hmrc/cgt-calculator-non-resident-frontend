@@ -17,11 +17,11 @@
 package controllers.CalculationControllerTests
 
 import assets.MessageLookup.NonResident.{SoldOrGivenAway => messages}
-import common.KeystoreKeys
+import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
+import controllers.SoldOrGivenAwayController
 import controllers.helpers.FakeRequestHelper
-import controllers.nonresident.SoldOrGivenAwayController
-import models.nonresident.SoldOrGivenAwayModel
+import models.SoldOrGivenAwayModel
 import org.jsoup.Jsoup
 import org.mockito.Matchers
 import org.mockito.Mockito._

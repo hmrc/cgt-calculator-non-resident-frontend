@@ -1,0 +1,21 @@
+@import models.AcquisitionValueModel
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import views.html.helpers._
+
+@(acquisitionValueForm: Form[AcquisitionValueModel])(implicit request: Request[_])
+
+@main_template(Messages("calc.acquisitionValue.question")) {
+
+    <a id="back-link" class="back-link" href="@controllers.nonresident.routes.BoughtForLessController.boughtForLess">@Messages("calc.base.back")</a>
+
+    @errorSummary(acquisitionValueForm, "acquisition-value")
+
+    <h1 class="heading-xlarge">@Messages("calc.acquisitionValue.question")</h1>
+
+    @form(action = controllers.nonresident.routes.AcquisitionValueController.submitAcquisitionValue) {
+
+        @formInputMoney(acquisitionValueForm, "acquisitionValue", Messages("calc.acquisitionValue.question"), None, None, true)
+
+        <button class="button" type="submit" id="continue-button">@Messages("calc.base.continue")</button>
+    }
+}

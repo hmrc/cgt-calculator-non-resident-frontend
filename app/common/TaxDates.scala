@@ -42,9 +42,6 @@ object TaxDates {
   def dateInsideTaxYear(day: Int, month: Int, year: Int): Boolean =
     constructDate(day, month, year).isAfter(taxYearStartDate) && constructDate(day, month, year).isBefore(taxYearEndDate)
 
-  def dateInsideAcceptedTaxYears(day: Int, month: Int, year: Int): Boolean =
-    constructDate(day, month, year).isAfter(taxStartDate) && constructDate(day, month, year).isBefore(taxYearEndDate)
-
   def taxYearStringToInteger(taxYear: String): Int = (taxYear.take(2) + taxYear.takeRight(2)).toInt
 
 }

@@ -17,10 +17,10 @@
 package controllers.CalculationControllerTests
 
 import assets.MessageLookup.NonResident.{AnnualExemptAmount => messages}
-import common.KeystoreKeys
+import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.nonresident.CustomerTypeKeys
 import connectors.CalculatorConnector
-import constructors.nonresident.CalculationElectionConstructor
+import controllers.AnnualExemptAmountController
 import controllers.helpers.FakeRequestHelper
 import org.mockito.Matchers
 import org.mockito.Mockito._
@@ -31,8 +31,8 @@ import org.jsoup._
 import org.scalatest.mock.MockitoSugar
 
 import scala.concurrent.Future
-import controllers.nonresident.{AnnualExemptAmountController, routes}
-import models.nonresident._
+import controllers.nonresident.routes
+import models._
 
 class AnnualExemptAmountActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
@@ -62,7 +62,7 @@ class AnnualExemptAmountActionSpec extends UnitSpec with WithFakeApplication wit
     when(mockCalcConnector.fetchAndGetFormData[AnnualExemptAmountModel](Matchers.eq(KeystoreKeys.annualExemptAmount))(Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(getData))
 
-    when(mockCalcConnector.fetchAndGetFormData[PreviousLossOrGainModel](Matchers.eq(KeystoreKeys.NonResidentKeys.previousLossOrGain))
+    when(mockCalcConnector.fetchAndGetFormData[PreviousLossOrGainModel](Matchers.eq(KeystoreKeys.previousLossOrGain))
       (Matchers.any(), Matchers.any())).thenReturn(Future.successful(previousLossOrGain))
 
     when(mockCalcConnector.fetchAndGetFormData[HowMuchGainModel](Matchers.eq(KeystoreKeys.howMuchGain))(Matchers.any(), Matchers.any()))

@@ -19,8 +19,9 @@ package controllers.CalculationControllerTests
 import assets.MessageLookup.NonResident.{OtherProperties => messages}
 import common.DefaultRoutes._
 import common.nonresident.CustomerTypeKeys
-import common.KeystoreKeys
+import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
+import controllers.OtherPropertiesController
 import controllers.helpers.FakeRequestHelper
 import org.mockito.Matchers
 import org.mockito.Mockito._
@@ -31,15 +32,16 @@ import org.jsoup._
 import org.scalatest.mock.MockitoSugar
 
 import scala.concurrent.Future
-import controllers.nonresident.{OtherPropertiesController, routes}
-import models.nonresident.{CurrentIncomeModel, CustomerTypeModel, OtherPropertiesModel}
+import controllers.nonresident.routes
+import models.{CurrentIncomeModel, CustomerTypeModel, OtherPropertiesModel}
 import uk.gov.hmrc.http.cache.client.CacheMap
 
 class OtherPropertiesActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
   implicit val hc = new HeaderCarrier()
 
-  def setupTarget(getData: Option[OtherPropertiesModel], customerTypeData:Option[CustomerTypeModel] = None, currentIncomeData:Option[CurrentIncomeModel] = None): OtherPropertiesController = {
+  def setupTarget(getData: Option[OtherPropertiesModel], customerTypeData:Option[CustomerTypeModel] = None,
+                  currentIncomeData:Option[CurrentIncomeModel] = None): OtherPropertiesController = {
 
     val mockCalcConnector = mock[CalculatorConnector]
 

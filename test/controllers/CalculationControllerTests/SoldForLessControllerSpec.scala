@@ -19,9 +19,9 @@ package controllers.CalculationControllerTests
 import assets.MessageLookup.NonResident.{SoldForLess => messages}
 import common.KeystoreKeys.{NonResidentKeys => keyStoreKeys}
 import connectors.CalculatorConnector
+import controllers.SoldForLessController
 import controllers.helpers.FakeRequestHelper
-import controllers.nonresident.SoldForLessController
-import models.nonresident.SoldForLessModel
+import models.SoldForLessModel
 import org.jsoup.Jsoup
 import org.mockito.Matchers
 import org.mockito.Mockito._

@@ -17,8 +17,9 @@
 package controllers.CalculationControllerTests
 
 import assets.MessageLookup.NonResident.{PersonalAllowance => messages}
-import common.KeystoreKeys
+import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
+import controllers.PersonalAllowanceController
 import controllers.helpers.FakeRequestHelper
 import org.mockito.Matchers
 import org.mockito.Mockito._
@@ -29,8 +30,8 @@ import org.jsoup._
 import org.scalatest.mock.MockitoSugar
 
 import scala.concurrent.Future
-import controllers.nonresident.{PersonalAllowanceController, routes}
-import models.nonresident.{DisposalDateModel, PersonalAllowanceModel}
+import controllers.nonresident.routes
+import models.{DisposalDateModel, PersonalAllowanceModel}
 
 class PersonalAllowanceActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 

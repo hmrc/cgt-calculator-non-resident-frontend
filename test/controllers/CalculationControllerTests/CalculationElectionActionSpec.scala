@@ -17,13 +17,14 @@
 package controllers.CalculationControllerTests
 
 import assets.MessageLookup.NonResident.{CalculationElection => messages}
-import common.{KeystoreKeys, TestModels}
+import common.TestModels
+import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
-import constructors.nonresident.{AnswersConstructor, CalculationElectionConstructor}
+import constructors.{AnswersConstructor, CalculationElectionConstructor}
+import controllers.CalculationElectionController
 import controllers.helpers.FakeRequestHelper
-import controllers.nonresident.{CalculationElectionController, routes}
-import models.nonresident._
-import models.resident.TaxYearModel
+import controllers.nonresident.routes
+import models.{TaxYearModel, _}
 import org.jsoup._
 import org.mockito.Matchers
 import org.mockito.Mockito._

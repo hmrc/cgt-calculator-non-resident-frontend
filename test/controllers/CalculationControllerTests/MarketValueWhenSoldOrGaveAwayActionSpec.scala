@@ -18,9 +18,9 @@ package controllers.CalculationControllerTests
 
 import assets.MessageLookup.NonResident.{MarketValue => marketValueMessages}
 import connectors.CalculatorConnector
+import controllers.MarketValueWhenSoldOrGaveAwayController
 import controllers.helpers.FakeRequestHelper
-import controllers.nonresident.{DisposalValueController, MarketValueWhenSoldOrGaveAwayController}
-import models.nonresident.DisposalValueModel
+import models.DisposalValueModel
 import org.jsoup.Jsoup
 import org.mockito.Matchers
 import org.mockito.Mockito._

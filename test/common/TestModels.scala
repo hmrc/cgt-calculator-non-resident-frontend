@@ -17,7 +17,7 @@
 package common
 
 import common.nonresident.CustomerTypeKeys
-import models.nonresident._
+import models._
 
 object TestModels {
 

@@ -1,0 +1,51 @@
+@import models.PreviousLossOrGainModel
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import views.html.helpers._
+
+@(previousLossOrGainForm: Form[PreviousLossOrGainModel])(implicit request: Request[_])
+
+@sidebar = {
+    <ul>
+        <li>
+            <a id="capitalGainsTaxHelp" href="https://www.gov.uk/capital-gains-tax" class="external-link" rel="external" target="_blank">
+                @Messages("calc.previousLossOrGain.CGTLink")
+                <span>@Messages("calc.base.externalLink")</span>
+            </a>
+        </li>
+        <li>
+            <a id="previousTaxYearsHelp" href="https://www.gov.uk/income-tax-rates/previous-tax-years" class="external-link" rel="external" target="_blank">
+                @Messages("calc.previousLossOrGain.previousTaxLink")
+                <span>@Messages("calc.base.externalLink")</span>
+            </a>
+        </li>
+    </ul>
+}
+
+@main_template(Messages("calc.previousLossOrGain.question"), sidebarLinks = Some(sidebar)) {
+
+    <a id="back-link" class="back-link" href="@controllers.nonresident.routes.OtherPropertiesController.otherProperties()">@Messages("calc.base.back")</a>
+
+    @errorSummary(previousLossOrGainForm, "previousLossOrGain")
+
+    <h1 class="heading-xlarge">@Messages("calc.previousLossOrGain.question")</h1>
+
+    @form(action = controllers.nonresident.routes.PreviousGainOrLossController.submitPreviousGainOrLoss()) {
+        @formInputRadioGroup(
+            field = previousLossOrGainForm("previousLossOrGain"),
+            Seq(
+                    "Loss" -> Messages("calc.previousLossOrGain.loss"),
+                    "Gain" -> Messages("calc.previousLossOrGain.gain"),
+                    "Neither" -> Messages("calc.previousLossOrGain.neither")),
+            '_legend -> Messages("calc.previousLossOrGain.question"),
+            '_legendID -> "previousLossOrGain",
+            '_legendClass -> "visuallyhidden",
+            '_labelAfter -> true,
+            '_labelClass -> "block-label",
+            '_groupClass -> "form-group radio-list",
+            '_fieldsetAttributes -> "aria-details = help"
+            )
+        <input type="hidden" name="previousLossOrGain" value="" />
+        <button class="button yes-no-button" type="submit" id="continue-button">@Messages("calc.base.continue")</button>
+    }
+
+}

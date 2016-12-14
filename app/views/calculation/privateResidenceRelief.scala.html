@@ -1,0 +1,85 @@
+@import models.PrivateResidenceReliefModel
+@import uk.gov.hmrc.play.views.html.helpers.{form, input}
+@import views.html.helpers._
+
+@(privateResidenceReliefForm: Form[PrivateResidenceReliefModel], daysBetweenShow: Boolean, daysBeforeShow: Boolean, disposalDateLess18Months: String)(implicit request: Request[_])
+
+@sidebar = {
+<ul>
+    <li>
+        <a id="helpLink1" class="external-link" rel="external" href="https://www.gov.uk/tax-sell-home/private-residence-relief"
+            target="_blank" data-journey-click="help:govUK:privateResidenceRelief">
+            @Messages("calc.privateResidenceRelief.helpLink")
+            <span>@Messages("calc.base.externalLink")</span>
+        </a>
+    </li>
+</ul>
+}
+
+@hiddenContent = {
+    @if(daysBeforeShow){
+        <div class="form-group">
+            @input(
+            privateResidenceReliefForm("daysClaimed"),
+            '_label -> (Messages("calc.privateResidenceRelief.questionBefore.partOne") + " " + disposalDateLess18Months + " " + Messages("calc.privateResidenceRelief.questionBefore.partTwo")),
+            '_type -> "text",
+            '_inputClass -> "form-group input--no-spinner",
+            '_type -> "number"
+            )
+        </div>
+    }
+    @if(daysBetweenShow){
+        <div class="form-group">
+            @input(
+                privateResidenceReliefForm("daysClaimedAfter"),
+                '_label -> (Messages("calc.privateResidenceRelief.questionBetween.partOne") + " " + disposalDateLess18Months + " " + Messages("calc.privateResidenceRelief.questionBetween.partTwo")),
+                '_type -> "text",
+                '_inputClass -> "form-group input--no-spinner",
+                '_type -> "number"
+            )
+        </div>
+    }
+
+}
+
+@main_template(Messages("calc.privateResidenceRelief.question"), sidebarLinks = Some(sidebar)) {
+
+    <a id="back-link" class="back-link" href="@controllers.nonresident.routes.ImprovementsController.improvements">@Messages("calc.base.back")</a>
+
+    @if(daysBeforeShow){@errorSummary(privateResidenceReliefForm, "private-residence-relief", "daysClaimed")
+    } else {
+        @if(daysBetweenShow) {@errorSummary(privateResidenceReliefForm, "private-residence-relief", "daysClaimedAfter")
+        } else {@errorSummary(privateResidenceReliefForm, "private-residence-relief")}
+    }
+
+
+    <h1 class="heading-xlarge">@Messages("calc.privateResidenceRelief.question")</h1>
+
+    @form(action = controllers.nonresident.routes.PrivateResidenceReliefController.submitPrivateResidenceRelief) {
+
+        @if(!(daysBeforeShow || daysBetweenShow)){
+            <div class="inline form-group">
+                @formInputRadioGroup(
+                    field = privateResidenceReliefForm("isClaimingPRR"),
+                    Seq(
+                        "Yes"->Messages("calc.base.yes"),
+                        "No"->Messages("calc.base.no")),
+                    '_legend -> Messages("calc.privateResidenceRelief.question"),
+                    '_labelAfter -> true,
+                    '_labelClass -> "block-label",
+                    '_legendID -> "isClaimingPRR",
+                    '_legendClass -> "visuallyhidden"
+                )
+            </div>
+        } else {
+            @formHiddenYesNoRadio(
+                privateResidenceReliefForm,
+                "isClaimingPRR",
+                Messages("calc.privateResidenceRelief.question"),
+                hiddenContent,
+                hideLegend = true
+            )
+        }
+        <button class="button" type="submit" id="continue-button">@Messages("calc.base.continue")</button>
+    }
+}

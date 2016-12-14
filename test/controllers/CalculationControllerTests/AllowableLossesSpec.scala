@@ -17,11 +17,13 @@
 package controllers.CalculationControllerTests
 
 import assets.MessageLookup.NonResident.{AllowableLosses => messages}
-import common.{Constants, KeystoreKeys}
+import common.Constants
+import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
+import controllers.AllowableLossesController
 import controllers.helpers.FakeRequestHelper
-import controllers.nonresident.{AllowableLossesController, routes}
-import models.nonresident.{AcquisitionDateModel, AllowableLossesModel, RebasedValueModel}
+import controllers.nonresident.routes
+import models.{AcquisitionDateModel, AllowableLossesModel, RebasedValueModel}
 import org.jsoup.Jsoup
 import org.mockito.Matchers
 import org.mockito.Mockito._

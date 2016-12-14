@@ -20,19 +20,17 @@ import org.mockito.Matchers
 import org.mockito.Mockito._
 import play.api.test.Helpers._
 import play.api.mvc.RequestHeader
-import models.resident.TaxYearModel
 import connectors.CalculatorConnector
 import org.scalatest.mock.MockitoSugar
 import controllers.helpers.FakeRequestHelper
-import controllers.nonresident.ReportController
 import assets.MessageLookup.{SummaryPage => messages}
-import common.KeystoreKeys
-import constructors.nonresident.AnswersConstructor
+import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
-import models.nonresident._
+import models.{TaxYearModel, _}
 import common.nonresident.CalculationType
 import common.nonresident.CustomerTypeKeys
-import org.apache.xpath.functions.FuncRound
+import constructors.AnswersConstructor
+import controllers.ReportController
 
 import scala.concurrent.Future
 

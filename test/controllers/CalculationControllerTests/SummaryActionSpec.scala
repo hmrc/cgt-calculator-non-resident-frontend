@@ -18,13 +18,12 @@ package controllers.CalculationControllerTests
 
 import assets.MessageLookup.NonResident.{Summary => messages}
 import common.nonresident.CalculationType
-import common.KeystoreKeys
+import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
-import constructors.nonresident.AnswersConstructor
+import constructors.AnswersConstructor
+import controllers.SummaryController
 import controllers.helpers.FakeRequestHelper
-import controllers.nonresident.SummaryController
-import models.nonresident._
-import models.resident.TaxYearModel
+import models.{TaxYearModel, _}
 import org.jsoup.Jsoup
 import org.mockito.Matchers
 import org.mockito.Mockito._

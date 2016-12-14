@@ -18,9 +18,9 @@ package controllers.CalculationControllerTests
 
 import assets.MessageLookup.NonResident.{DisposalValue => messages}
 import connectors.CalculatorConnector
+import controllers.DisposalValueController
 import controllers.helpers.FakeRequestHelper
-import controllers.nonresident.DisposalValueController
-import models.nonresident.DisposalValueModel
+import models.DisposalValueModel
 import org.jsoup._
 import org.mockito.Matchers
 import org.mockito.Mockito._

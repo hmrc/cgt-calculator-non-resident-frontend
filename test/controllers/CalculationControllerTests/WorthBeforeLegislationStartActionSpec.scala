@@ -18,8 +18,7 @@ package controllers.CalculationControllerTests
 
 import connectors.CalculatorConnector
 import controllers.helpers.FakeRequestHelper
-import controllers.nonresident.WorthBeforeLegislationStartController
-import models.nonresident.WorthBeforeLegislationStartModel
+import models.WorthBeforeLegislationStartModel
 import org.jsoup.Jsoup
 import org.mockito.Matchers
 import org.mockito.Mockito._
@@ -27,6 +26,7 @@ import org.scalatest.mock.MockitoSugar
 import uk.gov.hmrc.play.http.HeaderCarrier
 import play.api.test.Helpers._
 import assets.MessageLookup.NonResident.{WorthBeforeLegislationStart => messages}
+import controllers.WorthBeforeLegislationStartController
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 import scala.concurrent.Future

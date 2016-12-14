@@ -16,15 +16,14 @@
 
 package common.nonresident
 
-import common.{KeystoreKeys, TaxDates}
+import common.TaxDates
+import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
-import constructors.nonresident.AnswersConstructor
-import models.nonresident._
-import models.resident.TaxYearModel
+import constructors.AnswersConstructor
+import models._
 import uk.gov.hmrc.play.http.HeaderCarrier
 
 import scala.concurrent.Future
-
 import scala.concurrent.ExecutionContext.Implicits.global
 
 object TaxableGainCalculation {

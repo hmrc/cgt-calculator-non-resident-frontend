@@ -16,18 +16,14 @@
 
 package connectors
 
-import common.Dates._
-import common.KeystoreKeys
-import common.KeystoreKeys.{ResidentPropertyKeys, ResidentShareKeys}
 import config.{CalculatorSessionCache, WSHttp}
-import constructors.nonresident._
+import constructors.{nonresident => _, _}
 import models._
 import play.api.libs.json.Format
 import uk.gov.hmrc.http.cache.client.{CacheMap, SessionCache}
 import uk.gov.hmrc.play.config.ServicesConfig
 import uk.gov.hmrc.play.http.{HeaderCarrier, HttpGet, HttpResponse}
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 object CalculatorConnector extends CalculatorConnector with ServicesConfig {
@@ -52,32 +48,30 @@ trait CalculatorConnector {
     sessionCache.fetchAndGetEntry(key)
   }
 
-  def calculateTotalGain(totalGainAnswersModel: nonresident.TotalGainAnswersModel)
-                        (implicit hc: HeaderCarrier): Future[Option[nonresident.TotalGainResultsModel]] = {
-    http.GET[Option[nonresident.TotalGainResultsModel]](s"$serviceUrl/capital-gains-calculator/non-resident/calculate-total-gain?${
+  def calculateTotalGain(totalGainAnswersModel: TotalGainAnswersModel)
+                        (implicit hc: HeaderCarrier): Future[Option[TotalGainResultsModel]] = {
+    http.GET[Option[TotalGainResultsModel]](s"$serviceUrl/capital-gains-calculator/non-resident/calculate-total-gain?${
       TotalGainRequestConstructor.totalGainQuery(totalGainAnswersModel)
     }")
   }
 
-  def calculateTaxableGainAfterPRR(totalGainAnswersModel: nonresident.TotalGainAnswersModel,
-                                   privateResidenceReliefModel: nonresident.PrivateResidenceReliefModel)
-                                  (implicit hc: HeaderCarrier): Future[Option[nonresident.CalculationResultsWithPRRModel]] = {
-    http.GET[Option[nonresident.CalculationResultsWithPRRModel]](s"$serviceUrl/capital-gains-calculator/non-resident/calculate-gain-after-prr?${
+  def calculateTaxableGainAfterPRR(totalGainAnswersModel: TotalGainAnswersModel,
+                                   privateResidenceReliefModel: PrivateResidenceReliefModel)
+                                  (implicit hc: HeaderCarrier): Future[Option[CalculationResultsWithPRRModel]] = {
+    http.GET[Option[CalculationResultsWithPRRModel]](s"$serviceUrl/capital-gains-calculator/non-resident/calculate-gain-after-prr?${
       TotalGainRequestConstructor.totalGainQuery(totalGainAnswersModel) +
         PrivateResidenceReliefRequestConstructor.privateResidenceReliefQuery(totalGainAnswersModel, Some(privateResidenceReliefModel))
     }")
   }
 
-  //########################################################################################################################################
-
-  def calculateNRCGTTotalTax(totalGainAnswersModel: nonresident.TotalGainAnswersModel,
-                             privateResidenceReliefModel: Option[nonresident.PrivateResidenceReliefModel],
-                             totalTaxPersonalDetailsModel: nonresident.TotalPersonalDetailsCalculationModel,
+  def calculateNRCGTTotalTax(totalGainAnswersModel: TotalGainAnswersModel,
+                             privateResidenceReliefModel: Option[PrivateResidenceReliefModel],
+                             totalTaxPersonalDetailsModel: TotalPersonalDetailsCalculationModel,
                              maxAnnualExemptAmount: BigDecimal,
-                             otherReliefs: Option[nonresident.AllOtherReliefsModel] = None)(implicit hc: HeaderCarrier):
-  Future[Option[nonresident.CalculationResultsWithTaxOwedModel]] = {
+                             otherReliefs: Option[AllOtherReliefsModel] = None)(implicit hc: HeaderCarrier):
+  Future[Option[CalculationResultsWithTaxOwedModel]] = {
 
-    http.GET[Option[nonresident.CalculationResultsWithTaxOwedModel]](s"$serviceUrl/capital-gains-calculator/non-resident/calculate-tax-owed?${
+    http.GET[Option[CalculationResultsWithTaxOwedModel]](s"$serviceUrl/capital-gains-calculator/non-resident/calculate-tax-owed?${
       TotalGainRequestConstructor.totalGainQuery(totalGainAnswersModel) +
         PrivateResidenceReliefRequestConstructor.privateResidenceReliefQuery(totalGainAnswersModel, privateResidenceReliefModel) +
         FinalTaxAnswersRequestConstructor.additionalParametersQuery(totalTaxPersonalDetailsModel, maxAnnualExemptAmount) +
@@ -85,26 +79,24 @@ trait CalculatorConnector {
     }")
   }
 
-  //########################################################################################################################################
-
-  def calculateFlat(input: nonresident.SummaryModel)(implicit hc: HeaderCarrier): Future[Option[nonresident.CalculationResultModel]] = {
-    http.GET[Option[nonresident.CalculationResultModel]](s"$serviceUrl/capital-gains-calculator/calculate-flat?${
+  def calculateFlat(input: SummaryModel)(implicit hc: HeaderCarrier): Future[Option[CalculationResultModel]] = {
+    http.GET[Option[CalculationResultModel]](s"$serviceUrl/capital-gains-calculator/calculate-flat?${
       CalculateRequestConstructor.baseCalcUrl(input)
     }${
       CalculateRequestConstructor.flatCalcUrlExtra(input)
     }")
   }
 
-  def calculateTA(input: nonresident.SummaryModel)(implicit hc: HeaderCarrier): Future[Option[nonresident.CalculationResultModel]] = {
-    http.GET[Option[nonresident.CalculationResultModel]](s"$serviceUrl/capital-gains-calculator/calculate-time-apportioned?${
+  def calculateTA(input: SummaryModel)(implicit hc: HeaderCarrier): Future[Option[CalculationResultModel]] = {
+    http.GET[Option[CalculationResultModel]](s"$serviceUrl/capital-gains-calculator/calculate-time-apportioned?${
       CalculateRequestConstructor.baseCalcUrl(input)
     }${
       CalculateRequestConstructor.taCalcUrlExtra(input)
     }")
   }
 
-  def calculateRebased(input: nonresident.SummaryModel)(implicit hc: HeaderCarrier): Future[Option[nonresident.CalculationResultModel]] = {
-    http.GET[Option[nonresident.CalculationResultModel]](s"$serviceUrl/capital-gains-calculator/calculate-rebased?${
+  def calculateRebased(input: SummaryModel)(implicit hc: HeaderCarrier): Future[Option[CalculationResultModel]] = {
+    http.GET[Option[CalculationResultModel]](s"$serviceUrl/capital-gains-calculator/calculate-rebased?${
       CalculateRequestConstructor.baseCalcUrl(input)
     }${
       CalculateRequestConstructor.rebasedCalcUrlExtra(input)
@@ -128,8 +120,8 @@ trait CalculatorConnector {
     )
   }
 
-  def getTaxYear(taxYear: String)(implicit hc: HeaderCarrier): Future[Option[resident.TaxYearModel]] = {
-    http.GET[Option[resident.TaxYearModel]](s"$serviceUrl/capital-gains-calculator/tax-year?date=$taxYear")
+  def getTaxYear(taxYear: String)(implicit hc: HeaderCarrier): Future[Option[TaxYearModel]] = {
+    http.GET[Option[TaxYearModel]](s"$serviceUrl/capital-gains-calculator/tax-year?date=$taxYear")
   }
 
   def clearKeystore(implicit hc: HeaderCarrier): Future[HttpResponse] = {

@@ -1,0 +1,37 @@
+@import models.DisposalCostsModel
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import views.html.helpers._
+
+@(disposalCostsForm: Form[DisposalCostsModel], backLink: String)(implicit request: Request[_])
+
+@additionalContent = {
+
+    <span id="input-hint" class="form-hint">
+        <p id="bullet-list-title">@Messages("calc.disposalCosts.helpTitle") </p>
+        <ul class="list-bullet">
+            <li>@Messages("calc.disposalCosts.helpBulletOne")</li>
+            <li>@Messages("calc.disposalCosts.helpBulletTwo")</li>
+            <li>@Messages("calc.disposalCosts.helpBulletThree")</li>
+            <li>@Messages("calc.disposalCosts.helpBulletFour")</li>
+        </ul>
+    </span>
+}
+
+@main_template(Messages("calc.disposalCosts.question")) {
+
+    <a id="back-link" class="back-link" href="@backLink">Back</a>
+
+    @errorSummary(disposalCostsForm, "disposal-costs")
+
+    <h1 class="heading-xlarge">@Messages("calc.disposalCosts.question")</h1>
+
+    @additionalContent
+
+    @form(action = controllers.nonresident.routes.DisposalCostsController.submitDisposalCosts) {
+
+        @formInputMoney(disposalCostsForm, "disposalCosts", Messages("calc.disposalCosts.question"), hideLabel = true)
+
+        <button class="button" type="submit" id="continue-button">@Messages("calc.base.continue")</button>
+
+    }
+}

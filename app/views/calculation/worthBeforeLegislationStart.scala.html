@@ -1,0 +1,29 @@
+@import models.WorthBeforeLegislationStartModel
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import views.html.helpers._
+@import views.html.main_template
+
+@(worthBeforeLegislationStart : Form[WorthBeforeLegislationStartModel])(implicit request: Request[_])
+
+@exampleContent = {
+    <p>@Messages("calc.worthBeforeLegislationStart.expandableText")</p>
+}
+@main_template(Messages("calc.worthBeforeLegislationStart.question")) {
+
+    <a id="back-link" class="back-link" href="@controllers.nonresident.routes.AcquisitionDateController.acquisitionDate">@Messages("calc.base.back")</a>
+
+    @errorSummary(worthBeforeLegislationStart, "worthBeforeLegislationStart")
+
+    <h1 class="heading-xlarge">@Messages("calc.worthBeforeLegislationStart.question")</h1>
+
+    <p id="helpText" class="form-hint">@Messages("calc.acquisitionMarketValue.hintTwo")</p>
+
+    @expandableHelpTextHelper(Messages("calc.worthBeforeLegislationStart.expandableTitle"), exampleContent)
+
+    @form(action = controllers.nonresident.routes.WorthBeforeLegislationStartController.submitWorthBeforeLegislationStart) {
+
+        @formInputMoney(worthBeforeLegislationStart, "worthBeforeLegislationStart", Messages("calc.worthBeforeLegislationStart.question"), hideLabel = true)
+
+        <button class="button" type="submit" id="continue-button">@Messages("calc.base.continue")</button>
+    }
+}

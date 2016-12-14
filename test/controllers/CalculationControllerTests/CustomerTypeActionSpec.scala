@@ -18,12 +18,11 @@ package controllers.CalculationControllerTests
 
 import assets.MessageLookup.{NonResident => commonMessages}
 import assets.MessageLookup.NonResident.{CustomerType => messages}
-import common.KeystoreKeys
+import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.nonresident.CustomerTypeKeys
 import connectors.CalculatorConnector
-import play.api.libs.json.Json
+import controllers.CustomerTypeController
 import uk.gov.hmrc.http.cache.client.CacheMap
-import constructors.nonresident.CalculationElectionConstructor
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import play.api.mvc.AnyContentAsFormUrlEncoded
@@ -35,8 +34,7 @@ import org.jsoup._
 import org.scalatest.mock.MockitoSugar
 
 import scala.concurrent.Future
-import controllers.nonresident.CustomerTypeController
-import models.nonresident.{AcquisitionDateModel, CustomerTypeModel, RebasedValueModel}
+import models.{AcquisitionDateModel, CustomerTypeModel, RebasedValueModel}
 import play.api.mvc.Result
 
 class CustomerTypeActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar {

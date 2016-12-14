@@ -16,26 +16,20 @@
 
 package controllers.CalculationControllerTests
 
-import assets.MessageLookup.{NonResident => commonMessages}
-import assets.MessageLookup.NonResident.{AcquisitionCosts, CurrentIncome => messages}
-import common.Constants
+import assets.MessageLookup.NonResident.{CurrentIncome => messages}
 import connectors.CalculatorConnector
+import controllers.CurrentIncomeController
 import controllers.helpers.FakeRequestHelper
-import controllers.nonresident.{CurrentIncomeController, routes}
-import models.nonresident.CurrentIncomeModel
+import controllers.nonresident.routes
+import models.CurrentIncomeModel
 import org.jsoup.Jsoup
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
-import play.api.i18n.Messages
-import play.api.libs.json.Json
-import play.api.mvc.{AnyContentAsFormUrlEncoded, Result}
-import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap
-import uk.gov.hmrc.play.http.{HeaderCarrier, SessionKeys}
+import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
-import uk.gov.hmrc.play.views.helpers.MoneyPounds
 
 import scala.concurrent.Future
 

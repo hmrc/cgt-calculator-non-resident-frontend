@@ -17,11 +17,11 @@
 package controllers.CalculationControllerTests
 
 import assets.MessageLookup.NonResident.{WorthWhenBoughtForLess => messages}
-import common.KeystoreKeys
+import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
+import controllers.WorthWhenBoughtForLessController
 import controllers.helpers.FakeRequestHelper
-import controllers.nonresident.WorthWhenBoughtForLessController
-import models.nonresident.AcquisitionValueModel
+import models.AcquisitionValueModel
 import org.jsoup.Jsoup
 import org.mockito.Matchers
 import org.mockito.Mockito._

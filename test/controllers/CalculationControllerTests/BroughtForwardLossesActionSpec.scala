@@ -16,17 +16,17 @@
 
 package controllers.CalculationControllerTests
 
-import common.KeystoreKeys
+import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
 import controllers.helpers.FakeRequestHelper
-import controllers.nonresident.BroughtForwardLossesController
-import models.nonresident._
+import models._
 import org.jsoup.Jsoup
 import org.scalatest.mock.MockitoSugar
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import assets.MessageLookup.{NonResident => messages}
+import controllers.BroughtForwardLossesController
 import play.api.test.Helpers._
 import uk.gov.hmrc.play.http.HeaderCarrier
 
@@ -51,7 +51,7 @@ class BroughtForwardLossesActionSpec extends UnitSpec with WithFakeApplication w
       .thenReturn(Future.successful(otherPropertiesModel))
 
     when(mockCalcConnector.fetchAndGetFormData[PreviousLossOrGainModel]
-      (Matchers.eq(KeystoreKeys.NonResidentKeys.previousLossOrGain))(Matchers.any(), Matchers.any()))
+      (Matchers.eq(KeystoreKeys.previousLossOrGain))(Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(previousLossOrGainModel))
 
     when(mockCalcConnector.fetchAndGetFormData[HowMuchGainModel](Matchers.eq(KeystoreKeys.howMuchGain))(Matchers.any(), Matchers.any()))

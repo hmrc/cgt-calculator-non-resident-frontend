@@ -17,12 +17,11 @@
 package controllers.CalculationControllerTests
 
 import assets.MessageLookup.NonResident.{AcquisitionCosts => messages}
-import common.KeystoreKeys
+import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
-import constructors.nonresident.CalculationElectionConstructor
+import controllers.AcquisitionCostsController
 import controllers.helpers.FakeRequestHelper
-import controllers.nonresident.AcquisitionCostsController
-import models.nonresident.{AcquisitionCostsModel, AcquisitionDateModel, BoughtForLessModel, HowBecameOwnerModel}
+import models.{AcquisitionCostsModel, AcquisitionDateModel, BoughtForLessModel, HowBecameOwnerModel}
 import org.jsoup.Jsoup
 import org.mockito.Matchers
 import org.mockito.Mockito._

@@ -16,11 +16,10 @@
 
 package controllers.CalculationControllerTests
 
-import common.KeystoreKeys
+import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
 import controllers.helpers.FakeRequestHelper
-import controllers.nonresident.HowMuchLossController
-import models.nonresident.HowMuchLossModel
+import models.HowMuchLossModel
 import org.jsoup.Jsoup
 import org.scalatest.mock.MockitoSugar
 import uk.gov.hmrc.play.http.HeaderCarrier
@@ -28,6 +27,7 @@ import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import assets.MessageLookup.{NonResident => messages}
+import controllers.HowMuchLossController
 import play.api.test.Helpers._
 
 class HowMuchLossActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {

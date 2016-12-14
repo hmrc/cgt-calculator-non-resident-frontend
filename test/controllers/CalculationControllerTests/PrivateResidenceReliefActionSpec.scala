@@ -20,12 +20,12 @@ import java.time.LocalDate
 
 import assets.MessageLookup.NonResident.{PrivateResidenceRelief => messages}
 import assets.MessageLookup.{NonResident => commonMessages}
-import common.KeystoreKeys
+import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
-import constructors.nonresident.AnswersConstructor
+import constructors.AnswersConstructor
+import controllers.PrivateResidenceReliefController
 import controllers.helpers.FakeRequestHelper
-import controllers.nonresident.PrivateResidenceReliefController
-import models.nonresident._
+import models._
 import org.jsoup.Jsoup
 import org.mockito.Matchers
 import org.mockito.Mockito._

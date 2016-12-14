@@ -17,11 +17,12 @@
 package controllers.CalculationControllerTests
 
 import assets.MessageLookup.NonResident.{DisposalCosts => messages}
-import common.KeystoreKeys
-import models.nonresident._
+import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import models._
 import connectors.CalculatorConnector
+import controllers.DisposalCostsController
 import controllers.helpers.FakeRequestHelper
-import controllers.nonresident.{DisposalCostsController, routes}
+import controllers.nonresident.routes
 import org.jsoup._
 import org.mockito.Matchers
 import org.mockito.Mockito._
@@ -48,7 +49,7 @@ class DisposalCostsActionSpec extends UnitSpec with WithFakeApplication with Moc
     when(mockCalcConnector.fetchAndGetFormData[SoldOrGivenAwayModel](Matchers.eq(KeystoreKeys.soldOrGivenAway))(Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(soldOrGivenModel))
 
-    when(mockCalcConnector.fetchAndGetFormData[SoldForLessModel](Matchers.eq(KeystoreKeys.NonResidentKeys.soldForLess))(Matchers.any(), Matchers.any()))
+    when(mockCalcConnector.fetchAndGetFormData[SoldForLessModel](Matchers.eq(KeystoreKeys.soldForLess))(Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(soldForLessModel))
 
     new DisposalCostsController {

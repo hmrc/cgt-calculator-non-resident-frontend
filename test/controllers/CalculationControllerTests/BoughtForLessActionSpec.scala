@@ -18,9 +18,9 @@ package controllers.CalculationControllerTests
 
 import assets.MessageLookup.{NonResident => messages}
 import connectors.CalculatorConnector
+import controllers.BoughtForLessController
 import controllers.helpers.FakeRequestHelper
-import controllers.nonresident.BoughtForLessController
-import models.nonresident.BoughtForLessModel
+import models.BoughtForLessModel
 import org.jsoup.Jsoup
 import org.mockito.Matchers
 import org.mockito.Mockito._

@@ -18,10 +18,9 @@ package common
 
 import common.nonresident.TaxableGainCalculation
 import connectors.CalculatorConnector
-import constructors.nonresident.AnswersConstructor
+import constructors.AnswersConstructor
 import controllers.helpers.FakeRequestHelper
-import models.nonresident._
-import models.resident.TaxYearModel
+import models.{TaxYearModel, _}
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
@@ -74,7 +73,8 @@ class TaxableGainCalculationSpec extends UnitSpec with WithFakeApplication with 
     None
   )
 
-  when(mockCalcConnector.fetchAndGetFormData[PrivateResidenceReliefModel](Matchers.eq(KeystoreKeys.privateResidenceRelief))(Matchers.any(), Matchers.any()))
+  when(mockCalcConnector.fetchAndGetFormData[PrivateResidenceReliefModel](Matchers.eq(KeystoreKeys.NonResidentKeys.privateResidenceRelief))
+    (Matchers.any(), Matchers.any()))
     .thenReturn(Future.successful(Some(prrModel)))
 
   when(mockCalcConnector.calculateTaxableGainAfterPRR(Matchers.any(), Matchers.any())(Matchers.any()))

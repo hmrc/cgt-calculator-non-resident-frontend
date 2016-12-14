@@ -17,11 +17,11 @@
 package controllers.CalculationControllerTests
 
 import assets.MessageLookup.NonResident.{NoCapitalGainsTax => messages}
-import common.KeystoreKeys
+import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
+import controllers.NoCapitalGainsTaxController
 import controllers.helpers.FakeRequestHelper
-import controllers.nonresident.NoCapitalGainsTaxController
-import models.nonresident.DisposalDateModel
+import models.DisposalDateModel
 import org.jsoup.Jsoup
 import org.mockito.Matchers
 import org.mockito.Mockito._

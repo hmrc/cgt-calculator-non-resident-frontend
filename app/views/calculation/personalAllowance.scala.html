@@ -1,0 +1,35 @@
+@import models.PersonalAllowanceModel
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import views.html.helpers._
+
+@(personalAllowanceForm: Form[PersonalAllowanceModel])(implicit request: Request[_])
+
+@helpLink = {
+    <a id="helpLink2" class="external-link" rel="external" href="https://www.gov.uk/government/publications/rates-and-allowances-income-tax/income-tax-rates-and-allowances-current-and-past"
+       target="_blank" data-journey-click="help:govUK:personalAllowancesCurrentAndPast">
+        @Messages("calc.personalAllowance.link")
+        <span>@Messages("calc.base.externalLink")</span>
+    </a>
+}
+
+@helpAndLink = {
+    <p>@Messages("calc.personalAllowance.help") @helpLink</p>
+}
+
+@main_template(Messages("calc.personalAllowance.question")) {
+
+    <a id="back-link" class="back-link" href="@controllers.nonresident.routes.CurrentIncomeController.currentIncome">@Messages("calc.base.back")</a>
+
+    @errorSummary(personalAllowanceForm, "personal-allowance")
+
+    <h1 class="heading-xlarge">@Messages("calc.personalAllowance.question")</h1>
+
+    @form(action = controllers.nonresident.routes.PersonalAllowanceController.submitPersonalAllowance) {
+
+        @formInputMoneyHTML(personalAllowanceForm, "personalAllowance", Messages("calc.personalAllowance.question"), helpText = Some(helpAndLink), hideLabel = true)
+
+        <button class="button" type="submit" id="continue-button">@Messages("calc.base.continue")</button>
+
+    }
+
+}

@@ -17,11 +17,12 @@
 package controllers.CalculationControllerTests
 
 import assets.MessageLookup.NonResident.{RebasedValue => messages}
-import common.KeystoreKeys
+import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
+import controllers.RebasedValueController
 import controllers.helpers.FakeRequestHelper
-import controllers.nonresident.{RebasedValueController, routes}
-import models.nonresident.{AcquisitionDateModel, RebasedValueModel}
+import controllers.nonresident.routes
+import models.{AcquisitionDateModel, RebasedValueModel}
 import org.jsoup._
 import org.mockito.Matchers
 import org.mockito.Mockito._

@@ -17,13 +17,13 @@
 package controllers.CalculationControllerTests
 
 import assets.MessageLookup.NonResident.{OtherReliefs => messages}
-import common.{KeystoreKeys, TestModels}
+import common.TestModels
+import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
-import constructors.nonresident.AnswersConstructor
+import constructors.AnswersConstructor
+import controllers.OtherReliefsController
 import controllers.helpers.FakeRequestHelper
-import controllers.nonresident.OtherReliefsController
-import models.nonresident._
-import models.resident.TaxYearModel
+import models.{TaxYearModel, _}
 import org.jsoup.Jsoup
 import org.mockito.Matchers
 import org.mockito.Mockito._

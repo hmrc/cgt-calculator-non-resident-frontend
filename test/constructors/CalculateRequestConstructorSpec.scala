@@ -18,8 +18,7 @@ package constructors
 
 import common.nonresident.CustomerTypeKeys
 import common.TestModels
-import constructors.nonresident.CalculateRequestConstructor
-import models.nonresident._
+import models._
 import uk.gov.hmrc.play.test.UnitSpec
 
 class CalculateRequestConstructorSpec extends UnitSpec {

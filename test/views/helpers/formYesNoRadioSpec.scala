@@ -17,10 +17,10 @@
 package views.helpers
 
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
-import forms.nonresident.AcquisitionCostsForm._
 import org.jsoup.Jsoup
 import views.html.helpers._
 import assets.MessageLookup.{NonResident => messages}
+import forms.AcquisitionCostsForm
 
 class formYesNoRadioSpec extends UnitSpec with WithFakeApplication {
 

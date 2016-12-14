@@ -16,7 +16,7 @@
 
 package views.helpers.nonresident
 
-import models.nonresident.QuestionAnswerModel
+import models.QuestionAnswerModel
 import org.jsoup.Jsoup
 import uk.gov.hmrc.play.test.UnitSpec
 import views.html.helpers.nonresident.summarySectionNoLink

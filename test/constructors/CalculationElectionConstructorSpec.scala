@@ -16,8 +16,7 @@
 
 package constructors
 
-import constructors.nonresident.CalculationElectionConstructor
-import models.nonresident._
+import models._
 import org.scalatest.mock.MockitoSugar
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 

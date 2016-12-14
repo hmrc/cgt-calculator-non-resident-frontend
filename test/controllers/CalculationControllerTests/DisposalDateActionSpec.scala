@@ -18,9 +18,10 @@ package controllers.CalculationControllerTests
 
 import assets.MessageLookup.NonResident.{DisposalDate => messages}
 import connectors.CalculatorConnector
+import controllers.DisposalDateController
 import controllers.helpers.FakeRequestHelper
-import controllers.nonresident.{DisposalDateController, routes}
-import models.nonresident.DisposalDateModel
+import controllers.nonresident.routes
+import models.DisposalDateModel
 import org.jsoup._
 import org.mockito.Matchers
 import org.mockito.Mockito._

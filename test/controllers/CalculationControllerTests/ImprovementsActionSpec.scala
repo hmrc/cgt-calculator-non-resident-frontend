@@ -16,7 +16,7 @@
 
 package controllers.CalculationControllerTests
 
-import common.KeystoreKeys
+import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
 import org.mockito.Matchers
 import org.mockito.Mockito._
@@ -27,12 +27,13 @@ import org.scalatest.mock.MockitoSugar
 import play.api.test.Helpers._
 import assets.MessageLookup.NonResident.{Improvements => messages}
 import assets.MessageLookup.{NonResident => commonMessages}
-import constructors.nonresident.AnswersConstructor
+import constructors.AnswersConstructor
+import controllers.ImprovementsController
 import controllers.helpers.FakeRequestHelper
 
 import scala.concurrent.Future
-import controllers.nonresident.{ImprovementsController, routes}
-import models.nonresident._
+import controllers.nonresident.routes
+import models._
 import uk.gov.hmrc.http.cache.client.CacheMap
 
 class ImprovementsActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {

@@ -18,9 +18,9 @@ package controllers.CalculationControllerTests
 
 import assets.MessageLookup.NonResident.{HowMuchGain => messages}
 import connectors.CalculatorConnector
+import controllers.HowMuchGainController
 import controllers.helpers.FakeRequestHelper
-import controllers.nonresident.HowMuchGainController
-import models.nonresident.HowMuchGainModel
+import models.HowMuchGainModel
 import org.jsoup._
 import org.mockito.Matchers
 import org.mockito.Mockito._
