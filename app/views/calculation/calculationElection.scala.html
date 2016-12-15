@@ -1,0 +1,60 @@
+@import models._
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import views.html.helpers._
+
+@(calculationElectionForm: Form[CalculationElectionModel], content: Seq[(String, String, String, Option[String], Option[BigDecimal])])(implicit request: Request[_])
+
+@sidebar = {
+    <ul>
+        <li>
+            <a class="external-link" rel="external" id="helpLink1" target="_blank"
+               href="https://www.gov.uk/guidance/capital-gains-tax-for-non-residents-calculating-taxable-gain-or-loss">
+                @Messages("calc.calculationElection.link.one")
+                <span>@Messages("calc.base.externalLink")</span>
+            </a>
+        </li>
+    </ul>
+}
+
+@main_template(Messages("calc.calculationElection.question"), sidebarLinks = Some(sidebar)) {
+
+    <a id="back-link" class="back-link" href="@controllers.routes.CheckYourAnswersController.checkYourAnswers">@Messages("calc.base.back")</a>
+
+    @errorSummary(calculationElectionForm, "calculation-election")
+
+    <div class="grid-row">
+        <h1 class="heading-xlarge">@Messages("calc.calculationElection.pageHeading")</h1>
+    </div>
+
+    <p>@Messages("calc.calculationElection.paragraph.one")</p>
+
+    <h2 class="heading-small">@Messages("calc.calculationElection.h2")</h2>
+
+    <p>@Messages("calc.calculationElection.paragraph.two")</p>
+
+    <p>@Messages("calc.calculationElection.paragraph.three")</p>
+
+    <details role="group">
+        <summary role="button" aria-controls="details-content-0" aria-expanded="false"><span class="summary" data-journey-click="help:reveal:choose-calc-type">@Messages("calc.calculationElection.message.whyMore")</span></summary>
+        <div class="panel panel-indent" id="details-content-0" aria-hidden="true">
+            <p>@Messages("calc.calculationElection.whyMoreDetails.one")</p>
+            <p>@Messages("calc.calculationElection.whyMoreDetails.two")</p>
+        </div>
+    </details>
+
+    @form(action = controllers.routes.CalculationElectionController.submitCalculationElection) {
+
+        <div class="form-group">
+            @calculationElectionHelperForm(
+                field = calculationElectionForm("calculationElection"),
+                content,
+                '_labelClass -> "block-label election",
+                '_legend -> Messages("calc.calculationElection.legend"),
+                '_legendClass -> "bold-medium")
+        </div>
+
+        <div class="grid-row form-group">
+            <button class="button" name="action" value="continue" id="continue-button">@Messages("calc.base.continue")</button>
+        </div>
+    }
+}

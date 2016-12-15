@@ -1,0 +1,35 @@
+@import models.RebasedValueModel
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import views.html.helpers._
+
+@(rebasedValueForm: Form[RebasedValueModel])(implicit request: Request[_])
+
+@hiddenHelpTextContent = {
+    <p>@Messages("calc.nonResident.rebasedValue.helpText")</p>
+}
+
+@hintTextContent = {
+    <span class="form-hint">@Messages("calc.nonResident.rebasedValue.hintText")</span>
+}
+
+@main_template(Messages("calc.nonResident.rebasedValue.questionAndDate")) {
+
+    <a id="back-link" class="back-link" href="@controllers.routes.AcquisitionCostsController.acquisitionCosts">@Messages("calc.base.back")</a>
+
+    @errorSummary(rebasedValueForm, "rebased-value", "rebasedValueAmt")
+
+    <h1 class="heading-xlarge">@Messages("calc.nonResident.rebasedValue.question") <span class="no-wrap">@Messages("calc.nonResident.rebasedValue.date")</span></h1>
+
+    <p>@Messages("calc.nonResident.rebasedValue.optionalLine")</p>
+
+    @hintTextContent
+
+    @hiddenHelpText("rebasedValue", Messages("calc.nonResident.rebasedValue.helpHidden.title"), hiddenHelpTextContent)
+
+    @form(action = controllers.routes.RebasedValueController.submitRebasedValue) {
+
+        @formInputMoney(rebasedValueForm, "rebasedValueAmt", Messages("calc.nonResident.rebasedValue.questionAndDate"), hideLabel = true)
+
+        <button class="button" type="submit" id="continue-button">@Messages("calc.base.continue")</button>
+    }
+}

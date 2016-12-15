@@ -1,0 +1,25 @@
+@import models.DisposalValueModel
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import views.html.helpers._
+
+@import play.mvc.Results.Todo
+@(marketValueForm: Form[DisposalValueModel])(implicit request: Request[_])
+
+@main_template(Messages("calc.marketValue.sold.question")) {
+
+    <a id="back-link" class="back-link" href="@controllers.routes.SoldForLessController.soldForLess">@Messages("calc.base.back")</a>
+
+    @errorSummary(marketValueForm, "disposalValue")
+
+    <h1 class="heading-xlarge" for="disposal-value">@Messages("calc.marketValue.sold.question")</h1>
+
+    <p class="form-hint">@Messages("calc.marketValue.helpText") <br/>
+        @Messages("calc.marketValue.helpTextAdditional")
+    </p>
+
+    @form(action = controllers.routes.MarketValueWhenSoldOrGaveAwayController.submitMarketValueWhenSold()) {
+        @formInputMoney(marketValueForm, "disposalValue", Messages("calc.marketValue.sold.question"), hideLabel = true)
+
+        <button id="continue-button" type="submit" class="button">@Messages("calc.base.button.continue")</button>
+    }
+}

@@ -1,0 +1,34 @@
+@import models.SoldOrGivenAwayModel
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import views.html.helpers._
+
+@(soldOrGivenAway: Form[SoldOrGivenAwayModel])(implicit request: Request[_])
+
+@main_template(Messages("calc.soldOrGivenAway.question")){
+
+    <a id="back-link" class="back-link" href="@controllers.routes.DisposalDateController.disposalDate()">@Messages("calc.base.back")</a>
+
+    @errorSummary(soldOrGivenAway, "soldIt")
+
+    <h1 class="heading-xlarge">@Messages("calc.soldOrGivenAway.question")</h1>
+
+    @form(action = controllers.routes.SoldOrGivenAwayController.submitSoldOrGivenAway) {
+
+        @formInputRadioGroup(
+            field = soldOrGivenAway("soldIt"),
+            Seq(
+            "Yes" -> Messages("calc.soldOrGivenAway.sold"),
+            "No" -> Messages("calc.soldOrGivenAway.gave")),
+            '_legend -> Messages("calc.soldOrGivenAway.question"),
+            '_legendID -> "option",
+            '_legendClass -> "visuallyhidden",
+            '_labelAfter -> true,
+            '_labelClass -> "block-label",
+            '_groupClass -> "form-group radio-list",
+            '_fieldsetAttributes -> "aria-details = help"
+        )
+
+        <button id="continue-button" class="button" type="submit">@Messages("calc.base.continue")</button>
+    }
+
+}

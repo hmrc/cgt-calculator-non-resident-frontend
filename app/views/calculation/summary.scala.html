@@ -1,0 +1,41 @@
+@import views.html.helpers._
+@import models._
+@import uk.gov.hmrc.play.views.helpers._
+@import views.html.helpers._
+
+@import common.TaxDates
+@(result: Seq[QuestionAnswerModel[Any]], backUrl: String, displayDateWarning: Boolean, calculationType: String, taxOwed: Option[BigDecimal])(implicit request: Request[_])
+
+@main_template(Messages("calc.summary.title"), articleLayout = false) {
+
+    <a id="back-link" class="back-link" href="@backUrl">@Messages("calc.base.back")</a>
+
+    <h1 class="heading-xlarge">@Messages("calc.summary.calculation.details.title")</h1>
+
+    @(if (displayDateWarning) taxYearWarningNotice())
+
+    <div class=font-medium" data-metrics="summary:calc-election:@calculationType">
+
+        @amountYouOweRow(taxOwed.getOrElse(0), 2)
+        @summaryOfCalcSection("calculationDetails", result, 2)
+
+    </div>
+
+    <div class="grid-layout__column grid-layout__column--2-3">
+
+        <a type="submit" class="button nr save-pdf-button" href="@controllers.routes.ReportController.summaryReport.toString" data-journey-click="nr-summary:pdf:save">@Messages("calc.resident.summary.saveAsPdf")</a>
+
+        <div id="whatToDoNext" class="form-group">
+            <h2 class="heading-medium">@Messages("calc.common.next.actions.heading")</h2>
+            <p>
+                @Messages("calc.summary.next.actions.text")
+                <a class="external-link" rel="external" href="https://www.gov.uk/guidance/capital-gains-tax-for-non-residents-uk-residential-property"
+                    target="_blank" data-journey-click="nav:calc:kana-nrcgt">@Messages("calc.summary.next.actions.link") <span>@Messages("calc.base.externalLink")</span>
+                </a>
+            </p>
+        </div>
+
+        <a id="startAgain" class="bold-medium" href="@controllers.routes.SummaryController.restart" data-journey-click="nav:calc:restart">@Messages("calc.summary.startAgain")</a>
+
+    </div>
+}

@@ -1,0 +1,23 @@
+@import models.QuestionAnswerModel
+@import java.time._
+@import uk.gov.hmrc.play.views.helpers._
+@import common.Dates._
+
+@(questionAnswer: QuestionAnswerModel[Any], decimalPlaces: Int)
+
+@questionAnswer.link.fold(questionAnswerRowNoLink(questionAnswer, decimalPlaces)) { link =>
+    <div id="@{s"${questionAnswer.id}-question"}" class="grid-layout__column grid-layout__column--1-2">
+        <span class="lede">@questionAnswer.question</span>
+    </div>
+    <div id="@questionAnswer.id-answer" class="grid-layout__column grid-layout__column--1-2">
+        <a class="lede summary-answer" href="@link">@{
+            questionAnswer.data match {
+                    case string: String => string
+                    case int: Int => int.toString
+                    case bigDecimal: BigDecimal => s"£${MoneyPounds(bigDecimal, decimalPlaces).quantity}"
+                    case date: LocalDate => datePageFormatNoZero.format(date)
+                    case _ => ""
+                }
+            }</a>
+    </div>
+}
