@@ -3,7 +3,7 @@
 @import views.html.helpers._
 @import views.html.main_template
 
-@(worthBeforeLegislationStart : Form[WorthBeforeLegislationStartModel])(implicit request: Request[_])
+@(worthBeforeLegislationStart : Form[WorthBeforeLegislationStartModel])(implicit request: Request[_], messages: Messages)
 
 @exampleContent = {
     <p>@Messages("calc.worthBeforeLegislationStart.expandableText")</p>

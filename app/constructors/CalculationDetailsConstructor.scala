@@ -21,6 +21,8 @@ import controllers.routes
 import models.{QuestionAnswerModel, TotalGainResultsModel}
 import play.api.i18n.Messages
 import common.nonresident.CalculationType
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 
 object CalculationDetailsConstructor {
 

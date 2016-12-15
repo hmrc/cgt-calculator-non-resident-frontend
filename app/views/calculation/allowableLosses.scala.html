@@ -2,7 +2,7 @@
 @import uk.gov.hmrc.play.views.html.helpers.form
 @import views.html.helpers._
 
-@(allowableLossesForm: Form[AllowableLossesModel], backUrl: String)(implicit request: Request[_])
+@(allowableLossesForm: Form[AllowableLossesModel], backUrl: String)(implicit request: Request[_], messages: Messages)
 
 @hiddenYesNoContent = {
     @formInputMoney(allowableLossesForm, "allowableLossesAmt", Messages("calc.allowableLosses.question.two"))

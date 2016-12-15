@@ -3,7 +3,7 @@
 @import uk.gov.hmrc.play.views.helpers.MoneyPounds
 @import constructors.OtherReliefsDetailsConstructor
 
-@(totalGain: TotalGainAnswersModel, result: Seq[QuestionAnswerModel[Any]], taxYear: TaxYearModel, electionType: String, pRRModel: Option[PrivateResidenceReliefModel] = None, finalAnswers: Option[TotalPersonalDetailsCalculationModel] = None, taxOwed: BigDecimal, otherReliefs: Option[OtherReliefsModel])(implicit request: Request[_])
+@(totalGain: TotalGainAnswersModel, result: Seq[QuestionAnswerModel[Any]], taxYear: TaxYearModel, electionType: String, pRRModel: Option[PrivateResidenceReliefModel] = None, finalAnswers: Option[TotalPersonalDetailsCalculationModel] = None, taxOwed: BigDecimal, otherReliefs: Option[OtherReliefsModel])(implicit request: Request[_], messages: Messages)
 
 <!DOCTYPE html>
 <html>

@@ -2,7 +2,7 @@
 @import uk.gov.hmrc.play.views.html.helpers.form
 @import views.html.helpers._
 
-@(rebasedCosts: Form[RebasedCostsModel])(implicit request: Request[_])
+@(rebasedCosts: Form[RebasedCostsModel])(implicit request: Request[_], messages: Messages)
 
 @main_template(Messages("calc.rebasedCosts.question")) {
 

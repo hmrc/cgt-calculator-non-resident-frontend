@@ -29,6 +29,8 @@ import play.api.mvc.RequestHeader
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import uk.gov.hmrc.play.http.HeaderCarrier
 import views.html.calculation.{summaryReport => summaryView}
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 
 import scala.concurrent.Future
 
@@ -42,6 +44,7 @@ trait ReportController extends FrontendController with ValidActiveSession {
 
   val calcConnector: CalculatorConnector
   val answersConstructor: AnswersConstructor
+  val pdfGenerator = new PdfGenerator
 
   def host(implicit request: RequestHeader): String = {
     s"http://${request.host}/"
@@ -192,8 +195,8 @@ trait ReportController extends FrontendController with ValidActiveSession {
         totalGains.get, calculationType.get.calculationType, finalResult, taxYear)
       taxOwed <- getTaxOwed(finalResult, calculationType.get.calculationType)
     } yield {
-      PdfGenerator.ok(summaryView(answers, results, taxYear.get, calculationType.get.calculationType, prrModel,
-        finalAnswers, taxOwed.getOrElse(0), otherReliefs), host).toScala
+      pdfGenerator.ok(summaryView(answers, results, taxYear.get, calculationType.get.calculationType, prrModel,
+        finalAnswers, taxOwed.getOrElse(0), otherReliefs), host).asScala()
         .withHeaders("Content-Disposition" ->s"""attachment; filename="${Messages("calc.summary.title")}.pdf"""")
     }
   }

@@ -5,7 +5,7 @@
 @import uk.gov.hmrc.play.views.helpers._
 @import common.Dates._
 @import common.Transformers.booleanToString
-@(questions: Seq[(QuestionAnswerModel[Any])], backLink: String)(implicit request: Request[_])
+@(questions: Seq[(QuestionAnswerModel[Any])], backLink: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(Messages("calc.checkYourAnswers.title"), articleLayout = false){
 

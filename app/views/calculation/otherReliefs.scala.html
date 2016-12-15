@@ -3,7 +3,7 @@
 @import uk.gov.hmrc.play.views.helpers.MoneyPounds
 @import views.html.helpers._
 
-@(otherReliefsForm: Form[OtherReliefsModel], chargeableGain: BigDecimal, gain: BigDecimal)(implicit request: Request[_])
+@(otherReliefsForm: Form[OtherReliefsModel], chargeableGain: BigDecimal, gain: BigDecimal)(implicit request: Request[_], messages: Messages)
 
 @helpContent = {
     <div id="otherReliefHelp" class="form-hint">

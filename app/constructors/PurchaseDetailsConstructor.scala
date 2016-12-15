@@ -22,6 +22,8 @@ import common.TaxDates
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import models._
 import play.api.i18n.Messages
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 
 object PurchaseDetailsConstructor {
 

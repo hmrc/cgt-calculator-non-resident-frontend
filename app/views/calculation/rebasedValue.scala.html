@@ -2,7 +2,7 @@
 @import uk.gov.hmrc.play.views.html.helpers.form
 @import views.html.helpers._
 
-@(rebasedValueForm: Form[RebasedValueModel])(implicit request: Request[_])
+@(rebasedValueForm: Form[RebasedValueModel])(implicit request: Request[_], messages: Messages)
 
 @hiddenHelpTextContent = {
     <p>@Messages("calc.nonResident.rebasedValue.helpText")</p>

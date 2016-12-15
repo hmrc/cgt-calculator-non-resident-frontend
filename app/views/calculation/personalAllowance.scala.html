@@ -2,7 +2,7 @@
 @import uk.gov.hmrc.play.views.html.helpers.form
 @import views.html.helpers._
 
-@(personalAllowanceForm: Form[PersonalAllowanceModel])(implicit request: Request[_])
+@(personalAllowanceForm: Form[PersonalAllowanceModel])(implicit request: Request[_], messages: Messages)
 
 @helpLink = {
     <a id="helpLink2" class="external-link" rel="external" href="https://www.gov.uk/government/publications/rates-and-allowances-income-tax/income-tax-rates-and-allowances-current-and-past"

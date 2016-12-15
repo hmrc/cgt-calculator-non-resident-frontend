@@ -17,8 +17,10 @@
 package constructors
 
 import common.nonresident.CalculationType
-import models.{CalculationResultsWithTaxOwedModel, OtherReliefsModel, QuestionAnswerModel}
+import models.{CalculationResultsWithTaxOwedModel, QuestionAnswerModel}
+import play.api.Play.current
 import play.api.i18n.Messages
+import play.api.i18n.Messages.Implicits._
 import uk.gov.hmrc.play.views.helpers.MoneyPounds
 
 object CalculationDetailsWithAllAnswersConstructor {

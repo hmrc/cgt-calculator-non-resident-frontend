@@ -23,6 +23,8 @@ import forms.AcquisitionValueForm._
 import views.html.calculation
 import models.AcquisitionValueModel
 import uk.gov.hmrc.play.frontend.controller.FrontendController
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 
 import scala.concurrent.Future
 

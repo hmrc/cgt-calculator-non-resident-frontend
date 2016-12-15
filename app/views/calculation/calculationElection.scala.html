@@ -2,7 +2,7 @@
 @import uk.gov.hmrc.play.views.html.helpers.form
 @import views.html.helpers._
 
-@(calculationElectionForm: Form[CalculationElectionModel], content: Seq[(String, String, String, Option[String], Option[BigDecimal])])(implicit request: Request[_])
+@(calculationElectionForm: Form[CalculationElectionModel], content: Seq[(String, String, String, Option[String], Option[BigDecimal])])(implicit request: Request[_], messages: Messages)
 
 @sidebar = {
     <ul>
