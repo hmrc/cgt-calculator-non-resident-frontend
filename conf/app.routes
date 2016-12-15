@@ -11,6 +11,8 @@ GET         /thankyou               controllers.utils.FeedbackController.thankyo
 #Session Timeout route
 GET         /session-timeout        controllers.utils.TimeoutController.timeout(restartUrl: String, homeLink: String)
 
+GET         /admin/metrics          @com.kenshoo.play.metrics.MetricsController.metrics
+
 
 #Non Resident Calculation controller routes
 ########################################################
