@@ -24,6 +24,8 @@ import play.api.data._
 import play.api.i18n.Messages
 import uk.gov.hmrc.play.views.helpers.MoneyPounds
 import common.Transformers._
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 
 object RebasedCostsForm {
 

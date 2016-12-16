@@ -24,12 +24,16 @@ import org.scalatest.mock.MockitoSugar
 import forms.CustomerTypeForm._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.customerType
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 
 class CustomerTypeViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
+
+
   "The Customer Type View" should {
     val dummyBackLink = controllers.routes.PrivateResidenceReliefController.privateResidenceRelief().url
-    lazy val view = customerType(customerTypeForm, dummyBackLink)(fakeRequest)
+    lazy val view = customerType(customerTypeForm, dummyBackLink)
     lazy val document = Jsoup.parse(view.body)
 
     "return some HTML that" which {

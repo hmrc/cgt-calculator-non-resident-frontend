@@ -3,7 +3,7 @@
 @import views.html.helpers._
 @import constructors.ImprovementsConstructor
 
-@(improvementsForm: Form[ImprovementsModel], improvementsOptions: Boolean, backUrl: String)(implicit request: Request[_])
+@(improvementsForm: Form[ImprovementsModel], improvementsOptions: Boolean, backUrl: String)(implicit request: Request[_], messages: Messages)
 
 @exampleContent = {
     <p>@Messages("calc.improvements.exampleOne")

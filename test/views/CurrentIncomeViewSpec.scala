@@ -23,13 +23,17 @@ import org.scalatest.mock.MockitoSugar
 import forms.CurrentIncomeForm._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.currentIncome
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 
 class CurrentIncomeViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
+
+
 
   "Current Income view" when {
 
     "supplied with no errors" should {
-      lazy val view = currentIncome(currentIncomeForm)(fakeRequest)
+      lazy val view = currentIncome(currentIncomeForm)
       lazy val document = Jsoup.parse(view.body)
 
       s"have the correct title" in {
@@ -99,7 +103,7 @@ class CurrentIncomeViewSpec extends UnitSpec with WithFakeApplication with Mocki
 
     "supplied with errors" should {
       lazy val form = currentIncomeForm.bind(Map("currentIncome" -> "a"))
-      lazy val view = currentIncome(form)(fakeRequest)
+      lazy val view = currentIncome(form)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

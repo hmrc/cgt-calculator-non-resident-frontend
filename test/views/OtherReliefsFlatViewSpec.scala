@@ -24,12 +24,16 @@ import forms.OtherReliefsForm._
 import org.scalatest.mock.MockitoSugar
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.otherReliefsFlat
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 
 class OtherReliefsFlatViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
+
+
   "The Other Reliefs Flat view" when {
     "not supplied with a pre-existing stored value and a taxable gain" should {
-      lazy val view = otherReliefsFlat(otherReliefsForm, hasExistingReliefAmount = false, BigDecimal(2000), BigDecimal(2500))(fakeRequest)
+      lazy val view = otherReliefsFlat(otherReliefsForm, hasExistingReliefAmount = false, BigDecimal(2000), BigDecimal(2500))
       lazy val document = Jsoup.parse(view.body)
 
       "have a back link" which {
@@ -126,7 +130,7 @@ class OtherReliefsFlatViewSpec extends UnitSpec with WithFakeApplication with Mo
 
     "supplied with a pre-existing stored value and a negative taxable gain" should {
       val map = Map("otherReliefs" -> "1000")
-      lazy val view = otherReliefsFlat(otherReliefsForm.bind(map), hasExistingReliefAmount = true, BigDecimal(-1000), BigDecimal(2000))(fakeRequest)
+      lazy val view = otherReliefsFlat(otherReliefsForm.bind(map), hasExistingReliefAmount = true, BigDecimal(-1000), BigDecimal(2000))
       lazy val document = Jsoup.parse(view.body)
 
       "has a list entry with the loss carried forward message and value" in {
@@ -153,7 +157,7 @@ class OtherReliefsFlatViewSpec extends UnitSpec with WithFakeApplication with Mo
     "supplied with an invalid map" should {
       val model = CalculationResultModel(100, 1000, -100, 18, 0, None, None, None)
       val map = Map("otherReliefs" -> "-1000")
-      lazy val view = otherReliefsFlat(otherReliefsForm.bind(map), hasExistingReliefAmount = true, BigDecimal(2000), BigDecimal(2000))(fakeRequest)
+      lazy val view = otherReliefsFlat(otherReliefsForm.bind(map), hasExistingReliefAmount = true, BigDecimal(2000), BigDecimal(2000))
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

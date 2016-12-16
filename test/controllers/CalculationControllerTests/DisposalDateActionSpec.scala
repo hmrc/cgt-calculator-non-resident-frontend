@@ -23,7 +23,7 @@ import controllers.helpers.FakeRequestHelper
 import controllers.routes
 import models.DisposalDateModel
 import org.jsoup._
-import org.mockito.Matchers
+import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
 import play.api.test.Helpers._
@@ -41,7 +41,7 @@ class DisposalDateActionSpec extends UnitSpec with WithFakeApplication with Mock
 
     val mockCalcConnector = mock[CalculatorConnector]
 
-    when(mockCalcConnector.fetchAndGetFormData[DisposalDateModel](Matchers.anyString())(Matchers.any(), Matchers.any()))
+    when(mockCalcConnector.fetchAndGetFormData[DisposalDateModel](ArgumentMatchers.anyString())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
     new DisposalDateController {

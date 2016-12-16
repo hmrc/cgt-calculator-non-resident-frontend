@@ -2,7 +2,7 @@
 @import uk.gov.hmrc.play.views.html.helpers.form
 @import views.html.helpers._
 
-@(customerTypeForm: Form[CustomerTypeModel], backUrl: String)(implicit request: Request[_])
+@(customerTypeForm: Form[CustomerTypeModel], backUrl: String)(implicit request: Request[_], messages: Messages)
 
 @import common.nonresident.CustomerTypeKeys
 

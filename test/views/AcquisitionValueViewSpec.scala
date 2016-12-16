@@ -24,14 +24,16 @@ import forms.AcquisitionValueForm._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.{calculation => views}
 import controllers.routes
-
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 
 class AcquisitionValueViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper{
 
 
+
   "the Acquisition Value View" should {
 
-    lazy val view = views.acquisitionValue(acquisitionValueForm)(fakeRequest)
+    lazy val view = views.acquisitionValue(acquisitionValueForm)
     lazy val document = Jsoup.parse(view.body)
 
     "have a h1 tag that" should {
@@ -103,7 +105,7 @@ class AcquisitionValueViewSpec extends UnitSpec with WithFakeApplication with Fa
 
     "supplied with errors" should {
       lazy val form = acquisitionValueForm.bind(Map("acquisitionValue" -> "a"))
-      lazy val view = views.acquisitionValue(form)(fakeRequest)
+      lazy val view = views.acquisitionValue(form)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

@@ -2,7 +2,7 @@
 @import uk.gov.hmrc.play.views.html.helpers.{form, input}
 @import views.html.helpers._
 
-@(privateResidenceReliefForm: Form[PrivateResidenceReliefModel], daysBetweenShow: Boolean, daysBeforeShow: Boolean, disposalDateLess18Months: String)(implicit request: Request[_])
+@(privateResidenceReliefForm: Form[PrivateResidenceReliefModel], daysBetweenShow: Boolean, daysBeforeShow: Boolean, disposalDateLess18Months: String)(implicit request: Request[_], messages: Messages)
 
 @sidebar = {
 <ul>

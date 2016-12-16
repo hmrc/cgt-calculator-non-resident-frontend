@@ -24,13 +24,17 @@ import forms.BoughtForLessForm._
 import org.scalatest.mock.MockitoSugar
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.boughtForLess
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 
-class BoughtForLessViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper with AssertHelpers{
+class BoughtForLessViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper with AssertHelpers {
+
+
 
   "Bought for less view" when {
 
     "supplied with no errors" should {
-      lazy val view = boughtForLess(boughtForLessForm)(fakeRequest)
+      lazy val view = boughtForLess(boughtForLessForm)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of ${messages.BoughtForLess.question}" in {
@@ -124,7 +128,7 @@ class BoughtForLessViewSpec extends UnitSpec with WithFakeApplication with Mocki
 
     "supplied with errors" should {
       lazy val form = boughtForLessForm.bind(Map("boughtForLess" -> "invalid text"))
-      lazy val view = boughtForLess(form)(fakeRequest)
+      lazy val view = boughtForLess(form)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

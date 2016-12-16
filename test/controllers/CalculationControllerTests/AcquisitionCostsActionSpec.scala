@@ -23,7 +23,7 @@ import controllers.AcquisitionCostsController
 import controllers.helpers.FakeRequestHelper
 import models.{AcquisitionCostsModel, AcquisitionDateModel, BoughtForLessModel, HowBecameOwnerModel}
 import org.jsoup.Jsoup
-import org.mockito.Matchers
+import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
 import play.api.test.Helpers._
@@ -43,16 +43,20 @@ class AcquisitionCostsActionSpec extends UnitSpec with WithFakeApplication with 
 
     val mockCalcConnector = mock[CalculatorConnector]
 
-    when(mockCalcConnector.fetchAndGetFormData[AcquisitionCostsModel](Matchers.eq(KeystoreKeys.acquisitionCosts))(Matchers.any(), Matchers.any()))
+    when(mockCalcConnector.fetchAndGetFormData[AcquisitionCostsModel](
+      ArgumentMatchers.eq(KeystoreKeys.acquisitionCosts))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    when(mockCalcConnector.fetchAndGetFormData[AcquisitionDateModel](Matchers.eq(KeystoreKeys.acquisitionDate))(Matchers.any(), Matchers.any()))
+    when(mockCalcConnector.fetchAndGetFormData[AcquisitionDateModel](
+      ArgumentMatchers.eq(KeystoreKeys.acquisitionDate))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(acquisitionDateData)
 
-    when(mockCalcConnector.fetchAndGetFormData[HowBecameOwnerModel](Matchers.eq(KeystoreKeys.howBecameOwner))(Matchers.any(), Matchers.any()))
+    when(mockCalcConnector.fetchAndGetFormData[HowBecameOwnerModel](
+      ArgumentMatchers.eq(KeystoreKeys.howBecameOwner))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(howBecameOwnerData)
 
-    when(mockCalcConnector.fetchAndGetFormData[BoughtForLessModel](Matchers.eq(KeystoreKeys.boughtForLess))(Matchers.any(), Matchers.any()))
+    when(mockCalcConnector.fetchAndGetFormData[BoughtForLessModel](
+      ArgumentMatchers.eq(KeystoreKeys.boughtForLess))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(boughtForLessData)
 
     new AcquisitionCostsController {

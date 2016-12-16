@@ -19,6 +19,8 @@ package constructors
 import models._
 import play.api.i18n.Messages
 import scala.concurrent.Future
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 
 object CalculationElectionConstructor extends CalculationElectionConstructor
 

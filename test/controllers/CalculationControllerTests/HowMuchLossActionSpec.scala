@@ -24,7 +24,7 @@ import org.jsoup.Jsoup
 import org.scalatest.mock.MockitoSugar
 import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
-import org.mockito.Matchers
+import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import assets.MessageLookup.{NonResident => messages}
 import controllers.HowMuchLossController
@@ -38,7 +38,7 @@ class HowMuchLossActionSpec extends UnitSpec with WithFakeApplication with Mocki
 
     val mockConnector = mock[CalculatorConnector]
 
-    when(mockConnector.fetchAndGetFormData[HowMuchLossModel](Matchers.eq(KeystoreKeys.howMuchLoss))(Matchers.any(), Matchers.any()))
+    when(mockConnector.fetchAndGetFormData[HowMuchLossModel](ArgumentMatchers.eq(KeystoreKeys.howMuchLoss))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(getData)
 
     new HowMuchLossController {

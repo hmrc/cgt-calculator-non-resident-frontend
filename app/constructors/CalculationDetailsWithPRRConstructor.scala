@@ -21,6 +21,8 @@ import common.nonresident.CalculationType
 import controllers.routes
 import models.{CalculationResultsWithPRRModel, QuestionAnswerModel}
 import play.api.i18n.Messages
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 
 object CalculationDetailsWithPRRConstructor {
 

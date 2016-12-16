@@ -22,8 +22,12 @@ import models.QuestionAnswerModel
 import org.jsoup.Jsoup
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.summary
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 
 class SummaryViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
+
+
 
   "Summary view" when {
 
@@ -31,7 +35,7 @@ class SummaryViewSpec extends UnitSpec with WithFakeApplication with FakeRequest
       val questionAnswer = QuestionAnswerModel[String]("text", "1000", "test-question", None)
       val seqQuestionAnswers = Seq(questionAnswer, questionAnswer)
 
-      lazy val view = summary(seqQuestionAnswers, "back-link", displayDateWarning = false, "flat", None)(fakeRequest)
+      lazy val view = summary(seqQuestionAnswers, "back-link", displayDateWarning = false, "flat", None)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${messages.Summary.title}'" in {
@@ -145,7 +149,7 @@ class SummaryViewSpec extends UnitSpec with WithFakeApplication with FakeRequest
     "supplied with a disposal date within the valid tax years" should {
       val questionAnswer = QuestionAnswerModel[String]("text", "1000", "test-question", None)
       val seqQuestionAnswers = Seq(questionAnswer, questionAnswer)
-      lazy val view = summary(seqQuestionAnswers, "back-link", displayDateWarning = true, "flat", Some(100))(fakeRequest)
+      lazy val view = summary(seqQuestionAnswers, "back-link", displayDateWarning = true, "flat", Some(100))
       lazy val document = Jsoup.parse(view.body)
 
       "display a tax year warning" in {

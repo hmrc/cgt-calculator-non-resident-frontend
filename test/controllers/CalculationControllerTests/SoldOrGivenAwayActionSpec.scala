@@ -23,7 +23,7 @@ import controllers.SoldOrGivenAwayController
 import controllers.helpers.FakeRequestHelper
 import models.SoldOrGivenAwayModel
 import org.jsoup.Jsoup
-import org.mockito.Matchers
+import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
 import play.api.test.Helpers._
@@ -40,7 +40,8 @@ class SoldOrGivenAwayActionSpec extends UnitSpec with WithFakeApplication with M
 
     val mockCalcConnector = mock[CalculatorConnector]
 
-    when(mockCalcConnector.fetchAndGetFormData[SoldOrGivenAwayModel](Matchers.eq(KeystoreKeys.soldOrGivenAway))(Matchers.any(), Matchers.any()))
+    when(mockCalcConnector.fetchAndGetFormData[SoldOrGivenAwayModel](
+      ArgumentMatchers.eq(KeystoreKeys.soldOrGivenAway))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
     new SoldOrGivenAwayController  {

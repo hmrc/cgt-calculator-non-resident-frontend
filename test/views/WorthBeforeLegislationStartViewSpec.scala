@@ -24,14 +24,18 @@ import forms.WorthBeforeLegislationStartForm._
 import org.scalatest.mock.MockitoSugar
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.worthBeforeLegislationStart
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 
 class WorthBeforeLegislationStartViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
+
+
 
   "The Worth Before Legislation Start view spec" when {
 
     "supplied with no errors" should {
 
-      lazy val view = worthBeforeLegislationStart(worthBeforeLegislationStartForm)(fakeRequest)
+      lazy val view = worthBeforeLegislationStart(worthBeforeLegislationStartForm)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${WorthBeforeLegislationStart.question}'" in {
@@ -139,7 +143,7 @@ class WorthBeforeLegislationStartViewSpec extends UnitSpec with WithFakeApplicat
     "supplied with a form with errors" should {
 
       lazy val form = worthBeforeLegislationStartForm.bind(Map("worthBeforeLegislationStart" -> "a"))
-      lazy val view = worthBeforeLegislationStart(form)(fakeRequest)
+      lazy val view = worthBeforeLegislationStart(form)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

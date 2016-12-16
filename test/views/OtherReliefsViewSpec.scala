@@ -23,15 +23,19 @@ import forms.OtherReliefsForm._
 import org.scalatest.mock.MockitoSugar
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.otherReliefs
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 
 class OtherReliefsViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
+
+
 
   "The Other Reliefs Flat view" when {
 
     "not supplied with a pre-existing stored value and a taxable gain" should {
       val totalGain = 1234
       val totalChargeableGain = 4321
-      lazy val view = otherReliefs(otherReliefsForm, totalChargeableGain, totalGain)(fakeRequest)
+      lazy val view = otherReliefs(otherReliefsForm, totalChargeableGain, totalGain)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of ${messages.OtherReliefs.question}" in {
@@ -122,7 +126,7 @@ class OtherReliefsViewSpec extends UnitSpec with WithFakeApplication with Mockit
       val totalGain = -1234
       val totalChargeableGain = -4321
 
-      lazy val view = otherReliefs(otherReliefsForm, totalChargeableGain, totalGain)(fakeRequest)
+      lazy val view = otherReliefs(otherReliefsForm, totalChargeableGain, totalGain)
       lazy val document = Jsoup.parse(view.body)
 
       "have the correct additional help text" in {
@@ -141,7 +145,7 @@ class OtherReliefsViewSpec extends UnitSpec with WithFakeApplication with Mockit
 
     "supplied with an invalid map" should {
       val map = Map("otherReliefs" -> "-1000")
-      lazy val view = otherReliefs(otherReliefsForm.bind(map), 0, 0)(fakeRequest)
+      lazy val view = otherReliefs(otherReliefsForm.bind(map), 0, 0)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

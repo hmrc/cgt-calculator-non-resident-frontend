@@ -17,6 +17,8 @@
 package forms
 
 import play.api.i18n.Messages
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 
 object MarketValueGaveAwayForm extends MarketDisposalValueForm {
   override val errorNegative = Messages("calc.marketValue.error.gaveItAway.negative")

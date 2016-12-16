@@ -23,14 +23,18 @@ import org.jsoup.Jsoup
 import forms.OtherPropertiesForm._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.otherProperties
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 
 class OtherPropertiesViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
+
+
 
   "The other properties view" should {
 
     "return some HTML that, when the hidden question is displayed" should {
 
-      lazy val view = otherProperties(otherPropertiesForm, "back-link")(fakeRequest)
+      lazy val view = otherProperties(otherPropertiesForm, "back-link")
       lazy val document = Jsoup.parse(view.body)
 
       s"have the title '${messages.question}'" in {
@@ -145,7 +149,7 @@ class OtherPropertiesViewSpec extends UnitSpec with WithFakeApplication with Fak
 
     "return some HTML that, when the hidden question is not displayed" should {
 
-      lazy val view = otherProperties(otherPropertiesForm, "back-link")(fakeRequest)
+      lazy val view = otherProperties(otherPropertiesForm, "back-link")
       lazy val document = Jsoup.parse(view.body)
 
       s"have the title '${messages.question}'" in {
@@ -164,7 +168,7 @@ class OtherPropertiesViewSpec extends UnitSpec with WithFakeApplication with Fak
     "when passed a form with errors" should {
 
       lazy val form = otherPropertiesForm.bind(Map("otherProperties" -> "bad-data"))
-      lazy val view = otherProperties(form, "back-link")(fakeRequest)
+      lazy val view = otherProperties(form, "back-link")
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

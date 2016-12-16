@@ -2,7 +2,7 @@
 @import common.Dates
 @import models._
 
-@(data: DisposalDateModel)(implicit request: Request[_])
+@(data: DisposalDateModel)(implicit request: Request[_], messages: Messages)
 
 @date = {
     @Dates.datePageFormatNoZero.format(Dates.constructDate(data.day, data.month, data.year))

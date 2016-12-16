@@ -24,7 +24,7 @@ import controllers.DisposalCostsController
 import controllers.helpers.FakeRequestHelper
 import controllers.routes
 import org.jsoup._
-import org.mockito.Matchers
+import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
 import play.api.test.Helpers._
@@ -43,13 +43,14 @@ class DisposalCostsActionSpec extends UnitSpec with WithFakeApplication with Moc
 
     val mockCalcConnector = mock[CalculatorConnector]
 
-    when(mockCalcConnector.fetchAndGetFormData[DisposalCostsModel](Matchers.any())(Matchers.any(), Matchers.any()))
+    when(mockCalcConnector.fetchAndGetFormData[DisposalCostsModel](ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    when(mockCalcConnector.fetchAndGetFormData[SoldOrGivenAwayModel](Matchers.eq(KeystoreKeys.soldOrGivenAway))(Matchers.any(), Matchers.any()))
+    when(mockCalcConnector.fetchAndGetFormData[SoldOrGivenAwayModel](
+      ArgumentMatchers.eq(KeystoreKeys.soldOrGivenAway))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(soldOrGivenModel))
 
-    when(mockCalcConnector.fetchAndGetFormData[SoldForLessModel](Matchers.eq(KeystoreKeys.soldForLess))(Matchers.any(), Matchers.any()))
+    when(mockCalcConnector.fetchAndGetFormData[SoldForLessModel](ArgumentMatchers.eq(KeystoreKeys.soldForLess))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(soldForLessModel))
 
     new DisposalCostsController {

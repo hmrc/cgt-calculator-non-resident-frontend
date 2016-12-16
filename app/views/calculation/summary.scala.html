@@ -4,7 +4,7 @@
 @import views.html.helpers._
 
 @import common.TaxDates
-@(result: Seq[QuestionAnswerModel[Any]], backUrl: String, displayDateWarning: Boolean, calculationType: String, taxOwed: Option[BigDecimal])(implicit request: Request[_])
+@(result: Seq[QuestionAnswerModel[Any]], backUrl: String, displayDateWarning: Boolean, calculationType: String, taxOwed: Option[BigDecimal])(implicit request: Request[_], messages: Messages)
 
 @main_template(Messages("calc.summary.title"), articleLayout = false) {
 

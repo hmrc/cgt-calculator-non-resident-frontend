@@ -16,7 +16,7 @@
 
 package controllers.CalculationControllerTests
 
-import org.mockito.Matchers
+import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import play.api.test.Helpers._
 import play.api.mvc.RequestHeader
@@ -51,47 +51,52 @@ class ReportActionSpec extends UnitSpec with WithFakeApplication with FakeReques
     lazy val mockCalculatorConnector = mock[CalculatorConnector]
     lazy val mockAnswersConstructor = mock[AnswersConstructor]
 
-    when(mockAnswersConstructor.getNRTotalGainAnswers(Matchers.any()))
+    when(mockAnswersConstructor.getNRTotalGainAnswers(ArgumentMatchers.any()))
       .thenReturn(Future.successful(totalGainAnswersModel))
 
-    when(mockAnswersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers(Matchers.any()))
+    when(mockAnswersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers(ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(finalSummaryModel)))
 
-    when(mockCalculatorConnector.fetchAndGetFormData[CalculationElectionModel](Matchers.eq(KeystoreKeys.calculationElection))(Matchers.any(), Matchers.any()))
+    when(mockCalculatorConnector.fetchAndGetFormData[CalculationElectionModel](
+      ArgumentMatchers.eq(KeystoreKeys.calculationElection))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Some(calculationElectionModel))
 
-    when(mockCalculatorConnector.calculateTotalGain(Matchers.any())(Matchers.any()))
+    when(mockCalculatorConnector.calculateTotalGain(ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(Future.successful(totalGainResultsModel))
 
-    when(mockCalculatorConnector.getTaxYear(Matchers.any())(Matchers.any()))
+    when(mockCalculatorConnector.getTaxYear(ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(Future.successful(taxYearModel))
 
-    when(mockCalculatorConnector.calculateTaxableGainAfterPRR(Matchers.any(), Matchers.any())(Matchers.any()))
+    when(mockCalculatorConnector.calculateTaxableGainAfterPRR(ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(Future.successful(calculationResultsWithPRRModel))
 
-    when(mockCalculatorConnector.fetchAndGetFormData[PrivateResidenceReliefModel](Matchers.eq(KeystoreKeys.privateResidenceRelief))
-      (Matchers.any(), Matchers.any()))
+    when(mockCalculatorConnector.fetchAndGetFormData[PrivateResidenceReliefModel](ArgumentMatchers.eq(KeystoreKeys.privateResidenceRelief))
+      (ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(prrModel))
 
-    when(mockCalculatorConnector.getFullAEA(Matchers.any())(Matchers.any()))
+    when(mockCalculatorConnector.getFullAEA(ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(BigDecimal(11000))))
 
-    when(mockCalculatorConnector.getPartialAEA(Matchers.any())(Matchers.any()))
+    when(mockCalculatorConnector.getPartialAEA(ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(BigDecimal(5500))))
 
-    when(mockCalculatorConnector.calculateNRCGTTotalTax(Matchers.any(), Matchers.any(), Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any()))
+    when(mockCalculatorConnector.calculateNRCGTTotalTax(
+      ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(Future.successful(taxOwedResult))
 
-    when(mockCalculatorConnector.getTaxYear(Matchers.any())(Matchers.any()))
+    when(mockCalculatorConnector.getTaxYear(ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(TaxYearModel("2015/16", true, "2015/16"))))
 
-    when(mockCalculatorConnector.fetchAndGetFormData[OtherReliefsModel](Matchers.eq(KeystoreKeys.otherReliefsFlat))(Matchers.any(), Matchers.any()))
+    when(mockCalculatorConnector.fetchAndGetFormData[OtherReliefsModel](
+      ArgumentMatchers.eq(KeystoreKeys.otherReliefsFlat))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(None))
 
-    when(mockCalculatorConnector.fetchAndGetFormData[OtherReliefsModel](Matchers.eq(KeystoreKeys.otherReliefsRebased))(Matchers.any(), Matchers.any()))
+    when(mockCalculatorConnector.fetchAndGetFormData[OtherReliefsModel](
+      ArgumentMatchers.eq(KeystoreKeys.otherReliefsRebased))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(None))
 
-    when(mockCalculatorConnector.fetchAndGetFormData[OtherReliefsModel](Matchers.eq(KeystoreKeys.otherReliefsTA))(Matchers.any(), Matchers.any()))
+    when(mockCalculatorConnector.fetchAndGetFormData[OtherReliefsModel](
+      ArgumentMatchers.eq(KeystoreKeys.otherReliefsTA))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(None))
 
     new ReportController {

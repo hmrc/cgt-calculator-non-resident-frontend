@@ -24,14 +24,18 @@ import forms.RebasedValueForm._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.rebasedValue
 import controllers.routes
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 
 class RebasedValueViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
+
+
 
   "The rebased value view" when {
 
     "not supplied with a pre-existing stored model" should {
 
-      lazy val view = rebasedValue(rebasedValueForm(false))(fakeRequest)
+      lazy val view = rebasedValue(rebasedValueForm(false))
       lazy val document = Jsoup.parse(view.body)
 
       s"Have the title ${messages.question}" in {
@@ -134,7 +138,7 @@ class RebasedValueViewSpec extends UnitSpec with WithFakeApplication with FakeRe
     "supplied with a form with errors" should {
 
       lazy val form = rebasedValueForm(false).bind(Map("rebasedValueAmt" -> "euo1rh34889dsf"))
-      lazy val view = rebasedValue(form)(fakeRequest)
+      lazy val view = rebasedValue(form)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

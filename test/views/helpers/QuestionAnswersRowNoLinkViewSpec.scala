@@ -22,6 +22,8 @@ import models.QuestionAnswerModel
 import org.jsoup.Jsoup
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.helpers.questionAnswerRowNoLink
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 
 class QuestionAnswersRowNoLinkViewSpec extends UnitSpec with WithFakeApplication {
 
@@ -29,8 +31,8 @@ class QuestionAnswersRowNoLinkViewSpec extends UnitSpec with WithFakeApplication
 
     "passing in a String answer" should {
       val model = QuestionAnswerModel[String]("id", "answer", "question", None)
-      val result = questionAnswerRowNoLink(model, 2)
-      val doc = Jsoup.parse(result.body)
+      lazy val result = questionAnswerRowNoLink(model, 2)
+      lazy val doc = Jsoup.parse(result.body)
 
       "have a div for the question with an id of 'id-question' which" which {
 
@@ -65,8 +67,8 @@ class QuestionAnswersRowNoLinkViewSpec extends UnitSpec with WithFakeApplication
 
     "passing in an Int answer" should {
       val model = QuestionAnswerModel[Int]("id-two", 1, "question-two", Some("change-link"))
-      val result = questionAnswerRowNoLink(model, 2)
-      val doc = Jsoup.parse(result.body)
+      lazy val result = questionAnswerRowNoLink(model, 2)
+      lazy val doc = Jsoup.parse(result.body)
 
       "have the question with the text 'question-two'" in {
         doc.select("div#id-two-question span").text() shouldBe "question-two"
@@ -79,8 +81,8 @@ class QuestionAnswersRowNoLinkViewSpec extends UnitSpec with WithFakeApplication
 
     "passing in a BigDecimal answer" should {
       val model = QuestionAnswerModel[BigDecimal]("id", BigDecimal(1000.53), "question", Some("change-link"))
-      val result = questionAnswerRowNoLink(model, 2)
-      val doc = Jsoup.parse(result.body)
+      lazy val result = questionAnswerRowNoLink(model, 2)
+      lazy val doc = Jsoup.parse(result.body)
 
       "have the answer '£1,000'" in {
         doc.select("div#id-answer span").text() shouldBe "£1,000.53"
@@ -89,8 +91,8 @@ class QuestionAnswersRowNoLinkViewSpec extends UnitSpec with WithFakeApplication
 
     "passing in a Date answer" should {
       val model = QuestionAnswerModel[LocalDate]("id", LocalDate.parse("2016-05-04"), "question", Some("change-link"))
-      val result = questionAnswerRowNoLink(model, 2)
-      val doc = Jsoup.parse(result.body)
+      lazy val result = questionAnswerRowNoLink(model, 2)
+      lazy val doc = Jsoup.parse(result.body)
 
       "have the answer '04 May 2016'" in {
         doc.select("div#id-answer span").text() shouldBe "4 May 2016"
@@ -99,8 +101,8 @@ class QuestionAnswersRowNoLinkViewSpec extends UnitSpec with WithFakeApplication
 
     "passing in a non-matching type" should {
       val model = QuestionAnswerModel[Double]("id", 52.3, "question", Some("change-link"))
-      val result = questionAnswerRowNoLink(model, 2)
-      val doc = Jsoup.parse(result.body)
+      lazy val result = questionAnswerRowNoLink(model, 2)
+      lazy val doc = Jsoup.parse(result.body)
 
       "have a blank answer'" in {
         doc.select("div#id-answer span").text() shouldBe ""
@@ -109,8 +111,8 @@ class QuestionAnswersRowNoLinkViewSpec extends UnitSpec with WithFakeApplication
 
     "passing in a boolean type with true" should {
       val model = QuestionAnswerModel[Boolean]("id", true, "question", Some("change-link"))
-      val result = questionAnswerRowNoLink(model, 2)
-      val doc = Jsoup.parse(result.body)
+      lazy val result = questionAnswerRowNoLink(model, 2)
+      lazy val doc = Jsoup.parse(result.body)
 
       "have an answer 'Yes'" in {
         doc.select("div#id-answer span").text() shouldBe "Yes"
@@ -119,8 +121,8 @@ class QuestionAnswersRowNoLinkViewSpec extends UnitSpec with WithFakeApplication
 
     "passing in a boolean type with false" should {
       val model = QuestionAnswerModel[Boolean]("id", false, "question", Some("change-link"))
-      val result = questionAnswerRowNoLink(model, 2)
-      val doc = Jsoup.parse(result.body)
+      lazy val result = questionAnswerRowNoLink(model, 2)
+      lazy val doc = Jsoup.parse(result.body)
 
       "have an answer 'No'" in {
         doc.select("div#id-answer span").text() shouldBe "No"

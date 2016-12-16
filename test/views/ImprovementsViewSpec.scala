@@ -23,14 +23,18 @@ import forms.ImprovementsForm._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.improvements
 import controllers.routes
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 
 class ImprovementsViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
+
+
 
   "Improvements view" should {
 
     "supplied with no errors and improvementsOptions = true" should {
 
-      lazy val view = improvements(improvementsForm(true), false, "back-link")(fakeRequest)
+      lazy val view = improvements(improvementsForm(true), false, "back-link")
       lazy val document = Jsoup.parse(view.body)
 
       "return some HTML that" should {
@@ -177,7 +181,7 @@ class ImprovementsViewSpec extends UnitSpec with WithFakeApplication with FakeRe
 
     "supplied with no errors and improvementsOptions = false" should {
 
-      lazy val view = improvements(improvementsForm(true), true, "back-link")(fakeRequest)
+      lazy val view = improvements(improvementsForm(true), true, "back-link")
       lazy val document = Jsoup.parse(view.body)
 
       "return some HTML that" should {
@@ -208,7 +212,7 @@ class ImprovementsViewSpec extends UnitSpec with WithFakeApplication with FakeRe
 
     "supplied with errors" should {
       lazy val form = improvementsForm(true).bind(Map("improvements" -> "testData"))
-      lazy val view = improvements(form, true, "back-link")(fakeRequest)
+      lazy val view = improvements(form, true, "back-link")
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

@@ -22,7 +22,7 @@ import controllers.MarketValueWhenSoldOrGaveAwayController
 import controllers.helpers.FakeRequestHelper
 import models.DisposalValueModel
 import org.jsoup.Jsoup
-import org.mockito.Matchers
+import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
 import play.api.test.Helpers._
@@ -31,7 +31,7 @@ import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 import scala.concurrent.Future
 
-class MarketValueWhenSoldOrGaveAwayActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper{
+class MarketValueWhenSoldOrGaveAwayActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
   implicit val hc = new HeaderCarrier()
 
@@ -39,7 +39,7 @@ class MarketValueWhenSoldOrGaveAwayActionSpec extends UnitSpec with WithFakeAppl
 
     val mockCalcConnector = mock[CalculatorConnector]
 
-    when(mockCalcConnector.fetchAndGetFormData[DisposalValueModel](Matchers.anyString())(Matchers.any(), Matchers.any()))
+    when(mockCalcConnector.fetchAndGetFormData[DisposalValueModel](ArgumentMatchers.anyString())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
     new MarketValueWhenSoldOrGaveAwayController {

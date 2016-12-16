@@ -22,8 +22,9 @@ import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.nonresident.CustomerTypeKeys
 import connectors.CalculatorConnector
 import controllers.CustomerTypeController
+import controllers.helpers.FakeRequestHelper
 import uk.gov.hmrc.http.cache.client.CacheMap
-import org.mockito.Matchers
+import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
@@ -37,7 +38,7 @@ import scala.concurrent.Future
 import models.{AcquisitionDateModel, CustomerTypeModel, RebasedValueModel}
 import play.api.mvc.Result
 
-class CustomerTypeActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar {
+class CustomerTypeActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
   implicit val hc = new HeaderCarrier()
 
@@ -47,16 +48,19 @@ class CustomerTypeActionSpec extends UnitSpec with WithFakeApplication with Mock
 
     val mockCalcConnector = mock[CalculatorConnector]
 
-    when(mockCalcConnector.fetchAndGetFormData[CustomerTypeModel](Matchers.anyString())(Matchers.any(), Matchers.any()))
+    when(mockCalcConnector.fetchAndGetFormData[CustomerTypeModel](ArgumentMatchers.anyString())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    when(mockCalcConnector.fetchAndGetFormData[AcquisitionDateModel](Matchers.eq(KeystoreKeys.acquisitionDate))(Matchers.any(), Matchers.any()))
+    when(mockCalcConnector.fetchAndGetFormData[AcquisitionDateModel]
+      (ArgumentMatchers.eq(KeystoreKeys.acquisitionDate))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(acquisitionDateData))
 
-    when(mockCalcConnector.fetchAndGetFormData[RebasedValueModel](Matchers.eq(KeystoreKeys.rebasedValue))(Matchers.any(), Matchers.any()))
+    when(mockCalcConnector.fetchAndGetFormData[RebasedValueModel](
+      ArgumentMatchers.eq(KeystoreKeys.rebasedValue))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(rebasedValueData))
 
-    when(mockCalcConnector.saveFormData[CustomerTypeModel](Matchers.anyString(), Matchers.any())(Matchers.any(), Matchers.any()))
+    when(mockCalcConnector.saveFormData[CustomerTypeModel](
+      ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(mock[CacheMap]))
 
     new CustomerTypeController {

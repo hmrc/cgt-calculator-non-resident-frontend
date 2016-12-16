@@ -25,11 +25,16 @@ import forms.MarketValueWhenSoldForm._
 import org.scalatest.mock.MockitoSugar
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.marketValueSold
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 
-class MarketValueWhenSoldViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper{
+class MarketValueWhenSoldViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
+
+
+
   "The market value when gave away page" should {
 
-    lazy val view = marketValueSold(marketValueForm)(fakeRequestWithSession)
+    lazy val view = marketValueSold(marketValueForm)
     lazy val document = Jsoup.parse(view.body)
 
     "supplied with no errors" should {
@@ -114,7 +119,7 @@ class MarketValueWhenSoldViewSpec extends UnitSpec with WithFakeApplication with
 
     "supplied with a form with errors" should {
       lazy val form = marketValueForm.bind(Map("disposalValue" -> "testData"))
-      lazy val view = marketValueSold(form)(fakeRequest)
+      lazy val view = marketValueSold(form)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

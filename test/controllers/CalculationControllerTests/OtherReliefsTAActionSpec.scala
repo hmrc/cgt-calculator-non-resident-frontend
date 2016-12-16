@@ -22,7 +22,7 @@ import connectors.CalculatorConnector
 import controllers.helpers.FakeRequestHelper
 import models.{TaxYearModel, _}
 import org.jsoup.Jsoup
-import org.mockito.Matchers
+import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
 import play.api.test.Helpers._
@@ -50,34 +50,37 @@ class OtherReliefsTAActionSpec extends UnitSpec with WithFakeApplication with Mo
     val mockCalcConnector = mock[CalculatorConnector]
     val mockAnswersConstructor = mock[AnswersConstructor]
 
-    when(mockCalcConnector.fetchAndGetFormData[OtherReliefsModel](Matchers.eq(KeystoreKeys.otherReliefsTA))(Matchers.any(), Matchers.any()))
+    when(mockCalcConnector.fetchAndGetFormData[OtherReliefsModel](
+      ArgumentMatchers.eq(KeystoreKeys.otherReliefsTA))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    when(mockCalcConnector.fetchAndGetFormData[PrivateResidenceReliefModel](Matchers.eq(KeystoreKeys.privateResidenceRelief))(Matchers.any(), Matchers.any()))
+    when(mockCalcConnector.fetchAndGetFormData[PrivateResidenceReliefModel](
+      ArgumentMatchers.eq(KeystoreKeys.privateResidenceRelief))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(PrivateResidenceReliefModel("No", None))))
 
-    when(mockAnswersConstructor.getNRTotalGainAnswers(Matchers.any()))
+    when(mockAnswersConstructor.getNRTotalGainAnswers(ArgumentMatchers.any()))
       .thenReturn(Future.successful(gainAnswers))
 
-    when(mockCalcConnector.calculateTotalGain(Matchers.any())(Matchers.any()))
+    when(mockCalcConnector.calculateTotalGain(ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(totalGainResultModel)))
 
-    when(mockAnswersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers(Matchers.any()))
+    when(mockAnswersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers(ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(personalDetailsModel)))
 
-    when(mockCalcConnector.calculateTaxableGainAfterPRR(Matchers.any(), Matchers.any())(Matchers.any()))
+    when(mockCalcConnector.calculateTaxableGainAfterPRR(ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(calculationResultsWithPRRModel)
 
-    when(mockCalcConnector.getFullAEA(Matchers.any())(Matchers.any()))
+    when(mockCalcConnector.getFullAEA(ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(BigDecimal(11000))))
 
-    when(mockCalcConnector.getPartialAEA(Matchers.any())(Matchers.any()))
+    when(mockCalcConnector.getPartialAEA(ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(BigDecimal(5500))))
 
-    when(mockCalcConnector.calculateNRCGTTotalTax(Matchers.any(), Matchers.any(), Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any()))
+    when(mockCalcConnector.calculateNRCGTTotalTax(
+      ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(TestModels.calculationResultsModelWithTA)))
 
-    when(mockCalcConnector.getTaxYear(Matchers.any())(Matchers.any()))
+    when(mockCalcConnector.getTaxYear(ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(TaxYearModel("2015/16", isValidYear = true, "2015/16"))))
 
     new OtherReliefsTAController {

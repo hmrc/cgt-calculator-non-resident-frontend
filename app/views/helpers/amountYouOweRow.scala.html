@@ -1,7 +1,7 @@
 @import models.QuestionAnswerModel
 @import uk.gov.hmrc.play.views.helpers._
 
-@(amount: BigDecimal, decimalPlaces: Int)
+@(amount: BigDecimal, decimalPlaces: Int)(implicit messages: Messages)
 
 <div class="grid-layout grid-layout--stacked form-group non-resident-summary-padding-above">
     <div id="amount-you-owe-question" class="grid-layout__column grid-layout__column--1-2">

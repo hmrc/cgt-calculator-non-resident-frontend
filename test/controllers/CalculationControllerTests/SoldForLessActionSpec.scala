@@ -23,7 +23,7 @@ import controllers.SoldForLessController
 import controllers.helpers.FakeRequestHelper
 import models.SoldForLessModel
 import org.jsoup.Jsoup
-import org.mockito.Matchers
+import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
 import play.api.test.Helpers._
@@ -38,10 +38,10 @@ class SoldForLessActionSpec extends UnitSpec with WithFakeApplication with FakeR
 
     val mockCalcConnector = mock[CalculatorConnector]
 
-    when(mockCalcConnector.fetchAndGetFormData[SoldForLessModel](Matchers.eq(keyStoreKeys.soldForLess))(Matchers.any(), Matchers.any()))
+    when(mockCalcConnector.fetchAndGetFormData[SoldForLessModel](ArgumentMatchers.eq(keyStoreKeys.soldForLess))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    when(mockCalcConnector.saveFormData[SoldForLessModel](Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any()))
+    when(mockCalcConnector.saveFormData[SoldForLessModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(mock[CacheMap]))
 
     new SoldForLessController {

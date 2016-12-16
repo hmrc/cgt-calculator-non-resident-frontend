@@ -24,14 +24,18 @@ import forms.HowBecameOwnerForm._
 import org.scalatest.mock.MockitoSugar
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.howBecameOwner
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 
 class HowBecameOwnerViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
+
+
 
   "The Sold for Less view spec"  when {
 
     "supplied with no errors" should {
 
-      lazy val view = howBecameOwner(howBecameOwnerForm)(fakeRequest)
+      lazy val view = howBecameOwner(howBecameOwnerForm)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${messages.question}'" in {
@@ -120,7 +124,7 @@ class HowBecameOwnerViewSpec extends UnitSpec with WithFakeApplication with Mock
     "supplied with a form with errors" should {
 
       lazy val form = howBecameOwnerForm.bind(Map("gainedBy" -> "a"))
-      lazy val view = howBecameOwner(form)(fakeRequest)
+      lazy val view = howBecameOwner(form)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

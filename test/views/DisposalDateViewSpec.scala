@@ -21,9 +21,10 @@ import assets.MessageLookup.{NonResident => commonMessages}
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
 import forms.DisposalDateForm._
-import play.api.i18n.Messages
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.disposalDate
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 
 class DisposalDateViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
 
@@ -31,18 +32,18 @@ class DisposalDateViewSpec extends UnitSpec with WithFakeApplication with FakeRe
 
     "return some HTML" which {
 
-      lazy val view = disposalDate(disposalDateForm)(fakeRequest)
+      lazy val view = disposalDate(disposalDateForm)
       lazy val document = Jsoup.parse(view.body)
 
       "have the title 'When did you sign the contract that made someone else the owner?'" in {
         document.title shouldEqual messages.question
       }
 
-      s"have the heading ${Messages("calc.disposalDate.question")} " in {
+      s"have the heading ${messages.question} " in {
         document.body.getElementsByTag("h1").text shouldEqual messages.question
       }
 
-      s"have the question '${Messages("calc.disposalDate.question")}'" in {
+      s"have the question '${messages.question}'" in {
         document.body.getElementsByTag("fieldset").text should include(messages.question)
       }
 
@@ -77,7 +78,7 @@ class DisposalDateViewSpec extends UnitSpec with WithFakeApplication with FakeRe
 
     "supplied with errors" should {
       lazy val form = disposalDateForm.bind(Map("disposalDateDay" -> "a"))
-      lazy val view = disposalDate(form)(fakeRequest)
+      lazy val view = disposalDate(form)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

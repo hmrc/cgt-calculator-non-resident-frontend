@@ -2,7 +2,7 @@
 @import models.HowMuchLossModel
 @import views.html.helpers._
 
-@(howMuchLossForm: Form[HowMuchLossModel])(implicit request: Request[_])
+@(howMuchLossForm: Form[HowMuchLossModel])(implicit request: Request[_], messages: Messages)
 
 @main_template(Messages("calc.howMuchLoss.question")) {
 

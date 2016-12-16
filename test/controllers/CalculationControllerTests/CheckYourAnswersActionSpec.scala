@@ -24,7 +24,7 @@ import controllers.helpers.FakeRequestHelper
 import controllers.routes
 import models._
 import org.jsoup.Jsoup
-import org.mockito.Matchers
+import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
 import play.api.test.Helpers._
@@ -46,22 +46,23 @@ class CheckYourAnswersActionSpec extends UnitSpec with WithFakeApplication with 
     val mockAnswersConstructor = mock[AnswersConstructor]
     val mockCalcConnector = mock[CalculatorConnector]
 
-    when(mockAnswersConstructor.getNRTotalGainAnswers(Matchers.any())).thenReturn(Future.successful(totalGainAnswersModel))
+    when(mockAnswersConstructor.getNRTotalGainAnswers(ArgumentMatchers.any())).thenReturn(Future.successful(totalGainAnswersModel))
 
-    when(mockAnswersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers(Matchers.any())).thenReturn(Future.successful(totalPersonalDetailsModel))
+    when(mockAnswersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers(
+      ArgumentMatchers.any())).thenReturn(Future.successful(totalPersonalDetailsModel))
 
-    when(mockCalcConnector.calculateTaxableGainAfterPRR(Matchers.any(), Matchers.any())(Matchers.any()))
+    when(mockCalcConnector.calculateTaxableGainAfterPRR(ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(Future.successful(calculationResultsWithPRRModel))
 
-    when(mockCalcConnector.calculateTotalGain(Matchers.any())(Matchers.any())).thenReturn(Future.successful(Some(totalGainResultsModel)))
+    when(mockCalcConnector.calculateTotalGain(ArgumentMatchers.any())(ArgumentMatchers.any())).thenReturn(Future.successful(Some(totalGainResultsModel)))
 
-    when(mockCalcConnector.fetchAndGetFormData[PrivateResidenceReliefModel](Matchers.any())(Matchers.any(), Matchers.any()))
+    when(mockCalcConnector.fetchAndGetFormData[PrivateResidenceReliefModel](ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(privateResidenceReliefModel)
 
-    when(mockCalcConnector.calculateTotalGain(Matchers.any())(Matchers.any()))
+    when(mockCalcConnector.calculateTotalGain(ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(totalGainsModel)
 
-    when(mockCalcConnector.calculateTaxableGainAfterPRR(Matchers.any(), Matchers.any())(Matchers.any()))
+    when(mockCalcConnector.calculateTaxableGainAfterPRR(ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(Future.successful(calculationResultsWithPRRModel))
 
     new CheckYourAnswersController {

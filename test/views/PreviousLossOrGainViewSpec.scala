@@ -24,12 +24,16 @@ import forms.PreviousLossOrGainForm._
 import org.scalatest.mock.MockitoSugar
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.previousLossOrGain
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 
 class PreviousLossOrGainViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
+
+
   "The PreviousLossOrGain view" should {
 
-    lazy val view = previousLossOrGain(previousLossOrGainForm)(fakeRequest)
+    lazy val view = previousLossOrGain(previousLossOrGainForm)
     lazy val document = Jsoup.parse(view.body)
 
     "return some HTML" which {
@@ -166,8 +170,8 @@ class PreviousLossOrGainViewSpec extends UnitSpec with WithFakeApplication with 
   }
 
   "PreviousLossOrGainView with form errors" should {
-    val form = previousLossOrGainForm.bind(Map("previousLossOrGain" -> ""))
-    lazy val view = previousLossOrGain(form)(fakeRequest)
+    lazy val form = previousLossOrGainForm.bind(Map("previousLossOrGain" -> ""))
+    lazy val view = previousLossOrGain(form)
     lazy val doc = Jsoup.parse(view.body)
 
     "display an error summary message regarding incorrect value being inputted" in {

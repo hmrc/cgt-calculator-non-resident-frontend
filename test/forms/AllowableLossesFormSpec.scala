@@ -19,7 +19,6 @@ package forms
 import assets.MessageLookup
 import assets.MessageLookup.NonResident.{AllowableLosses => messages}
 import models.AllowableLossesModel
-import play.api.i18n.Messages
 import forms.AllowableLossesForm._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
@@ -61,7 +60,7 @@ class AllowableLossesFormSpec extends UnitSpec with WithFakeApplication {
       }
 
       s"return an error with message ${messages.errorCompulsoryValue}" in {
-        form.error("isClaimingAllowableLosses").get.message shouldBe Messages("error.required")
+        form.error("isClaimingAllowableLosses").get.message shouldBe MessageLookup.NonResident.errorRequired
       }
     }
 
@@ -77,7 +76,7 @@ class AllowableLossesFormSpec extends UnitSpec with WithFakeApplication {
       }
 
       s"return an error with message ${messages.errorCompulsoryValue}" in {
-        form.error("isClaimingAllowableLosses").get.message shouldBe Messages("error.required")
+        form.error("isClaimingAllowableLosses").get.message shouldBe MessageLookup.NonResident.errorRequired
       }
     }
 

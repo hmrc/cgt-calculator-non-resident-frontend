@@ -25,6 +25,8 @@ import play.api.data.Form
 import play.api.mvc.Result
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import views.html.{calculation => views}
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 
 import scala.concurrent.Future
 object PreviousGainOrLossController extends PreviousGainOrLossController {

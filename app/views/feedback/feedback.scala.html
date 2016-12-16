@@ -18,7 +18,7 @@
 @import uk.gov.hmrc.play.partials.CachedStaticHtmlPartialRetriever
 
 @(partialUrl: String, formBody: Option[Html])(implicit request: Request[_], formPartialRetriever: FormPartialRetriever,
-  partialRetriever: CachedStaticHtmlPartialRetriever)
+  partialRetriever: CachedStaticHtmlPartialRetriever, messages: Messages)
 
 @main_template(Messages("feedback.title")) {
     @formBody.getOrElse(formPartialRetriever.getPartialContent(partialUrl))

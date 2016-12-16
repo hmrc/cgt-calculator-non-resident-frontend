@@ -25,13 +25,17 @@ import org.jsoup.Jsoup
 import org.scalatest.mock.MockitoSugar
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.{calculation => views}
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 
 class AllowableLossesViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
+
+
 
   "The allowable losses view" when {
 
     "not supplied with a pre-existing stored value" should {
-      lazy val view = views.allowableLosses(allowableLossesForm, "back-link")(fakeRequest)
+      lazy val view = views.allowableLosses(allowableLossesForm, "back-link")
       lazy val document = Jsoup.parse(view.body)
 
       "return some HTML that" should {
@@ -123,7 +127,7 @@ class AllowableLossesViewSpec extends UnitSpec with WithFakeApplication with Moc
 
     "supplied with a pre-existing stored model for yes" should {
       lazy val model = AllowableLossesModel("Yes", Some(9999.54))
-      lazy val view = views.allowableLosses(allowableLossesForm.fill(model), "back-link")(fakeRequest)
+      lazy val view = views.allowableLosses(allowableLossesForm.fill(model), "back-link")
       lazy val document = Jsoup.parse(view.body)
 
       "return some HTML that" should {
@@ -140,7 +144,7 @@ class AllowableLossesViewSpec extends UnitSpec with WithFakeApplication with Moc
 
     "supplied with a pre-existing stored model for no" should {
       lazy val model = AllowableLossesModel("No", None)
-      lazy val view = views.allowableLosses(allowableLossesForm.fill(model), "back-link")(fakeRequest)
+      lazy val view = views.allowableLosses(allowableLossesForm.fill(model), "back-link")
       lazy val document = Jsoup.parse(view.body)
 
       "return some HTML that" should {
@@ -160,7 +164,7 @@ class AllowableLossesViewSpec extends UnitSpec with WithFakeApplication with Moc
       //Just a note how this is working here;
       //The map is only binding the value for the amount but the isClaimingAllowableLosses is not supplied so it is the isClaiming
       //field that is raising the error.
-      lazy val view = views.allowableLosses(allowableLossesForm.bind(Map(("allowableLossesAmt", ""))), "back-link")(fakeRequest)
+      lazy val view = views.allowableLosses(allowableLossesForm.bind(Map(("allowableLossesAmt", ""))), "back-link")
       lazy val document = Jsoup.parse(view.body)
 
       "return some HTML that" should {

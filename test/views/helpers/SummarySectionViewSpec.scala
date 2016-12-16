@@ -18,10 +18,12 @@ package views.helpers
 
 import models.QuestionAnswerModel
 import org.jsoup.Jsoup
-import uk.gov.hmrc.play.test.UnitSpec
+import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.helpers.summarySection
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 
-class SummarySectionViewSpec extends UnitSpec {
+class SummarySectionViewSpec extends UnitSpec with WithFakeApplication {
 
   "Creating a summary section" when {
     val firstItem = QuestionAnswerModel[String]("firstID", "firstData", "firstQuestion", Some("first-link"))
@@ -30,8 +32,8 @@ class SummarySectionViewSpec extends UnitSpec {
 
     "passing in a sequence of one item" should {
       val sequence = Seq(firstItem)
-      val result = summarySection("sectionID", "sectionTitle", sequence)
-      val doc = Jsoup.parse(result.body)
+      lazy val result = summarySection("sectionID", "sectionTitle", sequence)
+      lazy val doc = Jsoup.parse(result.body)
 
       "contain a section with the ID 'sectionID' and the class 'summary-section'" in {
         doc.select("section#sectionID").attr("class") shouldBe "summary-section"
@@ -63,8 +65,8 @@ class SummarySectionViewSpec extends UnitSpec {
 
     "passing in a sequence of two items" should {
       val sequence = Seq(firstItem, secondItem)
-      val result = summarySection("sectionID-two", "sectionTitle-two", sequence)
-      val doc = Jsoup.parse(result.body)
+      lazy val result = summarySection("sectionID-two", "sectionTitle-two", sequence)
+      lazy val doc = Jsoup.parse(result.body)
 
       "contain a section with the ID 'sectionID-two' and the class 'summary-section'" in {
         doc.select("section#sectionID-two").attr("class") shouldBe "summary-section"
@@ -100,8 +102,8 @@ class SummarySectionViewSpec extends UnitSpec {
 
     "passing in a sequence of three items" should {
       val sequence = Seq(firstItem, secondItem, thirdItem)
-      val result = summarySection("sectionID", "sectionTitle", sequence)
-      val doc = Jsoup.parse(result.body)
+      lazy val result = summarySection("sectionID", "sectionTitle", sequence)
+      lazy val doc = Jsoup.parse(result.body)
 
       "contain three divs for the three summaryRow" in {
         doc.select("div.form-group").size() shouldBe 3
@@ -118,8 +120,8 @@ class SummarySectionViewSpec extends UnitSpec {
 
     "passing in an empty sequence" should {
       val sequence = Seq()
-      val result = summarySection("sectionID", "sectionTitle", sequence)
-      val doc = Jsoup.parse(result.body)
+      lazy val result = summarySection("sectionID", "sectionTitle", sequence)
+      lazy val doc = Jsoup.parse(result.body)
 
       "not have any content" in {
         doc.body().children().isEmpty() shouldBe true

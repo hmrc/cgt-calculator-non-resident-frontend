@@ -25,14 +25,18 @@ import controllers.routes
 import org.scalatest.mock.MockitoSugar
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.personalAllowance
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 
 class PersonalAllowanceViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
+
+
 
   "The Personal Allowance View" should {
 
     "return some HTML" which {
 
-      lazy val view = personalAllowance(personalAllowanceForm(11000))(fakeRequest)
+      lazy val view = personalAllowance(personalAllowanceForm(11000))
       lazy val document = Jsoup.parse(view.body)
 
       s"has the title ${messages.question}" in {
@@ -144,7 +148,7 @@ class PersonalAllowanceViewSpec extends UnitSpec with WithFakeApplication with M
     "when supplied with a form with errors" should {
 
       lazy val form = personalAllowanceForm(11000).bind(Map("personalAllowance" -> "132891"))
-      lazy val view = personalAllowance(form)(fakeRequest)
+      lazy val view = personalAllowance(form)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {
