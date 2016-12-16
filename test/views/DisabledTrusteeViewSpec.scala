@@ -28,7 +28,7 @@ import play.api.Play.current
 
 class DisabledTrusteeViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val fr = fakeRequest
+
 
   "Disabled Trustee view" when {
 

@@ -28,7 +28,7 @@ import play.api.Play.current
 
 class DisposalCostsViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
 
-  implicit val fr = fakeRequest
+
 
   "Disposal Costs view" when {
 

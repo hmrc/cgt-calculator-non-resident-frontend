@@ -25,6 +25,8 @@ trait FakeRequestHelper extends MicroserviceFilterSupport {
   lazy val fakeRequest = FakeRequest()
   lazy val fakeRequestWithSession = fakeRequest.withSession((SessionKeys.sessionId, ""))
 
+  lazy implicit val fr = fakeRequest
+
   def fakeRequestToPOSTWithSession (input: (String, String)*): FakeRequest[AnyContentAsFormUrlEncoded] =
     fakeRequestWithSession.withFormUrlEncodedBody(input: _*)
 }

@@ -29,7 +29,7 @@ import play.api.Play.current
 
 class BoughtForLessViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper with AssertHelpers {
 
-  implicit val fr = fakeRequest
+
 
   "Bought for less view" when {
 

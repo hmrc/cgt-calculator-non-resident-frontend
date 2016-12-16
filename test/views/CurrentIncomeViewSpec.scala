@@ -28,7 +28,7 @@ import play.api.Play.current
 
 class CurrentIncomeViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val fr = fakeRequest
+
 
   "Current Income view" when {
 

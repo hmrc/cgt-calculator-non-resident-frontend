@@ -29,7 +29,7 @@ import play.api.Play.current
 
 class CustomerTypeViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val fr = fakeRequest
+
 
   "The Customer Type View" should {
     val dummyBackLink = controllers.routes.PrivateResidenceReliefController.privateResidenceRelief().url

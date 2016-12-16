@@ -26,7 +26,7 @@ import play.api.Play.current
 
 class HowMuchLossViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
 
-  implicit val fr = fakeRequest
+
 
   "Previous Loss view" when {
 

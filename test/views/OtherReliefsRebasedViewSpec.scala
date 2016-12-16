@@ -28,7 +28,7 @@ import play.api.Play.current
 
 class OtherReliefsRebasedViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val fr = fakeRequest
+
 
   "The Other Reliefs Rebased view" when {
 

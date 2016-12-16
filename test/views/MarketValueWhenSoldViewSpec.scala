@@ -30,7 +30,7 @@ import play.api.Play.current
 
 class MarketValueWhenSoldViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val fr = fakeRequest
+
 
   "The market value when gave away page" should {
 

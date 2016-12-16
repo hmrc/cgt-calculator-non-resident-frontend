@@ -29,7 +29,7 @@ import play.api.Play.current
 
 class RebasedValueViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
 
-  implicit val fr = fakeRequest
+
 
   "The rebased value view" when {
 

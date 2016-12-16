@@ -29,7 +29,7 @@ import play.api.Play.current
 
 class CalculationElectionViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
 
-  implicit val fr = fakeRequest
+
 
   "The Calculation Election View" should {
 

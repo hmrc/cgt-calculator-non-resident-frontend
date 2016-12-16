@@ -29,7 +29,7 @@ import play.api.Play.current
 
 class WorthBeforeLegislationStartViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val fr = fakeRequest
+
 
   "The Worth Before Legislation Start view spec" when {
 

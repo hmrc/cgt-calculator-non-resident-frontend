@@ -27,7 +27,7 @@ import play.api.Play.current
 
 class RebasedCostsViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
 
-  implicit val fr = fakeRequest
+
 
   "The rebased value view" when {
 

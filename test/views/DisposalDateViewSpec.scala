@@ -29,7 +29,7 @@ import play.api.Play.current
 
 class DisposalDateViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
 
-  implicit val fr = fakeRequest
+
 
   "The Disposal Date View" should {
 

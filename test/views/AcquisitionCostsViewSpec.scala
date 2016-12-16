@@ -29,7 +29,7 @@ import play.api.Play.current
 
 class AcquisitionCostsViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val fr = fakeRequest
+
 
   "Acquisition costs view" when {
 

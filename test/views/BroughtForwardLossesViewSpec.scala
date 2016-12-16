@@ -28,7 +28,7 @@ import play.api.Play.current
 
 class BroughtForwardLossesViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper with AssertHelpers {
 
-  implicit val fr = fakeRequest
+
 
   "Brought forward losses view" when {
 

@@ -28,7 +28,7 @@ import play.api.Play.current
 
 class DisposalValueViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val fr = fakeRequest
+
 
   "Disposal value view" when {
 

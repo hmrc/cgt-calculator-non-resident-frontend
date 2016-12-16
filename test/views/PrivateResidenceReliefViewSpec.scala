@@ -28,7 +28,7 @@ import play.api.Play.current
 
 class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val fr = fakeRequest
+
 
   "Private Residence Relief view" when {
 

@@ -27,7 +27,7 @@ import play.api.Play.current
 
 class SummaryViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
 
-  implicit val fr = fakeRequest
+
 
   "Summary view" when {
 

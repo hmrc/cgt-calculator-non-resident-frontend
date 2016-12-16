@@ -28,7 +28,7 @@ import play.api.Play.current
 
 class OtherPropertiesViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
 
-  implicit val fr = fakeRequest
+
 
   "The other properties view" should {
 

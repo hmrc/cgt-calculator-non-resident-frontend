@@ -28,7 +28,7 @@ import play.api.Play.current
 
 class SoldOrGivenAwayViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper{
 
-  implicit val fr = fakeRequest
+
 
   "The Sold Or Given Away View" when{
 

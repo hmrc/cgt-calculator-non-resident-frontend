@@ -28,7 +28,7 @@ import play.api.Play.current
 
 class OtherReliefsTAViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val fr = fakeRequest
+
 
   "The Other Reliefs TA view" when {
     "not supplied with a pre-existing stored value and a taxable gain" should {

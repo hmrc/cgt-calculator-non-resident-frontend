@@ -30,7 +30,7 @@ import play.api.Play.current
 
 class PersonalAllowanceViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val fr = fakeRequest
+
 
   "The Personal Allowance View" should {
 

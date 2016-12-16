@@ -28,7 +28,7 @@ import play.api.Play.current
 
 class HowMuchGainViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val fr = fakeRequest
+
 
   "How Much Gain view" when {
 

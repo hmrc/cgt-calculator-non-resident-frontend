@@ -30,7 +30,7 @@ import play.api.Play.current
 
 class CheckYourAnswersViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
 
-  implicit val fr = fakeRequest
+
 
     "The check your answers view" when {
 

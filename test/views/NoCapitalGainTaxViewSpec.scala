@@ -28,7 +28,7 @@ import play.api.Play.current
 
 class NoCapitalGainTaxViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val fr = fakeRequest
+
 
   "No Capital Gains Tax view" when {
 

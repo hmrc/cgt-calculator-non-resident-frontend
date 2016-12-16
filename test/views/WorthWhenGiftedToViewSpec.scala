@@ -29,7 +29,7 @@ import play.api.Play.current
 
 class WorthWhenGiftedToViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val fr = fakeRequest
+
 
   "The Worth When Gifted To view spec" when {
 

@@ -28,7 +28,7 @@ import play.api.Play.current
 
 class ImprovementsViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
 
-  implicit val fr = fakeRequest
+
 
   "Improvements view" should {
 

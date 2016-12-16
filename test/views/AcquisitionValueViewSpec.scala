@@ -29,7 +29,7 @@ import play.api.Play.current
 
 class AcquisitionValueViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper{
 
-  implicit val fr = fakeRequest
+
 
   "the Acquisition Value View" should {
 

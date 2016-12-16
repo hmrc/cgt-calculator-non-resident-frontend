@@ -28,7 +28,7 @@ import play.api.Play.current
 
 class AcquisitionDateViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val fr = fakeRequest
+
 
   "Acquisition date view" when {
 

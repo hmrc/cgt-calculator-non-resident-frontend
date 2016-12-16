@@ -29,7 +29,7 @@ import play.api.Play.current
 
 class MandatoryRebasedValueViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
 
-  implicit val fr = fakeRequest
+
 
   "The mandatory rebased value view" when {
 
