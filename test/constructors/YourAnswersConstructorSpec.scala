@@ -17,9 +17,9 @@
 package constructors
 
 import models._
-import uk.gov.hmrc.play.test.UnitSpec
+import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
-class YourAnswersConstructorSpec extends UnitSpec {
+class YourAnswersConstructorSpec extends UnitSpec with WithFakeApplication {
 
   "Calling .fetchYourAnswers" when {
 

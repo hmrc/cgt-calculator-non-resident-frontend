@@ -21,15 +21,12 @@ import assets.MessageLookup.{NonResident => commonMessages}
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
 import forms.DisposalDateForm._
-import play.api.i18n.Messages
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.disposalDate
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 
 class DisposalDateViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
-
-
 
   "The Disposal Date View" should {
 
@@ -42,11 +39,11 @@ class DisposalDateViewSpec extends UnitSpec with WithFakeApplication with FakeRe
         document.title shouldEqual messages.question
       }
 
-      s"have the heading ${Messages("calc.disposalDate.question")} " in {
+      s"have the heading ${messages.question} " in {
         document.body.getElementsByTag("h1").text shouldEqual messages.question
       }
 
-      s"have the question '${Messages("calc.disposalDate.question")}'" in {
+      s"have the question '${messages.question}'" in {
         document.body.getElementsByTag("fieldset").text should include(messages.question)
       }
 

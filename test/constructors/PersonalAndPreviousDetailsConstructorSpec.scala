@@ -41,7 +41,7 @@ class PersonalAndPreviousDetailsConstructorSpec extends UnitSpec with WithFakeAp
 
   "Calling .personalAndPreviousDetailsRows" should {
 
-    val result = PersonalAndPreviousDetailsConstructor.personalAndPreviousDetailsRows(Some(modelIndividual))
+    lazy val result = PersonalAndPreviousDetailsConstructor.personalAndPreviousDetailsRows(Some(modelIndividual))
 
     "when called with no model return an empty sequence" in {
       PersonalAndPreviousDetailsConstructor.personalAndPreviousDetailsRows(None) shouldEqual Seq()

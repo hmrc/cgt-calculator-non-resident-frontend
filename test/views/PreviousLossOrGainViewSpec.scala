@@ -170,7 +170,7 @@ class PreviousLossOrGainViewSpec extends UnitSpec with WithFakeApplication with 
   }
 
   "PreviousLossOrGainView with form errors" should {
-    val form = previousLossOrGainForm.bind(Map("previousLossOrGain" -> ""))
+    lazy val form = previousLossOrGainForm.bind(Map("previousLossOrGain" -> ""))
     lazy val view = previousLossOrGain(form)
     lazy val doc = Jsoup.parse(view.body)
 

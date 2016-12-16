@@ -143,7 +143,7 @@ class DisabledTrusteeViewSpec extends UnitSpec with WithFakeApplication with Moc
     }
 
     "supplied with errors" should {
-      val form = disabledTrusteeForm.bind(Map("isVulnerable" -> "a"))
+      lazy val form = disabledTrusteeForm.bind(Map("isVulnerable" -> "a"))
       lazy val view = disabledTrustee(form)
       lazy val document = Jsoup.parse(view.body)
 

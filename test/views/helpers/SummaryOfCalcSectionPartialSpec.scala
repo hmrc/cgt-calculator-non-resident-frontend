@@ -18,12 +18,12 @@ package views.helpers
 
 import models.QuestionAnswerModel
 import org.jsoup.Jsoup
-import uk.gov.hmrc.play.test.UnitSpec
+import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.helpers.summaryOfCalcSection
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 
-class SummaryOfCalcSectionPartialSpec extends UnitSpec {
+class SummaryOfCalcSectionPartialSpec extends UnitSpec with WithFakeApplication {
 
 
   "Creating a summary section" when {
@@ -33,8 +33,8 @@ class SummaryOfCalcSectionPartialSpec extends UnitSpec {
 
     "passing in a sequence of one item" should {
       val sequence = Seq(firstItem)
-      val result = summaryOfCalcSection("sectionID", sequence)
-      val doc = Jsoup.parse(result.body)
+      lazy val result = summaryOfCalcSection("sectionID", sequence)
+      lazy val doc = Jsoup.parse(result.body)
 
       "contain a section with the ID 'sectionID' and the class 'summary-section'" in {
         doc.select("section#sectionID").attr("class") shouldBe "summary-section"
@@ -62,8 +62,8 @@ class SummaryOfCalcSectionPartialSpec extends UnitSpec {
 
     "passing in a sequence of two items" should {
       val sequence = Seq(firstItem, secondItem)
-      val result = summaryOfCalcSection("sectionID-two", sequence)
-      val doc = Jsoup.parse(result.body)
+      lazy val result = summaryOfCalcSection("sectionID-two", sequence)
+      lazy val doc = Jsoup.parse(result.body)
 
       "contain a section with the ID 'sectionID-two' and the class 'summary-section'" in {
         doc.select("section#sectionID-two").attr("class") shouldBe "summary-section"
@@ -91,8 +91,8 @@ class SummaryOfCalcSectionPartialSpec extends UnitSpec {
 
     "passing in a sequence of 3 items" should {
       val sequence = Seq(firstItem, secondItem, thirdItem)
-      val result = summaryOfCalcSection("sectionID", sequence)
-      val doc = Jsoup.parse(result.body)
+      lazy val result = summaryOfCalcSection("sectionID", sequence)
+      lazy val doc = Jsoup.parse(result.body)
 
       "contain three divs for the three summaryRow" in {
         doc.select("div.form-group").size() shouldBe 3
@@ -105,8 +105,8 @@ class SummaryOfCalcSectionPartialSpec extends UnitSpec {
 
     "passing in an empty sequence" should {
       val sequence = Seq()
-      val result = summaryOfCalcSection("sectionID", sequence)
-      val doc = Jsoup.parse(result.body)
+      lazy val result = summaryOfCalcSection("sectionID", sequence)
+      lazy val doc = Jsoup.parse(result.body)
 
       "not have any content" in {
         doc.body().children().isEmpty shouldBe true

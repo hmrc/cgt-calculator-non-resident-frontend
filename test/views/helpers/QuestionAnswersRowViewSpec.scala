@@ -20,19 +20,19 @@ import java.time.LocalDate
 
 import models.QuestionAnswerModel
 import org.jsoup.Jsoup
-import uk.gov.hmrc.play.test.UnitSpec
-import views.html.helpers.questionAnswerRow
-import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
+import play.api.i18n.Messages.Implicits._
+import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import views.html.helpers.questionAnswerRow
 
-class QuestionAnswersRowViewSpec extends UnitSpec {
+class QuestionAnswersRowViewSpec extends UnitSpec with WithFakeApplication {
 
   "Creating questionAnswerRow" when {
 
     "passing in a String answer" should {
       val model = QuestionAnswerModel[String]("id", "answer", "question", Some("change-link"))
-      val result = questionAnswerRow(model, 2)
-      val doc = Jsoup.parse(result.body)
+      lazy val result = questionAnswerRow(model, 2)
+      lazy val doc = Jsoup.parse(result.body)
 
       "have a div for the question with an id of 'id-question' which" which {
 
@@ -71,8 +71,8 @@ class QuestionAnswersRowViewSpec extends UnitSpec {
 
     "passing in an Int answer" should {
       val model = QuestionAnswerModel[Int]("id-two", 1, "question-two", Some("other-change-link"))
-      val result = questionAnswerRow(model, 2)
-      val doc = Jsoup.parse(result.body)
+      lazy val result = questionAnswerRow(model, 2)
+      lazy val doc = Jsoup.parse(result.body)
 
       "have the question with the text 'question-two'" in {
         doc.select("div#id-two-question span").text() shouldBe "question-two"
@@ -89,8 +89,8 @@ class QuestionAnswersRowViewSpec extends UnitSpec {
 
     "passing in a BigDecimal answer" should {
       val model = QuestionAnswerModel[BigDecimal]("id", BigDecimal(1000.53), "question", Some("change-link"))
-      val result = questionAnswerRow(model, 2)
-      val doc = Jsoup.parse(result.body)
+      lazy val result = questionAnswerRow(model, 2)
+      lazy val doc = Jsoup.parse(result.body)
 
       "have the answer '£1,000'" in {
         doc.select("div#id-answer a").text() shouldBe "£1,000.53"
@@ -99,8 +99,8 @@ class QuestionAnswersRowViewSpec extends UnitSpec {
 
     "passing in a Date answer" should {
       val model = QuestionAnswerModel[LocalDate]("id", LocalDate.parse("2016-05-04"), "question", Some("change-link"))
-      val result = questionAnswerRow(model, 2)
-      val doc = Jsoup.parse(result.body)
+      lazy val result = questionAnswerRow(model, 2)
+      lazy val doc = Jsoup.parse(result.body)
 
       "have the answer '04 May 2016'" in {
         doc.select("div#id-answer a").text() shouldBe "4 May 2016"
@@ -109,8 +109,8 @@ class QuestionAnswersRowViewSpec extends UnitSpec {
 
     "passing in a non-matching type" should {
       val model = QuestionAnswerModel[Double]("id", 52.3, "question", Some("change-link"))
-      val result = questionAnswerRow(model, 2)
-      val doc = Jsoup.parse(result.body)
+      lazy val result = questionAnswerRow(model, 2)
+      lazy val doc = Jsoup.parse(result.body)
 
       "have a blank answer'" in {
         doc.select("div#id-answer a").text() shouldBe ""
