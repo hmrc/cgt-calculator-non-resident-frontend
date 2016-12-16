@@ -22,6 +22,7 @@ import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.nonresident.CustomerTypeKeys
 import connectors.CalculatorConnector
 import controllers.CustomerTypeController
+import controllers.helpers.FakeRequestHelper
 import uk.gov.hmrc.http.cache.client.CacheMap
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
@@ -37,7 +38,7 @@ import scala.concurrent.Future
 import models.{AcquisitionDateModel, CustomerTypeModel, RebasedValueModel}
 import play.api.mvc.Result
 
-class CustomerTypeActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar {
+class CustomerTypeActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
   implicit val hc = new HeaderCarrier()
 

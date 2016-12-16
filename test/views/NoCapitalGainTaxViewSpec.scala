@@ -23,13 +23,17 @@ import org.jsoup.Jsoup
 import org.scalatest.mock.MockitoSugar
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.noCapitalGainsTax
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 
 class NoCapitalGainTaxViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
+
+  implicit val fr = fakeRequest
 
   "No Capital Gains Tax view" when {
 
     "supplied with a date of 5-4-2014" should {
-      lazy val view = noCapitalGainsTax(DisposalDateModel(5, 4, 2014))(fakeRequest)
+      lazy val view = noCapitalGainsTax(DisposalDateModel(5, 4, 2014))
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${messages.NoCapitalGainsTax.title}'" in {
@@ -126,7 +130,7 @@ class NoCapitalGainTaxViewSpec extends UnitSpec with WithFakeApplication with Mo
     }
 
     "supplied with a date of 12-11-2013" should {
-      lazy val view = noCapitalGainsTax(DisposalDateModel(12, 11, 2013))(fakeRequest)
+      lazy val view = noCapitalGainsTax(DisposalDateModel(12, 11, 2013))
       lazy val document = Jsoup.parse(view.body)
 
       "has the date 12-11-2013" in {

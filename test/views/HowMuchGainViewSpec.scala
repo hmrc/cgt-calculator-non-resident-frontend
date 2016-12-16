@@ -23,13 +23,17 @@ import forms.HowMuchGainForm._
 import org.scalatest.mock.MockitoSugar
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.howMuchGain
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 
 class HowMuchGainViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
+
+  implicit val fr = fakeRequest
 
   "How Much Gain view" when {
 
     "supplied with no errors" should {
-      lazy val view = howMuchGain(howMuchGainForm)(fakeRequest)
+      lazy val view = howMuchGain(howMuchGainForm)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${messages.HowMuchGain.question}'" in {
@@ -116,7 +120,7 @@ class HowMuchGainViewSpec extends UnitSpec with WithFakeApplication with Mockito
 
     "supplied with a form with errors" should {
       lazy val form = howMuchGainForm.bind(Map("howMuchGain" -> "testData"))
-      lazy val view = howMuchGain(form)(fakeRequest)
+      lazy val view = howMuchGain(form)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

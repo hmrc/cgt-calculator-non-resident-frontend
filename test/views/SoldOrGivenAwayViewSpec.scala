@@ -23,13 +23,17 @@ import org.jsoup.Jsoup
 import forms.SoldOrGivenAwayForm._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.soldOrGivenAway
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 
 class SoldOrGivenAwayViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper{
+
+  implicit val fr = fakeRequest
 
   "The Sold Or Given Away View" when{
 
     "not supplied with a pre-existing model" should {
-      lazy val view = soldOrGivenAway(soldOrGivenAwayForm)(fakeRequest)
+      lazy val view = soldOrGivenAway(soldOrGivenAwayForm)
       lazy val document = Jsoup.parse(view.body)
 
       "have a 'back-link' that" should {
@@ -115,7 +119,7 @@ class SoldOrGivenAwayViewSpec extends UnitSpec with WithFakeApplication with Fak
 
     "provided with errors" should {
       lazy val form = soldOrGivenAwayForm.bind(Map("soldIt" -> "999"))
-      lazy val view = soldOrGivenAway(form)(fakeRequest)
+      lazy val view = soldOrGivenAway(form)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

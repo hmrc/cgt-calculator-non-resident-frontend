@@ -23,13 +23,17 @@ import forms.DisabledTrusteeForm._
 import org.scalatest.mock.MockitoSugar
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.disabledTrustee
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 
 class DisabledTrusteeViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
+
+  implicit val fr = fakeRequest
 
   "Disabled Trustee view" when {
 
     "supplied with no errors" should {
-      lazy val view = disabledTrustee(disabledTrusteeForm)(fakeRequest)
+      lazy val view = disabledTrustee(disabledTrusteeForm)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${messages.DisabledTrustee.question}'" in {
@@ -140,7 +144,7 @@ class DisabledTrusteeViewSpec extends UnitSpec with WithFakeApplication with Moc
 
     "supplied with errors" should {
       val form = disabledTrusteeForm.bind(Map("isVulnerable" -> "a"))
-      lazy val view = disabledTrustee(form)(fakeRequest)
+      lazy val view = disabledTrustee(form)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

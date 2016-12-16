@@ -20,6 +20,8 @@ import models.QuestionAnswerModel
 import org.jsoup.Jsoup
 import uk.gov.hmrc.play.test.UnitSpec
 import views.html.helpers.summarySection
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 
 class SummarySectionViewSpec extends UnitSpec {
 

@@ -24,15 +24,19 @@ import play.api.i18n.Messages
 import forms.CalculationElectionForm._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.{calculation => views}
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 
 class CalculationElectionViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
+
+  implicit val fr = fakeRequest
 
   "The Calculation Election View" should {
 
     lazy val form = calculationElectionForm
     lazy val seq: Seq[(String, String, String, Option[String], Option[BigDecimal])] =
       Seq(("flat", "2000", Messages("calc.calculationElection.message.flat"), None, None))
-    lazy val view = views.calculationElection(form, seq)(fakeRequest)
+    lazy val view = views.calculationElection(form, seq)
     lazy val doc = Jsoup.parse(view.body)
 
     "have a h1 tag that" should {
@@ -137,7 +141,7 @@ class CalculationElectionViewSpec extends UnitSpec with WithFakeApplication with
 
     "supplied with errors" should {
       lazy val form = calculationElectionForm.bind(Map("calculationElection" -> "a"))
-      lazy val view = views.calculationElection(form, seq)(fakeRequest)
+      lazy val view = views.calculationElection(form, seq)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

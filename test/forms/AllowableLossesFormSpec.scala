@@ -61,7 +61,7 @@ class AllowableLossesFormSpec extends UnitSpec with WithFakeApplication {
       }
 
       s"return an error with message ${messages.errorCompulsoryValue}" in {
-        form.error("isClaimingAllowableLosses").get.message shouldBe Messages("error.required")
+        form.error("isClaimingAllowableLosses").get.message shouldBe messages.errorCompulsoryValue
       }
     }
 
@@ -77,7 +77,7 @@ class AllowableLossesFormSpec extends UnitSpec with WithFakeApplication {
       }
 
       s"return an error with message ${messages.errorCompulsoryValue}" in {
-        form.error("isClaimingAllowableLosses").get.message shouldBe Messages("error.required")
+        form.error("isClaimingAllowableLosses").get.message shouldBe messages.errorCompulsoryValue
       }
     }
 

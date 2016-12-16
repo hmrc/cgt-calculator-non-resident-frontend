@@ -23,13 +23,17 @@ import forms.DisposalValueForm._
 import org.scalatest.mock.MockitoSugar
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.disposalValue
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 
 class DisposalValueViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
+
+  implicit val fr = fakeRequest
 
   "Disposal value view" when {
 
     "supplied with no errors" should {
-      lazy val view = disposalValue(disposalValueForm)(fakeRequest)
+      lazy val view = disposalValue(disposalValueForm)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${messages.DisposalValue.question}'" in {
@@ -112,7 +116,7 @@ class DisposalValueViewSpec extends UnitSpec with WithFakeApplication with Mocki
 
     "supplied with a form with errors" should {
       lazy val form = disposalValueForm.bind(Map("disposalValue" -> "testData"))
-      lazy val view = disposalValue(form)(fakeRequest)
+      lazy val view = disposalValue(form)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

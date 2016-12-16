@@ -24,14 +24,18 @@ import forms.DisposalDateForm._
 import play.api.i18n.Messages
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.disposalDate
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 
 class DisposalDateViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
+
+  implicit val fr = fakeRequest
 
   "The Disposal Date View" should {
 
     "return some HTML" which {
 
-      lazy val view = disposalDate(disposalDateForm)(fakeRequest)
+      lazy val view = disposalDate(disposalDateForm)
       lazy val document = Jsoup.parse(view.body)
 
       "have the title 'When did you sign the contract that made someone else the owner?'" in {
@@ -77,7 +81,7 @@ class DisposalDateViewSpec extends UnitSpec with WithFakeApplication with FakeRe
 
     "supplied with errors" should {
       lazy val form = disposalDateForm.bind(Map("disposalDateDay" -> "a"))
-      lazy val view = disposalDate(form)(fakeRequest)
+      lazy val view = disposalDate(form)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

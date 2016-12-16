@@ -23,13 +23,17 @@ import forms.PrivateResidenceReliefForm._
 import org.scalatest.mock.MockitoSugar
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.privateResidenceRelief
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 
 class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
+
+  implicit val fr = fakeRequest
 
   "Private Residence Relief view" when {
 
     "supplied with no errors and neither day inputs displayed" should {
-      lazy val view = privateResidenceRelief(privateResidenceReliefForm(false, false), false, false, "")(fakeRequest)
+      lazy val view = privateResidenceRelief(privateResidenceReliefForm(false, false), false, false, "")
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${messages.PrivateResidenceRelief.question}'" in {
@@ -145,7 +149,7 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
     }
 
     "supplied with no errors and the days before input displayed" should {
-      lazy val view = privateResidenceRelief(privateResidenceReliefForm(true, false), false, true, "date-input")(fakeRequest)
+      lazy val view = privateResidenceRelief(privateResidenceReliefForm(true, false), false, true, "date-input")
       lazy val document = Jsoup.parse(view.body)
 
       s"have the question a hidden legend" which {
@@ -182,7 +186,7 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
     }
 
     "supplied with no errors and the days after input displayed" should {
-      lazy val view = privateResidenceRelief(privateResidenceReliefForm(false, true), true, false, "date-input-two")(fakeRequest)
+      lazy val view = privateResidenceRelief(privateResidenceReliefForm(false, true), true, false, "date-input-two")
       lazy val document = Jsoup.parse(view.body)
 
       "have some hidden content" which {
@@ -204,7 +208,7 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
     }
 
     "supplied with no errors and both inputs displayed" should {
-      lazy val view = privateResidenceRelief(privateResidenceReliefForm(true, true), true, true, "date-input")(fakeRequest)
+      lazy val view = privateResidenceRelief(privateResidenceReliefForm(true, true), true, true, "date-input")
       lazy val document = Jsoup.parse(view.body)
 
       "have some hidden content" which {
@@ -218,7 +222,7 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
 
     "supplied with errors" should {
       val map = Map("isClaimingPRR" -> "")
-      lazy val view = privateResidenceRelief(privateResidenceReliefForm(false, false).bind(map), false, false, "")(fakeRequest)
+      lazy val view = privateResidenceRelief(privateResidenceReliefForm(false, false).bind(map), false, false, "")
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

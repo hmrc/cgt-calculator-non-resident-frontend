@@ -23,13 +23,17 @@ import org.scalatest.mock.MockitoSugar
 import forms.AcquisitionDateForm._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.acquisitionDate
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 
 class AcquisitionDateViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
+
+  implicit val fr = fakeRequest
 
   "Acquisition date view" when {
 
     "supplied with no errors" should {
-      lazy val view = acquisitionDate(acquisitionDateForm)(fakeRequest)
+      lazy val view = acquisitionDate(acquisitionDateForm)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${messages.AcquisitionDate.question}'" in {
@@ -115,7 +119,7 @@ class AcquisitionDateViewSpec extends UnitSpec with WithFakeApplication with Moc
 
     "supplied with errors" should {
       lazy val form = acquisitionDateForm.bind(Map("hasAcquisitionDate" -> "Yes"))
-      lazy val view = acquisitionDate(form)(fakeRequest)
+      lazy val view = acquisitionDate(form)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

@@ -29,9 +29,9 @@ import play.api.Play.current
 
 class AcquisitionCostsViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  "Acquisition costs view" when {
+  implicit val fr = fakeRequest
 
-    implicit val implicitFakeRequest = fakeRequest
+  "Acquisition costs view" when {
 
     "supplied with no errors" should {
       lazy val view = acquisitionCosts(acquisitionCostsForm, "back-link")

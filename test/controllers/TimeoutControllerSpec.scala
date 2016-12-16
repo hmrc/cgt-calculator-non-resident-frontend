@@ -16,14 +16,17 @@
 
 package controllers
 
+import controllers.helpers.FakeRequestHelper
 import controllers.utils.TimeoutController
 import org.jsoup.Jsoup
 import play.api.i18n.Messages
 import play.api.mvc.{Action, AnyContent}
 import play.api.test.FakeRequest
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 
-class TimeoutControllerSpec extends UnitSpec with WithFakeApplication {
+class TimeoutControllerSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
 
   class fakeRequestTo(url : String, controllerAction : Action[AnyContent]) {
     val fakeRequest = FakeRequest("GET", "/calculate-your-capital-gains/" + url)

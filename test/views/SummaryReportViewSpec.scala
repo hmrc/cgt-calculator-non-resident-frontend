@@ -23,8 +23,12 @@ import models._
 import org.jsoup.Jsoup
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.summaryReport
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 
 class SummaryReportViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
+
+  implicit val fr = fakeRequest
 
   "The report summary view" when {
 
@@ -51,7 +55,7 @@ class SummaryReportViewSpec extends UnitSpec with WithFakeApplication with FakeR
       val seqQuestionAnswers = Seq(questionAnswer, questionAnswer)
 
       lazy val view = summaryReport(answersModel, seqQuestionAnswers, taxYear,
-        sumModelFlat.calculationElectionModel.calculationType, None, taxOwed = BigDecimal(1000), otherReliefs = Some(OtherReliefsModel(1000)))(fakeRequestWithSession)
+        sumModelFlat.calculationElectionModel.calculationType, None, taxOwed = BigDecimal(1000), otherReliefs = Some(OtherReliefsModel(1000)))
       lazy val document = Jsoup.parse(view.body)
 
       "have a heading" which {
@@ -157,7 +161,7 @@ class SummaryReportViewSpec extends UnitSpec with WithFakeApplication with FakeR
       val seqQuestionAnswers = Seq(questionAnswer, questionAnswer)
 
       lazy val view = summaryReport(answersModel, seqQuestionAnswers, taxYear,
-        sumModelFlat.calculationElectionModel.calculationType,None, taxOwed = BigDecimal(1000), otherReliefs = None)(fakeRequestWithSession)
+        sumModelFlat.calculationElectionModel.calculationType,None, taxOwed = BigDecimal(1000), otherReliefs = None)
       lazy val document = Jsoup.parse(view.body)
 
       "have a notice summary" which {
@@ -199,7 +203,7 @@ class SummaryReportViewSpec extends UnitSpec with WithFakeApplication with FakeR
       val seqQuestionAnswers = Seq(questionAnswer, questionAnswer)
 
       lazy val view = summaryReport(answersModel, seqQuestionAnswers, taxYear,
-        sumModelFlat.calculationElectionModel.calculationType, None, taxOwed = BigDecimal(1000), otherReliefs = Some(OtherReliefsModel(1000)))(fakeRequestWithSession)
+        sumModelFlat.calculationElectionModel.calculationType, None, taxOwed = BigDecimal(1000), otherReliefs = Some(OtherReliefsModel(1000)))
       lazy val document = Jsoup.parse(view.body)
 
       "have a heading" which {

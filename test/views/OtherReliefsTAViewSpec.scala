@@ -23,12 +23,16 @@ import forms.OtherReliefsForm._
 import org.scalatest.mock.MockitoSugar
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.otherReliefsTA
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 
 class OtherReliefsTAViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
+  implicit val fr = fakeRequest
+
   "The Other Reliefs TA view" when {
     "not supplied with a pre-existing stored value and a taxable gain" should {
-      lazy val view = otherReliefsTA(otherReliefsForm,hasExistingReliefAmount = false, 1000, 100)(fakeRequest)
+      lazy val view = otherReliefsTA(otherReliefsForm,hasExistingReliefAmount = false, 1000, 100)
       lazy val document = Jsoup.parse(view.body)
 
       "have a back link" which {
@@ -129,7 +133,7 @@ class OtherReliefsTAViewSpec extends UnitSpec with WithFakeApplication with Mock
 
     "supplied with a pre-existing stored value and a negative taxable gain" should {
       val map = Map("otherReliefs" -> "1000")
-      lazy val view = otherReliefsTA(otherReliefsForm.bind(map),hasExistingReliefAmount = true, -1000, 100)(fakeRequest)
+      lazy val view = otherReliefsTA(otherReliefsForm.bind(map),hasExistingReliefAmount = true, -1000, 100)
       lazy val document = Jsoup.parse(view.body)
 
       "has a list entry with the loss carried forward message and value" in {
@@ -155,7 +159,7 @@ class OtherReliefsTAViewSpec extends UnitSpec with WithFakeApplication with Mock
 
     "supplied with an invalid map" should {
       val map = Map("otherReliefs" -> "-1000")
-      lazy val view = otherReliefsTA(otherReliefsForm.bind(map), hasExistingReliefAmount = true, 1000, 100)(fakeRequest)
+      lazy val view = otherReliefsTA(otherReliefsForm.bind(map), hasExistingReliefAmount = true, 1000, 100)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

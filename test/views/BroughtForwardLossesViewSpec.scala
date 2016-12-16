@@ -23,13 +23,17 @@ import org.jsoup.Jsoup
 import forms.BroughtForwardLossesForm._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.broughtForwardLosses
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 
 class BroughtForwardLossesViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper with AssertHelpers {
+
+  implicit val fr = fakeRequest
 
   "Brought forward losses view" when {
 
     "provided with no errors" should {
-      lazy val view = broughtForwardLosses(broughtForwardLossesForm, "back-link")(fakeRequest)
+      lazy val view = broughtForwardLosses(broughtForwardLossesForm, "back-link")
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of ${messages.BroughtForwardLosses.question}" in {
@@ -212,7 +216,7 @@ class BroughtForwardLossesViewSpec extends UnitSpec with WithFakeApplication wit
 
     "provided with errors" should {
       lazy val form = broughtForwardLossesForm.bind(Map("isClaiming" -> "Yes", "broughtForwardLoss" -> ""))
-      lazy val view = broughtForwardLosses(form, "back-link")(fakeRequest)
+      lazy val view = broughtForwardLosses(form, "back-link")
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

@@ -24,14 +24,18 @@ import forms.AcquisitionMarketValueForm._
 import org.scalatest.mock.MockitoSugar
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.worthWhenBoughtForLess
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 
 class WorthWhenBoughtForLessViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
+
+  implicit val fr = fakeRequest
 
   "The Worth When Bought For Less view spec" when {
 
     "supplied with no errors" should {
 
-      lazy val view = worthWhenBoughtForLess(acquisitionMarketValueForm)(fakeRequest)
+      lazy val view = worthWhenBoughtForLess(acquisitionMarketValueForm)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${WorthWhenBoughtForLess.question}'" in {
@@ -120,7 +124,7 @@ class WorthWhenBoughtForLessViewSpec extends UnitSpec with WithFakeApplication w
     "supplied with a form with errors" should {
 
       lazy val form = acquisitionMarketValueForm.bind(Map("acquisitionMarketValue" -> "a"))
-      lazy val view = worthWhenBoughtForLess(form)(fakeRequest)
+      lazy val view = worthWhenBoughtForLess(form)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

@@ -24,14 +24,18 @@ import forms.AcquisitionMarketValueForm._
 import org.scalatest.mock.MockitoSugar
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.worthWhenGiftedTo
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 
 class WorthWhenGiftedToViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
+
+  implicit val fr = fakeRequest
 
   "The Worth When Gifted To view spec" when {
 
     "supplied with no errors" should {
 
-      lazy val view = worthWhenGiftedTo(acquisitionMarketValueForm)(fakeRequest)
+      lazy val view = worthWhenGiftedTo(acquisitionMarketValueForm)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${WorthWhenGiftedTo.question}'" in {
@@ -120,7 +124,7 @@ class WorthWhenGiftedToViewSpec extends UnitSpec with WithFakeApplication with M
     "supplied with a form with errors" should {
 
       lazy val form = acquisitionMarketValueForm.bind(Map("acquisitionMarketValue" -> "a"))
-      lazy val view = worthWhenGiftedTo(form)(fakeRequest)
+      lazy val view = worthWhenGiftedTo(form)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

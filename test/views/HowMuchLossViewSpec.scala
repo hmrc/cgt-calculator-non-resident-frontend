@@ -21,13 +21,17 @@ import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
 import forms.HowMuchLossForm._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 
 class HowMuchLossViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
+
+  implicit val fr = fakeRequest
 
   "Previous Loss view" when {
 
     "provided with no errors" should {
-      lazy val view = views.html.calculation.howMuchLoss(howMuchLossForm)(fakeRequest)
+      lazy val view = views.html.calculation.howMuchLoss(howMuchLossForm)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of ${messages.HowMuchLoss.question}" in {
@@ -110,7 +114,7 @@ class HowMuchLossViewSpec extends UnitSpec with WithFakeApplication with FakeReq
 
     "provided with some errors" should {
       lazy val form = howMuchLossForm.bind(Map("loss" -> ""))
-      lazy val view = views.html.calculation.howMuchLoss(form)(fakeRequest)
+      lazy val view = views.html.calculation.howMuchLoss(form)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {
