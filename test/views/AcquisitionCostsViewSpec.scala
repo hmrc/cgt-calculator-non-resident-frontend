@@ -24,13 +24,17 @@ import org.scalatest.mock.MockitoSugar
 import forms.AcquisitionCostsForm._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.acquisitionCosts
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 
 class AcquisitionCostsViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
   "Acquisition costs view" when {
 
+    implicit val implicitFakeRequest = fakeRequest
+
     "supplied with no errors" should {
-      lazy val view = acquisitionCosts(acquisitionCostsForm, "back-link")(fakeRequest)
+      lazy val view = acquisitionCosts(acquisitionCostsForm, "back-link")
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${messages.AcquisitionCosts.question}'" in {
@@ -134,7 +138,7 @@ class AcquisitionCostsViewSpec extends UnitSpec with WithFakeApplication with Mo
 
     "supplied with errors" should {
       lazy val form = acquisitionCostsForm.bind(Map("acquisitionCosts" -> "a"))
-      lazy val view = acquisitionCosts(form, "back-link")(fakeRequest)
+      lazy val view = acquisitionCosts(form, "back-link")
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

@@ -23,7 +23,7 @@ import models._
 import org.jsoup.Jsoup
 import org.scalatest.mock.MockitoSugar
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
-import org.mockito.Matchers
+import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import assets.MessageLookup.{NonResident => messages}
 import controllers.BroughtForwardLossesController
@@ -44,20 +44,22 @@ class BroughtForwardLossesActionSpec extends UnitSpec with WithFakeApplication w
 
     val mockCalcConnector = mock[CalculatorConnector]
 
-    when(mockCalcConnector.fetchAndGetFormData[BroughtForwardLossesModel](Matchers.eq(KeystoreKeys.broughtForwardLosses))(Matchers.any(), Matchers.any()))
+    when(mockCalcConnector.fetchAndGetFormData[BroughtForwardLossesModel](
+      ArgumentMatchers.eq(KeystoreKeys.broughtForwardLosses))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(getData)
 
-    when(mockCalcConnector.fetchAndGetFormData[OtherPropertiesModel](Matchers.eq(KeystoreKeys.otherProperties))(Matchers.any(), Matchers.any()))
+    when(mockCalcConnector.fetchAndGetFormData[OtherPropertiesModel](
+      ArgumentMatchers.eq(KeystoreKeys.otherProperties))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(otherPropertiesModel))
 
     when(mockCalcConnector.fetchAndGetFormData[PreviousLossOrGainModel]
-      (Matchers.eq(KeystoreKeys.previousLossOrGain))(Matchers.any(), Matchers.any()))
+      (ArgumentMatchers.eq(KeystoreKeys.previousLossOrGain))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(previousLossOrGainModel))
 
-    when(mockCalcConnector.fetchAndGetFormData[HowMuchGainModel](Matchers.eq(KeystoreKeys.howMuchGain))(Matchers.any(), Matchers.any()))
+    when(mockCalcConnector.fetchAndGetFormData[HowMuchGainModel](ArgumentMatchers.eq(KeystoreKeys.howMuchGain))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(howMuchGainModel))
 
-    when(mockCalcConnector.fetchAndGetFormData[HowMuchLossModel](Matchers.eq(KeystoreKeys.howMuchLoss))(Matchers.any(), Matchers.any()))
+    when(mockCalcConnector.fetchAndGetFormData[HowMuchLossModel](ArgumentMatchers.eq(KeystoreKeys.howMuchLoss))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(howMuchLossModel))
 
     new BroughtForwardLossesController {

@@ -23,7 +23,7 @@ import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
 import controllers.OtherPropertiesController
 import controllers.helpers.FakeRequestHelper
-import org.mockito.Matchers
+import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import play.api.test.Helpers._
 import uk.gov.hmrc.play.http.HeaderCarrier
@@ -45,16 +45,18 @@ class OtherPropertiesActionSpec extends UnitSpec with WithFakeApplication with M
 
     val mockCalcConnector = mock[CalculatorConnector]
 
-    when(mockCalcConnector.fetchAndGetFormData[OtherPropertiesModel](Matchers.anyString())(Matchers.any(), Matchers.any()))
+    when(mockCalcConnector.fetchAndGetFormData[OtherPropertiesModel](ArgumentMatchers.anyString())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    when(mockCalcConnector.saveFormData[OtherPropertiesModel](Matchers.any(), Matchers.any()) (Matchers.any(), Matchers.any()))
+    when(mockCalcConnector.saveFormData[OtherPropertiesModel](ArgumentMatchers.any(), ArgumentMatchers.any()) (ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(mock[CacheMap])
 
-    when(mockCalcConnector.fetchAndGetFormData[CustomerTypeModel](Matchers.eq(KeystoreKeys.customerType))(Matchers.any(), Matchers.any()))
+    when(mockCalcConnector.fetchAndGetFormData[CustomerTypeModel](
+      ArgumentMatchers.eq(KeystoreKeys.customerType))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(customerTypeData))
 
-    when(mockCalcConnector.fetchAndGetFormData[CurrentIncomeModel](Matchers.eq(KeystoreKeys.currentIncome))(Matchers.any(), Matchers.any()))
+    when(mockCalcConnector.fetchAndGetFormData[CurrentIncomeModel](
+      ArgumentMatchers.eq(KeystoreKeys.currentIncome))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(currentIncomeData))
 
     new OtherPropertiesController {

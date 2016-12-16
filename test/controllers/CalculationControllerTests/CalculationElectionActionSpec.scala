@@ -26,7 +26,7 @@ import controllers.helpers.FakeRequestHelper
 import controllers.routes
 import models.{TaxYearModel, _}
 import org.jsoup._
-import org.mockito.Matchers
+import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
 import play.api.test.Helpers._
@@ -51,31 +51,33 @@ class CalculationElectionActionSpec extends UnitSpec with WithFakeApplication wi
     val mockCalcElectionConstructor = mock[CalculationElectionConstructor]
     val mockCalcAnswersConstructor = mock[AnswersConstructor]
 
-    when(mockCalcConnector.fetchAndGetFormData[CalculationElectionModel](Matchers.eq(KeystoreKeys.calculationElection))(Matchers.any(), Matchers.any()))
+    when(mockCalcConnector.fetchAndGetFormData[CalculationElectionModel](
+      ArgumentMatchers.eq(KeystoreKeys.calculationElection))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    when(mockCalcAnswersConstructor.getNRTotalGainAnswers(Matchers.any()))
+    when(mockCalcAnswersConstructor.getNRTotalGainAnswers(ArgumentMatchers.any()))
       .thenReturn(Future.successful(TestModels.businessScenarioFiveModel))
 
-    when(mockCalcConnector.calculateTotalGain(Matchers.any())(Matchers.any()))
+    when(mockCalcConnector.calculateTotalGain(ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(totalGainResultsModel)
 
-    when(mockCalcElectionConstructor.generateElection(Matchers.any(), Matchers.any(), Matchers.any(), Matchers.any()))
+    when(mockCalcElectionConstructor.generateElection(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(contentElements))
 
-    when(mockCalcAnswersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers(Matchers.any()))
+    when(mockCalcAnswersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers(ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(finalSummaryModel)))
 
-    when(mockCalcConnector.getFullAEA(Matchers.any())(Matchers.any()))
+    when(mockCalcConnector.getFullAEA(ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(BigDecimal(11000))))
 
-    when(mockCalcConnector.getPartialAEA(Matchers.any())(Matchers.any()))
+    when(mockCalcConnector.getPartialAEA(ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(BigDecimal(5500))))
 
-    when(mockCalcConnector.calculateNRCGTTotalTax(Matchers.any(), Matchers.any(), Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any()))
+    when(mockCalcConnector.calculateNRCGTTotalTax(
+      ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(Future.successful(taxOwedResult))
 
-    when(mockCalcConnector.getTaxYear(Matchers.any())(Matchers.any()))
+    when(mockCalcConnector.getTaxYear(ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(TaxYearModel("2015/16", true, "2015/16"))))
 
     new CalculationElectionController {

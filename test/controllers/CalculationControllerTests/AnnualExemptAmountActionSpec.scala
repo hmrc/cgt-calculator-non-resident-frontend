@@ -22,7 +22,7 @@ import common.nonresident.CustomerTypeKeys
 import connectors.CalculatorConnector
 import controllers.AnnualExemptAmountController
 import controllers.helpers.FakeRequestHelper
-import org.mockito.Matchers
+import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import play.api.test.Helpers._
 import uk.gov.hmrc.play.http.HeaderCarrier
@@ -50,31 +50,35 @@ class AnnualExemptAmountActionSpec extends UnitSpec with WithFakeApplication wit
 
     val mockCalcConnector = mock[CalculatorConnector]
 
-    when(mockCalcConnector.fetchAndGetFormData[DisabledTrusteeModel](Matchers.eq(KeystoreKeys.disabledTrustee))(Matchers.any(), Matchers.any()))
+    when(mockCalcConnector.fetchAndGetFormData[DisabledTrusteeModel](
+      ArgumentMatchers.eq(KeystoreKeys.disabledTrustee))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(DisabledTrusteeModel(disabledTrustee))))
 
-    when(mockCalcConnector.fetchAndGetFormData[CustomerTypeModel](Matchers.eq(KeystoreKeys.customerType))(Matchers.any(), Matchers.any()))
+    when(mockCalcConnector.fetchAndGetFormData[CustomerTypeModel](
+      ArgumentMatchers.eq(KeystoreKeys.customerType))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(customerType))
 
-    when(mockCalcConnector.fetchAndGetFormData[DisposalDateModel](Matchers.eq(KeystoreKeys.disposalDate))(Matchers.any(), Matchers.any()))
+    when(mockCalcConnector.fetchAndGetFormData[DisposalDateModel](
+      ArgumentMatchers.eq(KeystoreKeys.disposalDate))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(disposalDate))
 
-    when(mockCalcConnector.fetchAndGetFormData[AnnualExemptAmountModel](Matchers.eq(KeystoreKeys.annualExemptAmount))(Matchers.any(), Matchers.any()))
+    when(mockCalcConnector.fetchAndGetFormData[AnnualExemptAmountModel](
+      ArgumentMatchers.eq(KeystoreKeys.annualExemptAmount))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    when(mockCalcConnector.fetchAndGetFormData[PreviousLossOrGainModel](Matchers.eq(KeystoreKeys.previousLossOrGain))
-      (Matchers.any(), Matchers.any())).thenReturn(Future.successful(previousLossOrGain))
+    when(mockCalcConnector.fetchAndGetFormData[PreviousLossOrGainModel](ArgumentMatchers.eq(KeystoreKeys.previousLossOrGain))
+      (ArgumentMatchers.any(), ArgumentMatchers.any())).thenReturn(Future.successful(previousLossOrGain))
 
-    when(mockCalcConnector.fetchAndGetFormData[HowMuchGainModel](Matchers.eq(KeystoreKeys.howMuchGain))(Matchers.any(), Matchers.any()))
+    when(mockCalcConnector.fetchAndGetFormData[HowMuchGainModel](ArgumentMatchers.eq(KeystoreKeys.howMuchGain))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(howMuchGain))
 
-    when(mockCalcConnector.fetchAndGetFormData[HowMuchLossModel](Matchers.eq(KeystoreKeys.howMuchLoss))(Matchers.any(), Matchers.any()))
+    when(mockCalcConnector.fetchAndGetFormData[HowMuchLossModel](ArgumentMatchers.eq(KeystoreKeys.howMuchLoss))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(howMuchLoss))
 
-    when(mockCalcConnector.getFullAEA(Matchers.anyInt())(Matchers.any()))
+    when(mockCalcConnector.getFullAEA(ArgumentMatchers.anyInt())(ArgumentMatchers.any()))
       .thenReturn(Some(BigDecimal(11100)))
 
-    when(mockCalcConnector.getPartialAEA(Matchers.anyInt())(Matchers.any()))
+    when(mockCalcConnector.getPartialAEA(ArgumentMatchers.anyInt())(ArgumentMatchers.any()))
       .thenReturn(Some(BigDecimal(5550)))
 
     new AnnualExemptAmountController {

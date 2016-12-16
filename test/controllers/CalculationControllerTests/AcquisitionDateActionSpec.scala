@@ -22,7 +22,7 @@ import controllers.AcquisitionDateController
 import controllers.helpers.FakeRequestHelper
 import models.AcquisitionDateModel
 import org.jsoup._
-import org.mockito.Matchers
+import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
 import play.api.test.Helpers._
@@ -40,7 +40,7 @@ class AcquisitionDateActionSpec extends UnitSpec with WithFakeApplication with M
 
     val mockCalcConnector = mock[CalculatorConnector]
 
-    when(mockCalcConnector.fetchAndGetFormData[AcquisitionDateModel](Matchers.anyString())(Matchers.any(), Matchers.any()))
+    when(mockCalcConnector.fetchAndGetFormData[AcquisitionDateModel](ArgumentMatchers.anyString())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
     new AcquisitionDateController {

@@ -19,7 +19,7 @@ package constructors
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
 import models._
-import org.mockito.Matchers
+import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
 import uk.gov.hmrc.play.http.HeaderCarrier
@@ -36,40 +36,48 @@ class AnswersConstructorSpec extends UnitSpec with MockitoSugar {
 
     val mockConnector = mock[CalculatorConnector]
 
-    when(mockConnector.fetchAndGetFormData[DisposalDateModel](Matchers.eq(KeystoreKeys.disposalDate))(Matchers.any(), Matchers.any()))
+    when(mockConnector.fetchAndGetFormData[DisposalDateModel](ArgumentMatchers.eq(KeystoreKeys.disposalDate))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(totalGainAnswersModel.disposalDateModel)))
-    when(mockConnector.fetchAndGetFormData[SoldOrGivenAwayModel](Matchers.eq(KeystoreKeys.soldOrGivenAway))(Matchers.any(), Matchers.any()))
+    when(mockConnector.fetchAndGetFormData[SoldOrGivenAwayModel](
+      ArgumentMatchers.eq(KeystoreKeys.soldOrGivenAway))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(totalGainAnswersModel.soldOrGivenAwayModel)))
-    when(mockConnector.fetchAndGetFormData[SoldForLessModel](Matchers.eq(KeystoreKeys.soldForLess))(Matchers.any(), Matchers.any()))
+    when(mockConnector.fetchAndGetFormData[SoldForLessModel](ArgumentMatchers.eq(KeystoreKeys.soldForLess))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(totalGainAnswersModel.soldForLessModel))
-    when(mockConnector.fetchAndGetFormData[DisposalValueModel](Matchers.eq(KeystoreKeys.disposalValue))(Matchers.any(), Matchers.any()))
+    when(mockConnector.fetchAndGetFormData[DisposalValueModel](ArgumentMatchers.eq(KeystoreKeys.disposalValue))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(totalGainAnswersModel.disposalValueModel)))
-    when(mockConnector.fetchAndGetFormData[DisposalValueModel](Matchers.eq(KeystoreKeys.disposalMarketValue))(Matchers.any(), Matchers.any()))
+    when(mockConnector.fetchAndGetFormData[DisposalValueModel](
+      ArgumentMatchers.eq(KeystoreKeys.disposalMarketValue))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(marketDisposalValue))
-    when(mockConnector.fetchAndGetFormData[DisposalCostsModel](Matchers.eq(KeystoreKeys.disposalCosts))(Matchers.any(), Matchers.any()))
+    when(mockConnector.fetchAndGetFormData[DisposalCostsModel](ArgumentMatchers.eq(KeystoreKeys.disposalCosts))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(totalGainAnswersModel.disposalCostsModel)))
-    when(mockConnector.fetchAndGetFormData[HowBecameOwnerModel](Matchers.eq(KeystoreKeys.howBecameOwner))(Matchers.any(), Matchers.any()))
+    when(mockConnector.fetchAndGetFormData[HowBecameOwnerModel](
+      ArgumentMatchers.eq(KeystoreKeys.howBecameOwner))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(totalGainAnswersModel.howBecameOwnerModel))
-    when(mockConnector.fetchAndGetFormData[BoughtForLessModel](Matchers.eq(KeystoreKeys.boughtForLess))(Matchers.any(), Matchers.any()))
+    when(mockConnector.fetchAndGetFormData[BoughtForLessModel](ArgumentMatchers.eq(KeystoreKeys.boughtForLess))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(totalGainAnswersModel.boughtForLessModel))
-    when(mockConnector.fetchAndGetFormData[WorthBeforeLegislationStartModel](Matchers.eq(KeystoreKeys.worthBeforeLegislationStart))
-      (Matchers.any(), Matchers.any()))
+    when(mockConnector.fetchAndGetFormData[WorthBeforeLegislationStartModel](ArgumentMatchers.eq(KeystoreKeys.worthBeforeLegislationStart))
+      (ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(worthBeforeLegislationStartModel))
-    when(mockConnector.fetchAndGetFormData[AcquisitionValueModel](Matchers.eq(KeystoreKeys.acquisitionMarketValue))(Matchers.any(), Matchers.any()))
+    when(mockConnector.fetchAndGetFormData[AcquisitionValueModel](
+      ArgumentMatchers.eq(KeystoreKeys.acquisitionMarketValue))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(marketValueAcquisition))
-    when(mockConnector.fetchAndGetFormData[AcquisitionValueModel](Matchers.eq(KeystoreKeys.acquisitionValue))(Matchers.any(), Matchers.any()))
+    when(mockConnector.fetchAndGetFormData[AcquisitionValueModel](
+      ArgumentMatchers.eq(KeystoreKeys.acquisitionValue))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(totalGainAnswersModel.acquisitionValueModel)))
-    when(mockConnector.fetchAndGetFormData[AcquisitionCostsModel](Matchers.eq(KeystoreKeys.acquisitionCosts))(Matchers.any(), Matchers.any()))
+    when(mockConnector.fetchAndGetFormData[AcquisitionCostsModel](
+      ArgumentMatchers.eq(KeystoreKeys.acquisitionCosts))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(totalGainAnswersModel.acquisitionCostsModel)))
-    when(mockConnector.fetchAndGetFormData[AcquisitionDateModel](Matchers.eq(KeystoreKeys.acquisitionDate))(Matchers.any(), Matchers.any()))
+    when(mockConnector.fetchAndGetFormData[AcquisitionDateModel](
+      ArgumentMatchers.eq(KeystoreKeys.acquisitionDate))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(totalGainAnswersModel.acquisitionDateModel)))
-    when(mockConnector.fetchAndGetFormData[RebasedValueModel](Matchers.eq(KeystoreKeys.rebasedValue))(Matchers.any(), Matchers.any()))
+    when(mockConnector.fetchAndGetFormData[RebasedValueModel](ArgumentMatchers.eq(KeystoreKeys.rebasedValue))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(totalGainAnswersModel.rebasedValueModel))
-    when(mockConnector.fetchAndGetFormData[RebasedCostsModel](Matchers.eq(KeystoreKeys.rebasedCosts))(Matchers.any(), Matchers.any()))
+    when(mockConnector.fetchAndGetFormData[RebasedCostsModel](ArgumentMatchers.eq(KeystoreKeys.rebasedCosts))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(totalGainAnswersModel.rebasedCostsModel))
-    when(mockConnector.fetchAndGetFormData[ImprovementsModel](Matchers.eq(KeystoreKeys.improvements))(Matchers.any(), Matchers.any()))
+    when(mockConnector.fetchAndGetFormData[ImprovementsModel](ArgumentMatchers.eq(KeystoreKeys.improvements))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(totalGainAnswersModel.improvementsModel)))
-    when(mockConnector.fetchAndGetFormData[OtherReliefsModel](Matchers.eq(KeystoreKeys.otherReliefsFlat))(Matchers.any(), Matchers.any()))
+    when(mockConnector.fetchAndGetFormData[OtherReliefsModel](
+      ArgumentMatchers.eq(KeystoreKeys.otherReliefsFlat))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(totalGainAnswersModel.otherReliefsFlat))
 
     new AnswersConstructor {
@@ -81,35 +89,40 @@ class AnswersConstructorSpec extends UnitSpec with MockitoSugar {
 
     val mockConnector = mock[CalculatorConnector]
 
-    when(mockConnector.fetchAndGetFormData[CustomerTypeModel](Matchers.eq(KeystoreKeys.customerType))(Matchers.any(), Matchers.any()))
+    when(mockConnector.fetchAndGetFormData[CustomerTypeModel](ArgumentMatchers.eq(KeystoreKeys.customerType))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(totalPersonalDetailsCalculationModel.customerTypeModel)))
 
-    when(mockConnector.fetchAndGetFormData[CurrentIncomeModel](Matchers.eq(KeystoreKeys.currentIncome))(Matchers.any(), Matchers.any()))
+    when(mockConnector.fetchAndGetFormData[CurrentIncomeModel](ArgumentMatchers.eq(KeystoreKeys.currentIncome))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(totalPersonalDetailsCalculationModel.currentIncomeModel))
 
-    when(mockConnector.fetchAndGetFormData[PersonalAllowanceModel](Matchers.eq(KeystoreKeys.personalAllowance))(Matchers.any(), Matchers.any()))
+    when(mockConnector.fetchAndGetFormData[PersonalAllowanceModel](
+      ArgumentMatchers.eq(KeystoreKeys.personalAllowance))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(totalPersonalDetailsCalculationModel.personalAllowanceModel))
 
-    when(mockConnector.fetchAndGetFormData[DisabledTrusteeModel](Matchers.eq(KeystoreKeys.disabledTrustee))(Matchers.any(), Matchers.any()))
+    when(mockConnector.fetchAndGetFormData[DisabledTrusteeModel](
+      ArgumentMatchers.eq(KeystoreKeys.disabledTrustee))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(totalPersonalDetailsCalculationModel.trusteeModel))
 
-    when(mockConnector.fetchAndGetFormData[OtherPropertiesModel](Matchers.eq(KeystoreKeys.otherProperties))(Matchers.any(), Matchers.any()))
+    when(mockConnector.fetchAndGetFormData[OtherPropertiesModel](
+      ArgumentMatchers.eq(KeystoreKeys.otherProperties))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(totalPersonalDetailsCalculationModel.otherPropertiesModel)))
 
-    when(mockConnector.fetchAndGetFormData[PreviousLossOrGainModel](Matchers.eq(KeystoreKeys.previousLossOrGain))
-      (Matchers.any(), Matchers.any()))
+    when(mockConnector.fetchAndGetFormData[PreviousLossOrGainModel](ArgumentMatchers.eq(KeystoreKeys.previousLossOrGain))
+      (ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(totalPersonalDetailsCalculationModel.previousGainOrLoss))
 
-    when(mockConnector.fetchAndGetFormData[HowMuchLossModel](Matchers.eq(KeystoreKeys.howMuchLoss))(Matchers.any(), Matchers.any()))
+    when(mockConnector.fetchAndGetFormData[HowMuchLossModel](ArgumentMatchers.eq(KeystoreKeys.howMuchLoss))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(totalPersonalDetailsCalculationModel.howMuchLossModel))
 
-    when(mockConnector.fetchAndGetFormData[HowMuchGainModel](Matchers.eq(KeystoreKeys.howMuchGain))(Matchers.any(), Matchers.any()))
+    when(mockConnector.fetchAndGetFormData[HowMuchGainModel](ArgumentMatchers.eq(KeystoreKeys.howMuchGain))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(totalPersonalDetailsCalculationModel.howMuchGainModel))
 
-    when(mockConnector.fetchAndGetFormData[AnnualExemptAmountModel](Matchers.eq(KeystoreKeys.annualExemptAmount))(Matchers.any(), Matchers.any()))
+    when(mockConnector.fetchAndGetFormData[AnnualExemptAmountModel](
+      ArgumentMatchers.eq(KeystoreKeys.annualExemptAmount))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(totalPersonalDetailsCalculationModel.annualExemptAmountModel))
 
-    when(mockConnector.fetchAndGetFormData[BroughtForwardLossesModel](Matchers.eq(KeystoreKeys.broughtForwardLosses))(Matchers.any(), Matchers.any()))
+    when(mockConnector.fetchAndGetFormData[BroughtForwardLossesModel](
+      ArgumentMatchers.eq(KeystoreKeys.broughtForwardLosses))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(totalPersonalDetailsCalculationModel.broughtForwardLossesModel)))
 
     new AnswersConstructor {

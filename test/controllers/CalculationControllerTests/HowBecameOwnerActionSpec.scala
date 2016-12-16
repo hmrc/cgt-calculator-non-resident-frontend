@@ -23,7 +23,7 @@ import controllers.HowBecameOwnerController
 import controllers.helpers.FakeRequestHelper
 import models.{AcquisitionDateModel, HowBecameOwnerModel, RebasedValueModel}
 import org.jsoup._
-import org.mockito.Matchers
+import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
 import play.api.test.Helpers._
@@ -38,16 +38,18 @@ class HowBecameOwnerActionSpec extends UnitSpec with WithFakeApplication with Fa
 
     val mockConnector = mock[CalculatorConnector]
 
-    when(mockConnector.fetchAndGetFormData[HowBecameOwnerModel](Matchers.any())(Matchers.any(), Matchers.any()))
+    when(mockConnector.fetchAndGetFormData[HowBecameOwnerModel](ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(getData)
 
-    when(mockConnector.saveFormData[HowBecameOwnerModel](Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any()))
+    when(mockConnector.saveFormData[HowBecameOwnerModel](
+      ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(mock[CacheMap])
 
-    when(mockConnector.fetchAndGetFormData[AcquisitionDateModel](Matchers.eq(KeystoreKeys.acquisitionDate))(Matchers.any(), Matchers.any()))
+    when(mockConnector.fetchAndGetFormData[AcquisitionDateModel](
+      ArgumentMatchers.eq(KeystoreKeys.acquisitionDate))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Some(acquisitionDateModel))
 
-    when(mockConnector.fetchAndGetFormData[RebasedValueModel](Matchers.eq(KeystoreKeys.rebasedValue))(Matchers.any(), Matchers.any()))
+    when(mockConnector.fetchAndGetFormData[RebasedValueModel](ArgumentMatchers.eq(KeystoreKeys.rebasedValue))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Some(rebasedValueModel))
 
     new HowBecameOwnerController {

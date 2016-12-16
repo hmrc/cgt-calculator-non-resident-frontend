@@ -24,7 +24,7 @@ import config.AppConfig
 import controllers.helpers.FakeRequestHelper
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import org.mockito.Mockito._
-import org.mockito.Matchers
+import org.mockito.ArgumentMatchers
 import org.scalatest.mock.MockitoSugar
 import common.KeystoreKeys.{NonResidentKeys => keystoreKeys}
 import assets.MessageLookup.NonResident.{PreviousLossOrGain => messages}
@@ -37,10 +37,12 @@ class PreviousGainOrLossActionSpec extends UnitSpec with WithFakeApplication wit
   def setupTarget(getData: Option[PreviousLossOrGainModel]): PreviousGainOrLossController = {
     val mockCalcConnector = mock[CalculatorConnector]
 
-    when(mockCalcConnector.fetchAndGetFormData[PreviousLossOrGainModel](Matchers.eq(keystoreKeys.previousLossOrGain))(Matchers.any(), Matchers.any())).
+    when(mockCalcConnector.fetchAndGetFormData[PreviousLossOrGainModel](
+      ArgumentMatchers.eq(keystoreKeys.previousLossOrGain))(ArgumentMatchers.any(), ArgumentMatchers.any())).
       thenReturn(Future.successful(getData))
 
-    when(mockCalcConnector.saveFormData[PreviousLossOrGainModel](Matchers.eq(keystoreKeys.previousLossOrGain), Matchers.any())(Matchers.any(), Matchers.any())).
+    when(mockCalcConnector.saveFormData[PreviousLossOrGainModel](
+      ArgumentMatchers.eq(keystoreKeys.previousLossOrGain), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any())).
       thenReturn(mock[CacheMap])
 
     new PreviousGainOrLossController {

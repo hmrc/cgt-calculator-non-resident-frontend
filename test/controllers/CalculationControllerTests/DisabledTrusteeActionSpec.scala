@@ -20,7 +20,7 @@ import assets.MessageLookup.NonResident.{DisabledTrustee => messages}
 import connectors.CalculatorConnector
 import controllers.DisabledTrusteeController
 import controllers.helpers.FakeRequestHelper
-import org.mockito.Matchers
+import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import play.api.test.Helpers._
 import uk.gov.hmrc.play.http.HeaderCarrier
@@ -39,7 +39,7 @@ class DisabledTrusteeActionSpec extends UnitSpec with WithFakeApplication with M
 
     val mockCalcConnector = mock[CalculatorConnector]
 
-    when(mockCalcConnector.fetchAndGetFormData[DisabledTrusteeModel](Matchers.anyString())(Matchers.any(), Matchers.any()))
+    when(mockCalcConnector.fetchAndGetFormData[DisabledTrusteeModel](ArgumentMatchers.anyString())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
     new DisabledTrusteeController {
