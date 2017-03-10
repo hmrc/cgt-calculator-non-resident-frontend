@@ -50,12 +50,6 @@ class WorthWhenGiftedToActionSpec extends UnitSpec with WithFakeApplication with
     }
   }
 
-  "WorthWhenGiftedToController" should {
-    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-      WorthWhenGiftedToController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
-    }
-  }
-
   "Calling .worthWhenGiftedTo" when {
 
     "request has a valid session and no keystore value" should {

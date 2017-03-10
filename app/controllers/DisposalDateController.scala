@@ -41,8 +41,6 @@ object DisposalDateController extends DisposalDateController {
 trait DisposalDateController extends FrontendController with ValidActiveSession {
 
   val calcConnector: CalculatorConnector
-  override val sessionTimeoutUrl = controllers.routes.SummaryController.restart().url
-  override val homeLink = controllers.routes.DisposalDateController.disposalDate().url
 
   val disposalDate = Action.async { implicit request =>
     if (request.session.get(SessionKeys.sessionId).isEmpty) {

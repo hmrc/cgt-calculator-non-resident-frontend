@@ -49,12 +49,6 @@ class DisposalDateActionSpec extends UnitSpec with WithFakeApplication with Mock
     }
   }
 
-  "DisposalDateController" should {
-    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-      DisposalDateController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
-    }
-  }
-
   // GET Tests
   "Calling the CalculationController.disposalDate" when {
 

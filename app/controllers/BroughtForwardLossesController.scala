@@ -37,8 +37,6 @@ object BroughtForwardLossesController extends BroughtForwardLossesController {
 trait BroughtForwardLossesController extends FrontendController with ValidActiveSession {
 
   val calcConnector: CalculatorConnector
-  override val sessionTimeoutUrl = controllers.routes.SummaryController.restart().url
-  override val homeLink = controllers.routes.DisposalDateController.disposalDate().url
 
   def generateBackLink(implicit hc: HeaderCarrier): Future[String] = {
     val getOtherProperties = calcConnector.fetchAndGetFormData[OtherPropertiesModel](KeystoreKeys.otherProperties)

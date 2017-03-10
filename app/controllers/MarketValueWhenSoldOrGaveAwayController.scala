@@ -36,8 +36,6 @@ object MarketValueWhenSoldOrGaveAwayController extends MarketValueWhenSoldOrGave
 
 trait MarketValueWhenSoldOrGaveAwayController extends FrontendController with ValidActiveSession {
   val calcConnector: CalculatorConnector
-  override val sessionTimeoutUrl = controllers.routes.SummaryController.restart().url
-  override val homeLink = controllers.routes.DisposalDateController.disposalDate().url
 
   val marketValueWhenSold = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[DisposalValueModel](KeystoreKeys.disposalMarketValue).map {

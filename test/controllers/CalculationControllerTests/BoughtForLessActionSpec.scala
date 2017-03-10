@@ -51,12 +51,6 @@ class BoughtForLessActionSpec extends UnitSpec with WithFakeApplication with Moc
     }
   }
 
-  "BoughtForLessController" should {
-    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-      BoughtForLessController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
-    }
-  }
-
   "Calling .boughtForLess" when {
 
     "provided with no previous data" should {

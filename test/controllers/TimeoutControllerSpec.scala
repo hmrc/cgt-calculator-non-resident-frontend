@@ -38,7 +38,7 @@ class TimeoutControllerSpec extends UnitSpec with WithFakeApplication with FakeR
 
     "when called with no session" should {
 
-      object timeoutTestDataItem extends fakeRequestTo("", TimeoutController.timeout("test", "test2"))
+      object timeoutTestDataItem extends fakeRequestTo("", TimeoutController.timeout())
 
       "return a 200" in {
         status(timeoutTestDataItem.result) shouldBe 200
@@ -57,7 +57,7 @@ class TimeoutControllerSpec extends UnitSpec with WithFakeApplication with FakeR
       }
 
       "have a restart link to href of 'test'" in {
-        timeoutTestDataItem.jsoupDoc.getElementById("startAgain").attr("href") shouldEqual "test"
+        timeoutTestDataItem.jsoupDoc.getElementById("startAgain").attr("href") shouldEqual common.DefaultRoutes.restartUrl
       }
     }
   }

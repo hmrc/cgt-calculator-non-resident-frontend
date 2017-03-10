@@ -49,12 +49,6 @@ class NoCapitalGainsTaxActionSpec extends UnitSpec with WithFakeApplication with
     }
   }
 
-  "NoCapitalGainsTaxController" should {
-    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-      NoCapitalGainsTaxController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
-    }
-  }
-
   //GET Tests
   "In CalculationController calling the .noCapitalGainsTax action " when {
 

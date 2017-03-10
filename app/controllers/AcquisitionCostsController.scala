@@ -39,8 +39,6 @@ object AcquisitionCostsController extends AcquisitionCostsController{
 
 trait AcquisitionCostsController extends FrontendController with ValidActiveSession {
 
-  override val sessionTimeoutUrl = controllers.routes.SummaryController.restart().url
-  override val homeLink = controllers.routes.DisposalDateController.disposalDate().url
   val calcConnector: CalculatorConnector
   val calcElectionConstructor = CalculationElectionConstructor
 

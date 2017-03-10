@@ -47,12 +47,6 @@ class HowMuchGainActionSpec extends UnitSpec with WithFakeApplication with Mocki
     }
   }
 
-  "HowMuchGainController" should {
-    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-      HowMuchGainController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
-    }
-  }
-
   //GET Tests
   "In CalculationController calling the .howMuchGain action" when {
 

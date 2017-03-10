@@ -87,12 +87,6 @@ class OtherReliefsActionSpec extends UnitSpec with WithFakeApplication with Mock
     }
   }
 
-  "OtherReliefsController" should {
-    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-      OtherReliefsController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
-    }
-  }
-
   val personalDetailsModel = TotalPersonalDetailsCalculationModel(
     CustomerTypeModel("individual"),
     Some(CurrentIncomeModel(20000)),
@@ -103,7 +97,7 @@ class OtherReliefsActionSpec extends UnitSpec with WithFakeApplication with Mock
     None,
     None,
     Some(AnnualExemptAmountModel(0)),
-    BroughtForwardLossesModel(false, None)
+    BroughtForwardLossesModel(isClaiming = false, None)
   )
 
   val calculationResultsModel = CalculationResultsWithTaxOwedModel(

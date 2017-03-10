@@ -51,12 +51,6 @@ class CurrentIncomeActionSpec extends UnitSpec with WithFakeApplication with Moc
     }
   }
 
-  "CurrentIncomeController" should {
-    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-      CurrentIncomeController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
-    }
-  }
-
   //GET Tests
   "Calling the .currentIncome action " when {
 

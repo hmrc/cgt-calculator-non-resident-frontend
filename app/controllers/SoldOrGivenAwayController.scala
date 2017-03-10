@@ -35,8 +35,6 @@ object SoldOrGivenAwayController extends SoldOrGivenAwayController {
 trait SoldOrGivenAwayController extends FrontendController with ValidActiveSession  {
 
   val calcConnector: CalculatorConnector
-  override val sessionTimeoutUrl = controllers.routes.SummaryController.restart().url
-  override val homeLink = controllers.routes.DisposalDateController.disposalDate().url
 
   val soldOrGivenAway = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[SoldOrGivenAwayModel](KeystoreKeys.soldOrGivenAway).map {

@@ -25,9 +25,6 @@ import scala.concurrent.Future
 
 trait ValidActiveSession extends FrontendController {
 
-  val sessionTimeoutUrl: String = ""
-  val homeLink: String = ""
-
   private type PlayRequest = Request[AnyContent] => Result
   private type AsyncRequest = Request[AnyContent] => Future[Result]
 
@@ -36,7 +33,7 @@ trait ValidActiveSession extends FrontendController {
     def async(action: AsyncRequest): Action[AnyContent] = {
       Action.async { implicit request =>
         if (request.session.get(SessionKeys.sessionId).isEmpty) {
-          Future.successful(Redirect(routes.TimeoutController.timeout(sessionTimeoutUrl, homeLink)))
+          Future.successful(Redirect(routes.TimeoutController.timeout()))
         } else {
           action(request)
         }

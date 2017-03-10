@@ -64,12 +64,6 @@ class AcquisitionCostsActionSpec extends UnitSpec with WithFakeApplication with 
     }
   }
 
-  "AcquisitionCostsController" should {
-    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-      AcquisitionCostsController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
-    }
-  }
-
   "Calling the .backLink method" should {
 
     "return a link to WorthOnLegislationStart page with an acquisition date before legislation start" in {

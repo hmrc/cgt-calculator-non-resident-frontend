@@ -72,12 +72,6 @@ class AllowableLossesActionSpec extends UnitSpec with WithFakeApplication with F
     }
   }
 
-  "AllowableLossesController" should {
-    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-      AllowableLossesController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
-    }
-  }
-
   "In CalculationController calling the .allowableLosses action" when {
 
     "no prior data is supplied" should {

@@ -68,12 +68,6 @@ class CustomerTypeActionSpec extends UnitSpec with WithFakeApplication with Mock
     }
   }
 
-  "CustomerTypeController" should {
-    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-      CustomerTypeController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
-    }
-  }
-
   // GET Tests
   "Calling the CalculationController.customerType" when {
 

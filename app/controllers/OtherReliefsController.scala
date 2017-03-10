@@ -41,9 +41,6 @@ trait OtherReliefsController extends FrontendController with ValidActiveSession 
   val calcConnector: CalculatorConnector
   val answersConstructor: AnswersConstructor
 
-  override val sessionTimeoutUrl = controllers.routes.SummaryController.restart().url
-  override val homeLink = controllers.routes.DisposalDateController.disposalDate().url
-
   val otherReliefs = ValidateSession.async { implicit request =>
 
     def routeRequest(model: Option[OtherReliefsModel],

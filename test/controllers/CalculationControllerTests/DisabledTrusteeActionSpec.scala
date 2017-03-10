@@ -47,12 +47,6 @@ class DisabledTrusteeActionSpec extends UnitSpec with WithFakeApplication with M
     }
   }
 
-  "DisabledTrusteeController" should {
-    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-      DisabledTrusteeController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
-    }
-  }
-
   // GET Tests
   "Calling the CalculationController.disabledTrustee" when {
 

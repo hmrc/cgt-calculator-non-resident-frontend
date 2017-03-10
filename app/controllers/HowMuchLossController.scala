@@ -37,9 +37,6 @@ trait HowMuchLossController extends FrontendController with ValidActiveSession {
 
   val calcConnector: CalculatorConnector
 
-  override val sessionTimeoutUrl = controllers.routes.SummaryController.restart().url
-  override val homeLink = controllers.routes.DisposalDateController.disposalDate().url
-
   val howMuchLoss = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[HowMuchLossModel](KeystoreKeys.howMuchLoss).map {
       case Some(data) => Ok(calculation.howMuchLoss(howMuchLossForm.fill(data)))

@@ -88,12 +88,6 @@ class OtherReliefsRebasedActionSpec extends UnitSpec with WithFakeApplication wi
     }
   }
 
-  "OtherReliefsRebasedController" should {
-    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-      OtherReliefsRebasedController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
-    }
-  }
-
   "Calling the .otherReliefsRebased action " when {
 
     "not supplied with a pre-existing stored model and a chargeable gain of £500 and total gain of £500" should {

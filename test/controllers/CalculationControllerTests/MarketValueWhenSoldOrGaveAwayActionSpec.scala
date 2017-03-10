@@ -47,12 +47,6 @@ class MarketValueWhenSoldOrGaveAwayActionSpec extends UnitSpec with WithFakeAppl
     }
   }
 
-  "MarketValueController" should {
-    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-      MarketValueWhenSoldOrGaveAwayController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
-    }
-  }
-
   "The marketValueWhenGaveAway action" when {
     "not supplied with a pre-existing stored model" should {
       val target = setupTarget(None)

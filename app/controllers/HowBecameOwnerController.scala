@@ -38,8 +38,6 @@ object HowBecameOwnerController extends HowBecameOwnerController {
 trait HowBecameOwnerController extends FrontendController with ValidActiveSession {
 
   val calcConnector: CalculatorConnector
-  override val sessionTimeoutUrl = controllers.routes.SummaryController.restart().url
-  override val homeLink = controllers.routes.DisposalDateController.disposalDate().url
 
   def getAcquisitionDate(implicit hc: HeaderCarrier): Future[Option[AcquisitionDateModel]] = {
     calcConnector.fetchAndGetFormData[AcquisitionDateModel](KeystoreKeys.acquisitionDate)

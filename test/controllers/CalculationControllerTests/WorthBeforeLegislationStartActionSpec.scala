@@ -49,10 +49,6 @@ class WorthBeforeLegislationStartActionSpec extends UnitSpec with WithFakeApplic
 
   "WorthBeforeLegislationStartController" when{
 
-    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-      WorthBeforeLegislationStartController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
-    }
-
     "calling .worthBeforeLegislationStart" should {
 
 

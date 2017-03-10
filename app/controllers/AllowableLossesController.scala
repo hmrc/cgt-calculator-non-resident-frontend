@@ -37,8 +37,6 @@ object AllowableLossesController extends AllowableLossesController {
 
 trait AllowableLossesController extends FrontendController with ValidActiveSession {
 
-  override val sessionTimeoutUrl = controllers.routes.SummaryController.restart().url
-  override val homeLink = controllers.routes.DisposalDateController.disposalDate().url
   val calcConnector: CalculatorConnector
 
   def allowableLossesBackLink(implicit hc: HeaderCarrier): Future[String] = {

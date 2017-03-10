@@ -86,12 +86,6 @@ class AnnualExemptAmountActionSpec extends UnitSpec with WithFakeApplication wit
     }
   }
 
-  "AnnualExemptAmountController" should {
-    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-      AnnualExemptAmountController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
-    }
-  }
-
   // GET Tests
   "Calling the .annualExemptAmount action" when {
 

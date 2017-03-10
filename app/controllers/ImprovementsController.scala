@@ -42,8 +42,6 @@ trait ImprovementsController extends FrontendController with ValidActiveSession 
 
   val calcConnector: CalculatorConnector
   val answersConstructor: AnswersConstructor
-  override val sessionTimeoutUrl = controllers.routes.SummaryController.restart().url
-  override val homeLink = controllers.routes.DisposalDateController.disposalDate().url
 
   private def improvementsBackUrl(rebasedValue: Option[RebasedValueModel], acquisitionDate: Option[AcquisitionDateModel])
                                  (implicit hc: HeaderCarrier): Future[String] = (rebasedValue, acquisitionDate) match {

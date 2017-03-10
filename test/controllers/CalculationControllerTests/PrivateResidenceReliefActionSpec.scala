@@ -84,12 +84,6 @@ class PrivateResidenceReliefActionSpec extends UnitSpec with WithFakeApplication
     }
   }
 
-  "PrivateResidenceReliefController" should {
-    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-      PrivateResidenceReliefController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
-    }
-  }
-
   "Calling the .getAcquisitionDate method" should {
 
     "return a valid date when one is found with an answer of yes" in {

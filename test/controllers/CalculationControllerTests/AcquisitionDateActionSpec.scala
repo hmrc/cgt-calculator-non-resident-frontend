@@ -48,12 +48,6 @@ class AcquisitionDateActionSpec extends UnitSpec with WithFakeApplication with M
     }
   }
 
-  "AcquisitionDateController" should {
-    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-      AcquisitionDateController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
-    }
-  }
-
   "Calling the .acquisitionDate action " should {
 
     "no session is active" should {
@@ -64,7 +58,7 @@ class AcquisitionDateActionSpec extends UnitSpec with WithFakeApplication with M
         status(result) shouldBe 303
       }
 
-      s"redirect to ${controllers.utils.TimeoutController.timeout("restart", "home")}" in {
+      s"redirect to ${controllers.utils.TimeoutController.timeout()}" in {
         redirectLocation(result).get should include("/calculate-your-capital-gains/non-resident/session-timeout")
       }
     }

@@ -8,7 +8,6 @@
   mainContent: Html = HtmlFormat.empty,
   serviceInfoContent: Html = HtmlFormat.empty,
   scriptElem: Option[Html] = None,
-  homeLink: String,
   navTitle: String = "Calculate your Capital Gains Tax"
 )(implicit request: Request[_], messages: Messages)
 
@@ -33,7 +32,7 @@
 }
 
 @headerNavLinks = {
-  <li><a id="homeNavHref" href="@homeLink"
+  <li><a id="homeNavHref" href="@common.DefaultRoutes.homeUrl"
          data-journey-click="primary-navigation:Click:Home">Home</a></li>
 }
 

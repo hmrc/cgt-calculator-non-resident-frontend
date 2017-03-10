@@ -82,7 +82,7 @@ class SummaryActionSpec extends UnitSpec with WithFakeApplication with MockitoSu
       .thenReturn(Future.successful(taxOwedResult))
 
     when(mockCalcConnector.getTaxYear(ArgumentMatchers.any())(ArgumentMatchers.any()))
-      .thenReturn(Future.successful(Some(TaxYearModel("2015/16", true, "2015/16"))))
+      .thenReturn(Future.successful(Some(TaxYearModel("2015/16", isValidYear = true, "2015/16"))))
 
     when(mockCalcConnector.fetchAndGetFormData[OtherReliefsModel](
       ArgumentMatchers.eq(KeystoreKeys.otherReliefsFlat))(ArgumentMatchers.any(), ArgumentMatchers.any()))
@@ -129,14 +129,8 @@ class SummaryActionSpec extends UnitSpec with WithFakeApplication with MockitoSu
     None,
     None,
     None,
-    BroughtForwardLossesModel(false, None)
+    BroughtForwardLossesModel(isClaiming = false, None)
   )
-
-  "SummaryController" should {
-    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-      SummaryController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
-    }
-  }
 
   "Calling the .summary action" when {
 

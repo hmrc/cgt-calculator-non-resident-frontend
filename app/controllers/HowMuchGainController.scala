@@ -36,8 +36,6 @@ object HowMuchGainController extends HowMuchGainController {
 trait HowMuchGainController extends FrontendController with ValidActiveSession {
 
   val calcConnector: CalculatorConnector
-  override val sessionTimeoutUrl = controllers.routes.SummaryController.restart().url
-  override val homeLink = controllers.routes.DisposalDateController.disposalDate().url
 
   val howMuchGain = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[HowMuchGainModel](KeystoreKeys.howMuchGain).map {

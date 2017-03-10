@@ -36,8 +36,6 @@ object WorthWhenBoughtForLessController extends WorthWhenBoughtForLessController
 trait WorthWhenBoughtForLessController extends FrontendController with ValidActiveSession {
 
   val calcConnector: CalculatorConnector
-  override val sessionTimeoutUrl = controllers.routes.SummaryController.restart().url
-  override val homeLink = controllers.routes.DisposalDateController.disposalDate().url
 
   val worthWhenBoughtForLess = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[AcquisitionValueModel](KeystoreKeys.acquisitionMarketValue).map {

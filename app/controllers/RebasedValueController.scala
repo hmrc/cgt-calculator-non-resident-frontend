@@ -38,8 +38,6 @@ object RebasedValueController extends RebasedValueController {
 
 trait RebasedValueController extends FrontendController with ValidActiveSession {
 
-  override val sessionTimeoutUrl = controllers.routes.SummaryController.restart().url
-  override val homeLink = controllers.routes.DisposalDateController.disposalDate().url
   val calcConnector: CalculatorConnector
 
   private def routeToMandatoryFuture(data: AcquisitionDateModel): Future[Boolean] = Future.successful(routeToMandatory(data))

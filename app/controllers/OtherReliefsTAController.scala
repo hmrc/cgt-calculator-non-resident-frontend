@@ -38,8 +38,6 @@ object OtherReliefsTAController extends OtherReliefsTAController {
 
 trait OtherReliefsTAController extends FrontendController with ValidActiveSession {
 
-  override val sessionTimeoutUrl = controllers.routes.SummaryController.restart().url
-  override val homeLink = controllers.routes.DisposalDateController.disposalDate().url
   val answersConstructor: AnswersConstructor
   val calcConnector: CalculatorConnector
 

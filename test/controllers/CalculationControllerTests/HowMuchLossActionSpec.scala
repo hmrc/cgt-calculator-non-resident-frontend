@@ -42,7 +42,7 @@ class HowMuchLossActionSpec extends UnitSpec with WithFakeApplication with Mocki
       .thenReturn(getData)
 
     new HowMuchLossController {
-      val calcConnector = mockConnector
+      val calcConnector: CalculatorConnector = mockConnector
     }
   }
 

@@ -75,12 +75,6 @@ class ImprovementsActionSpec extends UnitSpec with WithFakeApplication with Mock
     }
   }
 
-  "ImprovementsController" should {
-    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-      ImprovementsController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
-    }
-  }
-
   "In CalculationController calling the .improvements action " when {
 
     "not supplied with a pre-existing stored model" should {

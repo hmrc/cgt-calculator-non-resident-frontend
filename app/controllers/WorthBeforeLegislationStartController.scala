@@ -36,8 +36,6 @@ object WorthBeforeLegislationStartController extends WorthBeforeLegislationStart
 trait WorthBeforeLegislationStartController extends FrontendController with ValidActiveSession {
 
   val calcConnector: CalculatorConnector
-  override val sessionTimeoutUrl = controllers.routes.SummaryController.restart().url
-  override val homeLink = controllers.routes.DisposalDateController.disposalDate().url
 
   val worthBeforeLegislationStart = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[WorthBeforeLegislationStartModel](KeystoreKeys.worthBeforeLegislationStart).map {

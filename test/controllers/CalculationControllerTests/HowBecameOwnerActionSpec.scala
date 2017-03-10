@@ -57,12 +57,6 @@ class HowBecameOwnerActionSpec extends UnitSpec with WithFakeApplication with Fa
     }
   }
 
-  "HowBecameOwnerController" should {
-    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-      HowBecameOwnerController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
-    }
-  }
-
   "Calling .howBecameOwner action" when {
 
     "provided with a valid session while valid for prr" should {

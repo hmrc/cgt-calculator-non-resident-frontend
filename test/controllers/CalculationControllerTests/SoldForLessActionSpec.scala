@@ -49,12 +49,6 @@ class SoldForLessActionSpec extends UnitSpec with WithFakeApplication with FakeR
     }
   }
 
-  "SoldForLessController" should {
-    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-      SoldForLessController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
-    }
-  }
-
   "Calling .soldForLess from the nonresident SoldForLess" when {
 
     "request has a valid session and no keystore value" should {
