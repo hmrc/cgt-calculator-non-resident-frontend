@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 HM Revenue & Customs
+ * Copyright 2017 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
 
 package controllers.utils
 
+import play.api.Play.current
+import play.api.i18n.Messages.Implicits._
 import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import views.html.warnings._
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 
 import scala.concurrent.Future
 
@@ -28,7 +28,7 @@ object TimeoutController extends TimeoutController
 
 trait TimeoutController extends FrontendController {
 
-  def timeout(restartUrl: String, homeLink: String) : Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok(sessionTimeout(restartUrl, homeLink)))
+  def timeout(): Action[AnyContent] = Action.async { implicit request =>
+    Future.successful(Ok(sessionTimeout()))
   }
 }

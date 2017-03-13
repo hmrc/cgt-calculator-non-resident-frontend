@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 HM Revenue & Customs
+ * Copyright 2017 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ import scala.concurrent.Future
 
 class BroughtForwardLossesActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val hc = mock[HeaderCarrier]
+  implicit val hc: HeaderCarrier = mock[HeaderCarrier]
 
   def setupTarget(getData: Option[BroughtForwardLossesModel],
                   otherPropertiesModel: Option[OtherPropertiesModel] = None,
@@ -88,7 +88,7 @@ class BroughtForwardLossesActionSpec extends UnitSpec with WithFakeApplication w
     }
 
     "provided with previous data" should {
-      val target = setupTarget(Some(BroughtForwardLossesModel(false, None)))
+      val target = setupTarget(Some(BroughtForwardLossesModel(isClaiming = false, None)))
       lazy val result = target.broughtForwardLosses(fakeRequestWithSession)
       lazy val document = Jsoup.parse(bodyOf(result))
 

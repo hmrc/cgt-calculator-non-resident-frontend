@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 HM Revenue & Customs
+ * Copyright 2017 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,8 +39,6 @@ object SummaryController extends SummaryController {
 
 trait SummaryController extends FrontendController with ValidActiveSession {
 
-  override val sessionTimeoutUrl = controllers.routes.SummaryController.restart().url
-  override val homeLink = controllers.routes.DisposalDateController.disposalDate().url
   val calcConnector: CalculatorConnector
   val answersConstructor: AnswersConstructor
 
@@ -199,6 +197,6 @@ trait SummaryController extends FrontendController with ValidActiveSession {
 
   def restart(): Action[AnyContent] = Action.async { implicit request =>
     calcConnector.clearKeystore(hc)
-    Future.successful(Redirect(routes.DisposalDateController.disposalDate()))
+    Future.successful(Redirect(common.DefaultRoutes.homeUrl))
   }
 }

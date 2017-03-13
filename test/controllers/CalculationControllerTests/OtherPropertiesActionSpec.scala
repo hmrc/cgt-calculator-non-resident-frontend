@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 HM Revenue & Customs
+ * Copyright 2017 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -64,12 +64,6 @@ class OtherPropertiesActionSpec extends UnitSpec with WithFakeApplication with M
     }
   }
 
-  "OtherPropertiesController" should {
-    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-      OtherPropertiesController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
-    }
-  }
-
   // GET Tests
   "Calling the CalculationController.otherProperties" when {
 
@@ -81,7 +75,7 @@ class OtherPropertiesActionSpec extends UnitSpec with WithFakeApplication with M
         status(result) shouldBe 303
       }
 
-      s"redirect to ${controllers.utils.TimeoutController.timeout("restart", "home")}" in {
+      s"redirect to ${controllers.utils.TimeoutController.timeout()}" in {
         redirectLocation(result).get should include("/calculate-your-capital-gains/non-resident/session-timeout")
       }
     }

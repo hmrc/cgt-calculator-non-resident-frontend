@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 HM Revenue & Customs
+ * Copyright 2017 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -85,12 +85,6 @@ class OtherReliefsRebasedActionSpec extends UnitSpec with WithFakeApplication wi
     new OtherReliefsRebasedController {
       override val calcConnector: CalculatorConnector = mockCalcConnector
       override val answersConstructor: AnswersConstructor = mockAnswersConstructor
-    }
-  }
-
-  "OtherReliefsRebasedController" should {
-    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-      OtherReliefsRebasedController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
     }
   }
 

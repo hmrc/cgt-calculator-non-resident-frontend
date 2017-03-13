@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 HM Revenue & Customs
+ * Copyright 2017 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -81,12 +81,6 @@ class PrivateResidenceReliefActionSpec extends UnitSpec with WithFakeApplication
     new PrivateResidenceReliefController {
       override val calcConnector: CalculatorConnector = mockCalcConnector
       override val answersConstructor: AnswersConstructor = mockAnswersConstructor
-    }
-  }
-
-  "PrivateResidenceReliefController" should {
-    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-      PrivateResidenceReliefController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
     }
   }
 

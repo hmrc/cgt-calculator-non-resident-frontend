@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 HM Revenue & Customs
+ * Copyright 2017 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -85,7 +85,7 @@ class ReportActionSpec extends UnitSpec with WithFakeApplication with FakeReques
       .thenReturn(Future.successful(taxOwedResult))
 
     when(mockCalculatorConnector.getTaxYear(ArgumentMatchers.any())(ArgumentMatchers.any()))
-      .thenReturn(Future.successful(Some(TaxYearModel("2015/16", true, "2015/16"))))
+      .thenReturn(Future.successful(Some(TaxYearModel("2015/16", isValidYear = true, "2015/16"))))
 
     when(mockCalculatorConnector.fetchAndGetFormData[OtherReliefsModel](
       ArgumentMatchers.eq(KeystoreKeys.otherReliefsFlat))(ArgumentMatchers.any(), ArgumentMatchers.any()))
@@ -101,7 +101,7 @@ class ReportActionSpec extends UnitSpec with WithFakeApplication with FakeReques
 
     new ReportController {
       override val calcConnector: CalculatorConnector = mockCalculatorConnector
-      override val answersConstructor = mockAnswersConstructor
+      override val answersConstructor: AnswersConstructor = mockAnswersConstructor
       override def host(implicit request: RequestHeader): String = "http://localhost:9977"
     }
   }
@@ -131,7 +131,7 @@ class ReportActionSpec extends UnitSpec with WithFakeApplication with FakeReques
     None,
     None,
     None,
-    BroughtForwardLossesModel(false, None)
+    BroughtForwardLossesModel(isClaiming = false, None)
   )
 
   "ReportController" should {
@@ -149,7 +149,7 @@ class ReportActionSpec extends UnitSpec with WithFakeApplication with FakeReques
 
     "the calculation chosen is flat" should {
 
-      lazy val taxYear = TaxYearModel("2016-12-12", true, "16")
+      lazy val taxYear = TaxYearModel("2016-12-12", isValidYear = true, "16")
 
       lazy val target = setupTarget(
         model,
@@ -181,7 +181,7 @@ class ReportActionSpec extends UnitSpec with WithFakeApplication with FakeReques
 
     "the calculation chosen is flat with some PRR" should {
 
-      lazy val taxYear = TaxYearModel("2016-12-12", true, "16")
+      lazy val taxYear = TaxYearModel("2016-12-12", isValidYear = true, "16")
 
       lazy val target = setupTarget(
         model,
@@ -214,7 +214,7 @@ class ReportActionSpec extends UnitSpec with WithFakeApplication with FakeReques
 
       "the calculation chosen is rebased" should {
 
-      lazy val taxYear = TaxYearModel("2016-12-12", true, "16")
+      lazy val taxYear = TaxYearModel("2016-12-12", isValidYear = true, "16")
 
       lazy val target = setupTarget(
         model,
@@ -246,7 +246,7 @@ class ReportActionSpec extends UnitSpec with WithFakeApplication with FakeReques
 
     "the calculation chosen is time apportioned" should {
 
-      lazy val taxYear = TaxYearModel("2016-12-12", true, "16")
+      lazy val taxYear = TaxYearModel("2016-12-12", isValidYear = true, "16")
 
       lazy val target = setupTarget(
         model,
@@ -276,7 +276,7 @@ class ReportActionSpec extends UnitSpec with WithFakeApplication with FakeReques
     }
 
     "supplied without a session" should {
-      lazy val taxYear = TaxYearModel("2016-12-12", true, "16")
+      lazy val taxYear = TaxYearModel("2016-12-12", isValidYear = true, "16")
 
       lazy val target = setupTarget(
         model,

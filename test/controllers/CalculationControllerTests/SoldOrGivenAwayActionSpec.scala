@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 HM Revenue & Customs
+ * Copyright 2017 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,12 +49,6 @@ class SoldOrGivenAwayActionSpec extends UnitSpec with WithFakeApplication with M
     }
   }
 
-  "SoldOrGivenAwayController" should {
-    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-      SoldOrGivenAwayController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
-    }
-  }
-
   //GET Tests
   "Calling the SellOrGiveAway .sellOrGiveAway" when {
 
@@ -89,7 +83,6 @@ class SoldOrGivenAwayActionSpec extends UnitSpec with WithFakeApplication with M
     "not supplied with a valid session" should {
       val target = setUpTarget(Some(SoldOrGivenAwayModel(true)))
       lazy val result = target.soldOrGivenAway(fakeRequest)
-      lazy val document = Jsoup.parse(bodyOf(result))
 
       "return a 303 response" in {
         status(result) shouldBe 303

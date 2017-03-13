@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 HM Revenue & Customs
+ * Copyright 2017 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@ class FrontendGlobalSpec extends UnitSpec with WithFakeApplication {
         val result = standardErrorTemplate("test", "teat-heading", "test-message")(fakeRequest)
         val doc = Jsoup.parse(result.body)
 
-        doc.getElementById("homeNavHref").attr("href") shouldBe controllers.routes.CustomerTypeController.customerType().url
+        doc.getElementById("homeNavHref").attr("href") shouldBe controllers.routes.DisposalDateController.disposalDate().url
       }
 
     }
@@ -48,7 +48,7 @@ class FrontendGlobalSpec extends UnitSpec with WithFakeApplication {
         val result = standardErrorTemplate("test", "teat-heading", "test-message")(fakeRequest)
         val doc = Jsoup.parse(result.body)
 
-        doc.getElementById("homeNavHref").attr("href") shouldBe "/calculate-your-capital-gains/"
+        doc.getElementById("homeNavHref").attr("href") shouldBe controllers.routes.DisposalDateController.disposalDate().url
       }
 
     }

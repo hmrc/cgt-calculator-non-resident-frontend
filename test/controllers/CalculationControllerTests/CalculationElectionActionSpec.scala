@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 HM Revenue & Customs
+ * Copyright 2017 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -78,18 +78,12 @@ class CalculationElectionActionSpec extends UnitSpec with WithFakeApplication wi
       .thenReturn(Future.successful(taxOwedResult))
 
     when(mockCalcConnector.getTaxYear(ArgumentMatchers.any())(ArgumentMatchers.any()))
-      .thenReturn(Future.successful(Some(TaxYearModel("2015/16", true, "2015/16"))))
+      .thenReturn(Future.successful(Some(TaxYearModel("2015/16", isValidYear = true, "2015/16"))))
 
     new CalculationElectionController {
       override val calcConnector: CalculatorConnector = mockCalcConnector
       override val calcElectionConstructor: CalculationElectionConstructor = mockCalcElectionConstructor
       override val calcAnswersConstructor: AnswersConstructor = mockCalcAnswersConstructor
-    }
-  }
-
-  "CalculationElectionController" should {
-    s"have a session timeout home link of '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-      CalculationElectionController.homeLink shouldEqual controllers.routes.DisposalDateController.disposalDate().url
     }
   }
 
@@ -103,7 +97,7 @@ class CalculationElectionActionSpec extends UnitSpec with WithFakeApplication wi
     None,
     None,
     None,
-    BroughtForwardLossesModel(false, None)
+    BroughtForwardLossesModel(isClaiming = false, None)
   )
 
   // GET Tests
@@ -260,7 +254,7 @@ class CalculationElectionActionSpec extends UnitSpec with WithFakeApplication wi
 
     "submitting an invalid calculation election" should {
 
-      lazy val request = fakeRequestToPOSTWithSession(("calculationElection", "fehuifoh"))
+      lazy val request = fakeRequestToPOSTWithSession(("calculationElection", "something"))
       lazy val target = setupTarget(
         None,
         None,
