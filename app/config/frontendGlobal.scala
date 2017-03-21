@@ -43,8 +43,6 @@ object FrontendGlobal
     ApplicationCrypto.verifyConfiguration()
   }
 
-  override def defaultFrontendFilters: Seq[EssentialFilter] = super.defaultFrontendFilters.filterNot(filter => filter.isInstanceOf[SessionTimeoutFilter])
-
   override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit rh: Request[_]): Html =
     views.html.error_template(pageTitle, heading, message)
 
