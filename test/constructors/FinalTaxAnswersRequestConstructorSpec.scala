@@ -119,6 +119,17 @@ class FinalTaxAnswersRequestConstructorSpec extends UnitSpec {
       ) shouldEqual "&annualExemptAmount=2000"
     }
 
+    "produce the entered amount for aea if otherProperties = Yes, previousLossOrGain = Gain, howMuchGain == 10000.0" in {
+      FinalTaxAnswersRequestConstructor.annualExemptAmount(
+        OtherPropertiesModel("Yes"),
+        Some(PreviousLossOrGainModel("Gain")),
+        Some(HowMuchLossModel(1.0)),
+        Some(HowMuchGainModel(10000.0)),
+        Some(AnnualExemptAmountModel(2000)),
+        1000.0
+      ) shouldEqual "&annualExemptAmount=0"
+    }
+
     "produce the entered amount for aea if otherProperties = Yes, previousLossOrGain = Neither" in {
       FinalTaxAnswersRequestConstructor.annualExemptAmount(
         OtherPropertiesModel("Yes"),
