@@ -92,6 +92,7 @@ object FinalTaxAnswersRequestConstructor {
         s"&annualExemptAmount=${annualExemptAmountModel.get.annualExemptAmount}"
       case (YesNoKeys.yes, Some(PreviousLossOrGainModel(PreviousGainOrLossKeys.gain)), _, Some(HowMuchGainModel(gain))) if gain == 0.0 =>
         s"&annualExemptAmount=${annualExemptAmountModel.get.annualExemptAmount}"
+      case (YesNoKeys.yes, Some(PreviousLossOrGainModel(PreviousGainOrLossKeys.gain)), _, Some(HowMuchGainModel(_))) => "&annualExemptAmount=0"
       case (YesNoKeys.yes, Some(PreviousLossOrGainModel(PreviousGainOrLossKeys.neither)), _, _) =>
         s"&annualExemptAmount=${annualExemptAmountModel.get.annualExemptAmount}"
       case (_, _, _, _) =>
