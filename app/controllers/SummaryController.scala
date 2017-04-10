@@ -120,9 +120,7 @@ trait SummaryController extends FrontendController with ValidActiveSession {
       case (None) => Future.successful(common.DefaultRoutes.missingDataRoute)
     }
 
-    def displayDateWarning(disposalDate: DisposalDateModel): Future[Boolean] = {
-      Future.successful(!TaxDates.dateInsideTaxYear(disposalDate.day, disposalDate.month, disposalDate.year))
-    }
+    def displayDateWarning(taxYearDetails: Option[TaxYearModel]): Future[Boolean] = Future.successful(!taxYearDetails.exists(_.isValidYear))
 
     def calculateDetails(summaryData: TotalGainAnswersModel): Future[Option[TotalGainResultsModel]] = {
       calcConnector.calculateTotalGain(summaryData)
@@ -176,13 +174,13 @@ trait SummaryController extends FrontendController with ValidActiveSession {
 
     for {
       answers <- answersConstructor.getNRTotalGainAnswers(hc)
-      displayWarning <- displayDateWarning(answers.disposalDateModel)
       totalGainResultsModel <- calculateDetails(answers)
       privateResidentReliefModel <- getPRRModel(hc, totalGainResultsModel.get)
       calculationResultsWithPRR <- calculatePRR(answers, privateResidentReliefModel)
       finalAnswers <- getFinalTaxAnswers(totalGainResultsModel.get, calculationResultsWithPRR)
       otherReliefsModel <- getAllOtherReliefs(finalAnswers)
       taxYear <- getTaxYear(answers)
+      displayWarning <- displayDateWarning(taxYear)
       maxAEA <- getMaxAEA(finalAnswers, taxYear)
       finalResult <- calculateTaxOwed(answers, privateResidentReliefModel, finalAnswers, maxAEA.get, otherReliefsModel)
       backUrl <- summaryBackUrl(totalGainResultsModel)
@@ -190,8 +188,7 @@ trait SummaryController extends FrontendController with ValidActiveSession {
       results <- getSection(calculationResultsWithPRR, privateResidentReliefModel,
         totalGainResultsModel.get, calculationType.get.calculationType, finalResult, taxYear)
       taxOwed <- getTaxOwed(finalResult, calculationType.get.calculationType)
-      route <- routeRequest(results, backUrl, displayWarning,
-        calculationType.get.calculationType, taxOwed)
+      route <- routeRequest(results, backUrl, displayWarning, calculationType.get.calculationType, taxOwed)
     } yield route
   }
 
