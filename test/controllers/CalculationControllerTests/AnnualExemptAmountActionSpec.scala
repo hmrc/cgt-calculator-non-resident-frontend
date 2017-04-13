@@ -81,6 +81,9 @@ class AnnualExemptAmountActionSpec extends UnitSpec with WithFakeApplication wit
     when(mockCalcConnector.getPartialAEA(ArgumentMatchers.anyInt())(ArgumentMatchers.any()))
       .thenReturn(Some(BigDecimal(5550)))
 
+    when(mockCalcConnector.getTaxYear(ArgumentMatchers.anyString())(ArgumentMatchers.any()))
+      .thenReturn(Some(TaxYearModel("2016-5-6", isValidYear = true, "2016/17")))
+
     new AnnualExemptAmountController {
       override val calcConnector: CalculatorConnector = mockCalcConnector
     }

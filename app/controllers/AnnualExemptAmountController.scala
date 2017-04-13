@@ -16,7 +16,7 @@
 
 package controllers
 
-import common.Dates
+import common.TaxDates
 import common.DefaultRoutes._
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.nonresident.CustomerTypeKeys
@@ -26,7 +26,7 @@ import controllers.predicates.ValidActiveSession
 import forms.AnnualExemptAmountForm._
 import models._
 import play.api.data.Form
-import play.api.mvc.Result
+import play.api.mvc.{Action, AnyContent, Result}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import uk.gov.hmrc.play.http.HeaderCarrier
 import views.html.calculation
@@ -105,7 +105,17 @@ trait AnnualExemptAmountController extends FrontendController with ValidActiveSe
     }
   }
 
-  val annualExemptAmount = ValidateSession.async { implicit request =>
+  private def formatDisposalDate(disposalDateModel: Option[DisposalDateModel]): Future[String] = {
+    val date = disposalDateModel.get
+    Future.successful(s"${date.year}-${date.month}-${date.day}")
+  }
+
+  private def getTaxYear(details: Option[TaxYearModel]) = {
+    val taxYear = details.get
+    Future.successful(TaxDates.taxYearStringToInteger(taxYear.calculationTaxYear))
+  }
+
+  val annualExemptAmount: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     def routeRequest(model: Option[AnnualExemptAmountModel], maxAEA: BigDecimal, backUrl: String): Future[Result] = {
       calcConnector.fetchAndGetFormData[AnnualExemptAmountModel](KeystoreKeys.annualExemptAmount).map {
@@ -116,9 +126,11 @@ trait AnnualExemptAmountController extends FrontendController with ValidActiveSe
 
     for {
       disposalDate <- fetchDisposalDate(hc)
+      date <- formatDisposalDate(disposalDate)
       customerTypeVal <- customerType(hc)
       isDisabledTrustee <- trusteeAEA(customerTypeVal.get.customerType)
-      taxYear <- Future.successful(Dates.getDisposalYear(disposalDate.get.day, disposalDate.get.month, disposalDate.get.year))
+      closestTaxYear <- calcConnector.getTaxYear(date)
+      taxYear <- getTaxYear(closestTaxYear)
       maxAEA <- fetchMaxAEA(isDisabledTrustee, taxYear)
       annualExemptAmount <- fetchAnnualExemptAmount(hc)
       previousLossOrGain <- fetchPreviousGainOrLoss(hc)
@@ -129,7 +141,7 @@ trait AnnualExemptAmountController extends FrontendController with ValidActiveSe
     } yield finalResult
   }
 
-  val submitAnnualExemptAmount = ValidateSession.async { implicit request =>
+  val submitAnnualExemptAmount: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     def errorAction(form: Form[AnnualExemptAmountModel], maxAEA: BigDecimal, backUrl: String) = {
       Future.successful(BadRequest(calculation.annualExemptAmount(form, maxAEA, backUrl)))
@@ -148,9 +160,11 @@ trait AnnualExemptAmountController extends FrontendController with ValidActiveSe
 
     for {
       disposalDate <- fetchDisposalDate(hc)
+      date <- formatDisposalDate(disposalDate)
       customerTypeVal <- customerType(hc)
       isDisabledTrustee <- trusteeAEA(customerTypeVal.get.customerType)
-      taxYear <- Future.successful(Dates.getDisposalYear(disposalDate.get.day, disposalDate.get.month, disposalDate.get.year))
+      closestTaxYear <- calcConnector.getTaxYear(date)
+      taxYear <- getTaxYear(closestTaxYear)
       maxAEA <- fetchMaxAEA(isDisabledTrustee, taxYear)
       previousLossOrGain <- fetchPreviousGainOrLoss(hc)
       gainAmount <- fetchPreviousGainAmount(previousLossOrGain.get.previousLossOrGain)
