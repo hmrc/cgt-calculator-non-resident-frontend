@@ -16,17 +16,18 @@
 
 package controllers
 
-import common.Dates
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import common.TaxDates
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import forms.PersonalAllowanceForm._
-import views.html.calculation
-import models.{DisposalDateModel, PersonalAllowanceModel}
-import play.api.data.Form
-import uk.gov.hmrc.play.frontend.controller.FrontendController
-import play.api.i18n.Messages.Implicits._
+import models.{DisposalDateModel, PersonalAllowanceModel, TaxYearModel}
 import play.api.Play.current
+import play.api.data.Form
+import play.api.i18n.Messages.Implicits._
+import play.api.mvc.{Action, AnyContent}
+import uk.gov.hmrc.play.frontend.controller.FrontendController
+import views.html.calculation
 
 import scala.concurrent.Future
 
@@ -38,20 +39,32 @@ trait PersonalAllowanceController extends FrontendController with ValidActiveSes
 
   val calcConnector: CalculatorConnector
 
-  val personalAllowance = ValidateSession.async { implicit request =>
+  val personalAllowance: Action[AnyContent] = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[PersonalAllowanceModel](KeystoreKeys.personalAllowance).map {
       case Some(data) => Ok(calculation.personalAllowance(personalAllowanceForm().fill(data)))
       case None => Ok(calculation.personalAllowance(personalAllowanceForm()))
     }
   }
 
-  val submitPersonalAllowance = ValidateSession.async { implicit request =>
+  val submitPersonalAllowance: Action[AnyContent] = ValidateSession.async { implicit request =>
+
+    def formatDisposalDate(disposalDateModel: Option[DisposalDateModel]): Future[String] = {
+      val date = disposalDateModel.get
+      Future.successful(s"${date.year}-${date.month}-${date.day}")
+    }
+
+    def getTaxYear(details: Option[TaxYearModel]) = {
+      val taxYear = details.get
+      Future.successful(TaxDates.taxYearStringToInteger(taxYear.calculationTaxYear))
+    }
 
     def getPersonalAllowanceForYear: Future[BigDecimal] = {
       for {
         disposalDate <- calcConnector.fetchAndGetFormData[DisposalDateModel](KeystoreKeys.disposalDate)
-        disposalYear <- Future.successful(Dates.getDisposalYear(disposalDate.get.day, disposalDate.get.month, disposalDate.get.year))
-        yearsAllowance <- calcConnector.getPA(disposalYear)
+        date <- formatDisposalDate(disposalDate)
+        taxYearDetails <- calcConnector.getTaxYear(date)
+        taxYear <- getTaxYear(taxYearDetails)
+        yearsAllowance <- calcConnector.getPA(taxYear)
       } yield yearsAllowance.get
     }
 
@@ -60,13 +73,13 @@ trait PersonalAllowanceController extends FrontendController with ValidActiveSes
     }
 
     def successAction(model: PersonalAllowanceModel) = {
-      calcConnector.saveFormData[PersonalAllowanceModel] (KeystoreKeys.personalAllowance, model)
+      calcConnector.saveFormData[PersonalAllowanceModel](KeystoreKeys.personalAllowance, model)
       Future.successful(Redirect(routes.OtherPropertiesController.otherProperties()))
     }
 
     for {
-      pA <- getPersonalAllowanceForYear
-      action <- personalAllowanceForm(pA).bindFromRequest.fold(errorAction, successAction)
+      allowance <- getPersonalAllowanceForYear
+      action <- personalAllowanceForm(allowance).bindFromRequest.fold(errorAction, successAction)
     } yield action
   }
 }

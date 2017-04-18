@@ -31,7 +31,7 @@ import org.scalatest.mock.MockitoSugar
 
 import scala.concurrent.Future
 import controllers.routes
-import models.{DisposalDateModel, PersonalAllowanceModel}
+import models.{DisposalDateModel, PersonalAllowanceModel, TaxYearModel}
 
 class PersonalAllowanceActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
@@ -48,6 +48,9 @@ class PersonalAllowanceActionSpec extends UnitSpec with WithFakeApplication with
     when(mockCalcConnector.fetchAndGetFormData[DisposalDateModel](
       ArgumentMatchers.eq(KeystoreKeys.disposalDate))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(DisposalDateModel(6, 5, 2016))))
+
+    when(mockCalcConnector.getTaxYear(ArgumentMatchers.anyString())(ArgumentMatchers.any()))
+      .thenReturn(Some(TaxYearModel("2016-5-6", isValidYear = true, "2016/17")))
 
     when(mockCalcConnector.getPA(ArgumentMatchers.anyInt(), ArgumentMatchers.anyBoolean())(ArgumentMatchers.any()))
       .thenReturn(Some(BigDecimal(11000)))
