@@ -126,8 +126,8 @@ class PersonalAllowanceViewSpec extends UnitSpec with WithFakeApplication with M
             link.text shouldEqual s"${messages.link} ${commonMessages.externalLink}"
           }
 
-          s"have an href to 'https://www.gov.uk/government/publications/rates-and-allowances-income-tax/income-tax-rates-and-allowances-current-and-past'" in {
-            link.attr("href") shouldEqual "https://www.gov.uk/government/publications/rates-and-allowances-income-tax/income-tax-rates-and-allowances-current-and-past"
+          "have an href to 'https://www.gov.uk/income-tax-rates/current-rates-and-allowances'" in {
+            link.attr("href") shouldEqual "https://www.gov.uk/income-tax-rates/current-rates-and-allowances"
           }
 
           "have the class 'external-link'" in {
