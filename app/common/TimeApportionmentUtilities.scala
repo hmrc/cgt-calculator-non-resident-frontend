@@ -14,27 +14,15 @@
  * limitations under the License.
  */
 
-package models
+package common
 
-import java.time.LocalDate
+object TimeApportionmentUtilities {
 
-import common.Dates
-import play.api.libs.json.Json
+  val percentageOfTotalGain: BigDecimal => BigDecimal => Int =
+    flatGain =>
+      timeApportionedGain =>
+        //This if statement should, by the very nature of the calculations NEVER be triggered but it's a catch all.
+        if(flatGain < timeApportionedGain || flatGain <= 0 || timeApportionedGain <= 0) 0
+        else Math.round((timeApportionedGain.toDouble/flatGain.toDouble)*100).toInt
 
-import scala.util.{Success, Try}
-
-case class DisposalDateModel (day: Int, month: Int, year: Int)
-
-object DisposalDateModel {
-  implicit val format = Json.format[DisposalDateModel]
-
-  implicit val createDate: DisposalDateModel => Option[LocalDate] = model => {
-    val dateFormatter = Dates.formatter
-    Try {
-      LocalDate.parse(s"${model.day}/${model.month}/${model.year}", dateFormatter)
-    } match {
-      case Success(date) => Some(date)
-      case _ => None
-    }
-  }
 }
