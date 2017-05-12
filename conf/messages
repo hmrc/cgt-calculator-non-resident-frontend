@@ -743,3 +743,8 @@ calc.resident.shares.currentIncome.helpText = Include your salary before tax, an
 ## Other Disposals messages
 calc.resident.shares.otherDisposals.bullet.one = UK residential properties
 calc.resident.shares.otherDisposals.bullet.three = other shares
+
+## Summary Partial messages
+calc.summaryPartial.cgtToPay = Capital Gains Tax to pay for {0}
+calc.summaryPartial.warning = Warning
+calc.summaryPartial.noticeSummary = Your result may be inaccurate because the calculator does not support the date of sale you entered. Do not use these figures to report your Capital Gains Tax.

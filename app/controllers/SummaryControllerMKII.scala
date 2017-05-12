@@ -14,18 +14,13 @@
  * limitations under the License.
  */
 
-package models
+package controllers
 
-import play.api.libs.json.Json
+import controllers.predicates.ValidActiveSession
+import uk.gov.hmrc.play.frontend.controller.FrontendController
 
-case class TaxYearModel (taxYearSupplied: String, isValidYear: Boolean, calculationTaxYear: String)
+object SummaryControllerMKII extends FrontendController with ValidActiveSession {
 
-object TaxYearModel {
-  implicit val formats = Json.format[TaxYearModel]
+  val summary = TODO
 
-  def convertToSummaryFormat(taxYear: String): String = {
-    val startYear = taxYear.take(4)
-    val endYear = startYear.toInt + 1
-    startYear + " to " + endYear
-  }
 }

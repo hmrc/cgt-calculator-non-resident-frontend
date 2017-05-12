@@ -58,6 +58,15 @@ object Dates {
     }
   }
 
+  def taxYearOfDateLongHand(date: LocalDate): String = {
+    if (date.isAfter(LocalDate.parse(s"${date.getYear.toString}-$taxYearEnd"))) {
+      s"${date.getYear} to ${date.plusYears(1L).getYear}"
+    }
+    else {
+      s"${date.minusYears(1L).getYear} to ${date.getYear}"
+    }
+  }
+
   def getDisposalYear(day: Int, month: Int, year: Int): Int = {
     val disposalYear = LocalDate.of(year, month, day)
     if (disposalYear.isAfter(LocalDate.parse(s"${year.toString}-$taxYearEnd"))) {
