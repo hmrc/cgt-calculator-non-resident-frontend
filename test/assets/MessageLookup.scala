@@ -443,7 +443,7 @@ object MessageLookup {
       val salesDetailsTitle = "Selling or giving away the property"
       val deductionsTitle = "Deductions"
       val whatToDoNextText = "What to do next"
-      val whatToDoNextContent = "You need to"
+      val whatToDoNextContent = "Before you continue, save a copy of your calculation. You will need this when you report your Capital Gains Tax."
       val whatToDoNextLink = "tell HMRC about the property"
       val startAgain = "Start again"
       val calculationElection = "What would you like to base your tax on?"
@@ -452,7 +452,7 @@ object MessageLookup {
       val rebasedCalculation = "How much you've gained on the property since 5 April 2015"
       val lossesCarriedForward = "Loss carried forward"
       val taxYearWarning = "Your total might be less accurate because you didn't sell or give away your property in this tax year"
-      val saveAsPdf = "Save as PDF"
+      val saveAsPdf = "Download your Capital Gains Tax calculation (PDF, under 25kB)"
 
       def basedOnYear(year: String): String = s"These figures are based on the tax rates from the $year tax year"
     }
