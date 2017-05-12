@@ -32,7 +32,10 @@ class SummaryPartialWorkingOutSectionViewSpec extends UnitSpec with WithFakeAppl
     "supplied with a flat calculation" should {
 
       lazy val view = helpers.summaryPartialWorkingOutSection(
-        CalculationType.flat
+        CalculationType.flat,
+        saleValue = 100000,
+        acquisitionValue = 20000,
+        allCosts = 4000
       )(fakeRequestWithSession, applicationMessages)
       lazy val doc = Jsoup.parse(view.body)
 
@@ -43,12 +46,19 @@ class SummaryPartialWorkingOutSectionViewSpec extends UnitSpec with WithFakeAppl
       s"have the message for a flat calculation type ${messages.flatCalculationSummary}" in {
         doc.select("p.lede").text shouldBe messages.flatCalculationSummary
       }
+
+      s"have the text ${messages.yourTotalGain}" in {
+        doc.select("h4").text shouldBe messages.yourTotalGain
+      }
     }
 
     "supplied with a rebased calculation" should {
 
       lazy val view = helpers.summaryPartialWorkingOutSection(
-        CalculationType.rebased
+        CalculationType.rebased,
+        saleValue = 100000,
+        acquisitionValue = 20000,
+        allCosts = 4000
       )(fakeRequestWithSession, applicationMessages)
       lazy val doc = Jsoup.parse(view.body)
 
@@ -59,12 +69,19 @@ class SummaryPartialWorkingOutSectionViewSpec extends UnitSpec with WithFakeAppl
       s"have the message for a rebased calculation type ${messages.rebasedCalculationSummary} ${messages.rebasedCalculationSummaryDate}" in {
         doc.select("p.lede").text shouldBe s"${messages.rebasedCalculationSummary} ${messages.rebasedCalculationSummaryDate}"
       }
+
+      s"have the text ${messages.yourTotalGain}" in {
+        doc.select("h4").text shouldBe messages.yourTotalGain
+      }
     }
 
     "supplied with a time-apportioned calculation" should {
 
       lazy val view = helpers.summaryPartialWorkingOutSection(
-        CalculationType.timeApportioned
+        CalculationType.timeApportioned,
+        saleValue = 100000,
+        acquisitionValue = 20000,
+        allCosts = 4000
       )(fakeRequestWithSession, applicationMessages)
       lazy val doc = Jsoup.parse(view.body)
 
@@ -74,6 +91,10 @@ class SummaryPartialWorkingOutSectionViewSpec extends UnitSpec with WithFakeAppl
 
       s"have the message for a time calculation type ${messages.timeCalculationSummary} ${messages.timeCalculationSummaryDate}" in {
         doc.select("p.lede").text shouldBe s"${messages.timeCalculationSummary} ${messages.timeCalculationSummaryDate}"
+      }
+
+      s"have the text ${messages.yourTotalGain}" in {
+        doc.select("h4").text shouldBe messages.yourTotalGain
       }
     }
   }
