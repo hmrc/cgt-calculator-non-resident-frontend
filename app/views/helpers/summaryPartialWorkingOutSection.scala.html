@@ -1,0 +1,15 @@
+@import common.nonresident.CalculationType
+
+@(calculationType: String)(implicit request: Request[_], messages: Messages)
+
+<div id="workedOutSection">
+    <h3>@Messages("calc.summaryPartial.workingOutSectionHeading")</h3>
+    <p class="lede">
+        @{calculationType match {
+            case CalculationType.flat => Messages("calc.calculationElection.message.flat")
+            case CalculationType.rebased => <span>{Messages("calc.calculationElection.message.rebased")}</span> <span class="no-wrap"> {Messages("calc.calculationElection.message.rebasedDate")}</span>
+            case CalculationType.timeApportioned => <span>{Messages("calc.calculationElection.message.time")}</span> <span class="no-wrap"> {Messages("calc.calculationElection.message.timeDate")}</span>
+            }
+        }
+    </p>
+</div>

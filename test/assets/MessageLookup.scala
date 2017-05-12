@@ -943,5 +943,12 @@ object MessageLookup {
     val warningHidden: String = "Warning"
     val warningNoticeSummary: String = "Your result may be inaccurate because the calculator does not support the date of sale you entered. " +
       "Do not use these figures to report your Capital Gains Tax."
+
+    val workingOutSectionHeading = "How we've worked this out"
+    val flatCalculationSummary = "How much you've gained on the property since you became the owner"
+    val timeCalculationSummary = "Working out your total gain, then taxing you on the percentage of it you've made since"
+    val timeCalculationSummaryDate = "5 April 2015"
+    val rebasedCalculationSummary = "How much you've gained on the property since"
+    val rebasedCalculationSummaryDate = "5 April 2015"
   }
 }
