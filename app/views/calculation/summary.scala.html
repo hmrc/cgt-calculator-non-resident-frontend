@@ -38,7 +38,7 @@
             <a class="bold-small save-pdf-link" href="@controllers.routes.ReportController.summaryReport.toString" data-journey-click="nr-summary:pdf:save">@Messages("calc.resident.summary.saveAsPdf")</a>
         </div>
         @*TODO Button needs to be updated to use what next routing when available*@
-        <a class="button" href="@controllers.routes.SummaryController.restart" data-journey-click="nav:calc:restart">@Messages("calc.base.continue")</a>
+        <a class="button" href="@controllers.routes.WhatNextController.whatNext" data-journey-click="nav:calc:restart">@Messages("calc.base.continue")</a>
 
     </div>
 }

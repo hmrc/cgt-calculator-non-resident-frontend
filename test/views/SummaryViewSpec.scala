@@ -117,7 +117,7 @@ class SummaryViewSpec extends UnitSpec with WithFakeApplication with FakeRequest
         }
 
         "have a link to /calculate-your-capital-gains/non-resident/restart" in {
-          startAgain.attr("href") shouldBe controllers.routes.SummaryController.restart().url
+          startAgain.attr("href") shouldBe controllers.routes.WhatNextController.whatNext().url
         }
       }
 

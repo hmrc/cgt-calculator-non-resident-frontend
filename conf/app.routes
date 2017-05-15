@@ -173,3 +173,8 @@ GET         /summary-report                     controllers.ReportController.sum
 GET         /summary                            controllers.SummaryController.summary
 GET         /restart                            controllers.SummaryController.restart
 ########################################################
+
+#WhatNext route
+########################################################
+GET         /what-next                          controllers.WhatNextController.whatNext
+POST        /what-next                          controllers.WhatNextController.submitWhatNext
