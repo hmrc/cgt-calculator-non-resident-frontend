@@ -18,11 +18,11 @@ package common
 
 object TimeApportionmentUtilities {
 
-  val percentageOfTotalGain: BigDecimal => BigDecimal => Int =
+  def percentageOfTotalGain: BigDecimal => BigDecimal => Int =
     flatGain =>
       timeApportionedGain =>
         //This if statement should, by the very nature of the calculations NEVER be triggered but it's a catch all.
-        if(flatGain < timeApportionedGain || flatGain <= 0 || timeApportionedGain <= 0) 0
+        if(flatGain < timeApportionedGain || flatGain <= 0 || timeApportionedGain <= 0) throw(new Exception)
         else Math.round((timeApportionedGain.toDouble/flatGain.toDouble)*100).toInt
 
 }
