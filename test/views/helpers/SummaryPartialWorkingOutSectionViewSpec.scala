@@ -91,6 +91,14 @@ class SummaryPartialWorkingOutSectionViewSpec extends UnitSpec with WithFakeAppl
           doc.select("#totalGain-amount").text shouldBe "£50,000"
         }
       }
+
+      "does not have row for the a percentage gain made on the property" in {
+        doc.select("#percentageTotalGain-text").isEmpty shouldBe true
+      }
+
+      "does not have row for the a percentage of gain made on the property" in {
+        doc.select("#percentageOfGain-text").isEmpty shouldBe true
+      }
     }
 
     "supplied with a rebased calculation" should {
@@ -154,6 +162,14 @@ class SummaryPartialWorkingOutSectionViewSpec extends UnitSpec with WithFakeAppl
         "has the value '£50,000'" in {
           doc.select("#totalGain-amount").text shouldBe "£50,000"
         }
+      }
+
+      "does not have row for the a percentage gain made on the property" in {
+        doc.select("#percentageTotalGain-text").isEmpty shouldBe true
+      }
+
+      "does not have row for the a percentage of gain made on the property" in {
+        doc.select("#percentageOfGain-text").isEmpty shouldBe true
       }
     }
 
