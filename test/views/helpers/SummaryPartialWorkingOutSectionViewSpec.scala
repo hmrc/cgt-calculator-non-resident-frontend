@@ -33,9 +33,9 @@ class SummaryPartialWorkingOutSectionViewSpec extends UnitSpec with WithFakeAppl
 
       lazy val view = helpers.summaryPartialWorkingOutSection(
         CalculationType.flat,
-        saleValue = 100000,
+        disposalValue = 100000,
         acquisitionValue = 20000,
-        allCosts = 4000
+        totalCosts = 4000
       )(fakeRequestWithSession, applicationMessages)
       lazy val doc = Jsoup.parse(view.body)
 
@@ -50,15 +50,45 @@ class SummaryPartialWorkingOutSectionViewSpec extends UnitSpec with WithFakeAppl
       s"have the text ${messages.yourTotalGain}" in {
         doc.select("h4").text shouldBe messages.yourTotalGain
       }
+
+      "has a row for disposal value" which {
+        s"has the text '${messages.valueWhenSold}'" in {
+          doc.select("#disposalValue-text").text shouldBe messages.valueWhenSold
+        }
+
+        "has the value '£100,000'" in {
+          doc.select("#disposalValue-amount").text shouldBe "£100,000"
+        }
+      }
+
+      "has a row for the acquisition value" which {
+        s"has the text '${messages.valueWhenAcquired}'" in {
+          doc.select("#acquisitionValue-text").text shouldBe messages.valueWhenAcquired
+        }
+
+        "has the value '£20,000'" in {
+          doc.select("#acquisitionValue-amount").text shouldBe "£20,000"
+        }
+      }
+
+      "has a row for the total costs" which {
+        s"has the text '${messages.totalCosts}'" in {
+          doc.select("#totalCosts-text").text shouldBe messages.totalCosts
+        }
+
+        "has the value '£4,000'" in {
+          doc.select("#totalCosts-amount").text shouldBe "£4,000"
+        }
+      }
     }
 
     "supplied with a rebased calculation" should {
 
       lazy val view = helpers.summaryPartialWorkingOutSection(
         CalculationType.rebased,
-        saleValue = 100000,
+        disposalValue = 100000,
         acquisitionValue = 20000,
-        allCosts = 4000
+        totalCosts = 4000
       )(fakeRequestWithSession, applicationMessages)
       lazy val doc = Jsoup.parse(view.body)
 
@@ -73,15 +103,45 @@ class SummaryPartialWorkingOutSectionViewSpec extends UnitSpec with WithFakeAppl
       s"have the text ${messages.yourTotalGain}" in {
         doc.select("h4").text shouldBe messages.yourTotalGain
       }
+
+      "has a row for disposal value" which {
+        s"has the text '${messages.valueWhenSold}'" in {
+          doc.select("#disposalValue-text").text shouldBe messages.valueWhenSold
+        }
+
+        "has the value '£100,000'" in {
+          doc.select("#disposalValue-amount").text shouldBe "£100,000"
+        }
+      }
+
+      "has a row for the acquisition value" which {
+        s"has the text '${messages.valueAtTaxStart}'" in {
+          doc.select("#acquisitionValue-text").text shouldBe messages.valueAtTaxStart
+        }
+
+        "has the value '£20,000'" in {
+          doc.select("#acquisitionValue-amount").text shouldBe "£20,000"
+        }
+      }
+
+      "has a row for the total costs" which {
+        s"has the text '${messages.totalCosts}'" in {
+          doc.select("#totalCosts-text").text shouldBe messages.totalCosts
+        }
+
+        "has the value '£4,000'" in {
+          doc.select("#totalCosts-amount").text shouldBe "£4,000"
+        }
+      }
     }
 
     "supplied with a time-apportioned calculation" should {
 
       lazy val view = helpers.summaryPartialWorkingOutSection(
         CalculationType.timeApportioned,
-        saleValue = 100000,
+        disposalValue = 100000,
         acquisitionValue = 20000,
-        allCosts = 4000
+        totalCosts = 4000
       )(fakeRequestWithSession, applicationMessages)
       lazy val doc = Jsoup.parse(view.body)
 
@@ -95,6 +155,36 @@ class SummaryPartialWorkingOutSectionViewSpec extends UnitSpec with WithFakeAppl
 
       s"have the text ${messages.yourTotalGain}" in {
         doc.select("h4").text shouldBe messages.yourTotalGain
+      }
+
+      "has a row for disposal value" which {
+        s"has the text '${messages.valueWhenSold}'" in {
+          doc.select("#disposalValue-text").text shouldBe messages.valueWhenSold
+        }
+
+        "has the value '£100,000'" in {
+          doc.select("#disposalValue-amount").text shouldBe "£100,000"
+        }
+      }
+
+      "has a row for the acquisition value" which {
+        s"has the text '${messages.valueWhenAcquired}'" in {
+          doc.select("#acquisitionValue-text").text shouldBe messages.valueWhenAcquired
+        }
+
+        "has the value '£20,000'" in {
+          doc.select("#acquisitionValue-amount").text shouldBe "£20,000"
+        }
+      }
+
+      "has a row for the total costs" which {
+        s"has the text '${messages.totalCosts}'" in {
+          doc.select("#totalCosts-text").text shouldBe messages.totalCosts
+        }
+
+        "has the value '£4,000'" in {
+          doc.select("#totalCosts-amount").text shouldBe "£4,000"
+        }
       }
     }
   }

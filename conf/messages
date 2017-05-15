@@ -753,6 +753,6 @@ calc.summaryPartial.yourTotalGain = Your total gain
 calc.summaryPartial.valueWhenSold = Value when you sold the property
 calc.summaryPartial.valueAtTaxStart = Minus the value of the property on 5 April 2015
 calc.summaryPartial.valueWhenAcquired = Minus the value of the property when you acquired it
-calc.summaryPartial.allCosts = Minus all costs, including improvements
+calc.summaryPartial.totalCosts = Minus all costs, including improvements
 calc.summaryPartial.totalGain = The gain you''ve made on the property
 calc.summaryPartial.percentageTotalGain = The gain you''ve made since 5th April 2015

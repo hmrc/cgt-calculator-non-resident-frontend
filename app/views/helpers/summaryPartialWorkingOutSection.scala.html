@@ -1,7 +1,7 @@
 @import common.nonresident.CalculationType
 @import views.html.helpers._
 
-@(calculationType: String, saleValue: BigDecimal, acquisitionValue: BigDecimal, allCosts: BigDecimal, totalGain: BigDecimal = 0, percentageOfGain: BigDecimal = 0)(implicit request: Request[_], messages: Messages)
+@(calculationType: String, disposalValue: BigDecimal, acquisitionValue: BigDecimal, totalCosts: BigDecimal, totalGain: BigDecimal = 0, percentageOfGain: BigDecimal = 0)(implicit request: Request[_], messages: Messages)
 
 <div id="workedOutSection">
     <h3>@Messages("calc.summaryPartial.workingOutSectionHeading")</h3>
@@ -16,7 +16,7 @@
 
     <h4>@Messages("calc.summaryPartial.yourTotalGain")</h4>
 
-    @summaryNumericRow("saleValue",Messages("calc.summaryPartial.valueWhenSold"), saleValue)
+    @summaryNumericRow("disposalValue",Messages("calc.summaryPartial.valueWhenSold"), disposalValue)
 
     @{if(calculationType == CalculationType.flat || calculationType == CalculationType.timeApportioned)
         summaryNumericRow("acquisitionValue", Messages("calc.summaryPartial.valueWhenAcquired"), acquisitionValue)
@@ -26,6 +26,6 @@
         summaryNumericRow("acquisitionValue", Messages("calc.summaryPartial.valueAtTaxStart"), acquisitionValue)
     }
 
-    @summaryNumericRow("allCosts", Messages("calc.summaryPartial.allCosts"), allCosts)
+    @summaryNumericRow("totalCosts", Messages("calc.summaryPartial.totalCosts"), totalCosts)
 
 </div>
