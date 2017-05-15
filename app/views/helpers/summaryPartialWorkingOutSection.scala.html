@@ -42,11 +42,11 @@ percentageTotalGain: BigDecimal = 0, percentageOfGain: Int = 0)(implicit request
             </div>
         </div>
 
-        @summaryNumericRow("percentageTotalGain", Messages("calc.summaryPartial.totalGain"), percentageTotalGain)
+        @summaryNumericRow("percentageTotalGain", Messages("calc.summaryPartial.totalGain"), percentageTotalGain, isTotal = true)
     }
 
     @{if(calculationType == CalculationType.flat || calculationType == CalculationType.rebased)
-        summaryNumericRow("totalGain", Messages("calc.summaryPartial.totalGain"), totalGain)
+        summaryNumericRow("totalGain", Messages("calc.summaryPartial.totalGain"), totalGain, isTotal = true)
     }
 
 </div>

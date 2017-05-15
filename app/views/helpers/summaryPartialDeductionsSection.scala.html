@@ -20,5 +20,5 @@ totalDeductions: BigDecimal)(implicit request: Request[_], messages: Messages)
 
     @summaryNumericRow("aeaUsed",Messages("calc.summaryPartial.aeaUsed"), aeaUsed)
 
-    @summaryNumericRow("totalDeductions",Messages("calc.summaryPartial.totalDeductions"), totalDeductions)
+    @summaryNumericRow("totalDeductions",Messages("calc.summaryPartial.totalDeductions"), totalDeductions, isTotal = true)
 </div>
