@@ -237,6 +237,8 @@ calc.disposalCosts.helpBulletFour = advertising to find a buyer
 calc.disposalCosts.errorNegativeNumber = Enter a positive number for your selling costs
 calc.disposalCosts.errorDecimalPlaces = There are too many numbers after the decimal point in your selling costs
 
+calc.disposalCosts.jointOwnership = If you owned the property with someone else, only enter your share of the costs.
+
 ## Market Value ##
 calc.marketValue.gaveItAway.question = What was the property worth when you gave it away?
 calc.marketValue.sold.question = What was the market value of the property when you sold it?
