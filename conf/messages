@@ -190,6 +190,7 @@ calc.improvements.questionFour = How much have you spent on improvements since 6
 calc.improvements.error.no.value.supplied = Enter the value of your improvements
 calc.improvements.errorNegative = Enter a positive number for the cost of your improvements
 calc.improvements.errorDecimalPlaces = The cost of your improvements has too many numbers after the decimal point
+calc.improvements.jointOwnership = If you owned the property with someone else, only enter your share of the improvement costs, as agreed with your co-owner.
 
 ## Disposal Date ##
 calc.disposalDate.question = When did you sign the contract that made someone else the owner?

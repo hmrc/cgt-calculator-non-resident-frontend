@@ -25,6 +25,8 @@
 
     @expandableHelpTextHelper(Messages("calc.improvements.exampleTitle"), exampleContent)
 
+    <p class="panel-indent panel-indent--wide panel-indent--gutter">@Messages("calc.improvements.jointOwnership")</p>
+
     @form(action = controllers.routes.ImprovementsController.submitImprovements) {
 
         @ImprovementsConstructor.generateImprovements(improvementsForm, improvementsOptions)
