@@ -23,32 +23,32 @@ class TimeApportionmentUtilitiesSpec extends UnitSpec {
   "Calling .percentageOfTotalGain" should {
 
     "when called with 100 and 20" in {
-      TimeApportionmentUtilities.percentageOfTotalGain(100)(20) shouldBe 20
+      TimeApportionmentUtilities.percentageOfTotalGain(100, 20) shouldBe 20
     }
 
     "when called with 99 and 66" in {
-      TimeApportionmentUtilities.percentageOfTotalGain(99)(66) shouldBe 67
+      TimeApportionmentUtilities.percentageOfTotalGain(99, 66) shouldBe 67
     }
 
     "when called with 100 and 101 throw an exception" in {
       intercept[Exception] {
-        TimeApportionmentUtilities.percentageOfTotalGain(100)(101)
+        TimeApportionmentUtilities.percentageOfTotalGain(100, 101)
       }
     }
 
     "when called with 100 and 100" in {
-      TimeApportionmentUtilities.percentageOfTotalGain(100)(100) shouldBe 100
+      TimeApportionmentUtilities.percentageOfTotalGain(100, 100) shouldBe 100
     }
 
     "when called with -100 and 100 throw an exception" in {
       intercept[Exception] {
-        TimeApportionmentUtilities.percentageOfTotalGain(-100)(100) shouldBe 0
+        TimeApportionmentUtilities.percentageOfTotalGain(-100, 100) shouldBe 0
       }
     }
 
     "when called with 100 and -100 throw an exception" in {
       intercept[Exception] {
-        TimeApportionmentUtilities.percentageOfTotalGain(100)(-100) shouldBe 0
+        TimeApportionmentUtilities.percentageOfTotalGain(100, -100) shouldBe 0
       }
     }
   }
