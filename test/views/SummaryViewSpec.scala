@@ -116,8 +116,8 @@ class SummaryViewSpec extends UnitSpec with WithFakeApplication with FakeRequest
           startAgain.text() shouldBe messages.continue
         }
 
-        "have a link to /calculate-your-capital-gains/non-resident/restart" in {
-          startAgain.attr("href") shouldBe controllers.routes.SummaryController.restart().url
+        "have a link to /calculate-your-capital-gains/non-resident/what-next" in {
+          startAgain.attr("href") shouldBe controllers.routes.WhatNextController.whatNext().url
         }
       }
 
