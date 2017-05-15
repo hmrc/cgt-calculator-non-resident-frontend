@@ -744,3 +744,15 @@ calc.resident.shares.currentIncome.helpText = Include your salary before tax, an
 ## Other Disposals messages
 calc.resident.shares.otherDisposals.bullet.one = UK residential properties
 calc.resident.shares.otherDisposals.bullet.three = other shares
+
+## What Next messages
+calc.whatNext.title = Report your property now
+calc.whatNext.listTitle = You have 30 days from the date you exchanged contracts to:
+calc.whatNext.listOne = tell us about the property you sold or gave away
+calc.whatNext.listTwo = pay any Capital Gains Tax
+calc.whatNext.penaltyWarning = You’ll have to pay a penalty if you report your property late.
+calc.whatNext.saHeader = If you''re registered for UK Self Assessment
+calc.whatNext.saText = You must report this property within 30 days and declare it on your Self Assessment tax return. However, you can choose to defer payment until you do your Self Assessment.
+calc.whatNext.loginInformation = You''ll have to log in using Government Gateway.
+calc.whatNext.report = Report now
+calc.whatNext.finish = Finish
