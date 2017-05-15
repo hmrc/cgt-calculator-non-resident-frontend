@@ -197,7 +197,7 @@ object MessageLookup {
       val bulletTwo = "sold it to a relative, business partner or"
       val bulletTwoLink = "someone else you're connected to"
       val bulletThree = "sold it for less than it's worth to help the buyer"
-
+      val jointOwnership = "If you owned the property with someone else, only enter your share of the sale value"
       def errorMaximum(value: String): String = s"Enter an amount that's £$value or less"
     }
 

@@ -206,6 +206,7 @@ nocgt.sidebar.linkone = Capital Gains Tax for non-residents
 calc.disposalValue.question = How much did you sell the property for?
 calc.disposalValue.errorNegative = Enter a positive number for the amount you sold the property for
 calc.disposalValue.errorDecimalPlaces = The amount you sold the property for has too many numbers after the decimal point
+calc.disposalValue.jointOwnership = If you owned the property with someone else, only enter your share of the sale value
 
 ## How Much Gain ##
 calc.howMuchGain.question = What was your taxable gain?

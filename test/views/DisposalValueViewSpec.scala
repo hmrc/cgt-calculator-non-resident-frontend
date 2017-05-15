@@ -95,6 +95,10 @@ class DisposalValueViewSpec extends UnitSpec with WithFakeApplication with Mocki
         s"has an action of '${controllers.routes.DisposalValueController.submitDisposalValue().url}'" in {
           form.attr("action") shouldBe controllers.routes.DisposalValueController.submitDisposalValue().url
         }
+
+        s"has a paragraph with the text ${messages.DisposalValue.jointOwnership}" in {
+          document.body().select("p.panel-indent").text shouldBe messages.DisposalValue.jointOwnership
+        }
       }
 
       "have a button" which {
