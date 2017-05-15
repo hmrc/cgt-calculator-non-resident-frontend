@@ -937,4 +937,18 @@ object MessageLookup {
     val other = "Someone else"
     val errormandatory = "Please tell us who you gave the property to"
   }
+
+  object WhatNext {
+    val title = "Report your property now"
+    val listTitle = "You have 30 days from the date you exchanged contracts to:"
+    val listOne = "tell us about the property you sold or gave away"
+    val listTwo = "pay any Capital Gains Tax"
+    val penaltyWarning = "You’ll have to pay a penalty if you report your property late."
+    val saHeader = "If you're registered for UK Self Assessment "
+    val saText = "You must report this property within 30 days and declare it on your Self Assessment tax return." +
+      " However, you can choose to defer payment until you do your Self Assessment."
+    val loginInformation = "You'll have to log in using Government Gateway."
+    val report = "Report now"
+    val finish = "Finish"
+  }
 }

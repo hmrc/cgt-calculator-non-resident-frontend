@@ -1,0 +1,28 @@
+@import config.AppConfig
+@()(implicit request: Request[_], messages: Messages, config: AppConfig)
+
+@main_template(Messages("calc.whatNext.title")) {
+
+    <h1 class="heading-large">@Messages("calc.whatNext.title")</h1>
+
+    <p>@Messages("calc.whatNext.listTitle")</p>
+
+    <ul class="list list-bullet">
+        <li>@Messages("calc.whatNext.listOne")</li>
+        <li>@Messages("calc.whatNext.listTwo")</li>
+    </ul>
+
+    <p>@Messages("calc.whatNext.penaltyWarning")</p>
+
+    <div class="form-group">
+        <h2 class="heading-small">@Messages("calc.whatNext.saHeader")</h2>
+
+        <p>@Messages("calc.whatNext.saText")</p>
+
+        <p>@Messages("calc.whatNext.loginInformation")</p>
+
+        <a class="button" href="@config.nrIFormLink">@Messages("calc.whatNext.report")</a>
+
+        <a href="@config.govUkLink">@Messages("calc.whatNext.finish")</a>
+    </div>
+}

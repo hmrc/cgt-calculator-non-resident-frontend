@@ -72,6 +72,8 @@ class FeedbackControllerSpec extends UnitSpec with MockitoSugar with WithFakeApp
       override val analyticsToken: String = ""
       override val reportAProblemPartialUrl: String = ""
       override val contactFormServiceIdentifier: String = ""
+      override val nrIFormLink: String = ""
+      override val govUkLink: String = ""
     }
   }
 
