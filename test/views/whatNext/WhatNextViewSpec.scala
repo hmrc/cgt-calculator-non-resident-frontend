@@ -16,6 +16,7 @@
 
 package views.whatNext
 
+import assets.MessageLookup
 import org.scalatest.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import uk.gov.hmrc.play.test.UnitSpec
@@ -35,6 +36,18 @@ class WhatNextViewSpec extends UnitSpec with GuiceOneAppPerSuite with MockitoSug
 
     s"have a title of ${messages.title}" in {
       doc.title() shouldBe messages.title
+    }
+
+    "have a back link" which {
+      lazy val backLink = doc.select("a.back-link")
+
+      s"should have the text ${messages.back}" in {
+        backLink.text() shouldBe messages.back
+      }
+
+      "should have a link to the summary page" in {
+        backLink.attr("href") shouldBe controllers.routes.SummaryController.summary().url
+      }
     }
 
     s"have a header of ${messages.title}" in {
@@ -62,11 +75,11 @@ class WhatNextViewSpec extends UnitSpec with GuiceOneAppPerSuite with MockitoSug
     }
 
     s"have information for sa users of ${messages.saText}" in {
-      doc.select(".form-group p").get(0).text() shouldBe messages.saText
+      doc.select("article p").get(2).text() shouldBe messages.saText
     }
 
     s"have information about logging in of ${messages.loginInformation}" in {
-      doc.select(".form-group p").get(1).text() shouldBe messages.loginInformation
+      doc.select("article p").get(3).text() shouldBe messages.loginInformation
     }
 
     "have a button for reporting" which {
@@ -82,7 +95,7 @@ class WhatNextViewSpec extends UnitSpec with GuiceOneAppPerSuite with MockitoSug
     }
 
     "have a link to finish" which {
-      lazy val link = doc.select("article a").get(1)
+      lazy val link = doc.select("article a").get(2)
 
       s"has the text ${messages.finish}" in {
         link.text() shouldBe messages.finish

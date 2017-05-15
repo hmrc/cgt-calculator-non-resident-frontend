@@ -938,7 +938,7 @@ object MessageLookup {
     val errormandatory = "Please tell us who you gave the property to"
   }
 
-  object WhatNext {
+  object WhatNext extends Common {
     val title = "Report your property now"
     val listTitle = "You have 30 days from the date you exchanged contracts to:"
     val listOne = "tell us about the property you sold or gave away"
