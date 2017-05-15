@@ -251,6 +251,7 @@ calc.marketValue.error.sold.negative  = Enter a positive number for the market v
 
 calc.marketValue.helpText = You can use a valuation from a surveyor. If you don''t know the exact value, you must provide a realistic estimate.
 calc.marketValue.helpTextAdditional = You might have to pay more if we think your estimate is unrealistic.
+calc.marketValue.jointOwnership = If you owned the property with someone else, only enter your share of the property value.
 
 ## Private Residence Relief ##
 calc.privateResidenceRelief.question = Are you claiming Private Residence Relief?

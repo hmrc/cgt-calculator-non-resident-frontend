@@ -57,7 +57,7 @@ class MarketValueWhenSoldViewSpec extends UnitSpec with WithFakeApplication with
         lazy val helpText = document.select("p.form-hint")
         s"has the help text'${MarketValueMessages.disposalHelpText}'" in {
           helpText.html() shouldBe MarketValueMessages.disposalHelpText +
-            " <br> " + MarketValueMessages.disposalHelpTextAdditional
+            " " + MarketValueMessages.disposalHelpTextAdditional
         }
         s"has the class 'form-hint'" in {
           helpText.attr("class") shouldBe "form-hint"
@@ -97,6 +97,10 @@ class MarketValueWhenSoldViewSpec extends UnitSpec with WithFakeApplication with
 
         s"has the input ID disposalValue" in {
           form.select("input").attr("id") shouldBe "disposalValue"
+        }
+
+        s"that has a paragraph with the text ${MarketValueMessages.jointOwnership}" in {
+          document.select("p.panel-indent").text shouldBe MarketValueMessages.jointOwnership
         }
       }
 

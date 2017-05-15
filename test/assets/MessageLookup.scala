@@ -173,7 +173,7 @@ object MessageLookup {
       val errorNegativeNumber = "Enter a positive number for your selling costs"
       val errorDecimalPlaces = "There are too many numbers after the decimal point in your selling costs"
 
-      val jointOwnership = "If you owned the property with someone else, only enter your share of the costs"
+      val jointOwnership = "If you owned the property with someone else, only enter your share of the costs."
     }
 
     object DisposalDate {
@@ -301,6 +301,8 @@ object MessageLookup {
 
       val errorNegativeGaveAway = "Enter a positive number for the market value at the point of being given away"
       val errorNegativeSold = "Enter a positive number for the market value at the point of being sold"
+
+      val jointOwnership = "If you owned the property with someone else, only enter your share of the property value."
     }
 
     object PersonalAllowance {
