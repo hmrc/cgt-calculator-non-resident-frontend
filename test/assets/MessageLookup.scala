@@ -970,5 +970,10 @@ object MessageLookup {
     val gain = "Total gain"
     val minusDeductions = "Minus deductions"
     val taxableGain = "Taxable gain"
+
+    val yourTaxRate = "Your tax rate"
+    val incomeBandInfo = "These tax rates are based on your Income Tax bands:"
+    def taxRate(taxAmount: String, taxRate: Int): String = s"$taxAmount taxable gain multiplied by $taxRate% tax rate"
+    val taxToPay = "Tax to pay"
   }
 }

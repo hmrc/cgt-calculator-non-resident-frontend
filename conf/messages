@@ -768,3 +768,8 @@ calc.summaryPartial.yourTaxableGain = Your taxable gain
 calc.summaryPartial.gain = Total gain
 calc.summaryPartial.minusDeductions = Minus deductions
 calc.summaryPartial.taxableGain = Taxable gain
+
+calc.summaryPartial.yourTaxRate = Your tax rate
+calc.summaryPartial.incomeBandInfo = These tax rates are based on your Income Tax bands:
+calc.summaryPartial.taxRate = £{0} taxable gain multiplied by {1}% tax rate
+calc.summaryPartial.taxToPay = Tax to pay
