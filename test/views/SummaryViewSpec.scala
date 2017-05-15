@@ -104,24 +104,16 @@ class SummaryViewSpec extends UnitSpec with WithFakeApplication with FakeRequest
           whatToDoNext.select("h2").text() shouldBe messages.Summary.whatToDoNextText
         }
 
-        "has a link to 'https://www.gov.uk/guidance/capital-gains-tax-for-non-residents-uk-residential-property'" in {
-          whatToDoNext.select("a").attr("href") shouldBe "https://www.gov.uk/guidance/capital-gains-tax-for-non-residents-uk-residential-property"
-        }
-
         "should have the text describing what to do next" in {
-          whatToDoNext.select("p").text() shouldBe s"${messages.Summary.whatToDoNextContent} ${messages.Summary.whatToDoNextLink} ${messages.externalLink}"
+          whatToDoNext.select("p").text() shouldBe s"${messages.Summary.whatToDoNextContent}"
         }
       }
 
       "have a link to start again" which {
-        lazy val startAgain = document.select("#startAgain")
+        lazy val startAgain = document.select("a.button")
 
-        "have a class of bold-medium" in {
-          startAgain.attr("class") shouldBe "bold-medium"
-        }
-
-        "have the text 'Start Again" in {
-          startAgain.text() shouldBe messages.Summary.startAgain
+        "have the text 'Continue" in {
+          startAgain.text() shouldBe messages.continue
         }
 
         "have a link to /calculate-your-capital-gains/non-resident/restart" in {
@@ -130,11 +122,7 @@ class SummaryViewSpec extends UnitSpec with WithFakeApplication with FakeRequest
       }
 
       "have a save pdf button" which {
-        lazy val savePDF = document.select("a.button")
-
-        "which has the class 'button save-pdf-button'" in {
-          savePDF.attr("class") shouldBe "button nr save-pdf-button"
-        }
+        lazy val savePDF = document.select("a.save-pdf-link")
 
         "which has the text 'Save as PDF'" in {
           savePDF.text() shouldBe messages.Summary.saveAsPdf

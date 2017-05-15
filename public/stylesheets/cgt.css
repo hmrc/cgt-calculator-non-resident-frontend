@@ -303,3 +303,20 @@ span.election-text > .block {
     clear: both;
     margin-top: 1em;
 }
+
+.save-pdf-link {
+    padding-left: 0.5em;
+    position: absolute;
+    text-decoration: none;
+    left: 30px;
+    top: 10px;
+}
+
+.icon-file-download {
+    background: url(/calculate-your-capital-gains/non-resident/assets/images/icon-file-download.png);
+    background-repeat: no-repeat;
+    padding-bottom: 1.0em;
+    width: 30px;
+    height: 39px;
+    display: inline-block;
+}
