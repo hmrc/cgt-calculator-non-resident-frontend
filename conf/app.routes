@@ -177,4 +177,3 @@ GET         /restart                            controllers.SummaryController.re
 #WhatNext route
 ########################################################
 GET         /what-next                          controllers.WhatNextController.whatNext
-POST        /what-next                          controllers.WhatNextController.submitWhatNext
