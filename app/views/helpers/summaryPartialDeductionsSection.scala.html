@@ -1,0 +1,24 @@
+@import common.nonresident.CalculationType
+@import views.html.helpers._
+
+@(reliefsUsed: BigDecimal, aeaUsed: BigDecimal, inYearLossesUsed: BigDecimal, broughtForwardLossesUsed: BigDecimal,
+totalDeductions: BigDecimal)(implicit request: Request[_], messages: Messages)
+
+<div id="deductionsSection">
+
+    <h4>@Messages("calc.summaryPartial.deductionsSectionHeading")</h4>
+
+    @summaryNumericRow("reliefsUsed",Messages("calc.summaryPartial.reliefsUsed"), reliefsUsed)
+
+    @if(inYearLossesUsed > 0) {
+        @summaryNumericRow("inYearLossesUsed",Messages("calc.summaryPartial.inYearLossesUsed"), inYearLossesUsed)
+    }
+
+    @if(broughtForwardLossesUsed > 0) {
+        @summaryNumericRow("broughtForwardLossesUsed",Messages("calc.summaryPartial.broughtForwardLossesUsed"), broughtForwardLossesUsed)
+    }
+
+    @summaryNumericRow("aeaUsed",Messages("calc.summaryPartial.aeaUsed"), aeaUsed)
+
+    @summaryNumericRow("totalDeductions",Messages("calc.summaryPartial.totalDeductions"), totalDeductions)
+</div>
