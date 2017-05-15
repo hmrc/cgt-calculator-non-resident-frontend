@@ -206,6 +206,7 @@ nocgt.sidebar.linkone = Capital Gains Tax for non-residents
 calc.disposalValue.question = How much did you sell the property for?
 calc.disposalValue.errorNegative = Enter a positive number for the amount you sold the property for
 calc.disposalValue.errorDecimalPlaces = The amount you sold the property for has too many numbers after the decimal point
+calc.disposalValue.jointOwnership = If you owned the property with someone else, only enter your share of the sale value
 
 ## How Much Gain ##
 calc.howMuchGain.question = What was your taxable gain?
@@ -236,6 +237,8 @@ calc.disposalCosts.helpBulletFour = advertising to find a buyer
 calc.disposalCosts.errorNegativeNumber = Enter a positive number for your selling costs
 calc.disposalCosts.errorDecimalPlaces = There are too many numbers after the decimal point in your selling costs
 
+calc.disposalCosts.jointOwnership = If you owned the property with someone else, only enter your share of the costs.
+
 ## Market Value ##
 calc.marketValue.gaveItAway.question = What was the property worth when you gave it away?
 calc.marketValue.sold.question = What was the market value of the property when you sold it?
@@ -248,6 +251,7 @@ calc.marketValue.error.sold.negative  = Enter a positive number for the market v
 
 calc.marketValue.helpText = You can use a valuation from a surveyor. If you don''t know the exact value, you must provide a realistic estimate.
 calc.marketValue.helpTextAdditional = You might have to pay more if we think your estimate is unrealistic.
+calc.marketValue.jointOwnership = If you owned the property with someone else, only enter your share of the property value.
 
 ## Private Residence Relief ##
 calc.privateResidenceRelief.question = Are you claiming Private Residence Relief?

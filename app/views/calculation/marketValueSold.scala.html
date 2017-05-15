@@ -12,11 +12,12 @@
 
     <h1 class="heading-xlarge" for="disposal-value">@Messages("calc.marketValue.sold.question")</h1>
 
-    <p class="form-hint">@Messages("calc.marketValue.helpText") <br/>
-        @Messages("calc.marketValue.helpTextAdditional")
-    </p>
+    <p class="form-hint">@Messages("calc.marketValue.helpText") @Messages("calc.marketValue.helpTextAdditional")</p>
 
     @form(action = controllers.routes.MarketValueWhenSoldOrGaveAwayController.submitMarketValueWhenSold()) {
+
+        <p class="panel-indent panel-indent--wide panel-indent--gutter">@Messages("calc.marketValue.jointOwnership")</p>
+
         @formInputMoney(marketValueForm, "disposalValue", Messages("calc.marketValue.sold.question"), hideLabel = true)
 
         <button id="continue-button" type="submit" class="button">@Messages("calc.base.button.continue")</button>
