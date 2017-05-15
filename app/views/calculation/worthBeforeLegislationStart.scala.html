@@ -16,9 +16,16 @@
 
     <h1 class="heading-xlarge">@Messages("calc.worthBeforeLegislationStart.question")</h1>
 
-    <p id="helpText" class="form-hint">@Messages("calc.acquisitionMarketValue.hintTwo")</p>
+    <p>@Messages("calc.worthBeforeLegislationStart.information")</p>
 
-    @expandableHelpTextHelper(Messages("calc.worthBeforeLegislationStart.expandableTitle"), exampleContent)
+    <div class="form-hint">
+         <p>@Messages("calc.worthBeforeLegislationStart.help")</p>
+    </div>
+
+    <div class="panel-indent panel-indent--wide panel-indent--gutter">
+        <p>@Messages("calc.worthBeforeLegislationStart.jointOwnership")</p>
+    </div>
+
 
     @form(action = controllers.routes.WorthBeforeLegislationStartController.submitWorthBeforeLegislationStart) {
 

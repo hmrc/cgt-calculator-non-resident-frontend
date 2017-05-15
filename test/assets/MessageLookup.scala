@@ -378,8 +378,10 @@ object MessageLookup {
 
     object WorthBeforeLegislationStart {
       val question = "What was the market value of the property on 31 March 1982?"
-      val expandableText = "You only need to pay tax on gains made after this date"
-      val expandableTitle = "Why we're asking for this"
+      val information = "31 March 1982 is when the current Capital Gains Tax system came into effect."
+      val hintText = "If you don't know the exact value, you must provide a realistic estimate. " +
+        "You might have to pay more if we think your estimate is unrealistic."
+      val jointOwnership = "If you owned the property with someone else, only enter your share of the property value."
     }
 
     //Worth When Inherited messages
