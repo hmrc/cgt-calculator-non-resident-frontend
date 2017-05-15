@@ -35,6 +35,4 @@ trait WhatNextController extends FrontendController with ValidActiveSession {
     Future.successful(Ok(views.html.whatNext.whatNext()))
   }
 
-  val submitWhatNext = TODO
-
 }
