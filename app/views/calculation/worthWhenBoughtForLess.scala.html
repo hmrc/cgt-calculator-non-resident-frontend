@@ -13,7 +13,9 @@
 
     <h1 class="heading-xlarge">@Messages("calc.worthWhenBoughtForLess.question")</h1>
 
-    <p id="helpText" class="form-hint">@Messages("calc.acquisitionMarketValue.hintOne")<br>@Messages("calc.acquisitionMarketValue.hintTwo")</p>
+    <p id="hintText" class="form-hint">@Messages("calc.worthWhenBoughtForLess.hint")</p>
+
+    <p id="helpText">@Messages("calc.worthWhenBoughtForLess.helpText")</p>
 
     @form(action = controllers.routes.WorthWhenBoughtForLessController.submitWorthWhenBoughtForLess) {
 
