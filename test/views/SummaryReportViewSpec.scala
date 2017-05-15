@@ -58,28 +58,12 @@ class SummaryReportViewSpec extends UnitSpec with WithFakeApplication with FakeR
         sumModelFlat.calculationElectionModel.calculationType, None, taxOwed = BigDecimal(1000), otherReliefs = Some(OtherReliefsModel(1000)))
       lazy val document = Jsoup.parse(view.body)
 
-      "have a heading" which {
-        lazy val heading = document.select("h1")
-
-        "has a class of 'heading-xlarge'" in {
-          heading.attr("class") shouldBe "heading-xlarge"
-        }
-
-        "has a span with the class 'pre-heading'" in {
-          heading.select("span").attr("class") shouldBe "pre-heading"
-        }
-
-        "has a span with the text 'You owe'" in {
-          heading.select("span").text shouldEqual nrMessages.Summary.secondaryHeading
-        }
-
-        "have a result amount currently set to £1,000.00" in {
-          heading.select("b").text shouldEqual "£1,000.00"
-        }
+      "have the HMRC logo with the HMRC name" in {
+        document.select("div.logo span").text should include(nrMessages.Report.logoText)
       }
 
-      "have the HMRC logo with the HMRC name" in {
-        document.select("div.logo span").text shouldBe "HM Revenue & Customs"
+      s"have the title ${nrMessages.Report.title}" in {
+        document.select("span.calculate-your-cgt").text() shouldBe nrMessages.Report.title
       }
 
       "not have a notice summary" in {
@@ -206,28 +190,12 @@ class SummaryReportViewSpec extends UnitSpec with WithFakeApplication with FakeR
         sumModelFlat.calculationElectionModel.calculationType, None, taxOwed = BigDecimal(1000), otherReliefs = Some(OtherReliefsModel(1000)))
       lazy val document = Jsoup.parse(view.body)
 
-      "have a heading" which {
-        lazy val heading = document.select("h1")
-
-        "has a class of 'heading-xlarge'" in {
-          heading.attr("class") shouldBe "heading-xlarge"
-        }
-
-        "has a span with the class 'pre-heading'" in {
-          heading.select("span").attr("class") shouldBe "pre-heading"
-        }
-
-        "has a span with the text 'You owe'" in {
-          heading.select("span").text shouldEqual nrMessages.Summary.secondaryHeading
-        }
-
-        "have a result amount currently set to £1,000.00" in {
-          heading.select("b").text shouldEqual "£1,000.00"
-        }
+      "have the HMRC logo with the HMRC name" in {
+        document.select("div.logo span").text should include(nrMessages.Report.logoText)
       }
 
-      "have the HMRC logo with the HMRC name" in {
-        document.select("div.logo span").text shouldBe "HM Revenue & Customs"
+      s"have the title ${nrMessages.Report.title}" in {
+        document.select("span.calculate-your-cgt").text() shouldBe nrMessages.Report.title
       }
 
       "not have a notice summary" in {

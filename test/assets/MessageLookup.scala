@@ -457,6 +457,11 @@ object MessageLookup {
       def basedOnYear(year: String): String = s"These figures are based on the tax rates from the $year tax year"
     }
 
+    object Report {
+      val logoText = "HM Revenue & Customs"
+      val title = "Calculate your Capital Gains Tax"
+    }
+
     object AllowableLosses {
       val yesNoQuestion = "Are you claiming any allowable losses from the 2016/2017 tax year?"
       val inputQuestion = "What's the total value of your allowable losses?"
