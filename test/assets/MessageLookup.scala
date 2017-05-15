@@ -955,7 +955,8 @@ object MessageLookup {
     val valueAtTaxStart = "Minus the value of the property on 5 April 2015"
     val valueWhenAcquired = "Minus the value of the property when you acquired it"
     val totalCosts = "Minus all costs, including improvements"
-    val totalGain = "The gain you've made on the property"
-    val percentageTotalGain = "The gain you've made since 5th April 2015"
+    val totalGain = "Total gain"
+    val gainMadeOnProperty = "The gain you've made on the property"
+    val percentageTotalGain = "The percentage gain you've made since 5 April 2015"
   }
 }

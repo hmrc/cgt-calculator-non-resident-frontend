@@ -1,7 +1,8 @@
 @import common.nonresident.CalculationType
 @import views.html.helpers._
 
-@(calculationType: String, disposalValue: BigDecimal, acquisitionValue: BigDecimal, totalCosts: BigDecimal, totalGain: BigDecimal = 0, percentageOfGain: BigDecimal = 0)(implicit request: Request[_], messages: Messages)
+@(calculationType: String, disposalValue: BigDecimal, acquisitionValue: BigDecimal, totalCosts: BigDecimal, totalGain: BigDecimal = 0,
+percentageTotalGain: BigDecimal = 0, percentageOfGain: Int = 0)(implicit request: Request[_], messages: Messages)
 
 <div id="workedOutSection">
     <h3>@Messages("calc.summaryPartial.workingOutSectionHeading")</h3>
@@ -27,5 +28,25 @@
     }
 
     @summaryNumericRow("totalCosts", Messages("calc.summaryPartial.totalCosts"), totalCosts)
+
+    @if(calculationType == CalculationType.timeApportioned) {
+        @summaryNumericRow("totalGain", Messages("calc.summaryPartial.gainMadeOnProperty"), totalGain)
+
+        <div id="percentageOfGain" class="grid-layout grid-layout--no-margin font-small summary-total-margin-top pdf-result-row">
+            <div id="percentageOfGain-text" class="pdf-grid-layout__column--1-2">
+                <strong>@Messages("calc.summaryPartial.percentageOfGain")</strong>
+            </div>
+
+            <div id="percentageOfGain-value" class="pdf-grid-layout__column--1-3 text--right">
+                <strong>@percentageOfGain&percnt;</strong>
+            </div>
+        </div>
+
+        @summaryNumericRow("percentageTotalGain", Messages("calc.summaryPartial.totalGain"), percentageTotalGain)
+    }
+
+    @{if(calculationType == CalculationType.flat || calculationType == CalculationType.rebased)
+        summaryNumericRow("totalGain", Messages("calc.summaryPartial.totalGain"), totalGain)
+    }
 
 </div>

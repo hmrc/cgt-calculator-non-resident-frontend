@@ -35,7 +35,8 @@ class SummaryPartialWorkingOutSectionViewSpec extends UnitSpec with WithFakeAppl
         CalculationType.flat,
         disposalValue = 100000,
         acquisitionValue = 20000,
-        totalCosts = 4000
+        totalCosts = 4000,
+        totalGain = 50000
       )(fakeRequestWithSession, applicationMessages)
       lazy val doc = Jsoup.parse(view.body)
 
@@ -80,6 +81,16 @@ class SummaryPartialWorkingOutSectionViewSpec extends UnitSpec with WithFakeAppl
           doc.select("#totalCosts-amount").text shouldBe "£4,000"
         }
       }
+
+      "has a row for the total gain" which {
+        s"has the text '${messages.totalGain}'" in {
+          doc.select("#totalGain-text").text shouldBe messages.totalGain
+        }
+
+        "has the value '£50,000'" in {
+          doc.select("#totalGain-amount").text shouldBe "£50,000"
+        }
+      }
     }
 
     "supplied with a rebased calculation" should {
@@ -88,7 +99,8 @@ class SummaryPartialWorkingOutSectionViewSpec extends UnitSpec with WithFakeAppl
         CalculationType.rebased,
         disposalValue = 100000,
         acquisitionValue = 20000,
-        totalCosts = 4000
+        totalCosts = 4000,
+        totalGain = 50000
       )(fakeRequestWithSession, applicationMessages)
       lazy val doc = Jsoup.parse(view.body)
 
@@ -133,6 +145,16 @@ class SummaryPartialWorkingOutSectionViewSpec extends UnitSpec with WithFakeAppl
           doc.select("#totalCosts-amount").text shouldBe "£4,000"
         }
       }
+
+      "has a row for the total gain" which {
+        s"has the text '${messages.totalGain}'" in {
+          doc.select("#totalGain-text").text shouldBe messages.totalGain
+        }
+
+        "has the value '£50,000'" in {
+          doc.select("#totalGain-amount").text shouldBe "£50,000"
+        }
+      }
     }
 
     "supplied with a time-apportioned calculation" should {
@@ -141,7 +163,10 @@ class SummaryPartialWorkingOutSectionViewSpec extends UnitSpec with WithFakeAppl
         CalculationType.timeApportioned,
         disposalValue = 100000,
         acquisitionValue = 20000,
-        totalCosts = 4000
+        totalCosts = 4000,
+        totalGain = 60000,
+        percentageTotalGain = 30000,
+        percentageOfGain = 50
       )(fakeRequestWithSession, applicationMessages)
       lazy val doc = Jsoup.parse(view.body)
 
@@ -184,6 +209,36 @@ class SummaryPartialWorkingOutSectionViewSpec extends UnitSpec with WithFakeAppl
 
         "has the value '£4,000'" in {
           doc.select("#totalCosts-amount").text shouldBe "£4,000"
+        }
+      }
+
+      "has a row for the gain made on the property" which {
+        s"has the text ${messages.gainMadeOnProperty}" in {
+          doc.select("#totalGain-text").text shouldBe messages.gainMadeOnProperty
+        }
+
+        "has the value '£60,000" in {
+          doc.select("#totalGain-amount").text shouldBe "£60,000"
+        }
+      }
+
+      "has a row for the percentage gain made on the property" which {
+        s"has the text ${messages.percentageTotalGain}" in {
+          doc.select("#percentageOfGain-text").text shouldBe messages.percentageTotalGain
+        }
+
+        "has the value '50%" in {
+          doc.select("#percentageOfGain-value").text shouldBe "50%"
+        }
+      }
+
+      "has a row for the total gain" which {
+        s"has the text '${messages.totalGain}'" in {
+          doc.select("#percentageTotalGain-text").text shouldBe messages.totalGain
+        }
+
+        "has the value '£30,000'" in {
+          doc.select("#percentageTotalGain-amount").text shouldBe "£30,000"
         }
       }
     }
