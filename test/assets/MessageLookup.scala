@@ -965,5 +965,10 @@ object MessageLookup {
     val aeaUsed = "Capital Gains Tax annual exempt amount used"
     val broughtForwardLossesUsed = "Brought forward losses used"
     val totalDeductions = "Total deductions"
+
+    val yourTaxableGain = "Your taxable gain"
+    val gain = "Total gain"
+    val minusDeductions = "Minus deductions"
+    val taxableGain = "Taxable gain"
   }
 }

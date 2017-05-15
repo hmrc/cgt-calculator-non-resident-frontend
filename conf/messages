@@ -763,3 +763,8 @@ calc.summaryPartial.inYearLossesUsed = In year losses used
 calc.summaryPartial.aeaUsed = Capital Gains Tax annual exempt amount used
 calc.summaryPartial.broughtForwardLossesUsed = Brought forward losses used
 calc.summaryPartial.totalDeductions = Total deductions
+
+calc.summaryPartial.yourTaxableGain = Your taxable gain
+calc.summaryPartial.gain = Total gain
+calc.summaryPartial.minusDeductions = Minus deductions
+calc.summaryPartial.taxableGain = Taxable gain
