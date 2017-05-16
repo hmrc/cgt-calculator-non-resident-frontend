@@ -29,8 +29,6 @@ import play.api.Play.current
 
 class AnnualExemptAmountViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
-
-
   "Annual exempt amount view" when {
 
     "supplied with no errors" should {
@@ -66,35 +64,6 @@ class AnnualExemptAmountViewSpec extends UnitSpec with WithFakeApplication with 
 
         s"has the text '${messages.question}'" in {
           heading.text shouldBe messages.question
-        }
-      }
-
-      "have a sidebar" which {
-        lazy val sidebar = document.body().select("aside")
-        lazy val link = sidebar.select("a")
-
-        "contains only one link" in {
-          link.size() shouldBe 1
-        }
-
-        "has a link with the class 'external-link'" in {
-          link.attr("class") shouldBe "external-link"
-        }
-
-        "has a link with a rel of 'external'" in {
-          link.attr("rel") shouldBe "external"
-        }
-
-        "has a link with a target of '_blank'" in {
-          link.attr("target") shouldBe "_blank"
-        }
-
-        "has a link with an href to 'https://www.gov.uk/capital-gains-tax/allowances'" in {
-          link.attr("href") shouldBe "https://www.gov.uk/capital-gains-tax/allowances"
-        }
-
-        "has a link with the correct text" in {
-          link.text() shouldBe s"${messages.link} ${commonMessages.externalLink}"
         }
       }
 

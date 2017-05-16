@@ -4,24 +4,7 @@
 
 @(previousLossOrGainForm: Form[PreviousLossOrGainModel])(implicit request: Request[_], messages: Messages)
 
-@sidebar = {
-    <ul>
-        <li>
-            <a id="capitalGainsTaxHelp" href="https://www.gov.uk/capital-gains-tax" class="external-link" rel="external" target="_blank">
-                @Messages("calc.previousLossOrGain.CGTLink")
-                <span>@Messages("calc.base.externalLink")</span>
-            </a>
-        </li>
-        <li>
-            <a id="previousTaxYearsHelp" href="https://www.gov.uk/income-tax-rates/previous-tax-years" class="external-link" rel="external" target="_blank">
-                @Messages("calc.previousLossOrGain.previousTaxLink")
-                <span>@Messages("calc.base.externalLink")</span>
-            </a>
-        </li>
-    </ul>
-}
-
-@main_template(Messages("calc.previousLossOrGain.question"), sidebarLinks = Some(sidebar)) {
+@main_template(Messages("calc.previousLossOrGain.question")) {
 
     <a id="back-link" class="back-link" href="@controllers.routes.OtherPropertiesController.otherProperties()">@Messages("calc.base.back")</a>
 

@@ -117,56 +117,6 @@ class PreviousLossOrGainViewSpec extends UnitSpec with WithFakeApplication with 
         continueButton.hasClass("button") shouldBe true
       }
     }
-
-    "have a sidebar that" should{
-      "have a link for help with CGT" which {
-        lazy val linkOne = document.body.getElementById("capitalGainsTaxHelp")
-
-        s"have the text ${messages.CGTlink}" in {
-          linkOne.text shouldBe messages.CGTlink + " " + commonMessages.externalLink
-        }
-
-        "has the href to 'https://www.gov.uk/capital-gains-tax" in {
-          linkOne.attr("href") shouldBe "https://www.gov.uk/capital-gains-tax"
-        }
-
-        "has a link with the class 'external-link'" in {
-          linkOne.attr("class") shouldBe "external-link"
-        }
-
-        "has a link with a rel of 'external'" in {
-          linkOne.attr("rel") shouldBe "external"
-        }
-
-        "has a link with a target of '_blank'" in {
-          linkOne.attr("target") shouldBe "_blank"
-        }
-      }
-
-      "have a link for help with Previous Tax Years" which {
-        lazy val linkTwo = document.body.getElementById("previousTaxYearsHelp")
-
-        s"have the text ${messages.previousTaxLink}" in {
-          linkTwo.text shouldBe messages.previousTaxLink + " " + commonMessages.externalLink
-        }
-
-        s"link two should have an href to 'https://www.gov.uk/income-tax-rates/previous-tax-years'" in {
-          linkTwo.attr("href") shouldEqual "https://www.gov.uk/income-tax-rates/previous-tax-years"
-        }
-        "has a link with the class 'external-link'" in {
-          linkTwo.attr("class") shouldBe "external-link"
-        }
-
-        "has a link with a rel of 'external'" in {
-          linkTwo.attr("rel") shouldBe "external"
-        }
-
-        "has a link with a target of '_blank'" in {
-          linkTwo.attr("target") shouldBe "_blank"
-        }
-      }
-    }
-
   }
 
   "PreviousLossOrGainView with form errors" should {

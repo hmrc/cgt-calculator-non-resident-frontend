@@ -151,67 +151,6 @@ class BroughtForwardLossesViewSpec extends UnitSpec with WithFakeApplication wit
           button.attr("id") shouldBe "continue-button"
         }
       }
-
-      "should contain a Read more sidebar that" should {
-
-        lazy val sidebar = document.select("aside")
-
-        "have a header" in {
-          sidebar.select("h2").text shouldEqual messages.readMore
-        }
-
-        "have two links of" which {
-
-          lazy val linkOne = sidebar.select("a").first
-          lazy val linkTwo = sidebar.select("a").last
-
-          "the first" should {
-
-            s"have text ${messages.BroughtForwardLosses.linkOne} ${messages.externalLink}" in {
-              linkOne.text shouldEqual s"${messages.BroughtForwardLosses.linkOne} ${messages.externalLink}"
-            }
-
-            s"have an href to 'https://www.gov.uk/capital-gains-tax'" in {
-              linkOne.attr("href") shouldEqual "https://www.gov.uk/capital-gains-tax"
-            }
-
-            "have the class 'external-link'" in {
-              linkOne.attr("class") shouldBe "external-link"
-            }
-
-            "have a rel of 'external'" in {
-              linkOne.attr("rel") shouldBe "external"
-            }
-
-            "have a target of '_blank'" in {
-              linkOne.attr("target") shouldBe "_blank"
-            }
-          }
-
-          "the second" should{
-
-            s"have text ${messages.BroughtForwardLosses.linkTwo} ${messages.externalLink}" in {
-              linkTwo.text shouldEqual s"${messages.BroughtForwardLosses.linkTwo} ${messages.externalLink}"
-            }
-
-            s"have an href to 'https://www.gov.uk/income-tax-rates/previous-tax-years'" in {
-              linkTwo.attr("href") shouldEqual "https://www.gov.uk/income-tax-rates/previous-tax-years"
-            }
-
-            "have the class 'external-link'" in {
-              linkTwo.attr("class") shouldBe "external-link"
-            }
-
-            "have a rel of 'external'" in {
-              linkTwo.attr("rel") shouldBe "external"
-            }
-
-            "have a target of '_blank'" in {
-              linkTwo.attr("target") shouldBe "_blank"
-            }
-          }
-        }
-      }
     }
 
     "provided with errors" should {
