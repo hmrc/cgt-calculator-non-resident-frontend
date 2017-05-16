@@ -27,13 +27,16 @@ import views.html.helpers
 
 class SummaryPartialViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
 
-  "the summaryPartial" when {
+  "the summaryPartial" should {
 
     "the tax owed is zero and the date of disposal was in a valid tax year" should {
 
       lazy val view = helpers.summaryPartial(
         BigDecimal(0),
-        TaxYearModel("2016/17", isValidYear = true, "2018/19")
+        TaxYearModel("2016/17", isValidYear = true, "2018/19"),
+        aeaRemaining = 2000,
+        inYearLossesRemaining = Some(5000),
+        broughtForwardLossesRemaining = Some(27000)
       )(fakeRequestWithSession, applicationMessages)
       lazy val doc = Jsoup.parse(view.body)
 
@@ -44,12 +47,49 @@ class SummaryPartialViewSpec extends UnitSpec with WithFakeApplication with Fake
         }
 
         s"contain the second heading text ${messages.headingTwo("2016 to 2017")}" in {
-          doc.select("h2").text shouldEqual messages.headingTwo("2016 to 2017")
+          doc.select("div#tax-owed-banner h2").text shouldEqual messages.headingTwo("2016 to 2017")
         }
       }
 
       "not display the out of tax years message" in {
         doc.select("div#notice-summary").isEmpty shouldBe true
+      }
+
+      "have a section for the deductions remaining" should {
+
+        s"have the heading ${messages.remainingDeductions}" in {
+          doc.select("div#remainingDeductions h2")
+        }
+
+        "have a row for in Year Losses" which {
+          s"has the text '${messages.inYearLossesRemaining("2016 to 2017")}'" in {
+            doc.select("#inYearLossesRemaining-text").text shouldBe messages.inYearLossesRemaining("2016 to 2017")
+          }
+
+          "has the value '£5,000'" in {
+            doc.select("#inYearLossesRemaining-amount").text shouldBe "£5,000"
+          }
+        }
+
+        "has a row for aea remaining" which {
+          s"has the text '${messages.aeaRemaining("2016 to 2017")}'" in {
+            doc.select("#aeaRemaining-text").text shouldBe messages.aeaRemaining("2016 to 2017")
+          }
+
+          "has the value '£2,000'" in {
+            doc.select("#aeaRemaining-amount").text shouldBe "£2,000"
+          }
+        }
+
+        "has a row for brought forward losses" which {
+          s"has the text '${messages.broughtForwardLossesRemaining}'" in {
+            doc.select("#broughtForwardLossesRemaining-text").text shouldBe messages.broughtForwardLossesRemaining
+          }
+
+          "has the value '£27,000'" in {
+            doc.select("#broughtForwardLossesRemaining-amount").text shouldBe "£27,000"
+          }
+        }
       }
     }
 
@@ -57,7 +97,8 @@ class SummaryPartialViewSpec extends UnitSpec with WithFakeApplication with Fake
 
       lazy val view = helpers.summaryPartial(
         BigDecimal(400),
-        TaxYearModel("2015/16", isValidYear = false, "2018/19")
+        TaxYearModel("2015/16", isValidYear = false, "2018/19"),
+        aeaRemaining = 0
       )(fakeRequestWithSession, applicationMessages)
       lazy val doc = Jsoup.parse(view.body)
 
@@ -68,7 +109,7 @@ class SummaryPartialViewSpec extends UnitSpec with WithFakeApplication with Fake
         }
 
         s"contain the second heading text ${messages.headingTwo("2015 to 2016")}" in {
-          doc.select("h2").text shouldEqual messages.headingTwo("2015 to 2016")
+          doc.select("div#tax-owed-banner h2").text shouldEqual messages.headingTwo("2015 to 2016")
         }
       }
 
@@ -92,6 +133,31 @@ class SummaryPartialViewSpec extends UnitSpec with WithFakeApplication with Fake
 
         s"has a strong tag with the text ${messages.warningNoticeSummary}" in {
           outsideTaxYearsSummary.select("strong").text shouldBe messages.warningNoticeSummary
+        }
+      }
+
+      "have a section for the deductions remaining" should {
+
+        s"have the heading ${messages.remainingDeductions}" in {
+          doc.select("div#remainingDeductions h2")
+        }
+
+        "not display a row for in Year Losses" in {
+          doc.select("#inYearLossesRemaining-text").isEmpty shouldBe true
+        }
+
+        "has a row for aea remaining" which {
+          s"has the text '${messages.aeaRemaining("2015 to 2016")}'" in {
+            doc.select("#aeaRemaining-text").text shouldBe messages.aeaRemaining("2015 to 2016")
+          }
+
+          "has the value '£0'" in {
+            doc.select("#aeaRemaining-amount").text shouldBe "£0"
+          }
+        }
+
+        "does not have a row for brought forward losses" in {
+          doc.select("#broughtForwardLossesRemaining-text").isEmpty shouldBe true
         }
       }
     }

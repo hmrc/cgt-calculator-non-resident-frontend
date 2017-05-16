@@ -962,7 +962,7 @@ object MessageLookup {
     val deductionsSectionHeading = "Your deductions"
     val reliefsUsed = "Reliefs used"
     val inYearLossesUsed = "In year losses used"
-    val aeaUsed = "Capital Gains Tax annual exempt amount used"
+    val aeaUsed = "Capital Gains Tax Annual Exempt Amount used"
     val broughtForwardLossesUsed = "Brought forward losses used"
     val totalDeductions = "Total deductions"
 
@@ -975,5 +975,10 @@ object MessageLookup {
     val incomeBandInfo = "These tax rates are based on your Income Tax bands:"
     def taxRate(taxAmount: String, taxRate: Int): String = s"$taxAmount taxable gain multiplied by $taxRate% tax rate"
     val taxToPay = "Tax to pay"
+
+    val remainingDeductions = "Your remaining deductions"
+    def inYearLossesRemaining(taxYear: String): String = s"In year losses left for the $taxYear tax year"
+    def aeaRemaining(taxYear: String): String = s"Annual Exempt Amount left for the $taxYear tax year"
+    val broughtForwardLossesRemaining = "Losses to carry forward from previous tax years"
   }
 }
