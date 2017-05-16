@@ -791,12 +791,11 @@ calc.summaryPartial.broughtForwardLossesRemaining = Losses to carry forward from
 
 ## What Next messages
 calc.whatNext.title = Report your property now
-calc.whatNext.listTitle = You have 30 days from the date you exchanged contracts to:
-calc.whatNext.listOne = tell us about the property you sold or gave away
+calc.whatNext.listTitle = You have 30 days from the date you completed the transfer of your property (the ''conveyance date'') to:
+calc.whatNext.listOne = tell us about the property you''ve sold or gave away
 calc.whatNext.listTwo = pay any Capital Gains Tax
-calc.whatNext.penaltyWarning = You’ll have to pay a penalty if you report your property late.
-calc.whatNext.saHeader = If you''re registered for UK Self Assessment
-calc.whatNext.saText = You must report this property within 30 days and declare it on your Self Assessment tax return. However, you can choose to defer payment until you do your Self Assessment.
-calc.whatNext.loginInformation = You''ll have to log in using Government Gateway.
+calc.whatNext.penaltyWarning = Use our online form to report now. You''ll have to pay a penalty if you miss the reporting deadline.
+calc.whatNext.saHeader = What if I''m registered for Self Assessment?
+calc.whatNext.saText = You must report basic information now, but you can choose to report in full and pay any tax due when you do your Self Assessment return.
 calc.whatNext.report = Report now
-calc.whatNext.finish = Finish
+calc.whatNext.finish = Return to GOV.UK

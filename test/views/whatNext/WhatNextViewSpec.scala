@@ -70,16 +70,12 @@ class WhatNextViewSpec extends UnitSpec with GuiceOneAppPerSuite with MockitoSug
       doc.select("article p").get(1).text() shouldBe messages.penaltyWarning
     }
 
-    s"have a secondary heading of ${messages.saHeader}" in {
-      doc.select("h2").text() shouldBe messages.saHeader
+    s"have a progressive disclosure heading of ${messages.saHeader}" in {
+      doc.select("summary span").text() shouldBe messages.saHeader
     }
 
     s"have information for sa users of ${messages.saText}" in {
       doc.select("article p").get(2).text() shouldBe messages.saText
-    }
-
-    s"have information about logging in of ${messages.loginInformation}" in {
-      doc.select("article p").get(3).text() shouldBe messages.loginInformation
     }
 
     "have a button for reporting" which {
