@@ -35,7 +35,7 @@
         )
     }
 
-    <div class="panel-indent" id='hidden'>
+    <div class="panel-indent panel-indent--wide panel-indent--gutter" id='hidden'>
         <div class="@hiddenClasses">
             @form.errors.filter(_.key == "").map { error => <span class="error-notification">@Messages(error.message)</span>}
             @if(additionalContent.isDefined) { @additionalContent }
