@@ -75,7 +75,7 @@ class RebasedValueViewSpec extends UnitSpec with WithFakeApplication with FakeRe
       }
 
       s"have a paragraph with the text ${messages.questionOptionalText}" in {
-        document.select("article > p").text shouldEqual messages.questionOptionalText
+        document.select("article > p").first().text shouldEqual messages.questionOptionalText
       }
 
       "have some hint text" which {
@@ -89,6 +89,10 @@ class RebasedValueViewSpec extends UnitSpec with WithFakeApplication with FakeRe
           hintText.text shouldEqual messages.inputHintText
         }
       }
+      s"have a joint ownership section with the text ${messages.jointOwnership}" in {
+        document.select("p.panel-indent").first().text() shouldBe messages.jointOwnership
+      }
+
 
       s"Have a hidden help section" which {
         lazy val hiddenHelp = document.select("details")

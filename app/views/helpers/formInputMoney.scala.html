@@ -2,7 +2,7 @@
 @import play.api.data._
 @import views.html.helpers._
 
-@(inputForm: Form[_], fieldName: String, questionText: String, helpText: Option[String] = None, additionalHTMLContent: Option[String] = None, hideLabel: Boolean = false, step: String = "0.01")(implicit messages: Messages)
+@(inputForm: Form[_], fieldName: String, questionText: String, helpText: Option[String] = None, additionalHTMLContent: Option[String] = None, hideLabel: Boolean = false, step: String = "0.01", labelClasses: String = "")(implicit messages: Messages)
 
     <div class="form-group">
 
@@ -34,6 +34,7 @@
                 @moneyInputFormat(
                     inputForm(fieldName),
                     '_label -> questionText,
+                    '_labelTextClass -> labelClasses,
                     '_additionalContent -> Html(additionalHTMLContent.get),
                     '_inputHint -> Html(helpText.getOrElse("")),
                     '_type -> "number",
@@ -44,6 +45,7 @@
                 @moneyInputFormat(
                     inputForm(fieldName),
                     '_label -> questionText,
+                    '_labelTextClass -> labelClasses,
                     '_inputHint -> Html(helpText.getOrElse("")),
                     '_type -> "number",
                     '_inputClass -> "input--no-spinner",

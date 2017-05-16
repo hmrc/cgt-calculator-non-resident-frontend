@@ -1,0 +1,10 @@
+@import views.html.helpers._
+
+@(gain: BigDecimal, totalDeductions: BigDecimal, taxableGain: BigDecimal)(implicit request: Request[_], messages: Messages)
+
+<div id="yourTaxableGain" class="resident summary-underline">
+    <h3>@Messages("calc.summaryPartial.yourTaxableGain")</h3>
+    @summaryNumericRow("gain", Messages("calc.summaryPartial.totalGain"), gain)
+    @summaryNumericRow("minusDeductions", Messages("calc.summaryPartial.minusDeductions"), totalDeductions)
+    @summaryNumericRow("taxableGain", Messages("calc.summaryPartial.taxableGain"), taxableGain, isTotal = true)
+</div>

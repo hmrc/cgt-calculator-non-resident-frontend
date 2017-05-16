@@ -155,9 +155,10 @@ calc.acquisitionValue.bullet.five = became the owner before 1 April 1982
 calc.nonResident.rebasedValue.question = What was the market value of the property on
 calc.nonResident.rebasedValue.date = 5 April 2015?
 calc.nonResident.rebasedValue.questionAndDate = What was the market value of the property on 5 April 2015?
-calc.nonResident.rebasedValue.helpText = This value lets us calculate your tax in different ways, which means you may have less tax to pay.
+calc.nonResident.rebasedValue.helpText = As you''re not a UK resident, you only have to report UK property you''ve sold or given away since 5 April 2015.
 calc.nonResident.rebasedValue.helpHidden.title = Why we''re asking for this
 calc.nonResident.rebasedValue.hintText = If you don''t know the exact value, you must provide a realistic estimate. You might have to pay more if we think your estimate is unrealistic.
+calc.nonResident.rebasedValue.jointOwnership = If you owned the property with someone else, only enter your share of the property value.
 calc.nonResident.rebasedValue.optionalLine = Only tell us if you owned the property on that date
 calc.nonResident.rebasedValue.errorNegative = Enter a positive value for your property on 5 April 2015
 calc.nonResident.rebasedValue.error.no.value.supplied = Enter a value for your property on 5 April 2015
@@ -173,6 +174,7 @@ calc.nonResident.mandatoryRebasedValue.hintText = If you don''t know the exact v
 ## Rebased Costs ##
 calc.rebasedCosts.question = Did you pay to have the property valued at 5 April 2015?
 calc.rebasedCosts.questionTwo = How much did it cost to get the property valued?
+calc.rebasedCosts.jointOwnership = If you owned the property with someone else, only enter your share of the cost.
 calc.rebasedCosts.errorNegative = Enter a positive number for your costs
 calc.rebasedCosts.error.no.value.supplied = Enter the value for your costs
 calc.rebasedCosts.errorDecimalPlaces = There are too many numbers after the decimal point in your costs
@@ -751,6 +753,41 @@ calc.resident.shares.currentIncome.helpText = Include your salary before tax, an
 ## Other Disposals messages
 calc.resident.shares.otherDisposals.bullet.one = UK residential properties
 calc.resident.shares.otherDisposals.bullet.three = other shares
+
+## Summary Partial messages
+calc.summaryPartial.cgtToPay = Capital Gains Tax to pay for {0}
+calc.summaryPartial.warning = Warning
+calc.summaryPartial.noticeSummary = Your result may be inaccurate because the calculator does not support the date of sale you entered. Do not use these figures to report your Capital Gains Tax.
+calc.summaryPartial.workingOutSectionHeading = How we''ve worked this out
+calc.summaryPartial.yourTotalGain = Your total gain
+calc.summaryPartial.valueWhenSold = Value when you sold the property
+calc.summaryPartial.valueAtTaxStart = Minus the value of the property on 5 April 2015
+calc.summaryPartial.valueWhenAcquired = Minus the value of the property when you acquired it
+calc.summaryPartial.totalCosts = Minus all costs, including improvements
+calc.summaryPartial.gainMadeOnProperty = The gain you''ve made on the property
+calc.summaryPartial.percentageOfGain = The percentage gain you''ve made since 5 April 2015
+calc.summaryPartial.totalGain = Total gain
+calc.summaryPartial.deductionsSectionHeading = Your deductions
+calc.summaryPartial.reliefsUsed = Reliefs used
+calc.summaryPartial.inYearLossesUsed = In year losses used
+calc.summaryPartial.aeaUsed = Capital Gains Tax Annual Exempt Amount used
+calc.summaryPartial.broughtForwardLossesUsed = Brought forward losses used
+calc.summaryPartial.totalDeductions = Total deductions
+
+calc.summaryPartial.yourTaxableGain = Your taxable gain
+calc.summaryPartial.gain = Total gain
+calc.summaryPartial.minusDeductions = Minus deductions
+calc.summaryPartial.taxableGain = Taxable gain
+
+calc.summaryPartial.yourTaxRate = Your tax rate
+calc.summaryPartial.incomeBandInfo = These tax rates are based on your Income Tax bands:
+calc.summaryPartial.taxRate = £{0} taxable gain multiplied by {1}% tax rate
+calc.summaryPartial.taxToPay = Tax to pay
+
+calc.summaryPartial.remainingDeductions = Your remaining deductions
+calc.summaryPartial.inYearLossesRemaining = In year losses left for the {0} tax year
+calc.summaryPartial.aeaRemaining = Annual Exempt Amount left for the {0} tax year
+calc.summaryPartial.broughtForwardLossesRemaining = Losses to carry forward from previous tax years
 
 ## What Next messages
 calc.whatNext.title = Report your property now

@@ -158,7 +158,7 @@ class RebasedValueActionSpec extends UnitSpec with WithFakeApplication with Mock
         }
 
         s"return to the rebased value page that has a paragraph with the text ${messages.questionOptionalText}" in {
-          document.select("article > p").text shouldEqual messages.questionOptionalText
+          document.select("article > p").first().text shouldEqual messages.questionOptionalText
         }
       }
     }
@@ -192,7 +192,7 @@ class RebasedValueActionSpec extends UnitSpec with WithFakeApplication with Mock
         }
 
         s"return to the mandatory rebased value page that does NOT have a paragraph with the text ${messages.questionOptionalText}" in {
-          document.select("article > p").text shouldEqual ""
+          document.select("""article > p[class=""]""").text shouldEqual ""
         }
       }
     }
