@@ -10,16 +10,7 @@
 
     <a id="back-link" class="back-link" href="@backUrl">@Messages("calc.base.back")</a>
 
-    <h1 class="heading-xlarge">@Messages("calc.summary.calculation.details.title")</h1>
-
-    @(if (displayDateWarning) taxYearWarningNotice())
-
-    <div class=font-medium" data-metrics="summary:calc-election:@calculationType">
-
-        @amountYouOweRow(taxOwed.getOrElse(0), 2)
-        @summaryOfCalcSection("calculationDetails", result, 2)
-
-    </div>
+    @summaryPartial(taxOwed = 100000, taxYearModel = TaxYearModel("2016/17", true, "2016/17"), aeaRemaining = 1000, inYearLossesRemaining = Some(50), broughtForwardLossesRemaining = Some(100))
 
     <div class="grid-layout__column grid-layout__column--1-3">
 

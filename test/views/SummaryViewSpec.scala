@@ -28,7 +28,6 @@ import play.api.Play.current
 class SummaryViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
 
 
-
   "Summary view" when {
 
     "supplied with a disposal date within the valid tax years" should {
@@ -74,24 +73,6 @@ class SummaryViewSpec extends UnitSpec with WithFakeApplication with FakeRequest
         }
       }
 
-      "not have a tax year warning" in {
-        document.select("div.notice-wrapper").size() shouldBe 0
-      }
-
-      "have a section heading" which {
-
-        s"has the text ${messages.Summary.amountOwed}" in {
-          document.select("#amount-you-owe-question span").text() shouldEqual messages.Summary.amountOwed
-        }
-
-        s"has a value of £0.00" in {
-          document.select("#amount-you-owe-value span").text() shouldEqual "£0.00"
-        }
-      }
-
-      "have a section for calculation details" in {
-        document.select("#calculationDetails") shouldNot be("")
-      }
 
       "have a what to do next section" which {
         lazy val whatToDoNext = document.select("#whatToDoNext")
@@ -109,15 +90,15 @@ class SummaryViewSpec extends UnitSpec with WithFakeApplication with FakeRequest
         }
       }
 
-      "have a link to start again" which {
-        lazy val startAgain = document.select("a.button")
+      "have a continue button" which {
+        lazy val continue = document.select("a.button")
 
         "have the text 'Continue" in {
-          startAgain.text() shouldBe messages.continue
+          continue.text() shouldBe messages.continue
         }
 
         "have a link to /calculate-your-capital-gains/non-resident/what-next" in {
-          startAgain.attr("href") shouldBe controllers.routes.WhatNextController.whatNext().url
+          continue.attr("href") shouldBe controllers.routes.WhatNextController.whatNext().url
         }
       }
 
