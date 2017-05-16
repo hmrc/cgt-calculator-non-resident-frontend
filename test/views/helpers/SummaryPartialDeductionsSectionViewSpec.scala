@@ -38,8 +38,8 @@ class SummaryPartialDeductionsSectionViewSpec extends UnitSpec with WithFakeAppl
     )(fakeRequestWithSession, applicationMessages)
     lazy val doc = Jsoup.parse(view.body)
 
-    s"have the h4 heading ${messages.deductionsSectionHeading}" in {
-      doc.select("h4").text shouldBe messages.deductionsSectionHeading
+    s"have the h3 heading ${messages.deductionsSectionHeading}" in {
+      doc.select("h3").text shouldBe messages.deductionsSectionHeading
     }
 
     "has a row for reliefs used" which {
@@ -104,8 +104,8 @@ class SummaryPartialDeductionsSectionViewSpec extends UnitSpec with WithFakeAppl
     )(fakeRequestWithSession, applicationMessages)
     lazy val doc = Jsoup.parse(view.body)
 
-    s"have the h4 heading ${messages.deductionsSectionHeading}" in {
-      doc.select("h4").text shouldBe messages.deductionsSectionHeading
+    s"have the h3 heading ${messages.deductionsSectionHeading}" in {
+      doc.select("h3").text shouldBe messages.deductionsSectionHeading
     }
 
     "does not have a row for in year losses used" in {

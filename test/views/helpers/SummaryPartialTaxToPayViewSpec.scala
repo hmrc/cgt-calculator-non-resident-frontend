@@ -44,7 +44,7 @@ class SummaryPartialTaxToPayViewSpec extends UnitSpec with WithFakeApplication w
       lazy val doc = Jsoup.parse(view.body)
 
       s"have the text ${messages.yourTaxRate}" in {
-        doc.select("h4").text shouldBe messages.yourTaxRate
+        doc.select("h3").text shouldBe messages.yourTaxRate
       }
 
       "has a information line" which {
@@ -98,7 +98,7 @@ class SummaryPartialTaxToPayViewSpec extends UnitSpec with WithFakeApplication w
       lazy val doc = Jsoup.parse(view.body)
 
       s"have the text ${messages.yourTaxRate}" in {
-        doc.select("h4").text shouldBe messages.yourTaxRate
+        doc.select("h3").text shouldBe messages.yourTaxRate
       }
 
       "does not have a row for tax band two" in {
@@ -120,7 +120,7 @@ class SummaryPartialTaxToPayViewSpec extends UnitSpec with WithFakeApplication w
       lazy val doc = Jsoup.parse(view.body)
 
       s"have the text ${messages.yourTaxRate}" in {
-        doc.select("h4").text shouldBe messages.yourTaxRate
+        doc.select("h3").text shouldBe messages.yourTaxRate
       }
 
       "does not have a row for tax band one" in {
@@ -142,7 +142,7 @@ class SummaryPartialTaxToPayViewSpec extends UnitSpec with WithFakeApplication w
       lazy val doc = Jsoup.parse(view.body)
 
       s"does not have the text ${messages.yourTaxRate}" in {
-        doc.select("h4").isEmpty shouldBe true
+        doc.select("h3").isEmpty shouldBe true
       }
 
       "does not have a information line" in {

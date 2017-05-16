@@ -5,7 +5,7 @@
 percentageTotalGain: BigDecimal = 0, percentageOfGain: Int = 0)(implicit request: Request[_], messages: Messages)
 
 <div id="workedOutSection">
-    <h3>@Messages("calc.summaryPartial.workingOutSectionHeading")</h3>
+    <h2>@Messages("calc.summaryPartial.workingOutSectionHeading")</h2>
     <p class="lede">
         @{calculationType match {
             case CalculationType.flat => Messages("calc.calculationElection.message.flat")
@@ -15,7 +15,7 @@ percentageTotalGain: BigDecimal = 0, percentageOfGain: Int = 0)(implicit request
         }
     </p>
 
-    <h4>@Messages("calc.summaryPartial.yourTotalGain")</h4>
+    <h3>@Messages("calc.summaryPartial.yourTotalGain")</h3>
 
     @summaryNumericRow("disposalValue",Messages("calc.summaryPartial.valueWhenSold"), disposalValue)
 

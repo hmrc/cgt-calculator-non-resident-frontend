@@ -38,7 +38,7 @@ class SummaryPartialTaxableGainViewSpec extends UnitSpec with WithFakeApplicatio
       lazy val doc = Jsoup.parse(view.body)
 
       s"have the text ${messages.yourTaxableGain}" in {
-        doc.select("h4").text shouldBe messages.yourTaxableGain
+        doc.select("h3").text shouldBe messages.yourTaxableGain
       }
 
       "has a row for total gain" which {

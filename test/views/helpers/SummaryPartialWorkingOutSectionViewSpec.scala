@@ -40,8 +40,8 @@ class SummaryPartialWorkingOutSectionViewSpec extends UnitSpec with WithFakeAppl
       )(fakeRequestWithSession, applicationMessages)
       lazy val doc = Jsoup.parse(view.body)
 
-      s"have the h3 heading ${messages.workingOutSectionHeading}" in {
-        doc.select("h3").text shouldBe messages.workingOutSectionHeading
+      s"have the h2 heading ${messages.workingOutSectionHeading}" in {
+        doc.select("h2").text shouldBe messages.workingOutSectionHeading
       }
 
       s"have the message for a flat calculation type ${messages.flatCalculationSummary}" in {
@@ -49,7 +49,7 @@ class SummaryPartialWorkingOutSectionViewSpec extends UnitSpec with WithFakeAppl
       }
 
       s"have the text ${messages.yourTotalGain}" in {
-        doc.select("h4").text shouldBe messages.yourTotalGain
+        doc.select("h3").text shouldBe messages.yourTotalGain
       }
 
       "has a row for disposal value" which {
@@ -112,8 +112,8 @@ class SummaryPartialWorkingOutSectionViewSpec extends UnitSpec with WithFakeAppl
       )(fakeRequestWithSession, applicationMessages)
       lazy val doc = Jsoup.parse(view.body)
 
-      s"have the h3 heading ${messages.workingOutSectionHeading}" in {
-        doc.select("h3").text shouldBe messages.workingOutSectionHeading
+      s"have the h2 heading ${messages.workingOutSectionHeading}" in {
+        doc.select("h2").text shouldBe messages.workingOutSectionHeading
       }
 
       s"have the message for a rebased calculation type ${messages.rebasedCalculationSummary} ${messages.rebasedCalculationSummaryDate}" in {
@@ -121,7 +121,7 @@ class SummaryPartialWorkingOutSectionViewSpec extends UnitSpec with WithFakeAppl
       }
 
       s"have the text ${messages.yourTotalGain}" in {
-        doc.select("h4").text shouldBe messages.yourTotalGain
+        doc.select("h3").text shouldBe messages.yourTotalGain
       }
 
       "has a row for disposal value" which {
@@ -186,8 +186,8 @@ class SummaryPartialWorkingOutSectionViewSpec extends UnitSpec with WithFakeAppl
       )(fakeRequestWithSession, applicationMessages)
       lazy val doc = Jsoup.parse(view.body)
 
-      s"have the h3 heading ${messages.workingOutSectionHeading}" in {
-        doc.select("h3").text shouldBe messages.workingOutSectionHeading
+      s"have the h2 heading ${messages.workingOutSectionHeading}" in {
+        doc.select("h2").text shouldBe messages.workingOutSectionHeading
       }
 
       s"have the message for a time calculation type ${messages.timeCalculationSummary} ${messages.timeCalculationSummaryDate}" in {
@@ -195,7 +195,7 @@ class SummaryPartialWorkingOutSectionViewSpec extends UnitSpec with WithFakeAppl
       }
 
       s"have the text ${messages.yourTotalGain}" in {
-        doc.select("h4").text shouldBe messages.yourTotalGain
+        doc.select("h3").text shouldBe messages.yourTotalGain
       }
 
       "has a row for disposal value" which {
