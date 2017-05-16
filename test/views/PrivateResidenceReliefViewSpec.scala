@@ -117,35 +117,6 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
           button.attr("id") shouldBe "continue-button"
         }
       }
-
-      "have a sidebar" which {
-        lazy val sidebar = document.body().select("aside")
-        lazy val link = sidebar.select("a")
-
-        "contains one link" in {
-          link.size() shouldBe 1
-        }
-
-        "has a link with the class 'external-link'" in {
-          link.attr("class") shouldBe "external-link"
-        }
-
-        "has a link with a rel of 'external'" in {
-          link.attr("rel") shouldBe "external"
-        }
-
-        "has a link with a target of '_blank'" in {
-          link.attr("target") shouldBe "_blank"
-        }
-
-        "has a link with an href to 'https://www.gov.uk/tax-sell-home/private-residence-relief'" in {
-          sidebar.select("#helpLink1").attr("href") shouldBe "https://www.gov.uk/tax-sell-home/private-residence-relief"
-        }
-
-        "has a link with the correct text" in {
-          sidebar.select("#helpLink1").text() shouldBe s"${messages.PrivateResidenceRelief.helpLink} ${messages.externalLink}"
-        }
-      }
     }
 
     "supplied with no errors and the days before input displayed" should {
