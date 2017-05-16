@@ -12,6 +12,8 @@
 
     <h1 class="heading-xlarge">@Messages("calc.acquisitionValue.question")</h1>
 
+    <p id="helpText">@Messages("calc.acquisitionValue.helpText")</p>
+
     @form(action = controllers.routes.AcquisitionValueController.submitAcquisitionValue) {
 
         @formInputMoney(acquisitionValueForm, "acquisitionValue", Messages("calc.acquisitionValue.question"), None, None, true)

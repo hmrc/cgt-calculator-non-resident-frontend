@@ -137,6 +137,7 @@ calc.acquisitionDate.questionTwo = What was the date you signed the contract tha
 
 ## Acquisition Value ##
 calc.acquisitionValue.question = How much did you pay for the property?
+calc.acquisitionValue.helpText = If you owned the property with someone else, only enter your share of the purchase.
 calc.acquisitionValue.errorNegative = Enter a positive number for the amount you paid
 calc.acquisitionValue.errorDecimalPlaces = The amount you paid has too many numbers after the decimal point
 calc.acquisitionValue.bullet.title = Put the market value of the property instead if you:

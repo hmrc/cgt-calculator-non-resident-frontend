@@ -53,6 +53,8 @@ class AcquisitionValueViewSpec extends UnitSpec with WithFakeApplication with Fa
 
     "have a 'Back link' that" should{
 
+      lazy val helpText = document.body().select("#helpText")
+
       s"have the text of ${commonMessages.back}" in {
         document.select("a#back-link").text shouldEqual commonMessages.back
       }
@@ -63,6 +65,10 @@ class AcquisitionValueViewSpec extends UnitSpec with WithFakeApplication with Fa
 
       "has the back-link class" in {
         document.select("a#back-link").hasClass("back-link") shouldBe true
+      }
+
+      s"contains help text '${messages.helpText}'" in {
+        helpText.text() should include(messages.helpText)
       }
     }
 

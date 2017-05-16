@@ -79,6 +79,7 @@ object MessageLookup {
 
     object AcquisitionValue {
       val question = "How much did you pay for the property?"
+      val helpText = "If you owned the property with someone else, only enter your share of the purchase."
       val bulletTitle = "Put the market value of the property instead if you:"
       val bulletOne = "inherited it"
       val bulletTwo = "got it as a gift"
