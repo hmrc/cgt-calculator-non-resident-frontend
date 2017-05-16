@@ -78,13 +78,15 @@ class WorthWhenInheritedViewSpec extends UnitSpec with WithFakeApplication with 
       "have help text" which {
 
         lazy val helpText = document.body().select("#helpText")
+        lazy val hintText = document.body().select("#hintText")
 
-        s"contains help text '${messages.hintOne}'" in {
-          helpText.text() should include(messages.hintOne)
+
+        s"contains hint text '${WorthWhenInherited.hint}'" in {
+          hintText.text() should include(WorthWhenInherited.hint)
         }
 
-        s"contains help text '${messages.hintTwo}'" in {
-          helpText.text() should include (messages.hintTwo)
+        s"contains help text '${WorthWhenInherited.helpText}'" in {
+          helpText.text() should include(WorthWhenInherited.helpText)
         }
       }
 

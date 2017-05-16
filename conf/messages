@@ -378,6 +378,8 @@ calc.worthWhenGiftedTo.question = What was the market value of the property when
 
 ## Worth When Inherited ##
 calc.worthWhenInherited.question = What was the market value of the property when you inherited it?
+calc.worthWhenInherited.hint = This is the value of the property on the date the previous owner died. You can use the probate valuation.
+calc.worthWhenInherited.helpText = If you owned the property with someone else, only enter the value of your share of the property.
 
 ## Worth When Bought For Less ##
 calc.worthWhenBoughtForLess.question = What was the market value of the property when you bought it?
