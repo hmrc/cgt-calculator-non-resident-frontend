@@ -754,6 +754,41 @@ calc.resident.shares.currentIncome.helpText = Include your salary before tax, an
 calc.resident.shares.otherDisposals.bullet.one = UK residential properties
 calc.resident.shares.otherDisposals.bullet.three = other shares
 
+## Summary Partial messages
+calc.summaryPartial.cgtToPay = Capital Gains Tax to pay for {0}
+calc.summaryPartial.warning = Warning
+calc.summaryPartial.noticeSummary = Your result may be inaccurate because the calculator does not support the date of sale you entered. Do not use these figures to report your Capital Gains Tax.
+calc.summaryPartial.workingOutSectionHeading = How we''ve worked this out
+calc.summaryPartial.yourTotalGain = Your total gain
+calc.summaryPartial.valueWhenSold = Value when you sold the property
+calc.summaryPartial.valueAtTaxStart = Minus the value of the property on 5 April 2015
+calc.summaryPartial.valueWhenAcquired = Minus the value of the property when you acquired it
+calc.summaryPartial.totalCosts = Minus all costs, including improvements
+calc.summaryPartial.gainMadeOnProperty = The gain you''ve made on the property
+calc.summaryPartial.percentageOfGain = The percentage gain you''ve made since 5 April 2015
+calc.summaryPartial.totalGain = Total gain
+calc.summaryPartial.deductionsSectionHeading = Your deductions
+calc.summaryPartial.reliefsUsed = Reliefs used
+calc.summaryPartial.inYearLossesUsed = In year losses used
+calc.summaryPartial.aeaUsed = Capital Gains Tax Annual Exempt Amount used
+calc.summaryPartial.broughtForwardLossesUsed = Brought forward losses used
+calc.summaryPartial.totalDeductions = Total deductions
+
+calc.summaryPartial.yourTaxableGain = Your taxable gain
+calc.summaryPartial.gain = Total gain
+calc.summaryPartial.minusDeductions = Minus deductions
+calc.summaryPartial.taxableGain = Taxable gain
+
+calc.summaryPartial.yourTaxRate = Your tax rate
+calc.summaryPartial.incomeBandInfo = These tax rates are based on your Income Tax bands:
+calc.summaryPartial.taxRate = £{0} taxable gain multiplied by {1}% tax rate
+calc.summaryPartial.taxToPay = Tax to pay
+
+calc.summaryPartial.remainingDeductions = Your remaining deductions
+calc.summaryPartial.inYearLossesRemaining = In year losses left for the {0} tax year
+calc.summaryPartial.aeaRemaining = Annual Exempt Amount left for the {0} tax year
+calc.summaryPartial.broughtForwardLossesRemaining = Losses to carry forward from previous tax years
+
 ## What Next messages
 calc.whatNext.title = Report your property now
 calc.whatNext.listTitle = You have 30 days from the date you exchanged contracts to:
