@@ -82,17 +82,6 @@ class CalculationElectionViewSpec extends UnitSpec with WithFakeApplication with
       }
     }
 
-    "have a read more sidebar" which {
-
-      s"contains the text ${commonMessages.readMore}" in {
-        doc.select("aside h2").text shouldBe commonMessages.readMore
-      }
-
-      s"contains the link ${commonMessages.externalLink}" in {
-        doc.select("aside a").text shouldBe s"${messages.linkOne} ${commonMessages.externalLink}"
-      }
-    }
-
     "contains a h2 heading" which {
 
       "has the class of heading-small" in {
