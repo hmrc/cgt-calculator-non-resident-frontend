@@ -70,58 +70,6 @@ class OtherPropertiesViewSpec extends UnitSpec with WithFakeApplication with Fak
         }
       }
 
-      "include a read more section" which {
-
-        "include twos links of which link one" should {
-
-          lazy val linkOne = document.body.getElementById("helpLink1")
-
-          s"link one should have text ${messages.linkOne} ${commonMessages.externalLink}" in {
-            linkOne.text shouldEqual s"${messages.linkOne} ${commonMessages.externalLink}"
-          }
-
-          s"link one should have an href to 'https://www.gov.uk/capital-gains-tax'" in {
-            linkOne.attr("href") shouldEqual "https://www.gov.uk/capital-gains-tax"
-          }
-
-          "has a link with the class 'external-link'" in {
-            linkOne.attr("class") shouldBe "external-link"
-          }
-
-          "has a link with a rel of 'external'" in {
-            linkOne.attr("rel") shouldBe "external"
-          }
-
-          "has a link with a target of '_blank'" in {
-            linkOne.attr("target") shouldBe "_blank"
-          }
-        }
-
-        "include twos links of which link two" should {
-
-          lazy val linkTwo = document.body.getElementById("helpLink2")
-
-          s"link two should have text ${messages.linkTwo} ${commonMessages.externalLink}" in {
-            linkTwo.text shouldEqual s"${messages.linkTwo} ${commonMessages.externalLink}"
-          }
-
-          s"link two should have an href to 'https://www.gov.uk/income-tax-rates/previous-tax-years'" in {
-            linkTwo.attr("href") shouldEqual "https://www.gov.uk/income-tax-rates/previous-tax-years"
-          }
-          "has a link with the class 'external-link'" in {
-            linkTwo.attr("class") shouldBe "external-link"
-          }
-
-          "has a link with a rel of 'external'" in {
-            linkTwo.attr("rel") shouldBe "external"
-          }
-
-          "has a link with a target of '_blank'" in {
-            linkTwo.attr("target") shouldBe "_blank"
-          }
-        }
-      }
-
       "have inputs using the id 'otherProperties'" in {
         document.body().select("input[type=radio]").attr("id") should include("otherProperties")
       }

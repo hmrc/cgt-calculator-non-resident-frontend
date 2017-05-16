@@ -4,24 +4,7 @@
 
 @(otherPropertiesForm: Form[OtherPropertiesModel], backUrl: String)(implicit request: Request[_], messages: Messages)
 
-@sidebar = {
-    <ul>
-        <li>
-            <a id="helpLink1" class="external-link" rel="external" href="https://www.gov.uk/capital-gains-tax" target="_blank">
-                @Messages("calc.otherProperties.link.one")
-                <span>@Messages("calc.base.externalLink")</span>
-            </a>
-        </li>
-        <li>
-            <a id="helpLink2" class="external-link" rel="external" href="https://www.gov.uk/income-tax-rates/previous-tax-years" target="_blank">
-                @Messages("calc.otherProperties.link.two")
-                <span>@Messages("calc.base.externalLink")</span>
-            </a>
-        </li>
-    </ul>
-}
-
-@main_template(Messages("calc.otherProperties.question"), sidebarLinks = Some(sidebar)) {
+@main_template(Messages("calc.otherProperties.question")) {
 
     <a id="back-link" class="back-link" href="@backUrl">@Messages("calc.base.back")</a>
 
