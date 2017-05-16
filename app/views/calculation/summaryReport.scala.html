@@ -1,9 +1,11 @@
 @import views.html.helpers.summarySectionNoLink
+@import views.html.helpers.summaryPartial
 @import models._
 @import uk.gov.hmrc.play.views.helpers.MoneyPounds
 @import constructors.OtherReliefsDetailsConstructor
 
-@(totalGain: TotalGainAnswersModel, result: Seq[QuestionAnswerModel[Any]], taxYear: TaxYearModel, electionType: String, pRRModel: Option[PrivateResidenceReliefModel] = None, finalAnswers: Option[TotalPersonalDetailsCalculationModel] = None, taxOwed: BigDecimal, otherReliefs: Option[OtherReliefsModel])(implicit request: Request[_], messages: Messages)
+@(taxYearModel: TaxYearModel, totalGain: TotalGainAnswersModel, result: Seq[QuestionAnswerModel[Any]], taxYear: TaxYearModel, electionType: String, pRRModel: Option[PrivateResidenceReliefModel] = None, finalAnswers: Option[TotalPersonalDetailsCalculationModel] = None, taxOwed: BigDecimal, otherReliefs: Option[OtherReliefsModel],
+        aeaRemaining: BigDecimal, inYearLossesRemaining: Option[BigDecimal] = None, broughtForwardLossesRemaining: Option[BigDecimal] = None)(implicit request: Request[_], messages: Messages)
 
 <!DOCTYPE html>
 <html>
@@ -53,6 +55,8 @@
     @{if (finalAnswers.isDefined)
         summarySectionNoLink("personalDetails", Messages("calc.summary.personal.details.title"), finalAnswers.get.personalDetailsRows)
     }
+
+    @summaryPartial(taxOwed, taxYearModel, aeaRemaining, inYearLossesRemaining, broughtForwardLossesRemaining)
 
 
     <div id="whatToDoNext" class="form-group">
