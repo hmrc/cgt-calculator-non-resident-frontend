@@ -206,6 +206,7 @@ nocgt.sidebar.linkone = Capital Gains Tax for non-residents
 calc.disposalValue.question = How much did you sell the property for?
 calc.disposalValue.errorNegative = Enter a positive number for the amount you sold the property for
 calc.disposalValue.errorDecimalPlaces = The amount you sold the property for has too many numbers after the decimal point
+calc.disposalValue.jointOwnership = If you owned the property with someone else, only enter your share of the sale value
 
 ## How Much Gain ##
 calc.howMuchGain.question = What was your taxable gain?
@@ -236,6 +237,8 @@ calc.disposalCosts.helpBulletFour = advertising to find a buyer
 calc.disposalCosts.errorNegativeNumber = Enter a positive number for your selling costs
 calc.disposalCosts.errorDecimalPlaces = There are too many numbers after the decimal point in your selling costs
 
+calc.disposalCosts.jointOwnership = If you owned the property with someone else, only enter your share of the costs.
+
 ## Market Value ##
 calc.marketValue.gaveItAway.question = What was the property worth when you gave it away?
 calc.marketValue.sold.question = What was the market value of the property when you sold it?
@@ -248,6 +251,7 @@ calc.marketValue.error.sold.negative  = Enter a positive number for the market v
 
 calc.marketValue.helpText = You can use a valuation from a surveyor. If you don''t know the exact value, you must provide a realistic estimate.
 calc.marketValue.helpTextAdditional = You might have to pay more if we think your estimate is unrealistic.
+calc.marketValue.jointOwnership = If you owned the property with someone else, only enter your share of the property value.
 
 ## Private Residence Relief ##
 calc.privateResidenceRelief.question = Are you claiming Private Residence Relief?
@@ -408,7 +412,7 @@ calc.summary.purchase.details.title = Owning the property
 calc.summary.property.details.title = Property details
 calc.summary.sale.details.title = Selling or giving away the property
 calc.summary.deductions.title = Deductions
-calc.summary.next.actions.text = You need to
+calc.summary.next.actions.text = Before you continue, save a copy of your calculation. You will need this when you report your Capital Gains Tax.
 calc.summary.next.actions.link = tell HMRC about the property
 calc.summary.next.fullMessage = You need to tell HMRC about the property
 calc.summary.link.message = Further details on how to tell HMRC about this property can be found at
@@ -419,6 +423,9 @@ calc.summary.calculation.details.flatCalculation = How much you''ve gained on th
 calc.summary.calculation.details.rebasedCalculation = How much you''ve gained on the property since 5 April 2015
 calc.summary.calculation.details.lossCarriedForward = Loss carried forward
 calc.summary.warning.taxYear = Your total might be less accurate because you didn''t sell or give away your property in this tax year
+
+calc.report.title = Calculate your Capital Gains Tax
+calc.report.logoText = HM Revenue & Customs
 
 ## Check Your Answers ##
 calc.checkYourAnswers.title = Check your answers
@@ -573,7 +580,8 @@ calc.resident.summary.whatNext.shares.liabilityMessage = You can tell HMRC about
 calc.resident.summary.whatNext.properties.liabilityMessage = You can tell HMRC about the property and pay your tax using our
 calc.resident.summary.whatNext.liabilityLink = online service
 calc.resident.summary.whatNext.liabilityMessageTwo = You can use the figures on this page to help you do this.
-calc.resident.summary.saveAsPdf = Save as PDF
+calc.resident.summary.saveAsPdf = Download your Capital Gains Tax calculation (PDF, under 25kB)
+calc.resident.summary.download = Download
 calc.resident.summary.remainingAllowableLoss = Remaining loss from {0} tax year
 calc.resident.summary.remainingBroughtForwardLoss = Remaining loss from tax years before {0}
 calc.resident.summary.remainingLossHelp = You can
@@ -778,3 +786,15 @@ calc.summaryPartial.remainingDeductions = Your remaining deductions
 calc.summaryPartial.inYearLossesRemaining = In year losses left for the {0} tax year
 calc.summaryPartial.aeaRemaining = Annual Exempt Amount left for the {0} tax year
 calc.summaryPartial.broughtForwardLossesRemaining = Losses to carry forward from previous tax years
+
+## What Next messages
+calc.whatNext.title = Report your property now
+calc.whatNext.listTitle = You have 30 days from the date you exchanged contracts to:
+calc.whatNext.listOne = tell us about the property you sold or gave away
+calc.whatNext.listTwo = pay any Capital Gains Tax
+calc.whatNext.penaltyWarning = You’ll have to pay a penalty if you report your property late.
+calc.whatNext.saHeader = If you''re registered for UK Self Assessment
+calc.whatNext.saText = You must report this property within 30 days and declare it on your Self Assessment tax return. However, you can choose to defer payment until you do your Self Assessment.
+calc.whatNext.loginInformation = You''ll have to log in using Government Gateway.
+calc.whatNext.report = Report now
+calc.whatNext.finish = Finish

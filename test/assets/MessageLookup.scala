@@ -173,6 +173,7 @@ object MessageLookup {
       val errorNegativeNumber = "Enter a positive number for your selling costs"
       val errorDecimalPlaces = "There are too many numbers after the decimal point in your selling costs"
 
+      val jointOwnership = "If you owned the property with someone else, only enter your share of the costs."
     }
 
     object DisposalDate {
@@ -197,7 +198,7 @@ object MessageLookup {
       val bulletTwo = "sold it to a relative, business partner or"
       val bulletTwoLink = "someone else you're connected to"
       val bulletThree = "sold it for less than it's worth to help the buyer"
-
+      val jointOwnership = "If you owned the property with someone else, only enter your share of the sale value"
       def errorMaximum(value: String): String = s"Enter an amount that's £$value or less"
     }
 
@@ -300,6 +301,8 @@ object MessageLookup {
 
       val errorNegativeGaveAway = "Enter a positive number for the market value at the point of being given away"
       val errorNegativeSold = "Enter a positive number for the market value at the point of being sold"
+
+      val jointOwnership = "If you owned the property with someone else, only enter your share of the property value."
     }
 
     object PersonalAllowance {
@@ -443,7 +446,7 @@ object MessageLookup {
       val salesDetailsTitle = "Selling or giving away the property"
       val deductionsTitle = "Deductions"
       val whatToDoNextText = "What to do next"
-      val whatToDoNextContent = "You need to"
+      val whatToDoNextContent = "Before you continue, save a copy of your calculation. You will need this when you report your Capital Gains Tax."
       val whatToDoNextLink = "tell HMRC about the property"
       val startAgain = "Start again"
       val calculationElection = "What would you like to base your tax on?"
@@ -452,9 +455,14 @@ object MessageLookup {
       val rebasedCalculation = "How much you've gained on the property since 5 April 2015"
       val lossesCarriedForward = "Loss carried forward"
       val taxYearWarning = "Your total might be less accurate because you didn't sell or give away your property in this tax year"
-      val saveAsPdf = "Save as PDF"
+      val saveAsPdf = "Download your Capital Gains Tax calculation (PDF, under 25kB)"
 
       def basedOnYear(year: String): String = s"These figures are based on the tax rates from the $year tax year"
+    }
+
+    object Report {
+      val logoText = "HM Revenue & Customs"
+      val title = "Calculate your Capital Gains Tax"
     }
 
     object AllowableLosses {
@@ -939,7 +947,7 @@ object MessageLookup {
   }
 
   object SummaryPartialMessages {
-    val headingTwo: String => String = taxYear =>  s"Capital Gains Tax to pay for $taxYear"
+    val headingTwo: String => String = taxYear => s"Capital Gains Tax to pay for $taxYear"
     val warningHidden: String = "Warning"
     val warningNoticeSummary: String = "Your result may be inaccurate because the calculator does not support the date of sale you entered. " +
       "Do not use these figures to report your Capital Gains Tax."
@@ -973,12 +981,32 @@ object MessageLookup {
 
     val yourTaxRate = "Your tax rate"
     val incomeBandInfo = "These tax rates are based on your Income Tax bands:"
+
     def taxRate(taxAmount: String, taxRate: Int): String = s"$taxAmount taxable gain multiplied by $taxRate% tax rate"
+
     val taxToPay = "Tax to pay"
 
     val remainingDeductions = "Your remaining deductions"
+
     def inYearLossesRemaining(taxYear: String): String = s"In year losses left for the $taxYear tax year"
+
     def aeaRemaining(taxYear: String): String = s"Annual Exempt Amount left for the $taxYear tax year"
+
     val broughtForwardLossesRemaining = "Losses to carry forward from previous tax years"
+  }
+
+
+  object WhatNext extends Common {
+    val title = "Report your property now"
+    val listTitle = "You have 30 days from the date you exchanged contracts to:"
+    val listOne = "tell us about the property you sold or gave away"
+    val listTwo = "pay any Capital Gains Tax"
+    val penaltyWarning = "You’ll have to pay a penalty if you report your property late."
+    val saHeader = "If you're registered for UK Self Assessment "
+    val saText = "You must report this property within 30 days and declare it on your Self Assessment tax return." +
+      " However, you can choose to defer payment until you do your Self Assessment."
+    val loginInformation = "You'll have to log in using Government Gateway."
+    val report = "Report now"
+    val finish = "Finish"
   }
 }

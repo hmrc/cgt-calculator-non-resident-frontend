@@ -17,6 +17,9 @@
     </p>
 
     @form(action = controllers.routes.MarketValueWhenSoldOrGaveAwayController.submitMarketValueWhenGaveAway()) {
+
+        <p class="panel-indent panel-indent--wide panel-indent--gutter">@Messages("calc.marketValue.jointOwnership")</p>
+
         @formInputMoney(marketValueForm, "disposalValue", Messages("calc.marketValue.gaveItAway.question"), hideLabel = true)
 
         <button id="continue-button" type="submit" class="button">@Messages("calc.base.button.continue")</button>

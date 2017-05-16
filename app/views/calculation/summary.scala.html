@@ -21,21 +21,24 @@
 
     </div>
 
-    <div class="grid-layout__column grid-layout__column--2-3">
-
-        <a type="submit" class="button nr save-pdf-button" href="@controllers.routes.ReportController.summaryReport.toString" data-journey-click="nr-summary:pdf:save">@Messages("calc.resident.summary.saveAsPdf")</a>
+    <div class="grid-layout__column grid-layout__column--1-3">
 
         <div id="whatToDoNext" class="form-group">
             <h2 class="heading-medium">@Messages("calc.common.next.actions.heading")</h2>
             <p>
                 @Messages("calc.summary.next.actions.text")
-                <a class="external-link" rel="external" href="https://www.gov.uk/guidance/capital-gains-tax-for-non-residents-uk-residential-property"
-                    target="_blank" data-journey-click="nav:calc:kana-nrcgt">@Messages("calc.summary.next.actions.link") <span>@Messages("calc.base.externalLink")</span>
-                </a>
             </p>
         </div>
 
-        <a id="startAgain" class="bold-medium" href="@controllers.routes.SummaryController.restart" data-journey-click="nav:calc:restart">@Messages("calc.summary.startAgain")</a>
+        <div id="save-as-a-pdf" class="notice download-pdf">
+            <div class="icon-file-download">
+                <span class="visuallyhidden">@Messages("calc.resident.summary.download")</span>
+            </div>
+
+            <a class="bold-small save-pdf-link" href="@controllers.routes.ReportController.summaryReport.toString" data-journey-click="nr-summary:pdf:save">@Messages("calc.resident.summary.saveAsPdf")</a>
+        </div>
+        @*TODO Button needs to be updated to use what next routing when available*@
+        <a class="button" href="@controllers.routes.WhatNextController.whatNext" data-journey-click="nav:calc:restart">@Messages("calc.base.continue")</a>
 
     </div>
 }

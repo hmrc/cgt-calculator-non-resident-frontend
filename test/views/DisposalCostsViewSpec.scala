@@ -114,6 +114,10 @@ class DisposalCostsViewSpec extends UnitSpec with WithFakeApplication with FakeR
         s"has an action of '${controllers.routes.DisposalCostsController.submitDisposalCosts().url}'" in {
           form.attr("action") shouldBe controllers.routes.DisposalCostsController.submitDisposalCosts().url
         }
+
+        s"have a paragraph with the text ${messages.jointOwnership}" in {
+          document.body.select("p.panel-indent").text shouldBe messages.jointOwnership
+        }
       }
 
       s"have the question ${messages.question}" in {

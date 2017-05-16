@@ -14,27 +14,25 @@
  * limitations under the License.
  */
 
-package models
+package controllers
 
-import java.time.LocalDate
+import config.ApplicationConfig
+import controllers.predicates.ValidActiveSession
+import uk.gov.hmrc.play.frontend.controller.FrontendController
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 
-import common.Dates
-import play.api.libs.json.Json
+import scala.concurrent.Future
 
-import scala.util.{Success, Try}
+object WhatNextController extends WhatNextController {
+}
 
-case class DisposalDateModel (day: Int, month: Int, year: Int)
+trait WhatNextController extends FrontendController with ValidActiveSession {
 
-object DisposalDateModel {
-  implicit val format = Json.format[DisposalDateModel]
+  lazy implicit val appConfig = ApplicationConfig
 
-  implicit val createDate: DisposalDateModel => Option[LocalDate] = model => {
-    val dateFormatter = Dates.formatter
-    Try {
-      LocalDate.parse(s"${model.day}/${model.month}/${model.year}", dateFormatter)
-    } match {
-      case Success(date) => Some(date)
-      case _ => None
-    }
+  val whatNext = ValidateSession.async { implicit request =>
+    Future.successful(Ok(views.html.whatNext.whatNext()))
   }
+
 }
