@@ -6,13 +6,13 @@
 @import common.TaxDates
 @(result: Seq[QuestionAnswerModel[Any]], backUrl: String, displayDateWarning: Boolean, calculationType: String, taxOwed: Option[BigDecimal])(implicit request: Request[_], messages: Messages)
 
-@main_template(Messages("calc.summary.title"), articleLayout = false) {
+@main_template(Messages("calc.summary.title")) {
 
     <a id="back-link" class="back-link" href="@backUrl">@Messages("calc.base.back")</a>
 
     @summaryPartial(taxOwed = 100000, taxYearModel = TaxYearModel("2016/17", true, "2016/17"), aeaRemaining = 1000, inYearLossesRemaining = Some(50), broughtForwardLossesRemaining = Some(100))
 
-    <div class="grid-layout__column grid-layout__column--1-3">
+    <div class="grid-layout__column grid-layout__column--1-3 summary-details-padding">
 
         <div id="whatToDoNext" class="form-group">
             <h2 class="heading-medium">@Messages("calc.common.next.actions.heading")</h2>

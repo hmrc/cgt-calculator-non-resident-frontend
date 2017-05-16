@@ -4,42 +4,44 @@
 
 @(taxOwed: BigDecimal, taxYearModel: TaxYearModel, aeaRemaining: BigDecimal, inYearLossesRemaining: Option[BigDecimal] = None, broughtForwardLossesRemaining: Option[BigDecimal] = None)(implicit request: Request[_], messages: Messages)
 
-<div id="tax-owed-banner" class="transaction-banner--complete">
-    <h1 class="bold-xlarge"><span>&pound;@MoneyPounds(taxOwed, 2).quantity</span></h1>
-    <h2 class="heading-medium">@Messages("calc.summaryPartial.cgtToPay", TaxYearModel.convertToSummaryFormat(taxYearModel.taxYearSupplied))</h2>
-</div>
-
-@{if (!taxYearModel.isValidYear) {
-    <div id="notice-summary" class="notice-wrapper">
-        <div class="notice">
-            <i class="icon icon-important">
-                <span class="visuallyhidden">{Messages("calc.summaryPartial.warning")}</span>
-            </i>
-            <strong class="bold-small">
-                {Messages("calc.summaryPartial.noticeSummary")}
-            </strong>
-        </div>
+<div class="summary-partial">
+    <div id="tax-owed-banner" class="transaction-banner--complete">
+        <h1 class="bold-xlarge"><span>&pound;@MoneyPounds(taxOwed, 2).quantity</span></h1>
+        <h2 class="heading-medium">@Messages("calc.summaryPartial.cgtToPay", TaxYearModel.convertToSummaryFormat(taxYearModel.taxYearSupplied))</h2>
     </div>
-    }
-}
 
-@summaryPartialWorkingOutSection(CalculationType.flat, 3000, 2000, 0)
-@summaryPartialDeductionsSection(0, 0, 0, 0, 0)
-@summaryPartialTaxableGain(1000, 500, 20)
-
-
-<div id="remainingDeductions">
-
-    <h2>@Messages("calc.summaryPartial.remainingDeductions")</h2>
-
-    @if(inYearLossesRemaining.isDefined) {
-        @summaryNumericRow("inYearLossesRemaining", Messages("calc.summaryPartial.inYearLossesRemaining", TaxYearModel.convertToSummaryFormat(taxYearModel.taxYearSupplied)), inYearLossesRemaining.get, hintText = false)
-    }
-
-    @summaryNumericRow("aeaRemaining", Messages("calc.summaryPartial.aeaRemaining", TaxYearModel.convertToSummaryFormat(taxYearModel.taxYearSupplied)), aeaRemaining, hintText = false)
-
-    @if(broughtForwardLossesRemaining.isDefined) {
-        @summaryNumericRow("broughtForwardLossesRemaining", Messages("calc.summaryPartial.broughtForwardLossesRemaining", TaxYearModel.convertToSummaryFormat(taxYearModel.taxYearSupplied)), broughtForwardLossesRemaining.get, hintText = false)
+    @{if (!taxYearModel.isValidYear) {
+        <div id="notice-summary" class="notice-wrapper">
+            <div class="notice">
+                <i class="icon icon-important">
+                    <span class="visuallyhidden">{Messages("calc.summaryPartial.warning")}</span>
+                </i>
+                <strong class="bold-small">
+                    {Messages("calc.summaryPartial.noticeSummary")}
+                </strong>
+            </div>
+        </div>
+        }
     }
 
+    @summaryPartialWorkingOutSection(CalculationType.flat, 3000, 2000, 0)
+    @summaryPartialDeductionsSection(0, 0, 0, 0, 0)
+    @summaryPartialTaxableGain(1000, 500, 20)
+
+
+    <div id="remainingDeductions">
+
+        <h2>@Messages("calc.summaryPartial.remainingDeductions")</h2>
+
+        @if(inYearLossesRemaining.isDefined) {
+            @summaryNumericRow("inYearLossesRemaining", Messages("calc.summaryPartial.inYearLossesRemaining", TaxYearModel.convertToSummaryFormat(taxYearModel.taxYearSupplied)), inYearLossesRemaining.get, hintText = false)
+        }
+
+        @summaryNumericRow("aeaRemaining", Messages("calc.summaryPartial.aeaRemaining", TaxYearModel.convertToSummaryFormat(taxYearModel.taxYearSupplied)), aeaRemaining, hintText = false)
+
+        @if(broughtForwardLossesRemaining.isDefined) {
+            @summaryNumericRow("broughtForwardLossesRemaining", Messages("calc.summaryPartial.broughtForwardLossesRemaining", TaxYearModel.convertToSummaryFormat(taxYearModel.taxYearSupplied)), broughtForwardLossesRemaining.get, hintText = false)
+        }
+
+    </div>
 </div>
