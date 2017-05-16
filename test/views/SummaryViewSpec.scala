@@ -44,10 +44,6 @@ class SummaryViewSpec extends UnitSpec with WithFakeApplication with FakeRequest
       "have a back link" which {
         lazy val backLink = document.body().select("#back-link")
 
-        "has a class of 'back-link'" in {
-          backLink.attr("class") shouldBe "back-link"
-        }
-
         "has the text" in {
           backLink.text shouldBe messages.back
         }
@@ -64,22 +60,13 @@ class SummaryViewSpec extends UnitSpec with WithFakeApplication with FakeRequest
       "have a heading" which {
         lazy val heading = document.body().select("h1")
 
-        "has a class of heading-xlarge" in {
-          heading.attr("class") shouldBe "heading-xlarge"
-        }
-
-        s"has a span with the text ${messages.Summary.calculationDetailsTitle}" in {
-          heading.text() shouldBe messages.Summary.calculationDetailsTitle
+        s"has a span with the text '£100,000.00'" in {
+          heading.text() shouldBe "£100,000.00"
         }
       }
 
-
       "have a what to do next section" which {
         lazy val whatToDoNext = document.select("#whatToDoNext")
-
-        "have a heading with the class 'heading-medium'" in {
-          whatToDoNext.select("h2").attr("class") shouldBe "heading-medium"
-        }
 
         "has the heading 'What to do next'" in {
           whatToDoNext.select("h2").text() shouldBe messages.Summary.whatToDoNextText
@@ -87,18 +74,6 @@ class SummaryViewSpec extends UnitSpec with WithFakeApplication with FakeRequest
 
         "should have the text describing what to do next" in {
           whatToDoNext.select("p").text() shouldBe s"${messages.Summary.whatToDoNextContent}"
-        }
-      }
-
-      "have a continue button" which {
-        lazy val continue = document.select("a.button")
-
-        "have the text 'Continue" in {
-          continue.text() shouldBe messages.continue
-        }
-
-        "have a link to /calculate-your-capital-gains/non-resident/what-next" in {
-          continue.attr("href") shouldBe controllers.routes.WhatNextController.whatNext().url
         }
       }
 
@@ -111,6 +86,18 @@ class SummaryViewSpec extends UnitSpec with WithFakeApplication with FakeRequest
 
         "which has the link to the summary report" in {
           savePDF.attr("href") shouldBe controllers.routes.ReportController.summaryReport().url
+        }
+      }
+
+      "have a continue button" which {
+        lazy val continue = document.select("a.button")
+
+        "have the text 'Continue" in {
+          continue.text() shouldBe messages.continue
+        }
+
+        "have a link to /calculate-your-capital-gains/non-resident/what-next" in {
+          continue.attr("href") shouldBe controllers.routes.WhatNextController.whatNext().url
         }
       }
     }
