@@ -75,17 +75,12 @@ class WorthWhenGiftedToViewSpec extends UnitSpec with WithFakeApplication with M
         }
       }
 
-      "have help text" which {
+      s"has the hint text ${WorthWhenGiftedTo.hintText}" in {
+        document.select("article > div.form-hint > p").text shouldEqual WorthWhenGiftedTo.hintText
+      }
 
-        lazy val helpText = document.body().select("#helpText")
-
-        s"contains help text '${messages.hintOne}'" in {
-          helpText.text() should include(messages.hintOne)
-        }
-
-        s"contains help text '${messages.hintTwo}'" in {
-          helpText.text() should include (messages.hintTwo)
-        }
+      s"has the joint ownership text ${WorthWhenGiftedTo.jointOwnership}" in {
+        document.select("article > div.panel-indent > p").text shouldEqual WorthWhenGiftedTo.jointOwnership
       }
 
       "have input containing the id 'acquisitionMarketValue'" in {

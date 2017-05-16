@@ -19,13 +19,13 @@ package views
 import assets.MessageLookup.NonResident.{WorthWhenBoughtForLess, AcquisitionMarketValue => messages}
 import assets.MessageLookup.{NonResident => commonMessages}
 import controllers.helpers.FakeRequestHelper
-import org.jsoup.Jsoup
 import forms.AcquisitionMarketValueForm._
+import org.jsoup.Jsoup
 import org.scalatest.mock.MockitoSugar
+import play.api.Play.current
+import play.api.i18n.Messages.Implicits._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.worthWhenBoughtForLess
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 
 class WorthWhenBoughtForLessViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
@@ -78,13 +78,15 @@ class WorthWhenBoughtForLessViewSpec extends UnitSpec with WithFakeApplication w
       "have help text" which {
 
         lazy val helpText = document.body().select("#helpText")
+        lazy val hintText = document.body().select("#hintText")
 
-        s"contains help text '${messages.hintOne}'" in {
-          helpText.text() should include(messages.hintOne)
+
+        s"contains hint text '${WorthWhenBoughtForLess.hintOne}'" in {
+          hintText.text() should include(WorthWhenBoughtForLess.hintOne)
         }
 
-        s"contains help text '${messages.hintTwo}'" in {
-          helpText.text() should include (messages.hintTwo)
+        s"contains help text '${WorthWhenBoughtForLess.helpText}'" in {
+          helpText.text() should include(WorthWhenBoughtForLess.helpText)
         }
       }
 

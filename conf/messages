@@ -137,6 +137,7 @@ calc.acquisitionDate.questionTwo = What was the date you signed the contract tha
 
 ## Acquisition Value ##
 calc.acquisitionValue.question = How much did you pay for the property?
+calc.acquisitionValue.helpText = If you owned the property with someone else, only enter your share of the purchase.
 calc.acquisitionValue.errorNegative = Enter a positive number for the amount you paid
 calc.acquisitionValue.errorDecimalPlaces = The amount you paid has too many numbers after the decimal point
 calc.acquisitionValue.bullet.title = Put the market value of the property instead if you:
@@ -227,7 +228,8 @@ calc.acquisitionCosts.errorDecimalPlaces = There are too many numbers after the 
 calc.acquisitionCosts.bulletTitle = This is what you paid for:
 calc.acquisitionCosts.bulletOne = estate agents or auctioneers
 calc.acquisitionCosts.bulletTwo = solicitors or conveyancers, including Stamp Duty Land Tax
-calc.acquisitionCosts.bulletThree = any professional help to value the property, eg surveyor or valuer
+calc.acquisitionCosts.bulletThree = any professional help to value the property, eg surveyor or valuer (this includes any valuations at 31 March 1982)
+calc.acquisitionCosts.hint = If you owned the property with someone else, only enter your share of the costs, as agreed with your co-owner.
 
 ## Disposal Costs ##
 calc.disposalCosts.question = How much did you pay in costs when you stopped owning the property?
@@ -381,17 +383,25 @@ calc.acquisitionMarketValue.hintTwo = If you don''t know the exact value, you mu
 
 ## Worth When Gifted To ##
 calc.worthWhenGiftedTo.question = What was the market value of the property when you got it as a gift?
+calc.worthWhenGiftedTo.help = If you don''t know the exact value, you must provide a realistic estimate. You might have to pay more if we think your estimate is unrealistic.
+calc.worthWhenGiftedTo.jointOwnership = If you owned the property with someone else, only enter your share of the property value.
+
 
 ## Worth When Inherited ##
 calc.worthWhenInherited.question = What was the market value of the property when you inherited it?
+calc.worthWhenInherited.hint = This is the value of the property on the date the previous owner died. You can use the probate valuation.
+calc.worthWhenInherited.helpText =If you owned the property with someone else, only enter your share of the property value.
 
 ## Worth When Bought For Less ##
 calc.worthWhenBoughtForLess.question = What was the market value of the property when you bought it?
+calc.worthWhenBoughtForLess.hint = You can use a valuation from a surveyor. If you don''t know the exact value, you must provide a realistic estimate. You might have to pay more if we think your estimate is unrealistic.
+calc.worthWhenBoughtForLess.helpText = If you owned the property with someone else, only enter your share of the property value.
 
 ## Worth Before Legislation Start ##
 calc.worthBeforeLegislationStart.question = What was the market value of the property on 31 March 1982?
-calc.worthBeforeLegislationStart.expandableText = You only need to pay tax on gains made after this date
-calc.worthBeforeLegislationStart.expandableTitle = Why we''re asking for this
+calc.worthBeforeLegislationStart.information = 31 March 1982 is when the current Capital Gains Tax system came into effect.
+calc.worthBeforeLegislationStart.help = If you don''t know the exact value, you must provide a realistic estimate. You might have to pay more if we think your estimate is unrealistic.
+calc.worthBeforeLegislationStart.jointOwnership = If you owned the property with someone else, only enter your share of the property value.
 
 ## Summary ##
 calc.summary.title = Summary

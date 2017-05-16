@@ -67,7 +67,8 @@ object MessageLookup {
       val bulletTitle = "This is what you paid for:"
       val bulletOne = "estate agents or auctioneers"
       val bulletTwo = "solicitors or conveyancers, including Stamp Duty Land Tax"
-      val bulletThree = "any professional help to value the property, eg surveyor or valuer"
+      val bulletThree = "any professional help to value the property, eg surveyor or valuer (this includes any valuations at 31 March 1982)"
+      val hint ="If you owned the property with someone else, only enter your share of the costs, as agreed with your co-owner."
 
       def errorMaximum(value: String): String = s"Enter an amount that's £$value or less"
     }
@@ -79,6 +80,7 @@ object MessageLookup {
 
     object AcquisitionValue {
       val question = "How much did you pay for the property?"
+      val helpText = "If you owned the property with someone else, only enter your share of the purchase."
       val bulletTitle = "Put the market value of the property instead if you:"
       val bulletOne = "inherited it"
       val bulletTwo = "got it as a gift"
@@ -384,23 +386,32 @@ object MessageLookup {
 
     object WorthBeforeLegislationStart {
       val question = "What was the market value of the property on 31 March 1982?"
-      val expandableText = "You only need to pay tax on gains made after this date"
-      val expandableTitle = "Why we're asking for this"
+      val information = "31 March 1982 is when the current Capital Gains Tax system came into effect."
+      val hintText = "If you don't know the exact value, you must provide a realistic estimate. " +
+        "You might have to pay more if we think your estimate is unrealistic."
+      val jointOwnership = "If you owned the property with someone else, only enter your share of the property value."
     }
 
     //Worth When Inherited messages
     object WorthWhenInherited {
       val question = "What was the market value of the property when you inherited it?"
+      val hint = "This is the value of the property on the date the previous owner died. You can use the probate valuation."
+      val helpText = "If you owned the property with someone else, only enter your share of the property value."
     }
 
     //Worth When Gifted To messages
     object WorthWhenGiftedTo {
       val question = "What was the market value of the property when you got it as a gift?"
+      val hintText = "If you don't know the exact value, you must provide a realistic estimate. " +
+        "You might have to pay more if we think your estimate is unrealistic."
+      val jointOwnership = "If you owned the property with someone else, only enter your share of the property value."
     }
 
     //Worth When Bought for Less messages
     object WorthWhenBoughtForLess {
       val question = "What was the market value of the property when you bought it?"
+      val hintOne = "You can use a valuation from a surveyor. If you don't know the exact value, you must provide a realistic estimate. You might have to pay more if we think your estimate is unrealistic."
+      val helpText = "If you owned the property with someone else, only enter your share of the property value."
     }
 
     object HowMuchLoss {

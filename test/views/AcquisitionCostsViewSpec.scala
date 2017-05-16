@@ -96,7 +96,11 @@ class AcquisitionCostsViewSpec extends UnitSpec with WithFakeApplication with Mo
         }
 
         "has the class 'list list-bullet'" in {
-          list.attr("class") shouldBe "list list-bullet"
+          list.attr("class") shouldBe "form-hint list list-bullet"
+        }
+
+        s"has the joint ownership text ${messages.AcquisitionCosts.hint}" in {
+          document.select("article > div.panel-indent > p").text shouldEqual messages.AcquisitionCosts.hint
         }
 
       }

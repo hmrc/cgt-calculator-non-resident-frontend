@@ -19,13 +19,13 @@ package views
 import assets.MessageLookup.NonResident.{WorthBeforeLegislationStart, AcquisitionMarketValue => messages}
 import assets.MessageLookup.{NonResident => commonMessages}
 import controllers.helpers.FakeRequestHelper
-import org.jsoup.Jsoup
 import forms.WorthBeforeLegislationStartForm._
+import org.jsoup.Jsoup
 import org.scalatest.mock.MockitoSugar
+import play.api.Play.current
+import play.api.i18n.Messages.Implicits._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.worthBeforeLegislationStart
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 
 class WorthBeforeLegislationStartViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
@@ -75,37 +75,18 @@ class WorthBeforeLegislationStartViewSpec extends UnitSpec with WithFakeApplicat
         }
       }
 
-      "have help text" which {
-
-        lazy val helpText = document.body().select("#helpText")
-
-        s"contains help text '${messages.hintTwo}'" in {
-          helpText.text() should include (messages.hintTwo)
-        }
+      s"has the information text ${WorthBeforeLegislationStart.information}" in {
+        document.select("article > p").text should include(WorthBeforeLegislationStart.information)
       }
 
-      "have a drop down section" which {
-
-        lazy val example = document.select("details")
-
-        "should have a span for the title" which {
-
-          lazy val exampleTitle = example.select("span")
-
-          s"should have the text ${WorthBeforeLegislationStart.expandableTitle}" in {
-            exampleTitle.text shouldEqual WorthBeforeLegislationStart.expandableTitle
-          }
-        }
-
-        "should have a div" which {
-
-          lazy val exampleContent = example.select("div")
-
-          s"should have the text ${WorthBeforeLegislationStart.expandableText}" in {
-            exampleContent.select("p").text shouldEqual WorthBeforeLegislationStart.expandableText
-          }
-        }
+      s"has the hint text ${WorthBeforeLegislationStart.hintText}" in {
+        document.select("article > div.form-hint > p").text shouldEqual WorthBeforeLegislationStart.hintText
       }
+
+      s"has the joint ownership text ${WorthBeforeLegislationStart.jointOwnership}" in {
+        document.select("article > div.panel-indent > p").text shouldEqual WorthBeforeLegislationStart.jointOwnership
+      }
+
 
       "have input containing the id 'worthBeforeLegislationStart'" in {
         document.body().select("input").attr("id") should include("worthBeforeLegislationStart")
