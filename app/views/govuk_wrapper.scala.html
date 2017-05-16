@@ -7,8 +7,7 @@
   contentHeader: Option[Html] = None,
   mainContent: Html = HtmlFormat.empty,
   serviceInfoContent: Html = HtmlFormat.empty,
-  scriptElem: Option[Html] = None,
-  navTitle: String = "Calculate your Capital Gains Tax"
+  scriptElem: Option[Html] = None
 )(implicit request: Request[_], messages: Messages)
 
 @import layouts.{govuk_template => hmrcGovUkTemplate}
@@ -38,7 +37,7 @@
 
 @insideHeader = {
     @uiLayouts.header_nav(
-      navTitle = Some(navTitle),
+      navTitle = Some(messages("calc.base.pageHeading")),
       navTitleLink = None,
       showBetaLink = false,
       navLinks = Some(headerNavLinks))
