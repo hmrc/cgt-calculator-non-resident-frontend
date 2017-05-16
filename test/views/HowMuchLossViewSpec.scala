@@ -80,7 +80,7 @@ class HowMuchLossViewSpec extends UnitSpec with WithFakeApplication with FakeReq
 
       s"have a label" which {
 
-        lazy val label = document.select("label span").first()
+        lazy val label = document.select("label div").first()
 
         s"has the question '${messages.HowMuchLoss.question}'" in {
           label.text shouldBe messages.HowMuchLoss.question

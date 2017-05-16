@@ -82,7 +82,7 @@ class PersonalAllowanceViewSpec extends UnitSpec with WithFakeApplication with M
         }
 
         "has the class visuallyhidden" in {
-          document.select("label > span").hasClass("visuallyhidden") shouldEqual true
+          document.select("label > div").hasClass("visuallyhidden") shouldEqual true
         }
       }
 

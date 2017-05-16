@@ -92,7 +92,7 @@ class MarketValueGaveAwayViewSpec extends UnitSpec with WithFakeApplication with
         }
 
         s"has the hidden text ${MessageLookup.NonResident.MarketValue.disposalGaveAwayQuestion}" in {
-          form.select("span.visuallyhidden").text() shouldBe MessageLookup.NonResident.MarketValue.disposalGaveAwayQuestion
+          form.select("div.visuallyhidden").text() shouldBe MessageLookup.NonResident.MarketValue.disposalGaveAwayQuestion
         }
 
         s"has the input ID disposalValue" in {

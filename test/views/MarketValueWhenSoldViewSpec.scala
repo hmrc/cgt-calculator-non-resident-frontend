@@ -92,7 +92,7 @@ class MarketValueWhenSoldViewSpec extends UnitSpec with WithFakeApplication with
         }
 
         s"has the hidden text ${MessageLookup.NonResident.MarketValue.disposalSoldQuestion}" in {
-          form.select("span.visuallyhidden").text() shouldBe MessageLookup.NonResident.MarketValue.disposalSoldQuestion
+          form.select("div.visuallyhidden").text() shouldBe MessageLookup.NonResident.MarketValue.disposalSoldQuestion
         }
 
         s"has the input ID disposalValue" in {

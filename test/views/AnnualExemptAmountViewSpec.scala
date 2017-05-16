@@ -111,7 +111,7 @@ class AnnualExemptAmountViewSpec extends UnitSpec with WithFakeApplication with 
       }
 
       s"have the question '${messages.question}'" in {
-        document.body.select("label span").first().text shouldBe messages.question
+        document.body.select("label div").first().text shouldBe messages.question
       }
 
       "have an input with the id 'annualExemptAmount" in {
