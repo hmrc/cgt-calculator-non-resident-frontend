@@ -19,14 +19,13 @@ package constructors
 import models.ImprovementsModel
 import play.api.data.Form
 import play.api.i18n.Messages
-import play.twirl.api.HtmlFormat
+import play.twirl.api.{Html, HtmlFormat}
 import views.html.helpers._
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 
 object ImprovementsConstructor {
-
-  def generateImprovements(improvementsForm: Form[ImprovementsModel], improvementsOptions: Boolean): HtmlFormat.Appendable = {
+  def generateImprovements(improvementsForm: Form[ImprovementsModel], improvementsOptions: Boolean, jointOwnership: Html): HtmlFormat.Appendable = {
     if (improvementsOptions) {
       formHiddenYesNoRadio(
         improvementsForm,
@@ -40,7 +39,8 @@ object ImprovementsConstructor {
           )
         ),
         None,
-        hideLegend = true
+        hideLegend = true,
+        additionalContent = Some(jointOwnership)
       )
     } else {
       formHiddenYesNoRadio(
@@ -49,7 +49,8 @@ object ImprovementsConstructor {
         Messages("calc.improvements.question"),
         formInputMoney(improvementsForm, "improvementsAmt", Messages("calc.improvements.questionTwo")),
         None,
-        hideLegend = true
+        hideLegend = true,
+        additionalContent = Some(jointOwnership)
       )
     }
   }

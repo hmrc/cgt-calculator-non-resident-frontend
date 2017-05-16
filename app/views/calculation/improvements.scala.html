@@ -10,6 +10,10 @@
         @Messages("calc.improvements.exampleTwo")</p>
 }
 
+@jointOwnershipText = {
+    <p id="jointOwner">@Messages("calc.improvements.jointOwnership")</p>
+}
+
 @main_template(Messages("calc.improvements.question")) {
 
     <a id="back-link" class="back-link" href="@backUrl">@Messages("calc.base.back")</a>
@@ -27,7 +31,7 @@
 
     @form(action = controllers.routes.ImprovementsController.submitImprovements) {
 
-        @ImprovementsConstructor.generateImprovements(improvementsForm, improvementsOptions)
+        @ImprovementsConstructor.generateImprovements(improvementsForm, improvementsOptions, jointOwnershipText)
 
         <button class="button" type="submit" id="continue-button">@Messages("calc.base.continue")</button>
     }

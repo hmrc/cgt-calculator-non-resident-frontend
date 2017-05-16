@@ -74,7 +74,7 @@ class HowMuchGainViewSpec extends UnitSpec with WithFakeApplication with Mockito
 
       s"have a label" which {
 
-        lazy val label = document.select("label span").first()
+        lazy val label = document.select("label div").first()
 
         s"has the question '${messages.HowMuchGain.question}'" in {
           label.text shouldBe messages.HowMuchGain.question

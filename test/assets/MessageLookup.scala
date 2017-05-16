@@ -222,6 +222,7 @@ object MessageLookup {
       val noValueSuppliedError = "Enter the value of your improvements"
       val negativeValueError = "Enter a positive number for the cost of your improvements"
       val excessDecimalPlacesError = "The cost of your improvements has too many numbers after the decimal point"
+      val jointOwnership = "If you owned the property with someone else, only enter your share of the improvement costs, as agreed with your co-owner."
 
       def errorMaximum(value: String): String = s"Enter an amount that's £$value or less"
 
