@@ -73,7 +73,7 @@ class CurrentIncomeViewSpec extends UnitSpec with WithFakeApplication with Mocki
       }
 
       s"have the correct question" in {
-        document.body.select("label span").first().text shouldBe messages.CurrentIncome.question
+        document.body.select("label div").first().text shouldBe messages.CurrentIncome.question
       }
 
       s"have the correct hint text" in {

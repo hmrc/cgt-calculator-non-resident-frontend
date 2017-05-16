@@ -145,6 +145,10 @@ class ImprovementsViewSpec extends UnitSpec with WithFakeApplication with FakeRe
           }
         }
 
+        s"have a paragraph with the text ${messages.Improvements.jointOwnership}" in {
+          document.getElementById("jointOwner").text shouldBe messages.Improvements.jointOwnership
+        }
+
         "have some hidden content" which {
           lazy val hiddenContent = document.body().select("#hidden")
 

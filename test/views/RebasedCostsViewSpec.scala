@@ -92,7 +92,7 @@ class RebasedCostsViewSpec extends UnitSpec with WithFakeApplication with FakeRe
       }
 
       s"have the input question '${messages.RebasedCosts.inputQuestion}'" in {
-        document.body().select("label[for=rebasedCosts] span").first().text() shouldBe messages.RebasedCosts.inputQuestion
+        document.body().select("label[for=rebasedCosts] div").first().text() shouldBe messages.RebasedCosts.inputQuestion
       }
 
       s"have joint ownership text of ${messages.RebasedCosts.jointOwnership}" in {

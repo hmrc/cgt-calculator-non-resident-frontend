@@ -50,9 +50,9 @@
         @if(labelHighlight){<strong>}
 
         @if(elements.args.contains('_labelTextClass)) {
-            <span class="@elements.args.get('_labelTextClass)">@elements.label</span>
+            <div class="@elements.args.get('_labelTextClass)">@elements.label</div>
         } else {
-            <span class="money-label">@elements.label</span>
+            <div class="money-label">@elements.label</div>
         }
 
         @if(additionalHTMLContent) {

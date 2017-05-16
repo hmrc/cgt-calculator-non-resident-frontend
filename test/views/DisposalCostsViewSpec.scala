@@ -121,7 +121,7 @@ class DisposalCostsViewSpec extends UnitSpec with WithFakeApplication with FakeR
       }
 
       s"have the question ${messages.question}" in {
-        document.body.select("label span").first.text shouldBe messages.question
+        document.body.select("label div").first.text shouldBe messages.question
       }
 
       "have an input with the id 'disposalCosts" in {

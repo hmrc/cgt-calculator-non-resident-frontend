@@ -70,7 +70,7 @@ class DisposalValueViewSpec extends UnitSpec with WithFakeApplication with Mocki
 
       s"have a label" which {
 
-        lazy val label = document.select("label span").first()
+        lazy val label = document.select("label div").first()
 
         s"has the question '${messages.DisposalValue.question}'" in {
           label.text shouldBe messages.DisposalValue.question
