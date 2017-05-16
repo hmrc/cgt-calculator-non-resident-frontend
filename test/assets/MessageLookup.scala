@@ -331,6 +331,7 @@ object MessageLookup {
     object RebasedCosts {
       val question = "Did you pay to have the property valued at 5 April 2015?"
       val inputQuestion = "How much did it cost to get the property valued?"
+      val jointOwnership = "If you owned the property with someone else, only enter your share of the cost."
       val errorNegative = "Enter a positive number for your costs"
       val errorNoValue = "Enter the value for your costs"
       val errorDecimalPlaces = "There are too many numbers after the decimal point in your costs"
@@ -345,8 +346,9 @@ object MessageLookup {
 
       val inputHintText = "If you don't know the exact value, you must provide a realistic estimate. " +
         "You might have to pay more if we think your estimate is unrealistic."
+      val jointOwnership = "If you owned the property with someone else, only enter your share of the property value."
       val additionalContentTitle = "Why we're asking for this"
-      val helpHiddenContent = "This value lets us calculate your tax in different ways, which means you may have less tax to pay."
+      val helpHiddenContent = "As you're not a UK resident, you only have to report UK property you've sold or given away since 5 April 2015."
 
       val errorNoValue = "Enter a value for your property on 5 April 2015"
       val errorNegative = "Enter a positive value for your property on 5 April 2015"

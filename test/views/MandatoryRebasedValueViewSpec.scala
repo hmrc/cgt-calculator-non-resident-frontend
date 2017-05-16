@@ -75,7 +75,7 @@ class MandatoryRebasedValueViewSpec extends UnitSpec with WithFakeApplication wi
       }
 
       s"NOT have a paragraph with the text ${messages.questionOptionalText}" in {
-        document.select("article > p").text shouldEqual ""
+        document.select("""article > p[class=""]""").isEmpty shouldBe true
       }
 
       "have some hint text" which {
@@ -88,6 +88,10 @@ class MandatoryRebasedValueViewSpec extends UnitSpec with WithFakeApplication wi
         s"should have the text ${messages.inputHintText}" in {
           hintText.text shouldEqual messages.inputHintText
         }
+      }
+
+      s"have a joint ownership section with the text ${messages.jointOwnership}" in {
+        document.select("p.panel-indent").first().text() shouldBe messages.jointOwnership
       }
 
       s"Have a hidden help section" which {
