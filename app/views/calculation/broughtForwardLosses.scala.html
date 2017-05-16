@@ -15,25 +15,7 @@
     </div>
 }
 
-@sidebar = {
-    <ul>
-        <li>
-            <a id="helpLink1" class="external-link" rel="external" href="https://www.gov.uk/capital-gains-tax" target="_blank">
-                @Messages("calc.broughtForwardLosses.linkOne")
-                <span>@Messages("calc.base.externalLink")</span>
-            </a>
-        </li>
-        <li>
-            <a id="helpLink2" class="external-link" rel="external" href="https://www.gov.uk/income-tax-rates/previous-tax-years"
-               target="_blank">
-                @Messages("calc.broughtForwardLosses.linkTwo")
-                <span>@Messages("calc.base.externalLink")</span>
-            </a>
-        </li>
-    </ul>
-}
-
-@main_template(Messages("calc.broughtForwardLosses.question"), sidebarLinks = Some(sidebar)) {
+@main_template(Messages("calc.broughtForwardLosses.question")) {
 
     <a id="back-link" class="back-link" href="@backLink">@Messages("calc.base.back")</a>
 
