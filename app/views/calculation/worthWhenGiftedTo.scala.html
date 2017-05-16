@@ -13,7 +13,14 @@
 
     <h1 class="heading-xlarge">@Messages("calc.worthWhenGiftedTo.question")</h1>
 
-    <p id="helpText" class="form-hint">@Messages("calc.acquisitionMarketValue.hintOne")<br>@Messages("calc.acquisitionMarketValue.hintTwo")</p>
+    <div class="form-hint">
+        <p>@Messages("calc.worthWhenGiftedTo.help")</p>
+    </div>
+
+    <div class="panel-indent panel-indent--wide panel-indent--gutter">
+        <p>@Messages("calc.worthWhenGiftedTo.jointOwnership")</p>
+    </div>
+
 
     @form(action = controllers.routes.WorthWhenGiftedToController.submitWorthWhenGiftedTo) {
 
