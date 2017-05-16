@@ -24,7 +24,9 @@
 
     @hintTextContent
 
-    @hiddenHelpText("rebasedValue", Messages("calc.nonResident.rebasedValue.helpHidden.title"), hiddenHelpTextContent)
+    <p class="panel-indent panel-indent--wide panel-indent--gutter">@Messages("calc.nonResident.rebasedValue.jointOwnership")</p>
+
+    @hiddenHelpText("rebasedValue", Messages("calc.nonResident.rebasedValue.helpHidden.title"), hiddenHelpTextContent, "form-hint")
 
     @form(action = controllers.routes.RebasedValueController.submitRebasedValue) {
 

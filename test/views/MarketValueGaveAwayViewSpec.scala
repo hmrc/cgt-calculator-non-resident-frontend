@@ -98,6 +98,10 @@ class MarketValueGaveAwayViewSpec extends UnitSpec with WithFakeApplication with
         s"has the input ID disposalValue" in {
           form.select("input").attr("id") shouldBe "disposalValue"
         }
+
+        s"that has a paragraph with the text ${MarketValueMessages.jointOwnership}" in {
+          document.select("p.panel-indent").text shouldBe MarketValueMessages.jointOwnership
+        }
       }
 
       "have a button" which {

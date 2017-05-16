@@ -15,13 +15,16 @@
     @form(action = controllers.routes.RebasedCostsController.submitRebasedCosts) {
 
         @formHiddenYesNoRadio(rebasedCosts,
-                              "hasRebasedCosts",
-                              Messages("calc.rebasedCosts.question"),
-                              formInputMoney(rebasedCosts,
-                                             "rebasedCosts",
-                                             Messages("calc.rebasedCosts.questionTwo")
-                                            ),
-                               hideLegend = true
+                                "hasRebasedCosts",
+                                Messages("calc.rebasedCosts.question"),
+                                formInputMoney(rebasedCosts,
+                                    "rebasedCosts",
+                                    Messages("calc.rebasedCosts.questionTwo"),
+                                    additionalHTMLContent = Some(s"""<p>${Messages("calc.rebasedCosts.jointOwnership")}</p>"""),
+                                    labelClasses = "heading-small"
+                                ),
+                                hideLegend = true,
+                                hidePanel = true
                               )
 
         <button class="button" type="submit" id="continue-button">@Messages("calc.base.continue")</button>

@@ -92,7 +92,11 @@ class RebasedCostsViewSpec extends UnitSpec with WithFakeApplication with FakeRe
       }
 
       s"have the input question '${messages.RebasedCosts.inputQuestion}'" in {
-        document.body().select("div.panel-indent label span").first().text() shouldBe messages.RebasedCosts.inputQuestion
+        document.body().select("label[for=rebasedCosts] span").first().text() shouldBe messages.RebasedCosts.inputQuestion
+      }
+
+      s"have joint ownership text of ${messages.RebasedCosts.jointOwnership}" in {
+        document.body().select("label[for=rebasedCosts] p").text() shouldBe messages.RebasedCosts.jointOwnership
       }
 
       "have a value input with the id 'rebasedCosts'" in {

@@ -1,9 +1,9 @@
-@(helpTextId: String, helpTextTitle: String, content: Html)
+@(helpTextId: String, helpTextTitle: String, content: Html, additionalClasses: String = "")
 
-<div id="@helpTextId" class="form-group">
+<div id="@helpTextId" class="form-group @additionalClasses">
     <details>
         <summary><span class="summary" data-journey-click="help:reveal:@helpTextTitle">@helpTextTitle</span></summary>
-        <div class="panel-indent">
+        <div class="panel-indent panel-indent--wide panel-indent--gutter">
             @content
         </div>
     </details>

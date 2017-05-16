@@ -173,6 +173,7 @@ object MessageLookup {
       val errorNegativeNumber = "Enter a positive number for your selling costs"
       val errorDecimalPlaces = "There are too many numbers after the decimal point in your selling costs"
 
+      val jointOwnership = "If you owned the property with someone else, only enter your share of the costs."
     }
 
     object DisposalDate {
@@ -197,7 +198,7 @@ object MessageLookup {
       val bulletTwo = "sold it to a relative, business partner or"
       val bulletTwoLink = "someone else you're connected to"
       val bulletThree = "sold it for less than it's worth to help the buyer"
-
+      val jointOwnership = "If you owned the property with someone else, only enter your share of the sale value"
       def errorMaximum(value: String): String = s"Enter an amount that's £$value or less"
     }
 
@@ -301,6 +302,8 @@ object MessageLookup {
 
       val errorNegativeGaveAway = "Enter a positive number for the market value at the point of being given away"
       val errorNegativeSold = "Enter a positive number for the market value at the point of being sold"
+
+      val jointOwnership = "If you owned the property with someone else, only enter your share of the property value."
     }
 
     object PersonalAllowance {
@@ -329,6 +332,7 @@ object MessageLookup {
     object RebasedCosts {
       val question = "Did you pay to have the property valued at 5 April 2015?"
       val inputQuestion = "How much did it cost to get the property valued?"
+      val jointOwnership = "If you owned the property with someone else, only enter your share of the cost."
       val errorNegative = "Enter a positive number for your costs"
       val errorNoValue = "Enter the value for your costs"
       val errorDecimalPlaces = "There are too many numbers after the decimal point in your costs"
@@ -343,8 +347,9 @@ object MessageLookup {
 
       val inputHintText = "If you don't know the exact value, you must provide a realistic estimate. " +
         "You might have to pay more if we think your estimate is unrealistic."
+      val jointOwnership = "If you owned the property with someone else, only enter your share of the property value."
       val additionalContentTitle = "Why we're asking for this"
-      val helpHiddenContent = "This value lets us calculate your tax in different ways, which means you may have less tax to pay."
+      val helpHiddenContent = "As you're not a UK resident, you only have to report UK property you've sold or given away since 5 April 2015."
 
       val errorNoValue = "Enter a value for your property on 5 April 2015"
       val errorNegative = "Enter a positive value for your property on 5 April 2015"
@@ -943,6 +948,56 @@ object MessageLookup {
     val other = "Someone else"
     val errormandatory = "Please tell us who you gave the property to"
   }
+
+  object SummaryPartialMessages {
+    val headingTwo: String => String = taxYear => s"Capital Gains Tax to pay for $taxYear"
+    val warningHidden: String = "Warning"
+    val warningNoticeSummary: String = "Your result may be inaccurate because the calculator does not support the date of sale you entered. " +
+      "Do not use these figures to report your Capital Gains Tax."
+
+    val workingOutSectionHeading = "How we've worked this out"
+    val flatCalculationSummary = "How much you've gained on the property since you became the owner"
+    val timeCalculationSummary = "Working out your total gain, then taxing you on the percentage of it you've made since"
+    val timeCalculationSummaryDate = "5 April 2015"
+    val rebasedCalculationSummary = "How much you've gained on the property since"
+    val rebasedCalculationSummaryDate = "5 April 2015"
+    val yourTotalGain = "Your total gain"
+    val valueWhenSold = "Value when you sold the property"
+    val valueAtTaxStart = "Minus the value of the property on 5 April 2015"
+    val valueWhenAcquired = "Minus the value of the property when you acquired it"
+    val totalCosts = "Minus all costs, including improvements"
+    val totalGain = "Total gain"
+    val gainMadeOnProperty = "The gain you've made on the property"
+    val percentageTotalGain = "The percentage gain you've made since 5 April 2015"
+
+    val deductionsSectionHeading = "Your deductions"
+    val reliefsUsed = "Reliefs used"
+    val inYearLossesUsed = "In year losses used"
+    val aeaUsed = "Capital Gains Tax Annual Exempt Amount used"
+    val broughtForwardLossesUsed = "Brought forward losses used"
+    val totalDeductions = "Total deductions"
+
+    val yourTaxableGain = "Your taxable gain"
+    val gain = "Total gain"
+    val minusDeductions = "Minus deductions"
+    val taxableGain = "Taxable gain"
+
+    val yourTaxRate = "Your tax rate"
+    val incomeBandInfo = "These tax rates are based on your Income Tax bands:"
+
+    def taxRate(taxAmount: String, taxRate: Int): String = s"$taxAmount taxable gain multiplied by $taxRate% tax rate"
+
+    val taxToPay = "Tax to pay"
+
+    val remainingDeductions = "Your remaining deductions"
+
+    def inYearLossesRemaining(taxYear: String): String = s"In year losses left for the $taxYear tax year"
+
+    def aeaRemaining(taxYear: String): String = s"Annual Exempt Amount left for the $taxYear tax year"
+
+    val broughtForwardLossesRemaining = "Losses to carry forward from previous tax years"
+  }
+
 
   object WhatNext extends Common {
     val title = "Report your property now"
