@@ -55,6 +55,18 @@ class SummaryPartialViewSpec extends UnitSpec with WithFakeApplication with Fake
         doc.select("div#notice-summary").isEmpty shouldBe true
       }
 
+      "display the section for Working Out" in {
+        doc.select("div#workedOutSection").isEmpty shouldBe false
+      }
+
+      "display the section for Deductions" in {
+        doc.select("div#deductionsSection").isEmpty shouldBe false
+      }
+
+      "display the section for Taxable Gain"in {
+        doc.select("div#yourTaxableGain").isEmpty shouldBe false
+      }
+
       "have a section for the deductions remaining" should {
 
         s"have the heading ${messages.remainingDeductions}" in {

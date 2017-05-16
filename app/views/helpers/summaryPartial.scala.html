@@ -1,4 +1,5 @@
 @import common.Dates
+@import common.nonresident.CalculationType
 @import uk.gov.hmrc.play.views.helpers.MoneyPounds
 
 @(taxOwed: BigDecimal, taxYearModel: TaxYearModel, aeaRemaining: BigDecimal, inYearLossesRemaining: Option[BigDecimal] = None, broughtForwardLossesRemaining: Option[BigDecimal] = None)(implicit request: Request[_], messages: Messages)
@@ -21,6 +22,10 @@
     </div>
     }
 }
+
+@summaryPartialWorkingOutSection(CalculationType.flat, 3000, 2000, 0)
+@summaryPartialDeductionsSection(0, 0, 0, 0, 0)
+@summaryPartialTaxableGain(1000, 500, 20)
 
 
 <div id="remainingDeductions">
