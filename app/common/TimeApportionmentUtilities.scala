@@ -20,6 +20,6 @@ object TimeApportionmentUtilities {
 
   def percentageOfTotalGain(flatGain: BigDecimal, timeApportionedGain: BigDecimal): Int =
         //This if statement should, by the very nature of the calculations NEVER be triggered but it's a catch all.
-        if(flatGain < timeApportionedGain || flatGain <= 0 || timeApportionedGain <= 0) throw(new Exception)
+        if(flatGain < timeApportionedGain || flatGain <= 0 || timeApportionedGain <= 0) throw new Exception
         else Math.round((timeApportionedGain.toDouble/flatGain.toDouble)*100).toInt
 }

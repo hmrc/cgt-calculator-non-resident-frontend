@@ -1,12 +1,13 @@
-@import common.Dates
+@import common._
 @import common.nonresident.CalculationType
 @import uk.gov.hmrc.play.views.helpers.MoneyPounds
 
-@(taxOwed: BigDecimal, taxYearModel: TaxYearModel, aeaRemaining: BigDecimal, inYearLossesRemaining: Option[BigDecimal] = None, broughtForwardLossesRemaining: Option[BigDecimal] = None)(implicit request: Request[_], messages: Messages)
+@(calculationResult: TotalTaxOwedModel, taxYearModel: TaxYearModel, calculationType: String,
+disposalValue: BigDecimal, acquisitionValue: BigDecimal, totalCosts: BigDecimal, flatGain: Option[BigDecimal] = None)(implicit request: Request[_], messages: Messages)
 
 <div class="summary-partial">
     <div id="tax-owed-banner" class="transaction-banner--complete">
-        <h1 class="bold-xlarge"><span>&pound;@MoneyPounds(taxOwed, 2).quantity</span></h1>
+        <h1 class="bold-xlarge"><span>&pound;@MoneyPounds(calculationResult.taxOwed, 2).quantity</span></h1>
         <h2 class="heading-medium">@Messages("calc.summaryPartial.cgtToPay", TaxYearModel.convertToSummaryFormat(taxYearModel.taxYearSupplied))</h2>
     </div>
 
@@ -24,23 +25,56 @@
         }
     }
 
-    @summaryPartialWorkingOutSection(CalculationType.flat, 3000, 2000, 0)
-    @summaryPartialDeductionsSection(0, 0, 0, 0, 0)
-    @summaryPartialTaxableGain(1000, 500, 20)
+
+    @{if(calculationType == CalculationType.flat || calculationType == CalculationType.rebased)
+        summaryPartialWorkingOutSection(
+            calculationType,
+            disposalValue,
+            acquisitionValue,
+            totalCosts,
+            calculationResult.totalGain
+        )
+    }
+
+    @{if(calculationType == CalculationType.timeApportioned)
+        summaryPartialWorkingOutSection(
+            calculationType,
+            disposalValue,
+            acquisitionValue,
+            totalCosts,
+            flatGain.get,
+            calculationResult.totalGain,
+            TimeApportionmentUtilities.percentageOfTotalGain(flatGain.get, calculationResult.totalGain)
+        )
+    }
+
+    @{summaryPartialDeductionsSection(
+        calculationResult.prrUsed.getOrElse(0).toInt + calculationResult.otherReliefsUsed.getOrElse(0).toInt,
+        calculationResult.aeaUsed.getOrElse(0),
+        calculationResult.allowableLossesUsed.getOrElse(0),
+        calculationResult.broughtForwardLossesUsed.getOrElse(0),
+        calculationResult.totalDeductions.getOrElse(0)
+    )}
+
+    @summaryPartialTaxableGain(
+        calculationResult.totalGain,
+        calculationResult.totalDeductions.getOrElse(0),
+        calculationResult.taxableGain
+    )
 
 
     <div id="remainingDeductions" class="summary-underline summary-details-padding">
 
         <h2>@Messages("calc.summaryPartial.remainingDeductions")</h2>
 
-        @if(inYearLossesRemaining.isDefined) {
-            @summaryNumericRow("inYearLossesRemaining", Messages("calc.summaryPartial.inYearLossesRemaining", TaxYearModel.convertToSummaryFormat(taxYearModel.taxYearSupplied)), inYearLossesRemaining.get, hintText = false)
+        @if(calculationResult.allowableLossesRemaining.isDefined) {
+            @summaryNumericRow("inYearLossesRemaining", Messages("calc.summaryPartial.inYearLossesRemaining", TaxYearModel.convertToSummaryFormat(taxYearModel.taxYearSupplied)), calculationResult.allowableLossesRemaining.get, hintText = false)
         }
 
-        @summaryNumericRow("aeaRemaining", Messages("calc.summaryPartial.aeaRemaining", TaxYearModel.convertToSummaryFormat(taxYearModel.taxYearSupplied)), aeaRemaining, hintText = false)
+        @summaryNumericRow("aeaRemaining", Messages("calc.summaryPartial.aeaRemaining", TaxYearModel.convertToSummaryFormat(taxYearModel.taxYearSupplied)), calculationResult.aeaRemaining, hintText = false)
 
-        @if(broughtForwardLossesRemaining.isDefined) {
-            @summaryNumericRow("broughtForwardLossesRemaining", Messages("calc.summaryPartial.broughtForwardLossesRemaining", TaxYearModel.convertToSummaryFormat(taxYearModel.taxYearSupplied)), broughtForwardLossesRemaining.get, hintText = false)
+        @if(calculationResult.broughtForwardLossesRemaining.isDefined) {
+            @summaryNumericRow("broughtForwardLossesRemaining", Messages("calc.summaryPartial.broughtForwardLossesRemaining", TaxYearModel.convertToSummaryFormat(taxYearModel.taxYearSupplied)), calculationResult.broughtForwardLossesRemaining.get, hintText = false)
         }
 
     </div>

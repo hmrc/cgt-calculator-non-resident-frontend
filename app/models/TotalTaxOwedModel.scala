@@ -30,7 +30,13 @@ case class TotalTaxOwedModel (taxOwed: BigDecimal,
                          allowableLossesUsed: Option[BigDecimal],
                          aeaUsed: Option[BigDecimal],
                          aeaRemaining: BigDecimal,
-                         broughtForwardLossesUsed: Option[BigDecimal])
+                         broughtForwardLossesUsed: Option[BigDecimal],
+                         reliefsRemaining: Option[BigDecimal],
+                         allowableLossesRemaining: Option[BigDecimal],
+                         broughtForwardLossesRemaining: Option[BigDecimal],
+                         totalDeductions: Option[BigDecimal],
+                         taxOwedAtBaseRate: Option[BigDecimal],
+                         taxOwedAtUpperRate: Option[BigDecimal])
 
 object TotalTaxOwedModel {
   implicit val formats = Json.format[TotalTaxOwedModel]
