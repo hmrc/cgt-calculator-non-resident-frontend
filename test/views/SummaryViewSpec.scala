@@ -18,7 +18,7 @@ package views
 
 import assets.MessageLookup.{NonResident => messages}
 import controllers.helpers.FakeRequestHelper
-import models.QuestionAnswerModel
+import models.{QuestionAnswerModel, TaxYearModel, TotalTaxOwedModel}
 import org.jsoup.Jsoup
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.summary
@@ -29,12 +29,10 @@ class SummaryViewSpec extends UnitSpec with WithFakeApplication with FakeRequest
 
 
   "Summary view" when {
-
     "supplied with a disposal date within the valid tax years" should {
-      val questionAnswer = QuestionAnswerModel[String]("text", "1000", "test-question", None)
-      val seqQuestionAnswers = Seq(questionAnswer, questionAnswer)
-
-      lazy val view = summary(seqQuestionAnswers, "back-link", displayDateWarning = false, "flat", None)
+      val totalTaxOwedModel = TotalTaxOwedModel(100000, 500, 20, None, None, 500, 500, None, None, None, None, 0, None, None, None, None, None, None, None)
+      val taxYearModel: TaxYearModel = TaxYearModel("2016/17", isValidYear = true, "2016/17")
+      lazy val view = summary(totalTaxOwedModel, taxYearModel, "flat", 1000.0, 100, 100, "back-link")
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${messages.Summary.title}'" in {
@@ -102,10 +100,10 @@ class SummaryViewSpec extends UnitSpec with WithFakeApplication with FakeRequest
       }
     }
 
-    "supplied with a disposal date within the valid tax years" should {
-      val questionAnswer = QuestionAnswerModel[String]("text", "1000", "test-question", None)
-      val seqQuestionAnswers = Seq(questionAnswer, questionAnswer)
-      lazy val view = summary(seqQuestionAnswers, "back-link", displayDateWarning = true, "flat", Some(100))
+    "supplied with a disposal date not within the valid tax years" should {
+      val totalTaxOwedModel = TotalTaxOwedModel(500, 500, 20, None, None, 500, 500, None, None, None, None, 0, None, None, None, None, None, None, None)
+      val taxYearModel: TaxYearModel = TaxYearModel("2018/19", isValidYear = false, "2017/18")
+      lazy val view = summary(totalTaxOwedModel, taxYearModel, "flat", 1000.0, 100, 100, "back-url")
       lazy val document = Jsoup.parse(view.body)
 
       "display a tax year warning" in {

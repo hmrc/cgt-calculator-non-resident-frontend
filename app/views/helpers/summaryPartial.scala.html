@@ -64,7 +64,12 @@ disposalValue: BigDecimal, acquisitionValue: BigDecimal, totalCosts: BigDecimal,
 
     @summaryPartialTaxToPay(
         calculationResult.taxOwed,
-        calculationResult.
+        calculationResult.taxGain,
+        calculationResult.upperTaxGain.getOrElse(0),
+        calculationResult.taxOwedAtBaseRate.getOrElse(0),
+        calculationResult.taxOwedAtUpperRate.getOrElse(0),
+        calculationResult.taxRate,
+        calculationResult.upperTaxRate.getOrElse(0)
     )
 
 

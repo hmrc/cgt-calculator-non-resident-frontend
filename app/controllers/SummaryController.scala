@@ -57,21 +57,14 @@ trait SummaryController extends FrontendController with ValidActiveSession {
       } else Future(None)
     }
 
-    def getFinalTaxAnswers(totalGainResultsModel: TotalGainResultsModel,
-                           calculationResultsWithPRRModel: Option[CalculationResultsWithPRRModel])
+    def getFinalTaxAnswers(totalGainResultsModel: TotalGainResultsModel)
                           (implicit hc: HeaderCarrier): Future[Option[TotalPersonalDetailsCalculationModel]] = {
       val optionSeq = Seq(totalGainResultsModel.rebasedGain, totalGainResultsModel.timeApportionedGain).flatten
       val finalSeq = Seq(totalGainResultsModel.flatGain) ++ optionSeq
       lazy val finalAnswers = answersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers
+
       if (!finalSeq.forall(_ <= 0)) {
-        calculationResultsWithPRRModel match {
-          case Some(model)
-            if (Seq(model.flatResult) ++ Seq(model.rebasedResult, model.timeApportionedResult).flatten).forall(_.taxableGain <= 0) =>
-            Future.successful(None)
-          case _ => for {
-            answers <- finalAnswers
-          } yield answers
-        }
+        finalAnswers
       } else Future.successful(None)
     }
 
@@ -110,14 +103,6 @@ trait SummaryController extends FrontendController with ValidActiveSession {
       calcConnector.calculateTotalGain(summaryData)
     }
 
-    def calculatePRR(answers: TotalGainAnswersModel, privateResidenceReliefModel: Option[PrivateResidenceReliefModel])
-      : Future[Option[CalculationResultsWithPRRModel]] = {
-        privateResidenceReliefModel match {
-          case Some(model) => calcConnector.calculateTaxableGainAfterPRR(answers, model)
-          case None => Future.successful(None)
-        }
-    }
-
     def calculateTaxOwed(totalGainAnswersModel: TotalGainAnswersModel,
                          privateResidenceReliefModel: Option[PrivateResidenceReliefModel],
                          totalPersonalDetailsCalculationModel: Option[TotalPersonalDetailsCalculationModel],
@@ -125,7 +110,7 @@ trait SummaryController extends FrontendController with ValidActiveSession {
                          otherReliefs: Option[AllOtherReliefsModel]): Future[Option[CalculationResultsWithTaxOwedModel]] = {
       totalPersonalDetailsCalculationModel match {
         case Some(data) => calcConnector.calculateNRCGTTotalTax(totalGainAnswersModel,
-          privateResidenceReliefModel, totalPersonalDetailsCalculationModel.get, maxAEA, otherReliefs)
+          privateResidenceReliefModel, data, maxAEA, otherReliefs)
         case _ => Future.successful(None)
       }
     }
@@ -152,8 +137,7 @@ trait SummaryController extends FrontendController with ValidActiveSession {
       answers <- answersConstructor.getNRTotalGainAnswers(hc)
       totalGainResultsModel <- calculateDetails(answers)
       privateResidentReliefModel <- getPRRModel(hc, totalGainResultsModel.get)
-      calculationResultsWithPRR <- calculatePRR(answers, privateResidentReliefModel)
-      finalAnswers <- getFinalTaxAnswers(totalGainResultsModel.get, calculationResultsWithPRR)
+      finalAnswers <- getFinalTaxAnswers(totalGainResultsModel.get)
       otherReliefsModel <- getAllOtherReliefs(finalAnswers)
       taxYearModel <- getTaxYear(answers)
       maxAEA <- getMaxAEA(finalAnswers, taxYearModel)

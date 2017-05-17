@@ -33,8 +33,8 @@ class TaxableGainCalculationSpec extends UnitSpec with WithFakeApplication with 
 
   implicit val hc = new HeaderCarrier()
 
-  val mockCalcConnector = mock[CalculatorConnector]
-  val mockAnswersConstructor = mock[AnswersConstructor]
+  val mockCalcConnector: CalculatorConnector = mock[CalculatorConnector]
+  val mockAnswersConstructor: AnswersConstructor = mock[AnswersConstructor]
 
   val calculationResultsWithPRRModel = CalculationResultsWithPRRModel(GainsAfterPRRModel(1000, 1500, 2000), None, None)
   val prrModel = PrivateResidenceReliefModel("No", None, None)
@@ -68,7 +68,7 @@ class TaxableGainCalculationSpec extends UnitSpec with WithFakeApplication with 
     Some(OtherReliefsModel(0))
   )
   val calculationResultsModel = CalculationResultsWithTaxOwedModel(
-    TotalTaxOwedModel(100, 100, 20, None, None, 200, 100, None, None, None, None, 0, None),
+    TotalTaxOwedModel(100, 100, 20, None, None, 200, 100, None, None, None, None, 0, None, None, None, None, None, None, None),
     None,
     None
   )

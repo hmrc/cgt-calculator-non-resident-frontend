@@ -18,7 +18,7 @@ package views.helpers
 
 import assets.MessageLookup.{SummaryPartialMessages => messages}
 import controllers.helpers.FakeRequestHelper
-import models.TaxYearModel
+import models.{TaxYearModel, TotalTaxOwedModel}
 import org.jsoup.Jsoup
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
@@ -31,12 +31,36 @@ class SummaryPartialViewSpec extends UnitSpec with WithFakeApplication with Fake
 
     "the tax owed is zero and the date of disposal was in a valid tax year" should {
 
+      val totalTaxOwedModel = TotalTaxOwedModel(
+        taxOwed = 0,
+        taxGain = 500,
+        taxRate = 20,
+        upperTaxGain = None,
+        upperTaxRate = None,
+        totalGain = 500,
+        taxableGain = 500,
+        prrUsed = None,
+        otherReliefsUsed = None,
+        allowableLossesUsed = None,
+        aeaUsed = None,
+        aeaRemaining = 2000.00,
+        broughtForwardLossesUsed = None,
+        reliefsRemaining = None,
+        allowableLossesRemaining = Some(5000.00),
+        broughtForwardLossesRemaining = Some(27000.00),
+        totalDeductions = None,
+        taxOwedAtBaseRate = None,
+        taxOwedAtUpperRate = None
+      )
+
+
       lazy val view = helpers.summaryPartial(
-        BigDecimal(0),
-        TaxYearModel("2016/17", isValidYear = true, "2018/19"),
-        aeaRemaining = 2000,
-        inYearLossesRemaining = Some(5000),
-        broughtForwardLossesRemaining = Some(27000)
+        totalTaxOwedModel,
+        TaxYearModel("2016/17", isValidYear = true, "2016/17"),
+        "flat",
+        100.00,
+        100.00,
+        0
       )(fakeRequestWithSession, applicationMessages)
       lazy val doc = Jsoup.parse(view.body)
 
@@ -107,10 +131,35 @@ class SummaryPartialViewSpec extends UnitSpec with WithFakeApplication with Fake
 
     "the tax owed is 400 and the date of disposal was in a valid tax year" should {
 
+      val totalTaxOwedModel = TotalTaxOwedModel(
+        taxOwed = 400,
+        taxGain = 500,
+        taxRate = 20,
+        upperTaxGain = None,
+        upperTaxRate = None,
+        totalGain = 500,
+        taxableGain = 500,
+        prrUsed = None,
+        otherReliefsUsed = None,
+        allowableLossesUsed = None,
+        aeaUsed = None,
+        aeaRemaining = 0,
+        broughtForwardLossesUsed = None,
+        reliefsRemaining = None,
+        allowableLossesRemaining = None,
+        broughtForwardLossesRemaining = None,
+        totalDeductions = None,
+        taxOwedAtBaseRate = None,
+        taxOwedAtUpperRate = None
+      )
+
       lazy val view = helpers.summaryPartial(
-        BigDecimal(400),
-        TaxYearModel("2015/16", isValidYear = false, "2018/19"),
-        aeaRemaining = 0
+        totalTaxOwedModel,
+        TaxYearModel("2018/19", isValidYear = false, "2016/17"),
+        "flat",
+        100.00,
+        100.00,
+        0
       )(fakeRequestWithSession, applicationMessages)
       lazy val doc = Jsoup.parse(view.body)
 
@@ -120,8 +169,8 @@ class SummaryPartialViewSpec extends UnitSpec with WithFakeApplication with Fake
           doc.select("h1").text shouldEqual "£400.00"
         }
 
-        s"contain the second heading text ${messages.headingTwo("2015 to 2016")}" in {
-          doc.select("div#tax-owed-banner h2").text shouldEqual messages.headingTwo("2015 to 2016")
+        s"contain the second heading text ${messages.headingTwo("2018 to 2019")}" in {
+          doc.select("div#tax-owed-banner h2").text shouldEqual messages.headingTwo("2018 to 2019")
         }
       }
 
@@ -151,7 +200,7 @@ class SummaryPartialViewSpec extends UnitSpec with WithFakeApplication with Fake
       "have a section for the deductions remaining" should {
 
         s"have the heading ${messages.remainingDeductions}" in {
-          doc.select("div#remainingDeductions h2")
+          doc.select("div#remainingDeductions h2").text shouldBe messages.remainingDeductions
         }
 
         "not display a row for in Year Losses" in {
@@ -159,8 +208,8 @@ class SummaryPartialViewSpec extends UnitSpec with WithFakeApplication with Fake
         }
 
         "has a row for aea remaining" which {
-          s"has the text '${messages.aeaRemaining("2015 to 2016")}'" in {
-            doc.select("#aeaRemaining-text").text shouldBe messages.aeaRemaining("2015 to 2016")
+          s"has the text '${messages.aeaRemaining("2018 to 2019")}'" in {
+            doc.select("#aeaRemaining-text").text shouldBe messages.aeaRemaining("2018 to 2019")
           }
 
           "has the value '£0'" in {
