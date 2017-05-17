@@ -2,17 +2,29 @@
 @import play.api.data._
 @import views.html.helpers._
 
-@(inputForm: Form[_], inputDetails: Seq[(String, String, Option[String])])(implicit messages: Messages)
+@(inputForm: Form[_], inputDetails: Seq[(String, String, Option[String])], boldText:Boolean = false)(implicit messages: Messages)
 
 <div class="form-group">
 
     @inputDetails.map(index => {
-                formInputMoney(
-                    inputForm,
-                    index._1, //fieldName
-                    index._2, //questionText
-                    index._3  //helpText
-                )
+
+    if(!boldText) {
+        formInputMoney(
+            inputForm,
+            index._1, //fieldName
+            index._2, //questionText
+            index._3 //helpText
+        )
+    }
+        else {
+            formInputMoney(
+            inputForm,
+            index._1, //fieldName
+            index._2, //questionText
+            index._3,  //helpText
+            labelClasses = "bold-small"
+            )
+        }
     })
 
 </div>
