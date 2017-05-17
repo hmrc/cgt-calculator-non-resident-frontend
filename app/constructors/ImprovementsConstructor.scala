@@ -36,7 +36,8 @@ object ImprovementsConstructor {
           Seq(
             ("improvementsAmt", Messages("calc.improvements.questionThree"), None),
             ("improvementsAmtAfter", Messages("calc.improvements.questionFour"), None)
-          )
+          ),
+          boldText = true
         ),
         None,
         hideLegend = true,
@@ -47,7 +48,7 @@ object ImprovementsConstructor {
         improvementsForm,
         "isClaimingImprovements",
         Messages("calc.improvements.question"),
-        formInputMoney(improvementsForm, "improvementsAmt", Messages("calc.improvements.questionTwo")),
+        formInputMoney(improvementsForm, "improvementsAmt", Messages("calc.improvements.questionTwo"), labelClasses = "bold"),
         None,
         hideLegend = true,
         additionalContent = Some(jointOwnership)
