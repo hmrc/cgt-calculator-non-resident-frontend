@@ -48,7 +48,7 @@ object ImprovementsConstructor {
         improvementsForm,
         "isClaimingImprovements",
         Messages("calc.improvements.question"),
-        formInputMoney(improvementsForm, "improvementsAmt", Messages("calc.improvements.questionTwo"), labelClasses = "bold"),
+        formInputMoney(improvementsForm, "improvementsAmt", Messages("calc.improvements.questionTwo"), labelClasses = "bold-small"),
         None,
         hideLegend = true,
         additionalContent = Some(jointOwnership)
