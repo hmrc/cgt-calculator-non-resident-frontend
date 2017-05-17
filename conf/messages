@@ -767,6 +767,7 @@ calc.summaryPartial.totalCosts = Minus all costs, including improvements
 calc.summaryPartial.gainMadeOnProperty = The gain you''ve made on the property
 calc.summaryPartial.percentageOfGain = The percentage gain you''ve made since 5 April 2015
 calc.summaryPartial.totalGain = Total gain
+calc.summaryPartial.totalLoss = Total loss
 calc.summaryPartial.deductionsSectionHeading = Your deductions
 calc.summaryPartial.reliefsUsed = Reliefs used
 calc.summaryPartial.inYearLossesUsed = In year losses used

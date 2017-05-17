@@ -56,11 +56,11 @@ disposalValue: BigDecimal, acquisitionValue: BigDecimal, totalCosts: BigDecimal,
         calculationResult.totalDeductions.getOrElse(0)
     )
 
-    @summaryPartialTaxableGain(
+    @{summaryPartialTaxableGain(
         calculationResult.totalGain,
         calculationResult.totalDeductions.getOrElse(0),
-        calculationResult.taxableGain
-    )
+        if(calculationResult.taxableGain < 0) BigDecimal(0) else calculationResult.taxableGain
+    )}
 
     @summaryPartialTaxToPay(
         calculationResult.taxOwed,

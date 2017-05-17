@@ -144,11 +144,10 @@ trait SummaryController extends FrontendController with ValidActiveSession {
       finalResult <- calculateTaxOwed(answers, privateResidentReliefModel, finalAnswers, maxAEA.get, otherReliefsModel)
       backUrl <- summaryBackUrl(totalGainResultsModel)
 
-      totalCosts <- Future.successful(404)
-
       calculationType <- calcConnector.fetchAndGetFormData[CalculationElectionModel](KeystoreKeys.calculationElection)
-      calculationResult <- getCalculationResult(finalResult, calculationType.get.calculationType)
+      totalCosts <- calcConnector.calculateTotalCosts(answers, calculationType)
 
+      calculationResult <- getCalculationResult(finalResult, calculationType.get.calculationType)
     } yield {
       calculationType.get.calculationType match {
         case CalculationType.flat =>

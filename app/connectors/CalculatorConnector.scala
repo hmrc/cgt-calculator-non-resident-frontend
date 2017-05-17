@@ -16,6 +16,7 @@
 
 package connectors
 
+import common.nonresident.CalculationType
 import config.{CalculatorSessionCache, WSHttp}
 import constructors._
 import models._
@@ -118,6 +119,19 @@ trait CalculatorConnector {
         else ""
       }"
     )
+  }
+
+  def calculateTotalCosts(answers: TotalGainAnswersModel, calculationType: Option[CalculationElectionModel]): Future[BigDecimal] = calculationType match {
+    case Some(calculationElection) =>
+      if(calculationElection.calculationType == CalculationType.rebased) {
+        http.GET[BigDecimal](s"$serviceUrl/capital-gains-calculator/non-resident/calculate-total-costs?disposalCosts=${answers.disposalCostsModel.disposalCosts}" +
+          s"&acquisitionCosts=${answers.acquisitionCostsModel.acquisitionCostsAmt}&improvements=${answers.improvementsModel.improvementsAmtAfter.getOrElse(0)}")
+      } else {
+        http.GET[BigDecimal](s"$serviceUrl/capital-gains-calculator/non-resident/calculate-total-costs?disposalCosts=${answers.disposalCostsModel.disposalCosts}" +
+          s"&acquisitionCosts=${answers.acquisitionCostsModel.acquisitionCostsAmt}" +
+          s"&improvements=${answers.improvementsModel.improvementsAmt.getOrElse(BigDecimal(0)) + answers.improvementsModel.improvementsAmtAfter.getOrElse(BigDecimal(0))}")
+      }
+    case _ => throw new Exception("No calculation election retrieved")
   }
 
   def getTaxYear(taxYear: String)(implicit hc: HeaderCarrier): Future[Option[TaxYearModel]] = {
