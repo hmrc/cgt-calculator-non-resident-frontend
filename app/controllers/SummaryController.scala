@@ -172,21 +172,24 @@ trait SummaryController extends FrontendController with ValidActiveSession {
             answers.disposalValueModel.disposalValue,
             answers.acquisitionValueModel.acquisitionValueAmt,
             totalCosts,
-            backUrl)
+            backUrl,
+            reliefsUsed = calculationResult.prrUsed.getOrElse(BigDecimal(0)) + calculationResult.otherReliefsUsed.getOrElse(BigDecimal(0)))
           )
         case CalculationType.timeApportioned =>
           Ok(calculation.summary(calculationResult, taxYearModel.get, calculationType.get.calculationType,
             answers.disposalValueModel.disposalValue,
             answers.acquisitionValueModel.acquisitionValueAmt,
             totalCosts,
-            backUrl, Some(finalResult.get.flatResult.totalGain))
+            backUrl, Some(finalResult.get.flatResult.totalGain),
+            reliefsUsed = calculationResult.prrUsed.getOrElse(BigDecimal(0)) + calculationResult.otherReliefsUsed.getOrElse(BigDecimal(0)))
           )
         case CalculationType.rebased =>
           Ok(calculation.summary(calculationResult, taxYearModel.get, calculationType.get.calculationType,
             answers.disposalValueModel.disposalValue,
             answers.rebasedValueModel.get.rebasedValueAmt.get,
             totalCosts,
-            backUrl, Some(finalResult.get.flatResult.totalGain))
+            backUrl, None,
+            reliefsUsed = calculationResult.prrUsed.getOrElse(BigDecimal(0)) + calculationResult.otherReliefsUsed.getOrElse(BigDecimal(0)))
           )
       }
     }

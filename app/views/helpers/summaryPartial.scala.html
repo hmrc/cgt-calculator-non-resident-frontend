@@ -3,7 +3,7 @@
 @import uk.gov.hmrc.play.views.helpers.MoneyPounds
 
 @(calculationResult: TotalTaxOwedModel, taxYearModel: TaxYearModel, calculationType: String,
-disposalValue: BigDecimal, acquisitionValue: BigDecimal, totalCosts: BigDecimal, flatGain: Option[BigDecimal] = None)(implicit request: Request[_], messages: Messages)
+disposalValue: BigDecimal, acquisitionValue: BigDecimal, totalCosts: BigDecimal, flatGain: Option[BigDecimal] = None, reliefsUsed: BigDecimal = 0)(implicit request: Request[_], messages: Messages)
 
 <div class="summary-partial">
     <div id="tax-owed-banner" class="transaction-banner--complete">
@@ -48,18 +48,23 @@ disposalValue: BigDecimal, acquisitionValue: BigDecimal, totalCosts: BigDecimal,
         )
     }
 
-    @{summaryPartialDeductionsSection(
-        calculationResult.prrUsed.getOrElse(0).toInt + calculationResult.otherReliefsUsed.getOrElse(0).toInt,
+    @summaryPartialDeductionsSection(
+        reliefsUsed,
         calculationResult.aeaUsed.getOrElse(0),
         calculationResult.allowableLossesUsed.getOrElse(0),
         calculationResult.broughtForwardLossesUsed.getOrElse(0),
         calculationResult.totalDeductions.getOrElse(0)
-    )}
+    )
 
     @summaryPartialTaxableGain(
         calculationResult.totalGain,
         calculationResult.totalDeductions.getOrElse(0),
         calculationResult.taxableGain
+    )
+
+    @summaryPartialTaxToPay(
+        calculationResult.taxOwed,
+        calculationResult.
     )
 
 
