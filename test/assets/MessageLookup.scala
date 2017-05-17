@@ -55,7 +55,7 @@ object MessageLookup {
 
   object NonResident extends Common {
 
-    val pageHeading = "Calculate your non-resident Capital Gains Tax"
+    val pageHeading = "Calculate your Non-Resident Capital Gains Tax"
     val errorInvalidDate = "Enter a real date"
     val errorRealNumber = "Enter a number without commas, for example 10000.00"
 
