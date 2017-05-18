@@ -70,8 +70,6 @@ class SummaryPartialTaxableGainViewSpec extends UnitSpec with WithFakeApplicatio
           doc.select("#taxableGain-amount").text shouldBe "£1,000"
         }
       }
-
     }
   }
-
 }

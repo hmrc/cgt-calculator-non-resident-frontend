@@ -28,11 +28,11 @@ import models.{TaxYearModel, _}
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
-import org.scalatest.mock.MockitoSugar
+import org.scalatest.mockito.MockitoSugar
 import play.api.test.Helpers._
 import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
-
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class SummaryActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
@@ -51,7 +51,6 @@ class SummaryActionSpec extends UnitSpec with WithFakeApplication with MockitoSu
     lazy val mockCalcConnector = mock[CalculatorConnector]
     lazy val mockAnswersConstructor = mock[AnswersConstructor]
 
-
     when(mockAnswersConstructor.getNRTotalGainAnswers(ArgumentMatchers.any()))
       .thenReturn(Future.successful(summary))
 
@@ -60,10 +59,13 @@ class SummaryActionSpec extends UnitSpec with WithFakeApplication with MockitoSu
 
     when(mockCalcConnector.fetchAndGetFormData[CalculationElectionModel](
       ArgumentMatchers.eq(KeystoreKeys.calculationElection))(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Some(calculationElectionModel))
+      .thenReturn(Future.successful(Some(calculationElectionModel)))
 
     when(mockCalcConnector.calculateTotalGain(ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(result)))
+
+    when(mockCalcConnector.calculateTotalCosts(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      .thenReturn(Future.successful(BigDecimal(100)))
 
     when(mockCalcConnector.calculateTaxableGainAfterPRR(ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(Future.successful(calculationResultsWithPRRModel))

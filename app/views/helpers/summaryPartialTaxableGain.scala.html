@@ -4,12 +4,13 @@
 
 <div id="yourTaxableGain" class="summary-underline summary-details-padding">
 
-    @{
-        if(gain > 0) {
-            <h3>Messages("calc.summaryPartial.yourTaxableGain")</h3>
-            summaryNumericRow("gain", Messages("calc.summaryPartial.totalGain"), gain)
-            summaryNumericRow("minusDeductions", Messages("calc.summaryPartial.minusDeductions"), totalDeductions)
-            summaryNumericRow("taxableGain", Messages("calc.summaryPartial.taxableGain"), taxableGain, isTotal = true)
-        } else { summaryNumericRow("taxableGain", Messages("calc.summaryPartial.taxableGain"), taxableGain, isTotal = true) }
-    }
+    @if(gain > 0){
+            <h3>@Messages("calc.summaryPartial.yourTaxableGain")</h3>
+            @summaryNumericRow("gain", Messages("calc.summaryPartial.totalGain"), gain)
+            @summaryNumericRow("minusDeductions", Messages("calc.summaryPartial.minusDeductions"), totalDeductions)
+            @summaryNumericRow("taxableGain", Messages("calc.summaryPartial.taxableGain"), taxableGain, isTotal = true)
+        }else{
+            @summaryNumericRow("taxableGain", Messages("calc.summaryPartial.taxableGain"), taxableGain, isTotal = true)
+        }
+
 </div>
