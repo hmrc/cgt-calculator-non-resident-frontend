@@ -351,7 +351,7 @@ object MessageLookup {
         "You might have to pay more if we think your estimate is unrealistic."
       val jointOwnership = "If you owned the property with someone else, only enter your share of the property value."
       val additionalContentTitle = "Why we're asking for this"
-      val helpHiddenContent = "As you're not a UK resident, you only have to report UK property you've sold or given away since 5 April 2015."
+      val helpHiddenContent = "If you're not a UK resident, you only have to report UK property you've sold or given away since 5 April 2015."
 
       val errorNoValue = "Enter a value for your property on 5 April 2015"
       val errorNegative = "Enter a positive value for your property on 5 April 2015"
