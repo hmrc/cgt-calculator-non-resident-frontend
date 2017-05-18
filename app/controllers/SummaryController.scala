@@ -57,21 +57,14 @@ trait SummaryController extends FrontendController with ValidActiveSession {
       } else Future(None)
     }
 
-    def getFinalTaxAnswers(totalGainResultsModel: TotalGainResultsModel,
-                           calculationResultsWithPRRModel: Option[CalculationResultsWithPRRModel])
+    def getFinalTaxAnswers(totalGainResultsModel: TotalGainResultsModel)
                           (implicit hc: HeaderCarrier): Future[Option[TotalPersonalDetailsCalculationModel]] = {
       val optionSeq = Seq(totalGainResultsModel.rebasedGain, totalGainResultsModel.timeApportionedGain).flatten
       val finalSeq = Seq(totalGainResultsModel.flatGain) ++ optionSeq
       lazy val finalAnswers = answersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers
+
       if (!finalSeq.forall(_ <= 0)) {
-        calculationResultsWithPRRModel match {
-          case Some(model)
-            if (Seq(model.flatResult) ++ Seq(model.rebasedResult, model.timeApportionedResult).flatten).forall(_.taxableGain <= 0) =>
-            Future.successful(None)
-          case _ => for {
-            answers <- finalAnswers
-          } yield answers
-        }
+        finalAnswers
       } else Future.successful(None)
     }
 
@@ -89,26 +82,12 @@ trait SummaryController extends FrontendController with ValidActiveSession {
       calcConnector.getTaxYear(s"${date.year}-${date.month}-${date.day}")
     }
 
-    def getTaxOwed(calculationResultsWithTaxOwedModel: Option[CalculationResultsWithTaxOwedModel],
-                   calculationElection: String): Future[Option[BigDecimal]] = {
+    def getCalculationResult(calculationResultsWithTaxOwedModel: Option[CalculationResultsWithTaxOwedModel],
+                   calculationElection: String): Future[TotalTaxOwedModel] = {
       (calculationResultsWithTaxOwedModel, calculationElection) match {
-        case (Some(model), CalculationType.flat) => Future.successful(Some(model.flatResult.taxOwed))
-        case (Some(model), CalculationType.rebased) => Future.successful(model.rebasedResult.map(_.taxOwed))
-        case (Some(model), CalculationType.timeApportioned) => Future.successful(model.timeApportionedResult.map(_.taxOwed))
-        case _ => Future.successful(None)
-      }
-    }
-
-    def getSection(calculationResultsWithPRRModel: Option[CalculationResultsWithPRRModel],
-                   privateResidenceReliefModel: Option[PrivateResidenceReliefModel],
-                   totalGainResultsModel: TotalGainResultsModel,
-                   calculationType: String,
-                   calculationResultsWithTaxOwedModel: Option[CalculationResultsWithTaxOwedModel],
-                   taxYear: Option[TaxYearModel]): Future[Seq[QuestionAnswerModel[Any]]] = {
-      (calculationResultsWithTaxOwedModel, privateResidenceReliefModel) match {
-        case (Some(model), _) => Future.successful(model.calculationDetailsRows(calculationType, taxYear.get.taxYearSupplied))
-        case (_, Some(model)) if model.isClaimingPRR == "Yes" => Future.successful(calculationResultsWithPRRModel.get.calculationDetailsRows(calculationType))
-        case _ => Future.successful(totalGainResultsModel.calculationDetailsRows(calculationType))
+        case (Some(model), CalculationType.flat) => Future.successful(model.flatResult)
+        case (Some(model), CalculationType.rebased) => Future.successful(model.rebasedResult.get)
+        case (Some(model), CalculationType.timeApportioned) => Future.successful(model.timeApportionedResult.get)
       }
     }
 
@@ -120,18 +99,8 @@ trait SummaryController extends FrontendController with ValidActiveSession {
       case (None) => Future.successful(common.DefaultRoutes.missingDataRoute)
     }
 
-    def displayDateWarning(taxYearDetails: Option[TaxYearModel]): Future[Boolean] = Future.successful(!taxYearDetails.exists(_.isValidYear))
-
     def calculateDetails(summaryData: TotalGainAnswersModel): Future[Option[TotalGainResultsModel]] = {
       calcConnector.calculateTotalGain(summaryData)
-    }
-
-    def calculatePRR(answers: TotalGainAnswersModel, privateResidenceReliefModel: Option[PrivateResidenceReliefModel])
-      : Future[Option[CalculationResultsWithPRRModel]] = {
-        privateResidenceReliefModel match {
-          case Some(model) => calcConnector.calculateTaxableGainAfterPRR(answers, model)
-          case None => Future.successful(None)
-        }
     }
 
     def calculateTaxOwed(totalGainAnswersModel: TotalGainAnswersModel,
@@ -141,17 +110,9 @@ trait SummaryController extends FrontendController with ValidActiveSession {
                          otherReliefs: Option[AllOtherReliefsModel]): Future[Option[CalculationResultsWithTaxOwedModel]] = {
       totalPersonalDetailsCalculationModel match {
         case Some(data) => calcConnector.calculateNRCGTTotalTax(totalGainAnswersModel,
-          privateResidenceReliefModel, totalPersonalDetailsCalculationModel.get, maxAEA, otherReliefs)
+          privateResidenceReliefModel, data, maxAEA, otherReliefs)
         case _ => Future.successful(None)
       }
-    }
-
-    def routeRequest(result: Seq[QuestionAnswerModel[Any]],
-                     backUrl: String, displayDateWarning: Boolean,
-                     calculationType: String,
-                     taxOwed: Option[BigDecimal]): Future[Result] = {
-      Future.successful(Ok(calculation.summary(result,
-        backUrl, displayDateWarning, calculationType, taxOwed)))
     }
 
     def getAllOtherReliefs(totalPersonalDetailsCalculationModel: Option[TotalPersonalDetailsCalculationModel])
@@ -176,20 +137,45 @@ trait SummaryController extends FrontendController with ValidActiveSession {
       answers <- answersConstructor.getNRTotalGainAnswers(hc)
       totalGainResultsModel <- calculateDetails(answers)
       privateResidentReliefModel <- getPRRModel(hc, totalGainResultsModel.get)
-      calculationResultsWithPRR <- calculatePRR(answers, privateResidentReliefModel)
-      finalAnswers <- getFinalTaxAnswers(totalGainResultsModel.get, calculationResultsWithPRR)
+      finalAnswers <- getFinalTaxAnswers(totalGainResultsModel.get)
       otherReliefsModel <- getAllOtherReliefs(finalAnswers)
-      taxYear <- getTaxYear(answers)
-      displayWarning <- displayDateWarning(taxYear)
-      maxAEA <- getMaxAEA(finalAnswers, taxYear)
+      taxYearModel <- getTaxYear(answers)
+      maxAEA <- getMaxAEA(finalAnswers, taxYearModel)
       finalResult <- calculateTaxOwed(answers, privateResidentReliefModel, finalAnswers, maxAEA.get, otherReliefsModel)
       backUrl <- summaryBackUrl(totalGainResultsModel)
+
       calculationType <- calcConnector.fetchAndGetFormData[CalculationElectionModel](KeystoreKeys.calculationElection)
-      results <- getSection(calculationResultsWithPRR, privateResidentReliefModel,
-        totalGainResultsModel.get, calculationType.get.calculationType, finalResult, taxYear)
-      taxOwed <- getTaxOwed(finalResult, calculationType.get.calculationType)
-      route <- routeRequest(results, backUrl, displayWarning, calculationType.get.calculationType, taxOwed)
-    } yield route
+      totalCosts <- calcConnector.calculateTotalCosts(answers, calculationType)
+
+      calculationResult <- getCalculationResult(finalResult, calculationType.get.calculationType)
+    } yield {
+      calculationType.get.calculationType match {
+        case CalculationType.flat =>
+          Ok(calculation.summary(calculationResult, taxYearModel.get, calculationType.get.calculationType,
+            answers.disposalValueModel.disposalValue,
+            answers.acquisitionValueModel.acquisitionValueAmt,
+            totalCosts,
+            backUrl,
+            reliefsUsed = calculationResult.prrUsed.getOrElse(BigDecimal(0)) + calculationResult.otherReliefsUsed.getOrElse(BigDecimal(0)))
+          )
+        case CalculationType.timeApportioned =>
+          Ok(calculation.summary(calculationResult, taxYearModel.get, calculationType.get.calculationType,
+            answers.disposalValueModel.disposalValue,
+            answers.acquisitionValueModel.acquisitionValueAmt,
+            totalCosts,
+            backUrl, Some(finalResult.get.flatResult.totalGain),
+            reliefsUsed = calculationResult.prrUsed.getOrElse(BigDecimal(0)) + calculationResult.otherReliefsUsed.getOrElse(BigDecimal(0)))
+          )
+        case CalculationType.rebased =>
+          Ok(calculation.summary(calculationResult, taxYearModel.get, calculationType.get.calculationType,
+            answers.disposalValueModel.disposalValue,
+            answers.rebasedValueModel.get.rebasedValueAmt.get,
+            totalCosts,
+            backUrl, None,
+            reliefsUsed = calculationResult.prrUsed.getOrElse(BigDecimal(0)) + calculationResult.otherReliefsUsed.getOrElse(BigDecimal(0)))
+          )
+      }
+    }
   }
 
   def restart(): Action[AnyContent] = Action.async { implicit request =>

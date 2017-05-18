@@ -227,9 +227,11 @@ class CalculationElectionConstructorSpec extends UnitSpec with MockitoSugar with
   }
 
   val calculationResultsTotalSortByTaxOwed = CalculationResultsWithTaxOwedModel(
-    TotalTaxOwedModel(4, 1, 1, Some(1), Some(1), 1, 1, Some(1), Some(1), Some(1), Some(1), 1, Some(1)),
-    Some(TotalTaxOwedModel(1, 1, 1, Some(1), Some(1), 1, 1, Some(1), Some(1), Some(1), Some(1), 1, Some(1))),
-    Some(TotalTaxOwedModel(2, 1, 1, Some(1), Some(1), 1, 1, Some(1), Some(1), Some(1), Some(1), 1, Some(1)))
+    TotalTaxOwedModel(4, 1, 1, Some(1), Some(1), 1, 1, Some(1), Some(1), Some(1), Some(1), 1, Some(1), Some(1), Some(1), Some(1), Some(1), Some(1), Some(1)),
+    Some(TotalTaxOwedModel(1, 1, 1, Some(1), Some(1), 1, 1, Some(1), Some(1), Some(1),
+      Some(1), 1, Some(1), Some(1), Some(1), Some(1), Some(1), Some(1), Some(1))),
+    Some(TotalTaxOwedModel(2, 1, 1, Some(1), Some(1), 1, 1, Some(1), Some(1), Some(1),
+      Some(1), 1, Some(1), Some(1), Some(1), Some(1), Some(1), Some(1), Some(1)))
   )
 
   "Calling generateElection with a TotalGainsResultsModel, and a CalculationResultsWithTaxOwedModel" should {
