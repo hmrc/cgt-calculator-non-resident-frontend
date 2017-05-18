@@ -93,9 +93,6 @@ class CalculatorConnectorSpec extends UnitSpec with MockitoSugar {
     when(mockSessionCache.fetchAndGetEntry[DisposalCostsModel](ArgumentMatchers.eq(KeystoreKeys.disposalCosts))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(summary.disposalCostsModel)))
 
-    when(mockSessionCache.fetchAndGetEntry[AllowableLossesModel](ArgumentMatchers.eq(KeystoreKeys.allowableLosses))(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(Some(summary.allowableLossesModel)))
-
     when(mockSessionCache.fetchAndGetEntry[CalculationElectionModel](ArgumentMatchers.eq(KeystoreKeys.calculationElection))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(calculationElectionModel))
 
@@ -178,7 +175,6 @@ class CalculatorConnectorSpec extends UnitSpec with MockitoSugar {
     DisposalValueModel(150000),
     AcquisitionCostsModel(0),
     DisposalCostsModel(0),
-    AllowableLossesModel("No", None),
     CalculationElectionModel("flat"),
     OtherReliefsModel(0),
     OtherReliefsModel(0),
@@ -202,7 +198,6 @@ class CalculatorConnectorSpec extends UnitSpec with MockitoSugar {
     DisposalValueModel(150000),
     AcquisitionCostsModel(0),
     DisposalCostsModel(0),
-    AllowableLossesModel("No", None),
     CalculationElectionModel("time-apportioned-calculation"),
     OtherReliefsModel(0),
     OtherReliefsModel(0),
@@ -226,7 +221,6 @@ class CalculatorConnectorSpec extends UnitSpec with MockitoSugar {
     DisposalValueModel(150000),
     AcquisitionCostsModel(0),
     DisposalCostsModel(0),
-    AllowableLossesModel("No", None),
     CalculationElectionModel("rebased"),
     OtherReliefsModel(0),
     OtherReliefsModel(0),
@@ -250,7 +244,6 @@ class CalculatorConnectorSpec extends UnitSpec with MockitoSugar {
     DisposalValueModel(150000),
     AcquisitionCostsModel(0),
     DisposalCostsModel(0),
-    AllowableLossesModel("No", None),
     CalculationElectionModel(""),
     OtherReliefsModel(0),
     OtherReliefsModel(0),
