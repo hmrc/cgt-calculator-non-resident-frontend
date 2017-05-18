@@ -425,10 +425,7 @@ object MessageLookup {
     object BroughtForwardLosses {
       val question = "Do you have losses you want to bring forward from previous tax years?"
       val inputQuestion = "How much would you like to bring forward?"
-      val helpTitle = "These are losses on UK properties that:"
-      val helpListOne = "are covered by Capital Gains Tax"
-      val helpListTwo = "you've declared within 4 years of making them"
-      val helpListThree = "you've not already used to reduce the amount of Capital Gains Tax you had to pay"
+      val helpText = "These are unused losses that are covered by Capital Gains Tax and that you've already reported to HMRC."
       val linkOne = "Capital Gains Tax"
       val linkTwo = "Previous tax years"
       val errorDecimalPlaces = "There are too many numbers after the decimal point in your brought forward loss"

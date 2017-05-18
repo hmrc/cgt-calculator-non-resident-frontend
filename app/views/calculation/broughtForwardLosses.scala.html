@@ -26,13 +26,7 @@
     @form(action = controllers.routes.BroughtForwardLossesController.submitBroughtForwardLosses) {
 
         <div class="form-hint">
-            <div>@Messages("calc.broughtForwardLosses.helpTitle")</div>
-
-            <ul class="list list-bullet">
-                <li>@Messages("calc.broughtForwardLosses.helpListOne")</li>
-                <li>@Messages("calc.broughtForwardLosses.helpListTwo")</li>
-                <li>@Messages("calc.broughtForwardLosses.helpListThree")</li>
-            </ul>
+            <p>@Messages("calc.broughtForwardLosses.helpText")</p>
         </div>
 
         @formHiddenYesNoRadio(broughtForwardLossesForm,

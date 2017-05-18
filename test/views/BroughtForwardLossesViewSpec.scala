@@ -95,25 +95,10 @@ class BroughtForwardLossesViewSpec extends UnitSpec with WithFakeApplication wit
           helpText.size() shouldBe 1
         }
 
-        s"has the title of ${messages.BroughtForwardLosses.helpTitle}" in {
-          assertHTML(helpText)(_.select("div > div").text() shouldBe messages.BroughtForwardLosses.helpTitle)
+        s"has a paragraph with the text ${messages.BroughtForwardLosses.helpText}" in {
+          helpText.select("p").text shouldBe messages.BroughtForwardLosses.helpText
         }
 
-        "has a list of class 'list list-bullet'" in {
-          assertHTML(helpText)(_.select("ul").attr("class") shouldBe "list list-bullet")
-        }
-
-        s"has a first list element of ${messages.BroughtForwardLosses.helpListOne}" in {
-          assertHTML(helpText)(_.select("li").first().text() shouldBe messages.BroughtForwardLosses.helpListOne)
-        }
-
-        s"has a second list element of ${messages.BroughtForwardLosses.helpListTwo}" in {
-          assertHTML(helpText)(_.select("li").get(1).text() shouldBe messages.BroughtForwardLosses.helpListTwo)
-        }
-
-        s"has a third list element of ${messages.BroughtForwardLosses.helpListThree}" in {
-          assertHTML(helpText)(_.select("li").get(2).text() shouldBe messages.BroughtForwardLosses.helpListThree)
-        }
       }
 
       s"have a legend with the text ${messages.BroughtForwardLosses.question}" in {
