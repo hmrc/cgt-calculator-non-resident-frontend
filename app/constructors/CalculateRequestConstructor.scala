@@ -26,8 +26,6 @@ object CalculateRequestConstructor {
   def baseCalcUrl(input: SummaryModel): String = {
     customerType(input.customerTypeModel.customerType) +
     priorDisposal(input.otherPropertiesModel.otherProperties) +
-    annualExemptAmount(input.otherPropertiesModel, input.annualExemptAmountModel) +
-    otherPropertiesAmount(input.otherPropertiesModel) +
     isVulnerableTrustee(input.customerTypeModel.customerType, input.disabledTrusteeModel) +
     currentIncome(input.customerTypeModel.customerType, input.currentIncomeModel) +
     personalAllowanceAmount(input.customerTypeModel.customerType, input.personalAllowanceModel) +
@@ -39,20 +37,6 @@ object CalculateRequestConstructor {
   def customerType(customerType: String): String = s"customerType=$customerType"
 
   def priorDisposal(otherProperties: String): String = s"&priorDisposal=$otherProperties"
-
-  def annualExemptAmount(otherPropertiesModel: OtherPropertiesModel, annualExemptAmountModel: Option[AnnualExemptAmountModel]): String = {
-    otherPropertiesModel match {
-      //case OtherPropertiesModel("Yes", Some(data)) if data == 0 => s"&annualExemptAmount=${annualExemptAmountModel.get.annualExemptAmount}"
-      case _ => ""
-    }
-  }
-
-  def otherPropertiesAmount(otherPropertiesModel: OtherPropertiesModel): String = {
-    otherPropertiesModel match {
-      //case OtherPropertiesModel("Yes", Some(data)) => s"&otherPropertiesAmt=$data"
-      case _ => ""
-    }
-  }
 
   def isVulnerableTrustee(customerType: String, disabledTrusteeModel: Option[DisabledTrusteeModel]): String = {
     if (customerType.equals("trustee")) s"&isVulnerable=${disabledTrusteeModel.get.isVulnerable}"
