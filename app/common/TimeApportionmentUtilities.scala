@@ -20,6 +20,6 @@ object TimeApportionmentUtilities {
 
   def percentageOfTotalGain(flatGain: BigDecimal, timeApportionedGain: BigDecimal): Int =
         //This if statement should, by the very nature of the calculations NEVER be triggered but it's a catch all.
-        if(Math.abs(flatGain.toDouble) < Math.abs(timeApportionedGain.toDouble)) throw new Exception("Something impossible happened -- look for losses")
+        if(Math.abs(flatGain.toDouble) < Math.abs(timeApportionedGain.toDouble)) throw new Exception("TA gain larger than FLAT")
         else Math.round(Math.abs(timeApportionedGain.toDouble)/Math.abs(flatGain.toDouble)*100).toInt
 }
