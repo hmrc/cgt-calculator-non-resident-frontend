@@ -93,10 +93,6 @@ trait SummaryController extends FrontendController with ValidActiveSession {
       case (None) => Future.successful(common.DefaultRoutes.missingDataRoute)
     }
 
-    def calculateDetails(summaryData: TotalGainAnswersModel): Future[Option[TotalGainResultsModel]] = {
-      calcConnector.calculateTotalGain(summaryData)
-    }
-
     def calculateTaxOwed(totalGainAnswersModel: TotalGainAnswersModel,
                          privateResidenceReliefModel: Option[PrivateResidenceReliefModel],
                          totalPersonalDetailsCalculationModel: Option[TotalPersonalDetailsCalculationModel],
@@ -129,7 +125,7 @@ trait SummaryController extends FrontendController with ValidActiveSession {
 
     for {
       answers <- answersConstructor.getNRTotalGainAnswers(hc)
-      totalGainResultsModel <- calculateDetails(answers)
+      totalGainResultsModel <- calcConnector.calculateTotalGain(answers)
       privateResidentReliefModel <- getPRRModel(hc, totalGainResultsModel.get)
       finalAnswers <- getFinalTaxAnswers(totalGainResultsModel.get)
       otherReliefsModel <- getAllOtherReliefs(finalAnswers)
