@@ -125,7 +125,7 @@ trait CalculatorConnector {
     case Some(calculationElection) =>
       if(calculationElection.calculationType == CalculationType.rebased) {
         http.GET[BigDecimal](s"$serviceUrl/capital-gains-calculator/non-resident/calculate-total-costs?disposalCosts=${answers.disposalCostsModel.disposalCosts}" +
-          s"&acquisitionCosts=${answers.acquisitionCostsModel.acquisitionCostsAmt}&improvements=${answers.improvementsModel.improvementsAmtAfter.getOrElse(0)}")
+          s"&acquisitionCosts=${answers.rebasedCostsModel.get.rebasedCosts.getOrElse(0)}&improvements=${answers.improvementsModel.improvementsAmtAfter.getOrElse(0)}")
       } else {
         http.GET[BigDecimal](s"$serviceUrl/capital-gains-calculator/non-resident/calculate-total-costs?disposalCosts=${answers.disposalCostsModel.disposalCosts}" +
           s"&acquisitionCosts=${answers.acquisitionCostsModel.acquisitionCostsAmt}" +
