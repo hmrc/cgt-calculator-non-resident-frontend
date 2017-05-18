@@ -131,7 +131,7 @@ trait CalculatorConnector {
           s"&acquisitionCosts=${answers.acquisitionCostsModel.acquisitionCostsAmt}" +
           s"&improvements=${answers.improvementsModel.improvementsAmt.getOrElse(BigDecimal(0)) + answers.improvementsModel.improvementsAmtAfter.getOrElse(BigDecimal(0))}")
       }
-    case _ => throw new Exception("No calculation election retrieved")
+    case _ => Future.successful(throw new Exception("No calculation election supplied"))
   }
 
   def getTaxYear(taxYear: String)(implicit hc: HeaderCarrier): Future[Option[TaxYearModel]] = {
