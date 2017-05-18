@@ -96,10 +96,6 @@ class BoughtForLessViewSpec extends UnitSpec with WithFakeApplication with Mocki
       "have a visually hidden legend" which {
         lazy val legend = document.body().select("legend")
 
-        "has the class visuallyhidden" in {
-          legend.attr("class") shouldBe "visuallyhidden"
-        }
-
         s"has the text ${messages.BoughtForLess.question}" in {
           legend.text() shouldBe messages.BoughtForLess.question
         }

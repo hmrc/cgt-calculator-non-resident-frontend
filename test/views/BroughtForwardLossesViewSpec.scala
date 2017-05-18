@@ -105,10 +105,6 @@ class BroughtForwardLossesViewSpec extends UnitSpec with WithFakeApplication wit
         document.select("legend").text() shouldBe messages.BroughtForwardLosses.question
       }
 
-      "have a legend which is visuallyhidden" in {
-        document.select("legend").attr("class") shouldBe "visuallyhidden"
-      }
-
       "have an input id of 'isClaiming'" in {
         document.select("input").attr("id") should include("isClaiming")
       }
