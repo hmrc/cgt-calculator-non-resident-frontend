@@ -59,13 +59,7 @@ trait SummaryController extends FrontendController with ValidActiveSession {
 
     def getFinalTaxAnswers(totalGainResultsModel: TotalGainResultsModel)
                           (implicit hc: HeaderCarrier): Future[Option[TotalPersonalDetailsCalculationModel]] = {
-      val optionSeq = Seq(totalGainResultsModel.rebasedGain, totalGainResultsModel.timeApportionedGain).flatten
-      val finalSeq = Seq(totalGainResultsModel.flatGain) ++ optionSeq
-      lazy val finalAnswers = answersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers
-
-      if (!finalSeq.forall(_ <= 0)) {
-        finalAnswers
-      } else Future.successful(None)
+      answersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers
     }
 
     def getMaxAEA(totalPersonalDetailsCalculationModel: Option[TotalPersonalDetailsCalculationModel],
