@@ -18,6 +18,7 @@ package constructors
 
 import common.TaxDates
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import common.nonresident.CustomerTypeKeys
 import connectors.CalculatorConnector
 import models._
 import uk.gov.hmrc.play.http.HeaderCarrier
@@ -94,7 +95,7 @@ trait AnswersConstructor {
   }
 
   def getPersonalDetailsAndPreviousCapitalGainsAnswers(implicit hc: HeaderCarrier): Future[Option[TotalPersonalDetailsCalculationModel]] = {
-    val customerType = calculatorConnector.fetchAndGetFormData[CustomerTypeModel](KeystoreKeys.customerType).map(data => data.get)
+    val customerType = Future.successful(CustomerTypeModel(CustomerTypeKeys.individual))
     val currentIncome = calculatorConnector.fetchAndGetFormData[CurrentIncomeModel](KeystoreKeys.currentIncome)
     val personalAllowance = calculatorConnector.fetchAndGetFormData[PersonalAllowanceModel](KeystoreKeys.personalAllowance)
     val isVulnerableTrustee = calculatorConnector.fetchAndGetFormData[DisabledTrusteeModel](KeystoreKeys.disabledTrustee)
