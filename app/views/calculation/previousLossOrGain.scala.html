@@ -12,6 +12,12 @@
 
     <h1 class="heading-xlarge">@Messages("calc.previousLossOrGain.question")</h1>
 
+    <div class="form-hint">
+        <p>@Messages("calc.previousLossOrGain.hintOne")</p>
+
+        <p>@Messages("calc.previousLossOrGain.hintTwo")</p>
+    </div>
+
     @form(action = controllers.routes.PreviousGainOrLossController.submitPreviousGainOrLoss()) {
         @formInputRadioGroup(
             field = previousLossOrGainForm("previousLossOrGain"),

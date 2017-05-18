@@ -50,6 +50,14 @@ class PreviousLossOrGainViewSpec extends UnitSpec with WithFakeApplication with 
       }
     }
 
+    s"has guidance that includes the text '${messages.hintOne}'" in {
+      document.select("article p").get(0).text() shouldBe messages.hintOne
+    }
+
+    s"has guidance that includes the text '${messages.hintTwo}'" in {
+      document.select("article p").get(1).text() shouldBe messages.hintTwo
+    }
+
     "have a legend that" should {
       lazy val legend = document.body.select("legend")
 
