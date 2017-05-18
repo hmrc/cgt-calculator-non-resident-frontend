@@ -50,7 +50,7 @@ object FinalTaxAnswersRequestConstructor {
 
   def currentIncome(customerTypeModel: CustomerTypeModel, currentIncomeModel: Option[CurrentIncomeModel]): String = {
     if(customerTypeModel.customerType == CustomerTypeKeys.individual) {
-      s"&currentIncome=${currentIncomeModel.get.currentIncome}"
+      s"&currentIncome=${currentIncomeModel.getOrElse(CurrentIncomeModel(0)).currentIncome}"
     } else { "" }
   }
 
