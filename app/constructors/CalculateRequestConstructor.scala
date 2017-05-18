@@ -33,7 +33,6 @@ object CalculateRequestConstructor {
     personalAllowanceAmount(input.customerTypeModel.customerType, input.personalAllowanceModel) +
     disposalValue(input.disposalValueModel.disposalValue) +
     disposalCosts(input.disposalCostsModel.disposalCosts) +
-    allowableLossesAmount(input.allowableLossesModel) +
     disposalDate(input.disposalDateModel)
   }
 
@@ -73,13 +72,6 @@ object CalculateRequestConstructor {
   def disposalValue(disposalValue: BigDecimal): String = s"&disposalValue=$disposalValue"
 
   def disposalCosts(disposalCosts: BigDecimal): String = s"&disposalCosts=$disposalCosts"
-
-  def allowableLossesAmount(allowableLossesModel: AllowableLossesModel): String = {
-    s"&allowableLossesAmt=${
-      if (allowableLossesModel.isClaimingAllowableLosses.equals("Yes")) allowableLossesModel.allowableLossesAmt.get
-      else "0"
-    }"
-  }
 
   def disposalDate(disposalDateModel: DisposalDateModel): String = {
     s"&disposalDate=${disposalDateModel.year}-${disposalDateModel.month}-${disposalDateModel.day}"
