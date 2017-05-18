@@ -57,11 +57,6 @@ trait SummaryController extends FrontendController with ValidActiveSession {
       } else Future(None)
     }
 
-    def getFinalTaxAnswers(totalGainResultsModel: TotalGainResultsModel)
-                          (implicit hc: HeaderCarrier): Future[Option[TotalPersonalDetailsCalculationModel]] = {
-      answersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers
-    }
-
     def getMaxAEA(totalPersonalDetailsCalculationModel: Option[TotalPersonalDetailsCalculationModel],
                   taxYear: Option[TaxYearModel]): Future[Option[BigDecimal]] = {
       totalPersonalDetailsCalculationModel match {
@@ -127,7 +122,7 @@ trait SummaryController extends FrontendController with ValidActiveSession {
       answers <- answersConstructor.getNRTotalGainAnswers(hc)
       totalGainResultsModel <- calcConnector.calculateTotalGain(answers)
       privateResidentReliefModel <- getPRRModel(hc, totalGainResultsModel.get)
-      finalAnswers <- getFinalTaxAnswers(totalGainResultsModel.get)
+      finalAnswers <- answersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers
       otherReliefsModel <- getAllOtherReliefs(finalAnswers)
       taxYearModel <- getTaxYear(answers)
       maxAEA <- getMaxAEA(finalAnswers, taxYearModel)
