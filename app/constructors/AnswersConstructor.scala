@@ -16,7 +16,7 @@
 
 package constructors
 
-import common.TaxDates
+import common.{TaxDates, YesNoKeys}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.nonresident.CustomerTypeKeys
 import connectors.CalculatorConnector
@@ -99,12 +99,14 @@ trait AnswersConstructor {
     val currentIncome = calculatorConnector.fetchAndGetFormData[CurrentIncomeModel](KeystoreKeys.currentIncome)
     val personalAllowance = calculatorConnector.fetchAndGetFormData[PersonalAllowanceModel](KeystoreKeys.personalAllowance)
     val isVulnerableTrustee = calculatorConnector.fetchAndGetFormData[DisabledTrusteeModel](KeystoreKeys.disabledTrustee)
-    val otherProperties = calculatorConnector.fetchAndGetFormData[OtherPropertiesModel](KeystoreKeys.otherProperties).map(data => data.get)
+    val otherProperties = calculatorConnector.fetchAndGetFormData[OtherPropertiesModel](KeystoreKeys.otherProperties)
+      .map(data => data.getOrElse(OtherPropertiesModel(YesNoKeys.no)))
     val previousLossOrGain = calculatorConnector.fetchAndGetFormData[PreviousLossOrGainModel](KeystoreKeys.previousLossOrGain)
     val howMuchLoss = calculatorConnector.fetchAndGetFormData[HowMuchLossModel](KeystoreKeys.howMuchLoss)
     val howMuchGain = calculatorConnector.fetchAndGetFormData[HowMuchGainModel](KeystoreKeys.howMuchGain)
     val annualExemptAmount = calculatorConnector.fetchAndGetFormData[AnnualExemptAmountModel](KeystoreKeys.annualExemptAmount)
-    val broughtForwardLosses = calculatorConnector.fetchAndGetFormData[BroughtForwardLossesModel](KeystoreKeys.broughtForwardLosses).map(data => data.get)
+    val broughtForwardLosses = calculatorConnector.fetchAndGetFormData[BroughtForwardLossesModel](KeystoreKeys.broughtForwardLosses)
+      .map(data => data.getOrElse(BroughtForwardLossesModel(isClaiming = false, None)))
 
     for {
       customerType <- customerType
