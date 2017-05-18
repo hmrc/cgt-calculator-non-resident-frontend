@@ -4,7 +4,7 @@
 @(calculationType: String, disposalValue: BigDecimal, acquisitionValue: BigDecimal, totalCosts: BigDecimal, totalGain: BigDecimal = 0,
 percentageTotalGain: BigDecimal = 0, percentageOfGain: Int = 0)(implicit request: Request[_], messages: Messages)
 
-<div id="workedOutSection">
+<div id="workedOutSection" class="summary-underline summary-details-padding">
     <h2>@Messages("calc.summaryPartial.workingOutSectionHeading")</h2>
     <p class="lede">
         @{calculationType match {
@@ -32,21 +32,25 @@ percentageTotalGain: BigDecimal = 0, percentageOfGain: Int = 0)(implicit request
     @if(calculationType == CalculationType.timeApportioned) {
         @summaryNumericRow("totalGain", Messages("calc.summaryPartial.gainMadeOnProperty"), totalGain)
 
-        <div id="percentageOfGain" class="grid-layout grid-layout--no-margin font-small summary-total-margin-top pdf-result-row">
-            <div id="percentageOfGain-text" class="pdf-grid-layout__column--1-2">
-                <strong>@Messages("calc.summaryPartial.percentageOfGain")</strong>
+        <div id="percentageOfGain" class="grid-layout grid-layout--no-margin font-small hint-text">
+            <div id="percentageOfGain-text" class="grid-layout__column--1-2">
+                @Messages("calc.summaryPartial.percentageOfGain")
             </div>
 
-            <div id="percentageOfGain-value" class="pdf-grid-layout__column--1-3 text--right">
-                <strong>@percentageOfGain&percnt;</strong>
+            <div id="percentageOfGain-value" class="grid-layout__column--1-3 text--right">
+                @percentageOfGain&percnt;
             </div>
         </div>
 
-        @summaryNumericRow("percentageTotalGain", Messages("calc.summaryPartial.totalGain"), percentageTotalGain, isTotal = true)
+        @{
+            if(percentageTotalGain > 0) summaryNumericRow("percentageTotalGain", Messages("calc.summaryPartial.totalGain"), percentageTotalGain, isTotal = true)
+            else summaryNumericRow("percentageTotalGain", Messages("calc.summaryPartial.totalLoss"), percentageTotalGain, isTotal = true)
+        }
     }
 
     @{if(calculationType == CalculationType.flat || calculationType == CalculationType.rebased)
-        summaryNumericRow("totalGain", Messages("calc.summaryPartial.totalGain"), totalGain, isTotal = true)
+        if(totalGain > 0) summaryNumericRow("totalGain", Messages("calc.summaryPartial.totalGain"), totalGain, isTotal = true)
+        else summaryNumericRow("totalGain", Messages("calc.summaryPartial.totalLoss"), totalGain, isTotal = true)
     }
 
 </div>

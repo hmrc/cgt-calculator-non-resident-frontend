@@ -101,7 +101,7 @@ class OtherReliefsActionSpec extends UnitSpec with WithFakeApplication with Mock
   )
 
   val calculationResultsModel = CalculationResultsWithTaxOwedModel(
-    TotalTaxOwedModel(100, 100, 20, None, None, 200, 100, None, None, None, None, 0, None),
+    TotalTaxOwedModel(100, 100, 20, None, None, 200, 100, None, None, None, None, 0, None , None , None , None , None , None , None),
     None,
     None
   )

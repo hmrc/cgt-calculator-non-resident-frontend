@@ -28,7 +28,25 @@ class CalculationDetailsWithAllAnswersConstructorSpec extends UnitSpec with With
   "Calling buildSection" should {
     val model = CalculationResultsWithTaxOwedModel(
       TotalTaxOwedModel(
-        1000, 10000, 10, None, None, 12000, -10000, Some(100), Some(1), Some(50), Some(25), 5000, Some(12)
+        1000,
+        10000,
+        10,
+        None,
+        None,
+        12000,
+        -10000,
+        Some(100),
+        Some(1),
+        Some(50),
+        Some(25),
+        5000,
+        Some(12),
+        None,
+        None,
+        None,
+        None,
+        None,
+        None
       ), None, None
     )
 
