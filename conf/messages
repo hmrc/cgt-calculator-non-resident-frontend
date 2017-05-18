@@ -377,7 +377,7 @@ calc.worthWhenGiftedTo.jointOwnership = If you owned the property with someone e
 
 ## Worth When Inherited ##
 calc.worthWhenInherited.question = What was the market value of the property when you inherited it?
-calc.worthWhenInherited.hint = This is the value of the property on the date the previous owner died. You can use the probate valuation.
+calc.worthWhenInherited.hint = This is the value of the property on the date the previous owner died.
 calc.worthWhenInherited.helpText =If you owned the property with someone else, only enter your share of the property value.
 
 ## Worth When Bought For Less ##
