@@ -257,9 +257,11 @@ object MessageLookup {
       val mandatoryCheck = "Please tell us whether you made a gain or loss"
       val loss = "Loss"
       val gain = "Gain"
-      val neither = "Neither, I broke even"
+      val neither = "Neither ('nil gain')"
       val CGTlink = "Capital Gains Tax"
       val previousTaxLink = "Previous tax years"
+      val hintOne = "This is the combined loss or gain on these properties after accounting for costs, reliefs and any Capital Gains allowance (Annual Exempt Amount) you've used."
+      val hintTwo = "You should already have reported these properties to HMRC. Work out if you've made a loss or gain by adding up the final figures from these reports."
     }
 
     object OtherReliefs {
