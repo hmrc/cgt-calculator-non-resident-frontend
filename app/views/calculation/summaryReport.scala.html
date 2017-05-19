@@ -4,7 +4,7 @@
 @import uk.gov.hmrc.play.views.helpers.MoneyPounds
 @import constructors.OtherReliefsDetailsConstructor
 
-@(calculationResult: TotalTaxOwedModel, taxYearModel: TaxYearModel, calculationType: String,
+@(calculationResult: TotalTaxOwedModel, taxYear: TaxYearModel, calculationType: String,
         disposalValue: BigDecimal, acquisitionValue: BigDecimal, totalCosts: BigDecimal,
         flatGain: Option[BigDecimal] = None, reliefsUsed: BigDecimal = 0)(implicit request: Request[_], messages: Messages)
 
@@ -47,7 +47,7 @@
         }
     }
 
-    @summaryPartial(calculationResult, taxYearModel, calculationType,
+    @summaryPartial(calculationResult, taxYear, calculationType,
         disposalValue, acquisitionValue, totalCosts, flatGain, reliefsUsed)
 
     <div id="whatToDoNext" class="form-group">
