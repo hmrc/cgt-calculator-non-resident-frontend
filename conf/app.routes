@@ -143,10 +143,6 @@ POST        /how-much-gain                      controllers.HowMuchGainControlle
 GET         /brought-forward-losses             controllers.BroughtForwardLossesController.broughtForwardLosses
 POST        /brought-forward-losses             controllers.BroughtForwardLossesController.submitBroughtForwardLosses
 
-#Allowable Losses
-GET         /allowable-losses                   controllers.AllowableLossesController.allowableLosses
-POST        /allowable-losses                   controllers.AllowableLossesController.submitAllowableLosses
-
 #Calculation Election
 GET         /calculation-election               controllers.CalculationElectionController.calculationElection
 POST        /calculation-election               controllers.CalculationElectionController.submitCalculationElection

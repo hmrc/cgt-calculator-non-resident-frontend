@@ -26,34 +26,17 @@ object CalculateRequestConstructor {
   def baseCalcUrl(input: SummaryModel): String = {
     customerType(input.customerTypeModel.customerType) +
     priorDisposal(input.otherPropertiesModel.otherProperties) +
-    annualExemptAmount(input.otherPropertiesModel, input.annualExemptAmountModel) +
-    otherPropertiesAmount(input.otherPropertiesModel) +
     isVulnerableTrustee(input.customerTypeModel.customerType, input.disabledTrusteeModel) +
     currentIncome(input.customerTypeModel.customerType, input.currentIncomeModel) +
     personalAllowanceAmount(input.customerTypeModel.customerType, input.personalAllowanceModel) +
     disposalValue(input.disposalValueModel.disposalValue) +
     disposalCosts(input.disposalCostsModel.disposalCosts) +
-    allowableLossesAmount(input.allowableLossesModel) +
     disposalDate(input.disposalDateModel)
   }
 
   def customerType(customerType: String): String = s"customerType=$customerType"
 
   def priorDisposal(otherProperties: String): String = s"&priorDisposal=$otherProperties"
-
-  def annualExemptAmount(otherPropertiesModel: OtherPropertiesModel, annualExemptAmountModel: Option[AnnualExemptAmountModel]): String = {
-    otherPropertiesModel match {
-      //case OtherPropertiesModel("Yes", Some(data)) if data == 0 => s"&annualExemptAmount=${annualExemptAmountModel.get.annualExemptAmount}"
-      case _ => ""
-    }
-  }
-
-  def otherPropertiesAmount(otherPropertiesModel: OtherPropertiesModel): String = {
-    otherPropertiesModel match {
-      //case OtherPropertiesModel("Yes", Some(data)) => s"&otherPropertiesAmt=$data"
-      case _ => ""
-    }
-  }
 
   def isVulnerableTrustee(customerType: String, disabledTrusteeModel: Option[DisabledTrusteeModel]): String = {
     if (customerType.equals("trustee")) s"&isVulnerable=${disabledTrusteeModel.get.isVulnerable}"
@@ -73,13 +56,6 @@ object CalculateRequestConstructor {
   def disposalValue(disposalValue: BigDecimal): String = s"&disposalValue=$disposalValue"
 
   def disposalCosts(disposalCosts: BigDecimal): String = s"&disposalCosts=$disposalCosts"
-
-  def allowableLossesAmount(allowableLossesModel: AllowableLossesModel): String = {
-    s"&allowableLossesAmt=${
-      if (allowableLossesModel.isClaimingAllowableLosses.equals("Yes")) allowableLossesModel.allowableLossesAmt.get
-      else "0"
-    }"
-  }
 
   def disposalDate(disposalDateModel: DisposalDateModel): String = {
     s"&disposalDate=${disposalDateModel.year}-${disposalDateModel.month}-${disposalDateModel.day}"

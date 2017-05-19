@@ -39,7 +39,6 @@ class CalculateRequestConstructorSpec extends UnitSpec {
     DisposalValueModel(150000),
     AcquisitionCostsModel(0),
     DisposalCostsModel(0),
-    AllowableLossesModel("No", None),
     CalculationElectionModel("flat"),
     OtherReliefsModel(0),
     OtherReliefsModel(0),
@@ -50,7 +49,7 @@ class CalculateRequestConstructorSpec extends UnitSpec {
   "CalculateRequest Constructor" should {
     "return a string from the baseCalcUrl as an individual with no prior disposal" in {
       CalculateRequestConstructor.baseCalcUrl(sumModel) shouldEqual "customerType=individual&priorDisposal=No&currentIncome=1000" +
-        "&personalAllowanceAmt=11100&disposalValue=150000&disposalCosts=0&allowableLossesAmt=0&disposalDate=2010-10-10"
+        "&personalAllowanceAmt=11100&disposalValue=150000&disposalCosts=0&disposalDate=2010-10-10"
     }
 
     /* in {
@@ -471,27 +470,6 @@ class CalculateRequestConstructorSpec extends UnitSpec {
     "return a value of 2000" in {
       val result = CalculateRequestConstructor.disposalCosts(2000)
       result shouldBe "&disposalCosts=2000"
-    }
-  }
-
-  "Calling allowableLossesAmount" should {
-
-    "return a value of 10000" in {
-      val model = AllowableLossesModel("Yes", Some(BigDecimal(10000)))
-      val result = CalculateRequestConstructor.allowableLossesAmount(model)
-      result shouldBe "&allowableLossesAmt=10000"
-    }
-
-    "return a value of 2000" in {
-      val model = AllowableLossesModel("Yes", Some(BigDecimal(2000)))
-      val result = CalculateRequestConstructor.allowableLossesAmount(model)
-      result shouldBe "&allowableLossesAmt=2000"
-    }
-
-    "return a value of 0" in {
-      val model = AllowableLossesModel("No", None)
-      val result = CalculateRequestConstructor.allowableLossesAmount(model)
-      result shouldBe "&allowableLossesAmt=0"
     }
   }
 

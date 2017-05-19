@@ -55,7 +55,7 @@ object MessageLookup {
 
   object NonResident extends Common {
 
-    val pageHeading = "Calculate your non-resident Capital Gains Tax"
+    val pageHeading = "Calculate your Non-Resident Capital Gains Tax"
     val errorInvalidDate = "Enter a real date"
     val errorRealNumber = "Enter a number without commas, for example 10000.00"
 
@@ -175,7 +175,7 @@ object MessageLookup {
       val errorNegativeNumber = "Enter a positive number for your selling costs"
       val errorDecimalPlaces = "There are too many numbers after the decimal point in your selling costs"
 
-      val jointOwnership = "If you owned the property with someone else, only enter your share of the costs."
+      val jointOwnership = "If you owned the property with someone else, only enter your share of the costs, as agreed with your co-owner."
     }
 
     object DisposalDate {
@@ -257,9 +257,11 @@ object MessageLookup {
       val mandatoryCheck = "Please tell us whether you made a gain or loss"
       val loss = "Loss"
       val gain = "Gain"
-      val neither = "Neither, I broke even"
+      val neither = "Neither ('nil gain')"
       val CGTlink = "Capital Gains Tax"
       val previousTaxLink = "Previous tax years"
+      val hintOne = "This is the combined loss or gain on these properties after accounting for costs, reliefs and any Capital Gains allowance (Annual Exempt Amount) you've used."
+      val hintTwo = "You should already have reported these properties to HMRC. Work out if you've made a loss or gain by adding up the final figures from these reports."
     }
 
     object OtherReliefs {
@@ -334,7 +336,7 @@ object MessageLookup {
     object RebasedCosts {
       val question = "Did you pay to have the property valued at 5 April 2015?"
       val inputQuestion = "How much did it cost to get the property valued?"
-      val jointOwnership = "If you owned the property with someone else, only enter your share of the cost."
+      val jointOwnership = "If you owned the property with someone else, only enter your share of the cost, as agreed with your co-owner."
       val errorNegative = "Enter a positive number for your costs"
       val errorNoValue = "Enter the value for your costs"
       val errorDecimalPlaces = "There are too many numbers after the decimal point in your costs"
@@ -351,7 +353,7 @@ object MessageLookup {
         "You might have to pay more if we think your estimate is unrealistic."
       val jointOwnership = "If you owned the property with someone else, only enter your share of the property value."
       val additionalContentTitle = "Why we're asking for this"
-      val helpHiddenContent = "As you're not a UK resident, you only have to report UK property you've sold or given away since 5 April 2015."
+      val helpHiddenContent = "If you're not a UK resident, you only have to report UK property you've sold or given away since 5 April 2015."
 
       val errorNoValue = "Enter a value for your property on 5 April 2015"
       val errorNegative = "Enter a positive value for your property on 5 April 2015"
@@ -395,7 +397,7 @@ object MessageLookup {
     //Worth When Inherited messages
     object WorthWhenInherited {
       val question = "What was the market value of the property when you inherited it?"
-      val hint = "This is the value of the property on the date the previous owner died. You can use the probate valuation."
+      val hint = "This is the value of the property on the date the previous owner died."
       val helpText = "If you owned the property with someone else, only enter your share of the property value."
     }
 
@@ -425,10 +427,7 @@ object MessageLookup {
     object BroughtForwardLosses {
       val question = "Do you have losses you want to bring forward from previous tax years?"
       val inputQuestion = "How much would you like to bring forward?"
-      val helpTitle = "These are losses on UK properties that:"
-      val helpListOne = "are covered by Capital Gains Tax"
-      val helpListTwo = "you've declared within 4 years of making them"
-      val helpListThree = "you've not already used to reduce the amount of Capital Gains Tax you had to pay"
+      val helpText = "These are unused losses that are covered by Capital Gains Tax and that you've already reported to HMRC."
       val linkOne = "Capital Gains Tax"
       val linkTwo = "Previous tax years"
       val errorDecimalPlaces = "There are too many numbers after the decimal point in your brought forward loss"
@@ -477,20 +476,6 @@ object MessageLookup {
     object Report {
       val logoText = "HM Revenue & Customs"
       val title = "Calculate your Capital Gains Tax"
-    }
-
-    object AllowableLosses {
-      val yesNoQuestion = "Are you claiming any allowable losses from the 2016/2017 tax year?"
-      val inputQuestion = "What's the total value of your allowable losses?"
-      val helpTextTitle = "What are allowable losses?"
-      val helpTextLead = "They're losses you've made on UK properties that:"
-      val helpTextBulletOne = "are covered by Capital Gains Tax"
-      val helpTextBulletTwo = "you've declared to HMRC within 4 years of making the loss"
-      val helpTextBulletThree = "you haven't already used in an allowable losses claim"
-
-      val errorCompulsoryValue = "Enter the value of your allowable losses"
-      val errorMinimumAmount = "Enter a positive number for your allowable losses"
-      val errorTooManyDecimals = "There are too many numbers after the decimal point in your allowable losses"
     }
   }
 
@@ -973,11 +958,13 @@ object MessageLookup {
     val rebasedCalculationSummary = "How much you've gained on the property since"
     val rebasedCalculationSummaryDate = "5 April 2015"
     val yourTotalGain = "Your total gain"
+    val yourTotalLoss = "Your total loss"
     val valueWhenSold = "Value when you sold the property"
     val valueAtTaxStart = "Minus the value of the property on 5 April 2015"
     val valueWhenAcquired = "Minus the value of the property when you acquired it"
     val totalCosts = "Minus all costs, including improvements"
     val totalGain = "Total gain"
+    val totalLoss = "Total loss"
     val gainMadeOnProperty = "The gain you've made on the property"
     val percentageTotalGain = "The percentage gain you've made since 5 April 2015"
 

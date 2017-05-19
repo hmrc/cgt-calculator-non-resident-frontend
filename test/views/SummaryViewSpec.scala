@@ -18,7 +18,7 @@ package views
 
 import assets.MessageLookup.{NonResident => messages}
 import controllers.helpers.FakeRequestHelper
-import models.QuestionAnswerModel
+import models.{QuestionAnswerModel, TaxYearModel, TotalTaxOwedModel}
 import org.jsoup.Jsoup
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.summary
@@ -28,14 +28,11 @@ import play.api.Play.current
 class SummaryViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
 
 
-
   "Summary view" when {
-
     "supplied with a disposal date within the valid tax years" should {
-      val questionAnswer = QuestionAnswerModel[String]("text", "1000", "test-question", None)
-      val seqQuestionAnswers = Seq(questionAnswer, questionAnswer)
-
-      lazy val view = summary(seqQuestionAnswers, "back-link", displayDateWarning = false, "flat", None)
+      val totalTaxOwedModel = TotalTaxOwedModel(100000, 500, 20, None, None, 500, 500, None, None, None, None, 0, None, None, None, None, None, None, None)
+      val taxYearModel: TaxYearModel = TaxYearModel("2016/17", isValidYear = true, "2016/17")
+      lazy val view = summary(totalTaxOwedModel, taxYearModel, "flat", 1000.0, 100, 100, "back-link")
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${messages.Summary.title}'" in {
@@ -44,10 +41,6 @@ class SummaryViewSpec extends UnitSpec with WithFakeApplication with FakeRequest
 
       "have a back link" which {
         lazy val backLink = document.body().select("#back-link")
-
-        "has a class of 'back-link'" in {
-          backLink.attr("class") shouldBe "back-link"
-        }
 
         "has the text" in {
           backLink.text shouldBe messages.back
@@ -65,40 +58,13 @@ class SummaryViewSpec extends UnitSpec with WithFakeApplication with FakeRequest
       "have a heading" which {
         lazy val heading = document.body().select("h1")
 
-        "has a class of heading-xlarge" in {
-          heading.attr("class") shouldBe "heading-xlarge"
+        s"has a span with the text '£100,000.00'" in {
+          heading.text() shouldBe "£100,000.00"
         }
-
-        s"has a span with the text ${messages.Summary.calculationDetailsTitle}" in {
-          heading.text() shouldBe messages.Summary.calculationDetailsTitle
-        }
-      }
-
-      "not have a tax year warning" in {
-        document.select("div.notice-wrapper").size() shouldBe 0
-      }
-
-      "have a section heading" which {
-
-        s"has the text ${messages.Summary.amountOwed}" in {
-          document.select("#amount-you-owe-question span").text() shouldEqual messages.Summary.amountOwed
-        }
-
-        s"has a value of £0.00" in {
-          document.select("#amount-you-owe-value span").text() shouldEqual "£0.00"
-        }
-      }
-
-      "have a section for calculation details" in {
-        document.select("#calculationDetails") shouldNot be("")
       }
 
       "have a what to do next section" which {
         lazy val whatToDoNext = document.select("#whatToDoNext")
-
-        "have a heading with the class 'heading-medium'" in {
-          whatToDoNext.select("h2").attr("class") shouldBe "heading-medium"
-        }
 
         "has the heading 'What to do next'" in {
           whatToDoNext.select("h2").text() shouldBe messages.Summary.whatToDoNextText
@@ -106,18 +72,6 @@ class SummaryViewSpec extends UnitSpec with WithFakeApplication with FakeRequest
 
         "should have the text describing what to do next" in {
           whatToDoNext.select("p").text() shouldBe s"${messages.Summary.whatToDoNextContent}"
-        }
-      }
-
-      "have a link to start again" which {
-        lazy val startAgain = document.select("a.button")
-
-        "have the text 'Continue" in {
-          startAgain.text() shouldBe messages.continue
-        }
-
-        "have a link to /calculate-your-capital-gains/non-resident/what-next" in {
-          startAgain.attr("href") shouldBe controllers.routes.WhatNextController.whatNext().url
         }
       }
 
@@ -132,12 +86,24 @@ class SummaryViewSpec extends UnitSpec with WithFakeApplication with FakeRequest
           savePDF.attr("href") shouldBe controllers.routes.ReportController.summaryReport().url
         }
       }
+
+      "have a continue button" which {
+        lazy val continue = document.select("a.button")
+
+        "have the text 'Continue" in {
+          continue.text() shouldBe messages.continue
+        }
+
+        "have a link to /calculate-your-capital-gains/non-resident/what-next" in {
+          continue.attr("href") shouldBe controllers.routes.WhatNextController.whatNext().url
+        }
+      }
     }
 
-    "supplied with a disposal date within the valid tax years" should {
-      val questionAnswer = QuestionAnswerModel[String]("text", "1000", "test-question", None)
-      val seqQuestionAnswers = Seq(questionAnswer, questionAnswer)
-      lazy val view = summary(seqQuestionAnswers, "back-link", displayDateWarning = true, "flat", Some(100))
+    "supplied with a disposal date not within the valid tax years" should {
+      val totalTaxOwedModel = TotalTaxOwedModel(500, 500, 20, None, None, 500, 500, None, None, None, None, 0, None, None, None, None, None, None, None)
+      val taxYearModel: TaxYearModel = TaxYearModel("2018/19", isValidYear = false, "2017/18")
+      lazy val view = summary(totalTaxOwedModel, taxYearModel, "flat", 1000.0, 100, 100, "back-url")
       lazy val document = Jsoup.parse(view.body)
 
       "display a tax year warning" in {

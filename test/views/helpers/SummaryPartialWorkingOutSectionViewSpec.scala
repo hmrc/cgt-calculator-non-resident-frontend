@@ -29,7 +29,7 @@ class SummaryPartialWorkingOutSectionViewSpec extends UnitSpec with WithFakeAppl
 
   "The workingOutSummary partial" when {
 
-    "supplied with a flat calculation" should {
+    "supplied with a flat calculation and a gain" should {
 
       lazy val view = helpers.summaryPartialWorkingOutSection(
         CalculationType.flat,
@@ -101,14 +101,14 @@ class SummaryPartialWorkingOutSectionViewSpec extends UnitSpec with WithFakeAppl
       }
     }
 
-    "supplied with a rebased calculation" should {
+    "supplied with a rebased calculation and a loss" should {
 
       lazy val view = helpers.summaryPartialWorkingOutSection(
         CalculationType.rebased,
         disposalValue = 100000,
-        acquisitionValue = 20000,
+        acquisitionValue = 120000,
         totalCosts = 4000,
-        totalGain = 50000
+        totalGain = -20000
       )(fakeRequestWithSession, applicationMessages)
       lazy val doc = Jsoup.parse(view.body)
 
@@ -120,8 +120,8 @@ class SummaryPartialWorkingOutSectionViewSpec extends UnitSpec with WithFakeAppl
         doc.select("p.lede").text shouldBe s"${messages.rebasedCalculationSummary} ${messages.rebasedCalculationSummaryDate}"
       }
 
-      s"have the text ${messages.yourTotalGain}" in {
-        doc.select("h3").text shouldBe messages.yourTotalGain
+      s"have the text ${messages.yourTotalLoss}" in {
+        doc.select("h3").text shouldBe messages.yourTotalLoss
       }
 
       "has a row for disposal value" which {
@@ -139,8 +139,8 @@ class SummaryPartialWorkingOutSectionViewSpec extends UnitSpec with WithFakeAppl
           doc.select("#acquisitionValue-text").text shouldBe messages.valueAtTaxStart
         }
 
-        "has the value '£20,000'" in {
-          doc.select("#acquisitionValue-amount").text shouldBe "£20,000"
+        "has the value '£120,000'" in {
+          doc.select("#acquisitionValue-amount").text shouldBe "£120,000"
         }
       }
 
@@ -155,12 +155,12 @@ class SummaryPartialWorkingOutSectionViewSpec extends UnitSpec with WithFakeAppl
       }
 
       "has a row for the total gain" which {
-        s"has the text '${messages.totalGain}'" in {
-          doc.select("#totalGain-text").text shouldBe messages.totalGain
+        s"has the text '${messages.totalLoss}'" in {
+          doc.select("#totalGain-text").text shouldBe messages.totalLoss
         }
 
-        "has the value '£50,000'" in {
-          doc.select("#totalGain-amount").text shouldBe "£50,000"
+        "has the value '£20,000'" in {
+          doc.select("#totalGain-amount").text shouldBe "£20,000"
         }
       }
 
@@ -173,15 +173,13 @@ class SummaryPartialWorkingOutSectionViewSpec extends UnitSpec with WithFakeAppl
       }
     }
 
-    "supplied with a time-apportioned calculation" should {
+    "supplied with a time-apportioned calculation and a zero gain" should {
 
       lazy val view = helpers.summaryPartialWorkingOutSection(
         CalculationType.timeApportioned,
         disposalValue = 100000,
         acquisitionValue = 20000,
         totalCosts = 4000,
-        totalGain = 60000,
-        percentageTotalGain = 30000,
         percentageOfGain = 50
       )(fakeRequestWithSession, applicationMessages)
       lazy val doc = Jsoup.parse(view.body)
@@ -233,8 +231,8 @@ class SummaryPartialWorkingOutSectionViewSpec extends UnitSpec with WithFakeAppl
           doc.select("#totalGain-text").text shouldBe messages.gainMadeOnProperty
         }
 
-        "has the value '£60,000" in {
-          doc.select("#totalGain-amount").text shouldBe "£60,000"
+        "has the value '£0" in {
+          doc.select("#totalGain-amount").text shouldBe "£0"
         }
       }
 
@@ -253,8 +251,8 @@ class SummaryPartialWorkingOutSectionViewSpec extends UnitSpec with WithFakeAppl
           doc.select("#percentageTotalGain-text").text shouldBe messages.totalGain
         }
 
-        "has the value '£30,000'" in {
-          doc.select("#percentageTotalGain-amount").text shouldBe "£30,000"
+        "has the value '£0'" in {
+          doc.select("#percentageTotalGain-amount").text shouldBe "£0"
         }
       }
     }
