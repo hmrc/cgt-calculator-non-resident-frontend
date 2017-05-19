@@ -57,17 +57,6 @@ trait SummaryController extends FrontendController with ValidActiveSession {
       } else Future(None)
     }
 
-    def getFinalTaxAnswers(totalGainResultsModel: TotalGainResultsModel)
-                          (implicit hc: HeaderCarrier): Future[Option[TotalPersonalDetailsCalculationModel]] = {
-      val optionSeq = Seq(totalGainResultsModel.rebasedGain, totalGainResultsModel.timeApportionedGain).flatten
-      val finalSeq = Seq(totalGainResultsModel.flatGain) ++ optionSeq
-      lazy val finalAnswers = answersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers
-
-      if (!finalSeq.forall(_ <= 0)) {
-        finalAnswers
-      } else Future.successful(None)
-    }
-
     def getMaxAEA(totalPersonalDetailsCalculationModel: Option[TotalPersonalDetailsCalculationModel],
                   taxYear: Option[TaxYearModel]): Future[Option[BigDecimal]] = {
       totalPersonalDetailsCalculationModel match {
@@ -97,10 +86,6 @@ trait SummaryController extends FrontendController with ValidActiveSession {
       case (Some(data)) =>
         Future.successful(routes.CheckYourAnswersController.checkYourAnswers().url)
       case (None) => Future.successful(common.DefaultRoutes.missingDataRoute)
-    }
-
-    def calculateDetails(summaryData: TotalGainAnswersModel): Future[Option[TotalGainResultsModel]] = {
-      calcConnector.calculateTotalGain(summaryData)
     }
 
     def calculateTaxOwed(totalGainAnswersModel: TotalGainAnswersModel,
@@ -135,9 +120,9 @@ trait SummaryController extends FrontendController with ValidActiveSession {
 
     for {
       answers <- answersConstructor.getNRTotalGainAnswers(hc)
-      totalGainResultsModel <- calculateDetails(answers)
+      totalGainResultsModel <- calcConnector.calculateTotalGain(answers)
       privateResidentReliefModel <- getPRRModel(hc, totalGainResultsModel.get)
-      finalAnswers <- getFinalTaxAnswers(totalGainResultsModel.get)
+      finalAnswers <- answersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers
       otherReliefsModel <- getAllOtherReliefs(finalAnswers)
       taxYearModel <- getTaxYear(answers)
       maxAEA <- getMaxAEA(finalAnswers, taxYearModel)

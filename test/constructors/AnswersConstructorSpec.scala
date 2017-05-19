@@ -17,6 +17,7 @@
 package constructors
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import common.nonresident.CustomerTypeKeys
 import connectors.CalculatorConnector
 import models._
 import org.mockito.ArgumentMatchers
@@ -290,7 +291,7 @@ class AnswersConstructorSpec extends UnitSpec with MockitoSugar {
   "Calling .getPersonalDetailsAndPreviousCapitalGainsAnswers" should {
 
     val model = TotalPersonalDetailsCalculationModel(
-      CustomerTypeModel("Individual"),
+      CustomerTypeModel(CustomerTypeKeys.individual),
       Some(CurrentIncomeModel(10000)),
       Some(PersonalAllowanceModel(100)),
       Some(DisabledTrusteeModel("Yes")),
