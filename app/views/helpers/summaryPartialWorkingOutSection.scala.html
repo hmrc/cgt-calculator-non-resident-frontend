@@ -15,7 +15,7 @@ percentageTotalGain: BigDecimal = 0, percentageOfGain: Int = 0)(implicit request
         }
     </p>
 
-    <h3>@Messages("calc.summaryPartial.yourTotalGain")</h3>
+    <h3>@if(totalGain >= 0){@Messages("calc.summaryPartial.yourTotalGain")}else{@Messages("calc.summaryPartial.yourTotalLoss")}</h3>
 
     @summaryNumericRow("disposalValue",Messages("calc.summaryPartial.valueWhenSold"), disposalValue)
 
@@ -43,13 +43,13 @@ percentageTotalGain: BigDecimal = 0, percentageOfGain: Int = 0)(implicit request
         </div>
 
         @{
-            if(percentageTotalGain > 0) summaryNumericRow("percentageTotalGain", Messages("calc.summaryPartial.totalGain"), percentageTotalGain, isTotal = true)
+            if(percentageTotalGain >= 0) summaryNumericRow("percentageTotalGain", Messages("calc.summaryPartial.totalGain"), percentageTotalGain, isTotal = true)
             else summaryNumericRow("percentageTotalGain", Messages("calc.summaryPartial.totalLoss"), percentageTotalGain, isTotal = true)
         }
     }
 
     @{if(calculationType == CalculationType.flat || calculationType == CalculationType.rebased)
-        if(totalGain > 0) summaryNumericRow("totalGain", Messages("calc.summaryPartial.totalGain"), totalGain, isTotal = true)
+        if(totalGain >= 0) summaryNumericRow("totalGain", Messages("calc.summaryPartial.totalGain"), totalGain, isTotal = true)
         else summaryNumericRow("totalGain", Messages("calc.summaryPartial.totalLoss"), totalGain, isTotal = true)
     }
 
