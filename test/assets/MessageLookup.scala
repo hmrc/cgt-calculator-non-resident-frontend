@@ -958,11 +958,13 @@ object MessageLookup {
     val rebasedCalculationSummary = "How much you've gained on the property since"
     val rebasedCalculationSummaryDate = "5 April 2015"
     val yourTotalGain = "Your total gain"
+    val yourTotalLoss = "Your total loss"
     val valueWhenSold = "Value when you sold the property"
     val valueAtTaxStart = "Minus the value of the property on 5 April 2015"
     val valueWhenAcquired = "Minus the value of the property when you acquired it"
     val totalCosts = "Minus all costs, including improvements"
     val totalGain = "Total gain"
+    val totalLoss = "Total loss"
     val gainMadeOnProperty = "The gain you've made on the property"
     val percentageTotalGain = "The percentage gain you've made since 5 April 2015"
 
