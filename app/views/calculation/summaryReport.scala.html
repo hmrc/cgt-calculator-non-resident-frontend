@@ -4,12 +4,9 @@
 @import uk.gov.hmrc.play.views.helpers.MoneyPounds
 @import constructors.OtherReliefsDetailsConstructor
 
-@(taxYearModel: TaxYearModel,
-        taxYear: TaxYearModel,
-        taxOwed: BigDecimal,
-        aeaRemaining: BigDecimal,
-        inYearLossesRemaining: Option[BigDecimal] = None,
-        broughtForwardLossesRemaining: Option[BigDecimal] = None)(implicit request: Request[_], messages: Messages)
+@(calculationResult: TotalTaxOwedModel, taxYearModel: TaxYearModel, calculationType: String,
+        disposalValue: BigDecimal, acquisitionValue: BigDecimal, totalCosts: BigDecimal,
+        flatGain: Option[BigDecimal] = None, reliefsUsed: BigDecimal = 0)(implicit request: Request[_], messages: Messages)
 
 <!DOCTYPE html>
 <html>
@@ -50,8 +47,8 @@
         }
     }
 
-    @summaryPartial(taxOwed, taxYearModel, aeaRemaining, inYearLossesRemaining, broughtForwardLossesRemaining)
-
+    @summaryPartial(calculationResult, taxYearModel, calculationType,
+        disposalValue, acquisitionValue, totalCosts, flatGain, reliefsUsed)
 
     <div id="whatToDoNext" class="form-group">
         <h2 class="heading-medium">@Messages("calc.summary.next.fullMessage")</h2>
