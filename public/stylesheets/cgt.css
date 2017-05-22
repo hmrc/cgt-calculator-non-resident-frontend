@@ -435,10 +435,11 @@ span.election-text > .block {
 
 .summary-details-padding {
     padding-top: 1.0em;
+    padding-bottom: 1em;
 }
 
 .hint-text {
-    color: #6f777b;
+    color: #6f777b
 }
 
 .check-your-answers-report {
@@ -446,6 +447,6 @@ span.election-text > .block {
 }
 
 .report-answer-row {
-    padding-top: 0.75em;
-    padding-bottom: 0.75em;
+    padding-top: 1em;
+    padding-bottom: 1em;
 }

@@ -4,7 +4,7 @@
 
 <div id="yourTaxableGain" class="summary-underline summary-details-padding">
 
-    @if(gain >= 0){
+    @if(gain > 0){
             <h3>@Messages("calc.summaryPartial.yourTaxableGain")</h3>
             @summaryNumericRow("gain", Messages("calc.summaryPartial.totalGain"), gain)
             @summaryNumericRow("minusDeductions", Messages("calc.summaryPartial.minusDeductions"), totalDeductions)
