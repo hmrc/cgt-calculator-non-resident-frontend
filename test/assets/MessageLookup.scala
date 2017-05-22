@@ -469,6 +469,11 @@ object MessageLookup {
       val lossesCarriedForward = "Loss carried forward"
       val taxYearWarning = "Your total might be less accurate because you didn't sell or give away your property in this tax year"
       val saveAsPdf = "Download your Capital Gains Tax calculation (PDF, under 25kB)"
+      val yourAnswers = "You've told us"
+      val noticeSummary: String = "Your result may be inaccurate because the calculator does not support the date of sale you entered. " +
+        "Do not use these figures to report your Capital Gains Tax."
+      val whoOwnedIt = "Who owned the property?"
+
 
       def basedOnYear(year: String): String = s"These figures are based on the tax rates from the $year tax year"
     }

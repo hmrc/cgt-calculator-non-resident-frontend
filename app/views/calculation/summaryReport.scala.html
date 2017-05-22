@@ -40,17 +40,6 @@ disposalValue: BigDecimal, acquisitionValue: BigDecimal, totalCosts: BigDecimal,
         </div>
     </span>
 
-    @{if (!taxYearModel.isValidYear) {
-        <div class="notice-wrapper">
-            <div class="notice">
-                <strong class="bold-small">
-                    {Messages("calc.base.summary.dateWarning", taxYearModel.calculationTaxYear)}
-                </strong>
-            </div>
-        </div>
-        }
-    }
-
     @summaryPartial(calculationResult, taxYearModel, calculationType,
         disposalValue, acquisitionValue, totalCosts, flatGain, reliefsUsed)
 

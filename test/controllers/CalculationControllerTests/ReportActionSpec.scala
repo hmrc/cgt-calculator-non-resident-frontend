@@ -27,6 +27,7 @@ import assets.MessageLookup.{SummaryPage => messages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import models.{TaxYearModel, _}
+import common.TestModels
 import common.nonresident.CalculationType
 import common.nonresident.CustomerTypeKeys
 import constructors.AnswersConstructor
@@ -99,6 +100,9 @@ class ReportActionSpec extends UnitSpec with WithFakeApplication with FakeReques
       ArgumentMatchers.eq(KeystoreKeys.otherReliefsTA))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(None))
 
+    when(mockCalculatorConnector.calculateTotalCosts(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      .thenReturn(Future.successful(BigDecimal(1000.00)))
+
     new ReportController {
       override val calcConnector: CalculatorConnector = mockCalculatorConnector
       override val answersConstructor: AnswersConstructor = mockAnswersConstructor
@@ -156,7 +160,8 @@ class ReportActionSpec extends UnitSpec with WithFakeApplication with FakeReques
         Some(TotalGainResultsModel(1000, None, None)),
         Some(taxYear),
         CalculationElectionModel(CalculationType.flat),
-        finalSummaryModel = finalAnswersModel
+        finalSummaryModel = finalAnswersModel,
+        taxOwedResult = Some(TestModels.calculationResultsModelWithAll)
       )
 
       lazy val result = target.summaryReport(fakeRequestWithSession)
@@ -190,7 +195,8 @@ class ReportActionSpec extends UnitSpec with WithFakeApplication with FakeReques
         CalculationElectionModel(CalculationType.flat),
         Some(PrivateResidenceReliefModel("Yes", Some(200), None)),
         Some(CalculationResultsWithPRRModel(GainsAfterPRRModel(10000, 2000, 1000), None, None)),
-        finalSummaryModel = finalAnswersModel
+        finalSummaryModel = finalAnswersModel,
+        taxOwedResult = Some(TestModels.calculationResultsModelWithAll)
       )
 
       lazy val result = target.summaryReport(fakeRequestWithSession)
@@ -212,7 +218,7 @@ class ReportActionSpec extends UnitSpec with WithFakeApplication with FakeReques
       }
     }
 
-      "the calculation chosen is rebased" should {
+    "the calculation chosen is rebased" should {
 
       lazy val taxYear = TaxYearModel("2016-12-12", isValidYear = true, "16")
 
@@ -221,7 +227,8 @@ class ReportActionSpec extends UnitSpec with WithFakeApplication with FakeReques
         Some(TotalGainResultsModel(1000, Some(2000), None)),
         Some(taxYear),
         CalculationElectionModel(CalculationType.rebased),
-        finalSummaryModel = finalAnswersModel
+        finalSummaryModel = finalAnswersModel,
+        taxOwedResult = Some(TestModels.calculationResultsModelWithRebased)
       )
 
       lazy val result = target.summaryReport(fakeRequestWithSession)
@@ -253,7 +260,8 @@ class ReportActionSpec extends UnitSpec with WithFakeApplication with FakeReques
         Some(TotalGainResultsModel(1000, None, Some(3000))),
         Some(taxYear),
         CalculationElectionModel(CalculationType.timeApportioned),
-        finalSummaryModel = finalAnswersModel
+        finalSummaryModel = finalAnswersModel,
+        taxOwedResult = Some(TestModels.calculationResultsModelWithTA)
       )
 
       lazy val result = target.summaryReport(fakeRequestWithSession)
@@ -283,7 +291,8 @@ class ReportActionSpec extends UnitSpec with WithFakeApplication with FakeReques
         Some(TotalGainResultsModel(1000, None, None)),
         Some(taxYear),
         CalculationElectionModel(CalculationType.flat),
-        finalSummaryModel = finalAnswersModel
+        finalSummaryModel = finalAnswersModel,
+        taxOwedResult = Some(TestModels.calculationResultsModelWithAll)
       )
 
       lazy val result = target.summaryReport(fakeRequest)

@@ -34,28 +34,54 @@ class SummaryReportViewSpec extends UnitSpec with WithFakeApplication with FakeR
 
     "provided with a valid tax year" should {
 
-      lazy val taxYear = TaxYearModel("2016/17", true, "2016/17")
+      lazy val taxYear = TaxYearModel("2016/17", isValidYear = true, "2016/17")
 
-      val answersModel = TotalGainAnswersModel(DisposalDateModel(5, 10, 2016),
-        SoldOrGivenAwayModel(true),
-        Some(SoldForLessModel(false)),
-        DisposalValueModel(1000),
-        DisposalCostsModel(100),
-        Some(HowBecameOwnerModel("Gifted")),
-        Some(BoughtForLessModel(false)),
-        AcquisitionValueModel(2000),
-        AcquisitionCostsModel(200),
-        AcquisitionDateModel("Yes", Some(4), Some(10), Some(2013)),
-        Some(RebasedValueModel(Some(3000))),
-        Some(RebasedCostsModel("Yes", Some(300))),
-        ImprovementsModel("Yes", Some(10), Some(20)),
-        Some(OtherReliefsModel(1000)))
+//      val answersModel = TotalGainAnswersModel(DisposalDateModel(5, 10, 2016),
+//        SoldOrGivenAwayModel(true),
+//        Some(SoldForLessModel(false)),
+//        DisposalValueModel(1000),
+//        DisposalCostsModel(100),
+//        Some(HowBecameOwnerModel("Gifted")),
+//        Some(BoughtForLessModel(false)),
+//        AcquisitionValueModel(2000),
+//        AcquisitionCostsModel(200),
+//        AcquisitionDateModel("Yes", Some(4), Some(10), Some(2013)),
+//        Some(RebasedValueModel(Some(3000))),
+//        Some(RebasedCostsModel("Yes", Some(300))),
+//        ImprovementsModel("Yes", Some(10), Some(20)),
+//        Some(OtherReliefsModel(1000)))
+
+      val totalTaxOwedModel = TotalTaxOwedModel(
+        taxOwed = BigDecimal(1000.00),
+        taxGain = 100.00,
+        taxRate = 18,
+        upperTaxGain = Some(100.00),
+        upperTaxRate = Some(100),
+        totalGain = 150.00,
+        taxableGain = 100.00,
+        prrUsed = None,
+        otherReliefsUsed = None,
+        allowableLossesUsed = None,
+        aeaUsed = Some(11000.00),
+        aeaRemaining = 0.00,
+        broughtForwardLossesUsed = None,
+        reliefsRemaining = None,
+        allowableLossesRemaining = None,
+        broughtForwardLossesRemaining = None,
+        totalDeductions = None,
+        taxOwedAtBaseRate = None,
+        taxOwedAtUpperRate = None
+      )
 
       val questionAnswer = QuestionAnswerModel[String]("text", "1000", "test-question", None)
       val seqQuestionAnswers = Seq(questionAnswer, questionAnswer)
 
-      lazy val view = summaryReport(answersModel, seqQuestionAnswers, taxYear,
-        sumModelFlat.calculationElectionModel.calculationType, None, taxOwed = BigDecimal(1000), otherReliefs = Some(OtherReliefsModel(1000)))
+      lazy val view = summaryReport(seqQuestionAnswers, totalTaxOwedModel, taxYear, sumModelFlat.calculationElectionModel.calculationType,
+        disposalValue = 1000.00,
+        acquisitionValue = 1000.00,
+        totalCosts = 1000,
+        flatGain = Some(1000.00))
+
       lazy val document = Jsoup.parse(view.body)
 
       "have the HMRC logo with the HMRC name" in {
@@ -70,82 +96,45 @@ class SummaryReportViewSpec extends UnitSpec with WithFakeApplication with FakeR
         document.select("div.notice-wrapper").isEmpty shouldBe true
       }
 
-      "have a 'Calculation details' section that" in {
-        document.select("#calculationDetails span.heading-large").text should include(nrMessages.Summary.calculationDetailsTitle)
-      }
-
-      "have a 'Purchase details' section that" in {
-        document.select("#purchaseDetails span.heading-large").text should include(nrMessages.Summary.purchaseDetailsTitle)
-      }
-
-      "have a 'Property details' section that" in {
-        document.select("#propertyDetails span.heading-large").text should include(nrMessages.Summary.propertyDetailsTitle)
-      }
-
-      "have a 'Sale details' section that" in {
-        document.select("#salesDetails span.heading-large").text should include(nrMessages.Summary.salesDetailsTitle)
-      }
-
-      "have a 'Deductions details' section that" in {
-        document.select("#deductions span.heading-large").text should include(nrMessages.Summary.deductionsTitle)
-      }
-
-      "have a what to do next section that " should {
-
-        lazy val whatToDoNext = document.select("#whatToDoNext")
-
-        "have a heading with the class 'heading-medium'" in {
-          whatToDoNext.select("h2").attr("class") shouldBe "heading-medium"
-        }
-
-        "have the text 'You need to tell HMRC about the property'" in {
-          whatToDoNext.select("h2").text shouldBe nrMessages.whatToDoNextTextTwo
-        }
-
-        "have the text 'Further details on how to tell HMRC about this property can be found at'" in {
-          whatToDoNext.select("p").text should include (nrMessages.whatToDoNextFurtherDetails)
-        }
-
-        "have a link with the class 'external-link'" in {
-          whatToDoNext.select("a").attr("class") shouldBe "external-link"
-        }
-
-        "have a link with a rel of 'external'" in {
-          whatToDoNext.select("a").attr("rel") shouldBe "external"
-        }
-
-        "have a link with a target of '_blank'" in {
-          whatToDoNext.select("a").attr("target") shouldBe "_blank"
-        }
-
-        "have the correct link" in {
-          whatToDoNext.select("a").text shouldBe "https://www.gov.uk/guidance/capital-gains-tax-for-non-residents-uk-residential-property"
-        }
+      "have a 'You've told us' section that" in {
+        document.select("div.check-your-answers-report h2").text should include(nrMessages.Summary.yourAnswers)
       }
     }
 
     "provided with an invalid tax year" should {
-      lazy val taxYear = TaxYearModel("2018/19", false, "2016/17")
-      val answersModel = TotalGainAnswersModel(DisposalDateModel(5, 10, 2016),
-        SoldOrGivenAwayModel(true),
-        Some(SoldForLessModel(false)),
-        DisposalValueModel(1000),
-        DisposalCostsModel(100),
-        Some(HowBecameOwnerModel("Gifted")),
-        Some(BoughtForLessModel(false)),
-        AcquisitionValueModel(2000),
-        AcquisitionCostsModel(200),
-        AcquisitionDateModel("Yes", Some(4), Some(10), Some(2013)),
-        Some(RebasedValueModel(Some(3000))),
-        Some(RebasedCostsModel("Yes", Some(300))),
-        ImprovementsModel("Yes", Some(10), Some(20)),
-        Some(OtherReliefsModel(1000)))
+      lazy val taxYear = TaxYearModel("2018/19", isValidYear = false, "2016/17")
+
+      val totalTaxOwedModel = TotalTaxOwedModel(
+        taxOwed = BigDecimal(1000.00),
+        taxGain = 100.00,
+        taxRate = 18,
+        upperTaxGain = Some(100.00),
+        upperTaxRate = Some(100),
+        totalGain = 150.00,
+        taxableGain = 100.00,
+        prrUsed = None,
+        otherReliefsUsed = None,
+        allowableLossesUsed = None,
+        aeaUsed = Some(11000.00),
+        aeaRemaining = 0.00,
+        broughtForwardLossesUsed = None,
+        reliefsRemaining = None,
+        allowableLossesRemaining = None,
+        broughtForwardLossesRemaining = None,
+        totalDeductions = None,
+        taxOwedAtBaseRate = None,
+        taxOwedAtUpperRate = None
+      )
 
       val questionAnswer = QuestionAnswerModel[String]("text", "1000", "test-question", None)
       val seqQuestionAnswers = Seq(questionAnswer, questionAnswer)
 
-      lazy val view = summaryReport(answersModel, seqQuestionAnswers, taxYear,
-        sumModelFlat.calculationElectionModel.calculationType,None, taxOwed = BigDecimal(1000), otherReliefs = None)
+      lazy val view = summaryReport(seqQuestionAnswers, totalTaxOwedModel, taxYear, sumModelFlat.calculationElectionModel.calculationType,
+        disposalValue = 1000.00,
+        acquisitionValue = 1000.00,
+        totalCosts = 1000,
+        flatGain = Some(1000.00))
+
       lazy val document = Jsoup.parse(view.body)
 
       "have a notice summary" which {
@@ -160,74 +149,8 @@ class SummaryReportViewSpec extends UnitSpec with WithFakeApplication with FakeR
         }
 
         "has the correct message text" in {
-          notice.select("strong").text() shouldBe nrMessages.Summary.basedOnYear("2016/17")
+          notice.select("strong").text() shouldBe nrMessages.Summary.noticeSummary
         }
-      }
-    }
-
-    "provided with a flat loss calculation" should {
-      lazy val taxYear = TaxYearModel("2016/17", true, "2016/17")
-
-      val answersModel = TotalGainAnswersModel(DisposalDateModel(5, 10, 2016),
-        SoldOrGivenAwayModel(true),
-        Some(SoldForLessModel(false)),
-        DisposalValueModel(1000),
-        DisposalCostsModel(100),
-        Some(HowBecameOwnerModel("Gifted")),
-        Some(BoughtForLessModel(false)),
-        AcquisitionValueModel(2000),
-        AcquisitionCostsModel(200),
-        AcquisitionDateModel("Yes", Some(4), Some(10), Some(2013)),
-        Some(RebasedValueModel(Some(3000))),
-        Some(RebasedCostsModel("Yes", Some(300))),
-        ImprovementsModel("Yes", Some(10), Some(20)),
-        Some(OtherReliefsModel(1000)))
-
-      val questionAnswer = QuestionAnswerModel[String]("text", "1000", "test-question", None)
-      val seqQuestionAnswers = Seq(questionAnswer, questionAnswer)
-
-      lazy val view = summaryReport(answersModel, seqQuestionAnswers, taxYear,
-        sumModelFlat.calculationElectionModel.calculationType, None, taxOwed = BigDecimal(1000), otherReliefs = Some(OtherReliefsModel(1000)))
-      lazy val document = Jsoup.parse(view.body)
-
-      "have the HMRC logo with the HMRC name" in {
-        document.select("div.logo span").text should include(nrMessages.Report.logoText)
-      }
-
-      s"have the title ${nrMessages.Report.title}" in {
-        document.select("span.calculate-your-cgt").text() shouldBe nrMessages.Report.title
-      }
-
-      "not have a notice summary" in {
-        document.select("div.notice-wrapper").isEmpty shouldBe true
-      }
-
-      "have a 'Calculation details' section that" in {
-        document.select("#calculationDetails span.heading-large").text should include(nrMessages.Summary.calculationDetailsTitle)
-      }
-
-      "have an 'Owning the property' section that" in {
-        document.select("#purchaseDetails span.heading-large").text should include(nrMessages.Summary.purchaseDetailsTitle)
-      }
-
-      "have a 'Property details' section that" in {
-        document.select("#propertyDetails span.heading-large").text should include(nrMessages.Summary.propertyDetailsTitle)
-      }
-
-      "have a 'Sale details' section that" in {
-        document.select("#salesDetails span.heading-large").text should include(nrMessages.Summary.salesDetailsTitle)
-      }
-
-      "have a 'Deductions details' section that" in {
-        document.select("#deductions span.heading-large").text should include(nrMessages.Summary.deductionsTitle)
-      }
-
-      "not have a 'Personal details' section that" in {
-        document.select("#personalDetails span.heading-large").text shouldBe ""
-      }
-
-      "do" in {
-        document shouldBe ""
       }
     }
   }
