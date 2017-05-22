@@ -225,6 +225,10 @@ class SummaryReportViewSpec extends UnitSpec with WithFakeApplication with FakeR
       "not have a 'Personal details' section that" in {
         document.select("#personalDetails span.heading-large").text shouldBe ""
       }
+
+      "do" in {
+        document shouldBe ""
+      }
     }
   }
 }
