@@ -1,4 +1,5 @@
 @import views.html.helpers.summarySectionNoLink
+@import views.html.helpers.summaryPartial
 @import models._
 @import uk.gov.hmrc.play.views.helpers.MoneyPounds
 @import constructors.OtherReliefsDetailsConstructor
@@ -49,6 +50,9 @@ disposalValue: BigDecimal, acquisitionValue: BigDecimal, totalCosts: BigDecimal,
         </div>
         }
     }
+
+    @summaryPartial(calculationResult, taxYearModel, calculationType,
+        disposalValue, acquisitionValue, totalCosts, flatGain, reliefsUsed)
 
     <div class="check-your-answers-report">
         <h2>@Messages("calc.checkYourAnswers.tableHeading")</h2>

@@ -24,13 +24,13 @@ import constructors.{AnswersConstructor, YourAnswersConstructor}
 import controllers.predicates.ValidActiveSession
 import it.innove.play.pdf.PdfGenerator
 import models.{TaxYearModel, _}
-import play.api.i18n.Messages
 import play.api.mvc.{Action, AnyContent, RequestHeader}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import uk.gov.hmrc.play.http.HeaderCarrier
 import views.html.calculation
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
+import play.api.i18n.Messages
 
 import scala.concurrent.Future
 
@@ -62,7 +62,7 @@ trait ReportController extends FrontendController with ValidActiveSession {
     }
 
     def getMaxAEA(totalPersonalDetailsCalculationModel: Option[TotalPersonalDetailsCalculationModel],
-                  taxYear: Option[TaxYearModel]): Future[Option[BigDecimal]] = {
+                  taxYear: Option[TaxYearModel])(implicit hc: HeaderCarrier): Future[Option[BigDecimal]] = {
       totalPersonalDetailsCalculationModel match {
         case Some(data) if data.customerTypeModel.customerType.equals(CustomerTypeKeys.trustee) && data.trusteeModel.get.isVulnerable.equals("No") =>
           calcConnector.getPartialAEA(TaxDates.taxYearStringToInteger(taxYear.get.calculationTaxYear))
@@ -70,26 +70,18 @@ trait ReportController extends FrontendController with ValidActiveSession {
       }
     }
 
-    def getTaxYear(totalGainAnswersModel: TotalGainAnswersModel): Future[Option[TaxYearModel]] = {
+    def getTaxYear(totalGainAnswersModel: TotalGainAnswersModel)(implicit hc: HeaderCarrier): Future[Option[TaxYearModel]] = {
       val date = totalGainAnswersModel.disposalDateModel
-      calcConnector.getTaxYear(s"${date.year}-${date.month}-${date.day}")
+      calcConnector.getTaxYear(s"${date.year}-${date.month}-${date.day}")(hc)
     }
 
     def getCalculationResult(calculationResultsWithTaxOwedModel: Option[CalculationResultsWithTaxOwedModel],
-                             calculationElection: String): Future[TotalTaxOwedModel] = {
+                             calculationElection: String)(implicit hc: HeaderCarrier): Future[TotalTaxOwedModel] = {
       (calculationResultsWithTaxOwedModel, calculationElection) match {
         case (Some(model), CalculationType.flat) => Future.successful(model.flatResult)
         case (Some(model), CalculationType.rebased) => Future.successful(model.rebasedResult.get)
         case (Some(model), CalculationType.timeApportioned) => Future.successful(model.timeApportionedResult.get)
       }
-    }
-
-    def summaryBackUrl(model: Option[TotalGainResultsModel])(implicit hc: HeaderCarrier): Future[String] = model match {
-      case (Some(data)) if data.rebasedGain.isDefined || data.timeApportionedGain.isDefined =>
-        Future.successful(routes.CalculationElectionController.calculationElection().url)
-      case (Some(data)) =>
-        Future.successful(routes.CheckYourAnswersController.checkYourAnswers().url)
-      case (None) => Future.successful(common.DefaultRoutes.missingDataRoute)
     }
 
     def calculateTaxOwed(totalGainAnswersModel: TotalGainAnswersModel,
@@ -122,7 +114,7 @@ trait ReportController extends FrontendController with ValidActiveSession {
       }
     }
 
-    def qaRows(totalGainAnswersModel: TotalGainAnswersModel,
+    def questionAnswerRows(totalGainAnswersModel: TotalGainAnswersModel,
                totalGainResultsModel: TotalGainResultsModel,
                privateResidenceReliefModel: Option[PrivateResidenceReliefModel] = None,
                personalAndPreviousDetailsModel: Option[TotalPersonalDetailsCalculationModel] = None
@@ -147,45 +139,41 @@ trait ReportController extends FrontendController with ValidActiveSession {
       taxYearModel <- getTaxYear(answers)
       maxAEA <- getMaxAEA(finalAnswers, taxYearModel)
       finalResult <- calculateTaxOwed(answers, privateResidentReliefModel, finalAnswers, maxAEA.get, otherReliefsModel)
-      backUrl <- summaryBackUrl(totalGainResultsModel)
 
-      questionAnswerRows <- qaRows(answers, totalGainResultsModel.get, privateResidentReliefModel, finalAnswers)
+      questionAnswerRows <- questionAnswerRows(answers, totalGainResultsModel.get, privateResidentReliefModel, finalAnswers)
 
       calculationType <- calcConnector.fetchAndGetFormData[CalculationElectionModel](KeystoreKeys.calculationElection)
       totalCosts <- calcConnector.calculateTotalCosts(answers, calculationType)
 
       calculationResult <- getCalculationResult(finalResult, calculationType.get.calculationType)
     } yield {
-      calculationType.get.calculationType match {
+
+      lazy val view = calculationType.get.calculationType match {
         case CalculationType.flat =>
-          pdfGenerator.ok(calculation.summaryReport(questionAnswerRows, calculationResult, taxYearModel.get, calculationType.get.calculationType,
+          calculation.summaryReport(questionAnswerRows, calculationResult, taxYearModel.get, calculationType.get.calculationType,
             answers.disposalValueModel.disposalValue,
             answers.acquisitionValueModel.acquisitionValueAmt,
             totalCosts,
-            reliefsUsed = calculationResult.prrUsed.getOrElse(BigDecimal(0)) + calculationResult.otherReliefsUsed.getOrElse(BigDecimal(0))), host)
-            .asScala()
-            .withHeaders("Content-Disposition" ->s"""attachment; filename="${Messages("calc.summary.title")}.pdf"""")
+            reliefsUsed = calculationResult.prrUsed.getOrElse(BigDecimal(0)) + calculationResult.otherReliefsUsed.getOrElse(BigDecimal(0)))
 
         case CalculationType.timeApportioned =>
-          pdfGenerator.ok(calculation.summaryReport(questionAnswerRows, calculationResult, taxYearModel.get, calculationType.get.calculationType,
-            answers.disposalValueModel.disposalValue,
-            answers.acquisitionValueModel.acquisitionValueAmt,
-            totalCosts,
-            Some(finalResult.get.flatResult.totalGain),
-            reliefsUsed = calculationResult.prrUsed.getOrElse(BigDecimal(0)) + calculationResult.otherReliefsUsed.getOrElse(BigDecimal(0))), host)
-            .asScala()
-            .withHeaders("Content-Disposition" ->s"""attachment; filename="${Messages("calc.summary.title")}.pdf"""")
+          calculation.summaryReport(questionAnswerRows, calculationResult, taxYearModel.get, calculationType.get.calculationType,
+          answers.disposalValueModel.disposalValue,
+          answers.acquisitionValueModel.acquisitionValueAmt,
+          totalCosts,
+          Some(finalResult.get.flatResult.totalGain),
+          reliefsUsed = calculationResult.prrUsed.getOrElse(BigDecimal(0)) + calculationResult.otherReliefsUsed.getOrElse(BigDecimal(0)))
 
         case CalculationType.rebased =>
-          pdfGenerator.ok(calculation.summaryReport(questionAnswerRows, calculationResult, taxYearModel.get, calculationType.get.calculationType,
-            answers.disposalValueModel.disposalValue,
-            answers.rebasedValueModel.get.rebasedValueAmt.get,
-            totalCosts,
-            None,
-            reliefsUsed = calculationResult.prrUsed.getOrElse(BigDecimal(0)) + calculationResult.otherReliefsUsed.getOrElse(BigDecimal(0))), host)
-            .asScala()
-            .withHeaders("Content-Disposition" ->s"""attachment; filename="${Messages("calc.summary.title")}.pdf"""")
+          calculation.summaryReport(questionAnswerRows, calculationResult, taxYearModel.get, calculationType.get.calculationType,
+          answers.disposalValueModel.disposalValue,
+          answers.rebasedValueModel.get.rebasedValueAmt.get,
+          totalCosts,
+          None,
+          reliefsUsed = calculationResult.prrUsed.getOrElse(BigDecimal(0)) + calculationResult.otherReliefsUsed.getOrElse(BigDecimal(0)))
       }
+      pdfGenerator.ok(view, host).asScala()
+        .withHeaders("Content-Disposition" ->s"""attachment; filename="${Messages("calc.summary.title")}.pdf"""")
     }
   }
 }
