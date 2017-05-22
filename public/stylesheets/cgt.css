@@ -422,6 +422,15 @@ span.election-text > .block {
     color: #ffffff;
 }
 
+.pdf .transaction-banner--complete {
+    display: block;
+    background-color:#28a197;
+    color:#fff;
+    padding:30px;
+    margin-bottom:30px;
+    text-align:center
+}
+
 .summary-total-margin-top {
     margin-top: 0.8em;
 }

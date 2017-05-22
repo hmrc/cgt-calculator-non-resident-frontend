@@ -151,9 +151,9 @@ trait ReportController extends FrontendController with ValidActiveSession {
           None,
           reliefsUsed = calculationResult.prrUsed.getOrElse(BigDecimal(0)) + calculationResult.otherReliefsUsed.getOrElse(BigDecimal(0)))
       }
-//      pdfGenerator.ok(view, host).asScala()
-//        .withHeaders("Content-Disposition" ->s"""attachment; filename="${Messages("calc.summary.title")}.pdf"""")
-      Ok(view)
+
+      pdfGenerator.ok(view, host).asScala()
+        .withHeaders("Content-Disposition" ->s"""attachment; filename="${Messages("calc.summary.title")}.pdf"""")
     }
   }
 }
