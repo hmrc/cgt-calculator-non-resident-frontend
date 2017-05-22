@@ -240,7 +240,7 @@
 }
 
 .pdf .summary-underline {
-    padding-bottom: 0.5em;
+    padding-bottom: 2.0em;
     border-bottom: 2px solid #BFC1C3;
 }
 
@@ -435,7 +435,7 @@ span.election-text > .block {
 
 .summary-details-padding {
     padding-top: 1.0em;
-    padding-bottom: 1em;
+    margin-bottom: em;
 }
 
 .hint-text {
