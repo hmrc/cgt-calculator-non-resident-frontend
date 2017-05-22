@@ -58,11 +58,11 @@ disposalValue: BigDecimal, acquisitionValue: BigDecimal, totalCosts: BigDecimal,
         <h2>@Messages("calc.checkYourAnswers.tableHeading")</h2>
 
         @questions.map { question =>
-            <div id="@question.id" class="grid-layout grid-layout--stacked form-group resident summary-underline">
+            <div id="@question.id" class="grid-layout report-answer-row grid-layout--stacked summary-underline">
                 <div id="@{question.id}-question" class="grid-layout__column grid-layout__column--1-2">
                     @question.question
                 </div>
-                <div id="@{question.id}-amount" class="grid-layout__column grid-layout__column--1-2 text--right">
+                <div id="@{question.id}-amount" class="grid-layout__column grid-layout__column--1-3 text--right">
                     @{question.data match {
                         case string: String => string
                         case int: Int => int.toString
