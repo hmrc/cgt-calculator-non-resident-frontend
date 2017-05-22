@@ -22,7 +22,7 @@ import connectors.CalculatorConnector
 import constructors.{AnswersConstructor, CalculationElectionConstructor, YourAnswersConstructor}
 import controllers.predicates.ValidActiveSession
 import models._
-import play.api.mvc.Result
+import play.api.mvc.{Action, AnyContent, Result}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import uk.gov.hmrc.play.http.HeaderCarrier
 import views.html.calculation
@@ -140,7 +140,7 @@ trait CheckYourAnswersController extends FrontendController with ValidActiveSess
     }
   }
 
-  val checkYourAnswers = ValidateSession.async { implicit request =>
+  val checkYourAnswers: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     for {
       model <- answersConstructor.getNRTotalGainAnswers
@@ -155,12 +155,12 @@ trait CheckYourAnswersController extends FrontendController with ValidActiveSess
     }
   }
 
-  val submitCheckYourAnswers = ValidateSession.async { implicit request =>
+  val submitCheckYourAnswers: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     def routeRequest(model: Option[TotalGainResultsModel], taxableGainModel: Option[CalculationResultsWithPRRModel]) = model match {
       case (Some(data)) if data.rebasedGain.isDefined || data.timeApportionedGain.isDefined =>
         Future.successful(Redirect(routes.CalculationElectionController.calculationElection()))
-      case (Some(data)) =>
+      case (Some(_)) =>
         calculatorConnector.saveFormData[CalculationElectionModel](KeystoreKeys.calculationElection, CalculationElectionModel(CalculationType.flat))
         redirectRoute(taxableGainModel, model.get)
       case (None) => Future.successful(Redirect(common.DefaultRoutes.missingDataRoute))

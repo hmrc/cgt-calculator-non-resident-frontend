@@ -2,8 +2,14 @@
 @import models._
 @import uk.gov.hmrc.play.views.helpers.MoneyPounds
 @import constructors.OtherReliefsDetailsConstructor
+@import common.Transformers.booleanToString
+@import common.Dates._
+@import java.time._
+@import views.html.helpers._
 
-@(totalGain: TotalGainAnswersModel, result: Seq[QuestionAnswerModel[Any]], taxYear: TaxYearModel, electionType: String, pRRModel: Option[PrivateResidenceReliefModel] = None, finalAnswers: Option[TotalPersonalDetailsCalculationModel] = None, taxOwed: BigDecimal, otherReliefs: Option[OtherReliefsModel])(implicit request: Request[_], messages: Messages)
+@(questions: Seq[QuestionAnswerModel[Any]],
+calculationResult: TotalTaxOwedModel, taxYearModel: TaxYearModel, calculationType: String,
+disposalValue: BigDecimal, acquisitionValue: BigDecimal, totalCosts: BigDecimal, flatGain: Option[BigDecimal] = None, reliefsUsed: BigDecimal = 0)(implicit request: Request[_], messages: Messages)
 
 <!DOCTYPE html>
 <html>
@@ -33,37 +39,37 @@
         </div>
     </span>
 
-    @{if (!taxYear.isValidYear) {
+    @{if (!taxYearModel.isValidYear) {
         <div class="notice-wrapper">
             <div class="notice">
                 <strong class="bold-small">
-                    {Messages("calc.base.summary.dateWarning", taxYear.calculationTaxYear)}
+                    {Messages("calc.base.summary.dateWarning", taxYearModel.calculationTaxYear)}
                 </strong>
             </div>
         </div>
         }
     }
 
-    @summarySectionNoLink("calculationDetails", Messages("calc.summary.calculation.details.title"), result)
-    @summarySectionNoLink("purchaseDetails", Messages("calc.summary.purchase.details.title"), totalGain.purchaseDetailsRows)
-    @summarySectionNoLink("propertyDetails", Messages("calc.summary.property.details.title"), totalGain.propertyDetailsRows)
-    @summarySectionNoLink("salesDetails", Messages("calc.summary.sale.details.title"), totalGain.salesDetailsRows)
-    @summarySectionNoLink("deductions", Messages("calc.summary.deductions.title"), totalGain.deductionDetailsRows(pRRModel)
-    ++ OtherReliefsDetailsConstructor.getOtherReliefsSection(otherReliefs, electionType))
-    @{if (finalAnswers.isDefined)
-        summarySectionNoLink("personalDetails", Messages("calc.summary.personal.details.title"), finalAnswers.get.personalDetailsRows)
-    }
+    <div class="check-your-answers-report">
+        <h2>@Messages("calc.checkYourAnswers.tableHeading")</h2>
 
-
-    <div id="whatToDoNext" class="form-group">
-        <h2 class="heading-medium">@Messages("calc.summary.next.fullMessage")</h2>
-        <p>@Messages("calc.summary.link.message")</p>
-        <p>
-            <a class="external-link" rel="external" href="https://www.gov.uk/guidance/capital-gains-tax-for-non-residents-uk-residential-property"
-               target="_blank" data-journey-click="nav:calc:kana-nrcgt">
-                <span>https://www.gov.uk/guidance/capital-gains-tax-for-non-residents-uk-residential-property</span>
-            </a>
-        </p>
+        @questions.map { question =>
+            <div id="@question.id" class="grid-layout grid-layout--stacked form-group resident summary-underline">
+                <div id="@{question.id}-question" class="grid-layout__column grid-layout__column--1-2">
+                    @question.question
+                </div>
+                <div id="@{question.id}-amount" class="grid-layout__column grid-layout__column--1-2 text--right">
+                    @{question.data match {
+                        case string: String => string
+                        case int: Int => int.toString
+                        case bigDecimal: BigDecimal => s"£${MoneyPounds(bigDecimal, 2).quantity}"
+                        case date: LocalDate => datePageFormatNoZero.format(date)
+                        case boolean: Boolean => booleanToString(boolean)
+                        case _ => ""
+                    }}
+                </div>
+            </div>
+        }
     </div>
-
 </div>
+</html>

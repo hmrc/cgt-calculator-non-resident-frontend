@@ -48,12 +48,8 @@ trait SummaryController extends FrontendController with ValidActiveSession {
       val optionSeq = Seq(totalGainResultsModel.rebasedGain, totalGainResultsModel.timeApportionedGain).flatten
       val finalSeq = Seq(totalGainResultsModel.flatGain) ++ optionSeq
 
-      if (!finalSeq.forall(_ <= 0)) {
-        val prrModel = calcConnector.fetchAndGetFormData[PrivateResidenceReliefModel](KeystoreKeys.privateResidenceRelief)
-
-        for {
-          prrModel <- prrModel
-        } yield prrModel
+      if (finalSeq.forall(_ > 0)) {
+        calcConnector.fetchAndGetFormData[PrivateResidenceReliefModel](KeystoreKeys.privateResidenceRelief)
       } else Future(None)
     }
 
@@ -121,6 +117,9 @@ trait SummaryController extends FrontendController with ValidActiveSession {
     for {
       answers <- answersConstructor.getNRTotalGainAnswers(hc)
       totalGainResultsModel <- calcConnector.calculateTotalGain(answers)
+
+    //TODO -> display final tax answer rows
+
       privateResidentReliefModel <- getPRRModel(hc, totalGainResultsModel.get)
       finalAnswers <- answersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers
       otherReliefsModel <- getAllOtherReliefs(finalAnswers)
