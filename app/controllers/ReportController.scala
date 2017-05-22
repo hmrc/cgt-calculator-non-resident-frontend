@@ -123,7 +123,7 @@ trait ReportController extends FrontendController with ValidActiveSession {
       val optionSeq = Seq(totalGainResultsModel.rebasedGain, totalGainResultsModel.timeApportionedGain).flatten
       val finalSeq = Seq(totalGainResultsModel.flatGain) ++ optionSeq
 
-      if (!finalSeq.forall(_ <= 0)) {
+      if (finalSeq.forall(_ <= 0)) {
         Future.successful(YourAnswersConstructor.fetchYourAnswers(totalGainAnswersModel, privateResidenceReliefModel, None))
       }
       else Future.successful(YourAnswersConstructor.fetchYourAnswers(totalGainAnswersModel, privateResidenceReliefModel, personalAndPreviousDetailsModel))
