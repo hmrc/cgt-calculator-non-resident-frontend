@@ -40,8 +40,10 @@ disposalValue: BigDecimal, acquisitionValue: BigDecimal, totalCosts: BigDecimal,
         </div>
     </span>
 
-    @summaryPartial(calculationResult, taxYearModel, calculationType,
-        disposalValue, acquisitionValue, totalCosts, flatGain, reliefsUsed)
+    <div class="calculation-details">
+        @summaryPartial(calculationResult, taxYearModel, calculationType,
+            disposalValue, acquisitionValue, totalCosts, flatGain, reliefsUsed)
+    </div>
 
     <div class="check-your-answers-report">
         <h2>@Messages("calc.checkYourAnswers.tableHeading")</h2>
