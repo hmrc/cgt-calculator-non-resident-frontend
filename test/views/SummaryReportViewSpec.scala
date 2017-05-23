@@ -36,21 +36,6 @@ class SummaryReportViewSpec extends UnitSpec with WithFakeApplication with FakeR
 
       lazy val taxYear = TaxYearModel("2016/17", isValidYear = true, "2016/17")
 
-//      val answersModel = TotalGainAnswersModel(DisposalDateModel(5, 10, 2016),
-//        SoldOrGivenAwayModel(true),
-//        Some(SoldForLessModel(false)),
-//        DisposalValueModel(1000),
-//        DisposalCostsModel(100),
-//        Some(HowBecameOwnerModel("Gifted")),
-//        Some(BoughtForLessModel(false)),
-//        AcquisitionValueModel(2000),
-//        AcquisitionCostsModel(200),
-//        AcquisitionDateModel("Yes", Some(4), Some(10), Some(2013)),
-//        Some(RebasedValueModel(Some(3000))),
-//        Some(RebasedCostsModel("Yes", Some(300))),
-//        ImprovementsModel("Yes", Some(10), Some(20)),
-//        Some(OtherReliefsModel(1000)))
-
       val totalTaxOwedModel = TotalTaxOwedModel(
         taxOwed = BigDecimal(1000.00),
         taxGain = 100.00,

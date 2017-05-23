@@ -22,13 +22,13 @@ import common.nonresident.{CalculationType, CustomerTypeKeys}
 import connectors.CalculatorConnector
 import constructors.AnswersConstructor
 import controllers.predicates.ValidActiveSession
-import models.{CalculationResultsWithPRRModel, TaxYearModel, _}
-import play.api.mvc.{Action, AnyContent, Result}
+import models._
+import play.api.Play.current
+import play.api.i18n.Messages.Implicits._
+import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import uk.gov.hmrc.play.http.HeaderCarrier
 import views.html.calculation
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 
 import scala.concurrent.Future
 
@@ -42,13 +42,13 @@ trait SummaryController extends FrontendController with ValidActiveSession {
   val calcConnector: CalculatorConnector
   val answersConstructor: AnswersConstructor
 
-  val summary = ValidateSession.async { implicit request =>
+  val summary: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     def getPRRModel(implicit hc: HeaderCarrier, totalGainResultsModel: TotalGainResultsModel): Future[Option[PrivateResidenceReliefModel]] = {
       val optionSeq = Seq(totalGainResultsModel.rebasedGain, totalGainResultsModel.timeApportionedGain).flatten
       val finalSeq = Seq(totalGainResultsModel.flatGain) ++ optionSeq
 
-      if (finalSeq.forall(_ > 0)) {
+      if (!finalSeq.forall(_ <= 0)) {
         calcConnector.fetchAndGetFormData[PrivateResidenceReliefModel](KeystoreKeys.privateResidenceRelief)
       } else Future(None)
     }
@@ -68,7 +68,7 @@ trait SummaryController extends FrontendController with ValidActiveSession {
     }
 
     def getCalculationResult(calculationResultsWithTaxOwedModel: Option[CalculationResultsWithTaxOwedModel],
-                   calculationElection: String): Future[TotalTaxOwedModel] = {
+                             calculationElection: String): Future[TotalTaxOwedModel] = {
       (calculationResultsWithTaxOwedModel, calculationElection) match {
         case (Some(model), CalculationType.flat) => Future.successful(model.flatResult)
         case (Some(model), CalculationType.rebased) => Future.successful(model.rebasedResult.get)
@@ -117,9 +117,6 @@ trait SummaryController extends FrontendController with ValidActiveSession {
     for {
       answers <- answersConstructor.getNRTotalGainAnswers(hc)
       totalGainResultsModel <- calcConnector.calculateTotalGain(answers)
-
-    //TODO -> display final tax answer rows
-
       privateResidentReliefModel <- getPRRModel(hc, totalGainResultsModel.get)
       finalAnswers <- answersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers
       otherReliefsModel <- getAllOtherReliefs(finalAnswers)
@@ -127,10 +124,8 @@ trait SummaryController extends FrontendController with ValidActiveSession {
       maxAEA <- getMaxAEA(finalAnswers, taxYearModel)
       finalResult <- calculateTaxOwed(answers, privateResidentReliefModel, finalAnswers, maxAEA.get, otherReliefsModel)
       backUrl <- summaryBackUrl(totalGainResultsModel)
-
       calculationType <- calcConnector.fetchAndGetFormData[CalculationElectionModel](KeystoreKeys.calculationElection)
       totalCosts <- calcConnector.calculateTotalCosts(answers, calculationType)
-
       calculationResult <- getCalculationResult(finalResult, calculationType.get.calculationType)
     } yield {
       calculationType.get.calculationType match {
