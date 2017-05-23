@@ -446,6 +446,10 @@ span.election-text > .block {
     padding-top: 1em;
 }
 
+.calculation-details {
+    page-break-after: always;
+}
+
 .report-answer-row {
     padding-top: 1em;
     padding-bottom: 1em;

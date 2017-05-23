@@ -951,7 +951,7 @@ object MessageLookup {
   }
 
   object SummaryPartialMessages {
-    val headingTwo: String => String = taxYear => s"Capital Gains Tax to pay for $taxYear"
+    val headingTwo: String => String = taxYear => s"Capital Gains Tax to pay for $taxYear tax year"
     val warningHidden: String = "Warning"
     val warningNoticeSummary: String = "Your result may be inaccurate because the calculator does not support the date of sale you entered. " +
       "Do not use these figures to report your Capital Gains Tax."
