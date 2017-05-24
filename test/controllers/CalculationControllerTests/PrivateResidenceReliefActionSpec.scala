@@ -390,7 +390,7 @@ class PrivateResidenceReliefActionSpec extends UnitSpec with WithFakeApplication
         status(result) shouldBe 303
       }
 
-      "redirect to the How Became Owner page" in {
+      "redirect to the Current Income page" in {
         redirectLocation(result).get shouldBe controllers.routes.CurrentIncomeController.currentIncome().url
       }
     }
