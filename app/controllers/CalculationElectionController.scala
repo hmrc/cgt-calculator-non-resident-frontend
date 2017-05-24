@@ -18,18 +18,18 @@ package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.TaxDates
-import common.nonresident.CustomerTypeKeys
 import connectors.CalculatorConnector
 import constructors.{AnswersConstructor, CalculationElectionConstructor}
 import controllers.predicates.ValidActiveSession
 import forms.CalculationElectionForm._
-import models.{TaxYearModel, TotalGainAnswersModel, _}
+import models._
+import play.api.Play.current
 import play.api.data.Form
+import play.api.i18n.Messages.Implicits._
+import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import uk.gov.hmrc.play.http.HeaderCarrier
 import views.html.calculation
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 
 import scala.concurrent.Future
 
@@ -86,13 +86,8 @@ trait CalculationElectionController extends FrontendController with ValidActiveS
     }
   }
 
-  private def getMaxAEA(totalPersonalDetailsCalculationModel: Option[TotalPersonalDetailsCalculationModel],
-                        taxYear: Option[TaxYearModel])(implicit hc: HeaderCarrier): Future[Option[BigDecimal]] = {
-    totalPersonalDetailsCalculationModel match {
-      case Some(data) if data.customerTypeModel.customerType.equals(CustomerTypeKeys.trustee) && data.trusteeModel.get.isVulnerable.equals("No") =>
-        calcConnector.getPartialAEA(TaxDates.taxYearStringToInteger(taxYear.get.calculationTaxYear))
-      case _ => calcConnector.getFullAEA(TaxDates.taxYearStringToInteger(taxYear.get.calculationTaxYear))
-    }
+  private def getMaxAEA(taxYear: Option[TaxYearModel])(implicit hc: HeaderCarrier): Future[Option[BigDecimal]] = {
+    calcConnector.getFullAEA(TaxDates.taxYearStringToInteger(taxYear.get.calculationTaxYear))
   }
 
   private def getTaxYear(totalGainAnswersModel: TotalGainAnswersModel)(implicit hc: HeaderCarrier): Future[Option[TaxYearModel]] = {
@@ -116,7 +111,7 @@ trait CalculationElectionController extends FrontendController with ValidActiveS
   private def getAllOtherReliefs(totalPersonalDetailsCalculationModel: Option[TotalPersonalDetailsCalculationModel])
                                 (implicit hc: HeaderCarrier): Future[Option[AllOtherReliefsModel]] = {
     totalPersonalDetailsCalculationModel match {
-      case Some(data) => {
+      case Some(_) =>
         val flat = calcConnector.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsFlat)
         val rebased = calcConnector.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsRebased)
         val time = calcConnector.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsTA)
@@ -126,12 +121,11 @@ trait CalculationElectionController extends FrontendController with ValidActiveS
           rebasedReliefs <- rebased
           timeReliefs <- time
         } yield Some(AllOtherReliefsModel(flatReliefs, rebasedReliefs, timeReliefs))
-      }
       case _ => Future.successful(None)
     }
   }
 
-  val calculationElection = ValidateSession.async { implicit request =>
+  val calculationElection: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     def action(content: Seq[(String, String, String, Option[String], Option[BigDecimal])]) =
       calcConnector.fetchAndGetFormData[CalculationElectionModel](KeystoreKeys.calculationElection).map {
@@ -155,14 +149,14 @@ trait CalculationElectionController extends FrontendController with ValidActiveS
       allAnswers <- getFinalSectionsAnswers(totalGain.get, totalGainWithPRR)
       otherReliefs <- getAllOtherReliefs(allAnswers)
       taxYear <- getTaxYear(totalGainAnswers)
-      maxAEA <- getMaxAEA(allAnswers, taxYear)
+      maxAEA <- getMaxAEA(taxYear)
       taxOwed <- getTaxOwedIfApplicable(totalGainAnswers, prrAnswers, allAnswers, maxAEA.get, otherReliefs)
       content <- calcElectionConstructor.generateElection(totalGain.get, totalGainWithPRR, taxOwed, otherReliefs)
       finalResult <- action(content)
     } yield finalResult
   }
 
-  val submitCalculationElection = ValidateSession.async { implicit request =>
+  val submitCalculationElection: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     def successAction(model: CalculationElectionModel) = {
       calcConnector.saveFormData(KeystoreKeys.calculationElection, model)
@@ -183,7 +177,7 @@ trait CalculationElectionController extends FrontendController with ValidActiveS
         allAnswers <- getFinalSectionsAnswers(totalGain.get, totalGainWithPRR)
         otherReliefs <- getAllOtherReliefs(allAnswers)
         taxYear <- getTaxYear(totalGainAnswers)
-        maxAEA <- getMaxAEA(allAnswers, taxYear)
+        maxAEA <- getMaxAEA(taxYear)
         taxOwed <- getTaxOwedIfApplicable(totalGainAnswers, prrAnswers, allAnswers, maxAEA.get, otherReliefs)
         content <- calcElectionConstructor.generateElection(totalGain.get, totalGainWithPRR, taxOwed, otherReliefs)
       } yield {

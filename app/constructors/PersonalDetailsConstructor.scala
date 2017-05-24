@@ -31,10 +31,8 @@ object PersonalDetailsConstructor {
 
     summaryModel match {
       case Some(data) =>
-        val customerTypeData = getCustomerTypeAnswer(data.customerTypeModel)
-        val currentIncomeData = getCurrentIncomeAnswer(data.customerTypeModel, data.currentIncomeModel)
-        val personalAllowanceData = getPersonalAllowanceAnswer(data.customerTypeModel, data.personalAllowanceModel, data.currentIncomeModel)
-        val disabledTrusteeData = getDisabledTrusteeAnswer(data.customerTypeModel, data.trusteeModel)
+        val currentIncomeData = getCurrentIncomeAnswer(data.currentIncomeModel)
+        val personalAllowanceData = getPersonalAllowanceAnswer(data.personalAllowanceModel, data.currentIncomeModel)
         val otherPropertiesData = getOtherPropertiesAnswer(data.otherPropertiesModel)
         val previousGainOrLossData = previousGainOrLossAnswer(data.otherPropertiesModel, data.previousGainOrLoss)
         val howMuchGainData = howMuchGainAnswer(data.otherPropertiesModel, data.previousGainOrLoss, data.howMuchGainModel)
@@ -45,10 +43,8 @@ object PersonalDetailsConstructor {
         val broughtForwardLossesAnswerData = getBroughtForwardLossesAnswer(data.broughtForwardLossesModel)
 
         val items = Seq(
-          customerTypeData,
           currentIncomeData,
           personalAllowanceData,
-          disabledTrusteeData,
           otherPropertiesData,
           previousGainOrLossData,
           howMuchGainData,
@@ -65,25 +61,10 @@ object PersonalDetailsConstructor {
 
   }
 
-  def getCustomerTypeAnswer(customerTypeModel: CustomerTypeModel): Option[QuestionAnswerModel[String]] = {
-    val answer = customerTypeModel.customerType match {
-      case CustomerTypeKeys.individual => Messages("calc.customerType.individual")
-      case CustomerTypeKeys.trustee => Messages("calc.customerType.trustee")
-      case CustomerTypeKeys.personalRep => Messages("calc.customerType.personalRep")
-    }
-
-    Some(QuestionAnswerModel(
-      KeystoreKeys.customerType,
-      answer,
-      Messages("calc.customerType.question"),
-      Some(controllers.routes.CustomerTypeController.customerType().url)
-    ))
-  }
-
   //Customer type needs to be individual
-  def getCurrentIncomeAnswer(customerTypeModel: CustomerTypeModel, currentIncomeModel: Option[CurrentIncomeModel]): Option[QuestionAnswerModel[BigDecimal]] =
-    (customerTypeModel.customerType, currentIncomeModel) match {
-      case (CustomerTypeKeys.individual, Some(CurrentIncomeModel(value))) =>
+  def getCurrentIncomeAnswer(currentIncomeModel: Option[CurrentIncomeModel]): Option[QuestionAnswerModel[BigDecimal]] =
+    currentIncomeModel match {
+      case Some(CurrentIncomeModel(value)) =>
         Some(QuestionAnswerModel(
           KeystoreKeys.currentIncome,
           value,
@@ -94,7 +75,7 @@ object PersonalDetailsConstructor {
     }
 
   //Customer type needs to be individual
-  def getPersonalAllowanceAnswer(customerTypeModel: CustomerTypeModel, personalAllowanceModel: Option[PersonalAllowanceModel],
+  def getPersonalAllowanceAnswer(personalAllowanceModel: Option[PersonalAllowanceModel],
                                  currentIncomeModel: Option[CurrentIncomeModel]): Option[QuestionAnswerModel[BigDecimal]] = {
 
     val checkCurrentIncome: BigDecimal =
@@ -103,8 +84,8 @@ object PersonalDetailsConstructor {
         case None => 0
       }
 
-    (customerTypeModel.customerType, personalAllowanceModel) match {
-      case (CustomerTypeKeys.individual, Some(PersonalAllowanceModel(value))) =>
+    personalAllowanceModel match {
+      case Some(PersonalAllowanceModel(value)) =>
         if (checkCurrentIncome > 0) {
           Some(QuestionAnswerModel(
             KeystoreKeys.personalAllowance,
@@ -117,17 +98,6 @@ object PersonalDetailsConstructor {
       case _ => None
     }
   }
-
-  //Customer type needs to be trustee
-  def getDisabledTrusteeAnswer(customerTypeModel: CustomerTypeModel, trusteeModel: Option[DisabledTrusteeModel]): Option[QuestionAnswerModel[String]] =
-    (customerTypeModel.customerType, trusteeModel) match {
-      case (CustomerTypeKeys.trustee, Some(disabledTrusteeModel)) => Some(QuestionAnswerModel(
-        KeystoreKeys.disabledTrustee,
-        disabledTrusteeModel.isVulnerable,
-        Messages("calc.disabledTrustee.question"),
-        Some(controllers.routes.DisabledTrusteeController.disabledTrustee().url)))
-      case _ => None
-    }
 
   def getOtherPropertiesAnswer(otherPropertiesModel: OtherPropertiesModel): Option[QuestionAnswerModel[String]] = {
     Some(QuestionAnswerModel(

@@ -18,7 +18,6 @@ package forms
 
 import assets.MessageLookup.{NonResident => messages}
 import models.CustomerTypeModel
-import forms.CustomerTypeForm._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 class CustomerTypeFormSpec extends UnitSpec with WithFakeApplication {

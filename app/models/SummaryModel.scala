@@ -19,8 +19,6 @@ package models
 import common.nonresident.CalculationType
 
 case class SummaryModel(
-                         customerTypeModel: CustomerTypeModel,
-                         disabledTrusteeModel: Option[DisabledTrusteeModel],
                          currentIncomeModel: Option[CurrentIncomeModel],
                          personalAllowanceModel: Option[PersonalAllowanceModel],
                          otherPropertiesModel: OtherPropertiesModel,

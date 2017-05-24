@@ -18,7 +18,6 @@ package forms
 
 import assets.MessageLookup.{NonResident => messages}
 import models.DisabledTrusteeModel
-import forms.DisabledTrusteeForm._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 class DisabledTrusteeFormSpec extends UnitSpec with WithFakeApplication {

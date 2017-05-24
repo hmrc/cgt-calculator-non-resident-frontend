@@ -18,10 +18,8 @@ package models
 
 import constructors.PersonalDetailsConstructor
 
-case class TotalPersonalDetailsCalculationModel(customerTypeModel: CustomerTypeModel,
-                                                currentIncomeModel: Option[CurrentIncomeModel],
+case class TotalPersonalDetailsCalculationModel(currentIncomeModel: Option[CurrentIncomeModel],
                                                 personalAllowanceModel: Option[PersonalAllowanceModel],
-                                                trusteeModel: Option[DisabledTrusteeModel],
                                                 otherPropertiesModel: OtherPropertiesModel,
                                                 previousGainOrLoss: Option[PreviousLossOrGainModel],
                                                 howMuchLossModel: Option[HowMuchLossModel],
@@ -30,5 +28,5 @@ case class TotalPersonalDetailsCalculationModel(customerTypeModel: CustomerTypeM
                                                 broughtForwardLossesModel: BroughtForwardLossesModel
                                                ) {
 
-  lazy val personalDetailsRows = PersonalDetailsConstructor.getPersonalDetailsSection(Some(this))
+  lazy val personalDetailsRows: Seq[QuestionAnswerModel[Any]] = PersonalDetailsConstructor.getPersonalDetailsSection(Some(this))
 }

@@ -95,10 +95,8 @@ trait AnswersConstructor {
   }
 
   def getPersonalDetailsAndPreviousCapitalGainsAnswers(implicit hc: HeaderCarrier): Future[Option[TotalPersonalDetailsCalculationModel]] = {
-    val customerType = Future.successful(CustomerTypeModel(CustomerTypeKeys.individual))
     val currentIncome = calculatorConnector.fetchAndGetFormData[CurrentIncomeModel](KeystoreKeys.currentIncome)
     val personalAllowance = calculatorConnector.fetchAndGetFormData[PersonalAllowanceModel](KeystoreKeys.personalAllowance)
-    val isVulnerableTrustee = calculatorConnector.fetchAndGetFormData[DisabledTrusteeModel](KeystoreKeys.disabledTrustee)
     val otherProperties = calculatorConnector.fetchAndGetFormData[OtherPropertiesModel](KeystoreKeys.otherProperties)
       .map(data => data.getOrElse(OtherPropertiesModel(YesNoKeys.no)))
     val previousLossOrGain = calculatorConnector.fetchAndGetFormData[PreviousLossOrGainModel](KeystoreKeys.previousLossOrGain)
@@ -109,17 +107,15 @@ trait AnswersConstructor {
       .map(data => data.getOrElse(BroughtForwardLossesModel(isClaiming = false, None)))
 
     for {
-      customerType <- customerType
       currentIncome <- currentIncome
       personalAllowance <- personalAllowance
-      isVulnerableTrustee <- isVulnerableTrustee
       otherProperties <- otherProperties
       previousLossOrGain <- previousLossOrGain
       howMuchLoss <- howMuchLoss
       howMuchGain <- howMuchGain
       annualExemptAmount <- annualExemptAmount
       broughtForwardLosses <- broughtForwardLosses
-    } yield Some(TotalPersonalDetailsCalculationModel(customerType, currentIncome, personalAllowance, isVulnerableTrustee, otherProperties,
+    } yield Some(TotalPersonalDetailsCalculationModel(currentIncome, personalAllowance, otherProperties,
       previousLossOrGain, howMuchLoss, howMuchGain, annualExemptAmount, broughtForwardLosses))
   }
 }
