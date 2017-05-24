@@ -2,11 +2,11 @@
 @import uk.gov.hmrc.play.views.html.helpers.form
 @import views.html.helpers._
 
-@(otherPropertiesForm: Form[OtherPropertiesModel], backUrl: String)(implicit request: Request[_], messages: Messages)
+@(otherPropertiesForm: Form[OtherPropertiesModel])(implicit request: Request[_], messages: Messages)
 
 @main_template(Messages("calc.otherProperties.question")) {
 
-    <a id="back-link" class="back-link" href="@backUrl">@Messages("calc.base.back")</a>
+    <a id="back-link" class="back-link" href="@{routes.PersonalAllowanceController.personalAllowance().url}">@Messages("calc.base.back")</a>
 
     @errorSummary(otherPropertiesForm, "other-properties", "otherPropertiesAmt")
 
