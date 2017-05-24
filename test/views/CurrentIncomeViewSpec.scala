@@ -29,7 +29,6 @@ import play.api.Play.current
 class CurrentIncomeViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
 
-
   "Current Income view" when {
 
     "supplied with no errors" should {
@@ -43,16 +42,12 @@ class CurrentIncomeViewSpec extends UnitSpec with WithFakeApplication with Mocki
       "have a back link" which {
         lazy val backLink = document.body().select("#back-link")
 
-        "has a class of 'back-link'" in {
-          backLink.attr("class") shouldBe "back-link"
-        }
-
         "has the text" in {
           backLink.text shouldBe messages.back
         }
 
         s"has a route to 'customer-type'" in {
-          backLink.attr("href") shouldBe controllers.routes.CustomerTypeController.customerType().url
+          backLink.attr("href") shouldBe controllers.routes.PrivateResidenceReliefController.privateResidenceRelief().url
         }
       }
 
@@ -86,10 +81,6 @@ class CurrentIncomeViewSpec extends UnitSpec with WithFakeApplication with Mocki
 
       "have a button" which {
         lazy val button = document.select("button")
-
-        "has the class 'button'" in {
-          button.attr("class") shouldBe "button"
-        }
 
         "has the type 'submit'" in {
           button.attr("type") shouldBe "submit"
