@@ -253,7 +253,7 @@ object MessageLookup {
     }
 
     object PreviousLossOrGain {
-      val question = "Did your previous properties result in a Capital Gains Tax loss or gain?"
+      val question = "Did these disposals result in an overall Capital Gains Tax loss or gain?"
       val mandatoryCheck = "Please tell us whether you made a gain or loss"
       val loss = "Loss"
       val gain = "Gain"
