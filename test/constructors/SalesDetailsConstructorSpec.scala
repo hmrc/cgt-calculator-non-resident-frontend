@@ -21,7 +21,6 @@ import java.time.LocalDate
 import assets.MessageLookup
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import assets.MessageLookup.{NonResident => messages}
-import assets.MessageLookup._
 import helpers.AssertHelpers
 import models._
 
