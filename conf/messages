@@ -272,7 +272,7 @@ calc.privateResidenceRelief.error.maxNumericExceeded = Enter a value for your da
 calc.privateResidenceRelief.error.maxNumericExceeded.OrLess = or less
 
 ## Previous Loss Or Gain ##
-calc.previousLossOrGain.question = Did your previous properties result in a Capital Gains Tax loss or gain?
+calc.previousLossOrGain.question = Did these disposals result in an overall Capital Gains Tax loss or gain?
 calc.previousLossOrGain.errors.required = Please tell us whether you made a gain or loss
 calc.previousLossOrGain.loss = Loss
 calc.previousLossOrGain.gain = Gain
