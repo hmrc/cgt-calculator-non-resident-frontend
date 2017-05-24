@@ -108,32 +108,12 @@ trait PrivateResidenceReliefController extends FrontendController with ValidActi
       val showBeforeQuestion = displayBeforeQuestion(disposalDate, acquisitionDate)
       val disposalDateLess18Months = Dates.dateMinusMonths(disposalDate, 18)
 
-      def checkTaxableGainsZeroOrLess(calculationResultsWithPRRModel: CalculationResultsWithPRRModel) = {
-        val optionSeq = Seq(calculationResultsWithPRRModel.rebasedResult, calculationResultsWithPRRModel.timeApportionedResult).flatten
-        val finalSeq = Seq(calculationResultsWithPRRModel.flatResult) ++ optionSeq
-
-        Future.successful(finalSeq.forall(_.taxableGain <= 0))
-      }
-
-      def routeDestination(taxableGainsZeroOrLess: Boolean) = {
-        if (taxableGainsZeroOrLess) Future.successful(Redirect(controllers.routes.CheckYourAnswersController.checkYourAnswers().url))
-        else Future.successful(Redirect(controllers.routes.CustomerTypeController.customerType().url))
-      }
-
       def errorAction(form: Form[PrivateResidenceReliefModel]) = {
         Future.successful(BadRequest(calculation.privateResidenceRelief(form, showBetweenQuestion,
           showBeforeQuestion, disposalDateLess18Months)))
       }
 
-      def successAction(model: PrivateResidenceReliefModel) = {
-        for {
-          _ <- calcConnector.saveFormData(KeystoreKeys.privateResidenceRelief, model)
-          answers <- answersConstructor.getNRTotalGainAnswers
-          results <- calcConnector.calculateTaxableGainAfterPRR(answers, model)
-          taxableGainsZeroOrLess <- checkTaxableGainsZeroOrLess(results.get)
-          route <- routeDestination(taxableGainsZeroOrLess)
-        } yield route
-      }
+      def successAction(model: PrivateResidenceReliefModel) = Future.successful(Redirect(controllers.routes.CurrentIncomeController.currentIncome().url))
 
       privateResidenceReliefForm(showBeforeQuestion, showBetweenQuestion).bindFromRequest.fold(errorAction, successAction)
     }
