@@ -391,7 +391,7 @@ class PrivateResidenceReliefActionSpec extends UnitSpec with WithFakeApplication
       }
 
       "redirect to the How Became Owner page" in {
-        redirectLocation(result).get shouldBe controllers.routes.CustomerTypeController.customerType().url
+        redirectLocation(result).get shouldBe controllers.routes.CurrentIncomeController.currentIncome().url
       }
     }
 

@@ -117,7 +117,7 @@ trait PrivateResidenceReliefController extends FrontendController with ValidActi
 
       def routeDestination(taxableGainsZeroOrLess: Boolean) = {
         if (taxableGainsZeroOrLess) Future.successful(Redirect(controllers.routes.CheckYourAnswersController.checkYourAnswers().url))
-        else Future.successful(Redirect(controllers.routes.CustomerTypeController.customerType().url))
+        else Future.successful(Redirect(controllers.routes.CurrentIncomeController.currentIncome().url))
       }
 
       def errorAction(form: Form[PrivateResidenceReliefModel]) = {
