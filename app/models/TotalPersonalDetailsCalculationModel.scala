@@ -18,7 +18,7 @@ package models
 
 import constructors.PersonalDetailsConstructor
 
-case class TotalPersonalDetailsCalculationModel(currentIncomeModel: Option[CurrentIncomeModel],
+case class TotalPersonalDetailsCalculationModel(currentIncomeModel: CurrentIncomeModel,
                                                 personalAllowanceModel: Option[PersonalAllowanceModel],
                                                 otherPropertiesModel: OtherPropertiesModel,
                                                 previousGainOrLoss: Option[PreviousLossOrGainModel],

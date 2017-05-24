@@ -72,18 +72,13 @@ object PersonalAndPreviousDetailsConstructor {
     ).flatten
   }
 
-  def currentIncomeAnswerRow(currentIncomeModel: Option[CurrentIncomeModel]): Option[QuestionAnswerModel[BigDecimal]] = {
-
-    currentIncomeModel match {
-      case Some(data) =>
-        Some(QuestionAnswerModel(
-          s"${KeystoreKeys.currentIncome}-question",
-          data.currentIncome,
-          Messages("calc.currentIncome.question"),
-          Some(controllers.routes.CurrentIncomeController.currentIncome().url)
-        ))
-      case _ => None
-    }
+  def currentIncomeAnswerRow(currentIncomeModel: CurrentIncomeModel): Option[QuestionAnswerModel[BigDecimal]] = {
+    Some(QuestionAnswerModel(
+      s"${KeystoreKeys.currentIncome}-question",
+      currentIncomeModel.currentIncome,
+      Messages("calc.currentIncome.question"),
+      Some(controllers.routes.CurrentIncomeController.currentIncome().url)
+    ))
   }
 
   def personalAllowanceAnswerRow(personalAllowanceModel: Option[PersonalAllowanceModel]): Option[QuestionAnswerModel[BigDecimal]] = {

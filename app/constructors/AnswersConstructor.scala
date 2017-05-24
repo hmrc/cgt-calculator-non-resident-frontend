@@ -96,6 +96,7 @@ trait AnswersConstructor {
 
   def getPersonalDetailsAndPreviousCapitalGainsAnswers(implicit hc: HeaderCarrier): Future[Option[TotalPersonalDetailsCalculationModel]] = {
     val currentIncome = calculatorConnector.fetchAndGetFormData[CurrentIncomeModel](KeystoreKeys.currentIncome)
+      .map(_.getOrElse(throw new Exception("No value for current income found")))
     val personalAllowance = calculatorConnector.fetchAndGetFormData[PersonalAllowanceModel](KeystoreKeys.personalAllowance)
     val otherProperties = calculatorConnector.fetchAndGetFormData[OtherPropertiesModel](KeystoreKeys.otherProperties)
       .map(data => data.getOrElse(OtherPropertiesModel(YesNoKeys.no)))

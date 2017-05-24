@@ -19,7 +19,7 @@ package models
 import common.nonresident.CalculationType
 
 case class SummaryModel(
-                         currentIncomeModel: Option[CurrentIncomeModel],
+                         currentIncomeModel: CurrentIncomeModel,
                          personalAllowanceModel: Option[PersonalAllowanceModel],
                          otherPropertiesModel: OtherPropertiesModel,
                          annualExemptAmountModel: Option[AnnualExemptAmountModel],

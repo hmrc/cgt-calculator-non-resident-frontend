@@ -35,8 +35,8 @@ object FinalTaxAnswersRequestConstructor {
         model.annualExemptAmountModel, maxAnnualExemptAmount)
   }
 
-  def currentIncome(currentIncomeModel: Option[CurrentIncomeModel]): String = {
-    s"&currentIncome=${currentIncomeModel.getOrElse(CurrentIncomeModel(0)).currentIncome}"
+  def currentIncome(currentIncomeModel: CurrentIncomeModel): String = {
+    s"&currentIncome=${currentIncomeModel.currentIncome}"
   }
 
   def personalAllowanceAmt(personalAllowanceModel: Option[PersonalAllowanceModel]): String =

@@ -17,11 +17,11 @@
 package constructors
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import common.nonresident.{CustomerTypeKeys, PreviousGainOrLossKeys}
+import common.nonresident.PreviousGainOrLossKeys
 import models._
+import play.api.Play.current
 import play.api.i18n.Messages
 import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 
 import scala.math.BigDecimal
 
@@ -62,31 +62,21 @@ object PersonalDetailsConstructor {
   }
 
   //Customer type needs to be individual
-  def getCurrentIncomeAnswer(currentIncomeModel: Option[CurrentIncomeModel]): Option[QuestionAnswerModel[BigDecimal]] =
-    currentIncomeModel match {
-      case Some(CurrentIncomeModel(value)) =>
-        Some(QuestionAnswerModel(
-          KeystoreKeys.currentIncome,
-          value,
-          Messages("calc.currentIncome.question"),
-          Some(controllers.routes.CurrentIncomeController.currentIncome().url))
-        )
-      case _ => None
-    }
+  def getCurrentIncomeAnswer(currentIncomeModel: CurrentIncomeModel): Option[QuestionAnswerModel[BigDecimal]] =
+    Some(QuestionAnswerModel(
+      KeystoreKeys.currentIncome,
+      currentIncomeModel.currentIncome,
+      Messages("calc.currentIncome.question"),
+      Some(controllers.routes.CurrentIncomeController.currentIncome().url))
+    )
 
   //Customer type needs to be individual
   def getPersonalAllowanceAnswer(personalAllowanceModel: Option[PersonalAllowanceModel],
-                                 currentIncomeModel: Option[CurrentIncomeModel]): Option[QuestionAnswerModel[BigDecimal]] = {
-
-    val checkCurrentIncome: BigDecimal =
-      currentIncomeModel match {
-        case Some(model) => model.currentIncome
-        case None => 0
-      }
+                                 currentIncomeModel: CurrentIncomeModel): Option[QuestionAnswerModel[BigDecimal]] = {
 
     personalAllowanceModel match {
       case Some(PersonalAllowanceModel(value)) =>
-        if (checkCurrentIncome > 0) {
+        if (currentIncomeModel.currentIncome > 0) {
           Some(QuestionAnswerModel(
             KeystoreKeys.personalAllowance,
             value,
