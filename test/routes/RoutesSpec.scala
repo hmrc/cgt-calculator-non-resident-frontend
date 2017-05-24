@@ -561,6 +561,29 @@ class RoutesSpec extends UnitSpec with WithFakeApplication with Matchers {
     }
   }
 
+  /* Who Did You Give It To / No Tax To Pay routes*/
+
+  "The URL for the whoDidYouGiveItTo Action" should {
+    "be equal to /calculate-your-capital-gains/non-resident/who-did-you-give-it-to" in {
+      val path = controllers.routes.WhoDidYouGiveItToController.whoDidYouGiveItTo().url
+      path shouldEqual "/calculate-your-capital-gains/non-resident/who-did-you-give-it-to"
+    }
+  }
+
+  "The URL for the submitWhoDidYouGiveItTo Action" should {
+    "be equal to /calculate-your-capital-gains/non-resident/who-did-you-give-it-to" in {
+      val path = controllers.routes.WhoDidYouGiveItToController.submitWhoDidYouGiveItTo().url
+      path shouldEqual "/calculate-your-capital-gains/non-resident/who-did-you-give-it-to"
+    }
+  }
+
+  "The URL for the noTaxToPay Action" should {
+    "be equal to /calculate-your-capital-gains/non-resident/no-tax-to-pay" in {
+      val path = controllers.routes.WhoDidYouGiveItToController.noTaxToPay().url
+      path shouldEqual "/calculate-your-capital-gains/non-resident/no-tax-to-pay"
+    }
+  }
+
   /* Report route*/
   "The URL for the save as pdf Action" should {
     "be equal to /calculate-your-capital-gains/non-resident/summary-report" in {
