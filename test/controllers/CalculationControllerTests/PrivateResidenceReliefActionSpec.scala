@@ -355,7 +355,7 @@ class PrivateResidenceReliefActionSpec extends UnitSpec with WithFakeApplication
   //POST Tests
   "Calling the .submitPrivateResidenceRelief action " when {
 
-    "submitting a valid form with no positive taxable gains" should {
+    "submitting a valid form" should {
       val model = CalculationResultsWithPRRModel(GainsAfterPRRModel(1000, 0, 0), None, None)
       val target = setupTarget(
         None,
@@ -371,27 +371,7 @@ class PrivateResidenceReliefActionSpec extends UnitSpec with WithFakeApplication
       }
 
       "redirect to the Check Your Answers page" in {
-        redirectLocation(result).get shouldBe controllers.routes.CheckYourAnswersController.checkYourAnswers().url
-      }
-    }
-
-    "submitting a valid form with some positive taxable gains" should {
-      val model = CalculationResultsWithPRRModel(GainsAfterPRRModel(1000, 500, 0), None, None)
-      val target = setupTarget(
-        None,
-        disposalDateData = Some(DisposalDateModel(5, 8, 2015)),
-        acquisitionDateData = Some(AcquisitionDateModel("No", None, None, None)),
-        rebasedValueData = Some(RebasedValueModel(Some(1000))),
-        calculationResultsWithPRRModel = Some(model))
-      lazy val request = fakeRequestToPOSTWithSession(("isClaimingPRR", "No"))
-      lazy val result = target.submitPrivateResidenceRelief(request)
-
-      "return a status of 303" in {
-        status(result) shouldBe 303
-      }
-
-      "redirect to the How Became Owner page" in {
-        redirectLocation(result).get shouldBe controllers.routes.CustomerTypeController.customerType().url
+        redirectLocation(result).get shouldBe controllers.routes.CurrentIncomeController.currentIncome().url
       }
     }
 
