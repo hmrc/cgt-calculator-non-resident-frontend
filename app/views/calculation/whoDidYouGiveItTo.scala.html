@@ -1,0 +1,37 @@
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import views.html.helpers._
+@import views.html.calculation.resident.properties._
+@import models.resident.properties.gain.WhoDidYouGiveItToModel
+
+@(whoDidYouGiveItToForm: Form[WhoDidYouGiveItToModel])(implicit request: Request[_], messages: Messages)
+
+@main_template(
+  title = Messages("calc.resident.whoDidYouGiveThePropertyTo.title")) {
+
+    <a id="back-link" class="back-link" href="@controllers.routes.SoldOrGivenAwayController.soldOrGivenAway().url">@Messages("calc.base.back")</a>
+
+
+    @errorSummary(whoDidYouGiveItToForm, "whoDidYouGiveItTo")
+
+  <h1 class="heading-large">@Messages("calc.resident.whoDidYouGiveThePropertyTo.title")</h1>
+
+  @form(action = controllers.routes.WhoDidYouGiveItToController.submitWhoDidYouGiveItTo) {
+
+    @formInputRadioGroup(
+      field = whoDidYouGiveItToForm("whoDidYouGiveItTo"),
+      Seq(
+        "Spouse"-> Messages("calc.resident.whoDidYouGiveThePropertyTo.spouse"),
+        "Charity"-> Messages("calc.resident.whoDidYouGiveThePropertyTo.charity"),
+        "Other"->Messages("calc.resident.whoDidYouGiveThePropertyTo.other")),
+      '_legend -> Messages("calc.resident.whoDidYouGiveThePropertyToo.title"),
+      '_legendID -> "whoDidYouGiveItTo",
+      '_legendClass -> "visuallyhidden",
+      '_labelAfter -> true,
+      '_labelClass -> "block-label",
+      '_groupClass -> "form-group radio-list",
+      '_fieldsetAttributes -> "aria-details = help")
+
+      <input type="hidden" name="whoDidYouGiveItTo" value="" />
+      <button class="button yes-no-button" type="submit" id="continue-button">@Messages("calc.base.continue")</button>
+  }
+}
