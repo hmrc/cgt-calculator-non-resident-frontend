@@ -37,7 +37,9 @@ object PersonalAndPreviousDetailsConstructor {
   def constructRows(personalAndPreviousDetailsModel: TotalPersonalDetailsCalculationModel): Seq[QuestionAnswerModel[Any]] = {
 
     val currentIncomeAnswerData = currentIncomeAnswerRow(personalAndPreviousDetailsModel.currentIncomeModel)
-    val personalAllowanceAnswerData = personalAllowanceAnswerRow(personalAndPreviousDetailsModel.personalAllowanceModel)
+    val personalAllowanceAnswerData = personalAllowanceAnswerRow(
+      personalAndPreviousDetailsModel.currentIncomeModel,
+      personalAndPreviousDetailsModel.personalAllowanceModel)
     val otherPropertiesAnswerData = otherPropertiesAnswerRow(personalAndPreviousDetailsModel.otherPropertiesModel)
     val previousGainsOrLossAnswerData = previousGainsOrLossAnswerRow(
       personalAndPreviousDetailsModel.otherPropertiesModel,
@@ -81,10 +83,11 @@ object PersonalAndPreviousDetailsConstructor {
     ))
   }
 
-  def personalAllowanceAnswerRow(personalAllowanceModel: Option[PersonalAllowanceModel]): Option[QuestionAnswerModel[BigDecimal]] = {
+  def personalAllowanceAnswerRow(currentIncomeModel: CurrentIncomeModel,
+                                 personalAllowanceModel: Option[PersonalAllowanceModel]): Option[QuestionAnswerModel[BigDecimal]] = {
 
     personalAllowanceModel match {
-      case (Some(data)) =>
+      case (Some(data)) if currentIncomeModel.currentIncome > 0 =>
         Some(QuestionAnswerModel(
           s"${KeystoreKeys.personalAllowance}-question",
           data.personalAllowanceAmt,

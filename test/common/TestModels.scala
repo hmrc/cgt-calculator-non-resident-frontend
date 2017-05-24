@@ -16,7 +16,6 @@
 
 package common
 
-import common.nonresident.CustomerTypeKeys
 import models._
 
 object TestModels {
@@ -39,9 +38,7 @@ object TestModels {
   )
 
   val sumModelFlat = SummaryModel(
-    CustomerTypeModel(CustomerTypeKeys.individual),
-    None,
-    Some(CurrentIncomeModel(1000)),
+    CurrentIncomeModel(1000),
     Some(PersonalAllowanceModel(11100)),
     OtherPropertiesModel("No"),
     None,
@@ -62,9 +59,7 @@ object TestModels {
   )
 
   val summaryIndividualFlatNoIncomeOtherPropNo = SummaryModel(
-    CustomerTypeModel(CustomerTypeKeys.individual),
-    None,
-    Some(CurrentIncomeModel(0)),
+    CurrentIncomeModel(0),
     None,
     OtherPropertiesModel("No"),
     None,
@@ -84,10 +79,8 @@ object TestModels {
     None
   )
 
-  val summaryIndividualFlatWithoutAEA = SummaryModel (
-    CustomerTypeModel(CustomerTypeKeys.individual),
-    None,
-    Some(CurrentIncomeModel(1000)),
+  val summaryIndividualFlatWithoutAEA = SummaryModel(
+    CurrentIncomeModel(1000),
     Some(PersonalAllowanceModel(9000)),
     OtherPropertiesModel("No"),
     None,
@@ -107,10 +100,8 @@ object TestModels {
     None
   )
 
-  val summaryIndividualFlatWithAEA = SummaryModel (
-    CustomerTypeModel(CustomerTypeKeys.individual),
-    None,
-    Some(CurrentIncomeModel(1000)),
+  val summaryIndividualFlatWithAEA = SummaryModel(
+    CurrentIncomeModel(1000),
     Some(PersonalAllowanceModel(9000)),
     OtherPropertiesModel("Yes"),
     Some(AnnualExemptAmountModel(1500)),
@@ -130,33 +121,8 @@ object TestModels {
     None
   )
 
-  val summaryTrusteeTAWithoutAEA = SummaryModel (
-    CustomerTypeModel(CustomerTypeKeys.trustee),
-    Some(DisabledTrusteeModel("No")),
-    None,
-    None,
-    OtherPropertiesModel("No"),
-    None,
-    AcquisitionDateModel("Yes", Some(9), Some(9), Some(1999)),
-    AcquisitionValueModel(100000),
-    Some(RebasedValueModel(None)),
-    None,
-    ImprovementsModel("Yes", Some(8000)),
-    DisposalDateModel(10, 10, 2010),
-    DisposalValueModel(150000),
-    AcquisitionCostsModel(300),
-    DisposalCostsModel(0),
-    CalculationElectionModel("time"),
-    OtherReliefsModel(999),
-    OtherReliefsModel(888),
-    OtherReliefsModel(777),
-    Some(PrivateResidenceReliefModel("No", None, None))
-  )
-
-  val summaryIndividualImprovementsNoRebasedModel = SummaryModel (
-    CustomerTypeModel(CustomerTypeKeys.individual),
-    None,
-    Some(CurrentIncomeModel(1000)),
+  val summaryIndividualImprovementsNoRebasedModel = SummaryModel(
+    CurrentIncomeModel(1000),
     Some(PersonalAllowanceModel(9000)),
     OtherPropertiesModel("No"),
     None,
@@ -176,10 +142,8 @@ object TestModels {
     Some(PrivateResidenceReliefModel("No", None, None))
   )
 
-  val summaryIndividualImprovementsWithRebasedModel = SummaryModel (
-    CustomerTypeModel(CustomerTypeKeys.individual),
-    None,
-    Some(CurrentIncomeModel(1000)),
+  val summaryIndividualImprovementsWithRebasedModel = SummaryModel(
+    CurrentIncomeModel(1000),
     Some(PersonalAllowanceModel(9000)),
     OtherPropertiesModel("No"),
     None,
@@ -199,10 +163,8 @@ object TestModels {
     Some(PrivateResidenceReliefModel("No", None, None))
   )
 
-  val summaryIndividualRebased = SummaryModel (
-    CustomerTypeModel(CustomerTypeKeys.individual),
-    None,
-    Some(CurrentIncomeModel(1000)),
+  val summaryIndividualRebased = SummaryModel(
+    CurrentIncomeModel(1000),
     Some(PersonalAllowanceModel(9000)),
     OtherPropertiesModel("No"),
     None,
@@ -222,10 +184,8 @@ object TestModels {
     Some(PrivateResidenceReliefModel("No", None, None))
   )
 
-  val summaryIndividualRebasedNoImprovements = SummaryModel (
-    CustomerTypeModel(CustomerTypeKeys.individual),
-    None,
-    Some(CurrentIncomeModel(1000)),
+  val summaryIndividualRebasedNoImprovements = SummaryModel(
+    CurrentIncomeModel(1000),
     Some(PersonalAllowanceModel(9000)),
     OtherPropertiesModel("No"),
     None,
@@ -245,10 +205,8 @@ object TestModels {
     Some(PrivateResidenceReliefModel("No", None, None))
   )
 
-  val summaryIndividualRebasedNoneImprovements = SummaryModel (
-    CustomerTypeModel(CustomerTypeKeys.individual),
-    None,
-    Some(CurrentIncomeModel(1000)),
+  val summaryIndividualRebasedNoneImprovements = SummaryModel(
+    CurrentIncomeModel(1000),
     Some(PersonalAllowanceModel(9000)),
     OtherPropertiesModel("No"),
     None,
@@ -268,10 +226,8 @@ object TestModels {
     Some(PrivateResidenceReliefModel("No", None, None))
   )
 
-  val summaryIndividualPRRAcqDateAfterAndDisposalDateBefore = SummaryModel (
-    CustomerTypeModel(CustomerTypeKeys.individual),
-    None,
-    Some(CurrentIncomeModel(1000)),
+  val summaryIndividualPRRAcqDateAfterAndDisposalDateBefore = SummaryModel(
+    CurrentIncomeModel(1000),
     Some(PersonalAllowanceModel(9000)),
     OtherPropertiesModel("No"),
     None,
@@ -291,10 +247,8 @@ object TestModels {
     Some(PrivateResidenceReliefModel("Yes", Some(100), Some(50)))
   )
 
-  val summaryIndividualPRRAcqDateAfterAndNoRebased = SummaryModel (
-    CustomerTypeModel(CustomerTypeKeys.individual),
-    None,
-    Some(CurrentIncomeModel(1000)),
+  val summaryIndividualPRRAcqDateAfterAndNoRebased = SummaryModel(
+    CurrentIncomeModel(1000),
     Some(PersonalAllowanceModel(9000)),
     OtherPropertiesModel("No"),
     None,
@@ -314,10 +268,8 @@ object TestModels {
     Some(PrivateResidenceReliefModel("Yes", Some(100), Some(50)))
   )
 
-  val summaryIndividualPRRAcqDateAfterAndDisposalDateAfter = SummaryModel (
-    CustomerTypeModel(CustomerTypeKeys.individual),
-    None,
-    Some(CurrentIncomeModel(1000)),
+  val summaryIndividualPRRAcqDateAfterAndDisposalDateAfter = SummaryModel(
+    CurrentIncomeModel(1000),
     Some(PersonalAllowanceModel(9000)),
     OtherPropertiesModel("No"),
     None,
@@ -337,10 +289,8 @@ object TestModels {
     Some(PrivateResidenceReliefModel("Yes", Some(100), Some(50)))
   )
 
-  val summaryIndividualPRRNoAcqDateAndDisposalDateAfterWithRebased = SummaryModel (
-    CustomerTypeModel(CustomerTypeKeys.individual),
-    None,
-    Some(CurrentIncomeModel(1000)),
+  val summaryIndividualPRRNoAcqDateAndDisposalDateAfterWithRebased = SummaryModel(
+    CurrentIncomeModel(1000),
     Some(PersonalAllowanceModel(9000)),
     OtherPropertiesModel("No"),
     None,
@@ -360,10 +310,8 @@ object TestModels {
     Some(PrivateResidenceReliefModel("Yes", Some(100), Some(50)))
   )
 
-  val summaryIndividualPRRAcqDateAfterAndDisposalDateAfterWithRebased = SummaryModel (
-    CustomerTypeModel(CustomerTypeKeys.individual),
-    None,
-    Some(CurrentIncomeModel(1000)),
+  val summaryIndividualPRRAcqDateAfterAndDisposalDateAfterWithRebased = SummaryModel(
+    CurrentIncomeModel(1000),
     Some(PersonalAllowanceModel(9000)),
     OtherPropertiesModel("No"),
     None,
@@ -383,10 +331,8 @@ object TestModels {
     Some(PrivateResidenceReliefModel("Yes", Some(100), Some(50)))
   )
 
-  val summaryIndividualPRRAcqDateBeforeAndDisposalDateAfterWithRebased = SummaryModel (
-    CustomerTypeModel(CustomerTypeKeys.individual),
-    None,
-    Some(CurrentIncomeModel(1000)),
+  val summaryIndividualPRRAcqDateBeforeAndDisposalDateAfterWithRebased = SummaryModel(
+    CurrentIncomeModel(1000),
     Some(PersonalAllowanceModel(9000)),
     OtherPropertiesModel("No"),
     None,
@@ -406,10 +352,8 @@ object TestModels {
     Some(PrivateResidenceReliefModel("Yes", Some(100), Some(50)))
   )
 
-  val summaryIndividualWithAllOptions = SummaryModel (
-    CustomerTypeModel(CustomerTypeKeys.individual),
-    None,
-    Some(CurrentIncomeModel(1000)),
+  val summaryIndividualWithAllOptions = SummaryModel(
+    CurrentIncomeModel(1000),
     Some(PersonalAllowanceModel(9000)),
     OtherPropertiesModel("No"),
     None,
@@ -465,15 +409,13 @@ object TestModels {
   )
 
   val personalDetailsCalculationModelIndividual = TotalPersonalDetailsCalculationModel(
-    CustomerTypeModel("individual"),
-    Some(CurrentIncomeModel(20000)),
+    CurrentIncomeModel(20000),
     Some(PersonalAllowanceModel(0)),
-    None,
     OtherPropertiesModel("Yes"),
     Some(PreviousLossOrGainModel("Neither")),
     None,
     None,
     Some(AnnualExemptAmountModel(0)),
-    BroughtForwardLossesModel(false, None)
+    BroughtForwardLossesModel(isClaiming = false, None)
   )
 }

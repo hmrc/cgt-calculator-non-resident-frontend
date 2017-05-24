@@ -21,31 +21,21 @@ import uk.gov.hmrc.play.test.UnitSpec
 
 class FinalTaxAnswersRequestConstructorSpec extends UnitSpec {
 
-  "Calling .customerType" should {
-    "produce a valid query string" in {
-      FinalTaxAnswersRequestConstructor.customerType(CustomerTypeModel("individual")) shouldEqual "&customerType=individual"
-    }
-  }
-
   "Calling .currentIncome" should {
-    "produce a valid query string when Customer type is individual" in {
-      FinalTaxAnswersRequestConstructor.currentIncome(CustomerTypeModel("individual"), Some(CurrentIncomeModel(10000))) shouldEqual
+    "produce a valid query string for current income" in {
+      FinalTaxAnswersRequestConstructor.currentIncome(CurrentIncomeModel(10000)) shouldEqual
       "&currentIncome=10000"
-    }
-
-    "produce a blank query string when Customer type is anything else" in {
-      FinalTaxAnswersRequestConstructor.currentIncome(CustomerTypeModel("trustee"), Some(CurrentIncomeModel(10000))) shouldEqual ""
     }
   }
 
   "Calling .personalAllowanceAmt" should {
-    "produce a valid query string when Customer type is individual" in {
-      FinalTaxAnswersRequestConstructor.personalAllowanceAmt(CustomerTypeModel("individual"), Some(PersonalAllowanceModel(10000))) shouldEqual
+    "produce a valid query string when a personal allowance is supplied" in {
+      FinalTaxAnswersRequestConstructor.personalAllowanceAmt(Some(PersonalAllowanceModel(10000))) shouldEqual
       "&personalAllowanceAmt=10000"
     }
 
-    "produce a blank query string when Customer type is anything else" in {
-      FinalTaxAnswersRequestConstructor.personalAllowanceAmt(CustomerTypeModel("trustee"), Some(PersonalAllowanceModel(10000))) shouldEqual ""
+    "produce a blank query string when no personal allowance is present is anything else" in {
+      FinalTaxAnswersRequestConstructor.personalAllowanceAmt(None) shouldEqual ""
     }
   }
 
@@ -156,11 +146,11 @@ class FinalTaxAnswersRequestConstructorSpec extends UnitSpec {
   "Calling .broughtForwardLosses" should {
 
     "produce a valid query string when claiming" in {
-      FinalTaxAnswersRequestConstructor.broughtForwardLosses(BroughtForwardLossesModel(true, Some(10000))) shouldEqual "&broughtForwardLoss=10000"
+      FinalTaxAnswersRequestConstructor.broughtForwardLosses(BroughtForwardLossesModel(isClaiming = true, Some(10000))) shouldEqual "&broughtForwardLoss=10000"
     }
 
     "produce a blank query string when not claiming" in {
-      FinalTaxAnswersRequestConstructor.broughtForwardLosses(BroughtForwardLossesModel(false, Some(10000))) shouldEqual ""
+      FinalTaxAnswersRequestConstructor.broughtForwardLosses(BroughtForwardLossesModel(isClaiming = false, Some(10000))) shouldEqual ""
     }
   }
 }

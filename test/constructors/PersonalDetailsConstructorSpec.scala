@@ -17,10 +17,10 @@
 package constructors
 
 import assets.MessageLookup.{NonResident => messages}
-import controllers.{routes => routes}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.TestModels._
-import common.nonresident.{CustomerTypeKeys, PreviousGainOrLossKeys}
+import common.nonresident.PreviousGainOrLossKeys
+import controllers.routes
 import models._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
@@ -28,119 +28,11 @@ class PersonalDetailsConstructorSpec extends UnitSpec with WithFakeApplication {
 
   val target = PersonalDetailsConstructor
 
-  "calling .getCustomerTypeAnswer" when {
-
-    "a customer type of individual" should {
-
-      lazy val result = target.getCustomerTypeAnswer(CustomerTypeModel(CustomerTypeKeys.individual))
-
-      "return some details for the CustomerType" in {
-        result should not be None
-      }
-
-      s"return an id of ${KeystoreKeys.customerType}" in {
-        result.fold(cancel("expected result not computed")) { item =>
-          item.id shouldBe KeystoreKeys.customerType
-        }
-      }
-
-      s"return a question of ${messages.CustomerType.question}" in {
-        result.fold(cancel("expected result not computed")) { item =>
-          item.question shouldBe messages.CustomerType.question
-        }
-      }
-
-      s"return the correct answer" in {
-        result.fold(cancel("expected result not computed")) { item =>
-          item.data shouldBe messages.CustomerType.individual
-        }
-      }
-
-      s"return a link of ${routes.CustomerTypeController.customerType().url}" in {
-        result.fold(cancel("expected result not computed")) { item =>
-          item.link.fold(cancel("link not supplied when expected")) { link =>
-            link shouldBe routes.CustomerTypeController.customerType().url
-          }
-        }
-      }
-    }
-
-    "a customer type of trustee" should {
-
-      lazy val result = target.getCustomerTypeAnswer(CustomerTypeModel(CustomerTypeKeys.trustee))
-
-      "return some details for the CustomerType" in {
-        result should not be None
-      }
-
-      s"return an id of ${KeystoreKeys.customerType}" in {
-        result.fold(cancel("expected result not computed")) { item =>
-          item.id shouldBe KeystoreKeys.customerType
-        }
-      }
-
-      s"return a question of ${messages.CustomerType.question}" in {
-        result.fold(cancel("expected result not computed")) { item =>
-          item.question shouldBe messages.CustomerType.question
-        }
-      }
-
-      s"return the correct answer" in {
-        result.fold(cancel("expected result not computed")) { item =>
-          item.data shouldBe messages.CustomerType.trustee
-        }
-      }
-
-      s"return a link of ${routes.CustomerTypeController.customerType().url}" in {
-        result.fold(cancel("expected result not computed")) { item =>
-          item.link.fold(cancel("link not supplied when expected")) { link =>
-            link shouldBe routes.CustomerTypeController.customerType().url
-          }
-        }
-      }
-    }
-
-    "a customer type of personal rep" should {
-
-      lazy val result = target.getCustomerTypeAnswer(CustomerTypeModel(CustomerTypeKeys.personalRep))
-
-      "return some details for the CustomerType" in {
-        result should not be None
-      }
-
-      s"return an id of ${KeystoreKeys.customerType}" in {
-        result.fold(cancel("expected result not computed")) { item =>
-          item.id shouldBe KeystoreKeys.customerType
-        }
-      }
-
-      s"return a question of ${messages.CustomerType.question}" in {
-        result.fold(cancel("expected result not computed")) { item =>
-          item.question shouldBe messages.CustomerType.question
-        }
-      }
-
-      s"return the correct answer" in {
-        result.fold(cancel("expected result not computed")) { item =>
-          item.data shouldBe messages.CustomerType.personalRep
-        }
-      }
-
-      s"return a link of ${routes.CustomerTypeController.customerType().url}" in {
-        result.fold(cancel("expected result not computed")) { item =>
-          item.link.fold(cancel("link not supplied when expected")) { link =>
-            link shouldBe routes.CustomerTypeController.customerType().url
-          }
-        }
-      }
-    }
-  }
-
   "calling .getCurrentIncomeAnswer" when {
 
     "a current income greater than 0" should {
 
-      lazy val result = target.getCurrentIncomeAnswer(CustomerTypeModel(CustomerTypeKeys.individual), Some(CurrentIncomeModel(1000)))
+      lazy val result = target.getCurrentIncomeAnswer(CurrentIncomeModel(1000))
 
       "return some details for the CurrentIncome" in {
         result should not be None
@@ -175,7 +67,7 @@ class PersonalDetailsConstructorSpec extends UnitSpec with WithFakeApplication {
 
     "a current income of 0.0" should {
 
-      lazy val result = target.getCurrentIncomeAnswer(CustomerTypeModel(CustomerTypeKeys.individual), Some(CurrentIncomeModel(0)))
+      lazy val result = target.getCurrentIncomeAnswer(CurrentIncomeModel(0))
 
       "return some details for the CurrentIncome" in {
         result should not be None
@@ -195,7 +87,7 @@ class PersonalDetailsConstructorSpec extends UnitSpec with WithFakeApplication {
 
       "return data of 0.0" in {
         result.fold(cancel("expected result not computed")) { item =>
-          item.data shouldBe summaryIndividualFlatNoIncomeOtherPropNo.currentIncomeModel.get.currentIncome
+          item.data shouldBe summaryIndividualFlatNoIncomeOtherPropNo.currentIncomeModel.currentIncome
         }
       }
 
@@ -206,16 +98,6 @@ class PersonalDetailsConstructorSpec extends UnitSpec with WithFakeApplication {
           }
         }
       }
-
-    }
-
-    "no current income is given" should {
-
-      lazy val result = target.getCurrentIncomeAnswer(CustomerTypeModel(CustomerTypeKeys.trustee), None)
-
-      "return a None" in {
-        result shouldBe None
-      }
     }
   }
 
@@ -223,8 +105,8 @@ class PersonalDetailsConstructorSpec extends UnitSpec with WithFakeApplication {
 
     "a personal allowance of greater than 0 is given" should {
 
-      lazy val result = target.getPersonalAllowanceAnswer(CustomerTypeModel(CustomerTypeKeys.individual), Some(PersonalAllowanceModel(10000)),
-        Some(CurrentIncomeModel(10000)))
+      lazy val result = target.getPersonalAllowanceAnswer(Some(PersonalAllowanceModel(10000)),
+        CurrentIncomeModel(1000))
 
       "return some details for the PersonalAllowance" in {
         result should not be None
@@ -259,8 +141,8 @@ class PersonalDetailsConstructorSpec extends UnitSpec with WithFakeApplication {
 
     "a personal allowance of 0 is given" should {
 
-      lazy val result = target.getPersonalAllowanceAnswer(CustomerTypeModel(CustomerTypeKeys.individual), Some(PersonalAllowanceModel(0)),
-        Some(CurrentIncomeModel(10000)))
+      lazy val result = target.getPersonalAllowanceAnswer(Some(PersonalAllowanceModel(0)),
+        CurrentIncomeModel(10000))
 
       "return some details for the PersonalAllowance" in {
         result should not be None
@@ -295,102 +177,11 @@ class PersonalDetailsConstructorSpec extends UnitSpec with WithFakeApplication {
 
     "personal allowance is not given as current income of 0 is given" should {
 
-      lazy val result = target.getPersonalAllowanceAnswer(CustomerTypeModel(CustomerTypeKeys.individual), Some(PersonalAllowanceModel(100)),
-        Some(CurrentIncomeModel(0)))
+      lazy val result = target.getPersonalAllowanceAnswer(Some(PersonalAllowanceModel(100)),
+        CurrentIncomeModel(0))
 
       "return a None" in {
         result shouldBe None
-      }
-    }
-
-    "no personal allowance is given" should {
-
-      lazy val result = target.getPersonalAllowanceAnswer(CustomerTypeModel(CustomerTypeKeys.trustee), None, None)
-
-      "return a None" in {
-        result shouldBe None
-      }
-    }
-  }
-
-  "calling .getDisabledTrusteeAnswer" when {
-
-    "no disabled trustee is given" should {
-
-      lazy val result = target.getDisabledTrusteeAnswer(CustomerTypeModel(CustomerTypeKeys.individual), None)
-
-      "return a None" in {
-        result shouldBe None
-      }
-    }
-
-    "a disabled trustee with Yes is supplied" should {
-
-      lazy val result = target.getDisabledTrusteeAnswer(CustomerTypeModel(CustomerTypeKeys.trustee), Some(DisabledTrusteeModel("Yes")))
-
-      "return some details for the DisabledTrustee" in {
-        result should not be None
-      }
-
-      s"return an id of ${KeystoreKeys.disabledTrustee}" in {
-        result.fold(cancel("expected result not computed")) { item =>
-          item.id shouldBe KeystoreKeys.disabledTrustee
-        }
-      }
-
-      s"return data of ${messages.yes}" in {
-        result.fold(cancel("expected result not computed")) { item =>
-          item.data shouldBe messages.yes
-        }
-      }
-
-      s"return a question of ${messages.DisabledTrustee.question}" in {
-        result.fold(cancel("expected result not computed")) { item =>
-          item.question shouldBe messages.DisabledTrustee.question
-        }
-      }
-
-      s"return an id of ${routes.DisabledTrusteeController.disabledTrustee().url}" in {
-        result.fold(cancel("expected result not computed")) { item =>
-          item.link.fold(cancel("link not supplied when expected")) { link =>
-            link shouldBe routes.DisabledTrusteeController.disabledTrustee().url
-          }
-        }
-      }
-    }
-
-    "a disabled trustee with No is supplied" should {
-
-      lazy val result = target.getDisabledTrusteeAnswer(CustomerTypeModel(CustomerTypeKeys.trustee), Some(DisabledTrusteeModel("No")))
-
-      "return some details for the DisabledTrustee" in {
-        result should not be None
-      }
-
-      s"return an id of ${KeystoreKeys.disabledTrustee}" in {
-        result.fold(cancel("expected result not computed")) { item =>
-          item.id shouldBe KeystoreKeys.disabledTrustee
-        }
-      }
-
-      s"return data of ${messages.no}" in {
-        result.fold(cancel("expected result not computed")) { item =>
-          item.data shouldBe messages.no
-        }
-      }
-
-      s"return a question of ${messages.DisabledTrustee.question}" in {
-        result.fold(cancel("expected result not computed")) { item =>
-          item.question shouldBe messages.DisabledTrustee.question
-        }
-      }
-
-      s"return an id of ${routes.DisabledTrusteeController.disabledTrustee().url}" in {
-        result.fold(cancel("expected result not computed")) { item =>
-          item.link.fold(cancel("link not supplied when expected")) { link =>
-            link shouldBe routes.DisabledTrusteeController.disabledTrustee().url
-          }
-        }
       }
     }
   }
