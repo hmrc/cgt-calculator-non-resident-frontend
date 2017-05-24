@@ -40,8 +40,7 @@ class OtherPropertiesActionSpec extends UnitSpec with WithFakeApplication with M
 
   implicit val hc = new HeaderCarrier()
 
-  def setupTarget(getData: Option[OtherPropertiesModel], customerTypeData:Option[CustomerTypeModel] = None,
-                  currentIncomeData:Option[CurrentIncomeModel] = None): OtherPropertiesController = {
+  def setupTarget(getData: Option[OtherPropertiesModel]): OtherPropertiesController = {
 
     val mockCalcConnector = mock[CalculatorConnector]
 
@@ -50,14 +49,6 @@ class OtherPropertiesActionSpec extends UnitSpec with WithFakeApplication with M
 
     when(mockCalcConnector.saveFormData[OtherPropertiesModel](ArgumentMatchers.any(), ArgumentMatchers.any()) (ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(mock[CacheMap])
-
-    when(mockCalcConnector.fetchAndGetFormData[CustomerTypeModel](
-      ArgumentMatchers.eq(KeystoreKeys.customerType))(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(customerTypeData))
-
-    when(mockCalcConnector.fetchAndGetFormData[CurrentIncomeModel](
-      ArgumentMatchers.eq(KeystoreKeys.currentIncome))(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(currentIncomeData))
 
     new OtherPropertiesController {
       override val calcConnector: CalculatorConnector = mockCalcConnector
@@ -84,81 +75,6 @@ class OtherPropertiesActionSpec extends UnitSpec with WithFakeApplication with M
 
       "for a customer type of Individual" should {
 
-        val target = setupTarget(None, Some(CustomerTypeModel(CustomerTypeKeys.individual)), Some(CurrentIncomeModel(100)))
-        lazy val result = target.otherProperties(fakeRequestWithSession)
-        lazy val document = Jsoup.parse(bodyOf(result))
-
-        "return a 200" in {
-          status(result) shouldBe 200
-        }
-
-        "display the other properties page" in {
-          document.title shouldEqual messages.question
-        }
-
-        s"has a 'Back' link to ${routes.PersonalAllowanceController.personalAllowance().url}" in {
-          document.body.getElementById("back-link").attr("href").trim() shouldEqual routes.PersonalAllowanceController.personalAllowance().url
-        }
-      }
-
-      "for a Customer Type of Individual with no Current Income" should {
-
-        val target = setupTarget(None,Some(CustomerTypeModel(CustomerTypeKeys.individual)), Some(CurrentIncomeModel(0)))
-        lazy val result = target.otherProperties(fakeRequestWithSession)
-        lazy val document = Jsoup.parse(bodyOf(result))
-
-        "return a 200" in {
-          status(result) shouldBe 200
-        }
-
-        "display the other properties page" in {
-          document.title shouldEqual messages.question
-        }
-
-        s"have a 'Back' link to ${routes.CurrentIncomeController.currentIncome().url}" in {
-          document.body.getElementById("back-link").attr("href") shouldEqual routes.CurrentIncomeController.currentIncome().url
-        }
-      }
-
-      "for a Customer Type of Trustee" should {
-
-        val target = setupTarget(None, Some(CustomerTypeModel(CustomerTypeKeys.trustee)))
-        lazy val result = target.otherProperties(fakeRequestWithSession)
-        lazy val document = Jsoup.parse(bodyOf(result))
-
-        "return a 200" in {
-          status(result) shouldBe 200
-        }
-
-        "display the other properties page" in {
-          document.title shouldEqual messages.question
-        }
-
-        s"have a 'Back' link to ${routes.DisabledTrusteeController.disabledTrustee().url}" in {
-          document.body.getElementById("back-link").attr("href") shouldEqual routes.DisabledTrusteeController.disabledTrustee().url
-        }
-      }
-
-      "for a Customer Type of Personal Rep" should {
-
-        val target = setupTarget(None, Some(CustomerTypeModel(CustomerTypeKeys.personalRep)))
-        lazy val result = target.otherProperties(fakeRequestWithSession)
-        lazy val document = Jsoup.parse(bodyOf(result))
-
-        "return a 200" in {
-          status(result) shouldBe 200
-        }
-
-        "display the other properties page" in {
-          document.title shouldEqual messages.question
-        }
-
-        s"have a 'Back' link to ${routes.CustomerTypeController.customerType().url}" in {
-          document.body.getElementById("back-link").attr("href") shouldEqual routes.CustomerTypeController.customerType().url
-        }
-      }
-
-      "if no customer type model exists" should {
         val target = setupTarget(None)
         lazy val result = target.otherProperties(fakeRequestWithSession)
         lazy val document = Jsoup.parse(bodyOf(result))
@@ -169,10 +85,6 @@ class OtherPropertiesActionSpec extends UnitSpec with WithFakeApplication with M
 
         "display the other properties page" in {
           document.title shouldEqual messages.question
-        }
-
-        s"have a 'Back' link to $missingDataRoute " in {
-          document.body.getElementById("back-link").attr("href") shouldEqual missingDataRoute
         }
       }
     }

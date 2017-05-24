@@ -16,19 +16,17 @@
 
 package controllers
 
-import common.DefaultRoutes._
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import forms.OtherPropertiesForm._
-import models.{CurrentIncomeModel, CustomerTypeModel, OtherPropertiesModel}
+import models.OtherPropertiesModel
+import play.api.Play.current
 import play.api.data.Form
+import play.api.i18n.Messages.Implicits._
 import play.api.mvc.Result
 import uk.gov.hmrc.play.frontend.controller.FrontendController
-import uk.gov.hmrc.play.http.HeaderCarrier
 import views.html.calculation
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 
 import scala.concurrent.Future
 
@@ -40,39 +38,17 @@ trait OtherPropertiesController extends FrontendController with ValidActiveSessi
 
   val calcConnector: CalculatorConnector
 
-  private def otherPropertiesBackUrl(implicit hc: HeaderCarrier): Future[String] =
-    calcConnector.fetchAndGetFormData[CustomerTypeModel](KeystoreKeys.customerType).flatMap {
-      case Some(CustomerTypeModel("individual")) =>
-        calcConnector.fetchAndGetFormData[CurrentIncomeModel](KeystoreKeys.currentIncome).flatMap {
-          case Some(data) if data.currentIncome == 0 => Future.successful(routes.CurrentIncomeController.currentIncome().url)
-          case _ => Future.successful(routes.PersonalAllowanceController.personalAllowance().url)
-        }
-      case Some(CustomerTypeModel("trustee")) => Future.successful(routes.DisabledTrusteeController.disabledTrustee().url)
-      case Some(_) => Future.successful(routes.CustomerTypeController.customerType().url)
-      case _ => Future.successful(missingDataRoute)
-    }
-
   val otherProperties = ValidateSession.async { implicit request =>
 
-    def routeRequest(backUrl: String): Future[Result] = {
-      calcConnector.fetchAndGetFormData[OtherPropertiesModel](KeystoreKeys.otherProperties).map {
-        case Some(data) => Ok(calculation.otherProperties(otherPropertiesForm.fill(data), backUrl))
-        case _ => Ok(calculation.otherProperties(otherPropertiesForm, backUrl))
-      }
+    calcConnector.fetchAndGetFormData[OtherPropertiesModel](KeystoreKeys.otherProperties).map {
+      case Some(data) => Ok(calculation.otherProperties(otherPropertiesForm.fill(data)))
+      case _ => Ok(calculation.otherProperties(otherPropertiesForm))
     }
-
-    for {
-      backUrl <- otherPropertiesBackUrl
-      finalResult <- routeRequest(backUrl)
-    } yield finalResult
   }
 
   val submitOtherProperties = ValidateSession.async { implicit request =>
     def errorAction(form: Form[OtherPropertiesModel]) = {
-      for {
-        url <- otherPropertiesBackUrl
-        result <- Future.successful(BadRequest(calculation.otherProperties(form, url)))
-      } yield result
+      Future.successful(BadRequest(calculation.otherProperties(form)))
     }
 
     def successAction(model: OtherPropertiesModel) = {

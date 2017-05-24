@@ -34,7 +34,7 @@ class OtherPropertiesViewSpec extends UnitSpec with WithFakeApplication with Fak
 
     "return some HTML that, when the hidden question is displayed" should {
 
-      lazy val view = otherProperties(otherPropertiesForm, "back-link")
+      lazy val view = otherProperties(otherPropertiesForm)
       lazy val document = Jsoup.parse(view.body)
 
       s"have the title '${messages.question}'" in {
@@ -45,14 +45,14 @@ class OtherPropertiesViewSpec extends UnitSpec with WithFakeApplication with Fak
         document.body.getElementsByTag("h1").text shouldEqual messages.question
       }
 
-      s"have a 'Back' link to back-link" which {
+      s"have a 'Back' link to ${controllers.routes.PersonalAllowanceController.personalAllowance().url}" which {
 
         "should have the text" in {
           document.body.getElementById("back-link").text shouldEqual commonMessages.back
         }
 
-        "should have an href to 'back-link'" in {
-          document.body.getElementById("back-link").attr("href") shouldEqual "back-link"
+        s"should have an href to '${controllers.routes.PersonalAllowanceController.personalAllowance().url}'" in {
+          document.body.getElementById("back-link").attr("href") shouldEqual controllers.routes.PersonalAllowanceController.personalAllowance().url
         }
       }
 
@@ -97,7 +97,7 @@ class OtherPropertiesViewSpec extends UnitSpec with WithFakeApplication with Fak
 
     "return some HTML that, when the hidden question is not displayed" should {
 
-      lazy val view = otherProperties(otherPropertiesForm, "back-link")
+      lazy val view = otherProperties(otherPropertiesForm)
       lazy val document = Jsoup.parse(view.body)
 
       s"have the title '${messages.question}'" in {
@@ -116,7 +116,7 @@ class OtherPropertiesViewSpec extends UnitSpec with WithFakeApplication with Fak
     "when passed a form with errors" should {
 
       lazy val form = otherPropertiesForm.bind(Map("otherProperties" -> "bad-data"))
-      lazy val view = otherProperties(form, "back-link")
+      lazy val view = otherProperties(form)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {
