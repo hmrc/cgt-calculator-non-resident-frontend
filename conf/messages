@@ -797,3 +797,9 @@ calc.whatNext.saHeader = What if I''m registered for Self Assessment?
 calc.whatNext.saText = You must report basic information now, but you can choose to report in full and pay any tax due when you do your Self Assessment return.
 calc.whatNext.report = Report now
 calc.whatNext.finish = Return to GOV.UK
+
+## Who did you give the property to messages
+calc.whoDidYouGiveThePropertyTo.title = Who did you give the property to?
+calc.whoDidYouGiveThePropertyTo.spouse = Your spouse or a civil partner
+calc.whoDidYouGiveThePropertyTo.charity = A charity
+calc.whoDidYouGiveThePropertyTo.other = Someone else
