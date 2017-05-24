@@ -159,6 +159,13 @@ POST        /other-reliefs-time-apportioned     controllers.OtherReliefsTAContro
 
 GET         /other-reliefs-rebased              controllers.OtherReliefsRebasedController.otherReliefsRebased
 POST        /other-reliefs-rebased              controllers.OtherReliefsRebasedController.submitOtherReliefsRebased
+
+#Who Did You Give It To
+GET         /who-did-you-give-it-to             controllers.WhoDidYouGiveItToController.whoDidYouGiveItTo
+POST        /who-did-you-give-it-to             controllers.WhoDidYouGiveItToController.submitWhoDidYouGiveItTo
+
+#You Have No Tax To Pay
+GET         /no-tax-to-pay                      controllers.WhoDidYouGiveItToController.noTaxToPay
 ########################################################
 
 #Report screen route
