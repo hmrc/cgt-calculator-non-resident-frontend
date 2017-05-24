@@ -121,7 +121,7 @@ class SoldOrGivenAwayActionSpec extends UnitSpec with WithFakeApplication with M
       }
 
       "redirect to the Market Value When Gave Away Page" in{
-        redirectLocation(result).get shouldBe controllers.routes.MarketValueWhenSoldOrGaveAwayController.marketValueWhenGaveAway().url
+        redirectLocation(result).get shouldBe controllers.routes.WhoDidYouGiveItToController.whoDidYouGiveItTo().url
       }
     }
 
