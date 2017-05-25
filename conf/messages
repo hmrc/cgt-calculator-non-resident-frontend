@@ -263,13 +263,6 @@ calc.marketValue.helpText = You can use a valuation from a surveyor. If you don'
 calc.marketValue.helpTextAdditional = You might have to pay more if we think your estimate is unrealistic.
 calc.marketValue.jointOwnership = If you owned the property with someone else, only enter your share of the property value.
 
-# NR Who Did You Give The Property To #
-calc.whoDidYouGiveThePropertyTo.title = Who did you give the property to?
-calc.whoDidYouGiveThePropertyTo.spouse = Your spouse or a civil partner
-calc.whoDidYouGiveThePropertyTo.charity = A charity
-calc.whoDidYouGiveThePropertyTo.other = Someone else
-calc.whoDidYouGiveThePropertyTo.errormandatory = Please tell us who you gave the property to
-
 ## Private Residence Relief ##
 calc.privateResidenceRelief.question = Are you claiming Private Residence Relief?
 calc.privateResidenceRelief.questionBetween.partOne = How many days between 5 April 2015 and
