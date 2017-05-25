@@ -126,17 +126,6 @@ class CustomerTypeActionSpec extends UnitSpec with WithFakeApplication with Mock
           PrivateResidenceReliefController.privateResidenceRelief().url
       }
     }
-
-    "there is an acquisition date but no rebased value" should {
-      val target = setupTarget(None, None, Some(AcquisitionDateModel(1, 1, 2016)), Some(RebasedValueModel(None)))
-      lazy val result = target.customerType(fakeRequest)
-      lazy val document = Jsoup.parse(bodyOf(result))
-
-      "have a back link that links to PRR" in {
-        document.getElementById("back-link").attr("href") shouldBe controllers.routes.
-          PrivateResidenceReliefController.privateResidenceRelief().url
-      }
-    }
   }
 
   // POST Tests
