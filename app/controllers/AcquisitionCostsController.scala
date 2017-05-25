@@ -49,7 +49,7 @@ trait AcquisitionCostsController extends FrontendController with ValidActiveSess
     def result(acquisitionDateModel: Option[AcquisitionDateModel],
                howBecameOwnerModel: Option[HowBecameOwnerModel],
                boughtForLessModel: Option[BoughtForLessModel]) = (acquisitionDateModel, howBecameOwnerModel, boughtForLessModel) match {
-      case (Some(AcquisitionDateModel("Yes",_,_,_)),_,_) if TaxDates.dateBeforeLegislationStart(acquisitionDateModel.get.get) =>
+      case (Some(AcquisitionDateModel(_,_,_)),_,_) if TaxDates.dateBeforeLegislationStart(acquisitionDateModel.get.get) =>
         Future.successful(controllers.routes.WorthBeforeLegislationStartController.worthBeforeLegislationStart().url)
       case (_,Some(HowBecameOwnerModel("Inherited")),_) =>
         Future.successful(controllers.routes.WorthWhenInheritedController.worthWhenInherited().url)
@@ -86,7 +86,7 @@ trait AcquisitionCostsController extends FrontendController with ValidActiveSess
       val getAcquisitionDate = calcConnector.fetchAndGetFormData[AcquisitionDateModel](KeystoreKeys.acquisitionDate)
 
       def result(acquisitionDateModel: Option[AcquisitionDateModel]) = acquisitionDateModel match {
-        case Some(AcquisitionDateModel("Yes",_,_,_)) if TaxDates.dateAfterStart(acquisitionDateModel.get.get) =>
+        case Some(AcquisitionDateModel(_,_,_)) if TaxDates.dateAfterStart(acquisitionDateModel.get.get) =>
           Future.successful(Redirect(routes.ImprovementsController.improvements()))
         case _ => Future.successful(Redirect(routes.RebasedValueController.rebasedValue()))
       }

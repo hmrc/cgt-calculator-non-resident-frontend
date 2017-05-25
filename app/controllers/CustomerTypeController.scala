@@ -22,9 +22,9 @@ import connectors.CalculatorConnector
 import constructors.CalculationElectionConstructor
 import controllers.predicates.ValidActiveSession
 import forms.CustomerTypeForm._
-import models.{AcquisitionDateModel, CustomerTypeModel, RebasedValueModel}
+import models.{CustomerTypeModel, RebasedValueModel}
 import play.api.data.Form
-import play.api.mvc.{Action, Result}
+import play.api.mvc.{Action, AnyContent, Result}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import uk.gov.hmrc.play.http.HeaderCarrier
 import views.html.calculation
@@ -44,26 +44,18 @@ trait CustomerTypeController extends FrontendController with ValidActiveSession 
 
   def customerTypeBackUrl(implicit hc: HeaderCarrier): Future[String] = {
 
-    def skipPRR(acquisitionDate: AcquisitionDateModel, rebasedValue: RebasedValueModel): Boolean = {
-      acquisitionDate.hasAcquisitionDate == "No" && rebasedValue.rebasedValueAmt.isEmpty
+    def skipPRR(rebasedValue: RebasedValueModel): Boolean = {
+      rebasedValue.rebasedValueAmt.isEmpty
     }
 
-    val acquisitionDateCall = calcConnector.fetchAndGetFormData[AcquisitionDateModel](KeystoreKeys.acquisitionDate)
-    val rebasedValueCall = calcConnector.fetchAndGetFormData[RebasedValueModel](KeystoreKeys.rebasedValue)
+    calcConnector.fetchAndGetFormData[RebasedValueModel](KeystoreKeys.rebasedValue).map {
+      case Some(rebasedValue) if skipPRR(rebasedValue) => routes.ImprovementsController.improvements().url
+      case _ => routes.PrivateResidenceReliefController.privateResidenceRelief().url
 
-    for {
-      acquisitionDate <- acquisitionDateCall
-      rebasedValue <- rebasedValueCall
-    } yield {
-      (acquisitionDate, rebasedValue) match {
-        case (Some(date), Some(value)) if skipPRR(date, value) => routes.ImprovementsController.improvements().url
-        case _ => routes.PrivateResidenceReliefController.privateResidenceRelief().url
-      }
     }
-
   }
 
-  val customerType = Action.async { implicit request =>
+  val customerType: Action[AnyContent] = Action.async { implicit request =>
 
     def routeRequest(backUrl: String): Future[Result] =
       calcConnector.fetchAndGetFormData[CustomerTypeModel](KeystoreKeys.customerType).map {
@@ -77,7 +69,7 @@ trait CustomerTypeController extends FrontendController with ValidActiveSession 
     } yield result
   }
 
-  val submitCustomerType = ValidateSession.async { implicit request =>
+  val submitCustomerType: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     def errorAction(form: Form[CustomerTypeModel]) = {
       for {

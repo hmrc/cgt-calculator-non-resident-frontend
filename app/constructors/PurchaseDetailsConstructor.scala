@@ -30,13 +30,11 @@ object PurchaseDetailsConstructor {
   def getPurchaseDetailsSection(totalGainAnswersModel: TotalGainAnswersModel): Seq[QuestionAnswerModel[Any]] = {
 
     val useRebasedValues = {
-      if (!TaxDates.dateAfterStart(totalGainAnswersModel.acquisitionDateModel.get))  true
-      else if (totalGainAnswersModel.rebasedValueModel.get.rebasedValueAmt.isDefined)  true
-      else false
+      !TaxDates.dateAfterStart(totalGainAnswersModel.acquisitionDateModel.get)
     }
 
     val useWorthBeforeLegislationStart = {
-      if (TaxDates.dateBeforeLegislationStart(totalGainAnswersModel.acquisitionDateModel.get)) true else false
+      TaxDates.dateBeforeLegislationStart(totalGainAnswersModel.acquisitionDateModel.get)
     }
 
     val acquisitionDateData = acquisitionDateRow(totalGainAnswersModel)
@@ -61,13 +59,13 @@ object PurchaseDetailsConstructor {
     items.flatten
   }
 
-  def acquisitionDateRow(totalGainAnswersModel: TotalGainAnswersModel): QuestionAnswerModel[LocalDate] = {
-    QuestionAnswerModel(
+  def acquisitionDateRow(totalGainAnswersModel: TotalGainAnswersModel): Option[QuestionAnswerModel[LocalDate]] = {
+    Some(QuestionAnswerModel(
         s"${KeystoreKeys.acquisitionDate}",
         totalGainAnswersModel.acquisitionDateModel.get,
         Messages("calc.acquisitionDate.questionTwo"),
         Some(controllers.routes.AcquisitionDateController.acquisitionDate().url)
-    )
+    ))
   }
 
   def howBecameOwnerRow(totalGainAnswersModel: TotalGainAnswersModel): Option[QuestionAnswerModel[String]] = {
