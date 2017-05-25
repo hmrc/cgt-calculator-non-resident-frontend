@@ -51,7 +51,7 @@ trait SoldOrGivenAwayController extends FrontendController with ValidActiveSessi
         calcConnector.saveFormData[SoldOrGivenAwayModel](KeystoreKeys.soldOrGivenAway, success)
         success match {
           case SoldOrGivenAwayModel(true) => Future.successful(Redirect(routes.SoldForLessController.soldForLess()))
-          case SoldOrGivenAwayModel(false) => Future.successful(Redirect(routes.MarketValueWhenSoldOrGaveAwayController.marketValueWhenGaveAway()))
+          case SoldOrGivenAwayModel(false) => Future.successful(Redirect(routes.WhoDidYouGiveItToController.whoDidYouGiveItTo()))
         }
       }
     )

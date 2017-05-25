@@ -75,8 +75,8 @@ class MarketValueGaveAwayViewSpec extends UnitSpec with WithFakeApplication with
           backLink.text shouldBe commonMessages.back
         }
 
-        s"has a route to 'sold-or-given-away'" in {
-          backLink.attr("href") shouldBe controllers.routes.SoldOrGivenAwayController.soldOrGivenAway().url
+        s"has a route to 'who-did-you-give-it-to'" in {
+          backLink.attr("href") shouldBe controllers.routes.WhoDidYouGiveItToController.whoDidYouGiveItTo().url
         }
       }
 

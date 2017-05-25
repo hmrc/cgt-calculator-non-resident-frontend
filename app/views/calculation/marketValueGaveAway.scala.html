@@ -6,7 +6,7 @@
 
 @main_template(Messages("calc.marketValue.gaveItAway.question")) {
 
-    <a id="back-link" class="back-link" href="@controllers.routes.SoldOrGivenAwayController.soldOrGivenAway">@Messages("calc.base.back")</a>
+    <a id="back-link" class="back-link" href="@controllers.routes.WhoDidYouGiveItToController.whoDidYouGiveItTo()">@Messages("calc.base.back")</a>
 
     @errorSummary(marketValueForm, "disposalValue")
 
