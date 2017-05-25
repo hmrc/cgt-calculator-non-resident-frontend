@@ -18,6 +18,7 @@ package constructors
 
 import java.time.LocalDate
 
+import assets.MessageLookup
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import assets.MessageLookup.{NonResident => messages}
 import helpers.AssertHelpers
@@ -312,6 +313,37 @@ class SalesDetailsConstructorSpec extends UnitSpec with WithFakeApplication with
 
       "have the data for 0" in {
         result.data shouldBe BigDecimal(0)
+      }
+    }
+  }
+
+  "Calling whoDidYouGiveItToRow" when {
+
+    "property was given away" should {
+      lazy val result = SalesDetailsConstructor.whoDidYouGiveItToRow(totalGainGiven).get
+
+      "have an id of nr:whoDidYouGiveItTo" in {
+        result.id shouldBe "nr:whoDidYouGiveItTo"
+      }
+
+      "have the data 'Someone else'" in {
+        result.data shouldBe "Someone else"
+      }
+
+      "have the question for who did you give it to" in {
+        result.question shouldBe MessageLookup.WhoDidYouGiveItTo.title
+      }
+
+      "have a link to who did you give it to page" in {
+        result.link shouldBe Some(controllers.routes.WhoDidYouGiveItToController.whoDidYouGiveItTo().url)
+      }
+    }
+
+    "property was sold" should {
+      lazy val result = SalesDetailsConstructor.whoDidYouGiveItToRow(totalGainSold)
+
+      "return a None" in {
+        result shouldBe None
       }
     }
   }
