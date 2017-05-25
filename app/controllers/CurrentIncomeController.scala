@@ -37,24 +37,16 @@ trait CurrentIncomeController extends FrontendController with ValidActiveSession
 
   val calcConnector: CalculatorConnector
 
-  def getBackLink: Boolean = {
+  def getBackLink: Future[String] = {
     calcConnector.fetchAndGetFormData[PropertyLivedInModel](KeystoreKeys.propertyLivedIn).map {
       case Some(PropertyLivedInModel(true)) => routes.PrivateResidenceReliefController.privateResidenceRelief.url
       case _ => routes.PropertyLivedInController.propertyLivedIn().url
     }
   }
 
-
   val currentIncome = ValidateSession.async { implicit request =>
 
-    def getBackLink: Future[String] = {
-      calcConnector.fetchAndGetFormData[PropertyLivedInModel](KeystoreKeys.propertyLivedIn).map {
-        case Some(PropertyLivedInModel(true)) => routes.PrivateResidenceReliefController.privateResidenceRelief.url
-        case _ => routes.PropertyLivedInController.propertyLivedIn().url
-      }
-    }
-
-    def getForm: Form[CurrentIncomeModel] = {
+    def getForm: Future[Form[CurrentIncomeModel]] = {
       calcConnector.fetchAndGetFormData[CurrentIncomeModel](KeystoreKeys.currentIncome).map {
         case(Some(data)) => currentIncomeForm.fill(data)
         case _ => currentIncomeForm
@@ -82,7 +74,7 @@ trait CurrentIncomeController extends FrontendController with ValidActiveSession
     }
 
     currentIncomeForm.bindFromRequest.fold(
-      errors => Future.successful(BadRequest(calculation.currentIncome(errors))),
+      errors => getBackLink.map{backLink => BadRequest(calculation.currentIncome(errors, backLink))},
       success => successAction(success)
     )
   }
