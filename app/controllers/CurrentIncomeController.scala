@@ -21,10 +21,11 @@ import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import forms.CurrentIncomeForm._
 import views.html.calculation
-import models.CurrentIncomeModel
+import models.{CurrentIncomeModel, PropertyLivedInModel}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
+import play.api.data.Form
 
 import scala.concurrent.Future
 
@@ -36,11 +37,34 @@ trait CurrentIncomeController extends FrontendController with ValidActiveSession
 
   val calcConnector: CalculatorConnector
 
-  val currentIncome = ValidateSession.async { implicit request =>
-    calcConnector.fetchAndGetFormData[CurrentIncomeModel](KeystoreKeys.currentIncome).map {
-      case Some(data) => Ok(calculation.currentIncome(currentIncomeForm.fill(data)))
-      case None => Ok(calculation.currentIncome(currentIncomeForm))
+  def getBackLink: Boolean = {
+    calcConnector.fetchAndGetFormData[PropertyLivedInModel](KeystoreKeys.propertyLivedIn).map {
+      case Some(PropertyLivedInModel(true)) => routes.PrivateResidenceReliefController.privateResidenceRelief.url
+      case _ => routes.PropertyLivedInController.propertyLivedIn().url
     }
+  }
+
+
+  val currentIncome = ValidateSession.async { implicit request =>
+
+    def getBackLink: Future[String] = {
+      calcConnector.fetchAndGetFormData[PropertyLivedInModel](KeystoreKeys.propertyLivedIn).map {
+        case Some(PropertyLivedInModel(true)) => routes.PrivateResidenceReliefController.privateResidenceRelief.url
+        case _ => routes.PropertyLivedInController.propertyLivedIn().url
+      }
+    }
+
+    def getForm: Form[CurrentIncomeModel] = {
+      calcConnector.fetchAndGetFormData[CurrentIncomeModel](KeystoreKeys.currentIncome).map {
+        case(Some(data)) => currentIncomeForm.fill(data)
+        case _ => currentIncomeForm
+      }
+    }
+
+    for {
+      backLink <- getBackLink
+      form <- getForm
+    } yield Ok(calculation.currentIncome(form, backLink))
   }
 
   val submitCurrentIncome = ValidateSession.async { implicit request =>
