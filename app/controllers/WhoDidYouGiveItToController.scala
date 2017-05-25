@@ -16,7 +16,7 @@
 
 package controllers
 
-import common.KeystoreKeys.{ResidentPropertyKeys, NonResidentKeys => keystoreKeys}
+import common.KeystoreKeys.{NonResidentKeys => keystoreKeys}
 import config.ApplicationConfig
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
@@ -27,6 +27,8 @@ import play.api.data.Form
 import play.api.i18n.Messages
 import forms.WhoDidYouGiveItToForm._
 import play.api.mvc.{Action, AnyContent, Result}
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 
 import scala.concurrent.Future
 

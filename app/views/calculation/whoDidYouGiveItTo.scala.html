@@ -6,24 +6,24 @@
 @(whoDidYouGiveItToForm: Form[WhoDidYouGiveItToModel])(implicit request: Request[_], messages: Messages)
 
 @main_template(
-  title = Messages("calc.resident.whoDidYouGiveThePropertyTo.title")) {
+  title = Messages("calc.whoDidYouGiveThePropertyTo.title")) {
 
     <a id="back-link" class="back-link" href="@controllers.routes.SoldOrGivenAwayController.soldOrGivenAway().url">@Messages("calc.base.back")</a>
 
 
     @errorSummary(whoDidYouGiveItToForm, "whoDidYouGiveItTo")
 
-  <h1 class="heading-large">@Messages("calc.resident.whoDidYouGiveThePropertyTo.title")</h1>
+  <h1 class="heading-large">@Messages("calc.whoDidYouGiveThePropertyTo.title")</h1>
 
   @form(action = controllers.routes.WhoDidYouGiveItToController.submitWhoDidYouGiveItTo) {
 
     @formInputRadioGroup(
       field = whoDidYouGiveItToForm("whoDidYouGiveItTo"),
       Seq(
-        "Spouse"-> Messages("calc.resident.whoDidYouGiveThePropertyTo.spouse"),
-        "Charity"-> Messages("calc.resident.whoDidYouGiveThePropertyTo.charity"),
-        "Other"->Messages("calc.resident.whoDidYouGiveThePropertyTo.other")),
-      '_legend -> Messages("calc.resident.whoDidYouGiveThePropertyToo.title"),
+        "Spouse"-> Messages("calc.whoDidYouGiveThePropertyTo.spouse"),
+        "Charity"-> Messages("calc.whoDidYouGiveThePropertyTo.charity"),
+        "Other"->Messages("calc.whoDidYouGiveThePropertyTo.other")),
+      '_legend -> Messages("calc.whoDidYouGiveThePropertyToo.title"),
       '_legendID -> "whoDidYouGiveItTo",
       '_legendClass -> "visuallyhidden",
       '_labelAfter -> true,

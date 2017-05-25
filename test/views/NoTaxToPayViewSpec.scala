@@ -22,7 +22,6 @@ import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 import assets.MessageLookup.{NoTaxToPay => messages}
-import assets.MessageLookup.{Resident => commonMessages}
 import views.html.{calculation => views}
 
 class NoTaxToPayViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
@@ -40,15 +39,7 @@ class NoTaxToPayViewSpec extends UnitSpec with WithFakeApplication with FakeRequ
     }
 
     "have a back link to back-link" in {
-      doc.body().select("a#back-link").attr("href") shouldBe "/calculate-your-capital-gains/resident/properties/who-did-you-give-it-to"
-    }
-
-    "have a home link to home-link" in {
-      doc.body().select("a#homeNavHref").attr("href") shouldBe "/calculate-your-capital-gains/resident/properties/"
-    }
-
-    "have a navTitle for resident properties" in {
-      doc.body().select("span.header__menu__proposition-name").text() shouldBe commonMessages.homeText
+      doc.body().select("a#back-link").attr("href") shouldBe "/calculate-your-capital-gains/non-resident/who-did-you-give-it-to"
     }
 
     s"have a header of ${messages.title}" in {
