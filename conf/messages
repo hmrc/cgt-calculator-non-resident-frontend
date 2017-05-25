@@ -182,6 +182,7 @@ calc.rebasedCosts.errorDecimalPlaces = There are too many numbers after the deci
 
 ## Improvements ##
 calc.improvements.question = Did you make any improvements to the property?
+calc.improvements.ownerBeforeLegislationStartQuestion = Did you make an improvement to the property after 31 March 1982?
 calc.improvements.helpOne = Improvements are permanent changes that increase the value of a property, like adding extensions or garages.
 calc.improvements.helpTwo = Normal maintenance costs don''t count.
 calc.improvements.exampleTitle = Show me an example

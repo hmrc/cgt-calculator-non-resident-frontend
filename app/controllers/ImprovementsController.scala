@@ -25,7 +25,7 @@ import forms.ImprovementsForm._
 import views.html.calculation
 import models._
 import play.api.data.Form
-import play.api.mvc.Result
+import play.api.mvc.{Action, AnyContent, Result}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import uk.gov.hmrc.play.http.HeaderCarrier
 import play.api.i18n.Messages.Implicits._
@@ -84,16 +84,22 @@ trait ImprovementsController extends FrontendController with ValidActiveSession 
     }
   }
 
-  val improvements = ValidateSession.async { implicit request =>
+  private def ownerBeforeLegislationStartCheck(model: Option[AcquisitionDateModel]): Future[Boolean] = {
+    if(TaxDates.dateBeforeLegislationStart(model.get.day.get, model.get.month.get, model.get.year.get)) Future.successful(true)
+    else Future.successful(false)
+  }
 
-    def routeRequest(backUrl: String, improvementsModel: Option[ImprovementsModel], improvementsOptions: Boolean): Future[Result] = {
+  val improvements: Action[AnyContent] = ValidateSession.async { implicit request =>
+
+    def routeRequest(backUrl: String, improvementsModel: Option[ImprovementsModel], improvementsOptions: Boolean,
+                     ownerBeforeLegislationStart: Boolean): Future[Result] = {
       improvementsModel match {
         case Some(data) =>
           Future.successful(Ok(calculation.improvements(improvementsForm(improvementsOptions).fill(data),
-            improvementsOptions, backUrl)))
+            improvementsOptions, backUrl, ownerBeforeLegislationStart)))
         case None =>
           Future.successful(Ok(calculation.improvements(improvementsForm(improvementsOptions),
-            improvementsOptions, backUrl)))
+            improvementsOptions, backUrl, ownerBeforeLegislationStart)))
       }
     }
 
@@ -103,11 +109,12 @@ trait ImprovementsController extends FrontendController with ValidActiveSession 
       improvements <- fetchImprovements(hc)
       improvementsOptions <- displayImprovementsSectionCheck(rebasedValue, acquisitionDate)
       backUrl <- improvementsBackUrl(rebasedValue, acquisitionDate)
-      route <- routeRequest(backUrl, improvements, improvementsOptions)
+      ownerBeforeLegislationStart <- ownerBeforeLegislationStartCheck(acquisitionDate)
+      route <- routeRequest(backUrl, improvements, improvementsOptions, ownerBeforeLegislationStart)
     } yield route
   }
 
-  val submitImprovements = ValidateSession.async { implicit request =>
+  val submitImprovements: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     def skipPRR(acquisitionDateModel: Option[AcquisitionDateModel], rebasedValueModel: Option[RebasedValueModel]): Boolean =
       (acquisitionDateModel, rebasedValueModel) match {
@@ -130,8 +137,9 @@ trait ImprovementsController extends FrontendController with ValidActiveSession 
       }
     }
 
-    def errorAction(errors: Form[ImprovementsModel], backUrl: String, improvementsOptions: Boolean) = {
-      Future.successful(BadRequest(calculation.improvements(errors, improvementsOptions, backUrl)))
+    def errorAction(errors: Form[ImprovementsModel], backUrl: String, improvementsOptions: Boolean,
+                    ownerBeforeLegislationStart: Boolean) = {
+      Future.successful(BadRequest(calculation.improvements(errors, improvementsOptions, backUrl, ownerBeforeLegislationStart)))
     }
 
     def successAction(rebasedValue: Option[RebasedValueModel],
@@ -151,9 +159,10 @@ trait ImprovementsController extends FrontendController with ValidActiveSession 
     def routeRequest(rebasedValue: Option[RebasedValueModel],
                      acquisitionDate: Option[AcquisitionDateModel],
                      backUrl: String,
-                     improvementsOptions: Boolean): Future[Result] = {
+                     improvementsOptions: Boolean,
+                     ownerBeforeLegislationStart: Boolean): Future[Result] = {
       improvementsForm(improvementsOptions).bindFromRequest.fold(
-        errors => errorAction(errors, backUrl, improvementsOptions),
+        errors => errorAction(errors, backUrl, improvementsOptions, ownerBeforeLegislationStart),
         success => successAction(rebasedValue, acquisitionDate, success)
       )
     }
@@ -163,7 +172,8 @@ trait ImprovementsController extends FrontendController with ValidActiveSession 
       acquisitionDate <- fetchAcquisitionDate(hc)
       improvementsOptions <- displayImprovementsSectionCheck(rebasedValue, acquisitionDate)
       backUrl <- improvementsBackUrl(rebasedValue, acquisitionDate)
-      route <- routeRequest(rebasedValue, acquisitionDate, backUrl, improvementsOptions)
+      ownerBeforeLegislationStart <- ownerBeforeLegislationStartCheck(acquisitionDate)
+      route <- routeRequest(rebasedValue, acquisitionDate, backUrl, improvementsOptions, ownerBeforeLegislationStart)
     } yield route
   }
 }

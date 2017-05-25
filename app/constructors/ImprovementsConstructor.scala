@@ -25,12 +25,13 @@ import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 
 object ImprovementsConstructor {
-  def generateImprovements(improvementsForm: Form[ImprovementsModel], improvementsOptions: Boolean, jointOwnership: Html): HtmlFormat.Appendable = {
-    if (improvementsOptions) {
+  def generateImprovements(improvementsForm: Form[ImprovementsModel], improvementsOptions: Boolean, jointOwnership: Html,
+                           question: String): HtmlFormat.Appendable = {
+      if (improvementsOptions) {
       formHiddenYesNoRadio(
         improvementsForm,
         "isClaimingImprovements",
-        Messages("calc.improvements.question"),
+        question,
         formMultipleInputMoney(
           improvementsForm,
           Seq(
@@ -47,7 +48,7 @@ object ImprovementsConstructor {
       formHiddenYesNoRadio(
         improvementsForm,
         "isClaimingImprovements",
-        Messages("calc.improvements.question"),
+        question,
         formInputMoney(improvementsForm, "improvementsAmt", Messages("calc.improvements.questionTwo"), labelClasses = "bold-small"),
         None,
         hideLegend = true,

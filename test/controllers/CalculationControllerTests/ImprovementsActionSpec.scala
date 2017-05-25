@@ -79,9 +79,11 @@ class ImprovementsActionSpec extends UnitSpec with WithFakeApplication with Mock
 
     "not supplied with a pre-existing stored model" should {
 
-      "when Acquisition Date is supplied and > 5 April 2015" should {
+      "when Acquisition Date is > 5 April 2015" should {
 
-        lazy val target = setupTarget(None, Some(AcquisitionDateModel("Yes", Some(1), Some(1), Some(2017))), Some(RebasedValueModel(Some(1000))))
+        lazy val target = setupTarget(None,
+          Some(AcquisitionDateModel("Yes", Some(1), Some(1), Some(2017))),
+          None)
         lazy val result = target.improvements(fakeRequestWithSession)
         lazy val document = Jsoup.parse(bodyOf(result))
 
@@ -101,8 +103,7 @@ class ImprovementsActionSpec extends UnitSpec with WithFakeApplication with Mock
         }
       }
 
-      "when Acquisition Date is supplied and <= 5 April 2015" +
-        "and a rebased value is supplied" should {
+      "when Acquisition Date is <= 5 April 2015" should {
 
         lazy val target = setupTarget(
           None,
@@ -118,68 +119,6 @@ class ImprovementsActionSpec extends UnitSpec with WithFakeApplication with Mock
 
         s"have a 'Back' link to ${routes.RebasedCostsController.rebasedCosts().url} " in {
           document.body.getElementById("back-link").attr("href") shouldEqual routes.RebasedCostsController.rebasedCosts().url
-        }
-      }
-
-      "when Acquisition Date is not supplied" +
-        "and a rebased value is supplied" should {
-
-        lazy val target = setupTarget(
-          None,
-          //These values have been left in to make sure the controller is ignoring them as required
-          Some(AcquisitionDateModel("No", Some(1), Some(1), Some(2014))),
-          Some(RebasedValueModel(Some(500)))
-        )
-        lazy val result = target.improvements(fakeRequestWithSession)
-        lazy val document = Jsoup.parse(bodyOf(result))
-
-        s"have a back link that contains ${commonMessages.back}" in {
-          document.body.getElementById("back-link").text shouldEqual commonMessages.back
-        }
-
-        s"have a 'Back' link to ${routes.RebasedCostsController.rebasedCosts().url} " in {
-          document.body.getElementById("back-link").attr("href") shouldEqual routes.RebasedCostsController.rebasedCosts().url
-        }
-      }
-
-      "when Acquisition Date is not supplied" +
-        "and a rebased value is supplied but left blank" should {
-
-        lazy val target = setupTarget(
-          None,
-          //These values have been left in to make sure the controller is ignoring them as required
-          Some(AcquisitionDateModel("No", Some(1), Some(1), Some(2014))),
-          Some(RebasedValueModel(None))
-        )
-        lazy val result = target.improvements(fakeRequestWithSession)
-        lazy val document = Jsoup.parse(bodyOf(result))
-
-        s"have a back link that contains ${commonMessages.back}" in {
-          document.body.getElementById("back-link").text shouldEqual commonMessages.back
-        }
-
-        s"have a 'Back' link to ${routes.RebasedValueController.rebasedValue().url} " in {
-          document.body.getElementById("back-link").attr("href") shouldEqual routes.RebasedValueController.rebasedValue().url
-        }
-      }
-
-      "when Acquisition Date is supplied and <= 5 April 2015" +
-        "and no rebased value is supplied" should {
-
-        lazy val target = setupTarget(
-          None,
-          Some(AcquisitionDateModel("Yes", Some(1), Some(1), Some(2014))),
-          Some(RebasedValueModel(None))
-        )
-        lazy val result = target.improvements(fakeRequestWithSession)
-        lazy val document = Jsoup.parse(bodyOf(result))
-
-        s"have a back link that contains ${commonMessages.back}" in {
-          document.body.getElementById("back-link").text shouldEqual commonMessages.back
-        }
-
-        s"have a 'Back' link to a missing data route ${controllers.routes.DisposalDateController.disposalDate().url} " in {
-          document.body.getElementById("back-link").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
         }
       }
     }
@@ -238,7 +177,8 @@ class ImprovementsActionSpec extends UnitSpec with WithFakeApplication with Mock
     "submitting a valid form with a rebased value" should {
 
       lazy val gainsModel = Some(TotalGainResultsModel(1000, Some(2000), None))
-      lazy val target = setupTarget(None, Some(AcquisitionDateModel("No", None, None, None)), Some(RebasedValueModel(Some(2000))), gainsModel)
+      lazy val target = setupTarget(None, Some(AcquisitionDateModel("Yes", Some(1), Some(1), Some(2014))),
+        Some(RebasedValueModel(Some(2000))), gainsModel)
       lazy val request = fakeRequestToPOSTWithSession("isClaimingImprovements" -> "No", "improvementsAmt" -> "")
       lazy val result = target.submitImprovements(request)
 
@@ -253,7 +193,7 @@ class ImprovementsActionSpec extends UnitSpec with WithFakeApplication with Mock
 
     "submitting an invalid form with 'testData123' and a value of 'fhu39awd8'" should {
 
-      val target = setupTarget(None, None)
+      val target = setupTarget(None, Some(AcquisitionDateModel("Yes", Some(1), Some(1), Some(2014))))
       lazy val request = fakeRequestToPOSTWithSession("isClaimingImprovements" -> "testData123", "improvementsAmt" -> "fhu39awd8")
       lazy val result = target.submitImprovements(request)
       lazy val document = Jsoup.parse(bodyOf(result))

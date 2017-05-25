@@ -218,6 +218,7 @@ object MessageLookup {
       val exampleOne = "Replacing a basic kitchen or bathroom with a luxury version is normally considered an improvement."
       val exampleTwo = "Replacing them with something of a similar standard is normally not an improvement."
       val question = "Did you make any improvements to the property?"
+      val ownerBeforeLegislationStartQuestion = "Did you make an improvement to the property after 31 March 1982?"
       val questionTwo = "How much did the improvements cost?"
       val questionThree = "How much did you spend on improvements before 6 April 2015?"
       val questionFour = "How much have you spent on improvements since 6 April 2015?"
