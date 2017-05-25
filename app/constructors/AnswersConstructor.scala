@@ -61,7 +61,7 @@ trait AnswersConstructor {
                          howBecameOwnerModel: Option[HowBecameOwnerModel],
                          boughtForLessModel: Option[BoughtForLessModel]): Future[AcquisitionValueModel] =
       (acquisitionDateModel, howBecameOwnerModel, boughtForLessModel) match {
-        case (AcquisitionDateModel("Yes",_,_,_),_, _) if TaxDates.dateBeforeLegislationStart(acquisitionDateModel.get) =>
+        case (AcquisitionDateModel(_,_,_),_, _) if TaxDates.dateBeforeLegislationStart(acquisitionDateModel.get) =>
           calculatorConnector.fetchAndGetFormData[WorthBeforeLegislationStartModel](KeystoreKeys.worthBeforeLegislationStart).map(data =>
             AcquisitionValueModel(data.get.worthBeforeLegislationStart)
           )

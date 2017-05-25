@@ -77,7 +77,7 @@ object CalculateRequestConstructor {
 
   def flatAcquisitionDate(isClaimingPrr: String, acquisitionDateModel: AcquisitionDateModel): String = {
     if (isClaimingPrr.contains("Yes"))
-      s"&acquisitionDate=${acquisitionDateModel.year.get}-${acquisitionDateModel.month.get}-${acquisitionDateModel.day.get}"
+      s"&acquisitionDate=${acquisitionDateModel.year}-${acquisitionDateModel.month}-${acquisitionDateModel.day}"
     else ""
   }
 
@@ -91,7 +91,7 @@ object CalculateRequestConstructor {
   }
 
   def taAcquisitionDate(acquisitionDateModel: AcquisitionDateModel): String = {
-    s"&acquisitionDate=${acquisitionDateModel.year.get}-${acquisitionDateModel.month.get}-${acquisitionDateModel.day.get}"
+    s"&acquisitionDate=${acquisitionDateModel.year}-${acquisitionDateModel.month}-${acquisitionDateModel.day}"
   }
 
   def taReliefs(otherReliefs: Option[BigDecimal]): String = {
@@ -147,7 +147,7 @@ object CalculateRequestConstructor {
 
   def privateResidenceReliefFlat(input: SummaryModel): String = s"${
     (input.acquisitionDateModel, input.privateResidenceReliefModel) match {
-      case (AcquisitionDateModel("Yes", day, month, year), Some(PrivateResidenceReliefModel("Yes", claimed, after))) if claimed.isDefined =>
+      case (AcquisitionDateModel(_, _, _), Some(PrivateResidenceReliefModel("Yes", claimed, _))) if claimed.isDefined =>
         s"&daysClaimed=${claimed.get}"
       case _ => ""
     }
@@ -155,7 +155,7 @@ object CalculateRequestConstructor {
 
   def privateResidenceReliefTA(input: SummaryModel): String = s"${
     (input.acquisitionDateModel, input.privateResidenceReliefModel) match {
-      case (AcquisitionDateModel("Yes", day, month, year), Some(PrivateResidenceReliefModel("Yes", claimed, after)))
+      case (AcquisitionDateModel(_, _, _), Some(PrivateResidenceReliefModel("Yes", _, after)))
         if dateAfter18Months(input.disposalDateModel.day, input.disposalDateModel.month, input.disposalDateModel.year) && after.isDefined =>
         s"&daysClaimed=${after.get}"
 
@@ -165,7 +165,7 @@ object CalculateRequestConstructor {
 
   def privateResidenceReliefRebased(input: SummaryModel): String = s"${
     (input.rebasedValueModel, input.privateResidenceReliefModel) match {
-      case (Some(RebasedValueModel(rebasedValue)), Some(PrivateResidenceReliefModel("Yes", claimed, after)))
+      case (Some(RebasedValueModel(rebasedValue)), Some(PrivateResidenceReliefModel("Yes", _, after)))
         if dateAfter18Months(input.disposalDateModel.day, input.disposalDateModel.month, input.disposalDateModel.year) &&
           after.isDefined && rebasedValue.isDefined =>
         s"&daysClaimed=${after.get}"
@@ -175,7 +175,7 @@ object CalculateRequestConstructor {
 
   def isClaimingPRR(input: SummaryModel): String = s"&isClaimingPRR=${
     (input.acquisitionDateModel, input.privateResidenceReliefModel) match {
-      case (AcquisitionDateModel("Yes", day, month, year), Some(PrivateResidenceReliefModel("Yes", claimed, after))) => "Yes"
+      case (AcquisitionDateModel(_, _, _), Some(PrivateResidenceReliefModel("Yes", _, _))) => "Yes"
       case _ => "No"
     }
   }"

@@ -39,7 +39,7 @@ object PrivateResidenceReliefRequestConstructor {
                   privateResidenceReliefModel: Option[PrivateResidenceReliefModel]): String = {
 
     (privateResidenceReliefModel, totalGainAnswersModel.acquisitionDateModel) match {
-      case (Some(PrivateResidenceReliefModel("Yes", Some(value), _)), AcquisitionDateModel("Yes",_,_,_))
+      case (Some(PrivateResidenceReliefModel("Yes", Some(value), _)), AcquisitionDateModel(_,_,_))
         if totalGainAnswersModel.acquisitionDateModel.get.plusMonths(18).isBefore(totalGainAnswersModel.disposalDateModel.get) =>
         s"&daysClaimed=$value"
       case _ => ""
@@ -49,12 +49,12 @@ object PrivateResidenceReliefRequestConstructor {
   def daysClaimedAfter(totalGainAnswersModel: TotalGainAnswersModel,
                        privateResidenceReliefModel: Option[PrivateResidenceReliefModel]): String = {
     (privateResidenceReliefModel, totalGainAnswersModel.acquisitionDateModel, totalGainAnswersModel.rebasedValueModel) match {
-      case (Some(PrivateResidenceReliefModel("Yes", _, Some(value))), AcquisitionDateModel("Yes",_,_,_), _)
+      case (Some(PrivateResidenceReliefModel("Yes", _, Some(value))), AcquisitionDateModel(_,_,_), _)
         if totalGainAnswersModel.acquisitionDateModel.get.plusMonths(18).isBefore(totalGainAnswersModel.disposalDateModel.get) &&
         !TaxDates.dateAfterStart(totalGainAnswersModel.acquisitionDateModel.get) =>
         s"&daysClaimedAfter=$value"
-      case (Some(PrivateResidenceReliefModel("Yes", _, Some(value))), AcquisitionDateModel("No",_,_,_), Some(RebasedValueModel(Some(_)))) =>
-        s"&daysClaimedAfter=$value"
+//      case (Some(PrivateResidenceReliefModel("Yes", _, Some(value))), AcquisitionDateModel("No",_,_,_), Some(RebasedValueModel(Some(_)))) =>
+//        s"&daysClaimedAfter=$value"
       case _ => ""
     }
   }

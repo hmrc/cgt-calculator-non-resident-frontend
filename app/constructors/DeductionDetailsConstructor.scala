@@ -27,7 +27,7 @@ object DeductionDetailsConstructor {
 
   def datesNotValidCheck(acquisitionDateModel: AcquisitionDateModel, disposalDateModel: DisposalDateModel): Boolean = {
     acquisitionDateModel match {
-      case AcquisitionDateModel("Yes",_,_,_) if acquisitionDateModel.get.plusMonths(18).isBefore(disposalDateModel.get)=> true
+      case AcquisitionDateModel(_,_,_) if acquisitionDateModel.get.plusMonths(18).isBefore(disposalDateModel.get)=> true
       case _ => false
     }
   }
@@ -77,7 +77,7 @@ object DeductionDetailsConstructor {
   def privateResidenceReliefDaysClaimedAfterRow(prr: Option[PrivateResidenceReliefModel],
                                                 answers: TotalGainAnswersModel): Option[QuestionAnswerModel[String]] = {
     (prr, answers.acquisitionDateModel, answers.rebasedValueModel) match {
-      case (Some(PrivateResidenceReliefModel("Yes", _, Some(value))), AcquisitionDateModel("Yes",_,_,_), _)
+      case (Some(PrivateResidenceReliefModel("Yes", _, Some(value))), AcquisitionDateModel(_,_,_), _)
       if !TaxDates.dateAfterStart(answers.acquisitionDateModel.get) && TaxDates.dateAfterOctober(answers.disposalDateModel.get) =>
         Some(QuestionAnswerModel(
           s"${keys.privateResidenceRelief}-daysClaimedAfter",
