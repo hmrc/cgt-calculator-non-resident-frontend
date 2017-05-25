@@ -120,7 +120,7 @@ class SoldOrGivenAwayActionSpec extends UnitSpec with WithFakeApplication with M
         status(result) shouldBe 303
       }
 
-      "redirect to the Market Value When Gave Away Page" in{
+      "redirect to the Who Did You Give This To Page" in{
         redirectLocation(result).get shouldBe controllers.routes.WhoDidYouGiveItToController.whoDidYouGiveItTo().url
       }
     }
