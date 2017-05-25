@@ -88,6 +88,7 @@ class AcquisitionDateFormSpec extends UnitSpec with WithFakeApplication {
 
     "passing in an invalid map with missing day data" should {
       val map = Map(
+        "acquisitionDateDay" -> "",
         "acquisitionDateMonth" -> "1",
         "acquisitionDateYear" -> "2015")
       lazy val form = acquisitionDateForm.bind(map)
@@ -104,6 +105,7 @@ class AcquisitionDateFormSpec extends UnitSpec with WithFakeApplication {
     "passing in an invalid map with missing month data" should {
       val map = Map(
         "acquisitionDateDay" -> "1",
+        "acquisitionDateMonth" -> "",
         "acquisitionDateYear" -> "2015")
       lazy val form = acquisitionDateForm.bind(map)
 
@@ -116,10 +118,11 @@ class AcquisitionDateFormSpec extends UnitSpec with WithFakeApplication {
       }
     }
 
-    "passing in an invalid map with missing month year" should {
+    "passing in an invalid map with missing year data" should {
       val map = Map(
         "acquisitionDateDay" -> "1",
-        "acquisitionDateMonth" -> "2")
+        "acquisitionDateMonth" -> "2",
+        "acquisitionDateYear" -> "")
       lazy val form = acquisitionDateForm.bind(map)
 
       "return an invalid form with one errors" in {

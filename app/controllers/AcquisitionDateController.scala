@@ -28,6 +28,7 @@ import uk.gov.hmrc.play.frontend.controller.FrontendController
 import views.html.calculation
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
+import play.api.mvc.{Action, AnyContent}
 
 import scala.concurrent.Future
 
@@ -40,20 +41,16 @@ trait AcquisitionDateController extends FrontendController with ValidActiveSessi
   val calcConnector: CalculatorConnector
   val calcElectionConstructor = CalculationElectionConstructor
 
-  val acquisitionDate = ValidateSession.async { implicit request =>
+  val acquisitionDate: Action[AnyContent] = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[AcquisitionDateModel](KeystoreKeys.acquisitionDate).map {
       case Some(data) => Ok(calculation.acquisitionDate(acquisitionDateForm.fill(data)))
       case None => Ok(calculation.acquisitionDate(acquisitionDateForm))
     }
   }
 
-  val submitAcquisitionDate = ValidateSession.async { implicit request =>
+  val submitAcquisitionDate: Action[AnyContent] = ValidateSession.async { implicit request =>
 
-    def errorAction(form: Form[AcquisitionDateModel]) = {
-      for {
-        route <- Future.successful(BadRequest(calculation.acquisitionDate(form)))
-      } yield route
-    }
+    def errorAction(form: Form[AcquisitionDateModel]) = Future.successful(BadRequest(calculation.acquisitionDate(form)))
 
     def successAction(model: AcquisitionDateModel) = {
       calcConnector.saveFormData(KeystoreKeys.acquisitionDate, model)

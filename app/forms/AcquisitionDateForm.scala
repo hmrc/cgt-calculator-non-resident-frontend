@@ -41,6 +41,8 @@ object AcquisitionDateForm {
         .verifying(Messages("calc.common.date.error.invalidDate"), mandatoryCheck)
         .verifying(Messages("calc.common.date.error.invalidDate"), integerCheck)
         .transform[Int](stringToInteger, _.toString)
-    )(AcquisitionDateModel.apply)(AcquisitionDateModel.unapply).verifying(Messages("calc.common.date.error.invalidDate"), fields =>
-      isValidDate(fields.day, fields.month, fields.year)))
+    )(AcquisitionDateModel.apply)(AcquisitionDateModel.unapply)
+      .verifying(Messages("calc.common.date.error.invalidDate"), fields =>
+        isValidDate(fields.day, fields.month, fields.year))
+  )
 }

@@ -57,10 +57,6 @@ class AcquisitionDateViewSpec extends UnitSpec with WithFakeApplication with Moc
       "have a heading" which {
         lazy val heading = document.body().select("h1")
 
-        "has a class of heading-xlarge" in {
-          heading.attr("class") shouldBe "heading-xlarge"
-        }
-
         s"has the text '${messages.AcquisitionDate.question}'" in {
           heading.text shouldBe messages.AcquisitionDate.question
         }
@@ -73,7 +69,6 @@ class AcquisitionDateViewSpec extends UnitSpec with WithFakeApplication with Moc
         s"have the question '${messages.AcquisitionDate.question}'" in {
           legend.text.stripSuffix(" ") shouldBe messages.AcquisitionDate.question
         }
-
 
         "be visually hidden" in {
           legend.hasClass("visuallyhidden") shouldEqual true
@@ -100,10 +95,6 @@ class AcquisitionDateViewSpec extends UnitSpec with WithFakeApplication with Moc
       "have a button" which {
         lazy val button = document.select("button")
 
-        "has the class 'button'" in {
-          button.attr("class") shouldBe "button"
-        }
-
         "has the type 'submit'" in {
           button.attr("type") shouldBe "submit"
         }
@@ -115,7 +106,7 @@ class AcquisitionDateViewSpec extends UnitSpec with WithFakeApplication with Moc
     }
 
     "supplied with errors" should {
-      lazy val form = acquisitionDateForm.bind(Map("hasAcquisitionDate" -> "Yes"))
+      lazy val form = acquisitionDateForm.bind(Map("acquisitionDateDay" -> "1", "acquisitionDateMonth" -> "1"))
       lazy val view = acquisitionDate(form)
       lazy val document = Jsoup.parse(view.body)
 
