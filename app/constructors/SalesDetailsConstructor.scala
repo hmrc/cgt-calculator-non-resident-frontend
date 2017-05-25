@@ -33,10 +33,22 @@ object SalesDetailsConstructor {
     val disposalCosts = disposalCostsRow(answers)
     val soldOrGivenAway = soldOrGivenAwayRow(answers)
     val soldForLess = soldForLessRow(answers)
+    val whoDidYouGiveItTo = whoDidYouGiveItToRow(answers)
 
-    val items = Seq(disposalDate, soldOrGivenAway, soldForLess, disposalValue, disposalCosts)
+    val items = Seq(disposalDate, soldOrGivenAway, whoDidYouGiveItTo, soldForLess, disposalValue, disposalCosts)
 
     items.flatten
+  }
+
+  def whoDidYouGiveItToRow(answers: TotalGainAnswersModel): Option[QuestionAnswerModel[String]] = {
+    if (!answers.soldOrGivenAwayModel.soldIt) {
+      Some(QuestionAnswerModel[String](keys.whoDidYouGiveItTo,
+        Messages("calc.whoDidYouGiveThePropertyTo.other"),
+        Messages("calc.whoDidYouGiveThePropertyTo.title"),
+        Some(controllers.routes.WhoDidYouGiveItToController.whoDidYouGiveItTo().url)
+      ))
+    }
+    else None
   }
 
   def disposalDateRow(answers: TotalGainAnswersModel): Option[QuestionAnswerModel[LocalDate]] = {
