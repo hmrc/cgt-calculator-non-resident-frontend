@@ -120,26 +120,6 @@ class ImprovementsActionSpec extends UnitSpec with WithFakeApplication with Mock
           document.body.getElementById("back-link").attr("href") shouldEqual routes.RebasedCostsController.rebasedCosts().url
         }
       }
-
-      "when Acquisition Date is supplied and <= 5 April 2015" +
-        "and no rebased value is supplied" should {
-
-        lazy val target = setupTarget(
-          None,
-          Some(AcquisitionDateModel(1, 1, 2014)),
-          Some(RebasedValueModel(None))
-        )
-        lazy val result = target.improvements(fakeRequestWithSession)
-        lazy val document = Jsoup.parse(bodyOf(result))
-
-        s"have a back link that contains ${commonMessages.back}" in {
-          document.body.getElementById("back-link").text shouldEqual commonMessages.back
-        }
-
-        s"have a 'Back' link to a missing data route ${controllers.routes.DisposalDateController.disposalDate().url} " in {
-          document.body.getElementById("back-link").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
-        }
-      }
     }
   }
 
