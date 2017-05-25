@@ -18,16 +18,15 @@ package views
 
 import assets.MessageLookup.{NonResident => messages}
 import controllers.helpers.FakeRequestHelper
+import forms.AcquisitionDateForm._
 import org.jsoup.Jsoup
 import org.scalatest.mock.MockitoSugar
-import forms.AcquisitionDateForm._
+import play.api.Play.current
+import play.api.i18n.Messages.Implicits._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.acquisitionDate
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 
 class AcquisitionDateViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
-
 
 
   "Acquisition date view" when {
@@ -75,6 +74,7 @@ class AcquisitionDateViewSpec extends UnitSpec with WithFakeApplication with Moc
           legend.text.stripSuffix(" ") shouldBe messages.AcquisitionDate.question
         }
 
+
         "be visually hidden" in {
           legend.hasClass("visuallyhidden") shouldEqual true
         }
@@ -90,14 +90,11 @@ class AcquisitionDateViewSpec extends UnitSpec with WithFakeApplication with Moc
         s"has an action of '${controllers.routes.AcquisitionDateController.submitAcquisitionDate().url}'" in {
           form.attr("action") shouldBe controllers.routes.AcquisitionDateController.submitAcquisitionDate().url
         }
-      }
 
-      "have inputs using the id 'hasAcquisitionDate'" in {
-        document.body().select("input[type=radio]").attr("id") should include ("hasAcquisitionDate")
-      }
 
-      "have inputs using the id acquisitionDate" in {
-        document.body().select("input[type=number]").attr("id") should include ("acquisitionDate")
+        s"have the hintText '${messages.AcquisitionDate.hintText}'" in {
+          document.select(".form-hint").first().text.stripSuffix(" ") shouldBe messages.AcquisitionDate.hintText
+        }
       }
 
       "have a button" which {
