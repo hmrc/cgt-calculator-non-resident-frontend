@@ -16,15 +16,15 @@
 
 package views
 
-import assets.MessageLookup.{Resident, WhoDidYouGiveItTo}
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
-import play.api.i18n.Messages.Implicits._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.whoDidYouGiveItTo
 import assets.MessageLookup.{WhoDidYouGiveItTo => messages}
-import assets.MessageLookup.{Resident => commonMessages}
+import assets.MessageLookup.{NonResident => commonMessages}
 import forms.WhoDidYouGiveItToForm._
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 
 
 class WhoDidYouGiveItToViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
@@ -56,6 +56,7 @@ class WhoDidYouGiveItToViewSpec extends UnitSpec with WithFakeApplication with F
         backLink.attr("href") shouldBe controllers.routes.SoldOrGivenAwayController.soldOrGivenAway().toString()
       }
     }
+
     "have a H1 tag that" should {
       lazy val heading = doc.select("h1")
 
