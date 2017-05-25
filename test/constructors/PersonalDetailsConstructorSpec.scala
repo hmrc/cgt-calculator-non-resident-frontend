@@ -87,7 +87,7 @@ class PersonalDetailsConstructorSpec extends UnitSpec with WithFakeApplication {
 
       "return data of 0.0" in {
         result.fold(cancel("expected result not computed")) { item =>
-          item.data shouldBe summaryIndividualFlatNoIncomeOtherPropNo.currentIncomeModel.currentIncome
+          item.data shouldBe summaryFlatNoIncomeOtherPropNo.currentIncomeModel.currentIncome
         }
       }
 
