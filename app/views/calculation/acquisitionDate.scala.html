@@ -14,17 +14,11 @@
 
     @form(action = controllers.routes.AcquisitionDateController.submitAcquisitionDate) {
 
-        @formHiddenYesNoRadioNoError(
-                acquisitionDateForm,
+                @formInlineDateInput(acquisitionDateForm,
                 "hasAcquisitionDate",
                 Messages("calc.acquisitionDate.question"),
-                formInlineDateInput(
-                    acquisitionDateForm,
-                    "acquisitionDate",
-                    ""
-                ),
-                displayLegend = false
-        )
+                '_visually_hidden -> true,
+                '_additionalHint -> Messages("calc.acquisitionDate.hintText"))
 
         <button class="button" type="submit" id="continue-button">@Messages("calc.base.continue")</button>
 
