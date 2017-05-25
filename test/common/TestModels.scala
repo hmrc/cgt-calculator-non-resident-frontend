@@ -408,7 +408,7 @@ object TestModels {
     Some(TotalTaxOwedModel(500, 0, 20, None, None, 200, 100, None, None, None, None, 0, None, None, None, None, None, None, None))
   )
 
-  val personalDetailsCalculationModelIndividual = TotalPersonalDetailsCalculationModel(
+  val personalDetailsCalculationModel = TotalPersonalDetailsCalculationModel(
     CurrentIncomeModel(20000),
     Some(PersonalAllowanceModel(0)),
     OtherPropertiesModel("Yes"),
