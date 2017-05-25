@@ -57,14 +57,11 @@ trait AcquisitionDateController extends FrontendController with ValidActiveSessi
 
     def successAction(model: AcquisitionDateModel) = {
       calcConnector.saveFormData(KeystoreKeys.acquisitionDate, model)
-      model.hasAcquisitionDate match {
-        case "Yes" =>
-          if(TaxDates.dateBeforeLegislationStart(model.day.get, model.month.get, model.year.get)) {
-            Future.successful(Redirect(routes.WorthBeforeLegislationStartController.worthBeforeLegislationStart()))
-          } else {
-            Future.successful(Redirect(routes.HowBecameOwnerController.howBecameOwner()))
-          }
-        case "No" => Future.successful(Redirect(routes.HowBecameOwnerController.howBecameOwner()))
+
+      if(TaxDates.dateBeforeLegislationStart(model.day, model.month, model.year)) {
+        Future.successful(Redirect(routes.WorthBeforeLegislationStartController.worthBeforeLegislationStart()))
+      } else {
+        Future.successful(Redirect(routes.HowBecameOwnerController.howBecameOwner()))
       }
     }
 

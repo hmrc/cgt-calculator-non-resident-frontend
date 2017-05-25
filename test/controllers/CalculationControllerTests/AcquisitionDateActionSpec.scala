@@ -80,7 +80,7 @@ class AcquisitionDateActionSpec extends UnitSpec with WithFakeApplication with M
 
     "supplied with a model already filled with data" should {
 
-      val testAcquisitionDateModel = new AcquisitionDateModel("Yes", Some(10), Some(12), Some(2016))
+      val testAcquisitionDateModel = new AcquisitionDateModel(10, 12, 2016)
       val target = setupTarget(Some(testAcquisitionDateModel))
       lazy val result = target.acquisitionDate(fakeRequestWithSession)
       lazy val document = Jsoup.parse(bodyOf(result))
@@ -99,7 +99,8 @@ class AcquisitionDateActionSpec extends UnitSpec with WithFakeApplication with M
 
     "supplied with a valid model" should {
       val target = setupTarget(None)
-      lazy val request = fakeRequestToPOSTWithSession(("hasAcquisitionDate", "No"))
+      lazy val request = fakeRequestToPOSTWithSession(("acquisitionDateDay", "31"),
+        ("acquisitionDateMonth", "03"), ("acquisitionDateYear", "2016"))
       lazy val result = target.submitAcquisitionDate(request)
 
       "return a 303" in {
@@ -113,7 +114,7 @@ class AcquisitionDateActionSpec extends UnitSpec with WithFakeApplication with M
 
     "supplied with a valid model with date before the legislation start" should {
       val target = setupTarget(None)
-      lazy val request = fakeRequestToPOSTWithSession(("hasAcquisitionDate", "Yes"), ("acquisitionDateDay", "31"),
+      lazy val request = fakeRequestToPOSTWithSession(("acquisitionDateDay", "31"),
         ("acquisitionDateMonth", "03"), ("acquisitionDateYear", "1982"))
       lazy val result = target.submitAcquisitionDate(request)
 
@@ -128,7 +129,7 @@ class AcquisitionDateActionSpec extends UnitSpec with WithFakeApplication with M
 
     "supplied with a valid model with date on the legislation start" should {
       val target = setupTarget(None)
-      lazy val request = fakeRequestToPOSTWithSession(("hasAcquisitionDate", "Yes"), ("acquisitionDateDay", "01"),
+      lazy val request = fakeRequestToPOSTWithSession(("acquisitionDateDay", "01"),
         ("acquisitionDateMonth", "04"), ("acquisitionDateYear", "1982"))
       lazy val result = target.submitAcquisitionDate(request)
 
@@ -138,21 +139,6 @@ class AcquisitionDateActionSpec extends UnitSpec with WithFakeApplication with M
 
       s"redirect to ${controllers.routes.HowBecameOwnerController.howBecameOwner().url}" in {
         redirectLocation(result).get shouldBe controllers.routes.HowBecameOwnerController.howBecameOwner().url
-      }
-    }
-
-    "supplied with an invalid model" should {
-      val target = setupTarget(None)
-      lazy val request = fakeRequestToPOSTWithSession(("hasAcquisitionDate", "Yes"))
-      lazy val result = target.submitAcquisitionDate(request)
-      lazy val document = Jsoup.parse(bodyOf(result))
-
-      "return a 400" in {
-        status(result) shouldBe 400
-      }
-
-      "return to the Acquisition Date page" in {
-        document.title shouldBe messages.question
       }
     }
   }
