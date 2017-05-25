@@ -45,7 +45,7 @@ class CalculateRequestConstructorSpec extends UnitSpec {
 
   "CalculateRequest Constructor" should {
     "return a string from the baseCalcUrl as an individual with no prior disposal" in {
-      CalculateRequestConstructor.baseCalcUrl(sumModel) shouldEqual "customerType=individual&priorDisposal=No&currentIncome=1000" +
+      CalculateRequestConstructor.baseCalcUrl(sumModel) shouldEqual "priorDisposal=No&currentIncome=1000" +
         "&personalAllowanceAmt=11100&disposalValue=150000&disposalCosts=0&disposalDate=2010-10-10"
     }
 
@@ -273,12 +273,12 @@ class CalculateRequestConstructorSpec extends UnitSpec {
 
     "return a value of yes" in {
       val result = CalculateRequestConstructor.priorDisposal("Yes")
-      result shouldBe "&priorDisposal=Yes"
+      result shouldBe "priorDisposal=Yes"
     }
 
     "return a value of No" in {
       val result = CalculateRequestConstructor.priorDisposal("No")
-      result shouldBe "&priorDisposal=No"
+      result shouldBe "priorDisposal=No"
     }
   }
 

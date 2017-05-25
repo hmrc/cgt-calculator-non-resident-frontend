@@ -46,11 +46,7 @@ class PersonalAndPreviousDetailsConstructorSpec extends UnitSpec with WithFakeAp
     }
 
     "when called with a valid model return a sequence of size 8" in {
-      PersonalAndPreviousDetailsConstructor.personalAndPreviousDetailsRows(Some(modelIndividual)).size shouldEqual 8
-    }
-
-    "return a CustomerType item" in {
-      result.exists(qa => qa.id == s"${KeystoreKeys.customerType}-question") shouldBe true
+      PersonalAndPreviousDetailsConstructor.personalAndPreviousDetailsRows(Some(modelIndividual)).size shouldEqual 7
     }
 
     "return a CurrentIncome item" in {

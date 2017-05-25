@@ -32,7 +32,7 @@ object CalculateRequestConstructor {
     disposalDate(input.disposalDateModel)
   }
 
-  def priorDisposal(otherProperties: String): String = s"&priorDisposal=$otherProperties"
+  def priorDisposal(otherProperties: String): String = s"priorDisposal=$otherProperties"
 
   def currentIncome(currentIncomeModel: CurrentIncomeModel): String = {
     s"&currentIncome=${currentIncomeModel.currentIncome}"
