@@ -810,3 +810,4 @@ calc.whoDidYouGiveThePropertyTo.title = Who did you give the property to?
 calc.whoDidYouGiveThePropertyTo.spouse = Your spouse or a civil partner
 calc.whoDidYouGiveThePropertyTo.charity = A charity
 calc.whoDidYouGiveThePropertyTo.other = Someone else
+calc.whoDidYouGiveThePropertyTo.errormandatory = Please tell us who you gave the property to
