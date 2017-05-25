@@ -164,6 +164,10 @@ POST        /other-reliefs-rebased              controllers.OtherReliefsRebasedC
 GET         /who-did-you-give-it-to             controllers.WhoDidYouGiveItToController.whoDidYouGiveItTo
 POST        /who-did-you-give-it-to             controllers.WhoDidYouGiveItToController.submitWhoDidYouGiveItTo
 
+#Property Live In
+GET         /property-lived-in                  controllers.PropertyLivedInController.propertyLivedIn
+POST        /property-lived-in                  controllers.PropertyLivedInController.submitPropertyLivedIn
+
 #You Have No Tax To Pay
 GET         /no-tax-to-pay                      controllers.WhoDidYouGiveItToController.noTaxToPay
 ########################################################
