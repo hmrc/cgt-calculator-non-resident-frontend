@@ -88,9 +88,7 @@ class CalculationElectionActionSpec extends UnitSpec with WithFakeApplication wi
   }
 
   val finalAnswersModel = TotalPersonalDetailsCalculationModel(
-    CustomerTypeModel("representative"),
-    None,
-    None,
+    CurrentIncomeModel(0),
     None,
     OtherPropertiesModel("No"),
     None,

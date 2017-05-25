@@ -27,16 +27,14 @@ import controllers.routes
 class PersonalAndPreviousDetailsConstructorSpec extends UnitSpec with WithFakeApplication {
 
   val modelIndividual = TotalPersonalDetailsCalculationModel(
-    CustomerTypeModel(CustomerTypeKeys.individual),
-    Some(CurrentIncomeModel(25000)),
+    CurrentIncomeModel(25000),
     Some(PersonalAllowanceModel(10000)),
-    Some(DisabledTrusteeModel(YesNoKeys.yes)),
     OtherPropertiesModel(YesNoKeys.yes),
     Some(PreviousLossOrGainModel(PreviousGainOrLossKeys.loss)),
     Some(HowMuchLossModel(15000)),
     Some(HowMuchGainModel(13000)),
     Some(AnnualExemptAmountModel(5000)),
-    BroughtForwardLossesModel(true, Some(3000))
+    BroughtForwardLossesModel(isClaiming = true, Some(3000))
   )
 
   "Calling .personalAndPreviousDetailsRows" should {
@@ -48,11 +46,7 @@ class PersonalAndPreviousDetailsConstructorSpec extends UnitSpec with WithFakeAp
     }
 
     "when called with a valid model return a sequence of size 8" in {
-      PersonalAndPreviousDetailsConstructor.personalAndPreviousDetailsRows(Some(modelIndividual)).size shouldEqual 8
-    }
-
-    "return a CustomerType item" in {
-      result.exists(qa => qa.id == s"${KeystoreKeys.customerType}-question") shouldBe true
+      PersonalAndPreviousDetailsConstructor.personalAndPreviousDetailsRows(Some(modelIndividual)).size shouldEqual 7
     }
 
     "return a CurrentIncome item" in {
@@ -96,120 +90,12 @@ class PersonalAndPreviousDetailsConstructorSpec extends UnitSpec with WithFakeAp
     }
   }
 
-  "calling .customerTypeAnswerRow" when {
-
-    "a customer type of individual" should {
-
-      lazy val result = PersonalAndPreviousDetailsConstructor.customerTypeAnswerRow(CustomerTypeModel(CustomerTypeKeys.individual))
-
-      "return some details for the CustomerType" in {
-        result should not be None
-      }
-
-      s"return an id of ${KeystoreKeys.customerType}" in {
-        result.fold(cancel("expected result not computed")) { item =>
-          item.id shouldBe s"${KeystoreKeys.customerType}-question"
-        }
-      }
-
-      s"return a question of ${messages.CustomerType.question}" in {
-        result.fold(cancel("expected result not computed")) { item =>
-          item.question shouldBe messages.CustomerType.question
-        }
-      }
-
-      s"return the correct answer" in {
-        result.fold(cancel("expected result not computed")) { item =>
-          item.data shouldBe messages.CustomerType.individual
-        }
-      }
-
-      s"return a link of ${routes.CustomerTypeController.customerType().url}" in {
-        result.fold(cancel("expected result not computed")) { item =>
-          item.link.fold(cancel("link not supplied when expected")) { link =>
-            link shouldBe routes.CustomerTypeController.customerType().url
-          }
-        }
-      }
-    }
-
-    "a customer type of trustee" should {
-
-      lazy val result = PersonalAndPreviousDetailsConstructor.customerTypeAnswerRow(CustomerTypeModel(CustomerTypeKeys.trustee))
-
-      "return some details for the CustomerType" in {
-        result should not be None
-      }
-
-      s"return an id of ${KeystoreKeys.customerType}" in {
-        result.fold(cancel("expected result not computed")) { item =>
-          item.id shouldBe s"${KeystoreKeys.customerType}-question"
-        }
-      }
-
-      s"return a question of ${messages.CustomerType.question}" in {
-        result.fold(cancel("expected result not computed")) { item =>
-          item.question shouldBe messages.CustomerType.question
-        }
-      }
-
-      s"return the correct answer" in {
-        result.fold(cancel("expected result not computed")) { item =>
-          item.data shouldBe messages.CustomerType.trustee
-        }
-      }
-
-      s"return a link of ${routes.CustomerTypeController.customerType().url}" in {
-        result.fold(cancel("expected result not computed")) { item =>
-          item.link.fold(cancel("link not supplied when expected")) { link =>
-            link shouldBe routes.CustomerTypeController.customerType().url
-          }
-        }
-      }
-    }
-
-    "a customer type of personal rep" should {
-
-      lazy val result = PersonalAndPreviousDetailsConstructor.customerTypeAnswerRow(CustomerTypeModel(CustomerTypeKeys.personalRep))
-
-      "return some details for the CustomerType" in {
-        result should not be None
-      }
-
-      s"return an id of ${KeystoreKeys.customerType}" in {
-        result.fold(cancel("expected result not computed")) { item =>
-          item.id shouldBe s"${KeystoreKeys.customerType}-question"
-        }
-      }
-
-      s"return a question of ${messages.CustomerType.question}" in {
-        result.fold(cancel("expected result not computed")) { item =>
-          item.question shouldBe messages.CustomerType.question
-        }
-      }
-
-      s"return the correct answer" in {
-        result.fold(cancel("expected result not computed")) { item =>
-          item.data shouldBe messages.CustomerType.personalRep
-        }
-      }
-
-      s"return a link of ${routes.CustomerTypeController.customerType().url}" in {
-        result.fold(cancel("expected result not computed")) { item =>
-          item.link.fold(cancel("link not supplied when expected")) { link =>
-            link shouldBe routes.CustomerTypeController.customerType().url
-          }
-        }
-      }
-    }
-  }
-
   "calling .currentIncomeAnswerRow" when {
 
     "a customer type of individual and some income" should {
 
       lazy val result =
-        PersonalAndPreviousDetailsConstructor.currentIncomeAnswerRow(CustomerTypeModel(CustomerTypeKeys.individual), Some(CurrentIncomeModel(1000)))
+        PersonalAndPreviousDetailsConstructor.currentIncomeAnswerRow(CurrentIncomeModel(1000))
 
       "return some details for the CurrentIncome" in {
         result should not be None
@@ -241,24 +127,14 @@ class PersonalAndPreviousDetailsConstructorSpec extends UnitSpec with WithFakeAp
         }
       }
     }
-
-    "a customer type of anything but individual and some income" should {
-
-      lazy val result =
-        PersonalAndPreviousDetailsConstructor.currentIncomeAnswerRow(CustomerTypeModel(CustomerTypeKeys.trustee), Some(CurrentIncomeModel(1000)))
-
-      "not return some details for the CurrentIncome" in {
-        result shouldEqual None
-      }
-    }
   }
 
   "calling .personalAllowanceAnswerRow" when {
 
-    "a customer type of individual and some allowance" should {
+    "a current income greater than 0 and some allowance" should {
 
       lazy val result =
-        PersonalAndPreviousDetailsConstructor.personalAllowanceAnswerRow(CustomerTypeModel(CustomerTypeKeys.individual), Some(PersonalAllowanceModel(1000)))
+        PersonalAndPreviousDetailsConstructor.personalAllowanceAnswerRow(CurrentIncomeModel(1), Some(PersonalAllowanceModel(1000)))
 
       "return some details for the PersonalAllowance" in {
         result should not be None
@@ -291,63 +167,12 @@ class PersonalAndPreviousDetailsConstructorSpec extends UnitSpec with WithFakeAp
       }
     }
 
-    "a customer type of anything but individual and some allowance" should {
+    "a current income of 0 and some allowance" should {
 
       lazy val result =
-        PersonalAndPreviousDetailsConstructor.personalAllowanceAnswerRow(CustomerTypeModel(CustomerTypeKeys.personalRep), Some(PersonalAllowanceModel(1000)))
+        PersonalAndPreviousDetailsConstructor.personalAllowanceAnswerRow(CurrentIncomeModel(0), Some(PersonalAllowanceModel(1000)))
 
       "not return some details for the PersonalAllowance" in {
-        result shouldEqual None
-      }
-    }
-  }
-
-  "calling .disabledTrusteeAnswerRow" when {
-
-    "a customer type of trustee and is a disabled trustee" should {
-
-      lazy val result =
-        PersonalAndPreviousDetailsConstructor.disabledTrusteeAnswerRow(CustomerTypeModel(CustomerTypeKeys.trustee), Some(DisabledTrusteeModel(YesNoKeys.yes)))
-
-      "return some details for the DisabledTrustee" in {
-        result should not be None
-      }
-
-      s"return an id of ${KeystoreKeys.disabledTrustee}" in {
-        result.fold(cancel("expected result not computed")) { item =>
-          item.id shouldBe s"${KeystoreKeys.disabledTrustee}-question"
-        }
-      }
-
-      s"return a question of ${messages.DisabledTrustee.question}" in {
-        result.fold(cancel("expected result not computed")) { item =>
-          item.question shouldBe messages.DisabledTrustee.question
-        }
-      }
-
-      s"return the correct answer" in {
-        result.fold(cancel("expected result not computed")) { item =>
-          item.data shouldBe YesNoKeys.yes
-        }
-      }
-
-      s"return a link of ${routes.DisabledTrusteeController.disabledTrustee().url}" in {
-        result.fold(cancel("expected result not computed")) { item =>
-          item.link.fold(cancel("link not supplied when expected")) { link =>
-            link shouldBe routes.DisabledTrusteeController.disabledTrustee().url
-          }
-        }
-      }
-    }
-
-    "a customer type of anything but trustee and is a disabled trustee" should {
-
-      lazy val result =
-        PersonalAndPreviousDetailsConstructor.disabledTrusteeAnswerRow(
-          CustomerTypeModel(CustomerTypeKeys.personalRep),
-          Some(DisabledTrusteeModel(YesNoKeys.yes)))
-
-      "not return some details for the DisabledTrustee" in {
         result shouldEqual None
       }
     }
@@ -822,7 +647,7 @@ class PersonalAndPreviousDetailsConstructorSpec extends UnitSpec with WithFakeAp
 
     "some broughtForwardLosses are claimed" should {
 
-      lazy val result = PersonalAndPreviousDetailsConstructor.broughtForwardLossesAnswerRow(BroughtForwardLossesModel(true, None))
+      lazy val result = PersonalAndPreviousDetailsConstructor.broughtForwardLossesAnswerRow(BroughtForwardLossesModel(isClaiming = true, None))
 
       "return some details for the broughtForwardLosses" in {
         result should not be None
@@ -857,7 +682,7 @@ class PersonalAndPreviousDetailsConstructorSpec extends UnitSpec with WithFakeAp
 
     "no broughtForwardLosses are claimed" should {
 
-      lazy val result = PersonalAndPreviousDetailsConstructor.broughtForwardLossesAnswerRow(BroughtForwardLossesModel(false, None))
+      lazy val result = PersonalAndPreviousDetailsConstructor.broughtForwardLossesAnswerRow(BroughtForwardLossesModel(isClaiming = false, None))
 
       "return some details for the broughtForwardLosses" in {
         result should not be None
@@ -895,7 +720,7 @@ class PersonalAndPreviousDetailsConstructorSpec extends UnitSpec with WithFakeAp
 
     "some broughtForwardLosses are claimed" should {
 
-      lazy val result = PersonalAndPreviousDetailsConstructor.broughtForwardLossesValueAnswerRow(BroughtForwardLossesModel(true, Some(200)))
+      lazy val result = PersonalAndPreviousDetailsConstructor.broughtForwardLossesValueAnswerRow(BroughtForwardLossesModel(isClaiming = true, Some(200)))
 
       "return some details for the broughtForwardLosses" in {
         result should not be None
@@ -930,7 +755,7 @@ class PersonalAndPreviousDetailsConstructorSpec extends UnitSpec with WithFakeAp
 
     "no brought forward losses are claimed" should {
 
-      lazy val result = PersonalAndPreviousDetailsConstructor.broughtForwardLossesValueAnswerRow(BroughtForwardLossesModel(false, Some(200)))
+      lazy val result = PersonalAndPreviousDetailsConstructor.broughtForwardLossesValueAnswerRow(BroughtForwardLossesModel(isClaiming = false, Some(200)))
 
       "return some details for the AnnualExemptAmount" in {
         result shouldEqual None

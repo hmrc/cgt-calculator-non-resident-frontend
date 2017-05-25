@@ -18,7 +18,7 @@ package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.TaxDates
-import common.nonresident.{CalculationType, CustomerTypeKeys}
+import common.nonresident.CalculationType
 import connectors.CalculatorConnector
 import constructors.AnswersConstructor
 import controllers.predicates.ValidActiveSession
@@ -53,13 +53,8 @@ trait SummaryController extends FrontendController with ValidActiveSession {
       } else Future(None)
     }
 
-    def getMaxAEA(totalPersonalDetailsCalculationModel: Option[TotalPersonalDetailsCalculationModel],
-                  taxYear: Option[TaxYearModel]): Future[Option[BigDecimal]] = {
-      totalPersonalDetailsCalculationModel match {
-        case Some(data) if data.customerTypeModel.customerType.equals(CustomerTypeKeys.trustee) && data.trusteeModel.get.isVulnerable.equals("No") =>
-          calcConnector.getPartialAEA(TaxDates.taxYearStringToInteger(taxYear.get.calculationTaxYear))
-        case _ => calcConnector.getFullAEA(TaxDates.taxYearStringToInteger(taxYear.get.calculationTaxYear))
-      }
+    def getMaxAEA(taxYear: Option[TaxYearModel]): Future[Option[BigDecimal]] = {
+      calcConnector.getFullAEA(TaxDates.taxYearStringToInteger(taxYear.get.calculationTaxYear))
     }
 
     def getTaxYear(totalGainAnswersModel: TotalGainAnswersModel): Future[Option[TaxYearModel]] = {
@@ -79,7 +74,7 @@ trait SummaryController extends FrontendController with ValidActiveSession {
     def summaryBackUrl(model: Option[TotalGainResultsModel])(implicit hc: HeaderCarrier): Future[String] = model match {
       case (Some(data)) if data.rebasedGain.isDefined || data.timeApportionedGain.isDefined =>
         Future.successful(routes.CalculationElectionController.calculationElection().url)
-      case (Some(data)) =>
+      case (Some(_)) =>
         Future.successful(routes.CheckYourAnswersController.checkYourAnswers().url)
       case (None) => Future.successful(common.DefaultRoutes.missingDataRoute)
     }
@@ -99,7 +94,7 @@ trait SummaryController extends FrontendController with ValidActiveSession {
     def getAllOtherReliefs(totalPersonalDetailsCalculationModel: Option[TotalPersonalDetailsCalculationModel])
                           (implicit hc: HeaderCarrier): Future[Option[AllOtherReliefsModel]] = {
       totalPersonalDetailsCalculationModel match {
-        case Some(data) => {
+        case Some(_) =>
           val flat = calcConnector.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsFlat)
           val rebased = calcConnector.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsRebased)
           val time = calcConnector.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsTA)
@@ -109,7 +104,6 @@ trait SummaryController extends FrontendController with ValidActiveSession {
             rebasedReliefs <- rebased
             timeReliefs <- time
           } yield Some(AllOtherReliefsModel(flatReliefs, rebasedReliefs, timeReliefs))
-        }
         case _ => Future.successful(None)
       }
     }
@@ -121,7 +115,7 @@ trait SummaryController extends FrontendController with ValidActiveSession {
       finalAnswers <- answersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers
       otherReliefsModel <- getAllOtherReliefs(finalAnswers)
       taxYearModel <- getTaxYear(answers)
-      maxAEA <- getMaxAEA(finalAnswers, taxYearModel)
+      maxAEA <- getMaxAEA(taxYearModel)
       finalResult <- calculateTaxOwed(answers, privateResidentReliefModel, finalAnswers, maxAEA.get, otherReliefsModel)
       backUrl <- summaryBackUrl(totalGainResultsModel)
       calculationType <- calcConnector.fetchAndGetFormData[CalculationElectionModel](KeystoreKeys.calculationElection)

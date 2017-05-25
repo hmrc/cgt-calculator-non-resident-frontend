@@ -34,28 +34,23 @@ import scala.concurrent.Future
 
 class CalculatorConnectorSpec extends UnitSpec with MockitoSugar {
 
-  val mockHttp = mock[HttpGet]
-  val mockSessionCache = mock[SessionCache]
-  val sessionId = UUID.randomUUID.toString
+  val mockHttp: HttpGet = mock[HttpGet]
+  val mockSessionCache: SessionCache = mock[SessionCache]
+  val sessionId: String = UUID.randomUUID.toString
 
   object TargetCalculatorConnector extends CalculatorConnector {
-    override val sessionCache = mockSessionCache
-    override val http = mockHttp
+    override val sessionCache: SessionCache = mockSessionCache
+    override val http: HttpGet = mockHttp
     override val serviceUrl = "dummy"
   }
 
   implicit val hc: HeaderCarrier = HeaderCarrier(sessionId = Some(SessionId(sessionId.toString)))
 
-  def mockFetchAndGetFormData (summary: SummaryModel,
+  def mockFetchAndGetFormData(summary: SummaryModel,
                                calculationElectionModel: Option[CalculationElectionModel],otherReliefsModel: Option[OtherReliefsModel]) = {
-    when(mockSessionCache.fetchAndGetEntry[CustomerTypeModel](ArgumentMatchers.eq(KeystoreKeys.customerType))(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(Some(summary.customerTypeModel)))
-
-    when(mockSessionCache.fetchAndGetEntry[DisabledTrusteeModel](ArgumentMatchers.eq(KeystoreKeys.disabledTrustee))(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(summary.disabledTrusteeModel))
 
     when(mockSessionCache.fetchAndGetEntry[CurrentIncomeModel](ArgumentMatchers.eq(KeystoreKeys.currentIncome))(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(summary.currentIncomeModel))
+      .thenReturn(Future.successful(Some(summary.currentIncomeModel)))
 
     when(mockSessionCache.fetchAndGetEntry[PersonalAllowanceModel](ArgumentMatchers.eq(KeystoreKeys.personalAllowance))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(summary.personalAllowanceModel))
@@ -160,9 +155,7 @@ class CalculatorConnectorSpec extends UnitSpec with MockitoSugar {
   }
 
   val sumModelFlat = SummaryModel(
-    CustomerTypeModel(CustomerTypeKeys.individual),
-    None,
-    Some(CurrentIncomeModel(1000)),
+    CurrentIncomeModel(1000),
     Some(PersonalAllowanceModel(11100)),
     OtherPropertiesModel("No"),
     None,
@@ -183,9 +176,7 @@ class CalculatorConnectorSpec extends UnitSpec with MockitoSugar {
   )
 
   val sumModelTA = SummaryModel(
-    CustomerTypeModel(CustomerTypeKeys.individual),
-    None,
-    Some(CurrentIncomeModel(1000)),
+    CurrentIncomeModel(1000),
     Some(PersonalAllowanceModel(11100)),
     OtherPropertiesModel("No"),
     None,
@@ -206,9 +197,7 @@ class CalculatorConnectorSpec extends UnitSpec with MockitoSugar {
   )
 
   val sumModelRebased = SummaryModel(
-    CustomerTypeModel(CustomerTypeKeys.individual),
-    None,
-    Some(CurrentIncomeModel(1000)),
+    CurrentIncomeModel(1000),
     Some(PersonalAllowanceModel(11100)),
     OtherPropertiesModel("No"),
     None,
@@ -229,9 +218,7 @@ class CalculatorConnectorSpec extends UnitSpec with MockitoSugar {
   )
 
   val sumModelFlatDefaulted = SummaryModel(
-    CustomerTypeModel(CustomerTypeKeys.individual),
-    None,
-    Some(CurrentIncomeModel(1000)),
+    CurrentIncomeModel(1000),
     Some(PersonalAllowanceModel(11100)),
     OtherPropertiesModel("No"),
     None,
@@ -254,21 +241,21 @@ class CalculatorConnectorSpec extends UnitSpec with MockitoSugar {
   "Calculator Connector" should {
 
     "fetch and get from keystore" in {
-      val testModel = CustomerTypeModel(CustomerTypeKeys.trustee)
-      when(mockSessionCache.fetchAndGetEntry[CustomerTypeModel](ArgumentMatchers.anyString())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      val testModel = DisposalValueModel(1000)
+      when(mockSessionCache.fetchAndGetEntry[DisposalValueModel](ArgumentMatchers.anyString())(ArgumentMatchers.any(), ArgumentMatchers.any()))
         .thenReturn(Future.successful(Option(testModel)))
 
-      lazy val result = TargetCalculatorConnector.fetchAndGetFormData[CustomerTypeModel](KeystoreKeys.customerType)
+      lazy val result = TargetCalculatorConnector.fetchAndGetFormData[DisposalValueModel](KeystoreKeys.disposalValue)
       await(result) shouldBe Some(testModel)
     }
 
     "save data to keystore" in {
-      val testModel = CustomerTypeModel(CustomerTypeKeys.trustee)
-      val returnedCacheMap = CacheMap(KeystoreKeys.customerType, Map("data" -> Json.toJson(testModel)))
-      when(mockSessionCache.cache[CustomerTypeModel](ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      val testModel = DisposalValueModel(1000)
+      val returnedCacheMap = CacheMap(KeystoreKeys.disposalValue, Map("data" -> Json.toJson(testModel)))
+      when(mockSessionCache.cache[DisposalValueModel](ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
         .thenReturn(Future.successful(returnedCacheMap))
 
-      lazy val result = TargetCalculatorConnector.saveFormData(KeystoreKeys.customerType, testModel)
+      lazy val result = TargetCalculatorConnector.saveFormData(KeystoreKeys.disposalValue, testModel)
       await(result) shouldBe returnedCacheMap
     }
   }

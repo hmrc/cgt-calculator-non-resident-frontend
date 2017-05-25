@@ -59,14 +59,6 @@ POST        /worth-when-inherited                controllers.WorthWhenInheritedC
 GET         /worth-before-legislation-start      controllers.WorthBeforeLegislationStartController.worthBeforeLegislationStart
 POST        /worth-before-legislation-start      controllers.WorthBeforeLegislationStartController.submitWorthBeforeLegislationStart
 
-#Customer Type
-GET         /customer-type                      controllers.CustomerTypeController.customerType
-POST        /customer-type                      controllers.CustomerTypeController.submitCustomerType
-
-#Disabled Trustee
-GET         /disabled-trustee                   controllers.DisabledTrusteeController.disabledTrustee
-POST        /disabled-trustee                   controllers.DisabledTrusteeController.submitDisabledTrustee
-
 #Current Income
 GET         /current-income                     controllers.CurrentIncomeController.currentIncome
 POST        /current-income                     controllers.CurrentIncomeController.submitCurrentIncome
