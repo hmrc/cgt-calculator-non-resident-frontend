@@ -20,7 +20,11 @@
         }
     }
 
+    @if(args.toMap.contains('_additionalHint)) {
+        <span class ="form-hint">@{args.toMap.get('_additionalHint)</span>
+    }
     <span class="form-hint">@Messages("calc.common.date.hint")</span>
+
 
     @simpleNoErrorInput(
         formItem(s"${fieldName}Day"),
