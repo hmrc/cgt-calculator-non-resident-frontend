@@ -16,21 +16,68 @@
 
 package controllers
 
+import common.KeystoreKeys.{ResidentPropertyKeys, NonResidentKeys => keystoreKeys}
 import config.ApplicationConfig
+import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
+import models.WhoDidYouGiveItToModel
 import uk.gov.hmrc.play.frontend.controller.FrontendController
+import views.html.{calculation => views}
+import play.api.data.Form
+import play.api.i18n.Messages
+import forms.WhoDidYouGiveItToForm._
+import play.api.mvc.{Action, AnyContent, Result}
+
+import scala.concurrent.Future
+
 
 object WhoDidYouGiveItToController extends WhoDidYouGiveItToController {
+  val calcConnector = CalculatorConnector
 }
 
 trait WhoDidYouGiveItToController extends FrontendController with ValidActiveSession {
 
+  val calcConnector: CalculatorConnector
   lazy implicit val appConfig = ApplicationConfig
 
-  val whoDidYouGiveItTo = TODO
+  val whoDidYouGiveItTo = ValidateSession.async { implicit request =>
 
-  val submitWhoDidYouGiveItTo = TODO
+    calcConnector.fetchAndGetFormData[WhoDidYouGiveItToModel](keystoreKeys.whoDidYouGiveItTo).map {
+      case Some(data) => Ok(views.whoDidYouGiveItTo(whoDidYouGiveItToForm.fill(data)))
+      case _ => Ok(views.whoDidYouGiveItTo(whoDidYouGiveItToForm))
+    }
+  }
 
-  val noTaxToPay = TODO
+  val submitWhoDidYouGiveItTo: Action[AnyContent] = ValidateSession.async { implicit request =>
+    whoDidYouGiveItToForm.bindFromRequest.fold(
+      errors => Future.successful(BadRequest(views.whoDidYouGiveItTo(errors))),
+      success => {
+        calcConnector.saveFormData[WhoDidYouGiveItToModel](keystoreKeys.whoDidYouGiveItTo, success)
+        success match {
+          case WhoDidYouGiveItToModel("Spouse") => Future.successful(Redirect(routes.WhoDidYouGiveItToController.noTaxToPay()))
+          case WhoDidYouGiveItToModel("Charity") => Future.successful(Redirect(routes.WhoDidYouGiveItToController.noTaxToPay()))
+          case WhoDidYouGiveItToModel("Other") => Future.successful(Redirect(routes.MarketValueWhenSoldOrGaveAwayController.marketValueWhenGaveAway()))
+        }
+      })
+  }
+
+  val noTaxToPay = ValidateSession.async { implicit request =>
+
+    def isGivenToCharity: Future[Boolean] = {
+      calcConnector.fetchAndGetFormData[WhoDidYouGiveItToModel](keystoreKeys.whoDidYouGiveItTo).map {
+        case Some(WhoDidYouGiveItToModel("Charity")) => true
+        case _ => false
+      }
+    }
+
+    def result(input: Boolean): Future[Result] = {
+      Future.successful(Ok(views.noTaxToPay(input)))
+    }
+
+    for {
+      givenToCharity <- isGivenToCharity
+      result <- result(givenToCharity)
+    } yield result
+  }
 
 }
