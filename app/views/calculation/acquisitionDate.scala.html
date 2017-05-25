@@ -11,7 +11,7 @@
     @errorSummary(acquisitionDateForm, "acquisition-date", "acquisitionDateDay")
 
     <h1 class="heading-xlarge">@Messages("calc.acquisitionDate.question")</h1>
-    <p> class="form-hint">"If you inherited the property, it is the date that the previous owner died."</p>
+    <p> class="form-hint">@Messages("calc.acquisitionDate.formHint")</p>
 
     @form(action = controllers.routes.AcquisitionDateController.submitAcquisitionDate) {
 
