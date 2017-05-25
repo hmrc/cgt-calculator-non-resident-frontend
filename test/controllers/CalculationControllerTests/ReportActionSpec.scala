@@ -119,7 +119,7 @@ class ReportActionSpec extends UnitSpec with WithFakeApplication with FakeReques
     Some(BoughtForLessModel(false)),
     AcquisitionValueModel(2000),
     AcquisitionCostsModel(200),
-    AcquisitionDateModel("Yes", Some(4), Some(10), Some(2013)),
+    AcquisitionDateModel(4, 10, 2013),
     Some(RebasedValueModel(Some(3000))),
     Some(RebasedCostsModel("Yes", Some(300))),
     ImprovementsModel("Yes", Some(10), Some(20)),

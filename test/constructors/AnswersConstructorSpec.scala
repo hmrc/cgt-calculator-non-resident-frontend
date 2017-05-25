@@ -156,7 +156,7 @@ class AnswersConstructorSpec extends UnitSpec with MockitoSugar {
     None,
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
-    AcquisitionDateModel("No", None, None, None),
+    AcquisitionDateModel(1, 1, 2016),
     None,
     None,
     ImprovementsModel("No", None, None),

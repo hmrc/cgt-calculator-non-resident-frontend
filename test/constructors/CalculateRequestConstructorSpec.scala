@@ -149,11 +149,6 @@ class CalculateRequestConstructorSpec extends UnitSpec {
       CalculateRequestConstructor.privateResidenceReliefTA(TestModels.summaryIndividualFlatWithAEA) shouldEqual ""
     }
 
-    "return a string from privateResidenceReliefRebased with a Rebased Value and a disposal date after 18 month period with no acqDate" in {
-      CalculateRequestConstructor.privateResidenceReliefRebased(TestModels.summaryIndividualPRRNoAcqDateAndDisposalDateAfterWithRebased) shouldEqual
-        "&daysClaimed=50"
-    }
-
     "return a string from privateResidenceReliefRebased with a Rebased Value and a disposal date after 18 month period with an acqDate before the start" in {
       CalculateRequestConstructor.privateResidenceReliefRebased(TestModels.summaryIndividualPRRAcqDateBeforeAndDisposalDateAfterWithRebased) shouldEqual
         "&daysClaimed=50"

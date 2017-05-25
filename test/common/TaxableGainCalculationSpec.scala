@@ -49,7 +49,7 @@ class TaxableGainCalculationSpec extends UnitSpec with WithFakeApplication with 
     None,
     None,
     Some(AnnualExemptAmountModel(0)),
-    BroughtForwardLossesModel(false, None)
+    BroughtForwardLossesModel(isClaiming = false, None)
   )
   val totalGainAnswersModel = TotalGainAnswersModel(
     DisposalDateModel(5, 6, 2015),
@@ -61,7 +61,7 @@ class TaxableGainCalculationSpec extends UnitSpec with WithFakeApplication with 
     Some(BoughtForLessModel(false)),
     AcquisitionValueModel(1250000),
     AcquisitionCostsModel(20000),
-    AcquisitionDateModel("Yes", Some(10), Some(10), Some(2001)),
+    AcquisitionDateModel(10, 10, 2001),
     Some(RebasedValueModel(Some(950000))),
     Some(RebasedCostsModel("No", None)),
     ImprovementsModel("No", None),
@@ -201,7 +201,7 @@ class TaxableGainCalculationSpec extends UnitSpec with WithFakeApplication with 
         None,
         None,
         Some(AnnualExemptAmountModel(0)),
-        BroughtForwardLossesModel(false, None)
+        BroughtForwardLossesModel(isClaiming = false, None)
       )
       val result = TaxableGainCalculation.getMaxAEA(Some(personalDetailsModel), Some(taxYearModel), mockCalcConnector)
 
@@ -221,7 +221,7 @@ class TaxableGainCalculationSpec extends UnitSpec with WithFakeApplication with 
         None,
         None,
         Some(AnnualExemptAmountModel(0)),
-        BroughtForwardLossesModel(false, None)
+        BroughtForwardLossesModel(isClaiming = false, None)
       )
       val result = TaxableGainCalculation.getMaxAEA(Some(personalDetailsModel), Some(taxYearModel), mockCalcConnector)
 
@@ -241,7 +241,7 @@ class TaxableGainCalculationSpec extends UnitSpec with WithFakeApplication with 
         None,
         None,
         Some(AnnualExemptAmountModel(0)),
-        BroughtForwardLossesModel(false, None)
+        BroughtForwardLossesModel(isClaiming = false, None)
       )
       val result = TaxableGainCalculation.getMaxAEA(Some(personalDetailsModel), Some(taxYearModel), mockCalcConnector)
 
