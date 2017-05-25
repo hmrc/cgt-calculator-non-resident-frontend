@@ -123,7 +123,7 @@ trait ImprovementsController extends FrontendController with ValidActiveSession 
         val finalSeq = Seq(model.get.flatGain) ++ optionSeq
 
         (!finalSeq.forall(_ <= 0), skipPRR) match {
-          case (true, false) => Redirect(routes.PrivateResidenceReliefController.privateResidenceRelief())
+          case (true, false) => Redirect(routes.PropertyLivedInController.propertyLivedIn())
           case (true, true) => Redirect(controllers.routes.CustomerTypeController.customerType())
           case (_, _) => Redirect(routes.CheckYourAnswersController.checkYourAnswers())
         }
