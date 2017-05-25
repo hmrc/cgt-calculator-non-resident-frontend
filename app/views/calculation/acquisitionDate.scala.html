@@ -11,20 +11,15 @@
     @errorSummary(acquisitionDateForm, "acquisition-date", "acquisitionDateDay")
 
     <h1 class="heading-xlarge">@Messages("calc.acquisitionDate.question")</h1>
+    <p> class="form-hint">"If you inherited the property, it is the date that the previous owner died."</p>
 
     @form(action = controllers.routes.AcquisitionDateController.submitAcquisitionDate) {
 
-        @formHiddenYesNoRadioNoError(
-                acquisitionDateForm,
+                @formInlineDateInput(acquisitionDateForm,
                 "hasAcquisitionDate",
                 Messages("calc.acquisitionDate.question"),
-                formInlineDateInput(
-                    acquisitionDateForm,
-                    "acquisitionDate",
-                    ""
-                ),
+                '_visually_hidden -> true),
                 displayLegend = false
-        )
 
         <button class="button" type="submit" id="continue-button">@Messages("calc.base.continue")</button>
 

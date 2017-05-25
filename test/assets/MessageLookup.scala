@@ -74,7 +74,7 @@ object MessageLookup {
     }
 
     object AcquisitionDate {
-      val question = "Do you know the date you signed the contract that made you the owner?"
+      val question = "What date did you sign the contract to become the owner?"
       val questionTwo = "What was the date you signed the contract that made you the owner?"
     }
 
