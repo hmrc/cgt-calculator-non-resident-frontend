@@ -132,9 +132,10 @@ calc.annualExemptAmount.errorNegative = Enter a positive number for your allowan
 calc.annualExemptAmount.errorDecimalPlaces = Your allowance has too many numbers after the decimal point
 
 ## Acquisition Date ##
-calc.acquisitionDate.question = Do you know the date you signed the contract that made you the owner?
+calc.acquisitionDate.question = What date did you sign the contract to become the owner?
 calc.acquisitionDate.questionTwo = What was the date you signed the contract that made you the owner?
-calc.acquisitionDate.formHint = If you inherited the property, it is the date that the previous owner died.
+calc.acquisitionDate.hintText = If you inherited the property, it is the date that the previous owner died.
+
 
 ## Acquisition Value ##
 calc.acquisitionValue.question = How much did you pay for the property?

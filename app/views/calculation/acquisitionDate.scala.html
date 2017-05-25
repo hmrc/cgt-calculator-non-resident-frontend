@@ -11,7 +11,7 @@
     @errorSummary(acquisitionDateForm, "acquisition-date", "acquisitionDateDay")
 
     <h1 class="heading-xlarge">@Messages("calc.acquisitionDate.question")</h1>
-    <p> class="form-hint">@Messages("calc.acquisitionDate.formHint")</p>
+    <p  class="hintText">@Messages("calc.acquisitionDate.hintText")</p>
 
     @form(action = controllers.routes.AcquisitionDateController.submitAcquisitionDate) {
 
@@ -19,7 +19,6 @@
                 "hasAcquisitionDate",
                 Messages("calc.acquisitionDate.question"),
                 '_visually_hidden -> true),
-                displayLegend = false
 
         <button class="button" type="submit" id="continue-button">@Messages("calc.base.continue")</button>
 

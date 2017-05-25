@@ -92,13 +92,6 @@ class AcquisitionDateViewSpec extends UnitSpec with WithFakeApplication with Moc
         }
       }
 
-      "have inputs using the id 'hasAcquisitionDate'" in {
-        document.body().select("input[type=radio]").attr("id") should include ("hasAcquisitionDate")
-      }
-
-      "have inputs using the id acquisitionDate" in {
-        document.body().select("input[type=number]").attr("id") should include ("acquisitionDate")
-      }
 
       "have a button" which {
         lazy val button = document.select("button")
