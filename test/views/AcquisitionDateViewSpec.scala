@@ -93,7 +93,7 @@ class AcquisitionDateViewSpec extends UnitSpec with WithFakeApplication with Moc
 
 
         s"have the hintText '${messages.AcquisitionDate.hintText}'" in {
-          document.select("form-hint").text.stripSuffix(" ") shouldBe messages.AcquisitionDate.hintText
+          document.select(".form-hint").first().text.stripSuffix(" ") shouldBe messages.AcquisitionDate.hintText
         }
       }
 
