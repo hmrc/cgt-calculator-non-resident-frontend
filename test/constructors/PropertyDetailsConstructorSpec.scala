@@ -33,7 +33,7 @@ class PropertyDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
     None,
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
-    AcquisitionDateModel("No", None, None, None),
+    AcquisitionDateModel(1, 1, 2015),
     None,
     None,
     ImprovementsModel("No", None, None),
@@ -50,7 +50,7 @@ class PropertyDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
     Some(BoughtForLessModel(false)),
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
-    AcquisitionDateModel("Yes", Some(1), Some(4), Some(2013)),
+    AcquisitionDateModel(1, 4, 2013),
     Some(RebasedValueModel(None)),
     Some(RebasedCostsModel("No", None)),
     ImprovementsModel("Yes", Some(50), None),
@@ -67,7 +67,7 @@ class PropertyDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
     Some(BoughtForLessModel(true)),
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
-    AcquisitionDateModel("Yes", Some(1), Some(4), Some(2013)),
+    AcquisitionDateModel(1, 4, 2013),
     Some(RebasedValueModel(Some(7500))),
     Some(RebasedCostsModel("Yes", Some(150))),
     ImprovementsModel("Yes", Some(50), Some(25)),
@@ -81,20 +81,16 @@ class PropertyDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
     "supplied with all improvements" should {
       lazy val result = PropertyDetailsConstructor.propertyDetailsRows(allImprovements)
 
-//      "return a sequence with 3 entries" in {
-//        result.size shouldBe 3
-//      }
-
       "return a sequence with an improvements question" in {
         result.contains(PropertyDetailsConstructor.improvementsIsClaimingRow(allImprovements).get)
       }
 
       "return a sequence with an improvements value" in {
-        result.contains(PropertyDetailsConstructor.improvementsTotalRow(allImprovements, true, true).get)
+        result.contains(PropertyDetailsConstructor.improvementsTotalRow(allImprovements, display = true, displayRebased = true).get)
       }
 
       "return a sequence with an improvements after value" in {
-        result.contains(PropertyDetailsConstructor.improvementsAfterRow(allImprovements, true).get)
+        result.contains(PropertyDetailsConstructor.improvementsAfterRow(allImprovements, display = true).get)
       }
     }
   }
@@ -133,7 +129,7 @@ class PropertyDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
   "Calling improvementsTotalRow" when {
 
     "supplied with a value of 50 and no rebased value is used" should {
-      lazy val result = PropertyDetailsConstructor.improvementsTotalRow(noRebasedImprovements, true, false)
+      lazy val result = PropertyDetailsConstructor.improvementsTotalRow(noRebasedImprovements, display = true, displayRebased = false)
 
       "return some value" in {
         result.isDefined shouldBe true
@@ -157,7 +153,7 @@ class PropertyDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
     }
 
     "supplied with no improvements value" should {
-      lazy val result = PropertyDetailsConstructor.improvementsTotalRow(noImprovements, false, false)
+      lazy val result = PropertyDetailsConstructor.improvementsTotalRow(noImprovements, display = false, displayRebased = false)
 
       "return a None" in {
         result shouldBe None
@@ -165,7 +161,7 @@ class PropertyDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
     }
 
     "supplied with a value of 50 alongside a rebased improvements value" should {
-      lazy val result = PropertyDetailsConstructor.improvementsTotalRow(allImprovements, true, true)
+      lazy val result = PropertyDetailsConstructor.improvementsTotalRow(allImprovements, display = true, displayRebased = true)
 
       "return some value" in {
         result.isDefined shouldBe true
@@ -184,7 +180,7 @@ class PropertyDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
   "Calling improvementsAfterRow" when {
 
     "supplied with a value of 25 and should be displayed it true" should {
-      lazy val result = PropertyDetailsConstructor.improvementsAfterRow(allImprovements, true)
+      lazy val result = PropertyDetailsConstructor.improvementsAfterRow(allImprovements, display = true)
 
       "return some value" in {
         result.isDefined shouldBe true
@@ -208,7 +204,7 @@ class PropertyDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
     }
 
     "supplied with a no value for improvements after" should {
-      lazy val result = PropertyDetailsConstructor.improvementsAfterRow(noRebasedImprovements, false)
+      lazy val result = PropertyDetailsConstructor.improvementsAfterRow(noRebasedImprovements, display = false)
 
       "return a None" in {
         result shouldBe None

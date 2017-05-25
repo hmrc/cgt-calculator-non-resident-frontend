@@ -31,7 +31,7 @@ class PrivateResidenceReliefRequestConstructorSpec extends UnitSpec{
     None,
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
-    AcquisitionDateModel("Yes", Some(7), Some(1), Some(2015)),
+    AcquisitionDateModel(7, 1, 2015),
     None,
     None,
     ImprovementsModel("No", None, None),
@@ -48,7 +48,7 @@ class PrivateResidenceReliefRequestConstructorSpec extends UnitSpec{
     None,
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
-    AcquisitionDateModel("Yes", Some(10), Some(10), Some(2015)),
+    AcquisitionDateModel(10, 10, 2015),
     None,
     None,
     ImprovementsModel("No", None, None),
@@ -65,14 +65,14 @@ class PrivateResidenceReliefRequestConstructorSpec extends UnitSpec{
     None,
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
-    AcquisitionDateModel("Yes", Some(10), Some(10), Some(2000)),
+    AcquisitionDateModel(10, 10, 2000),
     None,
     None,
     ImprovementsModel("No", None, None),
     None
   )
 
-  val modelNoAcquisitionOrRebased = TotalGainAnswersModel(
+  val modelNoRebased = TotalGainAnswersModel(
     DisposalDateModel(10, 10, 2016),
     SoldOrGivenAwayModel(false),
     None,
@@ -82,7 +82,7 @@ class PrivateResidenceReliefRequestConstructorSpec extends UnitSpec{
     None,
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
-    AcquisitionDateModel("No", None, None, None),
+    AcquisitionDateModel(10, 10, 2000),
     Some(RebasedValueModel(None)),
     None,
     ImprovementsModel("No", None, None),
@@ -99,7 +99,7 @@ class PrivateResidenceReliefRequestConstructorSpec extends UnitSpec{
     None,
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
-    AcquisitionDateModel("No", None, None, None),
+    AcquisitionDateModel(10, 10, 2000),
     Some(RebasedValueModel(Some(1000))),
     None,
     ImprovementsModel("No", None, None),
@@ -175,9 +175,9 @@ class PrivateResidenceReliefRequestConstructorSpec extends UnitSpec{
       result shouldBe ""
     }
 
-    "return a blank string when no acquisition date or rebased value is provided" in {
+    "return a blank string when no rebased value is provided" in {
       val privateResidenceReliefModel = PrivateResidenceReliefModel("Yes", Some(4), Some(5))
-      val result = PrivateResidenceReliefRequestConstructor.daysClaimedAfter(modelNoAcquisitionOrRebased, Some(privateResidenceReliefModel))
+      val result = PrivateResidenceReliefRequestConstructor.daysClaimedAfter(modelNoRebased, Some(privateResidenceReliefModel))
 
       result shouldBe ""
     }

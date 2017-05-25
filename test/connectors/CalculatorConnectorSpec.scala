@@ -23,6 +23,7 @@ import common.nonresident.CustomerTypeKeys
 import models._
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
+import org.mockito.stubbing.OngoingStubbing
 import org.scalatest.mock.MockitoSugar
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.cache.client.{CacheMap, SessionCache}
@@ -34,43 +35,44 @@ import scala.concurrent.Future
 
 class CalculatorConnectorSpec extends UnitSpec with MockitoSugar {
 
-  val mockHttp = mock[HttpGet]
-  val mockSessionCache = mock[SessionCache]
-  val sessionId = UUID.randomUUID.toString
+  val mockHttp: HttpGet = mock[HttpGet]
+  val mockSessionCache: SessionCache = mock[SessionCache]
+  val sessionId: String = UUID.randomUUID.toString
 
   object TargetCalculatorConnector extends CalculatorConnector {
-    override val sessionCache = mockSessionCache
-    override val http = mockHttp
+    override val sessionCache: SessionCache = mockSessionCache
+    override val http: HttpGet = mockHttp
     override val serviceUrl = "dummy"
   }
 
   implicit val hc: HeaderCarrier = HeaderCarrier(sessionId = Some(SessionId(sessionId.toString)))
 
   def mockFetchAndGetFormData (summary: SummaryModel,
-                               calculationElectionModel: Option[CalculationElectionModel],otherReliefsModel: Option[OtherReliefsModel]) = {
+                               calculationElectionModel: Option[CalculationElectionModel],
+                               otherReliefsModel: Option[OtherReliefsModel]): OngoingStubbing[Future[Option[PrivateResidenceReliefModel]]] = {
     when(mockSessionCache.fetchAndGetEntry[CustomerTypeModel](ArgumentMatchers.eq(KeystoreKeys.customerType))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(summary.customerTypeModel)))
 
-    when(mockSessionCache.fetchAndGetEntry[DisabledTrusteeModel](ArgumentMatchers.eq(KeystoreKeys.disabledTrustee))(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(summary.disabledTrusteeModel))
+    when(mockSessionCache.fetchAndGetEntry[DisabledTrusteeModel](ArgumentMatchers.eq(KeystoreKeys.disabledTrustee))(ArgumentMatchers.any(),
+      ArgumentMatchers.any())).thenReturn(Future.successful(summary.disabledTrusteeModel))
 
     when(mockSessionCache.fetchAndGetEntry[CurrentIncomeModel](ArgumentMatchers.eq(KeystoreKeys.currentIncome))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(summary.currentIncomeModel))
 
-    when(mockSessionCache.fetchAndGetEntry[PersonalAllowanceModel](ArgumentMatchers.eq(KeystoreKeys.personalAllowance))(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(summary.personalAllowanceModel))
+    when(mockSessionCache.fetchAndGetEntry[PersonalAllowanceModel](ArgumentMatchers.eq(KeystoreKeys.personalAllowance))(ArgumentMatchers.any(),
+      ArgumentMatchers.any())).thenReturn(Future.successful(summary.personalAllowanceModel))
 
-    when(mockSessionCache.fetchAndGetEntry[OtherPropertiesModel](ArgumentMatchers.eq(KeystoreKeys.otherProperties))(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(Some(summary.otherPropertiesModel)))
+    when(mockSessionCache.fetchAndGetEntry[OtherPropertiesModel](ArgumentMatchers.eq(KeystoreKeys.otherProperties))(ArgumentMatchers.any(),
+      ArgumentMatchers.any())).thenReturn(Future.successful(Some(summary.otherPropertiesModel)))
 
-    when(mockSessionCache.fetchAndGetEntry[AnnualExemptAmountModel](ArgumentMatchers.eq(KeystoreKeys.annualExemptAmount))(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(summary.annualExemptAmountModel))
+    when(mockSessionCache.fetchAndGetEntry[AnnualExemptAmountModel](ArgumentMatchers.eq(KeystoreKeys.annualExemptAmount))(ArgumentMatchers.any(),
+      ArgumentMatchers.any())).thenReturn(Future.successful(summary.annualExemptAmountModel))
 
-    when(mockSessionCache.fetchAndGetEntry[AcquisitionDateModel](ArgumentMatchers.eq(KeystoreKeys.acquisitionDate))(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(Some(summary.acquisitionDateModel)))
+    when(mockSessionCache.fetchAndGetEntry[AcquisitionDateModel](ArgumentMatchers.eq(KeystoreKeys.acquisitionDate))(ArgumentMatchers.any(),
+      ArgumentMatchers.any())).thenReturn(Future.successful(Some(summary.acquisitionDateModel)))
 
-    when(mockSessionCache.fetchAndGetEntry[AcquisitionValueModel](ArgumentMatchers.eq(KeystoreKeys.acquisitionValue))(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(Some(summary.acquisitionValueModel)))
+    when(mockSessionCache.fetchAndGetEntry[AcquisitionValueModel](ArgumentMatchers.eq(KeystoreKeys.acquisitionValue))(ArgumentMatchers.any(),
+      ArgumentMatchers.any())).thenReturn(Future.successful(Some(summary.acquisitionValueModel)))
 
     when(mockSessionCache.fetchAndGetEntry[RebasedValueModel](ArgumentMatchers.eq(KeystoreKeys.rebasedValue))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(summary.rebasedValueModel))
@@ -87,26 +89,26 @@ class CalculatorConnectorSpec extends UnitSpec with MockitoSugar {
     when(mockSessionCache.fetchAndGetEntry[DisposalValueModel](ArgumentMatchers.eq(KeystoreKeys.disposalValue))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(summary.disposalValueModel)))
 
-    when(mockSessionCache.fetchAndGetEntry[AcquisitionCostsModel](ArgumentMatchers.eq(KeystoreKeys.acquisitionCosts))(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(Some(summary.acquisitionCostsModel)))
+    when(mockSessionCache.fetchAndGetEntry[AcquisitionCostsModel](ArgumentMatchers.eq(KeystoreKeys.acquisitionCosts))(ArgumentMatchers.any(),
+      ArgumentMatchers.any())).thenReturn(Future.successful(Some(summary.acquisitionCostsModel)))
 
     when(mockSessionCache.fetchAndGetEntry[DisposalCostsModel](ArgumentMatchers.eq(KeystoreKeys.disposalCosts))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(summary.disposalCostsModel)))
 
-    when(mockSessionCache.fetchAndGetEntry[CalculationElectionModel](ArgumentMatchers.eq(KeystoreKeys.calculationElection))(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(calculationElectionModel))
+    when(mockSessionCache.fetchAndGetEntry[CalculationElectionModel](ArgumentMatchers.eq(KeystoreKeys.calculationElection))(ArgumentMatchers.any(),
+      ArgumentMatchers.any())).thenReturn(Future.successful(calculationElectionModel))
 
-    when(mockSessionCache.fetchAndGetEntry[OtherReliefsModel](ArgumentMatchers.eq(KeystoreKeys.otherReliefsFlat))(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(otherReliefsModel))
+    when(mockSessionCache.fetchAndGetEntry[OtherReliefsModel](ArgumentMatchers.eq(KeystoreKeys.otherReliefsFlat))(ArgumentMatchers.any(),
+      ArgumentMatchers.any())).thenReturn(Future.successful(otherReliefsModel))
 
     when(mockSessionCache.fetchAndGetEntry[OtherReliefsModel](ArgumentMatchers.eq(KeystoreKeys.otherReliefsTA))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(otherReliefsModel))
 
-    when(mockSessionCache.fetchAndGetEntry[OtherReliefsModel](ArgumentMatchers.eq(KeystoreKeys.otherReliefsRebased))(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(otherReliefsModel))
+    when(mockSessionCache.fetchAndGetEntry[OtherReliefsModel](ArgumentMatchers.eq(KeystoreKeys.otherReliefsRebased))(ArgumentMatchers.any(),
+      ArgumentMatchers.any())).thenReturn(Future.successful(otherReliefsModel))
 
-    when(mockSessionCache.fetchAndGetEntry[PrivateResidenceReliefModel](ArgumentMatchers.eq(KeystoreKeys.privateResidenceRelief))(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(summary.privateResidenceReliefModel))
+    when(mockSessionCache.fetchAndGetEntry[PrivateResidenceReliefModel](ArgumentMatchers.eq(KeystoreKeys.privateResidenceRelief))(ArgumentMatchers.any(),
+      ArgumentMatchers.any())).thenReturn(Future.successful(summary.privateResidenceReliefModel))
   }
 
   def setupMockedConnector(totalGainAnswersModel: TotalGainAnswersModel, totalGainResultsModel: Option[TotalGainResultsModel] = None,
@@ -124,14 +126,14 @@ class CalculatorConnectorSpec extends UnitSpec with MockitoSugar {
     when(mockSessionCache.fetchAndGetEntry[DisposalCostsModel](ArgumentMatchers.eq(KeystoreKeys.disposalCosts))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(totalGainAnswersModel.disposalCostsModel)))
 
-    when(mockSessionCache.fetchAndGetEntry[AcquisitionValueModel](ArgumentMatchers.eq(KeystoreKeys.acquisitionValue))(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(Some(totalGainAnswersModel.acquisitionValueModel)))
+    when(mockSessionCache.fetchAndGetEntry[AcquisitionValueModel](ArgumentMatchers.eq(KeystoreKeys.acquisitionValue))(ArgumentMatchers.any(),
+      ArgumentMatchers.any())).thenReturn(Future.successful(Some(totalGainAnswersModel.acquisitionValueModel)))
 
-    when(mockSessionCache.fetchAndGetEntry[AcquisitionCostsModel](ArgumentMatchers.eq(KeystoreKeys.acquisitionCosts))(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(Some(totalGainAnswersModel.acquisitionCostsModel)))
+    when(mockSessionCache.fetchAndGetEntry[AcquisitionCostsModel](ArgumentMatchers.eq(KeystoreKeys.acquisitionCosts))(ArgumentMatchers.any(),
+      ArgumentMatchers.any())).thenReturn(Future.successful(Some(totalGainAnswersModel.acquisitionCostsModel)))
 
-    when(mockSessionCache.fetchAndGetEntry[AcquisitionDateModel](ArgumentMatchers.eq(KeystoreKeys.acquisitionDate))(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(Some(totalGainAnswersModel.acquisitionDateModel)))
+    when(mockSessionCache.fetchAndGetEntry[AcquisitionDateModel](ArgumentMatchers.eq(KeystoreKeys.acquisitionDate))(ArgumentMatchers.any(),
+      ArgumentMatchers.any())).thenReturn(Future.successful(Some(totalGainAnswersModel.acquisitionDateModel)))
 
     when(mockSessionCache.fetchAndGetEntry[RebasedValueModel](ArgumentMatchers.eq(KeystoreKeys.rebasedValue))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(totalGainAnswersModel.rebasedValueModel))
@@ -189,7 +191,7 @@ class CalculatorConnectorSpec extends UnitSpec with MockitoSugar {
     Some(PersonalAllowanceModel(11100)),
     OtherPropertiesModel("No"),
     None,
-    AcquisitionDateModel("Yes", Some(9), Some(9), Some(1999)),
+    AcquisitionDateModel(9, 9, 1999),
     AcquisitionValueModel(100000),
     Some(RebasedValueModel(None)),
     None,
@@ -212,7 +214,7 @@ class CalculatorConnectorSpec extends UnitSpec with MockitoSugar {
     Some(PersonalAllowanceModel(11100)),
     OtherPropertiesModel("No"),
     None,
-    AcquisitionDateModel("Yes", Some(9), Some(9), Some(1999)),
+    AcquisitionDateModel(9, 9, 1999),
     AcquisitionValueModel(100000),
     Some(RebasedValueModel(Some(1000))),
     Some(RebasedCostsModel("No", None)),
