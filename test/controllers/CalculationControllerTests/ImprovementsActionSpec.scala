@@ -81,9 +81,7 @@ class ImprovementsActionSpec extends UnitSpec with WithFakeApplication with Mock
 
       "when Acquisition Date is > 5 April 2015" should {
 
-        lazy val target = setupTarget(None,
-          Some(AcquisitionDateModel("Yes", Some(1), Some(1), Some(2017))),
-          None)
+        lazy val target = setupTarget(None, Some(AcquisitionDateModel(1, 1, 2017)), Some(RebasedValueModel(Some(1000))))
         lazy val result = target.improvements(fakeRequestWithSession)
         lazy val document = Jsoup.parse(bodyOf(result))
 
@@ -107,7 +105,7 @@ class ImprovementsActionSpec extends UnitSpec with WithFakeApplication with Mock
 
         lazy val target = setupTarget(
           None,
-          Some(AcquisitionDateModel("Yes", Some(1), Some(1), Some(2014))),
+          Some(AcquisitionDateModel(1, 1, 2014)),
           Some(RebasedValueModel(Some(500)))
         )
         lazy val result = target.improvements(fakeRequestWithSession)
@@ -126,26 +124,10 @@ class ImprovementsActionSpec extends UnitSpec with WithFakeApplication with Mock
 
   "In CalculationController calling the .submitImprovements action " when {
 
-    "submitting a valid form with 'Yes' and a value of 12045 for improvementsAmt and no acquisition date but a rebased value of None" should {
-
-      lazy val gainsModel = Some(TotalGainResultsModel(1000, Some(2000), None))
-      lazy val target = setupTarget(None, Some(AcquisitionDateModel("No", Some(1), Some(1), Some(2016))), Some(RebasedValueModel(None)), gainsModel)
-      lazy val request = fakeRequestToPOSTWithSession("isClaimingImprovements" -> "Yes", "improvementsAmt" -> "12045")
-      lazy val result = target.submitImprovements(request)
-
-      "return a 303" in {
-        status(result) shouldBe 303
-      }
-
-      s"redirect to ${controllers.routes.CustomerTypeController.customerType()}" in {
-        redirectLocation(result) shouldBe Some(s"${controllers.routes.CustomerTypeController.customerType()}")
-      }
-    }
-
     "submitting a valid form with but no gains model returned" should {
 
       lazy val gainsModel = None
-      lazy val target = setupTarget(None, Some(AcquisitionDateModel("Yes", Some(1), Some(1), Some(2016))), gainsModel)
+      lazy val target = setupTarget(None, Some(AcquisitionDateModel(1, 1, 2016)), gainsModel)
       lazy val request = fakeRequestToPOSTWithSession("isClaimingImprovements" -> "No", "improvementsAmt" -> "")
       lazy val result = target.submitImprovements(request)
 
@@ -161,7 +143,7 @@ class ImprovementsActionSpec extends UnitSpec with WithFakeApplication with Mock
     "submitting a valid form with 'No' and total gains of less than 0" should {
 
       lazy val gainsModel = Some(TotalGainResultsModel(-1000, None, None))
-      lazy val target = setupTarget(None, Some(AcquisitionDateModel("Yes", Some(1), Some(1), Some(2014))), None, gainsModel)
+      lazy val target = setupTarget(None, Some(AcquisitionDateModel(1, 1, 2014)), None, gainsModel)
       lazy val request = fakeRequestToPOSTWithSession("isClaimingImprovements" -> "No", "improvementsAmt" -> "")
       lazy val result = target.submitImprovements(request)
 
@@ -177,8 +159,7 @@ class ImprovementsActionSpec extends UnitSpec with WithFakeApplication with Mock
     "submitting a valid form with a rebased value" should {
 
       lazy val gainsModel = Some(TotalGainResultsModel(1000, Some(2000), None))
-      lazy val target = setupTarget(None, Some(AcquisitionDateModel("Yes", Some(1), Some(1), Some(2014))),
-        Some(RebasedValueModel(Some(2000))), gainsModel)
+      lazy val target = setupTarget(None, Some(AcquisitionDateModel(1, 1, 2014)), Some(RebasedValueModel(Some(2000))), gainsModel)
       lazy val request = fakeRequestToPOSTWithSession("isClaimingImprovements" -> "No", "improvementsAmt" -> "")
       lazy val result = target.submitImprovements(request)
 
@@ -193,7 +174,7 @@ class ImprovementsActionSpec extends UnitSpec with WithFakeApplication with Mock
 
     "submitting an invalid form with 'testData123' and a value of 'fhu39awd8'" should {
 
-      val target = setupTarget(None, Some(AcquisitionDateModel("Yes", Some(1), Some(1), Some(2014))))
+      val target = setupTarget(None, Some(AcquisitionDateModel(1, 1, 2014)))
       lazy val request = fakeRequestToPOSTWithSession("isClaimingImprovements" -> "testData123", "improvementsAmt" -> "fhu39awd8")
       lazy val result = target.submitImprovements(request)
       lazy val document = Jsoup.parse(bodyOf(result))

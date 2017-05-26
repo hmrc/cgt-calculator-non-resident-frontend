@@ -24,18 +24,17 @@ import play.api.libs.json._
 import scala.util.{Success, Try}
 
 case class AcquisitionDateModel (
-                                  hasAcquisitionDate: String,
-                                  day: Option[Int],
-                                  month: Option[Int],
-                                  year: Option[Int])
+                                  day: Int,
+                                  month: Int,
+                                  year: Int)
 
 object AcquisitionDateModel {
-  implicit val format = Json.format[AcquisitionDateModel]
+  implicit val format: OFormat[AcquisitionDateModel] = Json.format[AcquisitionDateModel]
 
   implicit val createDate: AcquisitionDateModel => Option[LocalDate] = model => {
     val dateFormatter = Dates.formatter
     Try {
-      LocalDate.parse(s"${model.day.get}/${model.month.get}/${model.year.get}", dateFormatter)
+      LocalDate.parse(s"${model.day}/${model.month}/${model.year}", dateFormatter)
     } match {
       case Success(date) => Some(date)
       case _ => None

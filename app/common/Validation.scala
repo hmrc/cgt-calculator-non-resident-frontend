@@ -77,6 +77,15 @@ object Validation {
     case _ => false
   }
 
+  val whoDidYouGiveItToCheck: String => Boolean = {
+    case "Spouse" => true
+    case "Charity" => true
+    case "Other" => true
+    case "" => true
+    case _ => false
+  }
+
+
   def isYesNoOption(electionMade: Boolean): Option[String] => Boolean = {
     case Some(value) if !electionMade => yesNoCheck(value)
     case _ => true

@@ -74,9 +74,11 @@ object MessageLookup {
     }
 
     object AcquisitionDate {
-      val question = "Do you know the date you signed the contract that made you the owner?"
+      val question = "What date did you sign the contract to become the owner?"
       val questionTwo = "What was the date you signed the contract that made you the owner?"
+      val hintText = "If you inherited the property, it is the date that the previous owner died."
     }
+
 
     object AcquisitionValue {
       val question = "How much did you pay for the property?"
@@ -211,7 +213,7 @@ object MessageLookup {
       val errorDecimalPlaces = "Taxable Gain for has too many numbers after the decimal point"
       }
 
-    object Improvements {
+    object Improvements extends Common {
       val helpOne = "Improvements are permanent changes that increase the value of a property, like adding extensions or garages."
       val helpTwo = "Normal maintenance costs don't count."
       val exampleTitle = "Show me an example"

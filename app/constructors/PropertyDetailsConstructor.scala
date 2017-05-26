@@ -16,7 +16,7 @@
 
 package constructors
 
-import models.{AcquisitionDateModel, QuestionAnswerModel, TotalGainAnswersModel}
+import models.{QuestionAnswerModel, TotalGainAnswersModel}
 import common.TaxDates
 import common.KeystoreKeys.{NonResidentKeys => keys}
 import play.api.i18n.Messages
@@ -27,26 +27,18 @@ object PropertyDetailsConstructor {
 
   def propertyDetailsRows(answers: TotalGainAnswersModel): Seq[QuestionAnswerModel[Any]] = {
 
-    val rebasedImprovements =
-      answers.acquisitionDateModel match {
-        case AcquisitionDateModel("Yes",_,_,_) if !TaxDates.dateAfterStart(answers.acquisitionDateModel.get) => true
-        case AcquisitionDateModel("No",_,_,_) if answers.rebasedValueModel.get.rebasedValueAmt.isDefined => true
-        case _ => false
-      }
+    val showRebasedImprovements = !TaxDates.dateAfterStart(answers.acquisitionDateModel.get)
+    val showImprovements = answers.improvementsModel.isClaimingImprovements == "Yes"
 
-    val totalImprovements =
-      if(answers.improvementsModel.isClaimingImprovements == "Yes") true
-      else false
+    val claimingImprovementsRow = constructClaimingImprovementsRow(answers)
+    val improvementsTotalRow = constructTotalImprovementsRow(answers, showImprovements, showRebasedImprovements)
+    val improvementsAfterRow = constructImprovementsAfterRow(answers, showImprovements, showRebasedImprovements)
 
-    val improvementsIsClaiming = improvementsIsClaimingRow(answers)
-    val improvementsTotal = improvementsTotalRow(answers, totalImprovements, rebasedImprovements)
-    val improvementsAfter = improvementsAfterRow(answers, rebasedImprovements)
-
-    val sequence = Seq(improvementsIsClaiming, improvementsTotal, improvementsAfter)
+    val sequence = Seq(claimingImprovementsRow, improvementsTotalRow, improvementsAfterRow)
     sequence.flatten
   }
 
-  def improvementsIsClaimingRow(answers: TotalGainAnswersModel): Option[QuestionAnswerModel[String]] = {
+  def constructClaimingImprovementsRow(answers: TotalGainAnswersModel): Option[QuestionAnswerModel[String]] = {
     Some(QuestionAnswerModel[String](s"${keys.improvements}-isClaiming",
       answers.improvementsModel.isClaimingImprovements,
       Messages("calc.improvements.question"),
@@ -54,7 +46,7 @@ object PropertyDetailsConstructor {
     ))
   }
 
-  def improvementsTotalRow(answers: TotalGainAnswersModel, display: Boolean, displayRebased: Boolean): Option[QuestionAnswerModel[BigDecimal]] = {
+  def constructTotalImprovementsRow(answers: TotalGainAnswersModel, display: Boolean, displayRebased: Boolean): Option[QuestionAnswerModel[BigDecimal]] = {
     if (display && displayRebased) {
       val total: BigDecimal = answers.improvementsModel.improvementsAmt.getOrElse(BigDecimal(0))
       Some(QuestionAnswerModel[BigDecimal](s"${keys.improvements}-total",
@@ -74,8 +66,8 @@ object PropertyDetailsConstructor {
     else None
   }
 
-  def improvementsAfterRow(answers: TotalGainAnswersModel, display: Boolean): Option[QuestionAnswerModel[BigDecimal]] = {
-    if (display) {
+  def constructImprovementsAfterRow(answers: TotalGainAnswersModel, display: Boolean, displayRebased: Boolean): Option[QuestionAnswerModel[BigDecimal]] = {
+    if (display && displayRebased) {
       Some(QuestionAnswerModel[BigDecimal](s"${keys.improvements}-after",
         answers.improvementsModel.improvementsAmtAfter.getOrElse(0),
         Messages("calc.improvements.questionFour"),

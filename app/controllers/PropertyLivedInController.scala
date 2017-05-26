@@ -14,12 +14,19 @@
  * limitations under the License.
  */
 
-package models
+package controllers
 
-import play.api.libs.json.Json
+import controllers.predicates.ValidActiveSession
+import uk.gov.hmrc.play.frontend.controller.FrontendController
 
-case class DisabledTrusteeModel (isVulnerable: String)
+object PropertyLivedInController extends PropertyLivedInController {
 
-object DisabledTrusteeModel {
-  implicit val format = Json.format[DisabledTrusteeModel]
+}
+
+class PropertyLivedInController extends FrontendController with ValidActiveSession {
+
+  val propertyLivedIn = TODO
+
+  val submitPropertyLivedIn = TODO
+
 }

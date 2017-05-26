@@ -26,39 +26,22 @@ object FinalTaxAnswersRequestConstructor {
 
   def additionalParametersQuery(model: TotalPersonalDetailsCalculationModel,
                                 maxAnnualExemptAmount: BigDecimal): String = {
-    customerType(model.customerTypeModel) +
-    isVulnerable(model.customerTypeModel, model.trusteeModel) +
-    currentIncome(model.customerTypeModel, model.currentIncomeModel) +
-    personalAllowanceAmt(model.customerTypeModel, model.personalAllowanceModel) +
-    allowableLoss(model.otherPropertiesModel, model.previousGainOrLoss, model.howMuchLossModel) +
-    previousGain(model.otherPropertiesModel, model.previousGainOrLoss, model.howMuchGainModel) +
-    broughtForwardLosses(model.broughtForwardLossesModel) +
-    annualExemptAmount(model.otherPropertiesModel, model.previousGainOrLoss, model.howMuchLossModel, model.howMuchGainModel,
-      model.annualExemptAmountModel, maxAnnualExemptAmount)
+    currentIncome(model.currentIncomeModel) +
+      personalAllowanceAmt(model.personalAllowanceModel) +
+      allowableLoss(model.otherPropertiesModel, model.previousGainOrLoss, model.howMuchLossModel) +
+      previousGain(model.otherPropertiesModel, model.previousGainOrLoss, model.howMuchGainModel) +
+      broughtForwardLosses(model.broughtForwardLossesModel) +
+      annualExemptAmount(model.otherPropertiesModel, model.previousGainOrLoss, model.howMuchLossModel, model.howMuchGainModel,
+        model.annualExemptAmountModel, maxAnnualExemptAmount)
   }
 
-  def customerType(model: CustomerTypeModel): String = {
-    s"&customerType=${model.customerType}"
+  def currentIncome(currentIncomeModel: CurrentIncomeModel): String = {
+    s"&currentIncome=${currentIncomeModel.currentIncome}"
   }
 
-  def isVulnerable(customerTypeModel: CustomerTypeModel, disabledTrusteeModel: Option[DisabledTrusteeModel]): String = {
-
-    if(customerTypeModel.customerType == CustomerTypeKeys.trustee) {
-      s"&isVulnerable=${disabledTrusteeModel.get.isVulnerable}"
-    } else { "" }
-  }
-
-  def currentIncome(customerTypeModel: CustomerTypeModel, currentIncomeModel: Option[CurrentIncomeModel]): String = {
-    if(customerTypeModel.customerType == CustomerTypeKeys.individual) {
-      s"&currentIncome=${currentIncomeModel.getOrElse(CurrentIncomeModel(0)).currentIncome}"
-    } else { "" }
-  }
-
-  def personalAllowanceAmt(customerTypeModel: CustomerTypeModel, personalAllowanceModel: Option[PersonalAllowanceModel]): String =
-    (customerTypeModel.customerType, personalAllowanceModel) match {
-        case (CustomerTypeKeys.individual, Some(model)) => s"&personalAllowanceAmt=${model.personalAllowanceAmt}"
-        case _ => ""
-      }
+  def personalAllowanceAmt(personalAllowanceModel: Option[PersonalAllowanceModel]): String =
+    if (personalAllowanceModel.isDefined) s"&personalAllowanceAmt=${personalAllowanceModel.get.personalAllowanceAmt}"
+    else ""
 
 
   def allowableLoss(otherPropertiesModel: OtherPropertiesModel,
@@ -103,6 +86,8 @@ object FinalTaxAnswersRequestConstructor {
   def broughtForwardLosses(model: BroughtForwardLossesModel): String = {
     if (model.isClaiming) {
       s"&broughtForwardLoss=${model.broughtForwardLoss.get}"
-    } else { "" }
+    } else {
+      ""
+    }
   }
 }

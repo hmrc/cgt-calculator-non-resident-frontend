@@ -18,16 +18,15 @@ package views
 
 import assets.MessageLookup.{NonResident => messages}
 import controllers.helpers.FakeRequestHelper
+import forms.AcquisitionDateForm._
 import org.jsoup.Jsoup
 import org.scalatest.mock.MockitoSugar
-import forms.AcquisitionDateForm._
+import play.api.Play.current
+import play.api.i18n.Messages.Implicits._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.acquisitionDate
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 
 class AcquisitionDateViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
-
 
 
   "Acquisition date view" when {
@@ -58,10 +57,6 @@ class AcquisitionDateViewSpec extends UnitSpec with WithFakeApplication with Moc
       "have a heading" which {
         lazy val heading = document.body().select("h1")
 
-        "has a class of heading-xlarge" in {
-          heading.attr("class") shouldBe "heading-xlarge"
-        }
-
         s"has the text '${messages.AcquisitionDate.question}'" in {
           heading.text shouldBe messages.AcquisitionDate.question
         }
@@ -90,22 +85,15 @@ class AcquisitionDateViewSpec extends UnitSpec with WithFakeApplication with Moc
         s"has an action of '${controllers.routes.AcquisitionDateController.submitAcquisitionDate().url}'" in {
           form.attr("action") shouldBe controllers.routes.AcquisitionDateController.submitAcquisitionDate().url
         }
-      }
 
-      "have inputs using the id 'hasAcquisitionDate'" in {
-        document.body().select("input[type=radio]").attr("id") should include ("hasAcquisitionDate")
-      }
 
-      "have inputs using the id acquisitionDate" in {
-        document.body().select("input[type=number]").attr("id") should include ("acquisitionDate")
+        s"have the hintText '${messages.AcquisitionDate.hintText}'" in {
+          document.select(".form-hint").first().text.stripSuffix(" ") shouldBe messages.AcquisitionDate.hintText
+        }
       }
 
       "have a button" which {
         lazy val button = document.select("button")
-
-        "has the class 'button'" in {
-          button.attr("class") shouldBe "button"
-        }
 
         "has the type 'submit'" in {
           button.attr("type") shouldBe "submit"
@@ -118,7 +106,7 @@ class AcquisitionDateViewSpec extends UnitSpec with WithFakeApplication with Moc
     }
 
     "supplied with errors" should {
-      lazy val form = acquisitionDateForm.bind(Map("hasAcquisitionDate" -> "Yes"))
+      lazy val form = acquisitionDateForm.bind(Map("acquisitionDateDay" -> "1", "acquisitionDateMonth" -> "1"))
       lazy val view = acquisitionDate(form)
       lazy val document = Jsoup.parse(view.body)
 

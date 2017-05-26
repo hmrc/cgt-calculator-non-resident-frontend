@@ -125,31 +125,15 @@ class TotalGainRequestConstructorSpec extends UnitSpec {
     "produce a valid query string with both dates provided" in {
       val result = TotalGainRequestConstructor.timeApportionedValues(
         DisposalDateModel(15, 10, 2018),
-        AcquisitionDateModel("Yes", Some(4), Some(5), Some(2013)))
+        AcquisitionDateModel(4, 5, 2013))
 
       result shouldBe "&disposalDate=2018-10-15&acquisitionDate=2013-5-4"
-    }
-
-    "produce an empty string with no acquisition date" in {
-      val result = TotalGainRequestConstructor.timeApportionedValues(
-        DisposalDateModel(15, 10, 2018),
-        AcquisitionDateModel("No", None, None, None))
-
-      result shouldBe "&disposalDate=2018-10-15"
-    }
-
-    "produce an empty string with missing acquisition date" in {
-      val result = TotalGainRequestConstructor.timeApportionedValues(
-        DisposalDateModel(15, 10, 2018),
-        AcquisitionDateModel("Yes", None, None, None))
-
-      result shouldBe "&disposalDate=2018-10-15"
     }
 
     "produce an empty string with an acquisition date after tax start" in {
       val result = TotalGainRequestConstructor.timeApportionedValues(
         DisposalDateModel(15, 10, 2018),
-        AcquisitionDateModel("Yes", Some(4), Some(5), Some(2016)))
+        AcquisitionDateModel(4, 5, 2016))
 
       result shouldBe "&disposalDate=2018-10-15"
     }
@@ -161,7 +145,7 @@ class TotalGainRequestConstructorSpec extends UnitSpec {
       val result = TotalGainRequestConstructor.rebasedValues(Some(RebasedValueModel(Some(3000))),
         Some(RebasedCostsModel("Yes", Some(300))),
         ImprovementsModel("Yes", None, Some(30)),
-        AcquisitionDateModel("Yes", Some(1), Some(1), Some(2013)))
+        AcquisitionDateModel(1, 1, 2013))
 
       result shouldBe "&rebasedValue=3000&rebasedCosts=300&improvementsAfterTaxStarted=30"
     }
@@ -170,34 +154,7 @@ class TotalGainRequestConstructorSpec extends UnitSpec {
       val result = TotalGainRequestConstructor.rebasedValues(Some(RebasedValueModel(None)),
         None,
         ImprovementsModel("Yes", None, None),
-        AcquisitionDateModel("Yes", Some(1), Some(1), Some(2013)))
-
-      result shouldBe ""
-    }
-
-    "produce an empty query string with an acquisition date after tax start date" in {
-      val result = TotalGainRequestConstructor.rebasedValues(None,
-        None,
-        ImprovementsModel("Yes", None, Some(30)),
-        AcquisitionDateModel("Yes", Some(1), Some(1), Some(2016)))
-
-      result shouldBe ""
-    }
-
-    "produce a valid query string with no acquisition date and with a rebased value" in {
-      val result = TotalGainRequestConstructor.rebasedValues(Some(RebasedValueModel(Some(3000))),
-        Some(RebasedCostsModel("Yes", Some(300))),
-        ImprovementsModel("Yes", None, Some(30)),
-        AcquisitionDateModel("No", None, None, None))
-
-      result shouldBe "&rebasedValue=3000&rebasedCosts=300&improvementsAfterTaxStarted=30"
-    }
-
-    "produce an empty query string with no acquisition date or rebased value" in {
-      val result = TotalGainRequestConstructor.rebasedValues(Some(RebasedValueModel(None)),
-        None,
-        ImprovementsModel("Yes", None, Some(30)),
-        AcquisitionDateModel("No", None, None, None))
+        AcquisitionDateModel(1, 1, 2013))
 
       result shouldBe ""
     }
@@ -215,7 +172,7 @@ class TotalGainRequestConstructorSpec extends UnitSpec {
         Some(BoughtForLessModel(false)),
         AcquisitionValueModel(2000),
         AcquisitionCostsModel(200),
-        AcquisitionDateModel("Yes", Some(4), Some(10), Some(2013)),
+        AcquisitionDateModel(4, 10, 2013),
         Some(RebasedValueModel(Some(3000))),
         Some(RebasedCostsModel("Yes", Some(300))),
         ImprovementsModel("Yes", Some(10), Some(20)),

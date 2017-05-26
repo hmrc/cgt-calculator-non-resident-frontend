@@ -59,14 +59,6 @@ POST        /worth-when-inherited                controllers.WorthWhenInheritedC
 GET         /worth-before-legislation-start      controllers.WorthBeforeLegislationStartController.worthBeforeLegislationStart
 POST        /worth-before-legislation-start      controllers.WorthBeforeLegislationStartController.submitWorthBeforeLegislationStart
 
-#Customer Type
-GET         /customer-type                      controllers.CustomerTypeController.customerType
-POST        /customer-type                      controllers.CustomerTypeController.submitCustomerType
-
-#Disabled Trustee
-GET         /disabled-trustee                   controllers.DisabledTrusteeController.disabledTrustee
-POST        /disabled-trustee                   controllers.DisabledTrusteeController.submitDisabledTrustee
-
 #Current Income
 GET         /current-income                     controllers.CurrentIncomeController.currentIncome
 POST        /current-income                     controllers.CurrentIncomeController.submitCurrentIncome
@@ -163,6 +155,10 @@ POST        /other-reliefs-rebased              controllers.OtherReliefsRebasedC
 #Who Did You Give It To
 GET         /who-did-you-give-it-to             controllers.WhoDidYouGiveItToController.whoDidYouGiveItTo
 POST        /who-did-you-give-it-to             controllers.WhoDidYouGiveItToController.submitWhoDidYouGiveItTo
+
+#Property Lived In
+GET         /property-lived-in                  controllers.PropertyLivedInController.propertyLivedIn
+POST        /property-lived-in                  controllers.PropertyLivedInController.submitPropertyLivedIn
 
 #You Have No Tax To Pay
 GET         /no-tax-to-pay                      controllers.WhoDidYouGiveItToController.noTaxToPay

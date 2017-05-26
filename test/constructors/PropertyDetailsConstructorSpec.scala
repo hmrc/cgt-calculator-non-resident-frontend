@@ -33,14 +33,14 @@ class PropertyDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
     None,
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
-    AcquisitionDateModel("No", None, None, None),
+    AcquisitionDateModel(1, 1, 2015),
     None,
     None,
     ImprovementsModel("No", None, None),
     None
   )
 
-  val noRebasedImprovements = TotalGainAnswersModel(
+  val flatOnlyImprovements = TotalGainAnswersModel(
     DisposalDateModel(10, 10, 2018),
     SoldOrGivenAwayModel(true),
     Some(SoldForLessModel(false)),
@@ -50,14 +50,14 @@ class PropertyDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
     Some(BoughtForLessModel(false)),
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
-    AcquisitionDateModel("Yes", Some(1), Some(4), Some(2013)),
+    AcquisitionDateModel(6, 4, 2015),
     Some(RebasedValueModel(None)),
     Some(RebasedCostsModel("No", None)),
     ImprovementsModel("Yes", Some(50), None),
     None
   )
 
-  val allImprovements = TotalGainAnswersModel(
+  val claimingRebasedImprovements = TotalGainAnswersModel(
     DisposalDateModel(10, 10, 2016),
     SoldOrGivenAwayModel(true),
     Some(SoldForLessModel(true)),
@@ -67,49 +67,44 @@ class PropertyDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
     Some(BoughtForLessModel(true)),
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
-    AcquisitionDateModel("Yes", Some(1), Some(4), Some(2013)),
+    AcquisitionDateModel(1, 4, 2013),
     Some(RebasedValueModel(Some(7500))),
     Some(RebasedCostsModel("Yes", Some(150))),
     ImprovementsModel("Yes", Some(50), Some(25)),
     None
   )
 
-  private def assertExpectedResult[T](option: Option[T])(test: T => Unit) = assertOption("expected option is None")(option)(test)
 
   "Calling propertyDetailsRow" when {
 
-    "supplied with all improvements" should {
-      lazy val result = PropertyDetailsConstructor.propertyDetailsRows(allImprovements)
-
-//      "return a sequence with 3 entries" in {
-//        result.size shouldBe 3
-//      }
+    "claiming improvements is selected and acquisition date is before 5/4/2015" should {
+      lazy val result = PropertyDetailsConstructor.propertyDetailsRows(claimingRebasedImprovements)
 
       "return a sequence with an improvements question" in {
-        result.contains(PropertyDetailsConstructor.improvementsIsClaimingRow(allImprovements).get)
+        result.contains(PropertyDetailsConstructor.constructClaimingImprovementsRow(claimingRebasedImprovements).get)
       }
 
       "return a sequence with an improvements value" in {
-        result.contains(PropertyDetailsConstructor.improvementsTotalRow(allImprovements, true, true).get)
+        result.contains(PropertyDetailsConstructor.constructTotalImprovementsRow(claimingRebasedImprovements, display = true, displayRebased = true).get)
       }
 
       "return a sequence with an improvements after value" in {
-        result.contains(PropertyDetailsConstructor.improvementsAfterRow(allImprovements, true).get)
+        result.contains(PropertyDetailsConstructor.constructImprovementsAfterRow(claimingRebasedImprovements, display = true, displayRebased = true).get)
       }
     }
   }
 
-  "Calling improvementsIsClaimingRow" when {
+  "Calling constructClaimingImprovementsRow" when {
 
     "supplied with a value of Yes" should {
-      lazy val result = PropertyDetailsConstructor.improvementsIsClaimingRow(allImprovements).get
+      lazy val result = PropertyDetailsConstructor.constructClaimingImprovementsRow(claimingRebasedImprovements).get
 
       "have an id of nr:improvements-isClaiming" in {
         result.id shouldBe "nr:improvements-isClaiming"
       }
 
-      "have the data for Yes" in {
-        result.data shouldBe "Yes"
+      s"have the data for ${messages.yes}" in {
+        result.data shouldBe messages.yes
       }
 
       "have the question for improvements is claiming" in {
@@ -122,93 +117,109 @@ class PropertyDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
     }
 
     "supplied with a value of No" should {
-      lazy val result = PropertyDetailsConstructor.improvementsIsClaimingRow(noImprovements).get
+      lazy val result = PropertyDetailsConstructor.constructClaimingImprovementsRow(noImprovements).get
 
-      "have the data for No" in {
-        result.data shouldBe "No"
+      s"have the value ${messages.no}" in {
+        result.data shouldBe messages.no
       }
     }
   }
 
-  "Calling improvementsTotalRow" when {
+  "Calling constructTotalImprovementsRow" when {
 
-    "supplied with a value of 50 and no rebased value is used" should {
-      lazy val result = PropertyDetailsConstructor.improvementsTotalRow(noRebasedImprovements, true, false)
+    "claiming improvements is selected and acquisition date is after the 5/4/2015" should {
+      lazy val result = PropertyDetailsConstructor.constructTotalImprovementsRow(flatOnlyImprovements, display = true, displayRebased = false)
 
       "return some value" in {
         result.isDefined shouldBe true
       }
 
       "have an id of nr:improvements-total" in {
-        assertExpectedResult(result)(_.id shouldBe "nr:improvements-total")
+        result.get.id shouldBe "nr:improvements-total"
       }
 
       "have the data for the value of 50" in {
-        assertExpectedResult(result)(_.data shouldBe BigDecimal(50))
+        result.get.data shouldBe BigDecimal(50)
       }
 
       "have the question for improvements values" in {
-        assertExpectedResult(result)(_.question shouldBe messages.questionTwo)
+        result.get.question shouldBe messages.questionTwo
       }
 
       "have a link to the improvements page" in {
-        assertExpectedResult(result)(_.link shouldBe Some(controllers.routes.ImprovementsController.improvements().url))
+        result.get.link shouldBe Some(controllers.routes.ImprovementsController.improvements().url)
       }
     }
 
-    "supplied with no improvements value" should {
-      lazy val result = PropertyDetailsConstructor.improvementsTotalRow(noImprovements, false, false)
+    "not claiming improvements" should {
+      lazy val result = PropertyDetailsConstructor.constructTotalImprovementsRow(noImprovements, display = false, displayRebased = false)
 
       "return a None" in {
         result shouldBe None
       }
     }
 
-    "supplied with a value of 50 alongside a rebased improvements value" should {
-      lazy val result = PropertyDetailsConstructor.improvementsTotalRow(allImprovements, true, true)
+    "claiming improvements is selected and acquisition date is before 6/4/2015" should {
+      lazy val result = PropertyDetailsConstructor.constructTotalImprovementsRow(claimingRebasedImprovements, display = true, displayRebased = true)
 
       "return some value" in {
         result.isDefined shouldBe true
       }
 
+      "have an id of nr:improvements-total" in {
+        result.get.id shouldBe "nr:improvements-total"
+      }
+
       "have the data for the value of 50" in {
-        assertExpectedResult(result)(_.data shouldBe BigDecimal(50))
+        result.get.data shouldBe BigDecimal(50)
       }
 
       "have the question for improvements values" in {
-        assertExpectedResult(result)(_.question shouldBe messages.questionThree)
+        result.get.question shouldBe messages.questionThree
+      }
+
+      "have a link to the improvements page" in {
+        result.get.link shouldBe Some(controllers.routes.ImprovementsController.improvements().url)
       }
     }
   }
 
-  "Calling improvementsAfterRow" when {
+  "Calling constructImprovementsAfterRow" when {
 
-    "supplied with a value of 25 and should be displayed it true" should {
-      lazy val result = PropertyDetailsConstructor.improvementsAfterRow(allImprovements, true)
+    "claiming improvements is selected and acquisition date is before 6/4/2015" should {
+      lazy val result = PropertyDetailsConstructor.constructImprovementsAfterRow(claimingRebasedImprovements, display = true, displayRebased = true)
 
       "return some value" in {
         result.isDefined shouldBe true
       }
 
       "have an id of nr:improvements-after" in {
-        assertExpectedResult(result)(_.id shouldBe "nr:improvements-after")
+        result.get.id shouldBe "nr:improvements-after"
       }
 
       "have the data for the value of 25" in {
-        assertExpectedResult(result)(_.data shouldBe BigDecimal(25))
+        result.get.data shouldBe BigDecimal(25)
       }
 
       "have the question for improvements value" in {
-        assertExpectedResult(result)(_.question shouldBe messages.questionFour)
+        result.get.question shouldBe messages.questionFour
       }
 
       "have a link to the improvements page" in {
-        assertExpectedResult(result)(_.link shouldBe Some(controllers.routes.ImprovementsController.improvements().url))
+        result.get.link shouldBe Some(controllers.routes.ImprovementsController.improvements().url)
       }
     }
 
-    "supplied with a no value for improvements after" should {
-      lazy val result = PropertyDetailsConstructor.improvementsAfterRow(noRebasedImprovements, false)
+    "claiming improvements is selected and acquisition date is after 5/4/2015" should {
+      lazy val result = PropertyDetailsConstructor.constructImprovementsAfterRow(flatOnlyImprovements, display = true, displayRebased = false)
+
+      "return a None" in {
+        result shouldBe None
+      }
+    }
+
+    "is not claiming improvements" should {
+      lazy val result = PropertyDetailsConstructor.constructImprovementsAfterRow(noImprovements, display = false, displayRebased = false)
 
       "return a None" in {
         result shouldBe None

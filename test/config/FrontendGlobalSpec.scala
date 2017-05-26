@@ -29,7 +29,7 @@ class FrontendGlobalSpec extends UnitSpec with WithFakeApplication {
 
     "on the non-resident journey" should {
 
-      s"have a link to the non-resident start journey '${controllers.routes.CustomerTypeController.customerType().url}'" in {
+      s"have a link to the non-resident start journey '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
 
         val fakeRequest = FakeRequest("GET", "/calculate-your-capital-gains/non-resident/error").withSession(SessionKeys.sessionId -> "12345")
         val result = standardErrorTemplate("test", "teat-heading", "test-message")(fakeRequest)

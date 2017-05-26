@@ -67,7 +67,7 @@ class AcquisitionCostsActionSpec extends UnitSpec with WithFakeApplication with 
   "Calling the .backLink method" should {
 
     "return a link to WorthOnLegislationStart page with an acquisition date before legislation start" in {
-      val target = setupTarget(None, acquisitionDateData = Some(AcquisitionDateModel("Yes", Some(10), Some(5), Some(1972))))
+      val target = setupTarget(None, acquisitionDateData = Some(AcquisitionDateModel(10, 5, 1972)))
       val result = target.getBackLink
 
       await(result) shouldBe controllers.routes.WorthBeforeLegislationStartController.worthBeforeLegislationStart().url
@@ -75,7 +75,7 @@ class AcquisitionCostsActionSpec extends UnitSpec with WithFakeApplication with 
 
     "return a link to WorthWhenGifted page with an acquisition date after legislation start and gifted option" in {
       val target = setupTarget(None,
-        acquisitionDateData = Some(AcquisitionDateModel("Yes", Some(10), Some(5), Some(2000))),
+        acquisitionDateData = Some(AcquisitionDateModel(10, 5, 2000)),
         howBecameOwnerData = Some(HowBecameOwnerModel("Gifted")))
       val result = target.getBackLink
 
@@ -97,7 +97,7 @@ class AcquisitionCostsActionSpec extends UnitSpec with WithFakeApplication with 
     }
 
     "return a link to acquisition value when not bought for less" in {
-      val target = setupTarget(None, acquisitionDateData = Some(AcquisitionDateModel("No", None, None, None)),
+      val target = setupTarget(None, acquisitionDateData = Some(AcquisitionDateModel(1, 1, 2016)),
         howBecameOwnerData = Some(HowBecameOwnerModel("Bought")),
         boughtForLessData = Some(BoughtForLessModel(false)))
       val result = target.getBackLink
@@ -109,7 +109,7 @@ class AcquisitionCostsActionSpec extends UnitSpec with WithFakeApplication with 
   "Calling the .acquisitionCosts action " should {
 
     "not supplied with a pre-existing stored model" should {
-      val target = setupTarget(None, acquisitionDateData = Some(AcquisitionDateModel("No", None, None, None)), Some(HowBecameOwnerModel("Gifted")))
+      val target = setupTarget(None, acquisitionDateData = Some(AcquisitionDateModel(1, 1, 2016)), Some(HowBecameOwnerModel("Gifted")))
       lazy val result = target.acquisitionCosts(fakeRequestWithSession)
       lazy val document = Jsoup.parse(bodyOf(result))
 
@@ -157,22 +157,8 @@ class AcquisitionCostsActionSpec extends UnitSpec with WithFakeApplication with 
 
   "Calling the .submitAcquisitionCosts action" when {
 
-    "supplied with a valid form and no acquisition date" should {
-      val target = setupTarget(None, acquisitionDateData = Some(AcquisitionDateModel("No", None, None, None)))
-      lazy val request = fakeRequestToPOSTWithSession(("acquisitionCosts", "1000"))
-      lazy val result = target.submitAcquisitionCosts(request)
-
-      "return a 303" in {
-        status(result) shouldBe 303
-      }
-
-      s"redirect to '${controllers.routes.RebasedValueController.rebasedValue().url}'" in {
-        redirectLocation(result).get shouldBe controllers.routes.RebasedValueController.rebasedValue().url
-      }
-    }
-
     "supplied with an acquisition date after the tax start" should{
-      val target = setupTarget(None, acquisitionDateData = Some(AcquisitionDateModel("Yes", Some(10), Some(5), Some(2016))))
+      val target = setupTarget(None, acquisitionDateData = Some(AcquisitionDateModel(10, 5, 2016)))
       lazy val request = fakeRequestToPOSTWithSession(("acquisitionCosts", "1000"))
       lazy val result = target.submitAcquisitionCosts(request)
 
@@ -186,7 +172,7 @@ class AcquisitionCostsActionSpec extends UnitSpec with WithFakeApplication with 
     }
 
     "supplied with an acquisition date before the tax start" should {
-      val target = setupTarget(None, acquisitionDateData = Some(AcquisitionDateModel("Yes", Some(10), Some(5), Some(2000))))
+      val target = setupTarget(None, acquisitionDateData = Some(AcquisitionDateModel(10, 5, 2000)))
       lazy val request = fakeRequestToPOSTWithSession(("acquisitionCosts", "1000"))
       lazy val result = target.submitAcquisitionCosts(request)
 
@@ -200,7 +186,7 @@ class AcquisitionCostsActionSpec extends UnitSpec with WithFakeApplication with 
     }
 
     "supplied with an invalid form" should {
-      val target = setupTarget(None, acquisitionDateData = Some(AcquisitionDateModel("No", None, None, None)), Some(HowBecameOwnerModel("Inherited")))
+      val target = setupTarget(None, acquisitionDateData = Some(AcquisitionDateModel(1, 1, 2016)), Some(HowBecameOwnerModel("Inherited")))
       lazy val request = fakeRequestToPOSTWithSession(("acquisitionCosts", "a"))
       lazy val result = target.submitAcquisitionCosts(request)
       lazy val document = Jsoup.parse(bodyOf(result))
