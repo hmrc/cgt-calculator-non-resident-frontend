@@ -1,0 +1,15 @@
+@import views.html.main_template
+
+@(forCharity: Boolean)(implicit request: Request[_], messages: Messages)
+
+@main_template(title = Messages("calc.noTaxToPay.title")) {
+
+    <a id="back-link" class="back-link" href="@controllers.routes.WhoDidYouGiveItToController.whoDidYouGiveItTo().url">@Messages("calc.base.back")</a>
+
+    <h1 class="heading-large">@Messages("calc.noTaxToPay.title")</h1>
+
+
+    <p>@{if (forCharity) {Messages("calc.noTaxToPay.charityText")}
+    else {Messages("calc.noTaxToPay.spouseText")}}</p>
+
+}

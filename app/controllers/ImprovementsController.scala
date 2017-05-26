@@ -124,7 +124,7 @@ trait ImprovementsController extends FrontendController with ValidActiveSession 
 
         (!finalSeq.forall(_ <= 0), skipPRR) match {
           case (true, false) => Redirect(routes.PrivateResidenceReliefController.privateResidenceRelief())
-          case (true, true) => Redirect(controllers.routes.CustomerTypeController.customerType())
+          case (true, true) => Redirect(controllers.routes.CurrentIncomeController.currentIncome())
           case (_, _) => Redirect(routes.CheckYourAnswersController.checkYourAnswers())
         }
       }

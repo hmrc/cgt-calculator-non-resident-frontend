@@ -17,24 +17,20 @@
 package controllers.CalculationControllerTests
 
 import assets.MessageLookup.NonResident.{OtherProperties => messages}
-import common.DefaultRoutes._
-import common.nonresident.CustomerTypeKeys
-import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
-import controllers.OtherPropertiesController
 import controllers.helpers.FakeRequestHelper
+import controllers.{OtherPropertiesController, routes}
+import models.OtherPropertiesModel
+import org.jsoup._
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
+import org.scalatest.mock.MockitoSugar
 import play.api.test.Helpers._
+import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
-import org.jsoup._
-import org.scalatest.mock.MockitoSugar
 
 import scala.concurrent.Future
-import controllers.routes
-import models.{CurrentIncomeModel, CustomerTypeModel, OtherPropertiesModel}
-import uk.gov.hmrc.http.cache.client.CacheMap
 
 class OtherPropertiesActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
@@ -47,7 +43,7 @@ class OtherPropertiesActionSpec extends UnitSpec with WithFakeApplication with M
     when(mockCalcConnector.fetchAndGetFormData[OtherPropertiesModel](ArgumentMatchers.anyString())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    when(mockCalcConnector.saveFormData[OtherPropertiesModel](ArgumentMatchers.any(), ArgumentMatchers.any()) (ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockCalcConnector.saveFormData[OtherPropertiesModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(mock[CacheMap])
 
     new OtherPropertiesController {

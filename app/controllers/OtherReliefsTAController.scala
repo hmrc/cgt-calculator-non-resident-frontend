@@ -28,6 +28,7 @@ import play.api.data.Form
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
+import play.api.mvc.{Action, AnyContent}
 
 import scala.concurrent.Future
 
@@ -41,7 +42,7 @@ trait OtherReliefsTAController extends FrontendController with ValidActiveSessio
   val answersConstructor: AnswersConstructor
   val calcConnector: CalculatorConnector
 
-  val otherReliefsTA = ValidateSession.async { implicit request =>
+  val otherReliefsTA: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     def routeRequest(model: Option[OtherReliefsModel],
       totalGain: Option[TotalGainResultsModel],
@@ -63,14 +64,13 @@ trait OtherReliefsTAController extends FrontendController with ValidActiveSessio
         totalGainWithPRR <- getPRRIfApplicable(answers, prrAnswers, calcConnector)(hc)
         allAnswers <- getFinalSectionsAnswers(gain.get, totalGainWithPRR, calcConnector, answersConstructor)(hc)
         taxYear <- getTaxYear(answers, calcConnector)(hc)
-        maxAEA <- getMaxAEA(allAnswers, taxYear, calcConnector)(hc)
+        maxAEA <- getMaxAEA(taxYear, calcConnector)(hc)
         chargeableGainResult <- getChargeableGain(answers, prrAnswers, allAnswers, maxAEA.get, calcConnector)(hc)
         reliefs <- calcConnector.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsTA)
       } yield routeRequest(reliefs, gain, chargeableGainResult)
   }
 
-  val submitOtherReliefsTA = ValidateSession.async { implicit request =>
-
+  val submitOtherReliefsTA: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     def errorAction(form: Form[OtherReliefsModel]) = {
       for {
@@ -80,7 +80,7 @@ trait OtherReliefsTAController extends FrontendController with ValidActiveSessio
         totalGainWithPRR <- getPRRIfApplicable(answers, prrAnswers, calcConnector)(hc)
         allAnswers <- getFinalSectionsAnswers(gain.get, totalGainWithPRR, calcConnector, answersConstructor)(hc)
         taxYear <- getTaxYear(answers, calcConnector)(hc)
-        maxAEA <- getMaxAEA(allAnswers, taxYear, calcConnector)(hc)
+        maxAEA <- getMaxAEA(taxYear, calcConnector)(hc)
         chargeableGainResult <- getChargeableGain(answers, prrAnswers, allAnswers, maxAEA.get, calcConnector)(hc)
         route <- errorRoute(gain, chargeableGainResult, form)
       } yield route
@@ -98,7 +98,7 @@ trait OtherReliefsTAController extends FrontendController with ValidActiveSessio
 
 
       calcConnector.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsTA).map {
-        case Some(data) => BadRequest(calculation.otherReliefsTA(form, hasExistingReliefAmount = true, chargeableGain, gain))
+        case Some(_) => BadRequest(calculation.otherReliefsTA(form, hasExistingReliefAmount = true, chargeableGain, gain))
         case _ => BadRequest(calculation.otherReliefsTA(form, hasExistingReliefAmount = false, chargeableGain, gain))
       }
     }

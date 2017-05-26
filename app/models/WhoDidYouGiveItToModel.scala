@@ -16,10 +16,10 @@
 
 package models
 
-import play.api.libs.json._
+import play.api.libs.json.Json
 
-case class CustomerTypeModel(customerType: String)
+case class WhoDidYouGiveItToModel(option: String)
 
-object CustomerTypeModel {
-  implicit val formats = Json.format[CustomerTypeModel]
+object WhoDidYouGiveItToModel{
+  implicit val format = Json.format[WhoDidYouGiveItToModel]
 }

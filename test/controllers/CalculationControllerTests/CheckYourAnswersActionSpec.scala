@@ -104,10 +104,8 @@ class CheckYourAnswersActionSpec extends UnitSpec with WithFakeApplication with 
     ImprovementsModel("Yes", Some(10), Some(20)),
     Some(OtherReliefsModel(30)))
 
-  val individualModel = TotalPersonalDetailsCalculationModel(CustomerTypeModel("individual"),
-    Some(CurrentIncomeModel(9000)),
+  val individualModel = TotalPersonalDetailsCalculationModel(CurrentIncomeModel(9000),
     Some(PersonalAllowanceModel(1000)),
-    None,
     OtherPropertiesModel("No"),
     Some(PreviousLossOrGainModel("gain")),
     None,

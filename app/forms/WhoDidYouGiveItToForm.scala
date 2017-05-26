@@ -16,26 +16,20 @@
 
 package forms
 
-import common.nonresident.CustomerTypeKeys
-import models.CustomerTypeModel
-import play.api.Play.current
+import common.Validation._
+import play.api.data.Form
 import play.api.data.Forms._
 import play.api.data._
 import play.api.i18n.Messages
 import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
+import models.WhoDidYouGiveItToModel
 
-object CustomerTypeForm {
-
-  def validate: String => Boolean = customerType => customerType match {
-    case CustomerTypeKeys.individual => true
-    case CustomerTypeKeys.trustee => true
-    case CustomerTypeKeys.personalRep => true
-    case _ => false
-  }
-
-  val customerTypeForm = Form(
-    mapping(
-      "customerType" -> text.verifying(Messages("calc.common.invalidError"), validate)
-    )(CustomerTypeModel.apply)(CustomerTypeModel.unapply)
+object WhoDidYouGiveItToForm {
+  val whoDidYouGiveItToForm = Form(
+    mapping("whoDidYouGiveItTo" -> text
+      .verifying(Messages("calc.resident.whoDidYouGiveThePropertyTo.errormandatory"), mandatoryCheck)
+      .verifying(Messages("calc.resident.whoDidYouGiveThePropertyTo.errormandatory"), whoDidYouGiveItToCheck)
+    )(WhoDidYouGiveItToModel.apply)(WhoDidYouGiveItToModel.unapply)
   )
 }

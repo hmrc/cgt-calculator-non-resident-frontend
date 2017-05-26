@@ -24,32 +24,22 @@ import scala.math.BigDecimal
 object CalculateRequestConstructor {
 
   def baseCalcUrl(input: SummaryModel): String = {
-    customerType(input.customerTypeModel.customerType) +
     priorDisposal(input.otherPropertiesModel.otherProperties) +
-    isVulnerableTrustee(input.customerTypeModel.customerType, input.disabledTrusteeModel) +
-    currentIncome(input.customerTypeModel.customerType, input.currentIncomeModel) +
-    personalAllowanceAmount(input.customerTypeModel.customerType, input.personalAllowanceModel) +
+    currentIncome(input.currentIncomeModel) +
+    personalAllowanceAmount(input.personalAllowanceModel) +
     disposalValue(input.disposalValueModel.disposalValue) +
     disposalCosts(input.disposalCostsModel.disposalCosts) +
     disposalDate(input.disposalDateModel)
   }
 
-  def customerType(customerType: String): String = s"customerType=$customerType"
+  def priorDisposal(otherProperties: String): String = s"priorDisposal=$otherProperties"
 
-  def priorDisposal(otherProperties: String): String = s"&priorDisposal=$otherProperties"
-
-  def isVulnerableTrustee(customerType: String, disabledTrusteeModel: Option[DisabledTrusteeModel]): String = {
-    if (customerType.equals("trustee")) s"&isVulnerable=${disabledTrusteeModel.get.isVulnerable}"
-    else ""
+  def currentIncome(currentIncomeModel: CurrentIncomeModel): String = {
+    s"&currentIncome=${currentIncomeModel.currentIncome}"
   }
 
-  def currentIncome(customerType: String, currentIncomeModel: Option[CurrentIncomeModel]): String = {
-    if (customerType.equals("individual")) s"&currentIncome=${currentIncomeModel.get.currentIncome}"
-    else ""
-  }
-
-  def personalAllowanceAmount(customerType: String, personalAllowanceModel: Option[PersonalAllowanceModel]): String = {
-    if (customerType.equals("individual") && personalAllowanceModel.isDefined) s"&personalAllowanceAmt=${personalAllowanceModel.get.personalAllowanceAmt}"
+  def personalAllowanceAmount(personalAllowanceModel: Option[PersonalAllowanceModel]): String = {
+    if (personalAllowanceModel.isDefined) s"&personalAllowanceAmt=${personalAllowanceModel.get.personalAllowanceAmt}"
     else ""
   }
 
@@ -147,7 +137,7 @@ object CalculateRequestConstructor {
 
   def privateResidenceReliefFlat(input: SummaryModel): String = s"${
     (input.acquisitionDateModel, input.privateResidenceReliefModel) match {
-      case (AcquisitionDateModel("Yes", day, month, year), Some(PrivateResidenceReliefModel("Yes", claimed, after))) if claimed.isDefined =>
+      case (AcquisitionDateModel("Yes", _, _, _), Some(PrivateResidenceReliefModel("Yes", claimed, _))) if claimed.isDefined =>
         s"&daysClaimed=${claimed.get}"
       case _ => ""
     }
@@ -155,7 +145,7 @@ object CalculateRequestConstructor {
 
   def privateResidenceReliefTA(input: SummaryModel): String = s"${
     (input.acquisitionDateModel, input.privateResidenceReliefModel) match {
-      case (AcquisitionDateModel("Yes", day, month, year), Some(PrivateResidenceReliefModel("Yes", claimed, after)))
+      case (AcquisitionDateModel("Yes", _, _, _), Some(PrivateResidenceReliefModel("Yes", _, after)))
         if dateAfter18Months(input.disposalDateModel.day, input.disposalDateModel.month, input.disposalDateModel.year) && after.isDefined =>
         s"&daysClaimed=${after.get}"
 
@@ -165,7 +155,7 @@ object CalculateRequestConstructor {
 
   def privateResidenceReliefRebased(input: SummaryModel): String = s"${
     (input.rebasedValueModel, input.privateResidenceReliefModel) match {
-      case (Some(RebasedValueModel(rebasedValue)), Some(PrivateResidenceReliefModel("Yes", claimed, after)))
+      case (Some(RebasedValueModel(rebasedValue)), Some(PrivateResidenceReliefModel("Yes", _, after)))
         if dateAfter18Months(input.disposalDateModel.day, input.disposalDateModel.month, input.disposalDateModel.year) &&
           after.isDefined && rebasedValue.isDefined =>
         s"&daysClaimed=${after.get}"
@@ -175,7 +165,7 @@ object CalculateRequestConstructor {
 
   def isClaimingPRR(input: SummaryModel): String = s"&isClaimingPRR=${
     (input.acquisitionDateModel, input.privateResidenceReliefModel) match {
-      case (AcquisitionDateModel("Yes", day, month, year), Some(PrivateResidenceReliefModel("Yes", claimed, after))) => "Yes"
+      case (AcquisitionDateModel("Yes", _, _, _), Some(PrivateResidenceReliefModel("Yes", _, _))) => "Yes"
       case _ => "No"
     }
   }"

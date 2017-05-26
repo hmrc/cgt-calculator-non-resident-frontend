@@ -88,10 +88,8 @@ class OtherReliefsActionSpec extends UnitSpec with WithFakeApplication with Mock
   }
 
   val personalDetailsModel = TotalPersonalDetailsCalculationModel(
-    CustomerTypeModel("individual"),
-    Some(CurrentIncomeModel(20000)),
+    CurrentIncomeModel(20000),
     Some(PersonalAllowanceModel(0)),
-    None,
     OtherPropertiesModel("Yes"),
     Some(PreviousLossOrGainModel("Neither")),
     None,
