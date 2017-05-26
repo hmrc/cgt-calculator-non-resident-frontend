@@ -26,6 +26,7 @@ import uk.gov.hmrc.play.frontend.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 import play.api.data.Form
+import uk.gov.hmrc.play.http.HeaderCarrier
 
 import scala.concurrent.Future
 
@@ -37,7 +38,7 @@ trait CurrentIncomeController extends FrontendController with ValidActiveSession
 
   val calcConnector: CalculatorConnector
 
-  def getBackLink: Future[String] = {
+  def getBackLink(implicit hc: HeaderCarrier): Future[String] = {
     calcConnector.fetchAndGetFormData[PropertyLivedInModel](KeystoreKeys.propertyLivedIn).map {
       case Some(PropertyLivedInModel(true)) => routes.PrivateResidenceReliefController.privateResidenceRelief.url
       case _ => routes.PropertyLivedInController.propertyLivedIn().url
