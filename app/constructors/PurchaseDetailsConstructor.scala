@@ -29,21 +29,14 @@ object PurchaseDetailsConstructor {
 
   def getPurchaseDetailsSection(totalGainAnswersModel: TotalGainAnswersModel): Seq[QuestionAnswerModel[Any]] = {
 
-    val useRebasedValues =
-      totalGainAnswersModel.acquisitionDateModel match {
-        case AcquisitionDateModel("Yes",_,_,_) if !TaxDates.dateAfterStart(totalGainAnswersModel.acquisitionDateModel.get) => true
-        case AcquisitionDateModel("No",_,_,_) if totalGainAnswersModel.rebasedValueModel.get.rebasedValueAmt.isDefined => true
-        case _ => false
-      }
-
-    val useWorthBeforeLegislationStart = {
-      totalGainAnswersModel.acquisitionDateModel match {
-        case AcquisitionDateModel("Yes",_,_,_) if TaxDates.dateBeforeLegislationStart(totalGainAnswersModel.acquisitionDateModel.get) =>true
-        case _ => false
-      }
+    val useRebasedValues = {
+      !TaxDates.dateAfterStart(totalGainAnswersModel.acquisitionDateModel.get)
     }
 
-    val acquisitionDateAnswerData = acquisitionDateAnswerRow(totalGainAnswersModel)
+    val useWorthBeforeLegislationStart = {
+      TaxDates.dateBeforeLegislationStart(totalGainAnswersModel.acquisitionDateModel.get)
+    }
+
     val acquisitionDateData = acquisitionDateRow(totalGainAnswersModel)
     val howBecameOwnerData = howBecameOwnerRow(totalGainAnswersModel)
     val boughtForLessData = boughtForLessRow(totalGainAnswersModel)
@@ -54,7 +47,6 @@ object PurchaseDetailsConstructor {
     val rebasedCostsData = rebasedCostsRow(totalGainAnswersModel.rebasedCostsModel, useRebasedValues)
 
     val items = Seq(
-      acquisitionDateAnswerData,
       acquisitionDateData,
       howBecameOwnerData,
       boughtForLessData,
@@ -67,24 +59,13 @@ object PurchaseDetailsConstructor {
     items.flatten
   }
 
-  def acquisitionDateAnswerRow(totalGainAnswersModel: TotalGainAnswersModel): Option[QuestionAnswerModel[String]] = {
-    Some(QuestionAnswerModel(
-      s"${KeystoreKeys.acquisitionDate}-question",
-      totalGainAnswersModel.acquisitionDateModel.hasAcquisitionDate,
-      Messages("calc.acquisitionDate.question"),
-      Some(controllers.routes.AcquisitionDateController.acquisitionDate().url)
-    ))
-  }
-
   def acquisitionDateRow(totalGainAnswersModel: TotalGainAnswersModel): Option[QuestionAnswerModel[LocalDate]] = {
-    if (totalGainAnswersModel.acquisitionDateModel.hasAcquisitionDate.equals("Yes")) {
-      Some(QuestionAnswerModel(
+    Some(QuestionAnswerModel(
         s"${KeystoreKeys.acquisitionDate}",
         totalGainAnswersModel.acquisitionDateModel.get,
         Messages("calc.acquisitionDate.questionTwo"),
         Some(controllers.routes.AcquisitionDateController.acquisitionDate().url)
-      ))
-    } else None
+    ))
   }
 
   def howBecameOwnerRow(totalGainAnswersModel: TotalGainAnswersModel): Option[QuestionAnswerModel[String]] = {
@@ -96,7 +77,7 @@ object PurchaseDetailsConstructor {
     }
 
     totalGainAnswersModel.howBecameOwnerModel match {
-      case Some(data) => Some(QuestionAnswerModel(
+      case Some(_) => Some(QuestionAnswerModel(
         s"${KeystoreKeys.howBecameOwner}",
         answer,
         Messages("calc.howBecameOwner.question"),

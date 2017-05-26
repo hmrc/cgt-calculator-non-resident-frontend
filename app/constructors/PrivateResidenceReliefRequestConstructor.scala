@@ -17,7 +17,7 @@
 package constructors
 
 import common.TaxDates
-import models.{AcquisitionDateModel, PrivateResidenceReliefModel, RebasedValueModel, TotalGainAnswersModel}
+import models.{AcquisitionDateModel, PrivateResidenceReliefModel, TotalGainAnswersModel}
 
 object PrivateResidenceReliefRequestConstructor {
 
@@ -37,9 +37,8 @@ object PrivateResidenceReliefRequestConstructor {
 
   def daysClaimed(totalGainAnswersModel: TotalGainAnswersModel,
                   privateResidenceReliefModel: Option[PrivateResidenceReliefModel]): String = {
-
-    (privateResidenceReliefModel, totalGainAnswersModel.acquisitionDateModel) match {
-      case (Some(PrivateResidenceReliefModel("Yes", Some(value), _)), AcquisitionDateModel("Yes",_,_,_))
+    privateResidenceReliefModel match {
+      case (Some(PrivateResidenceReliefModel("Yes", Some(value), _)))
         if totalGainAnswersModel.acquisitionDateModel.get.plusMonths(18).isBefore(totalGainAnswersModel.disposalDateModel.get) =>
         s"&daysClaimed=$value"
       case _ => ""
@@ -48,13 +47,11 @@ object PrivateResidenceReliefRequestConstructor {
 
   def daysClaimedAfter(totalGainAnswersModel: TotalGainAnswersModel,
                        privateResidenceReliefModel: Option[PrivateResidenceReliefModel]): String = {
-    (privateResidenceReliefModel, totalGainAnswersModel.acquisitionDateModel, totalGainAnswersModel.rebasedValueModel) match {
-      case (Some(PrivateResidenceReliefModel("Yes", _, Some(value))), AcquisitionDateModel("Yes",_,_,_), _)
+    privateResidenceReliefModel match {
+      case (Some(PrivateResidenceReliefModel("Yes", _, Some(value))))
         if totalGainAnswersModel.acquisitionDateModel.get.plusMonths(18).isBefore(totalGainAnswersModel.disposalDateModel.get) &&
         !TaxDates.dateAfterStart(totalGainAnswersModel.acquisitionDateModel.get) =>
-        s"&daysClaimedAfter=$value"
-      case (Some(PrivateResidenceReliefModel("Yes", _, Some(value))), AcquisitionDateModel("No",_,_,_), Some(RebasedValueModel(Some(_)))) =>
-        s"&daysClaimedAfter=$value"
+          s"&daysClaimedAfter=$value"
       case _ => ""
     }
   }

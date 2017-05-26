@@ -27,7 +27,7 @@ class CalculateRequestConstructorSpec extends UnitSpec {
     Some(PersonalAllowanceModel(11100)),
     OtherPropertiesModel("No"),
     None,
-    AcquisitionDateModel("Yes", Some(9), Some(9), Some(1990)),
+    AcquisitionDateModel(9, 9, 1990),
     AcquisitionValueModel(100000),
     Some(RebasedValueModel(None)),
     None,
@@ -54,11 +54,6 @@ class CalculateRequestConstructorSpec extends UnitSpec {
         "&initialCostsAmt=0&reliefs=0&isClaimingPRR=No"
     }
 
-    "return a string from the flatCalcUrlExtra with improvements and no rebased value model" in {
-      CalculateRequestConstructor.flatCalcUrlExtra(TestModels.summaryImprovementsNoRebasedModel) shouldEqual
-        "&improvementsAmt=8000&initialValueAmt=100000&initialCostsAmt=300&reliefs=999&isClaimingPRR=No"
-    }
-
     "return a string from the flatCalcUrlExtra with improvements and a rebased value model with no improvements after" in {
       CalculateRequestConstructor.flatCalcUrlExtra(TestModels.summaryFlatWithoutAEA) shouldEqual
         "&improvementsAmt=8000&initialValueAmt=100000&initialCostsAmt=300&reliefs=999&isClaimingPRR=No"
@@ -78,11 +73,6 @@ class CalculateRequestConstructorSpec extends UnitSpec {
     "return a string from the taCalcUrlExtra with no improvements" in {
       CalculateRequestConstructor.taCalcUrlExtra(sumModel) shouldEqual "&improvementsAmt=0" +
         "&acquisitionDate=1990-9-9&initialValueAmt=100000&initialCostsAmt=0&reliefs=0&isClaimingPRR=No"
-    }
-
-    "return a string from the taCalcUrlExtra with improvements and no rebased value model" in {
-      CalculateRequestConstructor.taCalcUrlExtra(TestModels.summaryImprovementsNoRebasedModel) shouldEqual "&improvementsAmt=8000" +
-        "&acquisitionDate=1999-9-9&initialValueAmt=100000&initialCostsAmt=300&reliefs=888&isClaimingPRR=No"
     }
 
     "return a string from the taCalcUrlExtra with improvements and a rebased value model with improvements after" in {
@@ -139,11 +129,6 @@ class CalculateRequestConstructorSpec extends UnitSpec {
 
     "return an empty string from privateResidenceReliefTA with an answer of no to PRR" in {
       CalculateRequestConstructor.privateResidenceReliefTA(TestModels.summaryFlatWithAEA) shouldEqual ""
-    }
-
-    "return a string from privateResidenceReliefRebased with a Rebased Value and a disposal date after 18 month period with no acqDate" in {
-      CalculateRequestConstructor.privateResidenceReliefRebased(TestModels.summaryPRRNoAcqDateAndDisposalDateAfterWithRebased) shouldEqual
-        "&daysClaimed=50"
     }
 
     "return a string from privateResidenceReliefRebased with a Rebased Value and a disposal date after 18 month period with an acqDate before the start" in {
@@ -239,13 +224,13 @@ class CalculateRequestConstructorSpec extends UnitSpec {
   "Calling taAcquisitionDate" should {
 
     "return a value of 2015-10-9" in {
-      val model = AcquisitionDateModel("Yes", Some(9), Some(10), Some(2015))
+      val model = AcquisitionDateModel(9, 10, 2015)
       val result = CalculateRequestConstructor.taAcquisitionDate(model)
       result shouldBe "&acquisitionDate=2015-10-9"
     }
 
     "return a value of 2016-3-20" in {
-      val model = AcquisitionDateModel("Yes", Some(20), Some(3), Some(2016))
+      val model = AcquisitionDateModel(20, 3, 2016)
       val result = CalculateRequestConstructor.taAcquisitionDate(model)
       result shouldBe "&acquisitionDate=2016-3-20"
     }
@@ -395,21 +380,21 @@ class CalculateRequestConstructorSpec extends UnitSpec {
   "Calling flatAcquisitionDate" should {
 
     "return a value of 2015-10-5" in {
-      val model = AcquisitionDateModel("Yes", Some(5), Some(10), Some(2015))
+      val model = AcquisitionDateModel(5, 10, 2015)
       val answer = "&isClaimingPRR=Yes"
       val result = CalculateRequestConstructor.flatAcquisitionDate(answer, model)
       result shouldBe "&acquisitionDate=2015-10-5"
     }
 
     "return a value of 2017-8-9" in {
-      val model = AcquisitionDateModel("Yes", Some(9), Some(8), Some(2017))
+      val model = AcquisitionDateModel(9, 8, 2017)
       val answer = "&isClaimingPRR=Yes"
       val result = CalculateRequestConstructor.flatAcquisitionDate(answer, model)
       result shouldBe "&acquisitionDate=2017-8-9"
     }
 
     "return an empty string" in {
-      val model = AcquisitionDateModel("No", None, None, None)
+      val model = AcquisitionDateModel(5, 4, 2017)
       val answer = "&isClaimingPRR=No"
       val result = CalculateRequestConstructor.flatAcquisitionDate(answer, model)
       result shouldBe ""

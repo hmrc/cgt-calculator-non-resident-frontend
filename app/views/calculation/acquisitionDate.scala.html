@@ -12,15 +12,15 @@
 
     <h1 class="heading-xlarge">@Messages("calc.acquisitionDate.question")</h1>
 
+    <p class="form-hint">@Messages("calc.acquisitionDate.hintText")</p>
+
     @form(action = controllers.routes.AcquisitionDateController.submitAcquisitionDate) {
 
-                @formInlineDateInput(acquisitionDateForm,
-                "hasAcquisitionDate",
-                Messages("calc.acquisitionDate.question"),
-                '_visually_hidden -> true,
-                '_additionalHint -> Messages("calc.acquisitionDate.hintText"))
+        @formInlineDateInput(acquisitionDateForm,
+            "acquisitionDate",
+            Messages("calc.acquisitionDate.question"),
+            '_visually_hidden -> true)
 
         <button class="button" type="submit" id="continue-button">@Messages("calc.base.continue")</button>
-
     }
 }

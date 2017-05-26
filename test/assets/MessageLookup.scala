@@ -213,7 +213,7 @@ object MessageLookup {
       val errorDecimalPlaces = "Taxable Gain for has too many numbers after the decimal point"
       }
 
-    object Improvements {
+    object Improvements extends Common {
       val helpOne = "Improvements are permanent changes that increase the value of a property, like adding extensions or garages."
       val helpTwo = "Normal maintenance costs don't count."
       val exampleTitle = "Show me an example"

@@ -27,7 +27,7 @@ import forms.PrivateResidenceReliefForm._
 import views.html.calculation
 import models._
 import play.api.data.Form
-import play.api.mvc.Result
+import play.api.mvc.{Action, AnyContent, Result}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import uk.gov.hmrc.play.http.HeaderCarrier
 import play.api.i18n.Messages.Implicits._
@@ -47,7 +47,7 @@ trait PrivateResidenceReliefController extends FrontendController with ValidActi
 
   def getAcquisitionDate(implicit hc: HeaderCarrier): Future[Option[LocalDate]] =
     calcConnector.fetchAndGetFormData[AcquisitionDateModel](KeystoreKeys.acquisitionDate).map {
-      case Some(AcquisitionDateModel("Yes", Some(day), Some(month), Some(year))) => Some(Dates.constructDate(day, month, year))
+      case Some(AcquisitionDateModel(day, month, year)) => Some(Dates.constructDate(day, month, year))
       case _ => None
     }
 
@@ -72,12 +72,12 @@ trait PrivateResidenceReliefController extends FrontendController with ValidActi
 
   def displayBeforeQuestion(disposalDate: Option[LocalDate], acquisitionDate: Option[LocalDate]): Boolean =
     (disposalDate, acquisitionDate) match {
-      case (Some(dDate), Some(aDate)) if TaxDates.dateAfterOctober(dDate) => true
-      case (Some(dDate), Some(aDate)) if !TaxDates.dateAfterStart(aDate) => true
+      case (Some(dDate), Some(_)) if TaxDates.dateAfterOctober(dDate) => true
+      case (Some(_), Some(aDate)) if !TaxDates.dateAfterStart(aDate) => true
       case _ => false
     }
 
-  val privateResidenceRelief = ValidateSession.async { implicit request =>
+  val privateResidenceRelief: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     def action(disposalDate: Option[LocalDate], acquisitionDate: Option[LocalDate], hasRebasedValue: Boolean) = {
 
@@ -101,7 +101,7 @@ trait PrivateResidenceReliefController extends FrontendController with ValidActi
     } yield finalResult
   }
 
-  val submitPrivateResidenceRelief = ValidateSession.async { implicit request =>
+  val submitPrivateResidenceRelief: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     def action(disposalDate: Option[LocalDate], acquisitionDate: Option[LocalDate], hasRebasedValue: Boolean): Future[Result] = {
       val showBetweenQuestion = displayBetweenQuestion(disposalDate, acquisitionDate, hasRebasedValue)

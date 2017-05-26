@@ -24,7 +24,7 @@ import forms.RebasedValueForm._
 import views.html.calculation
 import models.{AcquisitionDateModel, RebasedValueModel}
 import play.api.data.Form
-import play.api.mvc.Result
+import play.api.mvc.{Action, AnyContent, Result}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import uk.gov.hmrc.play.http.HeaderCarrier
 import play.api.i18n.Messages.Implicits._
@@ -42,8 +42,8 @@ trait RebasedValueController extends FrontendController with ValidActiveSession 
 
   private def routeToMandatoryFuture(data: AcquisitionDateModel): Future[Boolean] = Future.successful(routeToMandatory(data))
 
-  private def routeToMandatory(data: AcquisitionDateModel): Boolean = data.hasAcquisitionDate == "Yes" &&
-    !TaxDates.dateAfterStart(data.day.getOrElse(0), data.month.getOrElse(0), data.year.getOrElse(0))
+  private def routeToMandatory(data: AcquisitionDateModel): Boolean =
+    !TaxDates.dateAfterStart(data.day, data.month, data.year)
 
   private def fetchAcquisitionDate(implicit headerCarrier: HeaderCarrier): Future[Option[AcquisitionDateModel]] = {
     calcConnector.fetchAndGetFormData[AcquisitionDateModel](KeystoreKeys.acquisitionDate)
@@ -53,7 +53,7 @@ trait RebasedValueController extends FrontendController with ValidActiveSession 
     calcConnector.fetchAndGetFormData[RebasedValueModel](KeystoreKeys.rebasedValue)
   }
 
-  val rebasedValue = ValidateSession.async { implicit request =>
+  val rebasedValue: Action[AnyContent] = ValidateSession.async { implicit request =>
     def routeRequest(routeToMandatory: Boolean, rebasedValue: Option[RebasedValueModel]): Future[Result] =
       (routeToMandatory, rebasedValue) match {
         case (true, Some(data)) => Future.successful(Ok(calculation.mandatoryRebasedValue(rebasedValueForm(routeToMandatory).fill(data))))
@@ -70,7 +70,7 @@ trait RebasedValueController extends FrontendController with ValidActiveSession 
     } yield route
   }
 
-  val submitRebasedValue = ValidateSession.async { implicit request =>
+  val submitRebasedValue: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     def errorAction(errors: Form[RebasedValueModel], routeToMandatory: Boolean) = {
       if(routeToMandatory) Future.successful(BadRequest(calculation.mandatoryRebasedValue(errors)))
@@ -79,10 +79,8 @@ trait RebasedValueController extends FrontendController with ValidActiveSession 
 
     def successAction(model: RebasedValueModel) = {
       calcConnector.saveFormData(KeystoreKeys.rebasedValue, model)
-      model.rebasedValueAmt.isDefined match {
-        case true => Future.successful(Redirect(routes.RebasedCostsController.rebasedCosts()))
-        case false => Future.successful(Redirect(routes.ImprovementsController.improvements()))
-      }
+      if (model.rebasedValueAmt.isDefined) Future.successful(Redirect(routes.RebasedCostsController.rebasedCosts()))
+      else Future.successful(Redirect(routes.ImprovementsController.improvements()))
     }
 
     def routeRequest(routeToMandatory: Boolean): Future[Result] = {

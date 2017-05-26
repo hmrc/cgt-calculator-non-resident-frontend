@@ -60,7 +60,7 @@ class HowBecameOwnerActionSpec extends UnitSpec with WithFakeApplication with Fa
   "Calling .howBecameOwner action" when {
 
     "provided with a valid session while valid for prr" should {
-      lazy val target = setupTarget(None, AcquisitionDateModel("Yes", Some(1), Some(1), Some(1990)), RebasedValueModel(Some(100)))
+      lazy val target = setupTarget(None, AcquisitionDateModel(1, 1, 1990), RebasedValueModel(Some(100)))
       lazy val result = target.howBecameOwner(fakeRequestWithSession)
       lazy val doc = Jsoup.parse(bodyOf(result))
 
@@ -74,7 +74,7 @@ class HowBecameOwnerActionSpec extends UnitSpec with WithFakeApplication with Fa
     }
 
     "provided with a valid session with stored data and is not valid for prr" should {
-      lazy val target = setupTarget(Some(HowBecameOwnerModel("Bought")), AcquisitionDateModel("No", None, None, None), RebasedValueModel(None))
+      lazy val target = setupTarget(Some(HowBecameOwnerModel("Bought")), AcquisitionDateModel(1, 1, 2016), RebasedValueModel(None))
       lazy val result = target.howBecameOwner(fakeRequestWithSession)
       lazy val doc = Jsoup.parse(bodyOf(result))
 
@@ -88,7 +88,7 @@ class HowBecameOwnerActionSpec extends UnitSpec with WithFakeApplication with Fa
     }
 
     "provided with an invalid session" should {
-      lazy val target = setupTarget(None, AcquisitionDateModel("No", None, None, None), RebasedValueModel(None))
+      lazy val target = setupTarget(None, AcquisitionDateModel(1, 1, 2016), RebasedValueModel(None))
       lazy val result = target.howBecameOwner(fakeRequest)
 
       "return a status of 303" in {
@@ -103,7 +103,7 @@ class HowBecameOwnerActionSpec extends UnitSpec with WithFakeApplication with Fa
 
   "Calling .submitHowBecameOwner action" when {
     "a valid form with the answer 'Bought' is submitted" should {
-      lazy val target = setupTarget(None, AcquisitionDateModel("No", None, None, None), RebasedValueModel(None))
+      lazy val target = setupTarget(None, AcquisitionDateModel(1, 1, 2016), RebasedValueModel(None))
       lazy val result = target.submitHowBecameOwner(fakeRequestToPOSTWithSession(("gainedBy", "Bought")))
 
       "return a status of 303" in {
@@ -117,7 +117,7 @@ class HowBecameOwnerActionSpec extends UnitSpec with WithFakeApplication with Fa
   }
 
   "a valid form with the answer 'Inherited' is submitted" should {
-    lazy val target = setupTarget(None, AcquisitionDateModel("No", None, None, None), RebasedValueModel(None))
+    lazy val target = setupTarget(None, AcquisitionDateModel(1, 1, 2016), RebasedValueModel(None))
     lazy val result = target.submitHowBecameOwner(fakeRequestToPOSTWithSession(("gainedBy", "Inherited")))
 
     "return a status of 303" in {
@@ -131,7 +131,7 @@ class HowBecameOwnerActionSpec extends UnitSpec with WithFakeApplication with Fa
 
 
   "a valid form with the answer 'Gifted' is submitted" should {
-    lazy val target = setupTarget(None, AcquisitionDateModel("No", None, None, None), RebasedValueModel(None))
+    lazy val target = setupTarget(None, AcquisitionDateModel(1, 1, 2016), RebasedValueModel(None))
     lazy val result = target.submitHowBecameOwner(fakeRequestToPOSTWithSession(("gainedBy", "Gifted")))
 
     "return a status of 303" in {
@@ -145,7 +145,7 @@ class HowBecameOwnerActionSpec extends UnitSpec with WithFakeApplication with Fa
 
 
   "an invalid form with no answer is submitted" should {
-    lazy val target = setupTarget(None, AcquisitionDateModel("No", None, None, None), RebasedValueModel(None))
+    lazy val target = setupTarget(None, AcquisitionDateModel(1, 1, 2016), RebasedValueModel(None))
     lazy val result = target.submitHowBecameOwner(fakeRequestToPOSTWithSession(("gainedBy", "")))
     lazy val doc = Jsoup.parse(bodyOf(result))
 
