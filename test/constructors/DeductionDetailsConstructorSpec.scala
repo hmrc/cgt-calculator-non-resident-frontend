@@ -227,15 +227,6 @@ class DeductionDetailsConstructorSpec extends UnitSpec with WithFakeApplication 
       }
     }
 
-    "provided with no acquisition date" should {
-      lazy val result = DeductionDetailsConstructor.privateResidenceReliefDaysClaimedRow(
-        Some(PrivateResidenceReliefModel("Yes", Some(4), None)), yesOtherReliefs)
-
-      "return a None" in {
-        result shouldBe None
-      }
-    }
-
     "provided with an an acquisition date and disposal date within 18 months of each other" should {
       lazy val result = DeductionDetailsConstructor.privateResidenceReliefDaysClaimedRow(
         Some(PrivateResidenceReliefModel("Yes", Some(4), None)), within18Months)

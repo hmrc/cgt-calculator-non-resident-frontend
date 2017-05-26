@@ -36,8 +36,8 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
     AcquisitionValueModel(300000),
     AcquisitionCostsModel(2500),
     AcquisitionDateModel(1, 4, 2013),
-    Some(RebasedValueModel(None)),
-    None,
+    Some(RebasedValueModel(Some(1000))),
+    Some(RebasedCostsModel("Yes", Some(150))),
     ImprovementsModel("No", None, None),
     None
   )
@@ -100,8 +100,8 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
     "using the totalGainForLess model" should {
       lazy val result = PurchaseDetailsConstructor.getPurchaseDetailsSection(totalGainForLess)
 
-      "will return a Sequence with size 9" in {
-        result.size shouldBe 9
+      "will return a Sequence with size 8" in {
+        result.size shouldBe 8
       }
 
       "return a Sequence that will contain an acquisitionDate data item" in {
@@ -140,8 +140,8 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
     "using the totalGainGiven model" should {
       lazy val result = PurchaseDetailsConstructor.getPurchaseDetailsSection(totalGainGiven)
 
-      "will return a Sequence with size 4" in {
-        result.size shouldBe 4
+      "will return a Sequence with size 3" in {
+        result.size shouldBe 3
       }
 
       "return a Sequence that will contain an acquisitionCost data item" in {
@@ -159,14 +159,6 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
   }
 
   "Calling .acquisitionDateRow" when {
-
-    "no acquisition date is given" should {
-      lazy val result = PurchaseDetailsConstructor.acquisitionDateRow(totalGainGiven)
-
-      "return a None" in {
-        result shouldBe None
-      }
-    }
 
     "an acquisition date is given" should {
       lazy val result = PurchaseDetailsConstructor.acquisitionDateRow(totalGainForLess)

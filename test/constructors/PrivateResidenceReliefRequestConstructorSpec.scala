@@ -175,13 +175,6 @@ class PrivateResidenceReliefRequestConstructorSpec extends UnitSpec{
       result shouldBe ""
     }
 
-    "return a blank string when no rebased value is provided" in {
-      val privateResidenceReliefModel = PrivateResidenceReliefModel("Yes", Some(4), Some(5))
-      val result = PrivateResidenceReliefRequestConstructor.daysClaimedAfter(modelNoRebased, Some(privateResidenceReliefModel))
-
-      result shouldBe ""
-    }
-
     "return a value for days claimed after with a valid acquisition date" in {
       val privateResidenceReliefModel = PrivateResidenceReliefModel("Yes", Some(4), Some(5))
       val result = PrivateResidenceReliefRequestConstructor.daysClaimedAfter(modelWithValidDates, Some(privateResidenceReliefModel))
