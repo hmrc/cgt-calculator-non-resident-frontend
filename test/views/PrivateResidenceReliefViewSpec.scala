@@ -52,7 +52,7 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
         }
 
         s"has a route to 'improvements'" in {
-          backLink.attr("href") shouldBe controllers.routes.ImprovementsController.improvements().url
+          backLink.attr("href") shouldBe controllers.routes.PropertyLivedInController.propertyLivedIn().url
         }
       }
 
