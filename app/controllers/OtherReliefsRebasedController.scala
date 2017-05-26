@@ -64,13 +64,13 @@ trait OtherReliefsRebasedController extends FrontendController with ValidActiveS
       totalGainWithPRR <- getPRRIfApplicable(answers, prrAnswers, calcConnector)(hc)
       allAnswers <- getFinalSectionsAnswers(gain.get, totalGainWithPRR, calcConnector, answersConstructor)(hc)
       taxYear <- getTaxYear(answers, calcConnector)(hc)
-      maxAEA <- getMaxAEA(allAnswers, taxYear, calcConnector)(hc)
+      maxAEA <- getMaxAEA(taxYear, calcConnector)(hc)
       chargeableGainResult <- getChargeableGain(answers, prrAnswers, allAnswers, maxAEA.get, calcConnector)(hc)
       reliefs <- calcConnector.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsRebased)
     } yield routeRequest(reliefs, gain, chargeableGainResult)
   }
 
-  val submitOtherReliefsRebased = ValidateSession.async { implicit request =>
+  val submitOtherReliefsRebased: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     def errorAction(form: Form[OtherReliefsModel]) = {
       for {
@@ -80,7 +80,7 @@ trait OtherReliefsRebasedController extends FrontendController with ValidActiveS
         totalGainWithPRR <- getPRRIfApplicable(answers, prrAnswers, calcConnector)(hc)
         allAnswers <- getFinalSectionsAnswers(gain.get, totalGainWithPRR, calcConnector, answersConstructor)(hc)
         taxYear <- getTaxYear(answers, calcConnector)(hc)
-        maxAEA <- getMaxAEA(allAnswers, taxYear, calcConnector)(hc)
+        maxAEA <- getMaxAEA(taxYear, calcConnector)(hc)
         chargeableGainResult <- getChargeableGain(answers, prrAnswers, allAnswers, maxAEA.get, calcConnector)(hc)
         route <- errorRoute(gain, chargeableGainResult, form)
       } yield route
@@ -92,7 +92,7 @@ trait OtherReliefsRebasedController extends FrontendController with ValidActiveS
       val chargeableGain = chargeableGainResult.fold(BigDecimal(0))(_.rebasedResult.get.taxableGain)
       calcConnector.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsRebased).map {
 
-        case Some(data) => BadRequest(calculation.otherReliefsRebased(form, hasExistingReliefAmount = true, chargeableGain, gain))
+        case Some(_) => BadRequest(calculation.otherReliefsRebased(form, hasExistingReliefAmount = true, chargeableGain, gain))
         case _ => BadRequest(calculation.otherReliefsRebased(form, hasExistingReliefAmount = false, chargeableGain, gain))
       }
     }

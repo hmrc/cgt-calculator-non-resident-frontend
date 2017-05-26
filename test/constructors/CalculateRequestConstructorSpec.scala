@@ -16,7 +16,6 @@
 
 package constructors
 
-import common.nonresident.CustomerTypeKeys
 import common.TestModels
 import models._
 import uk.gov.hmrc.play.test.UnitSpec
@@ -24,9 +23,7 @@ import uk.gov.hmrc.play.test.UnitSpec
 class CalculateRequestConstructorSpec extends UnitSpec {
 
   val sumModel = SummaryModel(
-    CustomerTypeModel(CustomerTypeKeys.individual),
-    None,
-    Some(CurrentIncomeModel(1000)),
+    CurrentIncomeModel(1000),
     Some(PersonalAllowanceModel(11100)),
     OtherPropertiesModel("No"),
     None,
@@ -48,7 +45,7 @@ class CalculateRequestConstructorSpec extends UnitSpec {
 
   "CalculateRequest Constructor" should {
     "return a string from the baseCalcUrl as an individual with no prior disposal" in {
-      CalculateRequestConstructor.baseCalcUrl(sumModel) shouldEqual "customerType=individual&priorDisposal=No&currentIncome=1000" +
+      CalculateRequestConstructor.baseCalcUrl(sumModel) shouldEqual "priorDisposal=No&currentIncome=1000" +
         "&personalAllowanceAmt=11100&disposalValue=150000&disposalCosts=0&disposalDate=2010-10-10"
     }
 
@@ -57,25 +54,20 @@ class CalculateRequestConstructorSpec extends UnitSpec {
         "&initialCostsAmt=0&reliefs=0&isClaimingPRR=No"
     }
 
-    "return a string from the flatCalcUrlExtra with improvements and no rebased value model" in {
-      CalculateRequestConstructor.flatCalcUrlExtra(TestModels.summaryIndividualImprovementsNoRebasedModel) shouldEqual
-        "&improvementsAmt=8000&initialValueAmt=100000&initialCostsAmt=300&reliefs=999&isClaimingPRR=No"
-    }
-
     "return a string from the flatCalcUrlExtra with improvements and a rebased value model with no improvements after" in {
-      CalculateRequestConstructor.flatCalcUrlExtra(TestModels.summaryIndividualFlatWithoutAEA) shouldEqual
+      CalculateRequestConstructor.flatCalcUrlExtra(TestModels.summaryFlatWithoutAEA) shouldEqual
         "&improvementsAmt=8000&initialValueAmt=100000&initialCostsAmt=300&reliefs=999&isClaimingPRR=No"
     }
 
     "return a string from the flatCalcUrlExtra with improvements and a rebased value model with improvements after" in {
-      CalculateRequestConstructor.flatCalcUrlExtra(TestModels.summaryIndividualImprovementsWithRebasedModel) shouldEqual
+      CalculateRequestConstructor.flatCalcUrlExtra(TestModels.summaryImprovementsWithRebasedModel) shouldEqual
         "&improvementsAmt=9000&initialValueAmt=100000&initialCostsAmt=300&reliefs=999&isClaimingPRR=No"
     }
 
     "return a string from the flatCalcUrlExtra with PRR claimed" in {
-      CalculateRequestConstructor.flatCalcUrlExtra(TestModels.summaryIndividualWithAllOptions) shouldEqual
+      CalculateRequestConstructor.flatCalcUrlExtra(TestModels.summaryWithAllOptions) shouldEqual
         "&improvementsAmt=8000&initialValueAmt=100000&initialCostsAmt=300" +
-        "&reliefs=999&daysClaimed=100&isClaimingPRR=Yes&acquisitionDate=1999-9-9"
+          "&reliefs=999&daysClaimed=100&isClaimingPRR=Yes&acquisitionDate=1999-9-9"
     }
 
     "return a string from the taCalcUrlExtra with no improvements" in {
@@ -83,79 +75,69 @@ class CalculateRequestConstructorSpec extends UnitSpec {
         "&acquisitionDate=1990-9-9&initialValueAmt=100000&initialCostsAmt=0&reliefs=0&isClaimingPRR=No"
     }
 
-    "return a string from the taCalcUrlExtra with improvements and no rebased value model" in {
-      CalculateRequestConstructor.taCalcUrlExtra(TestModels.summaryIndividualImprovementsNoRebasedModel) shouldEqual "&improvementsAmt=8000" +
-        "&acquisitionDate=1999-9-9&initialValueAmt=100000&initialCostsAmt=300&reliefs=888&isClaimingPRR=No"
-    }
-
-    "return a string from the taCalcUrlExtra with improvements and a rebased value model with no improvements after" in {
-      CalculateRequestConstructor.taCalcUrlExtra(TestModels.summaryTrusteeTAWithoutAEA) shouldEqual "&improvementsAmt=8000" +
-        "&acquisitionDate=1999-9-9&initialValueAmt=100000&initialCostsAmt=300&reliefs=888&isClaimingPRR=No"
-    }
-
     "return a string from the taCalcUrlExtra with improvements and a rebased value model with improvements after" in {
-      CalculateRequestConstructor.taCalcUrlExtra(TestModels.summaryIndividualImprovementsWithRebasedModel) shouldEqual "&improvementsAmt=9000" +
+      CalculateRequestConstructor.taCalcUrlExtra(TestModels.summaryImprovementsWithRebasedModel) shouldEqual "&improvementsAmt=9000" +
         "&acquisitionDate=1999-9-9&initialValueAmt=100000&initialCostsAmt=300&reliefs=888&isClaimingPRR=No"
     }
 
     "return a string from the taCalcUrlExtra with PRR" in {
-      CalculateRequestConstructor.taCalcUrlExtra(TestModels.summaryIndividualWithAllOptions) shouldEqual "&improvementsAmt=8000" +
+      CalculateRequestConstructor.taCalcUrlExtra(TestModels.summaryWithAllOptions) shouldEqual "&improvementsAmt=8000" +
         "&acquisitionDate=1999-9-9&initialValueAmt=100000&initialCostsAmt=300&reliefs=888&daysClaimed=50&isClaimingPRR=Yes"
     }
 
     "return a string from the rebasedCalcUrlExtra with no improvements or rebased costs" in {
-      CalculateRequestConstructor.rebasedCalcUrlExtra(TestModels.summaryIndividualRebasedNoImprovements) shouldEqual
+      CalculateRequestConstructor.rebasedCalcUrlExtra(TestModels.summaryRebasedNoImprovements) shouldEqual
         "&improvementsAmt=0&initialValueAmt=150000&initialCostsAmt=0&reliefs=0&isClaimingPRR=No"
     }
 
     "return a string from the rebasedCalcUrlExtra with improvements and rebased costs" in {
-      CalculateRequestConstructor.rebasedCalcUrlExtra(TestModels.summaryIndividualRebased) shouldEqual
+      CalculateRequestConstructor.rebasedCalcUrlExtra(TestModels.summaryRebased) shouldEqual
         "&improvementsAmt=3000&initialValueAmt=150000&initialCostsAmt=1000&reliefs=777&isClaimingPRR=No"
     }
 
     "return a string from the rebasedCalcUrlExtra with PRR" in {
-      CalculateRequestConstructor.rebasedCalcUrlExtra(TestModels.summaryIndividualWithAllOptions) shouldEqual
+      CalculateRequestConstructor.rebasedCalcUrlExtra(TestModels.summaryWithAllOptions) shouldEqual
         "&improvementsAmt=0&initialValueAmt=1000&initialCostsAmt=500&reliefs=777&daysClaimed=50&isClaimingPRR=Yes"
     }
 
     "return a string from the improvements with a rebased value and claiming improvements with an empty field" in {
-      CalculateRequestConstructor.improvements(TestModels.summaryIndividualRebasedNoneImprovements) shouldEqual "&improvementsAmt=0"
+      CalculateRequestConstructor.improvements(TestModels.summaryRebasedNoneImprovements) shouldEqual "&improvementsAmt=0"
     }
 
     "return a string from privateResidenceReliefFlat with an acquisition date after tax start date and disposal date after 18 month period" in {
-      CalculateRequestConstructor.privateResidenceReliefFlat(TestModels.summaryIndividualPRRAcqDateAfterAndDisposalDateBefore) shouldEqual "&daysClaimed=100"
+      CalculateRequestConstructor.privateResidenceReliefFlat(TestModels.summaryPRRAcqDateAfterAndDisposalDateBefore) shouldEqual "&daysClaimed=100"
     }
 
     "return a string from privateResidenceReliefFlat with an acquisition date before tax start date and no rebased value" in {
-      CalculateRequestConstructor.privateResidenceReliefFlat(TestModels.summaryIndividualPRRAcqDateAfterAndNoRebased) shouldEqual "&daysClaimed=100"
+      CalculateRequestConstructor.privateResidenceReliefFlat(TestModels.summaryPRRAcqDateAfterAndNoRebased) shouldEqual "&daysClaimed=100"
     }
 
     "return a string from privateResidenceReliefFlat with " +
       "an acquisition date before tax start date, a rebased value and disposal date after the 18 month period" in {
-      CalculateRequestConstructor.privateResidenceReliefFlat(TestModels.summaryIndividualPRRAcqDateAfterAndDisposalDateAfter) shouldEqual "&daysClaimed=100"
+      CalculateRequestConstructor.privateResidenceReliefFlat(TestModels.summaryPRRAcqDateAfterAndDisposalDateAfter) shouldEqual "&daysClaimed=100"
     }
 
     "return an empty string from privateResidenceReliefFlat with an answer of no to PRR" in {
-      CalculateRequestConstructor.privateResidenceReliefFlat(TestModels.summaryIndividualFlatWithAEA) shouldEqual ""
+      CalculateRequestConstructor.privateResidenceReliefFlat(TestModels.summaryFlatWithAEA) shouldEqual ""
     }
 
     "return a string from privateResidenceReliefTA with " +
       "an acquisition date before tax start date, a rebased value and disposal date after the 18 month period" in {
-      CalculateRequestConstructor.privateResidenceReliefTA(TestModels.summaryIndividualPRRAcqDateAfterAndDisposalDateAfterWithRebased) shouldEqual
+      CalculateRequestConstructor.privateResidenceReliefTA(TestModels.summaryPRRAcqDateAfterAndDisposalDateAfterWithRebased) shouldEqual
         "&daysClaimed=50"
     }
 
     "return an empty string from privateResidenceReliefTA with an answer of no to PRR" in {
-      CalculateRequestConstructor.privateResidenceReliefTA(TestModels.summaryIndividualFlatWithAEA) shouldEqual ""
+      CalculateRequestConstructor.privateResidenceReliefTA(TestModels.summaryFlatWithAEA) shouldEqual ""
     }
 
     "return a string from privateResidenceReliefRebased with a Rebased Value and a disposal date after 18 month period with an acqDate before the start" in {
-      CalculateRequestConstructor.privateResidenceReliefRebased(TestModels.summaryIndividualPRRAcqDateBeforeAndDisposalDateAfterWithRebased) shouldEqual
+      CalculateRequestConstructor.privateResidenceReliefRebased(TestModels.summaryPRRAcqDateBeforeAndDisposalDateAfterWithRebased) shouldEqual
         "&daysClaimed=50"
     }
 
     "return an empty string from privateResidenceReliefRebased with no Rebased PRR" in {
-      CalculateRequestConstructor.privateResidenceReliefRebased(TestModels.summaryIndividualFlatWithAEA) shouldEqual ""
+      CalculateRequestConstructor.privateResidenceReliefRebased(TestModels.summaryFlatWithAEA) shouldEqual ""
     }
 
   }
@@ -272,49 +254,16 @@ class CalculateRequestConstructorSpec extends UnitSpec {
     }
   }
 
-  "Calling customerType" should {
-
-    "return a value of individual" in {
-      val result = CalculateRequestConstructor.customerType("individual")
-      result shouldBe "customerType=individual"
-    }
-
-    "return a value of trustee" in {
-      val result = CalculateRequestConstructor.customerType("trustee")
-      result shouldBe "customerType=trustee"
-    }
-  }
-
   "Calling priorDisposal" should {
 
     "return a value of yes" in {
       val result = CalculateRequestConstructor.priorDisposal("Yes")
-      result shouldBe "&priorDisposal=Yes"
+      result shouldBe "priorDisposal=Yes"
     }
 
     "return a value of No" in {
       val result = CalculateRequestConstructor.priorDisposal("No")
-      result shouldBe "&priorDisposal=No"
-    }
-  }
-
-  "Calling isVulnerableTrustee" should {
-
-    "return a value of Yes" in {
-      val disabledTrusteeModel = DisabledTrusteeModel("Yes")
-      val result = CalculateRequestConstructor.isVulnerableTrustee("trustee", Some(disabledTrusteeModel))
-      result shouldBe "&isVulnerable=Yes"
-    }
-
-    "return a value of No" in {
-      val disabledTrusteeModel = DisabledTrusteeModel("No")
-      val result = CalculateRequestConstructor.isVulnerableTrustee("trustee", Some(disabledTrusteeModel))
-      result shouldBe "&isVulnerable=No"
-    }
-
-    "return an empty string" in {
-      val result = CalculateRequestConstructor.isVulnerableTrustee("individual", None)
-      result shouldBe ""
+      result shouldBe "priorDisposal=No"
     }
   }
 
@@ -322,19 +271,14 @@ class CalculateRequestConstructorSpec extends UnitSpec {
 
     "return a value of 10000" in {
       val currentIncomeModel = CurrentIncomeModel(10000)
-      val result = CalculateRequestConstructor.currentIncome("individual", Some(currentIncomeModel))
+      val result = CalculateRequestConstructor.currentIncome(currentIncomeModel)
       result shouldBe "&currentIncome=10000"
     }
 
     "return a value of 2000" in {
       val currentIncomeModel = CurrentIncomeModel(2000)
-      val result = CalculateRequestConstructor.currentIncome("individual", Some(currentIncomeModel))
+      val result = CalculateRequestConstructor.currentIncome(currentIncomeModel)
       result shouldBe "&currentIncome=2000"
-    }
-
-    "return an empty string" in {
-      val result = CalculateRequestConstructor.currentIncome("trustee", None)
-      result shouldBe ""
     }
   }
 
@@ -342,19 +286,14 @@ class CalculateRequestConstructorSpec extends UnitSpec {
 
     "return a value of 10000" in {
       val personalAllowanceModel = PersonalAllowanceModel(10000)
-      val result = CalculateRequestConstructor.personalAllowanceAmount("individual", Some(personalAllowanceModel))
+      val result = CalculateRequestConstructor.personalAllowanceAmount(Some(personalAllowanceModel))
       result shouldBe "&personalAllowanceAmt=10000"
     }
 
     "return a value of 2000" in {
       val personalAllowanceModel = PersonalAllowanceModel(2000)
-      val result = CalculateRequestConstructor.personalAllowanceAmount("individual", Some(personalAllowanceModel))
+      val result = CalculateRequestConstructor.personalAllowanceAmount(Some(personalAllowanceModel))
       result shouldBe "&personalAllowanceAmt=2000"
-    }
-
-    "return an empty string" in {
-      val result = CalculateRequestConstructor.personalAllowanceAmount("trustee", None)
-      result shouldBe ""
     }
   }
 
@@ -458,7 +397,7 @@ class CalculateRequestConstructorSpec extends UnitSpec {
       val model = AcquisitionDateModel(5, 4, 2017)
       val answer = "&isClaimingPRR=No"
       val result = CalculateRequestConstructor.flatAcquisitionDate(answer, model)
-
+      result shouldBe ""
     }
   }
 }

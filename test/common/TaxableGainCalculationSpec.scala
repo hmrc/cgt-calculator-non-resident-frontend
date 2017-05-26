@@ -20,7 +20,7 @@ import common.nonresident.TaxableGainCalculation
 import connectors.CalculatorConnector
 import constructors.AnswersConstructor
 import controllers.helpers.FakeRequestHelper
-import models.{TaxYearModel, _}
+import models._
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
@@ -40,10 +40,8 @@ class TaxableGainCalculationSpec extends UnitSpec with WithFakeApplication with 
   val prrModel = PrivateResidenceReliefModel("No", None, None)
   val taxYearModel = TaxYearModel("2015/16", isValidYear = true, "2015/16")
   val personalDetailsModel = TotalPersonalDetailsCalculationModel(
-    CustomerTypeModel("individual"),
-    Some(CurrentIncomeModel(20000)),
+    CurrentIncomeModel(20000),
     Some(PersonalAllowanceModel(0)),
-    None,
     OtherPropertiesModel("Yes"),
     Some(PreviousLossOrGainModel("Neither")),
     None,
@@ -191,59 +189,8 @@ class TaxableGainCalculationSpec extends UnitSpec with WithFakeApplication with 
   "Calling .getMaxAEA" when {
 
     "CustomerType is individual" should {
-      val personalDetailsModel = TotalPersonalDetailsCalculationModel(
-        CustomerTypeModel("individual"),
-        Some(CurrentIncomeModel(20000)),
-        Some(PersonalAllowanceModel(0)),
-        None,
-        OtherPropertiesModel("Yes"),
-        Some(PreviousLossOrGainModel("Neither")),
-        None,
-        None,
-        Some(AnnualExemptAmountModel(0)),
-        BroughtForwardLossesModel(isClaiming = false, None)
-      )
-      val result = TaxableGainCalculation.getMaxAEA(Some(personalDetailsModel), Some(taxYearModel), mockCalcConnector)
 
-      "return the full AEA of 11000" in {
-        await(result) shouldBe Some(BigDecimal(11000))
-      }
-    }
-
-    "CustomerType is trustee and not trustee for a vulnerable person" should {
-      val personalDetailsModel = TotalPersonalDetailsCalculationModel(
-        CustomerTypeModel("trustee"),
-        Some(CurrentIncomeModel(20000)),
-        Some(PersonalAllowanceModel(0)),
-        Some(DisabledTrusteeModel("No")),
-        OtherPropertiesModel("Yes"),
-        Some(PreviousLossOrGainModel("Neither")),
-        None,
-        None,
-        Some(AnnualExemptAmountModel(0)),
-        BroughtForwardLossesModel(isClaiming = false, None)
-      )
-      val result = TaxableGainCalculation.getMaxAEA(Some(personalDetailsModel), Some(taxYearModel), mockCalcConnector)
-
-      "return the partial AEA of 5500" in {
-        await(result) shouldBe Some(BigDecimal(5500))
-      }
-    }
-
-    "CustomerType is trustee and trustee for a vulnerable person" should {
-      val personalDetailsModel = TotalPersonalDetailsCalculationModel(
-        CustomerTypeModel("trustee"),
-        Some(CurrentIncomeModel(20000)),
-        Some(PersonalAllowanceModel(0)),
-        Some(DisabledTrusteeModel("Yes")),
-        OtherPropertiesModel("Yes"),
-        Some(PreviousLossOrGainModel("Neither")),
-        None,
-        None,
-        Some(AnnualExemptAmountModel(0)),
-        BroughtForwardLossesModel(isClaiming = false, None)
-      )
-      val result = TaxableGainCalculation.getMaxAEA(Some(personalDetailsModel), Some(taxYearModel), mockCalcConnector)
+      val result = TaxableGainCalculation.getMaxAEA(Some(taxYearModel), mockCalcConnector)
 
       "return the full AEA of 11000" in {
         await(result) shouldBe Some(BigDecimal(11000))

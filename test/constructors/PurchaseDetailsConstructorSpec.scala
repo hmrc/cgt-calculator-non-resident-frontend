@@ -26,7 +26,7 @@ import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication with AssertHelpers {
 
   val totalGainGiven = TotalGainAnswersModel(
-    DisposalDateModel(10, 10, 2010),
+    DisposalDateModel(10, 10, 2016),
     SoldOrGivenAwayModel(false),
     None,
     DisposalValueModel(150000),
@@ -141,7 +141,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
       lazy val result = PurchaseDetailsConstructor.getPurchaseDetailsSection(totalGainGiven)
 
       "will return a Sequence with size 3" in {
-        result.size shouldBe 3
+        result.size shouldBe 7
       }
 
       "return a Sequence that will contain an acquisitionCost data item" in {
@@ -154,6 +154,22 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
 
       "return a Sequence that will contain a howBecameOwner data item" in {
         result.contains(PurchaseDetailsConstructor.howBecameOwnerRow(totalGainGiven).get) shouldBe true
+      }
+
+      "return a Sequence that will contain an acquisitionDate data item" in {
+        result.contains(PurchaseDetailsConstructor.acquisitionDateRow(totalGainGiven).get) shouldBe true
+      }
+
+      "return a Sequence that will contain a rebasedValue data item" in {
+        result.contains(PurchaseDetailsConstructor.rebasedValueRow(totalGainGiven.rebasedValueModel, useRebasedValues = true).get) shouldBe true
+      }
+
+      "return a Sequence that will contain a rebasedCostsQuestion data item" in {
+        result.contains(PurchaseDetailsConstructor.rebasedCostsQuestionRow(totalGainGiven.rebasedCostsModel, useRebasedValues = true).get) shouldBe true
+      }
+
+      "return a Sequence that will contain a rebasedCosts data item" in {
+        result.contains(PurchaseDetailsConstructor.rebasedCostsRow(totalGainGiven.rebasedCostsModel, useRebasedValues = true).get) shouldBe true
       }
     }
   }

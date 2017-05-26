@@ -98,16 +98,14 @@ class CheckYourAnswersActionSpec extends UnitSpec with WithFakeApplication with 
     Some(BoughtForLessModel(false)),
     AcquisitionValueModel(2000),
     AcquisitionCostsModel(200),
-    AcquisitionDateModel(4, 10, 2013),
+    AcquisitionDateModel(4, 10, 2016),
     Some(RebasedValueModel(None)),
     None,
     ImprovementsModel("Yes", Some(10), Some(20)),
     Some(OtherReliefsModel(30)))
 
-  val individualModel = TotalPersonalDetailsCalculationModel(CustomerTypeModel("individual"),
-    Some(CurrentIncomeModel(9000)),
+  val personalDetailsModel = TotalPersonalDetailsCalculationModel(CurrentIncomeModel(9000),
     Some(PersonalAllowanceModel(1000)),
-    None,
     OtherPropertiesModel("No"),
     Some(PreviousLossOrGainModel("gain")),
     None,
@@ -177,7 +175,7 @@ class CheckYourAnswersActionSpec extends UnitSpec with WithFakeApplication with 
 
     "provided with a valid session when the final answers have been answered and are applicable" should {
 
-      lazy val target = setupTarget(modelWithOnlyFlat, Some(totalGainWithValueResultsModel), None, Some(individualModel))
+      lazy val target = setupTarget(modelWithOnlyFlat, Some(totalGainWithValueResultsModel), None, Some(personalDetailsModel))
       lazy val result = target.checkYourAnswers(fakeRequestWithSession)
       lazy val document = Jsoup.parse(bodyOf(result))
 
@@ -381,7 +379,7 @@ class CheckYourAnswersActionSpec extends UnitSpec with WithFakeApplication with 
       val calculationResultsWithPRRModel = CalculationResultsWithPRRModel(GainsAfterPRRModel(100, 0, 0), None, None)
 
       val target = setupTarget(modelWithMultipleGains, Some(totalGainResultsModelWithGain),
-        Some(prrModel), Some(individualModel), Some(calculationResultsWithPRRModel))
+        Some(prrModel), Some(personalDetailsModel), Some(calculationResultsWithPRRModel))
       lazy val result = target.calculatePRRIfApplicable(modelWithMultipleGains, Some(prrModel))
 
       "return a CalculationResultsWithPRRModel" in {

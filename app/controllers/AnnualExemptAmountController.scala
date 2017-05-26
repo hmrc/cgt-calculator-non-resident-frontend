@@ -16,26 +16,25 @@
 
 package controllers
 
-import common.TaxDates
 import common.DefaultRoutes._
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import common.nonresident.CustomerTypeKeys
+import common.TaxDates
 import connectors.CalculatorConnector
 import constructors.CalculationElectionConstructor
 import controllers.predicates.ValidActiveSession
 import forms.AnnualExemptAmountForm._
 import models._
+import play.api.Play.current
 import play.api.data.Form
+import play.api.i18n.Messages.Implicits._
 import play.api.mvc.{Action, AnyContent, Result}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import uk.gov.hmrc.play.http.HeaderCarrier
 import views.html.calculation
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 
 import scala.concurrent.Future
 
-object AnnualExemptAmountController extends AnnualExemptAmountController{
+object AnnualExemptAmountController extends AnnualExemptAmountController {
   val calcConnector = CalculatorConnector
 }
 
@@ -44,13 +43,8 @@ trait AnnualExemptAmountController extends FrontendController with ValidActiveSe
   val calcConnector: CalculatorConnector
   val calcElectionConstructor = CalculationElectionConstructor
 
-  private def fetchMaxAEA(isFullAEA: Boolean, taxYear: Int)(implicit hc: HeaderCarrier): Future[Option[BigDecimal]] = {
-    if (isFullAEA) {
-      calcConnector.getFullAEA(taxYear)
-    }
-    else {
-      calcConnector.getPartialAEA(taxYear)
-    }
+  private def fetchAEA(taxYear: Int)(implicit hc: HeaderCarrier): Future[Option[BigDecimal]] = {
+    calcConnector.getFullAEA(taxYear)
   }
 
   private def fetchAnnualExemptAmount(implicit headerCarrier: HeaderCarrier): Future[Option[AnnualExemptAmountModel]] = {
@@ -77,20 +71,6 @@ trait AnnualExemptAmountController extends FrontendController with ValidActiveSe
 
   private def fetchDisposalDate(implicit hc: HeaderCarrier): Future[Option[DisposalDateModel]] = {
     calcConnector.fetchAndGetFormData[DisposalDateModel](KeystoreKeys.disposalDate)
-  }
-
-  private def customerType(implicit hc: HeaderCarrier): Future[Option[CustomerTypeModel]] = {
-    calcConnector.fetchAndGetFormData[CustomerTypeModel](KeystoreKeys.customerType)
-  }
-
-  private def trusteeAEA(customerTypeVal: String)(implicit hc: HeaderCarrier): Future[Boolean] = {
-    customerTypeVal match {
-      case CustomerTypeKeys.trustee =>
-        calcConnector.fetchAndGetFormData[DisabledTrusteeModel](KeystoreKeys.disabledTrustee).map {
-          disabledTrusteeModel => if (disabledTrusteeModel.get.isVulnerable == "No") false else true
-        }
-      case _ => Future.successful(true)
-    }
   }
 
   private def backUrl(lossOrGain: PreviousLossOrGainModel, gainAmount: Option[HowMuchGainModel], lossAmount: Option[HowMuchLossModel]): Future[String] = {
@@ -127,11 +107,9 @@ trait AnnualExemptAmountController extends FrontendController with ValidActiveSe
     for {
       disposalDate <- fetchDisposalDate(hc)
       date <- formatDisposalDate(disposalDate)
-      customerTypeVal <- customerType(hc)
-      isDisabledTrustee <- trusteeAEA(customerTypeVal.get.customerType)
       closestTaxYear <- calcConnector.getTaxYear(date)
       taxYear <- getTaxYear(closestTaxYear)
-      maxAEA <- fetchMaxAEA(isDisabledTrustee, taxYear)
+      maxAEA <- fetchAEA(taxYear)
       annualExemptAmount <- fetchAnnualExemptAmount(hc)
       previousLossOrGain <- fetchPreviousGainOrLoss(hc)
       gainAmount <- fetchPreviousGainAmount(previousLossOrGain.get.previousLossOrGain)
@@ -161,11 +139,9 @@ trait AnnualExemptAmountController extends FrontendController with ValidActiveSe
     for {
       disposalDate <- fetchDisposalDate(hc)
       date <- formatDisposalDate(disposalDate)
-      customerTypeVal <- customerType(hc)
-      isDisabledTrustee <- trusteeAEA(customerTypeVal.get.customerType)
       closestTaxYear <- calcConnector.getTaxYear(date)
       taxYear <- getTaxYear(closestTaxYear)
-      maxAEA <- fetchMaxAEA(isDisabledTrustee, taxYear)
+      maxAEA <- fetchAEA(taxYear)
       previousLossOrGain <- fetchPreviousGainOrLoss(hc)
       gainAmount <- fetchPreviousGainAmount(previousLossOrGain.get.previousLossOrGain)
       lossAmount <- fetchPreviousLossAmount(previousLossOrGain.get.previousLossOrGain)

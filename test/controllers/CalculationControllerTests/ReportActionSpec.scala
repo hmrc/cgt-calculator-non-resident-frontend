@@ -16,22 +16,21 @@
 
 package controllers.CalculationControllerTests
 
-import org.mockito.ArgumentMatchers
-import org.mockito.Mockito._
-import play.api.test.Helpers._
-import play.api.mvc.RequestHeader
-import connectors.CalculatorConnector
-import org.scalatest.mock.MockitoSugar
-import controllers.helpers.FakeRequestHelper
 import assets.MessageLookup.{SummaryPage => messages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
-import models.{TaxYearModel, _}
 import common.TestModels
 import common.nonresident.CalculationType
-import common.nonresident.CustomerTypeKeys
+import connectors.CalculatorConnector
 import constructors.AnswersConstructor
 import controllers.ReportController
+import controllers.helpers.FakeRequestHelper
+import models.{TaxYearModel, _}
+import org.mockito.ArgumentMatchers
+import org.mockito.Mockito._
+import org.scalatest.mock.MockitoSugar
+import play.api.mvc.RequestHeader
+import play.api.test.Helpers._
+import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 import scala.concurrent.Future
 
@@ -106,6 +105,7 @@ class ReportActionSpec extends UnitSpec with WithFakeApplication with FakeReques
     new ReportController {
       override val calcConnector: CalculatorConnector = mockCalculatorConnector
       override val answersConstructor: AnswersConstructor = mockAnswersConstructor
+
       override def host(implicit request: RequestHeader): String = "http://localhost:9977"
     }
   }
@@ -126,9 +126,7 @@ class ReportActionSpec extends UnitSpec with WithFakeApplication with FakeReques
     Some(OtherReliefsModel(30)))
 
   val finalAnswersModel = TotalPersonalDetailsCalculationModel(
-    CustomerTypeModel(CustomerTypeKeys.personalRep),
-    None,
-    None,
+    CurrentIncomeModel(0),
     None,
     OtherPropertiesModel("No"),
     None,
@@ -302,7 +300,7 @@ class ReportActionSpec extends UnitSpec with WithFakeApplication with FakeReques
       }
 
       "redirect to the session timeout page" in {
-        redirectLocation(result).get should include ("/calculate-your-capital-gains/non-resident/session-timeout")
+        redirectLocation(result).get should include("/calculate-your-capital-gains/non-resident/session-timeout")
       }
     }
   }
