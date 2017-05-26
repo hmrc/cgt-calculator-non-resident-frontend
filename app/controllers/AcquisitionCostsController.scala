@@ -24,7 +24,7 @@ import controllers.predicates.ValidActiveSession
 import forms.AcquisitionCostsForm._
 import models.{AcquisitionCostsModel, AcquisitionDateModel, BoughtForLessModel, HowBecameOwnerModel}
 import play.api.data.Form
-import play.api.mvc.Result
+import play.api.mvc.{Action, AnyContent, Result}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import uk.gov.hmrc.play.http.HeaderCarrier
 import views.html.calculation
@@ -49,11 +49,11 @@ trait AcquisitionCostsController extends FrontendController with ValidActiveSess
     def result(acquisitionDateModel: Option[AcquisitionDateModel],
                howBecameOwnerModel: Option[HowBecameOwnerModel],
                boughtForLessModel: Option[BoughtForLessModel]) = (acquisitionDateModel, howBecameOwnerModel, boughtForLessModel) match {
-      case (Some(AcquisitionDateModel(_,_,_)),_,_) if TaxDates.dateBeforeLegislationStart(acquisitionDateModel.get.get) =>
+      case (Some(_), _, _) if TaxDates.dateBeforeLegislationStart(acquisitionDateModel.get.get) =>
         Future.successful(controllers.routes.WorthBeforeLegislationStartController.worthBeforeLegislationStart().url)
-      case (_,Some(HowBecameOwnerModel("Inherited")),_) =>
+      case (_, Some(HowBecameOwnerModel("Inherited")),_) =>
         Future.successful(controllers.routes.WorthWhenInheritedController.worthWhenInherited().url)
-      case (_,Some(HowBecameOwnerModel("Gifted")),_) =>
+      case (_, Some(HowBecameOwnerModel("Gifted")),_) =>
         Future.successful(controllers.routes.WorthWhenGiftedToController.worthWhenGiftedTo().url)
       case (_, _, Some(BoughtForLessModel(true))) =>
         Future.successful(controllers.routes.WorthWhenBoughtForLessController.worthWhenBoughtForLess().url)
@@ -68,7 +68,7 @@ trait AcquisitionCostsController extends FrontendController with ValidActiveSess
     } yield result
   }
 
-  val acquisitionCosts = ValidateSession.async { implicit request =>
+  val acquisitionCosts: Action[AnyContent] = ValidateSession.async { implicit request =>
     def result(backLink: String) = calcConnector.fetchAndGetFormData[AcquisitionCostsModel](KeystoreKeys.acquisitionCosts).map {
       case Some(data) => Ok(calculation.acquisitionCosts(acquisitionCostsForm.fill(data), backLink))
       case None => Ok(calculation.acquisitionCosts(acquisitionCostsForm, backLink))
@@ -80,13 +80,13 @@ trait AcquisitionCostsController extends FrontendController with ValidActiveSess
     } yield result
   }
 
-  val submitAcquisitionCosts = ValidateSession.async { implicit request =>
+  val submitAcquisitionCosts: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     val getRedirectRoute: Future[Result] = {
       val getAcquisitionDate = calcConnector.fetchAndGetFormData[AcquisitionDateModel](KeystoreKeys.acquisitionDate)
 
       def result(acquisitionDateModel: Option[AcquisitionDateModel]) = acquisitionDateModel match {
-        case Some(AcquisitionDateModel(_,_,_)) if TaxDates.dateAfterStart(acquisitionDateModel.get.get) =>
+        case Some(_) if TaxDates.dateAfterStart(acquisitionDateModel.get.get) =>
           Future.successful(Redirect(routes.ImprovementsController.improvements()))
         case _ => Future.successful(Redirect(routes.RebasedValueController.rebasedValue()))
       }

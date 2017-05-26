@@ -136,16 +136,16 @@ object CalculateRequestConstructor {
   }"
 
   def privateResidenceReliefFlat(input: SummaryModel): String = s"${
-    (input.acquisitionDateModel, input.privateResidenceReliefModel) match {
-      case (AcquisitionDateModel(_, _, _), Some(PrivateResidenceReliefModel("Yes", claimed, _))) if claimed.isDefined =>
+    input.privateResidenceReliefModel match {
+      case (Some(PrivateResidenceReliefModel("Yes", claimed, _))) if claimed.isDefined =>
         s"&daysClaimed=${claimed.get}"
       case _ => ""
     }
   }"
 
   def privateResidenceReliefTA(input: SummaryModel): String = s"${
-    (input.acquisitionDateModel, input.privateResidenceReliefModel) match {
-      case (AcquisitionDateModel(_, _, _), Some(PrivateResidenceReliefModel("Yes", _, after)))
+    input.privateResidenceReliefModel match {
+      case (Some(PrivateResidenceReliefModel("Yes", _, after)))
         if dateAfter18Months(input.disposalDateModel.day, input.disposalDateModel.month, input.disposalDateModel.year) && after.isDefined =>
         s"&daysClaimed=${after.get}"
 
@@ -164,8 +164,8 @@ object CalculateRequestConstructor {
   }"
 
   def isClaimingPRR(input: SummaryModel): String = s"&isClaimingPRR=${
-    (input.acquisitionDateModel, input.privateResidenceReliefModel) match {
-      case (AcquisitionDateModel(_, _, _), Some(PrivateResidenceReliefModel("Yes", _, _))) => "Yes"
+    input.privateResidenceReliefModel match {
+      case (Some(PrivateResidenceReliefModel("Yes", _, _))) => "Yes"
       case _ => "No"
     }
   }"

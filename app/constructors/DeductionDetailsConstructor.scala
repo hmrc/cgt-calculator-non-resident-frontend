@@ -26,10 +26,7 @@ import play.api.Play.current
 object DeductionDetailsConstructor {
 
   def datesNotValidCheck(acquisitionDateModel: AcquisitionDateModel, disposalDateModel: DisposalDateModel): Boolean = {
-    acquisitionDateModel match {
-      case AcquisitionDateModel(_,_,_) if acquisitionDateModel.get.plusMonths(18).isBefore(disposalDateModel.get)=> true
-      case _ => false
-    }
+    acquisitionDateModel.get.plusMonths(18).isBefore(disposalDateModel.get)
   }
 
   def deductionDetailsRows(answers: TotalGainAnswersModel,
@@ -76,8 +73,8 @@ object DeductionDetailsConstructor {
 
   def privateResidenceReliefDaysClaimedAfterRow(prr: Option[PrivateResidenceReliefModel],
                                                 answers: TotalGainAnswersModel): Option[QuestionAnswerModel[String]] = {
-    (prr, answers.acquisitionDateModel, answers.rebasedValueModel) match {
-      case (Some(PrivateResidenceReliefModel("Yes", _, Some(value))), AcquisitionDateModel(_,_,_), _)
+    (prr, answers.rebasedValueModel) match {
+      case (Some(PrivateResidenceReliefModel("Yes", _, Some(value))), _)
       if !TaxDates.dateAfterStart(answers.acquisitionDateModel.get) && TaxDates.dateAfterOctober(answers.disposalDateModel.get) =>
         Some(QuestionAnswerModel(
           s"${keys.privateResidenceRelief}-daysClaimedAfter",
@@ -86,7 +83,7 @@ object DeductionDetailsConstructor {
             s" ${Messages("calc.privateResidenceRelief.questionBetween.partTwo")}",
           Some(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief().url)
         ))
-      case (Some(PrivateResidenceReliefModel("Yes", _, Some(value))), _, Some(RebasedValueModel(Some(_))))
+      case (Some(PrivateResidenceReliefModel("Yes", _, Some(value))), Some(RebasedValueModel(Some(_))))
       if TaxDates.dateAfterOctober(answers.disposalDateModel.get) =>
         Some(QuestionAnswerModel(
           s"${keys.privateResidenceRelief}-daysClaimedAfter",
