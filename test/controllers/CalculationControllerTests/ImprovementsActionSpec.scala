@@ -198,8 +198,8 @@ class ImprovementsActionSpec extends UnitSpec with WithFakeApplication with Mock
         status(result) shouldBe 303
       }
 
-      s"redirect to ${controllers.routes.CustomerTypeController.customerType()}" in {
-        redirectLocation(result) shouldBe Some(s"${controllers.routes.CustomerTypeController.customerType()}")
+      s"redirect to ${controllers.routes.CurrentIncomeController.currentIncome()}" in {
+        redirectLocation(result) shouldBe Some(s"${controllers.routes.CurrentIncomeController.currentIncome()}")
       }
     }
 

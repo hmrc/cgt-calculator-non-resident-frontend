@@ -65,13 +65,13 @@ trait OtherReliefsFlatController extends FrontendController with ValidActiveSess
       totalGainWithPRR <- getPRRIfApplicable(answers, prrAnswers, calcConnector)(hc)
       allAnswers <- getFinalSectionsAnswers(gain.get, totalGainWithPRR, calcConnector, answersConstructor)(hc)
       taxYear <- getTaxYear(answers, calcConnector)(hc)
-      maxAEA <- getMaxAEA(allAnswers, taxYear, calcConnector)(hc)
+      maxAEA <- getMaxAEA(taxYear, calcConnector)(hc)
       chargeableGainResult <- getChargeableGain(answers, prrAnswers, allAnswers, maxAEA.get, calcConnector)(hc)
       reliefs <- calcConnector.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsFlat)
     } yield routeRequest(reliefs, gain, chargeableGainResult)
   }
 
-  val submitOtherReliefsFlat = ValidateSession.async { implicit request =>
+  val submitOtherReliefsFlat: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     def errorAction(form: Form[OtherReliefsModel]) = {
       for {
@@ -81,7 +81,7 @@ trait OtherReliefsFlatController extends FrontendController with ValidActiveSess
         totalGainWithPRR <- getPRRIfApplicable(answers, prrAnswers, calcConnector)(hc)
         allAnswers <- getFinalSectionsAnswers(gain.get, totalGainWithPRR, calcConnector, answersConstructor)(hc)
         taxYear <- getTaxYear(answers, calcConnector)(hc)
-        maxAEA <- getMaxAEA(allAnswers, taxYear, calcConnector)(hc)
+        maxAEA <- getMaxAEA(taxYear, calcConnector)(hc)
         chargeableGainResult <- getChargeableGain(answers, prrAnswers, allAnswers, maxAEA.get, calcConnector)(hc)
         route <- errorRoute(gain, chargeableGainResult, form)
       } yield route
@@ -98,7 +98,7 @@ trait OtherReliefsFlatController extends FrontendController with ValidActiveSess
       val chargeableGain = chargeableGainResult.fold(BigDecimal(0))(_.flatResult.taxableGain)
 
       calcConnector.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsFlat).map {
-        case Some(data) => BadRequest(calculation.otherReliefsFlat(form, hasExistingReliefAmount = true, chargeableGain, gain))
+        case Some(_) => BadRequest(calculation.otherReliefsFlat(form, hasExistingReliefAmount = true, chargeableGain, gain))
         case _ => BadRequest(calculation.otherReliefsFlat(form, hasExistingReliefAmount = false, chargeableGain, gain))
       }
     }

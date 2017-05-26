@@ -18,19 +18,19 @@ package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.TaxDates
-import common.nonresident.{CalculationType, CustomerTypeKeys}
+import common.nonresident.CalculationType
 import connectors.CalculatorConnector
 import constructors.{AnswersConstructor, YourAnswersConstructor}
 import controllers.predicates.ValidActiveSession
 import it.innove.play.pdf.PdfGenerator
 import models.{TaxYearModel, _}
+import play.api.Play.current
+import play.api.i18n.Messages
+import play.api.i18n.Messages.Implicits._
 import play.api.mvc.{Action, AnyContent, RequestHeader}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import uk.gov.hmrc.play.http.HeaderCarrier
 import views.html.calculation
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
-import play.api.i18n.Messages
 
 import scala.concurrent.Future
 
@@ -61,13 +61,8 @@ trait ReportController extends FrontendController with ValidActiveSession {
       } else Future(None)
     }
 
-    def getMaxAEA(totalPersonalDetailsCalculationModel: Option[TotalPersonalDetailsCalculationModel],
-                  taxYear: Option[TaxYearModel])(implicit hc: HeaderCarrier): Future[Option[BigDecimal]] = {
-      totalPersonalDetailsCalculationModel match {
-        case Some(data) if data.customerTypeModel.customerType.equals(CustomerTypeKeys.trustee) && data.trusteeModel.get.isVulnerable.equals("No") =>
-          calcConnector.getPartialAEA(TaxDates.taxYearStringToInteger(taxYear.get.calculationTaxYear))
-        case _ => calcConnector.getFullAEA(TaxDates.taxYearStringToInteger(taxYear.get.calculationTaxYear))
-      }
+    def getMaxAEA(taxYear: Option[TaxYearModel])(implicit hc: HeaderCarrier): Future[Option[BigDecimal]] = {
+      calcConnector.getFullAEA(TaxDates.taxYearStringToInteger(taxYear.get.calculationTaxYear))
     }
 
     def getTaxYear(totalGainAnswersModel: TotalGainAnswersModel)(implicit hc: HeaderCarrier): Future[Option[TaxYearModel]] = {
@@ -99,7 +94,7 @@ trait ReportController extends FrontendController with ValidActiveSession {
     def getAllOtherReliefs(totalPersonalDetailsCalculationModel: Option[TotalPersonalDetailsCalculationModel])
                           (implicit hc: HeaderCarrier): Future[Option[AllOtherReliefsModel]] = {
       totalPersonalDetailsCalculationModel match {
-        case Some(data) => {
+        case Some(_) =>
           val flat = calcConnector.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsFlat)
           val rebased = calcConnector.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsRebased)
           val time = calcConnector.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsTA)
@@ -109,16 +104,15 @@ trait ReportController extends FrontendController with ValidActiveSession {
             rebasedReliefs <- rebased
             timeReliefs <- time
           } yield Some(AllOtherReliefsModel(flatReliefs, rebasedReliefs, timeReliefs))
-        }
         case _ => Future.successful(None)
       }
     }
 
     def questionAnswerRows(totalGainAnswersModel: TotalGainAnswersModel,
-               totalGainResultsModel: TotalGainResultsModel,
-               privateResidenceReliefModel: Option[PrivateResidenceReliefModel] = None,
-               personalAndPreviousDetailsModel: Option[TotalPersonalDetailsCalculationModel] = None
-              )(implicit hc: HeaderCarrier): Future[Seq[QuestionAnswerModel[Any]]] = {
+                           totalGainResultsModel: TotalGainResultsModel,
+                           privateResidenceReliefModel: Option[PrivateResidenceReliefModel] = None,
+                           personalAndPreviousDetailsModel: Option[TotalPersonalDetailsCalculationModel] = None
+                          )(implicit hc: HeaderCarrier): Future[Seq[QuestionAnswerModel[Any]]] = {
 
       val optionSeq = Seq(totalGainResultsModel.rebasedGain, totalGainResultsModel.timeApportionedGain).flatten
       val finalSeq = Seq(totalGainResultsModel.flatGain) ++ optionSeq
@@ -137,7 +131,7 @@ trait ReportController extends FrontendController with ValidActiveSession {
       finalAnswers <- answersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers
       otherReliefsModel <- getAllOtherReliefs(finalAnswers)
       taxYearModel <- getTaxYear(answers)
-      maxAEA <- getMaxAEA(finalAnswers, taxYearModel)
+      maxAEA <- getMaxAEA(taxYearModel)
       finalResult <- calculateTaxOwed(answers, privateResidentReliefModel, finalAnswers, maxAEA.get, otherReliefsModel)
 
       questionAnswerRows <- questionAnswerRows(answers, totalGainResultsModel.get, privateResidentReliefModel, finalAnswers)
@@ -147,7 +141,6 @@ trait ReportController extends FrontendController with ValidActiveSession {
 
       calculationResult <- getCalculationResult(finalResult, calculationType.get.calculationType)
     } yield {
-
       lazy val view = calculationType.get.calculationType match {
         case CalculationType.flat =>
           calculation.summaryReport(questionAnswerRows, calculationResult, taxYearModel.get, calculationType.get.calculationType,
@@ -158,19 +151,19 @@ trait ReportController extends FrontendController with ValidActiveSession {
 
         case CalculationType.timeApportioned =>
           calculation.summaryReport(questionAnswerRows, calculationResult, taxYearModel.get, calculationType.get.calculationType,
-          answers.disposalValueModel.disposalValue,
-          answers.acquisitionValueModel.acquisitionValueAmt,
-          totalCosts,
-          Some(finalResult.get.flatResult.totalGain),
-          reliefsUsed = calculationResult.prrUsed.getOrElse(BigDecimal(0)) + calculationResult.otherReliefsUsed.getOrElse(BigDecimal(0)))
+            answers.disposalValueModel.disposalValue,
+            answers.acquisitionValueModel.acquisitionValueAmt,
+            totalCosts,
+            Some(finalResult.get.flatResult.totalGain),
+            reliefsUsed = calculationResult.prrUsed.getOrElse(BigDecimal(0)) + calculationResult.otherReliefsUsed.getOrElse(BigDecimal(0)))
 
         case CalculationType.rebased =>
           calculation.summaryReport(questionAnswerRows, calculationResult, taxYearModel.get, calculationType.get.calculationType,
-          answers.disposalValueModel.disposalValue,
-          answers.rebasedValueModel.get.rebasedValueAmt.get,
-          totalCosts,
-          None,
-          reliefsUsed = calculationResult.prrUsed.getOrElse(BigDecimal(0)) + calculationResult.otherReliefsUsed.getOrElse(BigDecimal(0)))
+            answers.disposalValueModel.disposalValue,
+            answers.rebasedValueModel.get.rebasedValueAmt.get,
+            totalCosts,
+            None,
+            reliefsUsed = calculationResult.prrUsed.getOrElse(BigDecimal(0)) + calculationResult.otherReliefsUsed.getOrElse(BigDecimal(0)))
       }
       pdfGenerator.ok(view, host).asScala()
         .withHeaders("Content-Disposition" ->s"""attachment; filename="${Messages("calc.summary.title")}.pdf"""")

@@ -97,7 +97,7 @@ class OtherReliefsFlatActionSpec extends UnitSpec with WithFakeApplication with 
         None,
         TestModels.totalGainAnswersModelWithRebasedTA,
         TestModels.calculationResultsModelWithRebased,
-        TestModels.personalDetailsCalculationModelIndividual)
+        TestModels.personalDetailsCalculationModel)
       lazy val result = target.otherReliefsFlat(fakeRequestWithSession)
       lazy val document = Jsoup.parse(bodyOf(result))
 
@@ -124,7 +124,7 @@ class OtherReliefsFlatActionSpec extends UnitSpec with WithFakeApplication with 
         Some(testOtherReliefsModel),
         TestModels.totalGainAnswersModelWithRebasedTA,
         TestModels.calculationResultsModelWithRebased,
-        TestModels.personalDetailsCalculationModelIndividual)
+        TestModels.personalDetailsCalculationModel)
       lazy val result = target.otherReliefsFlat(fakeRequestWithSession)
       lazy val document = Jsoup.parse(bodyOf(result))
 
@@ -142,7 +142,7 @@ class OtherReliefsFlatActionSpec extends UnitSpec with WithFakeApplication with 
         None,
         TestModels.totalGainAnswersModelWithRebasedTA,
         TestModels.calculationResultsModelWithRebased,
-        TestModels.personalDetailsCalculationModelIndividual)
+        TestModels.personalDetailsCalculationModel)
       lazy val result = target.otherReliefsFlat(fakeRequest)
 
       "return a status of 303" in {
@@ -162,7 +162,7 @@ class OtherReliefsFlatActionSpec extends UnitSpec with WithFakeApplication with 
         None,
         TestModels.totalGainAnswersModelWithRebasedTA,
         TestModels.calculationResultsModelWithRebased,
-        TestModels.personalDetailsCalculationModelIndividual)
+        TestModels.personalDetailsCalculationModel)
       lazy val request = fakeRequestToPOSTWithSession(("isClaimingOtherReliefs", "Yes"), ("otherReliefs", "1000"))
       lazy val result = target.submitOtherReliefsFlat(request)
 
@@ -180,7 +180,7 @@ class OtherReliefsFlatActionSpec extends UnitSpec with WithFakeApplication with 
         None,
         TestModels.totalGainAnswersModelWithRebasedTA,
         TestModels.calculationResultsModelWithRebased,
-        TestModels.personalDetailsCalculationModelIndividual)
+        TestModels.personalDetailsCalculationModel)
       lazy val request = fakeRequestToPOSTWithSession(("isClaimingOtherReliefs", "Yes"), ("otherReliefs", "-1000"))
       lazy val result = target.submitOtherReliefsFlat(request)
       lazy val document = Jsoup.parse(bodyOf(result))

@@ -17,7 +17,6 @@
 package constructors
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import common.nonresident.CustomerTypeKeys
 import connectors.CalculatorConnector
 import models._
 import org.mockito.ArgumentMatchers
@@ -90,19 +89,12 @@ class AnswersConstructorSpec extends UnitSpec with MockitoSugar {
 
     val mockConnector = mock[CalculatorConnector]
 
-    when(mockConnector.fetchAndGetFormData[CustomerTypeModel](ArgumentMatchers.eq(KeystoreKeys.customerType))(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(Some(totalPersonalDetailsCalculationModel.customerTypeModel)))
-
     when(mockConnector.fetchAndGetFormData[CurrentIncomeModel](ArgumentMatchers.eq(KeystoreKeys.currentIncome))(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(totalPersonalDetailsCalculationModel.currentIncomeModel))
+      .thenReturn(Future.successful(Some(totalPersonalDetailsCalculationModel.currentIncomeModel)))
 
     when(mockConnector.fetchAndGetFormData[PersonalAllowanceModel](
       ArgumentMatchers.eq(KeystoreKeys.personalAllowance))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(totalPersonalDetailsCalculationModel.personalAllowanceModel))
-
-    when(mockConnector.fetchAndGetFormData[DisabledTrusteeModel](
-      ArgumentMatchers.eq(KeystoreKeys.disabledTrustee))(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(totalPersonalDetailsCalculationModel.trusteeModel))
 
     when(mockConnector.fetchAndGetFormData[OtherPropertiesModel](
       ArgumentMatchers.eq(KeystoreKeys.otherProperties))(ArgumentMatchers.any(), ArgumentMatchers.any()))
@@ -221,7 +213,7 @@ class AnswersConstructorSpec extends UnitSpec with MockitoSugar {
     "return a valid TotalGainAnswersModel with no optional values" in {
       val hc = mock[HeaderCarrier]
       val constructor = setupMockedAnswersConstructor(totalGainNoOptionalModel, marketValueAcquisition = Some(AcquisitionValueModel(5000)),
-                                                      marketDisposalValue = Some(DisposalValueModel(10000)))
+        marketDisposalValue = Some(DisposalValueModel(10000)))
       val result = constructor.getNRTotalGainAnswers(hc)
 
       await(result) shouldBe totalGainNoOptionalModel
@@ -247,7 +239,7 @@ class AnswersConstructorSpec extends UnitSpec with MockitoSugar {
     "return a valid acquisition value of 3000 with an property acquired without purchasing" in {
       val hc = mock[HeaderCarrier]
       val constructor = setupMockedAnswersConstructor(totalGainNoOptionalModel, marketValueAcquisition = Some(AcquisitionValueModel(3000)),
-                                                      marketDisposalValue = Some(DisposalValueModel(10000)))
+        marketDisposalValue = Some(DisposalValueModel(10000)))
       val result = constructor.getNRTotalGainAnswers(hc)
 
       await(result).acquisitionValueModel.acquisitionValueAmt shouldBe 3000
@@ -272,7 +264,7 @@ class AnswersConstructorSpec extends UnitSpec with MockitoSugar {
     "return a valid disposal value of 11000 when sold and sold for less" in {
       val hc = mock[HeaderCarrier]
       val constructor = setupMockedAnswersConstructor(totalGainSoldForLess, marketValueAcquisition = Some(AcquisitionValueModel(5000)),
-                                                      marketDisposalValue = Some(DisposalValueModel(11000)))
+        marketDisposalValue = Some(DisposalValueModel(11000)))
       val result = constructor.getNRTotalGainAnswers(hc)
 
       await(result).disposalValueModel.disposalValue shouldBe 11000
@@ -281,7 +273,7 @@ class AnswersConstructorSpec extends UnitSpec with MockitoSugar {
     "return a valid disposal value of 10000 when given away" in {
       val hc = mock[HeaderCarrier]
       val constructor = setupMockedAnswersConstructor(totalGainNoOptionalModel, marketValueAcquisition = Some(AcquisitionValueModel(5000)),
-                                                      marketDisposalValue = Some(DisposalValueModel(10000)))
+        marketDisposalValue = Some(DisposalValueModel(10000)))
       val result = constructor.getNRTotalGainAnswers(hc)
 
       await(result).disposalValueModel.disposalValue shouldBe 10000
@@ -291,16 +283,14 @@ class AnswersConstructorSpec extends UnitSpec with MockitoSugar {
   "Calling .getPersonalDetailsAndPreviousCapitalGainsAnswers" should {
 
     val model = TotalPersonalDetailsCalculationModel(
-      CustomerTypeModel(CustomerTypeKeys.individual),
-      Some(CurrentIncomeModel(10000)),
+      CurrentIncomeModel(10000),
       Some(PersonalAllowanceModel(100)),
-      Some(DisabledTrusteeModel("Yes")),
       OtherPropertiesModel("Yes"),
       Some(PreviousLossOrGainModel("Loss")),
       Some(HowMuchLossModel(100)),
       Some(HowMuchGainModel(200)),
       Some(AnnualExemptAmountModel(10000)),
-      BroughtForwardLossesModel(true, Some(1000))
+      BroughtForwardLossesModel(isClaiming = true, Some(1000))
     )
 
     val hc = mock[HeaderCarrier]

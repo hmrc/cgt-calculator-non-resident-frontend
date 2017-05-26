@@ -123,9 +123,7 @@ class SummaryActionSpec extends UnitSpec with WithFakeApplication with MockitoSu
   )
 
   lazy val finalAnswersModel = TotalPersonalDetailsCalculationModel(
-    CustomerTypeModel("representative"),
-    None,
-    None,
+    CurrentIncomeModel(0),
     None,
     OtherPropertiesModel("No"),
     None,

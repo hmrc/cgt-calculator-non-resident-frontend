@@ -16,15 +16,15 @@
 
 package common.nonresident
 
-import common.TaxDates
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import common.TaxDates
 import connectors.CalculatorConnector
 import constructors.AnswersConstructor
 import models._
 import uk.gov.hmrc.play.http.HeaderCarrier
 
-import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 object TaxableGainCalculation {
 
@@ -74,14 +74,9 @@ object TaxableGainCalculation {
     }
   }
 
-  def getMaxAEA(totalPersonalDetailsCalculationModel: Option[TotalPersonalDetailsCalculationModel],
-                taxYear: Option[TaxYearModel],
+  def getMaxAEA(taxYear: Option[TaxYearModel],
                 calcConnector: CalculatorConnector)(implicit hc: HeaderCarrier): Future[Option[BigDecimal]] = {
-    totalPersonalDetailsCalculationModel match {
-      case Some(data) if data.customerTypeModel.customerType.equals(CustomerTypeKeys.trustee) && data.trusteeModel.get.isVulnerable.equals("No") =>
-        calcConnector.getPartialAEA(TaxDates.taxYearStringToInteger(taxYear.get.calculationTaxYear))
-      case _ => calcConnector.getFullAEA(TaxDates.taxYearStringToInteger(taxYear.get.calculationTaxYear))
-    }
+    calcConnector.getFullAEA(TaxDates.taxYearStringToInteger(taxYear.get.calculationTaxYear))
   }
 
   def getTaxYear(totalGainAnswersModel: TotalGainAnswersModel, calcConnector: CalculatorConnector)(implicit hc: HeaderCarrier): Future[Option[TaxYearModel]] = {
@@ -100,5 +95,4 @@ object TaxableGainCalculation {
       case None => Future(None)
     }
   }
-
 }

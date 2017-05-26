@@ -16,13 +16,13 @@
 
 package constructors
 
-import common.{Transformers, YesNoKeys}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import common.nonresident.{CustomerTypeKeys, PreviousGainOrLossKeys}
+import common.nonresident.PreviousGainOrLossKeys
+import common.{Transformers, YesNoKeys}
 import models._
+import play.api.Play.current
 import play.api.i18n.Messages
 import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 
 object PersonalAndPreviousDetailsConstructor {
 
@@ -36,16 +36,10 @@ object PersonalAndPreviousDetailsConstructor {
 
   def constructRows(personalAndPreviousDetailsModel: TotalPersonalDetailsCalculationModel): Seq[QuestionAnswerModel[Any]] = {
 
-    val customerTypeAnswerData = customerTypeAnswerRow(personalAndPreviousDetailsModel.customerTypeModel)
-    val currentIncomeAnswerData = currentIncomeAnswerRow(
-      personalAndPreviousDetailsModel.customerTypeModel,
-      personalAndPreviousDetailsModel.currentIncomeModel)
+    val currentIncomeAnswerData = currentIncomeAnswerRow(personalAndPreviousDetailsModel.currentIncomeModel)
     val personalAllowanceAnswerData = personalAllowanceAnswerRow(
-      personalAndPreviousDetailsModel.customerTypeModel,
+      personalAndPreviousDetailsModel.currentIncomeModel,
       personalAndPreviousDetailsModel.personalAllowanceModel)
-    val disabledTrusteeAnswerData = disabledTrusteeAnswerRow(
-      personalAndPreviousDetailsModel.customerTypeModel,
-      personalAndPreviousDetailsModel.trusteeModel)
     val otherPropertiesAnswerData = otherPropertiesAnswerRow(personalAndPreviousDetailsModel.otherPropertiesModel)
     val previousGainsOrLossAnswerData = previousGainsOrLossAnswerRow(
       personalAndPreviousDetailsModel.otherPropertiesModel,
@@ -68,10 +62,8 @@ object PersonalAndPreviousDetailsConstructor {
     val broughtForwardLossesValueAnswerData = broughtForwardLossesValueAnswerRow(personalAndPreviousDetailsModel.broughtForwardLossesModel)
 
     Seq(
-      customerTypeAnswerData,
       currentIncomeAnswerData,
       personalAllowanceAnswerData,
-      disabledTrusteeAnswerData,
       otherPropertiesAnswerData,
       previousGainsOrLossAnswerData,
       howMuchLossAnswerData,
@@ -82,63 +74,27 @@ object PersonalAndPreviousDetailsConstructor {
     ).flatten
   }
 
-  def customerTypeAnswerRow(customerTypeModel: CustomerTypeModel): Option[QuestionAnswerModel[String]] = {
-
-    val message = customerTypeModel.customerType match {
-      case CustomerTypeKeys.individual => Messages("calc.customerType.individual")
-      case CustomerTypeKeys.trustee => Messages("calc.customerType.trustee")
-      case CustomerTypeKeys.personalRep => Messages("calc.customerType.personalRep")
-    }
-
+  def currentIncomeAnswerRow(currentIncomeModel: CurrentIncomeModel): Option[QuestionAnswerModel[BigDecimal]] = {
     Some(QuestionAnswerModel(
-      s"${KeystoreKeys.customerType}-question",
-      message,
-      Messages("calc.customerType.question"),
-      Some(controllers.routes.CustomerTypeController.customerType().url)
+      s"${KeystoreKeys.currentIncome}-question",
+      currentIncomeModel.currentIncome,
+      Messages("calc.currentIncome.question"),
+      Some(controllers.routes.CurrentIncomeController.currentIncome().url)
     ))
   }
 
-  def currentIncomeAnswerRow(customerTypeModel: CustomerTypeModel, currentIncomeModel: Option[CurrentIncomeModel]): Option[QuestionAnswerModel[BigDecimal]] = {
-
-    (customerTypeModel.customerType, currentIncomeModel) match {
-      case (CustomerTypeKeys.individual, Some(data)) =>
-        Some(QuestionAnswerModel(
-          s"${KeystoreKeys.currentIncome}-question",
-          data.currentIncome,
-          Messages("calc.currentIncome.question"),
-          Some(controllers.routes.CurrentIncomeController.currentIncome().url)
-        ))
-      case (_, _) => None
-    }
-  }
-
-  def personalAllowanceAnswerRow(customerTypeModel: CustomerTypeModel,
+  def personalAllowanceAnswerRow(currentIncomeModel: CurrentIncomeModel,
                                  personalAllowanceModel: Option[PersonalAllowanceModel]): Option[QuestionAnswerModel[BigDecimal]] = {
 
-    (customerTypeModel.customerType, personalAllowanceModel) match {
-      case (CustomerTypeKeys.individual, Some(data)) =>
+    personalAllowanceModel match {
+      case (Some(data)) if currentIncomeModel.currentIncome > 0 =>
         Some(QuestionAnswerModel(
           s"${KeystoreKeys.personalAllowance}-question",
           data.personalAllowanceAmt,
           Messages("calc.personalAllowance.question"),
           Some(controllers.routes.PersonalAllowanceController.personalAllowance().url)
         ))
-      case (_, _) => None
-    }
-  }
-
-  def disabledTrusteeAnswerRow(customerTypeModel: CustomerTypeModel,
-                               disabledTrusteeModel: Option[DisabledTrusteeModel]): Option[QuestionAnswerModel[String]] = {
-
-    (customerTypeModel.customerType, disabledTrusteeModel) match {
-      case (CustomerTypeKeys.trustee, Some(data)) =>
-        Some(QuestionAnswerModel(
-          s"${KeystoreKeys.disabledTrustee}-question",
-          data.isVulnerable,
-          Messages("calc.disabledTrustee.question"),
-          Some(controllers.routes.DisabledTrusteeController.disabledTrustee().url)
-        ))
-      case (_, _) => None
+      case _ => None
     }
   }
 

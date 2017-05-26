@@ -28,6 +28,7 @@ import play.api.data.Form
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
+import play.api.mvc.{Action, AnyContent}
 
 import scala.concurrent.Future
 
@@ -41,7 +42,7 @@ trait OtherReliefsController extends FrontendController with ValidActiveSession 
   val calcConnector: CalculatorConnector
   val answersConstructor: AnswersConstructor
 
-  val otherReliefs = ValidateSession.async { implicit request =>
+  val otherReliefs: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     def routeRequest(model: Option[OtherReliefsModel],
                      totalGain: Option[TotalGainResultsModel],
@@ -63,14 +64,14 @@ trait OtherReliefsController extends FrontendController with ValidActiveSession 
       totalGainWithPRR <- getPRRIfApplicable(answers, prrAnswers, calcConnector)(hc)
       allAnswers <- getFinalSectionsAnswers(gain.get, totalGainWithPRR, calcConnector, answersConstructor)(hc)
       taxYear <- getTaxYear(answers, calcConnector)(hc)
-      maxAEA <- getMaxAEA(allAnswers, taxYear, calcConnector)(hc)
+      maxAEA <- getMaxAEA(taxYear, calcConnector)(hc)
       chargeableGainResult <- getChargeableGain(answers, prrAnswers, allAnswers, maxAEA.get, calcConnector)(hc)
       reliefs <- calcConnector.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsFlat)
     } yield routeRequest(reliefs, gain, chargeableGainResult)
 
   }
 
-  val submitOtherReliefs = ValidateSession.async { implicit request =>
+  val submitOtherReliefs: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     def errorAction(form: Form[OtherReliefsModel]) = {
 
@@ -88,7 +89,7 @@ trait OtherReliefsController extends FrontendController with ValidActiveSession 
         totalGainWithPRR <- getPRRIfApplicable(answers, prrAnswers, calcConnector)(hc)
         allAnswers <- getFinalSectionsAnswers(gain.get, totalGainWithPRR, calcConnector, answersConstructor)(hc)
         taxYear <- getTaxYear(answers, calcConnector)(hc)
-        maxAEA <- getMaxAEA(allAnswers, taxYear, calcConnector)(hc)
+        maxAEA <- getMaxAEA(taxYear, calcConnector)(hc)
         chargeableGainResult <- getChargeableGain(answers, prrAnswers, allAnswers, maxAEA.get, calcConnector)(hc)
       } yield routeRequest(gain, chargeableGainResult)
     }

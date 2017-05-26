@@ -171,37 +171,6 @@ class RoutesSpec extends UnitSpec with WithFakeApplication with Matchers {
     }
   }
 
-  /* Customer Type routes */
-  "The URL for the customerType Action" should {
-    "be equal to /calculate-your-capital-gains/non-resident/" in {
-      val path = controllers.routes.CustomerTypeController.customerType().url
-      path shouldEqual "/calculate-your-capital-gains/non-resident/customer-type"
-    }
-  }
-
-  "The URL for the submit customerType Action" should {
-    "be equal to /calculate-your-capital-gains/non-resident/" in {
-      val path = controllers.routes.CustomerTypeController.submitCustomerType().url
-      path shouldEqual "/calculate-your-capital-gains/non-resident/customer-type"
-    }
-  }
-
-  /* Disabled Trustee routes */
-  "The URL for the disabledTrustee Action" should {
-    "be equal to /calculate-your-capital-gains/non-resident/disabled-trustee" in {
-      val path = controllers.routes.DisabledTrusteeController.disabledTrustee().url
-      path shouldEqual "/calculate-your-capital-gains/non-resident/disabled-trustee"
-    }
-  }
-
-  "The URL for the submitDisabledTrustee Action" should {
-    "be equal to /calculate-your-capital-gains/non-resident/disabled-trustee" in {
-      val path = controllers.routes.DisabledTrusteeController.submitDisabledTrustee().url
-
-      path shouldEqual "/calculate-your-capital-gains/non-resident/disabled-trustee"
-    }
-  }
-
   /* Current Income routes */
   "The URL for the currentIncome Action" should {
     "be equal to /calculate-your-capital-gains/non-resident/current-income" in {
