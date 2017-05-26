@@ -32,14 +32,14 @@ class CurrentIncomeViewSpec extends UnitSpec with WithFakeApplication with Mocki
   "Current Income view" when {
 
     "supplied with no errors" should {
-      lazy val view = currentIncome(currentIncomeForm)
+      lazy val view = currentIncome(currentIncomeForm, "google.com")
       lazy val document = Jsoup.parse(view.body)
 
       s"have the correct title" in {
         document.title() shouldBe messages.CurrentIncome.question
       }
 
-      "have a back link" which {
+      "have a dynamically provided back link" which {
         lazy val backLink = document.body().select("#back-link")
 
         "has the text" in {
@@ -47,7 +47,7 @@ class CurrentIncomeViewSpec extends UnitSpec with WithFakeApplication with Mocki
         }
 
         s"has a route to 'customer-type'" in {
-          backLink.attr("href") shouldBe controllers.routes.PrivateResidenceReliefController.privateResidenceRelief().url
+          backLink.attr("href") shouldBe "google.com"
         }
       }
 
@@ -94,7 +94,7 @@ class CurrentIncomeViewSpec extends UnitSpec with WithFakeApplication with Mocki
 
     "supplied with errors" should {
       lazy val form = currentIncomeForm.bind(Map("currentIncome" -> "a"))
-      lazy val view = currentIncome(form)
+      lazy val view = currentIncome(form, "")
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {
