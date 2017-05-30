@@ -111,8 +111,8 @@ trait ReportController extends FrontendController with ValidActiveSession {
     def questionAnswerRows(totalGainAnswersModel: TotalGainAnswersModel,
                            totalGainResultsModel: TotalGainResultsModel,
                            privateResidenceReliefModel: Option[PrivateResidenceReliefModel] = None,
-                           personalAndPreviousDetailsModel: Option[TotalPersonalDetailsCalculationModel] = None
-                          )(implicit hc: HeaderCarrier): Future[Seq[QuestionAnswerModel[Any]]] = {
+                           personalAndPreviousDetailsModel: Option[TotalPersonalDetailsCalculationModel] = None,
+                           propertyLivedInModel: Option[PropertyLivedInModel] = None)(implicit hc: HeaderCarrier): Future[Seq[QuestionAnswerModel[Any]]] = {
 
       val optionSeq = Seq(totalGainResultsModel.rebasedGain, totalGainResultsModel.timeApportionedGain).flatten
       val finalSeq = Seq(totalGainResultsModel.flatGain) ++ optionSeq
@@ -135,7 +135,7 @@ trait ReportController extends FrontendController with ValidActiveSession {
       maxAEA <- getMaxAEA(taxYearModel)
       finalResult <- calculateTaxOwed(answers, privateResidentReliefModel, finalAnswers, maxAEA.get, otherReliefsModel)
 
-      questionAnswerRows <- questionAnswerRows(answers, totalGainResultsModel.get, privateResidentReliefModel, finalAnswers)
+      questionAnswerRows <- questionAnswerRows(answers, totalGainResultsModel.get, privateResidentReliefModel, finalAnswers, propertyLivedInModel)
 
       calculationType <- calcConnector.fetchAndGetFormData[CalculationElectionModel](KeystoreKeys.calculationElection)
       totalCosts <- calcConnector.calculateTotalCosts(answers, calculationType)
