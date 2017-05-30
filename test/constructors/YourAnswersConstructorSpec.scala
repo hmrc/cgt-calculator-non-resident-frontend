@@ -65,4 +65,8 @@ class YourAnswersConstructorSpec extends UnitSpec with WithFakeApplication {
       }
     }
   }
+
+  "fetching when supplied with a propertyLivedInModel" should {
+
+  }
 }
