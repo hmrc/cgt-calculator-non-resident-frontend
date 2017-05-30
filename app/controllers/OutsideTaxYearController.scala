@@ -23,7 +23,7 @@ object OutsideTaxYearController extends OutsideTaxYearController {
 
 }
 
-class OutsideTaxYearController extends FrontendController with ValidActiveSession {
+trait OutsideTaxYearController extends FrontendController with ValidActiveSession {
 
   val outsideTaxYear = TODO
 
