@@ -118,30 +118,6 @@ class PrivateResidenceReliefActionSpec extends UnitSpec with WithFakeApplication
     }
   }
 
-  "Calling the .getRebasedAmount method" should {
-
-    "return a true if a value is found with the answer 'Yes'" in {
-      val target = setupTarget(None, rebasedValueData = Some(RebasedValueModel(Some(1000))))
-      val result = target.getRebasedAmount(hc: HeaderCarrier)
-
-      await(result) shouldBe true
-    }
-
-    "return a false if a value is found with the answer 'No'" in {
-      val target = setupTarget(None, rebasedValueData = Some(RebasedValueModel(None)))
-      val result = target.getRebasedAmount(hc: HeaderCarrier)
-
-      await(result) shouldBe false
-    }
-
-    "return a false if no value is found" in {
-      val target = setupTarget(None)
-      val result = target.getRebasedAmount(hc: HeaderCarrier)
-
-      await(result) shouldBe false
-    }
-  }
-
   "Calling the .displayAfterQuestion method" when {
 
     "the disposal date is after the 18 month period" should {
@@ -149,26 +125,26 @@ class PrivateResidenceReliefActionSpec extends UnitSpec with WithFakeApplication
 
       "return a true if the acquisition date is before the tax start" in {
         val acquisitionDate = LocalDate.parse("2010-05-04")
-        val result = PrivateResidenceReliefController.displayAfterQuestion(Some(disposalDate), Some(acquisitionDate), hasRebasedValue = false)
+        val result = PrivateResidenceReliefController.displayAfterQuestion(Some(disposalDate), Some(acquisitionDate))
 
         result shouldBe true
       }
 
       "return a false if the acquisition date is after the tax start" in {
         val acquisitionDate = LocalDate.parse("2016-05-04")
-        val result = PrivateResidenceReliefController.displayAfterQuestion(Some(disposalDate), Some(acquisitionDate), hasRebasedValue = false)
+        val result = PrivateResidenceReliefController.displayAfterQuestion(Some(disposalDate), Some(acquisitionDate))
 
         result shouldBe false
       }
 
       "return a true if there is no acquisition date but a rebased value is given" in {
-        val result = PrivateResidenceReliefController.displayAfterQuestion(Some(disposalDate), None, hasRebasedValue = true)
+        val result = PrivateResidenceReliefController.displayAfterQuestion(Some(disposalDate), None)
 
         result shouldBe true
       }
 
       "return a true if there is no acquisition date and no rebased value is given" in {
-        val result = PrivateResidenceReliefController.displayAfterQuestion(Some(disposalDate), None, hasRebasedValue = false)
+        val result = PrivateResidenceReliefController.displayAfterQuestion(Some(disposalDate), None)
 
         result shouldBe false
       }
@@ -179,26 +155,26 @@ class PrivateResidenceReliefActionSpec extends UnitSpec with WithFakeApplication
 
       "return a false if the acquisition date is before the tax start" in {
         val acquisitionDate = LocalDate.parse("2010-05-04")
-        val result = PrivateResidenceReliefController.displayAfterQuestion(Some(disposalDate), Some(acquisitionDate), hasRebasedValue = false)
+        val result = PrivateResidenceReliefController.displayAfterQuestion(Some(disposalDate), Some(acquisitionDate))
 
         result shouldBe false
       }
 
       "return a false if the acquisition date is after the tax start" in {
         val acquisitionDate = LocalDate.parse("2016-05-04")
-        val result = PrivateResidenceReliefController.displayAfterQuestion(Some(disposalDate), Some(acquisitionDate), hasRebasedValue = false)
+        val result = PrivateResidenceReliefController.displayAfterQuestion(Some(disposalDate), Some(acquisitionDate))
 
         result shouldBe false
       }
 
       "return a false if there is no acquisition date but a rebased value is given" in {
-        val result = PrivateResidenceReliefController.displayAfterQuestion(Some(disposalDate), None, hasRebasedValue = true)
+        val result = PrivateResidenceReliefController.displayAfterQuestion(Some(disposalDate), None)
 
         result shouldBe false
       }
 
       "return a true if there is no acquisition date and no rebased value is given" in {
-        val result = PrivateResidenceReliefController.displayAfterQuestion(Some(disposalDate), None, hasRebasedValue = false)
+        val result = PrivateResidenceReliefController.displayAfterQuestion(Some(disposalDate), None)
 
         result shouldBe false
       }
@@ -207,7 +183,7 @@ class PrivateResidenceReliefActionSpec extends UnitSpec with WithFakeApplication
     "the disposal date is not given" should {
 
       "return a false" in {
-        val result = PrivateResidenceReliefController.displayAfterQuestion(None, None, hasRebasedValue = true)
+        val result = PrivateResidenceReliefController.displayAfterQuestion(None, None)
 
         result shouldBe false
       }
@@ -296,7 +272,7 @@ class PrivateResidenceReliefActionSpec extends UnitSpec with WithFakeApplication
         None,
         disposalDateData = Some(DisposalDateModel(5, 8, 2015)),
         acquisitionDateData = Some(AcquisitionDateModel(1, 1, 2016)),
-        rebasedValueData = Some(RebasedValueModel(Some(1000))))
+        rebasedValueData = Some(RebasedValueModel(1000)))
       lazy val result = target.privateResidenceRelief(fakeRequestWithSession)
       lazy val document = Jsoup.parse(bodyOf(result))
 
@@ -314,7 +290,7 @@ class PrivateResidenceReliefActionSpec extends UnitSpec with WithFakeApplication
         Some(PrivateResidenceReliefModel("Yes", None, None)),
         disposalDateData = Some(DisposalDateModel(5, 8, 2015)),
         acquisitionDateData = Some(AcquisitionDateModel(1, 1, 2016)),
-        rebasedValueData = Some(RebasedValueModel(Some(1000))))
+        rebasedValueData = Some(RebasedValueModel(1000)))
       lazy val result = target.privateResidenceRelief(fakeRequestWithSession)
       lazy val document = Jsoup.parse(bodyOf(result))
 
@@ -332,7 +308,7 @@ class PrivateResidenceReliefActionSpec extends UnitSpec with WithFakeApplication
         None,
         disposalDateData = Some(DisposalDateModel(5, 8, 2015)),
         acquisitionDateData = Some(AcquisitionDateModel(1, 1, 2016)),
-        rebasedValueData = Some(RebasedValueModel(Some(1000))))
+        rebasedValueData = Some(RebasedValueModel(1000)))
       lazy val result = target.privateResidenceRelief(fakeRequest)
 
       "return a status of 303" in {
@@ -354,7 +330,7 @@ class PrivateResidenceReliefActionSpec extends UnitSpec with WithFakeApplication
         None,
         disposalDateData = Some(DisposalDateModel(5, 8, 2015)),
         acquisitionDateData = Some(AcquisitionDateModel(1, 1, 2016)),
-        rebasedValueData = Some(RebasedValueModel(Some(1000))),
+        rebasedValueData = Some(RebasedValueModel(1000)),
         calculationResultsWithPRRModel = Some(model))
       lazy val request = fakeRequestToPOSTWithSession(("isClaimingPRR", "No"))
       lazy val result = target.submitPrivateResidenceRelief(request)
@@ -374,7 +350,7 @@ class PrivateResidenceReliefActionSpec extends UnitSpec with WithFakeApplication
         None,
         disposalDateData = Some(DisposalDateModel(5, 8, 2015)),
         acquisitionDateData = Some(AcquisitionDateModel(1, 1, 2016)),
-        rebasedValueData = Some(RebasedValueModel(Some(1000))),
+        rebasedValueData = Some(RebasedValueModel(1000)),
         calculationResultsWithPRRModel = Some(model))
       lazy val request = fakeRequestToPOSTWithSession(("isClaimingPRR", "No"))
       lazy val result = target.submitPrivateResidenceRelief(request)
@@ -393,7 +369,7 @@ class PrivateResidenceReliefActionSpec extends UnitSpec with WithFakeApplication
         None,
         disposalDateData = Some(DisposalDateModel(5, 8, 2015)),
         acquisitionDateData = Some(AcquisitionDateModel(1, 1, 2016)),
-        rebasedValueData = Some(RebasedValueModel(Some(1000))))
+        rebasedValueData = Some(RebasedValueModel(1000)))
       lazy val request = fakeRequestToPOSTWithSession(("isClaimingPRR", ""))
       lazy val result = target.submitPrivateResidenceRelief(request)
       lazy val document = Jsoup.parse(bodyOf(result))

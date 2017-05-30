@@ -68,7 +68,7 @@ class DeductionDetailsConstructorSpec extends UnitSpec with WithFakeApplication 
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
     AcquisitionDateModel(1, 1, 2016),
-    Some(RebasedValueModel(Some(1))),
+    Some(RebasedValueModel(1)),
     Some(RebasedCostsModel("No", None)),
     ImprovementsModel("No", None, None),
     Some(OtherReliefsModel(1450))
