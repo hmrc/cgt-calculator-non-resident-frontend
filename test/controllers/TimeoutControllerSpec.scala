@@ -44,10 +44,6 @@ class TimeoutControllerSpec extends UnitSpec with WithFakeApplication with FakeR
         status(timeoutTestDataItem.result) shouldBe 200
       }
 
-      s"have the home link to /calculate-your-capital-gains/non-resident/" in {
-        timeoutTestDataItem.jsoupDoc.select("#homeNavHref").attr("href") shouldEqual "/calculate-your-capital-gains/non-resident/"
-      }
-
       "have the title" in {
         timeoutTestDataItem.jsoupDoc.getElementsByTag("title").text shouldEqual Messages("session.timeout.message")
       }

@@ -295,7 +295,7 @@ class RoutesSpec extends UnitSpec with WithFakeApplication with Matchers {
   "The URL for the disposalDate Action" should {
     "be equal to /calculate-your-capital-gains/non-resident/disposal-date" in {
       val path = controllers.routes.DisposalDateController.disposalDate().url
-      path shouldEqual "/calculate-your-capital-gains/non-resident/"
+      path shouldEqual "/calculate-your-capital-gains/non-resident/disposal-date"
     }
   }
 
@@ -314,10 +314,10 @@ class RoutesSpec extends UnitSpec with WithFakeApplication with Matchers {
     }
   }
 
-  "The URL for the submitDisposalDate Action" should {
-    "be equal to /calculate-your-capital-gains/non-resident/disposal-date" in {
-      val path = controllers.routes.DisposalDateController.submitDisposalDate().url
-      path shouldEqual "/calculate-your-capital-gains/non-resident/disposal-date"
+  "The URL for the submitOutsideTaxYear Action" should {
+    "be equal to /calculate-your-capital-gains/non-resident/outside-tax-year" in {
+      val path = controllers.routes.OutsideTaxYearController.submitOutsideTaxYear().url
+      path shouldEqual "/calculate-your-capital-gains/non-resident/outside-tax-year"
     }
   }
   /* No Capital Gains Tax routes */
