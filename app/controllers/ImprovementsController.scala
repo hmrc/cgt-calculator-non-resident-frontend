@@ -99,14 +99,13 @@ trait ImprovementsController extends FrontendController with ValidActiveSession 
 
   val submitImprovements: Action[AnyContent] = ValidateSession.async { implicit request =>
 
-    def successRouteRequest(model: Option[TotalGainResultsModel]): Result = {
-
-      if (model.isEmpty) Redirect(common.DefaultRoutes.missingDataRoute)
-      else {
-        val totalGainResults: Seq[BigDecimal] = Seq(model.get.flatGain, model.get.rebasedGain, model.get.timeApportionedGain).flatten
-
-        if(totalGainResults.forall(_ > 0)) Redirect(routes.PrivateResidenceReliefController.privateResidenceRelief())
-        else Redirect(routes.CheckYourAnswersController.checkYourAnswers())
+    def successRouteRequest(totalGainResultsModel: Option[TotalGainResultsModel]): Result = {
+      totalGainResultsModel match {
+        case Some(model) =>
+          val totalGainResults: Seq[BigDecimal] = Seq(model.flatGain) ++ Seq(model.rebasedGain, model.timeApportionedGain).flatten
+          if(totalGainResults.forall(_ > 0)) Redirect(routes.PrivateResidenceReliefController.privateResidenceRelief())
+          else Redirect(routes.CheckYourAnswersController.checkYourAnswers())
+        case None => Redirect(common.DefaultRoutes.missingDataRoute)
       }
     }
 

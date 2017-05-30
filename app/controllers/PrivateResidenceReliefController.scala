@@ -57,31 +57,24 @@ trait PrivateResidenceReliefController extends FrontendController with ValidActi
       case _ => None
     }
 
-  def getRebasedAmount(implicit hc: HeaderCarrier): Future[Boolean] =
-    calcConnector.fetchAndGetFormData[RebasedValueModel](KeystoreKeys.rebasedValue).map {
-      case Some(data) if data.rebasedValueAmt.isDefined => true
-      case _ => false
-    }
-
-  def displayBetweenQuestion(disposalDate: Option[LocalDate], acquisitionDate: Option[LocalDate], hasRebasedValue: Boolean): Boolean =
+  def displayAfterQuestion(disposalDate: Option[LocalDate], acquisitionDate: Option[LocalDate]): Boolean =
     (disposalDate, acquisitionDate) match {
+      case (Some(dDate), Some(_)) if !TaxDates.dateAfterOctober(dDate) => false
       case (Some(dDate), Some(aDate)) if TaxDates.dateAfterOctober(dDate) && !TaxDates.dateAfterStart(aDate) => true
-      case (Some(dDate), None) if TaxDates.dateAfterOctober(dDate) && hasRebasedValue => true
       case _ => false
     }
 
   def displayBeforeQuestion(disposalDate: Option[LocalDate], acquisitionDate: Option[LocalDate]): Boolean =
     (disposalDate, acquisitionDate) match {
-      case (Some(dDate), Some(_)) if TaxDates.dateAfterOctober(dDate) => true
-      case (Some(_), Some(aDate)) if !TaxDates.dateAfterStart(aDate) => true
-      case _ => false
+      case (Some(dDate), Some(_)) if !TaxDates.dateAfterOctober(dDate) => false
+      case _ => true
     }
 
   val privateResidenceRelief: Action[AnyContent] = ValidateSession.async { implicit request =>
 
-    def action(disposalDate: Option[LocalDate], acquisitionDate: Option[LocalDate], hasRebasedValue: Boolean) = {
+    def action(disposalDate: Option[LocalDate], acquisitionDate: Option[LocalDate]) = {
 
-      val showBetweenQuestion = displayBetweenQuestion(disposalDate, acquisitionDate, hasRebasedValue)
+      val showBetweenQuestion = displayAfterQuestion(disposalDate, acquisitionDate)
       val showBeforeQuestion = displayBeforeQuestion(disposalDate, acquisitionDate)
       val disposalDateLess18Months = Dates.dateMinusMonths(disposalDate, 18)
 
@@ -96,15 +89,14 @@ trait PrivateResidenceReliefController extends FrontendController with ValidActi
     for {
       disposalDate <- getDisposalDate
       acquisitionDate <- getAcquisitionDate
-      hasRebasedValue <- getRebasedAmount
-      finalResult <- action(disposalDate, acquisitionDate, hasRebasedValue)
+      finalResult <- action(disposalDate, acquisitionDate)
     } yield finalResult
   }
 
   val submitPrivateResidenceRelief: Action[AnyContent] = ValidateSession.async { implicit request =>
 
-    def action(disposalDate: Option[LocalDate], acquisitionDate: Option[LocalDate], hasRebasedValue: Boolean): Future[Result] = {
-      val showBetweenQuestion = displayBetweenQuestion(disposalDate, acquisitionDate, hasRebasedValue)
+    def action(disposalDate: Option[LocalDate], acquisitionDate: Option[LocalDate]): Future[Result] = {
+      val showBetweenQuestion = displayAfterQuestion(disposalDate, acquisitionDate)
       val showBeforeQuestion = displayBeforeQuestion(disposalDate, acquisitionDate)
       val disposalDateLess18Months = Dates.dateMinusMonths(disposalDate, 18)
 
@@ -141,8 +133,7 @@ trait PrivateResidenceReliefController extends FrontendController with ValidActi
     for {
       disposalDate <- getDisposalDate
       acquisitionDate <- getAcquisitionDate
-      hasRebasedValue <- getRebasedAmount
-      finalResult <- action(disposalDate, acquisitionDate, hasRebasedValue)
+      finalResult <- action(disposalDate, acquisitionDate)
     } yield finalResult
   }
 }

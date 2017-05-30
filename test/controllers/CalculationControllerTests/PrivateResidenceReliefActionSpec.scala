@@ -142,33 +142,33 @@ class PrivateResidenceReliefActionSpec extends UnitSpec with WithFakeApplication
     }
   }
 
-  "Calling the .displayBetweenQuestion method" when {
+  "Calling the .displayAfterQuestion method" when {
 
     "the disposal date is after the 18 month period" should {
       val disposalDate = LocalDate.parse("2018-10-05")
 
       "return a true if the acquisition date is before the tax start" in {
         val acquisitionDate = LocalDate.parse("2010-05-04")
-        val result = PrivateResidenceReliefController.displayBetweenQuestion(Some(disposalDate), Some(acquisitionDate), hasRebasedValue = false)
+        val result = PrivateResidenceReliefController.displayAfterQuestion(Some(disposalDate), Some(acquisitionDate), hasRebasedValue = false)
 
         result shouldBe true
       }
 
       "return a false if the acquisition date is after the tax start" in {
         val acquisitionDate = LocalDate.parse("2016-05-04")
-        val result = PrivateResidenceReliefController.displayBetweenQuestion(Some(disposalDate), Some(acquisitionDate), hasRebasedValue = false)
+        val result = PrivateResidenceReliefController.displayAfterQuestion(Some(disposalDate), Some(acquisitionDate), hasRebasedValue = false)
 
         result shouldBe false
       }
 
       "return a true if there is no acquisition date but a rebased value is given" in {
-        val result = PrivateResidenceReliefController.displayBetweenQuestion(Some(disposalDate), None, hasRebasedValue = true)
+        val result = PrivateResidenceReliefController.displayAfterQuestion(Some(disposalDate), None, hasRebasedValue = true)
 
         result shouldBe true
       }
 
       "return a true if there is no acquisition date and no rebased value is given" in {
-        val result = PrivateResidenceReliefController.displayBetweenQuestion(Some(disposalDate), None, hasRebasedValue = false)
+        val result = PrivateResidenceReliefController.displayAfterQuestion(Some(disposalDate), None, hasRebasedValue = false)
 
         result shouldBe false
       }
@@ -179,26 +179,26 @@ class PrivateResidenceReliefActionSpec extends UnitSpec with WithFakeApplication
 
       "return a false if the acquisition date is before the tax start" in {
         val acquisitionDate = LocalDate.parse("2010-05-04")
-        val result = PrivateResidenceReliefController.displayBetweenQuestion(Some(disposalDate), Some(acquisitionDate), hasRebasedValue = false)
+        val result = PrivateResidenceReliefController.displayAfterQuestion(Some(disposalDate), Some(acquisitionDate), hasRebasedValue = false)
 
         result shouldBe false
       }
 
       "return a false if the acquisition date is after the tax start" in {
         val acquisitionDate = LocalDate.parse("2016-05-04")
-        val result = PrivateResidenceReliefController.displayBetweenQuestion(Some(disposalDate), Some(acquisitionDate), hasRebasedValue = false)
+        val result = PrivateResidenceReliefController.displayAfterQuestion(Some(disposalDate), Some(acquisitionDate), hasRebasedValue = false)
 
         result shouldBe false
       }
 
       "return a false if there is no acquisition date but a rebased value is given" in {
-        val result = PrivateResidenceReliefController.displayBetweenQuestion(Some(disposalDate), None, hasRebasedValue = true)
+        val result = PrivateResidenceReliefController.displayAfterQuestion(Some(disposalDate), None, hasRebasedValue = true)
 
         result shouldBe false
       }
 
       "return a true if there is no acquisition date and no rebased value is given" in {
-        val result = PrivateResidenceReliefController.displayBetweenQuestion(Some(disposalDate), None, hasRebasedValue = false)
+        val result = PrivateResidenceReliefController.displayAfterQuestion(Some(disposalDate), None, hasRebasedValue = false)
 
         result shouldBe false
       }
@@ -207,7 +207,7 @@ class PrivateResidenceReliefActionSpec extends UnitSpec with WithFakeApplication
     "the disposal date is not given" should {
 
       "return a false" in {
-        val result = PrivateResidenceReliefController.displayBetweenQuestion(None, None, hasRebasedValue = true)
+        val result = PrivateResidenceReliefController.displayAfterQuestion(None, None, hasRebasedValue = true)
 
         result shouldBe false
       }

@@ -160,7 +160,7 @@ trait ReportController extends FrontendController with ValidActiveSession {
         case CalculationType.rebased =>
           calculation.summaryReport(questionAnswerRows, calculationResult, taxYearModel.get, calculationType.get.calculationType,
             answers.disposalValueModel.disposalValue,
-            answers.rebasedValueModel.get.rebasedValueAmt.get,
+            answers.rebasedValueModel.get.rebasedValueAmt,
             totalCosts,
             None,
             reliefsUsed = calculationResult.prrUsed.getOrElse(BigDecimal(0)) + calculationResult.otherReliefsUsed.getOrElse(BigDecimal(0)))

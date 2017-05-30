@@ -50,9 +50,10 @@ trait CheckYourAnswersController extends FrontendController with ValidActiveSess
     case Some(_) =>
       Future.successful(controllers.routes.BroughtForwardLossesController.broughtForwardLosses().url)
     case _ =>
-      val optionSeq = Seq(totalGainResultsModel.rebasedGain, totalGainResultsModel.timeApportionedGain).flatten
-      val finalSeq = Seq(totalGainResultsModel.flatGain) ++ optionSeq
-      if (finalSeq.forall(_ > 0))
+      val totalGainResults: Seq[BigDecimal] = Seq(totalGainResultsModel.flatGain) ++
+        Seq(totalGainResultsModel.rebasedGain, totalGainResultsModel.timeApportionedGain).flatten
+
+      if (totalGainResults.forall(_ > 0))
         Future.successful(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief().url)
       else
         Future.successful(controllers.routes.ImprovementsController.improvements().url)
@@ -62,9 +63,9 @@ trait CheckYourAnswersController extends FrontendController with ValidActiveSess
   def getPRRModel(totalGainResultsModel: Option[TotalGainResultsModel])(implicit hc: HeaderCarrier): Future[Option[PrivateResidenceReliefModel]] = {
     totalGainResultsModel match {
       case Some(model) =>
-        val results: Seq[BigDecimal] = Seq(model.flatGain, model.rebasedGain, model.timeApportionedGain).flatten
+        val totalGainResults: Seq[BigDecimal] = Seq(model.flatGain) ++ Seq(model.rebasedGain, model.timeApportionedGain).flatten
 
-        if (results.forall(_ > 0)) {
+        if (totalGainResults.forall(_ > 0)) {
           calculatorConnector.fetchAndGetFormData[PrivateResidenceReliefModel](KeystoreKeys.privateResidenceRelief)
         } else Future(None)
       case _ => Future(None)
@@ -110,14 +111,16 @@ trait CheckYourAnswersController extends FrontendController with ValidActiveSess
     calculationResultsWithPRRModel match {
 
       case Some(data) =>
-        val results: Seq[GainsAfterPRRModel] = Seq(data.flatResult, data.rebasedResult, data.timeApportionedResult).flatten
+        val totalGainResults: Seq[GainsAfterPRRModel] = Seq(data.flatResult) ++
+          Seq(data.rebasedResult, data.timeApportionedResult).flatten
 
-        if (results.forall(_.taxableGain > 0)) {
+        if (totalGainResults.forall(_.taxableGain > 0)) {
           answersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers(hc)
         } else Future(None)
 
       case None =>
-        val results: Seq[BigDecimal] = Seq(totalGainResultsModel.flatGain, totalGainResultsModel.rebasedGain, totalGainResultsModel.timeApportionedGain).flatten
+        val results: Seq[BigDecimal] = Seq(totalGainResultsModel.flatGain) ++
+          Seq(totalGainResultsModel.rebasedGain, totalGainResultsModel.timeApportionedGain).flatten
 
         if (results.forall(_ > 0)) {
           answersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers(hc)
