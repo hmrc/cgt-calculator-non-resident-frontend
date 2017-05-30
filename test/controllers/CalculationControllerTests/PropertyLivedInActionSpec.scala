@@ -60,7 +60,7 @@ class PropertyLivedInActionSpec extends UnitSpec with WithFakeApplication with F
           }
   }
 
-  "Calling .propertyLivedIn from the resident DeductionsController" when {
+  "Calling .propertyLivedIn from the resident PropertyLivedInController" when {
 
     "request has a valid session and no keystore value" should {
 
