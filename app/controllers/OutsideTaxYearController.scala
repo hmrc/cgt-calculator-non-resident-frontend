@@ -25,8 +25,8 @@ object OutsideTaxYearController extends OutsideTaxYearController {
 
 class OutsideTaxYearController extends FrontendController with ValidActiveSession {
 
-  val propertyLivedIn = TODO
+  val outsideTaxYear = TODO
 
-  val submitPropertyLivedIn = TODO
+  val submitOutsideTaxYear = TODO
 
 }
