@@ -140,15 +140,17 @@ trait CheckYourAnswersController extends FrontendController with ValidActiveSess
     }
   }
 
+
   val checkYourAnswers: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     for {
       model <- answersConstructor.getNRTotalGainAnswers
       totalGainResult <- calculatorConnector.calculateTotalGain(model)
       prrModel <- getPRRModel(totalGainResult)
+      propertyLivedInModel <-  calculatorConnector.fetchAndGetFormData[PropertyLivedInModel](KeystoreKeys.propertyLivedIn)
       totalGainWithPRRResult <- calculatePRRIfApplicable(model, prrModel)
       finalAnswers <- checkAndGetFinalSectionsAnswers(totalGainResult.get, totalGainWithPRRResult)
-      answers <- Future.successful(YourAnswersConstructor.fetchYourAnswers(model, prrModel, finalAnswers))
+      answers <- Future.successful(YourAnswersConstructor.fetchYourAnswers(model, prrModel, finalAnswers, propertyLivedInModel))
       backLink <- getBackLink(totalGainResult.get, model.acquisitionDateModel, finalAnswers)
     } yield {
       Ok(calculation.checkYourAnswers(answers, backLink))
