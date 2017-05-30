@@ -29,8 +29,6 @@ object DeductionDetailsConstructor {
     acquisitionDateModel.get.plusMonths(18).isBefore(disposalDateModel.get)
   }
 
-  def propertyLivedInQuestionRow(propertyLivedInModel: model) {}
-
   def deductionDetailsRows(answers: TotalGainAnswersModel,
                            privateResidenceReliefModel: Option[PrivateResidenceReliefModel] = None): Seq[QuestionAnswerModel[Any]] = {
 

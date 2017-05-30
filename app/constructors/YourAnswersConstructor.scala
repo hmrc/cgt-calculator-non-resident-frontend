@@ -16,19 +16,27 @@
 
 package constructors
 
-import models.{PrivateResidenceReliefModel, QuestionAnswerModel, TotalGainAnswersModel, TotalPersonalDetailsCalculationModel}
+import models._
 
 object YourAnswersConstructor {
 
   def fetchYourAnswers(totalGainAnswersModel: TotalGainAnswersModel,
                        privateResidenceReliefModel: Option[PrivateResidenceReliefModel] = None,
-                       personalAndPreviousDetailsModel: Option[TotalPersonalDetailsCalculationModel] = None): Seq[QuestionAnswerModel[Any]] = {
+                       personalAndPreviousDetailsModel: Option[TotalPersonalDetailsCalculationModel] = None,
+                       propertyLivedInModel: Option[PropertyLivedInModel] = None): Seq[QuestionAnswerModel[Any]] = {
     val salesDetailsRows = SalesDetailsConstructor.salesDetailsRows(totalGainAnswersModel)
     val purchaseDetailsRows = PurchaseDetailsConstructor.getPurchaseDetailsSection(totalGainAnswersModel)
+    val propertyLivedInRow = DeductionDetailsConstructor.propertyLivedInQuestionRow(propertyLivedInModel)
     val propertyDetailsRows = PropertyDetailsConstructor.propertyDetailsRows(totalGainAnswersModel)
     val deductionDetailsRows = DeductionDetailsConstructor.deductionDetailsRows(totalGainAnswersModel, privateResidenceReliefModel)
     val personalAndPreviousDetailsRows = PersonalAndPreviousDetailsConstructor.personalAndPreviousDetailsRows(personalAndPreviousDetailsModel)
 
-    salesDetailsRows ++ purchaseDetailsRows ++ propertyDetailsRows ++ deductionDetailsRows ++ personalAndPreviousDetailsRows
+    if(propertyLivedInRow.isDefined) {
+      salesDetailsRows ++ purchaseDetailsRows ++ propertyDetailsRows ++ propertyLivedInRow ++  deductionDetailsRows ++ personalAndPreviousDetailsRows
+    }
+
+    else {
+      salesDetailsRows ++ purchaseDetailsRows ++ propertyDetailsRows ++ personalAndPreviousDetailsRows
+    }
   }
 }
