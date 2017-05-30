@@ -169,6 +169,38 @@ class DeductionDetailsConstructorSpec extends UnitSpec with WithFakeApplication 
     }
   }
 
+  "Calling .propertyLivedInQuestionRow" when {
+    "provided with no propertyLivedInModel" should {
+      "return an empty sequence" in {
+        lazy val result = DeductionDetailsConstructor.propertyLivedInQuestionRow(None)
+
+        result shouldBe Seq()
+      }
+    }
+
+    "provided with a propertyLivedInModel with a false value" should {
+      "return an empty sequence" in {
+        lazy val result = DeductionDetailsConstructor.propertyLivedInQuestionRow(Some(PropertyLivedInModel(false)))
+
+        result shouldBe Seq()
+      }
+    }
+
+    "provided with a propertyLivedInModel with a true value" should {
+      "return a sequence " which {
+        lazy val result = DeductionDetailsConstructor.propertyLivedInQuestionRow(Some(PropertyLivedInModel(true)))
+
+        "has a head of type QuestionAnswerModel[String]" in {
+          result.head shouldBe an[QuestionAnswerModel[String]]
+        }
+
+        "and a length of 1" in {
+          result.length shouldBe 1
+        }
+      }
+    }
+  }
+
   "Calling .privateResidenceReliefQuestionRow" when {
 
     "provided with no privateResidenceRelief model" should {
