@@ -31,7 +31,7 @@ object YourAnswersConstructor {
     val deductionDetailsRows = DeductionDetailsConstructor.deductionDetailsRows(totalGainAnswersModel, privateResidenceReliefModel)
     val personalAndPreviousDetailsRows = PersonalAndPreviousDetailsConstructor.personalAndPreviousDetailsRows(personalAndPreviousDetailsModel)
 
-    if(propertyLivedInRow.isDefined) {
+    if(!propertyLivedInRow.isEmpty) {
       salesDetailsRows ++ purchaseDetailsRows ++ propertyDetailsRows ++ propertyLivedInRow ++  deductionDetailsRows ++ personalAndPreviousDetailsRows
     }
 

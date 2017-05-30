@@ -69,13 +69,30 @@ class YourAnswersConstructorSpec extends UnitSpec with WithFakeApplication {
   }
 
   "fetching when supplied with a propertyLivedInModel and a PRR model" when {
-    val prrModel = PrivateResidenceReliefModel("Yes", Some(1))
-    val propertyLivedInModel = PropertyLivedInModel(true)
-    lazy val result = YourAnswersConstructor.fetchYourAnswers(totalGainModel, Some(prrModel), None, Some(propertyLivedInModel))
     "the property has been lived in" should {
+      val prrModel = PrivateResidenceReliefModel("Yes", Some(1))
+      val propertyLivedInModel = PropertyLivedInModel(true)
+      lazy val result = YourAnswersConstructor.fetchYourAnswers(totalGainModel, Some(prrModel), None, Some(propertyLivedInModel))
+
+      "have the propertyLivedIn question row" in {
+        val propertyLivedInRow = DeductionDetailsConstructor.propertyLivedInQuestionRow(Some(propertyLivedInModel))
+        result.containsSlice(propertyLivedInRow) shouldBe true
+      }
+
       "contain the answers from PRR" in {
         val deductionsSlice = DeductionDetailsConstructor.deductionDetailsRows(totalGainModel, Some(prrModel))
         result.containsSlice(deductionsSlice) shouldBe true
+      }
+    }
+
+    "the property hasn't been lived in" should {
+      val prrModel = PrivateResidenceReliefModel("Irrelevant string", Some(1))
+      val propertyLivedInModel = PropertyLivedInModel(false)
+      lazy val result = YourAnswersConstructor.fetchYourAnswers(totalGainModel, Some(prrModel), None, Some(propertyLivedInModel))
+
+      "not contain the answers from PRR" in {
+        val deductionsSlice = DeductionDetailsConstructor.deductionDetailsRows(totalGainModel, Some(prrModel))
+        result.containsSlice(deductionsSlice) shouldBe false
       }
     }
   }

@@ -44,15 +44,15 @@ object DeductionDetailsConstructor {
     sequence.flatten
   }
 
-  def propertyLivedInQuestionRow(livedIn: Option[PropertyLivedInModel]): Option[QuestionAnswerModel[String]] = {
+  def propertyLivedInQuestionRow(livedIn: Option[PropertyLivedInModel]): Seq[QuestionAnswerModel[String]] = {
     livedIn match {
-      case Some(PropertyLivedInModel(true)) => Some(QuestionAnswerModel(
+      case Some(PropertyLivedInModel(true)) => Seq(QuestionAnswerModel(
         keys.propertyLivedIn,
         "Lived in property",
         Messages("calc.propertyLivedIn.title"),
         Some(controllers.routes.PropertyLivedInController.propertyLivedIn().url)
       ))
-      case _ => None
+      case _ => Seq()
     }
   }
 
