@@ -33,7 +33,7 @@ import play.api.data.Form
 class PropertyLivedInViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper with AssertHelpers {
 
 
-  "Bought for less view" when {
+  "PropertyLivedIn view" when {
 
     "supplied with no errors" should {
       lazy val form = PropertyLivedInForm.propertyLivedInForm
