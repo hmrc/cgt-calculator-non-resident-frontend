@@ -60,11 +60,9 @@ object TotalGainRequestConstructor {
                     rebasedCostsModel: Option[RebasedCostsModel],
                     improvementsModel: ImprovementsModel,
                     acquisitionDateModel: AcquisitionDateModel): String = {
-    (rebasedValueModel, acquisitionDateModel) match {
-      case (Some(RebasedValueModel(Some(value))), AcquisitionDateModel("Yes",_,_,_))
+    rebasedValueModel match {
+      case (Some(RebasedValueModel(Some(value))))
         if !TaxDates.dateAfterStart(acquisitionDateModel.get) =>
-        s"&rebasedValue=$value${rebasedCosts(rebasedCostsModel.get)}${improvementsAfterTaxStarted(improvementsModel)}"
-      case (Some(RebasedValueModel(Some(value))), AcquisitionDateModel("No",_,_,_)) =>
         s"&rebasedValue=$value${rebasedCosts(rebasedCostsModel.get)}${improvementsAfterTaxStarted(improvementsModel)}"
       case _ => ""
     }
@@ -85,11 +83,9 @@ object TotalGainRequestConstructor {
   }
 
   def timeApportionedValues(disposalDateModel: DisposalDateModel, acquisitionDateModel: AcquisitionDateModel): String = {
-    (disposalDateModel, acquisitionDateModel) match {
-      case (DisposalDateModel(dDay, dMonth, dYear), AcquisitionDateModel("Yes", Some(aDay), Some(aMonth), Some(aYear)))
-        if !TaxDates.dateAfterStart(acquisitionDateModel.get) =>
-        s"&disposalDate=$dYear-$dMonth-$dDay&acquisitionDate=$aYear-$aMonth-$aDay"
-      case (DisposalDateModel(dDay, dMonth, dYear), _) => s"&disposalDate=$dYear-$dMonth-$dDay"
-    }
+    if (!TaxDates.dateAfterStart(acquisitionDateModel.get))
+     s"&disposalDate=${disposalDateModel.year}-${disposalDateModel.month}-${disposalDateModel.day}&" +
+       s"acquisitionDate=${acquisitionDateModel.year}-${acquisitionDateModel.month}-${acquisitionDateModel.day}"
+     else s"&disposalDate=${disposalDateModel.year}-${disposalDateModel.month}-${disposalDateModel.day}"
   }
 }

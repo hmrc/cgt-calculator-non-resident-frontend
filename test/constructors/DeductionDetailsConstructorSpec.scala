@@ -33,7 +33,7 @@ class DeductionDetailsConstructorSpec extends UnitSpec with WithFakeApplication 
     None,
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
-    AcquisitionDateModel("No", None, None, None),
+    AcquisitionDateModel(1, 1, 2009),
     None,
     None,
     ImprovementsModel("No", None, None),
@@ -50,7 +50,7 @@ class DeductionDetailsConstructorSpec extends UnitSpec with WithFakeApplication 
     None,
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
-    AcquisitionDateModel("No", None, None, None),
+    AcquisitionDateModel(1, 1, 2009),
     None,
     None,
     ImprovementsModel("No", None, None),
@@ -67,7 +67,7 @@ class DeductionDetailsConstructorSpec extends UnitSpec with WithFakeApplication 
     None,
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
-    AcquisitionDateModel("No", None, None, None),
+    AcquisitionDateModel(1, 1, 2016),
     Some(RebasedValueModel(Some(1))),
     Some(RebasedCostsModel("No", None)),
     ImprovementsModel("No", None, None),
@@ -84,7 +84,7 @@ class DeductionDetailsConstructorSpec extends UnitSpec with WithFakeApplication 
     None,
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
-    AcquisitionDateModel("Yes", Some(10), Some(4), Some(2015)),
+    AcquisitionDateModel(10, 4, 2015),
     None,
     None,
     ImprovementsModel("No", None, None),
@@ -101,7 +101,7 @@ class DeductionDetailsConstructorSpec extends UnitSpec with WithFakeApplication 
     None,
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
-    AcquisitionDateModel("Yes", Some(10), Some(2), Some(2015)),
+    AcquisitionDateModel(10, 2, 2015),
     None,
     None,
     ImprovementsModel("No", None, None),
@@ -118,7 +118,7 @@ class DeductionDetailsConstructorSpec extends UnitSpec with WithFakeApplication 
     None,
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
-    AcquisitionDateModel("Yes", Some(10), Some(2), Some(2016)),
+    AcquisitionDateModel(10, 2, 2016),
     None,
     None,
     ImprovementsModel("No", None, None),
@@ -135,7 +135,7 @@ class DeductionDetailsConstructorSpec extends UnitSpec with WithFakeApplication 
     None,
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
-    AcquisitionDateModel("Yes", Some(10), Some(2), Some(1990)),
+    AcquisitionDateModel(10, 2, 1990),
     None,
     None,
     ImprovementsModel("No", None, None),
@@ -221,15 +221,6 @@ class DeductionDetailsConstructorSpec extends UnitSpec with WithFakeApplication 
 
     "provided with an answer of 'No' to prr" should {
       lazy val result = DeductionDetailsConstructor.privateResidenceReliefDaysClaimedRow(Some(PrivateResidenceReliefModel("No", None, None)), validDates)
-
-      "return a None" in {
-        result shouldBe None
-      }
-    }
-
-    "provided with no acquisition date" should {
-      lazy val result = DeductionDetailsConstructor.privateResidenceReliefDaysClaimedRow(
-        Some(PrivateResidenceReliefModel("Yes", Some(4), None)), yesOtherReliefs)
 
       "return a None" in {
         result shouldBe None

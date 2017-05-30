@@ -3,7 +3,7 @@
 @import views.html.helpers._
 @import constructors.ImprovementsConstructor
 
-@(improvementsForm: Form[ImprovementsModel], improvementsOptions: Boolean, backUrl: String)(implicit request: Request[_], messages: Messages)
+@(improvementsForm: Form[ImprovementsModel], improvementsOptions: Boolean, backUrl: String, ownerBeforeLegislationStart: Boolean)(implicit request: Request[_], messages: Messages)
 
 @exampleContent = {
     <p>@Messages("calc.improvements.exampleOne")
@@ -14,26 +14,29 @@
     <p id="jointOwner">@Messages("calc.improvements.jointOwnership")</p>
 }
 
-@main_template(Messages("calc.improvements.question")) {
+@defining(if(ownerBeforeLegislationStart) { Messages("calc.improvements.ownerBeforeLegislationStartQuestion") }
+          else { Messages("calc.improvements.question") }) { question =>
 
-    <a id="back-link" class="back-link" href="@backUrl">@Messages("calc.base.back")</a>
+    @main_template(question) {
 
-    @errorSummary(improvementsForm, "improvements", "improvementsAmt")
+        <a id="back-link" class="back-link" href="@backUrl">@Messages("calc.base.back")</a>
 
-    <h1 class="heading-xlarge">@Messages("calc.improvements.question")</h1>
+        @errorSummary(improvementsForm, "improvements", "improvementsAmt")
 
-    <span id="input-hint" class="form-hint">
-        <p>@Messages("calc.improvements.helpOne")
-            @Messages("calc.improvements.helpTwo")</p>
-    </span>
+        <h1 class="heading-xlarge">@question</h1>
 
-    @expandableHelpTextHelper(Messages("calc.improvements.exampleTitle"), exampleContent)
+        <span id="input-hint" class="form-hint">
+            <p>@Messages("calc.improvements.helpOne")
+                @Messages("calc.improvements.helpTwo")</p>
+        </span>
 
-    @form(action = controllers.routes.ImprovementsController.submitImprovements) {
+        @expandableHelpTextHelper(Messages("calc.improvements.exampleTitle"), exampleContent)
 
-        @ImprovementsConstructor.generateImprovements(improvementsForm, improvementsOptions, jointOwnershipText)
+        @form(action = controllers.routes.ImprovementsController.submitImprovements) {
 
-        <button class="button" type="submit" id="continue-button">@Messages("calc.base.continue")</button>
+            @ImprovementsConstructor.generateImprovements(improvementsForm, improvementsOptions, jointOwnershipText, question)
+
+            <button class="button" type="submit" id="continue-button">@Messages("calc.base.continue")</button>
+        }
     }
-
 }

@@ -59,7 +59,7 @@ class TaxableGainCalculationSpec extends UnitSpec with WithFakeApplication with 
     Some(BoughtForLessModel(false)),
     AcquisitionValueModel(1250000),
     AcquisitionCostsModel(20000),
-    AcquisitionDateModel("Yes", Some(10), Some(10), Some(2001)),
+    AcquisitionDateModel(10, 10, 2001),
     Some(RebasedValueModel(Some(950000))),
     Some(RebasedCostsModel("No", None)),
     ImprovementsModel("No", None),
@@ -186,14 +186,12 @@ class TaxableGainCalculationSpec extends UnitSpec with WithFakeApplication with 
     }
   }
 
-  "Calling .getMaxAEA" when {
+  "Calling .getMaxAEA" should {
 
-    "CustomerType is individual" should {
-      val result = TaxableGainCalculation.getMaxAEA(Some(taxYearModel), mockCalcConnector)
+    val result = TaxableGainCalculation.getMaxAEA(Some(taxYearModel), mockCalcConnector)
 
-      "return the full AEA of 11000" in {
-        await(result) shouldBe Some(BigDecimal(11000))
-      }
+    "return the full AEA of 11000" in {
+      await(result) shouldBe Some(BigDecimal(11000))
     }
   }
 

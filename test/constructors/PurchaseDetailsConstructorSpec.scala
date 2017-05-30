@@ -26,7 +26,7 @@ import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication with AssertHelpers {
 
   val totalGainGiven = TotalGainAnswersModel(
-    DisposalDateModel(10, 10, 2010),
+    DisposalDateModel(10, 10, 2016),
     SoldOrGivenAwayModel(false),
     None,
     DisposalValueModel(150000),
@@ -35,9 +35,9 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
     None,
     AcquisitionValueModel(300000),
     AcquisitionCostsModel(2500),
-    AcquisitionDateModel("No", None, None, None),
-    Some(RebasedValueModel(None)),
-    None,
+    AcquisitionDateModel(1, 4, 2013),
+    Some(RebasedValueModel(Some(1000))),
+    Some(RebasedCostsModel("Yes", Some(150))),
     ImprovementsModel("No", None, None),
     None
   )
@@ -52,7 +52,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
     None,
     AcquisitionValueModel(300000),
     AcquisitionCostsModel(2500),
-    AcquisitionDateModel("No", None, None, None),
+    AcquisitionDateModel(1, 4, 2013),
     None,
     None,
     ImprovementsModel("No", None, None),
@@ -69,7 +69,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
     Some(BoughtForLessModel(false)),
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
-    AcquisitionDateModel("Yes", Some(1), Some(4), Some(2013)),
+    AcquisitionDateModel(1, 4, 2013),
     Some(RebasedValueModel(Some(7500))),
     Some(RebasedCostsModel("Yes", Some(150))),
     ImprovementsModel("Yes", Some(50), Some(25)),
@@ -86,7 +86,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
     Some(BoughtForLessModel(true)),
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
-    AcquisitionDateModel("Yes", Some(1), Some(4), Some(2013)),
+    AcquisitionDateModel(1, 4, 2013),
     Some(RebasedValueModel(Some(7500))),
     Some(RebasedCostsModel("Yes", Some(150))),
     ImprovementsModel("Yes", Some(50), Some(25)),
@@ -100,12 +100,8 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
     "using the totalGainForLess model" should {
       lazy val result = PurchaseDetailsConstructor.getPurchaseDetailsSection(totalGainForLess)
 
-      "will return a Sequence with size 9" in {
-        result.size shouldBe 9
-      }
-
-      "return a Sequence that will contain an acquisitionDateAnswer data item" in {
-        result.contains(PurchaseDetailsConstructor.acquisitionDateAnswerRow(totalGainForLess).get) shouldBe true
+      "will return a Sequence with size 8" in {
+        result.size shouldBe 8
       }
 
       "return a Sequence that will contain an acquisitionDate data item" in {
@@ -129,27 +125,23 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
       }
 
       "return a Sequence that will contain a rebasedValue data item" in {
-        result.contains(PurchaseDetailsConstructor.rebasedValueRow(totalGainForLess.rebasedValueModel, true).get) shouldBe true
+        result.contains(PurchaseDetailsConstructor.rebasedValueRow(totalGainForLess.rebasedValueModel, useRebasedValues = true).get) shouldBe true
       }
 
       "return a Sequence that will contain a rebasedCostsQuestion data item" in {
-        result.contains(PurchaseDetailsConstructor.rebasedCostsQuestionRow(totalGainForLess.rebasedCostsModel, true).get) shouldBe true
+        result.contains(PurchaseDetailsConstructor.rebasedCostsQuestionRow(totalGainForLess.rebasedCostsModel, useRebasedValues = true).get) shouldBe true
       }
 
       "return a Sequence that will contain a rebasedCosts data item" in {
-        result.contains(PurchaseDetailsConstructor.rebasedCostsRow(totalGainForLess.rebasedCostsModel, true).get) shouldBe true
+        result.contains(PurchaseDetailsConstructor.rebasedCostsRow(totalGainForLess.rebasedCostsModel, useRebasedValues = true).get) shouldBe true
       }
     }
 
     "using the totalGainGiven model" should {
       lazy val result = PurchaseDetailsConstructor.getPurchaseDetailsSection(totalGainGiven)
 
-      "will return a Sequence with size 4" in {
-        result.size shouldBe 4
-      }
-
-      "return a Sequence that will contain an acquisitionDateAnswer data item" in {
-        result.contains(PurchaseDetailsConstructor.acquisitionDateAnswerRow(totalGainGiven).get) shouldBe true
+      "will return a Sequence with size 3" in {
+        result.size shouldBe 7
       }
 
       "return a Sequence that will contain an acquisitionCost data item" in {
@@ -163,49 +155,26 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
       "return a Sequence that will contain a howBecameOwner data item" in {
         result.contains(PurchaseDetailsConstructor.howBecameOwnerRow(totalGainGiven).get) shouldBe true
       }
-    }
-  }
 
-  "Calling .acquisitionDateAnswerRow" when {
-
-    "no acquisition date is given" should {
-      lazy val result = PurchaseDetailsConstructor.acquisitionDateAnswerRow(totalGainGiven).get
-
-      "have an id of nr:acquisitionDate-question" in {
-        result.id shouldBe "nr:acquisitionDate-question"
+      "return a Sequence that will contain an acquisitionDate data item" in {
+        result.contains(PurchaseDetailsConstructor.acquisitionDateRow(totalGainGiven).get) shouldBe true
       }
 
-      "have the data for 'No'" in {
-        result.data shouldBe "No"
+      "return a Sequence that will contain a rebasedValue data item" in {
+        result.contains(PurchaseDetailsConstructor.rebasedValueRow(totalGainGiven.rebasedValueModel, useRebasedValues = true).get) shouldBe true
       }
 
-      "have the question for acquisition date" in {
-        result.question shouldBe messages.AcquisitionDate.question
+      "return a Sequence that will contain a rebasedCostsQuestion data item" in {
+        result.contains(PurchaseDetailsConstructor.rebasedCostsQuestionRow(totalGainGiven.rebasedCostsModel, useRebasedValues = true).get) shouldBe true
       }
 
-      "have a link to the acquisition date page" in {
-        result.link shouldBe Some(controllers.routes.AcquisitionDateController.acquisitionDate().url)
-      }
-    }
-
-    "an acquisition date is given" should {
-      lazy val result = PurchaseDetailsConstructor.acquisitionDateAnswerRow(totalGainForLess).get
-
-      "have the data for 'Yes'" in {
-        result.data shouldBe "Yes"
+      "return a Sequence that will contain a rebasedCosts data item" in {
+        result.contains(PurchaseDetailsConstructor.rebasedCostsRow(totalGainGiven.rebasedCostsModel, useRebasedValues = true).get) shouldBe true
       }
     }
   }
 
   "Calling .acquisitionDateRow" when {
-
-    "no acquisition date is given" should {
-      lazy val result = PurchaseDetailsConstructor.acquisitionDateRow(totalGainGiven)
-
-      "return a None" in {
-        result shouldBe None
-      }
-    }
 
     "an acquisition date is given" should {
       lazy val result = PurchaseDetailsConstructor.acquisitionDateRow(totalGainForLess)
@@ -417,7 +386,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
   "Calling .rebasedValueRow" when {
 
     "a value is applicable" should {
-      lazy val result = PurchaseDetailsConstructor.rebasedValueRow(Some(RebasedValueModel(Some(10))), true)
+      lazy val result = PurchaseDetailsConstructor.rebasedValueRow(Some(RebasedValueModel(Some(10))), useRebasedValues = true)
 
       "return Some value" in {
         result.isDefined shouldBe true
@@ -442,7 +411,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
     }
 
     "a value is provided but not applicable" should {
-      lazy val result = PurchaseDetailsConstructor.rebasedValueRow(Some(RebasedValueModel(Some(10))), false)
+      lazy val result = PurchaseDetailsConstructor.rebasedValueRow(Some(RebasedValueModel(Some(10))), useRebasedValues = false)
 
       "return a None" in {
         result shouldBe None
@@ -450,7 +419,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
     }
 
     "a value is not provided or applicable" should {
-      lazy val result = PurchaseDetailsConstructor.rebasedValueRow(Some(RebasedValueModel(None)), false)
+      lazy val result = PurchaseDetailsConstructor.rebasedValueRow(Some(RebasedValueModel(None)), useRebasedValues = false)
 
       "return a None" in {
         result shouldBe None
@@ -458,7 +427,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
     }
 
     "a value is not found or applicable" should {
-      lazy val result = PurchaseDetailsConstructor.rebasedValueRow(None, false)
+      lazy val result = PurchaseDetailsConstructor.rebasedValueRow(None, useRebasedValues = false)
 
       "return a None" in {
         result shouldBe None
@@ -469,7 +438,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
   "Calling .rebasedCostsQuestionRow" when {
 
     "a value is applicable" should {
-      lazy val result = PurchaseDetailsConstructor.rebasedCostsQuestionRow(Some(RebasedCostsModel("Yes", None)), true)
+      lazy val result = PurchaseDetailsConstructor.rebasedCostsQuestionRow(Some(RebasedCostsModel("Yes", None)), useRebasedValues = true)
 
       "return Some value" in {
         result.isDefined shouldBe true
@@ -494,7 +463,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
     }
 
     "a value is not applicable" should {
-      lazy val result = PurchaseDetailsConstructor.rebasedCostsQuestionRow(Some(RebasedCostsModel("No", None)), false)
+      lazy val result = PurchaseDetailsConstructor.rebasedCostsQuestionRow(Some(RebasedCostsModel("No", None)), useRebasedValues = false)
 
       "should return a None" in {
         result shouldBe None
@@ -502,7 +471,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
     }
 
     "a value is not found" should {
-      lazy val result = PurchaseDetailsConstructor.rebasedCostsQuestionRow(None, false)
+      lazy val result = PurchaseDetailsConstructor.rebasedCostsQuestionRow(None, useRebasedValues = false)
 
       "should return a None" in {
         result shouldBe None
@@ -513,7 +482,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
   "Calling .rebasedCostsRow" when {
 
     "an applicable value is provided" should {
-      lazy val result = PurchaseDetailsConstructor.rebasedCostsRow(Some(RebasedCostsModel("Yes", Some(1))), true)
+      lazy val result = PurchaseDetailsConstructor.rebasedCostsRow(Some(RebasedCostsModel("Yes", Some(1))), useRebasedValues = true)
 
       "return Some value" in {
         result.isDefined shouldBe true
@@ -538,7 +507,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
     }
 
     "an applicable value is not provided" should {
-      lazy val result = PurchaseDetailsConstructor.rebasedCostsRow(Some(RebasedCostsModel("No", None)), true)
+      lazy val result = PurchaseDetailsConstructor.rebasedCostsRow(Some(RebasedCostsModel("No", None)), useRebasedValues = true)
 
       "return a None" in {
         result shouldBe None
@@ -546,7 +515,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
     }
 
     "an applicable value is not found" should {
-      lazy val result = PurchaseDetailsConstructor.rebasedCostsRow(None, true)
+      lazy val result = PurchaseDetailsConstructor.rebasedCostsRow(None, useRebasedValues = true)
 
       "return a None" in {
         result shouldBe None
@@ -554,7 +523,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
     }
 
     "no applicable value is required" should {
-      lazy val result = PurchaseDetailsConstructor.rebasedCostsRow(Some(RebasedCostsModel("Yes", Some(1))), false)
+      lazy val result = PurchaseDetailsConstructor.rebasedCostsRow(Some(RebasedCostsModel("Yes", Some(1))), useRebasedValues = false)
 
       "return a None" in {
         result shouldBe None

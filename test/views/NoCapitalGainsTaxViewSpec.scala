@@ -26,9 +26,7 @@ import views.html.calculation.noCapitalGainsTax
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 
-class NoCapitalGainTaxViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
-
-
+class NoCapitalGainsTaxViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
   "No Capital Gains Tax view" when {
 
@@ -59,10 +57,6 @@ class NoCapitalGainTaxViewSpec extends UnitSpec with WithFakeApplication with Mo
       "have a heading" which {
         lazy val heading = document.body().select("h1")
 
-        "has a class of heading-xlarge" in {
-          heading.attr("class") shouldBe "heading-xlarge"
-        }
-
         s"has the text '${messages.NoCapitalGainsTax.title}'" in {
           heading.text shouldBe messages.NoCapitalGainsTax.title
         }
@@ -79,52 +73,36 @@ class NoCapitalGainTaxViewSpec extends UnitSpec with WithFakeApplication with Mo
       "contain a span within the second paragraph" which {
         lazy val span = document.select("div#content p span")
 
-        "has a class of 'no-wrap'" in {
-          span.attr("class") shouldBe "no-wrap"
-        }
-
         "contains a date in a span" which {
           lazy val dateSpan = span.select("span > span")
-
-          "has a class of 'bold-small'" in {
-            dateSpan.attr("class") shouldBe "bold-small"
-          }
 
           "has the date 05-04-2014" in {
             dateSpan.text() shouldBe "5 April 2014"
           }
         }
+      }
 
-        "contains a link" which {
-          lazy val changeLink = span.select("a")
+      "contains a change link" which {
+        lazy val changeLink = document.select("article div a").first()
 
-          "has an href to disposal-date page" in {
-            changeLink.attr("href") shouldBe controllers.routes.DisposalDateController.disposalDate().url
-          }
+        "has an href to disposal-date page" in {
+          changeLink.attr("href") shouldBe controllers.routes.DisposalDateController.disposalDate().url
+        }
 
-          s"has the text ${messages.NoCapitalGainsTax.change}" in {
-            changeLink.text() shouldBe messages.NoCapitalGainsTax.change
-          }
+        s"has the text ${messages.NoCapitalGainsTax.changeLink}" in {
+          changeLink.text() shouldBe messages.NoCapitalGainsTax.changeLink
         }
       }
 
-      "contains a sidebar with a link" which {
-        lazy val sidebar = document.select("aside.sidebar ul > li > a")
+      "contains a return link" which {
+        lazy val returnLink = document.select("article div a").get(1)
 
-        "has a target of _blank" in {
-          sidebar.attr("target") shouldBe "_blank"
+        "has an href to disposal-date page" in {
+          returnLink.attr("href") shouldBe "http://www.gov.uk"
         }
 
-        "has a rel of external" in {
-          sidebar.attr("rel") shouldBe "external"
-        }
-
-        "has a link to https://www.gov.uk/guidance/capital-gains-tax-for-non-residents-uk-residential-property" in {
-          sidebar.attr("href") shouldBe "https://www.gov.uk/guidance/capital-gains-tax-for-non-residents-uk-residential-property"
-        }
-
-        "has the correct link text" in {
-          sidebar.text() shouldBe s"${messages.NoCapitalGainsTax.link} ${messages.externalLink}"
+        s"has the text ${messages.NoCapitalGainsTax.returnLink}" in {
+          returnLink.text() shouldBe messages.NoCapitalGainsTax.returnLink
         }
       }
     }

@@ -18,7 +18,6 @@ package constructors
 
 import common.{TaxDates, YesNoKeys}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import common.nonresident.CustomerTypeKeys
 import connectors.CalculatorConnector
 import models._
 import uk.gov.hmrc.play.http.HeaderCarrier
@@ -61,7 +60,7 @@ trait AnswersConstructor {
                          howBecameOwnerModel: Option[HowBecameOwnerModel],
                          boughtForLessModel: Option[BoughtForLessModel]): Future[AcquisitionValueModel] =
       (acquisitionDateModel, howBecameOwnerModel, boughtForLessModel) match {
-        case (AcquisitionDateModel("Yes",_,_,_),_, _) if TaxDates.dateBeforeLegislationStart(acquisitionDateModel.get) =>
+        case _ if TaxDates.dateBeforeLegislationStart(acquisitionDateModel.get) =>
           calculatorConnector.fetchAndGetFormData[WorthBeforeLegislationStartModel](KeystoreKeys.worthBeforeLegislationStart).map(data =>
             AcquisitionValueModel(data.get.worthBeforeLegislationStart)
           )

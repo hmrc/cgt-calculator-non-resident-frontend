@@ -32,9 +32,10 @@ class ImprovementsViewSpec extends UnitSpec with WithFakeApplication with FakeRe
 
   "Improvements view" should {
 
-    "supplied with no errors and improvementsOptions = true" should {
+    "supplied with no errors, improvementsOptions = true and is owner after legislation start" should {
 
-      lazy val view = improvements(improvementsForm(true), false, "back-link")
+      lazy val view = improvements(improvementsForm(true), improvementsOptions = false,
+        "back-link", ownerBeforeLegislationStart = false)
       lazy val document = Jsoup.parse(view.body)
 
       "return some HTML that" should {
@@ -185,7 +186,7 @@ class ImprovementsViewSpec extends UnitSpec with WithFakeApplication with FakeRe
 
     "supplied with no errors and improvementsOptions = false" should {
 
-      lazy val view = improvements(improvementsForm(true), true, "back-link")
+      lazy val view = improvements(improvementsForm(true), improvementsOptions = true, "back-link", ownerBeforeLegislationStart = false)
       lazy val document = Jsoup.parse(view.body)
 
       "return some HTML that" should {
@@ -214,9 +215,38 @@ class ImprovementsViewSpec extends UnitSpec with WithFakeApplication with FakeRe
       }
     }
 
+    "supplied with no errors and is owner before legislation start" should {
+
+      lazy val view = improvements(improvementsForm(true), improvementsOptions = true, "back-link", ownerBeforeLegislationStart = true)
+      lazy val document = Jsoup.parse(view.body)
+
+      "return some HTML that" should {
+
+        "have that content" which {
+
+          s"has the title of ${messages.Improvements.ownerBeforeLegislationStartQuestion}" in {
+            document.title shouldBe messages.Improvements.ownerBeforeLegislationStartQuestion
+          }
+
+          s"has the heading of ${messages.Improvements.ownerBeforeLegislationStartQuestion}" in {
+            document.body().getElementsByTag("h1").text shouldBe messages.Improvements.ownerBeforeLegislationStartQuestion
+          }
+
+          "have a legend that" should {
+
+            lazy val legend = document.select("legend")
+
+            s"have the text ${messages.Improvements.ownerBeforeLegislationStartQuestion}" in {
+              legend.text shouldEqual messages.Improvements.ownerBeforeLegislationStartQuestion
+            }
+          }
+        }
+      }
+    }
+
     "supplied with errors" should {
       lazy val form = improvementsForm(true).bind(Map("improvements" -> "testData"))
-      lazy val view = improvements(form, true, "back-link")
+      lazy val view = improvements(form, improvementsOptions = true, "back-link", ownerBeforeLegislationStart = false)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {
