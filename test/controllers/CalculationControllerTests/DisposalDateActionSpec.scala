@@ -21,7 +21,7 @@ import connectors.CalculatorConnector
 import controllers.DisposalDateController
 import controllers.helpers.FakeRequestHelper
 import controllers.routes
-import models.DisposalDateModel
+import models.{DisposalDateModel, TaxYearModel}
 import org.jsoup._
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
@@ -37,8 +37,7 @@ class DisposalDateActionSpec extends UnitSpec with WithFakeApplication with Mock
 
   implicit val hc = new HeaderCarrier()
 
-  def setupTarget(getData: Option[DisposalDateModel]
-                 ): DisposalDateController = {
+  def setupTarget(getData: Option[DisposalDateModel], taxYearModel: Option[TaxYearModel] = None): DisposalDateController = {
 
     val mockCalcConnector = mock[CalculatorConnector]
 
@@ -47,6 +46,9 @@ class DisposalDateActionSpec extends UnitSpec with WithFakeApplication with Mock
 
     when(mockCalcConnector.saveFormData[DisposalDateModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(mock[CacheMap]))
+
+    when(mockCalcConnector.getTaxYear(ArgumentMatchers.any())(ArgumentMatchers.any()))
+      .thenReturn(Future.successful(taxYearModel))
 
     new DisposalDateController {
       override val calcConnector: CalculatorConnector = mockCalcConnector
@@ -106,7 +108,7 @@ class DisposalDateActionSpec extends UnitSpec with WithFakeApplication with Mock
 
     "submitting a valid date 31/01/2016" should {
 
-      lazy val target = setupTarget(None)
+      lazy val target = setupTarget(None, Some(TaxYearModel("2015/16", true, "2015/16")))
       lazy val request = fakeRequestToPOSTWithSession(("disposalDateDay", "31"), ("disposalDateMonth", "1"), ("disposalDateYear", "2016"))
       lazy val result = target.submitDisposalDate(request)
 
@@ -121,7 +123,7 @@ class DisposalDateActionSpec extends UnitSpec with WithFakeApplication with Mock
 
     "submitting a valid leap year date 29/02/2016" should {
 
-      lazy val target = setupTarget(None)
+      lazy val target = setupTarget(None, Some(TaxYearModel("2015/16", true, "2015/16")))
       lazy val request = fakeRequestToPOSTWithSession(("disposalDateDay", "29"), ("disposalDateMonth", "2"), ("disposalDateYear", "2016"))
       lazy val result = target.submitDisposalDate(request)
 
@@ -136,7 +138,7 @@ class DisposalDateActionSpec extends UnitSpec with WithFakeApplication with Mock
 
     "submitting a valid date of 20/02/2014 before the tax start date" should {
 
-      lazy val target = setupTarget(None)
+      lazy val target = setupTarget(None, Some(TaxYearModel("2014/15", false, "2015/16")))
       lazy val request = fakeRequestToPOSTWithSession(("disposalDateDay", "20"), ("disposalDateMonth", "2"), ("disposalDateYear", "2014"))
       lazy val result = target.submitDisposalDate(request)
 
@@ -146,6 +148,20 @@ class DisposalDateActionSpec extends UnitSpec with WithFakeApplication with Mock
 
       s"redirect to ${routes.NoCapitalGainsTaxController.noCapitalGainsTax()}" in {
         redirectLocation(result) shouldBe Some(s"${routes.NoCapitalGainsTaxController.noCapitalGainsTax()}")
+      }
+    }
+
+    "submitting a valid date in the future" should {
+      lazy val target = setupTarget(None, Some(TaxYearModel("2020/21", false, "2017/18")))
+      lazy val request = fakeRequestToPOSTWithSession(("disposalDateDay", "20"), ("disposalDateMonth", "2"), ("disposalDateYear", "2021"))
+      lazy val result = target.submitDisposalDate(request)
+
+      "return a 303" in {
+        status(result) shouldBe 303
+      }
+
+      s"redirect to ${routes.OutsideTaxYearController.outsideTaxYear()}" in {
+        redirectLocation(result) shouldBe Some(s"${routes.OutsideTaxYearController.outsideTaxYear()}")
       }
     }
   }
