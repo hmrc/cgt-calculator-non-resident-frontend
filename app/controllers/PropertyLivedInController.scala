@@ -16,17 +16,54 @@
 
 package controllers
 
+import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
+import forms.PropertyLivedInForm._
+import models.PropertyLivedInModel
+import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
+import play.api.data.Form
+import common.KeystoreKeys.{NonResidentKeys => keystoreKeys}
+
+import scala.concurrent.Future
 
 object PropertyLivedInController extends PropertyLivedInController {
-
+  val calcConnector = CalculatorConnector
 }
 
-class PropertyLivedInController extends FrontendController with ValidActiveSession {
+trait PropertyLivedInController extends FrontendController with ValidActiveSession {
 
-  val propertyLivedIn = TODO
+  val calcConnector: CalculatorConnector
 
-  val submitPropertyLivedIn = TODO
+  val propertyLivedIn: Action[AnyContent] = ValidateSession.async { implicit request =>
 
+    calcConnector.fetchAndGetFormData[PropertyLivedInModel](keystoreKeys.propertyLivedIn).map {
+      case Some(data) => Ok(views.html.calculation.propertyLivedIn(propertyLivedInForm.fill(data)))
+      case _ => Ok(views.html.calculation.propertyLivedIn(propertyLivedInForm))
+    }
+  }
+
+  val submitPropertyLivedIn: Action[AnyContent] = ValidateSession.async { implicit request =>
+
+    def errorAction(errors: Form[PropertyLivedInModel]) = Future.successful(BadRequest(views.html.calculation.propertyLivedIn(
+      errors
+    )))
+
+    def routeRequest(model: PropertyLivedInModel) = {
+      if (model.propertyLivedIn) Future.successful(Redirect(routes.PrivateResidenceReliefController.privateResidenceRelief()))
+      else Future.successful(Redirect(routes.CurrentIncomeController.currentIncome()))
+    }
+
+    def successAction(model: PropertyLivedInModel) = {
+      for {
+        save <- calcConnector.saveFormData(keystoreKeys.propertyLivedIn, model)
+        route <- routeRequest(model)
+      } yield route
+    }
+
+    propertyLivedInForm.bindFromRequest().fold(errorAction, successAction)
+  }
 }
+
