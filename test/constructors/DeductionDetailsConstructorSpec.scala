@@ -160,7 +160,7 @@ class DeductionDetailsConstructorSpec extends UnitSpec with WithFakeApplication 
       }
 
       "return a sequence with the days claimed answer" in {
-        result.contains(DeductionDetailsConstructor.privateResidenceReliefDaysClaimedRow(Some(yesPRRModel), validDates).get)
+        result.contains(DeductionDetailsConstructor.privateResidenceReliefDaysClaimedBeforeRow(Some(yesPRRModel), validDates).get)
       }
 
       "return a sequence with the days claimed after answer" in {
@@ -209,10 +209,10 @@ class DeductionDetailsConstructorSpec extends UnitSpec with WithFakeApplication 
     }
   }
 
-  "Calling .privateResidenceReliefDaysClaimedRow" when {
+  "Calling .privateResidenceReliefDaysClaimedBeforeRow" when {
 
     "provided with no privateResidenceReliefModel" should {
-      lazy val result = DeductionDetailsConstructor.privateResidenceReliefDaysClaimedRow(None, validDates)
+      lazy val result = DeductionDetailsConstructor.privateResidenceReliefDaysClaimedBeforeRow(None, validDates)
 
       "return a None" in {
         result shouldBe None
@@ -220,7 +220,7 @@ class DeductionDetailsConstructorSpec extends UnitSpec with WithFakeApplication 
     }
 
     "provided with an answer of 'No' to prr" should {
-      lazy val result = DeductionDetailsConstructor.privateResidenceReliefDaysClaimedRow(Some(PrivateResidenceReliefModel("No", None, None)), validDates)
+      lazy val result = DeductionDetailsConstructor.privateResidenceReliefDaysClaimedBeforeRow(Some(PrivateResidenceReliefModel("No", None, None)), validDates)
 
       "return a None" in {
         result shouldBe None
@@ -228,7 +228,7 @@ class DeductionDetailsConstructorSpec extends UnitSpec with WithFakeApplication 
     }
 
     "provided with an an acquisition date and disposal date within 18 months of each other" should {
-      lazy val result = DeductionDetailsConstructor.privateResidenceReliefDaysClaimedRow(
+      lazy val result = DeductionDetailsConstructor.privateResidenceReliefDaysClaimedBeforeRow(
         Some(PrivateResidenceReliefModel("Yes", Some(4), None)), within18Months)
 
       "return a None" in {
@@ -237,7 +237,7 @@ class DeductionDetailsConstructorSpec extends UnitSpec with WithFakeApplication 
     }
 
     "provided with a valid value and conditions to use it" should {
-      lazy val result = DeductionDetailsConstructor.privateResidenceReliefDaysClaimedRow(
+      lazy val result = DeductionDetailsConstructor.privateResidenceReliefDaysClaimedBeforeRow(
         Some(PrivateResidenceReliefModel("Yes", Some(4), None)), validDates)
 
       "return some value" in {
