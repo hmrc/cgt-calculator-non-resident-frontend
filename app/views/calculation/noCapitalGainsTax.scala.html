@@ -8,18 +8,7 @@
     @Dates.datePageFormatNoZero.format(Dates.constructDate(data.day, data.month, data.year))
 }
 
-@sidebar = {
-    <ul>
-        <li>
-            <a href="https://www.gov.uk/guidance/capital-gains-tax-for-non-residents-uk-residential-property" target="_blank"
-               rel="external">@Messages("nocgt.sidebar.linkone")
-                <span>@Messages("calc.base.externalLink")</span>
-            </a>
-        </li>
-    </ul>
-}
-
-@main_template(Messages("nocgt.invaliddate.title"), sidebarLinks = Some(sidebar)) {
+@main_template(Messages("nocgt.invaliddate.title")) {
 
     <a id="back-link" class="back-link" href="@controllers.routes.DisposalDateController.disposalDate">Back</a>
 
