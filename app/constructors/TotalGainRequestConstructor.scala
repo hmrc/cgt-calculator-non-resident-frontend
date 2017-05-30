@@ -84,10 +84,10 @@ object TotalGainRequestConstructor {
   }
 
   def disposalDate(disposalDateModel: DisposalDateModel): String = {
-    s"&disposalDate=${disposalDateModel.year}-${disposalDateModel.month}-${disposalDateModel.day}&"
+    s"&disposalDate=${disposalDateModel.year}-${disposalDateModel.month}-${disposalDateModel.day}"
   }
 
   def acquisitionDate(acquisitionDateModel: AcquisitionDateModel): String = {
-    s"acquisitionDate=${acquisitionDateModel.year}-${acquisitionDateModel.month}-${acquisitionDateModel.day}"
+    s"&acquisitionDate=${acquisitionDateModel.year}-${acquisitionDateModel.month}-${acquisitionDateModel.day}"
   }
 }

@@ -53,7 +53,7 @@ trait CheckYourAnswersController extends FrontendController with ValidActiveSess
       val totalGainResults: Seq[BigDecimal] = Seq(totalGainResultsModel.flatGain) ++
         Seq(totalGainResultsModel.rebasedGain, totalGainResultsModel.timeApportionedGain).flatten
 
-      if (totalGainResults.forall(_ > 0))
+      if (!totalGainResults.forall(_ <= 0))
         Future.successful(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief().url)
       else
         Future.successful(controllers.routes.ImprovementsController.improvements().url)
@@ -65,7 +65,7 @@ trait CheckYourAnswersController extends FrontendController with ValidActiveSess
       case Some(model) =>
         val totalGainResults: Seq[BigDecimal] = Seq(model.flatGain) ++ Seq(model.rebasedGain, model.timeApportionedGain).flatten
 
-        if (totalGainResults.forall(_ > 0)) {
+        if (!totalGainResults.forall(_ <= 0)) {
           calculatorConnector.fetchAndGetFormData[PrivateResidenceReliefModel](KeystoreKeys.privateResidenceRelief)
         } else Future(None)
       case _ => Future(None)
@@ -114,7 +114,7 @@ trait CheckYourAnswersController extends FrontendController with ValidActiveSess
         val totalGainResults: Seq[GainsAfterPRRModel] = Seq(data.flatResult) ++
           Seq(data.rebasedResult, data.timeApportionedResult).flatten
 
-        if (totalGainResults.forall(_.taxableGain > 0)) {
+        if (!totalGainResults.forall(_.taxableGain <= 0)) {
           answersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers(hc)
         } else Future(None)
 
@@ -122,7 +122,7 @@ trait CheckYourAnswersController extends FrontendController with ValidActiveSess
         val results: Seq[BigDecimal] = Seq(totalGainResultsModel.flatGain) ++
           Seq(totalGainResultsModel.rebasedGain, totalGainResultsModel.timeApportionedGain).flatten
 
-        if (results.forall(_ > 0)) {
+        if (!results.forall(_ <= 0)) {
           answersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers(hc)
         } else Future(None)
     }
