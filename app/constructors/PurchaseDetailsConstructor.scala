@@ -29,13 +29,8 @@ object PurchaseDetailsConstructor {
 
   def getPurchaseDetailsSection(totalGainAnswersModel: TotalGainAnswersModel): Seq[QuestionAnswerModel[Any]] = {
 
-    val useRebasedValues = {
-      !TaxDates.dateAfterStart(totalGainAnswersModel.acquisitionDateModel.get)
-    }
-
-    val useWorthBeforeLegislationStart = {
-      TaxDates.dateBeforeLegislationStart(totalGainAnswersModel.acquisitionDateModel.get)
-    }
+    val useRebasedValues = !TaxDates.dateAfterStart(totalGainAnswersModel.acquisitionDateModel.get)
+    val useWorthBeforeLegislationStart = TaxDates.dateBeforeLegislationStart(totalGainAnswersModel.acquisitionDateModel.get)
 
     val acquisitionDateData = acquisitionDateRow(totalGainAnswersModel)
     val howBecameOwnerData = howBecameOwnerRow(totalGainAnswersModel)
@@ -129,7 +124,7 @@ object PurchaseDetailsConstructor {
     if (useRebasedValues) {
       Some(QuestionAnswerModel(
         KeystoreKeys.rebasedValue,
-        rebasedValueModel.get.rebasedValueAmt.get,
+        rebasedValueModel.get.rebasedValueAmt,
         s"${Messages("calc.nonResident.rebasedValue.question")} ${Messages("calc.nonResident.rebasedValue.date")}",
         Some(controllers.routes.RebasedValueController.rebasedValue().url)
       ))

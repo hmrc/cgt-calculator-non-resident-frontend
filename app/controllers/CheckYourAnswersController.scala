@@ -17,6 +17,7 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import common.TaxDates
 import common.nonresident.CalculationType
 import connectors.CalculatorConnector
 import constructors.{AnswersConstructor, CalculationElectionConstructor, YourAnswersConstructor}
@@ -46,12 +47,12 @@ trait CheckYourAnswersController extends FrontendController with ValidActiveSess
                   acquisitionDateController: AcquisitionDateModel,
                   totalTaxOwedAnswers: Option[TotalPersonalDetailsCalculationModel]): Future[String] = totalTaxOwedAnswers match {
 
-    case Some(data) =>
+    case Some(_) =>
       Future.successful(controllers.routes.BroughtForwardLossesController.broughtForwardLosses().url)
     case _ =>
       val optionSeq = Seq(totalGainResultsModel.rebasedGain, totalGainResultsModel.timeApportionedGain).flatten
       val finalSeq = Seq(totalGainResultsModel.flatGain) ++ optionSeq
-      if (!finalSeq.forall(_ <= 0))
+      if (finalSeq.forall(_ > 0))
         Future.successful(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief().url)
       else
         Future.successful(controllers.routes.ImprovementsController.improvements().url)
@@ -61,15 +62,10 @@ trait CheckYourAnswersController extends FrontendController with ValidActiveSess
   def getPRRModel(totalGainResultsModel: Option[TotalGainResultsModel])(implicit hc: HeaderCarrier): Future[Option[PrivateResidenceReliefModel]] = {
     totalGainResultsModel match {
       case Some(model) =>
-        val optionSeq = Seq(model.rebasedGain, model.timeApportionedGain).flatten
-        val finalSeq = Seq(model.flatGain) ++ optionSeq
+        val results: Seq[BigDecimal] = Seq(model.flatGain, model.rebasedGain, model.timeApportionedGain).flatten
 
-        if (!finalSeq.forall(_ <= 0)) {
-          val prrModel = calculatorConnector.fetchAndGetFormData[PrivateResidenceReliefModel](KeystoreKeys.privateResidenceRelief)
-
-          for {
-            prrModel <- prrModel
-          } yield prrModel
+        if (results.forall(_ > 0)) {
+          calculatorConnector.fetchAndGetFormData[PrivateResidenceReliefModel](KeystoreKeys.privateResidenceRelief)
         } else Future(None)
       case _ => Future(None)
     }
@@ -78,11 +74,10 @@ trait CheckYourAnswersController extends FrontendController with ValidActiveSess
   def calculateTaxableGainWithPRR(privateResidenceReliefModel: Option[PrivateResidenceReliefModel],
                                   totalGainAnswersModel: TotalGainAnswersModel)
                                  (implicit hc: HeaderCarrier): Future[Option[CalculationResultsWithPRRModel]] = {
-    (totalGainAnswersModel.rebasedValueModel, privateResidenceReliefModel) match {
-      case (Some(rebasedValue), _) if rebasedValue.rebasedValueAmt.isEmpty =>
-        Future.successful(None)
-      case (_, Some(prrModel)) =>
-        calculatorConnector.calculateTaxableGainAfterPRR(totalGainAnswersModel, prrModel)
+    privateResidenceReliefModel match {
+      case Some(data) if !TaxDates.dateAfterStart(totalGainAnswersModel.acquisitionDateModel.get) => {
+        calculatorConnector.calculateTaxableGainAfterPRR(totalGainAnswersModel, data)
+      }
       case _ => Future.successful(None)
     }
   }
@@ -115,28 +110,18 @@ trait CheckYourAnswersController extends FrontendController with ValidActiveSess
     calculationResultsWithPRRModel match {
 
       case Some(data) =>
-        val optionalSeq = Seq(data.rebasedResult, data.timeApportionedResult).flatten
-        val finalSeq = Seq(data.flatResult) ++ optionalSeq
+        val results: Seq[GainsAfterPRRModel] = Seq(data.flatResult, data.rebasedResult, data.timeApportionedResult).flatten
 
-        if (!finalSeq.forall(_.taxableGain <= 0)) {
-          val personalAndPreviousDetailsModel = answersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers(hc)
-          for {
-            personalAndPreviousDetailsAnswers <- personalAndPreviousDetailsModel
-          } yield personalAndPreviousDetailsAnswers
+        if (results.forall(_.taxableGain > 0)) {
+          answersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers(hc)
         } else Future(None)
-
 
       case None =>
-        val optionalBaseSeq = Seq(totalGainResultsModel.rebasedGain, totalGainResultsModel.timeApportionedGain).flatten
-        val finalBaseSeq = Seq(totalGainResultsModel.flatGain) ++ optionalBaseSeq
+        val results: Seq[BigDecimal] = Seq(totalGainResultsModel.flatGain, totalGainResultsModel.rebasedGain, totalGainResultsModel.timeApportionedGain).flatten
 
-        if (!finalBaseSeq.forall(_ <= 0)) {
-          val personalAndPreviousDetailsModel = answersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers(hc)
-          for {
-            personalAndPreviousDetailsAnswers <- personalAndPreviousDetailsModel
-          } yield personalAndPreviousDetailsAnswers
+        if (results.forall(_ > 0)) {
+          answersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers(hc)
         } else Future(None)
-
     }
   }
 
