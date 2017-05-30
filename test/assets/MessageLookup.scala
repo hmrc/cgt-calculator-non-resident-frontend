@@ -235,11 +235,10 @@ object MessageLookup {
     object NoCapitalGainsTax {
 
       val title = "You have no tax to pay"
-      val paragraphOne = "This is because Capital Gains Tax for non-residents only applies to properties which were sold or given away after 5 April 2015."
+      val paragraphOne = "Capital Gains Tax for non-UK residents only applies to UK residential properties that were sold or given away after 5 April 2015."
       val paragraphTwo = "You've told us that you sold or gave away the property on"
-      val change = "Change"
-      val link = "Capital Gains Tax for non-residents"
-
+      val changeLink = "Change this date"
+      val returnLink = "Return to GOV.UK"
     }
 
     object OtherProperties {

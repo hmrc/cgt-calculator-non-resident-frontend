@@ -80,17 +80,29 @@ class NoCapitalGainsTaxViewSpec extends UnitSpec with WithFakeApplication with M
             dateSpan.text() shouldBe "5 April 2014"
           }
         }
+      }
 
-        "contains a link" which {
-          lazy val changeLink = span.select("a")
+      "contains a change link" which {
+        lazy val changeLink = document.select("article div a").first()
 
-          "has an href to disposal-date page" in {
-            changeLink.attr("href") shouldBe controllers.routes.DisposalDateController.disposalDate().url
-          }
+        "has an href to disposal-date page" in {
+          changeLink.attr("href") shouldBe controllers.routes.DisposalDateController.disposalDate().url
+        }
 
-          s"has the text ${messages.NoCapitalGainsTax.change}" in {
-            changeLink.text() shouldBe messages.NoCapitalGainsTax.change
-          }
+        s"has the text ${messages.NoCapitalGainsTax.changeLink}" in {
+          changeLink.text() shouldBe messages.NoCapitalGainsTax.changeLink
+        }
+      }
+
+      "contains a return link" which {
+        lazy val returnLink = document.select("article div a").get(1)
+
+        "has an href to disposal-date page" in {
+          returnLink.attr("href") shouldBe "http://www.gov.uk"
+        }
+
+        s"has the text ${messages.NoCapitalGainsTax.returnLink}" in {
+          returnLink.text() shouldBe messages.NoCapitalGainsTax.returnLink
         }
       }
     }
