@@ -29,6 +29,8 @@ object DeductionDetailsConstructor {
     acquisitionDateModel.get.plusMonths(18).isBefore(disposalDateModel.get)
   }
 
+  def propertyLivedInQuestionRow(propertyLivedInModel: model) {}
+
   def deductionDetailsRows(answers: TotalGainAnswersModel,
                            privateResidenceReliefModel: Option[PrivateResidenceReliefModel] = None): Seq[QuestionAnswerModel[Any]] = {
 
@@ -42,6 +44,18 @@ object DeductionDetailsConstructor {
       privateResidenceReliefDaysClaimedAfter)
 
     sequence.flatten
+  }
+
+  def propertyLivedInQuestionRow(livedIn: Option[PropertyLivedInModel]): Option[QuestionAnswerModel[String]] = {
+    livedIn match {
+      case Some(PropertyLivedInModel(true)) => Some(QuestionAnswerModel(
+        keys.propertyLivedIn,
+        "Lived in property",
+        Messages("calc.propertyLivedIn.title"),
+        Some(controllers.routes.PropertyLivedInController.propertyLivedIn().url)
+      ))
+      case _ => None
+    }
   }
 
   def privateResidenceReliefQuestionRow(prr: Option[PrivateResidenceReliefModel]): Option[QuestionAnswerModel[String]] = {
