@@ -74,6 +74,10 @@ class ReportActionSpec extends UnitSpec with WithFakeApplication with FakeReques
       (ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(prrModel))
 
+    when(mockCalculatorConnector.fetchAndGetFormData[PropertyLivedInModel](ArgumentMatchers.eq(KeystoreKeys.propertyLivedIn))
+    (ArgumentMatchers.any(), ArgumentMatchers.any()))
+      .thenReturn(Future.successful(Some(PropertyLivedInModel(true))))
+
     when(mockCalculatorConnector.getFullAEA(ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(BigDecimal(11000))))
 

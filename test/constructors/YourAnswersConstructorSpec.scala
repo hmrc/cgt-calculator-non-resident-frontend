@@ -21,52 +21,62 @@ import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 class YourAnswersConstructorSpec extends UnitSpec with WithFakeApplication {
 
+  val totalGainModel = TotalGainAnswersModel(DisposalDateModel(5, 10, 2016),
+    SoldOrGivenAwayModel(true),
+    Some(SoldForLessModel(false)),
+    DisposalValueModel(1000),
+    DisposalCostsModel(100),
+    Some(HowBecameOwnerModel("Gifted")),
+    Some(BoughtForLessModel(false)),
+    AcquisitionValueModel(2000),
+    AcquisitionCostsModel(200),
+    AcquisitionDateModel(4, 10, 2013),
+    Some(RebasedValueModel(Some(3000))),
+    Some(RebasedCostsModel("Yes", Some(300))),
+    ImprovementsModel("Yes", Some(10), Some(20)),
+    Some(OtherReliefsModel(30)))
+
   "Calling .fetchYourAnswers" when {
 
     "only fetching total gain answers" should {
-      val model = TotalGainAnswersModel(DisposalDateModel(5, 10, 2016),
-        SoldOrGivenAwayModel(true),
-        Some(SoldForLessModel(false)),
-        DisposalValueModel(1000),
-        DisposalCostsModel(100),
-        Some(HowBecameOwnerModel("Gifted")),
-        Some(BoughtForLessModel(false)),
-        AcquisitionValueModel(2000),
-        AcquisitionCostsModel(200),
-        AcquisitionDateModel(4, 10, 2013),
-        Some(RebasedValueModel(Some(3000))),
-        Some(RebasedCostsModel("Yes", Some(300))),
-        ImprovementsModel("Yes", Some(10), Some(20)),
-        Some(OtherReliefsModel(30)))
-      lazy val result = YourAnswersConstructor.fetchYourAnswers(model)
+
+      lazy val result = YourAnswersConstructor.fetchYourAnswers(totalGainModel)
 
       "contain the answers from sale details" in {
-        lazy val salesDetails = SalesDetailsConstructor.salesDetailsRows(model)
+        lazy val salesDetails = SalesDetailsConstructor.salesDetailsRows(totalGainModel)
 
         result.containsSlice(salesDetails) shouldBe true
       }
 
       "contain the answers from purchase details" in {
-        lazy val purchaseDetails = PurchaseDetailsConstructor.getPurchaseDetailsSection(model)
+        lazy val purchaseDetails = PurchaseDetailsConstructor.getPurchaseDetailsSection(totalGainModel)
 
         result.containsSlice(purchaseDetails) shouldBe true
       }
 
       "contain the answers from property details" in {
-        lazy val propertyDetails = PropertyDetailsConstructor.propertyDetailsRows(model)
+        lazy val propertyDetails = PropertyDetailsConstructor.propertyDetailsRows(totalGainModel)
 
         result.containsSlice(propertyDetails) shouldBe true
       }
 
       "contain the answers from deduction details" in {
-        lazy val deductionDetails = DeductionDetailsConstructor.deductionDetailsRows(model)
+        lazy val deductionDetails = DeductionDetailsConstructor.deductionDetailsRows(totalGainModel)
 
         result.containsSlice(deductionDetails) shouldBe true
       }
     }
   }
 
-  "fetching when supplied with a propertyLivedInModel" should {
-
+  "fetching when supplied with a propertyLivedInModel and a PRR model" when {
+    val prrModel = PrivateResidenceReliefModel("Yes", Some(1))
+    val propertyLivedInModel = PropertyLivedInModel(true)
+    lazy val result = YourAnswersConstructor.fetchYourAnswers(totalGainModel, Some(prrModel), None, Some(propertyLivedInModel))
+    "the property has been lived in" should {
+      "contain the answers from PRR" in {
+        val deductionsSlice = DeductionDetailsConstructor.deductionDetailsRows(totalGainModel, Some(prrModel))
+        result.containsSlice(deductionsSlice) shouldBe true
+      }
+    }
   }
 }
