@@ -128,6 +128,7 @@ trait ReportController extends FrontendController with ValidActiveSession {
       totalGainResultsModel <- calcConnector.calculateTotalGain(answers)
 
       privateResidentReliefModel <- getPRRModel(hc, totalGainResultsModel.get)
+      propertyLivedInModel <-  calcConnector.fetchAndGetFormData[PropertyLivedInModel](KeystoreKeys.propertyLivedIn)
       finalAnswers <- answersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers
       otherReliefsModel <- getAllOtherReliefs(finalAnswers)
       taxYearModel <- getTaxYear(answers)
