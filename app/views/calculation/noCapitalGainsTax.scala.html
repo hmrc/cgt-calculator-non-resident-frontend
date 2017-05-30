@@ -4,22 +4,7 @@
 
 @(data: DisposalDateModel)(implicit request: Request[_], messages: Messages)
 
-@date = {
-    @Dates.datePageFormatNoZero.format(Dates.constructDate(data.day, data.month, data.year))
-}
-
-@sidebar = {
-    <ul>
-        <li>
-            <a href="https://www.gov.uk/guidance/capital-gains-tax-for-non-residents-uk-residential-property" target="_blank"
-               rel="external">@Messages("nocgt.sidebar.linkone")
-                <span>@Messages("calc.base.externalLink")</span>
-            </a>
-        </li>
-    </ul>
-}
-
-@main_template(Messages("nocgt.invaliddate.title"), sidebarLinks = Some(sidebar)) {
+@main_template(Messages("nocgt.invaliddate.title")) {
 
     <a id="back-link" class="back-link" href="@controllers.routes.DisposalDateController.disposalDate">Back</a>
 
@@ -27,9 +12,14 @@
     <p>@Messages("nocgt.content.one")</p>
     <p>
         @Messages("nocgt.content.two")
-        <span class="no-wrap">
-            <span class="bold-small">@date</span>
-            <a id="change-link" href="@controllers.routes.DisposalDateController.disposalDate">@Messages("nocgt.content.change")</a>
+        <span class = "no-wrap">
+            <span class="bold-small">@Dates.datePageFormatNoZero.format(Dates.constructDate(data.day, data.month, data.year))</span>.
         </span>
     </p>
+    <div class="form-group">
+        <a class="button" id="change-link" href="@controllers.routes.DisposalDateController.disposalDate">@Messages("nocgt.content.change")</a>
+    </div>
+    <div>
+        <a href="http://www.gov.uk">@Messages("nocgt.content.return")</a>
+    </div>
 }
