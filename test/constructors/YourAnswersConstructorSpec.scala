@@ -42,6 +42,7 @@ class YourAnswersConstructorSpec extends UnitSpec with WithFakeApplication {
 
       lazy val result = YourAnswersConstructor.fetchYourAnswers(totalGainModel)
 
+
       "contain the answers from sale details" in {
         lazy val salesDetails = SalesDetailsConstructor.salesDetailsRows(totalGainModel)
 
