@@ -213,13 +213,14 @@ object MessageLookup {
       val errorDecimalPlaces = "Taxable Gain for has too many numbers after the decimal point"
       }
 
-    object Improvements {
+    object Improvements extends Common {
       val helpOne = "Improvements are permanent changes that increase the value of a property, like adding extensions or garages."
       val helpTwo = "Normal maintenance costs don't count."
       val exampleTitle = "Show me an example"
       val exampleOne = "Replacing a basic kitchen or bathroom with a luxury version is normally considered an improvement."
       val exampleTwo = "Replacing them with something of a similar standard is normally not an improvement."
       val question = "Did you make any improvements to the property?"
+      val ownerBeforeLegislationStartQuestion = "Did you make an improvement to the property after 31 March 1982?"
       val questionTwo = "How much did the improvements cost?"
       val questionThree = "How much did you spend on improvements before 6 April 2015?"
       val questionFour = "How much have you spent on improvements since 6 April 2015?"
@@ -235,11 +236,10 @@ object MessageLookup {
     object NoCapitalGainsTax {
 
       val title = "You have no tax to pay"
-      val paragraphOne = "This is because Capital Gains Tax for non-residents only applies to properties which were sold or given away after 5 April 2015."
+      val paragraphOne = "Capital Gains Tax for non-UK residents only applies to UK residential properties that were sold or given away after 5 April 2015."
       val paragraphTwo = "You've told us that you sold or gave away the property on"
-      val change = "Change"
-      val link = "Capital Gains Tax for non-residents"
-
+      val changeLink = "Change this date"
+      val returnLink = "Return to GOV.UK"
     }
 
     object OtherProperties {

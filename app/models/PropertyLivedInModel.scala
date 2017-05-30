@@ -18,7 +18,7 @@ package models
 
 import play.api.libs.json.Json
 
-case class PropertyLivedInModel (livedInProperty: Boolean)
+case class PropertyLivedInModel (propertyLivedIn: Boolean)
 
 object PropertyLivedInModel {
   implicit val format = Json.format[PropertyLivedInModel]

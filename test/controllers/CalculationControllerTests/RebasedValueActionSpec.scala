@@ -66,7 +66,7 @@ class RebasedValueActionSpec extends UnitSpec with WithFakeApplication with Mock
 
     "no session is active" should {
 
-      val target = setupTarget(None, Some(AcquisitionDateModel("No", None, None, None)))
+      val target = setupTarget(None, Some(AcquisitionDateModel(1, 1, 2016)))
       lazy val result = target.rebasedValue(fakeRequest)
 
       "return a status of 303" in {
@@ -78,24 +78,9 @@ class RebasedValueActionSpec extends UnitSpec with WithFakeApplication with Mock
       }
     }
 
-    "not supplied with a pre-existing stored model and no acquisition date (optional rebased value view)" should {
-
-      val target = setupTarget(None, Some(AcquisitionDateModel("No", None, None, None)))
-      lazy val result = target.rebasedValue(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
-
-      "return a 200" in {
-        status(result) shouldBe 200
-      }
-
-      s"route to the rebased value view with the question ${messages.question}" in {
-        document.title shouldEqual messages.question
-      }
-    }
-
     "not supplied with a pre-existing stored model and an acquisition date before 6/4/2015 (mandatory rebased value view)" should {
 
-      val target = setupTarget(None, Some(AcquisitionDateModel("Yes", Some(5), Some(4), Some(2015))))
+      val target = setupTarget(None, Some(AcquisitionDateModel(5, 4, 2015)))
       lazy val result = target.rebasedValue(fakeRequestWithSession)
       lazy val document = Jsoup.parse(bodyOf(result))
 
@@ -111,61 +96,9 @@ class RebasedValueActionSpec extends UnitSpec with WithFakeApplication with Mock
   //POST Tests
   "In CalculationController calling the .submitRebasedValue action with no acquisition date" when {
 
-    "with no acquisition date (optional rebased value)" should {
-
-      lazy val target = setupTarget(None, Some(AcquisitionDateModel("No", None, None, None)))
-
-      "submitting a valid form with a value of 12045" should {
-
-        lazy val request = fakeRequestToPOSTWithSession(("rebasedValueAmt", "12045"))
-        lazy val result = target.submitRebasedValue(request)
-
-        "return a 303" in {
-          status(result) shouldBe 303
-        }
-
-        "redirect to the rebased costs page" in {
-          redirectLocation(result).get shouldEqual routes.RebasedCostsController.rebasedCosts().url
-        }
-      }
-
-      "submitting a valid form with no value" should {
-
-        lazy val request = fakeRequestToPOSTWithSession(("rebasedValueAmt", ""))
-        lazy val result = target.submitRebasedValue(request)
-
-        "return a 303" in {
-          status(result) shouldBe 303
-        }
-
-        "redirect to the improvements page" in {
-          redirectLocation(result).get shouldEqual routes.ImprovementsController.improvements().url
-        }
-      }
-
-      "submitting a value which exceeds the maximum numeric" should {
-
-        lazy val request = fakeRequestToPOSTWithSession(("rebasedValueAmt", "4372814326478132946"))
-        lazy val result = target.submitRebasedValue(request)
-        lazy val document = Jsoup.parse(bodyOf(result))
-
-        "return a 400" in {
-          status(result) shouldBe 400
-        }
-
-        s"return to the rebased value page" in {
-          document.title shouldEqual messages.question
-        }
-
-        s"return to the rebased value page that has a paragraph with the text ${messages.questionOptionalText}" in {
-          document.select("article > p").first().text shouldEqual messages.questionOptionalText
-        }
-      }
-    }
-
     "with an acquisition date before 6/4/2015 (mandatory rebased value view)" should {
 
-      lazy val target = setupTarget(None, Some(AcquisitionDateModel("Yes", Some(5), Some(4), Some(2015))))
+      lazy val target = setupTarget(None, Some(AcquisitionDateModel(5, 4, 2015)))
 
       "submitting a valid form with Yes" should {
 

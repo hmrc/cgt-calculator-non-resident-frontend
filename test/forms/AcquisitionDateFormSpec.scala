@@ -26,7 +26,7 @@ class AcquisitionDateFormSpec extends UnitSpec with WithFakeApplication {
   "Creating a form" when {
 
     "passing in a valid model" should {
-      val model = AcquisitionDateModel("No", None, None, None)
+      val model = AcquisitionDateModel(1, 1, 2015)
       lazy val form = acquisitionDateForm.fill(model)
 
       "return a valid form with no errors" in {
@@ -34,13 +34,12 @@ class AcquisitionDateFormSpec extends UnitSpec with WithFakeApplication {
       }
 
       "return a form containing the data" in {
-        form.data shouldBe Map("hasAcquisitionDate" -> "No")
+        form.data shouldBe Map("acquisitionDateDay" -> "1", "acquisitionDateMonth" -> "1", "acquisitionDateYear" -> "2015")
       }
     }
 
     "passing in a valid map with a date" should {
       val map = Map(
-        "hasAcquisitionDate" -> "Yes",
         "acquisitionDateDay" -> "1",
         "acquisitionDateMonth" -> "5",
         "acquisitionDateYear" -> "2015")
@@ -51,13 +50,12 @@ class AcquisitionDateFormSpec extends UnitSpec with WithFakeApplication {
       }
 
       "return a form containing the data" in {
-        form.value shouldBe Some(AcquisitionDateModel("Yes", Some(1), Some(5), Some(2015)))
+        form.value shouldBe Some(AcquisitionDateModel(1, 5, 2015))
       }
     }
 
     "passing in an invalid map with an invalid date" should {
       val map = Map(
-        "hasAcquisitionDate" -> "Yes",
         "acquisitionDateDay" -> "100",
         "acquisitionDateMonth" -> "5",
         "acquisitionDateYear" -> "2015")
@@ -72,10 +70,42 @@ class AcquisitionDateFormSpec extends UnitSpec with WithFakeApplication {
       }
     }
 
-    "passing in an invalid map with missing date data" should {
+    "passing in an invalid map with a date containing a string" should {
       val map = Map(
-        "hasAcquisitionDate" -> "Yes",
+        "acquisitionDateDay" -> "A",
+        "acquisitionDateMonth" -> "B",
+        "acquisitionDateYear" -> "C")
+      lazy val form = acquisitionDateForm.bind(map)
+
+      "return an invalid form with one errors" in {
+        form.hasErrors shouldBe true
+      }
+
+      s"return an error message of '${messages.errorInvalidDate}" in {
+        form.errors.head.message shouldBe messages.errorInvalidDate
+      }
+    }
+
+    "passing in an invalid map with missing day data" should {
+      val map = Map(
+        "acquisitionDateDay" -> "",
+        "acquisitionDateMonth" -> "1",
+        "acquisitionDateYear" -> "2015")
+      lazy val form = acquisitionDateForm.bind(map)
+
+      "return an invalid form with one errors" in {
+        form.errors.size shouldBe 1
+      }
+
+      s"return an error message of '${messages.errorInvalidDate}" in {
+        form.error("acquisitionDateDay").get.message shouldBe messages.errorInvalidDate
+      }
+    }
+
+    "passing in an invalid map with missing month data" should {
+      val map = Map(
         "acquisitionDateDay" -> "1",
+        "acquisitionDateMonth" -> "",
         "acquisitionDateYear" -> "2015")
       lazy val form = acquisitionDateForm.bind(map)
 
@@ -84,63 +114,23 @@ class AcquisitionDateFormSpec extends UnitSpec with WithFakeApplication {
       }
 
       s"return an error message of '${messages.errorInvalidDate}" in {
-        form.error("").get.message shouldBe messages.errorInvalidDate
+        form.error("acquisitionDateMonth").get.message shouldBe messages.errorInvalidDate
       }
     }
 
-    "passing in a valid map with no date" should {
-      val map = Map("hasAcquisitionDate" -> "No")
-      lazy val form = acquisitionDateForm.bind(map)
-
-      "return a valid form with no errors" in {
-        form.errors.size shouldBe 0
-      }
-
-      "return a form containing the data" in {
-        form.value shouldBe Some(AcquisitionDateModel("No", None, None, None))
-      }
-    }
-
-    "passing in a valid map with an invalid date" should {
+    "passing in an invalid map with missing year data" should {
       val map = Map(
-        "hasAcquisitionDate" -> "No",
-        "acquisitionDateDay" -> "100",
-        "acquisitionDateMonth" -> "5",
-        "acquisitionDateYear" -> "2015")
+        "acquisitionDateDay" -> "1",
+        "acquisitionDateMonth" -> "2",
+        "acquisitionDateYear" -> "")
       lazy val form = acquisitionDateForm.bind(map)
 
-      "return a valid form with no errors" in {
-        form.errors.size shouldBe 0
-      }
-
-      "return a form containing the data" in {
-        form.value shouldBe Some(AcquisitionDateModel("No", Some(100), Some(5), Some(2015)))
-      }
-    }
-
-    "passing in an invalid map with no answer to hasAcquisitionDate" should {
-      val map = Map[String, String]("hasAcquisitionDate" -> "")
-      lazy val form = acquisitionDateForm.bind(map)
-
-      "return a valid form with one error" in {
+      "return an invalid form with one errors" in {
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.errorRequired}" in {
-        form.error("hasAcquisitionDate").get.message shouldBe messages.errorRequired
-      }
-    }
-
-    "passing in an invalid map with an incorrect answer to hasAcquisitionDate" should {
-      val map = Map[String, String]("hasAcquisitionDate" -> "Maybe")
-      lazy val form = acquisitionDateForm.bind(map)
-
-      "return a valid form with one error" in {
-        form.errors.size shouldBe 1
-      }
-
-      s"return an error message of '${messages.errorRequired}" in {
-        form.error("hasAcquisitionDate").get.message shouldBe messages.errorRequired
+      s"return an error message of '${messages.errorInvalidDate}" in {
+        form.error("acquisitionDateYear").get.message shouldBe messages.errorInvalidDate
       }
     }
   }

@@ -78,11 +78,11 @@ trait CheckYourAnswersController extends FrontendController with ValidActiveSess
   def calculateTaxableGainWithPRR(privateResidenceReliefModel: Option[PrivateResidenceReliefModel],
                                   totalGainAnswersModel: TotalGainAnswersModel)
                                  (implicit hc: HeaderCarrier): Future[Option[CalculationResultsWithPRRModel]] = {
-    (totalGainAnswersModel.acquisitionDateModel, totalGainAnswersModel.rebasedValueModel) match {
-      case (AcquisitionDateModel("No", _, _, _), Some(rebasedValue)) if rebasedValue.rebasedValueAmt.isEmpty =>
+    (totalGainAnswersModel.rebasedValueModel, privateResidenceReliefModel) match {
+      case (Some(rebasedValue), _) if rebasedValue.rebasedValueAmt.isEmpty =>
         Future.successful(None)
-      case (_, _) if privateResidenceReliefModel.isDefined =>
-        calculatorConnector.calculateTaxableGainAfterPRR(totalGainAnswersModel, privateResidenceReliefModel.get)
+      case (_, Some(prrModel)) =>
+        calculatorConnector.calculateTaxableGainAfterPRR(totalGainAnswersModel, prrModel)
       case _ => Future.successful(None)
     }
   }

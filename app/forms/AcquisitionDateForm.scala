@@ -23,17 +23,26 @@ import play.api.data._
 import play.api.i18n.Messages
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
+import common.Transformers._
 
 object AcquisitionDateForm {
 
   val acquisitionDateForm = Form(
     mapping(
-      "hasAcquisitionDate" -> text
-        .verifying(Messages("calc.common.error.fieldRequired"), mandatoryCheck)
-        .verifying(Messages("calc.common.error.fieldRequired"), yesNoCheck),
-      "acquisitionDateDay" -> optional(number),
-      "acquisitionDateMonth" -> optional(number),
-      "acquisitionDateYear" -> optional(number)
-    )(AcquisitionDateModel.apply)(AcquisitionDateModel.unapply).verifying(Messages("calc.common.date.error.invalidDate"), fields =>
-      if(fields.hasAcquisitionDate == "Yes") {isValidDate(fields.day.getOrElse(0), fields.month.getOrElse(0), fields.year.getOrElse(0))} else true))
+      "acquisitionDateDay" -> text
+        .verifying(Messages("calc.common.date.error.invalidDate"), mandatoryCheck)
+        .verifying(Messages("calc.common.date.error.invalidDate"), integerCheck)
+        .transform[Int](stringToInteger, _.toString),
+      "acquisitionDateMonth" -> text
+        .verifying(Messages("calc.common.date.error.invalidDate"), mandatoryCheck)
+        .verifying(Messages("calc.common.date.error.invalidDate"), integerCheck)
+        .transform[Int](stringToInteger, _.toString),
+      "acquisitionDateYear" -> text
+        .verifying(Messages("calc.common.date.error.invalidDate"), mandatoryCheck)
+        .verifying(Messages("calc.common.date.error.invalidDate"), integerCheck)
+        .transform[Int](stringToInteger, _.toString)
+    )(AcquisitionDateModel.apply)(AcquisitionDateModel.unapply)
+      .verifying(Messages("calc.common.date.error.invalidDate"), fields =>
+        isValidDate(fields.day, fields.month, fields.year))
+  )
 }

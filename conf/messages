@@ -184,6 +184,7 @@ calc.rebasedCosts.errorDecimalPlaces = There are too many numbers after the deci
 
 ## Improvements ##
 calc.improvements.question = Did you make any improvements to the property?
+calc.improvements.ownerBeforeLegislationStartQuestion = Did you make an improvement to the property after 31 March 1982?
 calc.improvements.helpOne = Improvements are permanent changes that increase the value of a property, like adding extensions or garages.
 calc.improvements.helpTwo = Normal maintenance costs don''t count.
 calc.improvements.exampleTitle = Show me an example
@@ -203,10 +204,10 @@ calc.disposalDate.error.disposalDateAfterAcquisition = This can''t be before the
 
 ## No Capital Gains Tax ##
 nocgt.invaliddate.title = You have no tax to pay
-nocgt.content.one = This is because Capital Gains Tax for non-residents only applies to properties which were sold or given away after 5 April 2015.
+nocgt.content.one = Capital Gains Tax for non-UK residents only applies to UK residential properties that were sold or given away after 5 April 2015.
 nocgt.content.two = You''ve told us that you sold or gave away the property on
-nocgt.content.change = Change
-nocgt.sidebar.linkone = Capital Gains Tax for non-residents
+nocgt.content.change = Change this date
+nocgt.content.return = Return to GOV.UK
 
 ## NR No Tax To Pay messages
 calc.noTaxToPay.title = You have no tax to pay
@@ -395,6 +396,11 @@ calc.worthBeforeLegislationStart.information = 31 March 1982 is when the current
 calc.worthBeforeLegislationStart.help = If you don''t know the exact value, you must provide a realistic estimate. You might have to pay more if we think your estimate is unrealistic.
 calc.worthBeforeLegislationStart.jointOwnership = If you owned the property with someone else, only enter your share of the property value.
 
+##Property Lived In Messages ##
+calc.propertyLivedIn.title = Have you ever lived in the property since you became the owner?
+calc.propertyLivedIn.noSelectError = Tell us if you have ever lived in the property since you became the owner
+
+
 ## Summary ##
 calc.summary.title = Summary
 calc.summary.amount.you.owe = Amount you owe
@@ -511,7 +517,6 @@ calc.resident.howBecameOwner.title = How did you become the property owner?
 calc.resident.howBecameOwner.bought = Bought it
 calc.resident.howBecameOwner.gifted = Got it as a gift
 calc.resident.howBecameOwner.inherited= Inherited it
-
 
 ##Worth On messages
 calc.resident.properties.valueBeforeLegislationStart.question = What was the property worth on 31 March 1982?
@@ -701,9 +706,6 @@ calc.resident.properties.privateResidenceRelief.title = Are you entitled to Priv
 
 calc.resident.properties.privateResidenceRelief.helpText = You''ll be entitled to Private Residence Relief if you''ve lived in the property as your main home at some point while you owned it. Find out more about
 calc.resident.properties.privateResidenceRelief.helpTextLink = Private Residence Relief
-
-calc.resident.properties.propertyLivedIn.title = Have you ever lived in the property since you became the owner?
-calc.resident.properties.propertyLivedIn.noSelectError = Tell us if you have ever lived in the property since you became the owner
 
 ###############################################################################################
 ## Resident Shares messages ##
