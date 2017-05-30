@@ -69,13 +69,15 @@ class YourAnswersConstructorSpec extends UnitSpec with WithFakeApplication {
   }
 
   "fetching when supplied with a propertyLivedInModel and a PRR model" when {
+
+    lazy val propertyLivedInRow = DeductionDetailsConstructor.propertyLivedInQuestionRow(Some(PropertyLivedInModel(true)))
+
     "the property has been lived in" should {
       val prrModel = PrivateResidenceReliefModel("Yes", Some(1))
       val propertyLivedInModel = PropertyLivedInModel(true)
       lazy val result = YourAnswersConstructor.fetchYourAnswers(totalGainModel, Some(prrModel), None, Some(propertyLivedInModel))
 
       "have the propertyLivedIn question row" in {
-        val propertyLivedInRow = DeductionDetailsConstructor.propertyLivedInQuestionRow(Some(propertyLivedInModel))
         result.containsSlice(propertyLivedInRow) shouldBe true
       }
 
@@ -89,6 +91,11 @@ class YourAnswersConstructorSpec extends UnitSpec with WithFakeApplication {
       val prrModel = PrivateResidenceReliefModel("Irrelevant string", Some(1))
       val propertyLivedInModel = PropertyLivedInModel(false)
       lazy val result = YourAnswersConstructor.fetchYourAnswers(totalGainModel, Some(prrModel), None, Some(propertyLivedInModel))
+
+      "not have the propertyLivedIn question row" in {
+        result.containsSlice(propertyLivedInRow) shouldBe false
+      }
+
 
       "not contain the answers from PRR" in {
         val deductionsSlice = DeductionDetailsConstructor.deductionDetailsRows(totalGainModel, Some(prrModel))
