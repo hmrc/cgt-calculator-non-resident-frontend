@@ -103,7 +103,7 @@ trait CalculationElectionController extends FrontendController with ValidActiveS
                                     (implicit hc: HeaderCarrier): Future[Option[CalculationResultsWithTaxOwedModel]] = {
 
     totalTaxOwedModel match {
-      case Some(data) => calcConnector.calculateNRCGTTotalTax(totalGainAnswersModel, prrModel, data, maxAEA, otherReliefs)
+      case Some(_) => calcConnector.calculateNRCGTTotalTax(totalGainAnswersModel, prrModel, totalTaxOwedModel, maxAEA, otherReliefs)
       case None => Future(None)
     }
   }

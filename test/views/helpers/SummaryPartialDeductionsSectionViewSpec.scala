@@ -96,7 +96,7 @@ class SummaryPartialDeductionsSectionViewSpec extends UnitSpec with WithFakeAppl
   "The deductions section with no options supplied" should {
 
     lazy val view = helpers.summaryPartialDeductionsSection(
-      reliefsUsed = 10000,
+      reliefsUsed = 0,
       aeaUsed = 11000,
       inYearLossesUsed = 0,
       broughtForwardLossesUsed = 0,
@@ -106,6 +106,10 @@ class SummaryPartialDeductionsSectionViewSpec extends UnitSpec with WithFakeAppl
 
     s"have the h3 heading ${messages.deductionsSectionHeading}" in {
       doc.select("h3").text shouldBe messages.deductionsSectionHeading
+    }
+
+    "does not have a row for reliefs used" in {
+      doc.select("#reliefsUsed-text").isEmpty shouldBe true
     }
 
     "does not have a row for in year losses used" in {

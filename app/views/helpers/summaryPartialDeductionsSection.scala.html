@@ -7,7 +7,9 @@ totalDeductions: BigDecimal)(implicit request: Request[_], messages: Messages)
 
     <h3>@Messages("calc.summaryPartial.deductionsSectionHeading")</h3>
 
-    @summaryNumericRow("reliefsUsed",Messages("calc.summaryPartial.reliefsUsed"), reliefsUsed)
+    @if(reliefsUsed > 0) {
+        @summaryNumericRow("reliefsUsed", Messages("calc.summaryPartial.reliefsUsed"), reliefsUsed)
+    }
 
     @if(inYearLossesUsed > 0) {
         @summaryNumericRow("inYearLossesUsed",Messages("calc.summaryPartial.inYearLossesUsed"), inYearLossesUsed)
