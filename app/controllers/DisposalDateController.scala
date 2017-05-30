@@ -62,11 +62,12 @@ trait DisposalDateController extends FrontendController with ValidActiveSession 
     def errorAction(form: Form[DisposalDateModel]) = Future.successful(BadRequest(calculation.disposalDate(form)))
 
     def successAction(model: DisposalDateModel) = {
-      calcConnector.saveFormData(KeystoreKeys.disposalDate, model)
-      if (!TaxDates.dateAfterStart(model.day, model.month, model.year)) {
-        Future.successful(Redirect(routes.NoCapitalGainsTaxController.noCapitalGainsTax()))
-      } else {
-        Future.successful(Redirect(routes.SoldOrGivenAwayController.soldOrGivenAway()))
+      calcConnector.saveFormData(KeystoreKeys.disposalDate, model).map { _ =>
+        if (!TaxDates.dateAfterStart(model.day, model.month, model.year)) {
+          Redirect(routes.NoCapitalGainsTaxController.noCapitalGainsTax())
+        } else {
+          Redirect(routes.SoldOrGivenAwayController.soldOrGivenAway())
+        }
       }
     }
     disposalDateForm.bindFromRequest.fold(errorAction, successAction)

@@ -204,10 +204,10 @@ calc.disposalDate.error.disposalDateAfterAcquisition = This can''t be before the
 
 ## No Capital Gains Tax ##
 nocgt.invaliddate.title = You have no tax to pay
-nocgt.content.one = This is because Capital Gains Tax for non-residents only applies to properties which were sold or given away after 5 April 2015.
+nocgt.content.one = Capital Gains Tax for non-UK residents only applies to UK residential properties that were sold or given away after 5 April 2015.
 nocgt.content.two = You''ve told us that you sold or gave away the property on
-nocgt.content.change = Change
-nocgt.sidebar.linkone = Capital Gains Tax for non-residents
+nocgt.content.change = Change this date
+nocgt.content.return = Return to GOV.UK
 
 ## NR No Tax To Pay messages
 calc.noTaxToPay.title = You have no tax to pay
