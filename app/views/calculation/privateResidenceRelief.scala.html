@@ -4,9 +4,9 @@
 
 @(privateResidenceReliefForm: Form[PrivateResidenceReliefModel], daysBetweenShow: Boolean, daysBeforeShow: Boolean, disposalDateLess18Months: String)(implicit request: Request[_], messages: Messages)
 
-@whyTheseDatesList = {
+@whyThisDate(showBoth: Boolean) = {
 
-    @if(daysBetweenShow && daysBeforeShow) {
+    @if(showBoth) {
         <p>@Messages("calc.privateResidenceRelief.helpTextSubTitle")</p>
 
         <ul class="list-bullet">
@@ -18,9 +18,10 @@
                 <li>@disposalDateLess18Months @Messages("calc.privateResidenceRelief.daysBetweenHelpText")</li>
             }
         </ul>
+    } else {
+            <p>@Messages("calc.privateResidenceRelief.daysBeforeHelpText")</p>
+        }
     }
-
-}
 
 @hiddenContent = {
 @if(daysBeforeShow) {
@@ -28,6 +29,7 @@
     @input(
         privateResidenceReliefForm("daysClaimed"),
         '_label -> Messages("calc.privateResidenceRelief.questionBefore.partOne"),
+        '_labelClass -> "bold",
         '_type -> "text",
         '_inputClass -> "form-group input--no-spinner",
         '_type -> "number"
@@ -39,6 +41,7 @@
     @input(
         privateResidenceReliefForm("daysClaimedAfter"),
         '_label -> (Messages("calc.privateResidenceRelief.questionBetween.partOne") + " " + disposalDateLess18Months + " " + Messages("calc.privateResidenceRelief.questionBetween.partTwo")),
+        '_labelClass -> "bold",
         '_type -> "text",
         '_inputClass -> "form-group input--no-spinner",
         '_type -> "number"
@@ -46,17 +49,26 @@
     </div>
 }
 
-@expandableHelpTextHelper(Messages("calc.privateResidenceRelief.helpTextTitle"), whyTheseDatesList)
+@(daysBetweenShow, daysBeforeShow) match {
+    case (true, true) => {
+        @expandableHelpTextHelper(Messages("calc.privateResidenceRelief.helpTextBeforeAfter"), whyThisDate(true), false, true)
+    }
+    case (false, true) => {
+        @expandableHelpTextHelper(Messages("calc.privateResidenceRelief.helpTextJustBefore"), whyThisDate(false), false, true)
+    }
+}
 }
 
 @main_template(Messages("calc.privateResidenceRelief.question")) {
 
     <a id="back-link" class="back-link" href="@controllers.routes.ImprovementsController.improvements">@Messages("calc.base.back")</a>
 
-    @if(daysBeforeShow){@errorSummary(privateResidenceReliefForm, "private-residence-relief", "daysClaimed")
+    @if(daysBeforeShow) {@errorSummary(privateResidenceReliefForm, "private-residence-relief", "daysClaimed")
     } else {
         @if(daysBetweenShow) {@errorSummary(privateResidenceReliefForm, "private-residence-relief", "daysClaimedAfter")
-        } else {@errorSummary(privateResidenceReliefForm, "private-residence-relief")}
+        } else {
+            @errorSummary(privateResidenceReliefForm, "private-residence-relief")
+        }
     }
 
 
@@ -64,19 +76,19 @@
 
     @form(action = controllers.routes.PrivateResidenceReliefController.submitPrivateResidenceRelief) {
 
-        @if(!(daysBeforeShow || daysBetweenShow)){
+        @if(!(daysBeforeShow || daysBetweenShow)) {
             <div class="inline form-group">
-                @formInputRadioGroup(
-                    field = privateResidenceReliefForm("isClaimingPRR"),
-                    Seq(
-                        "Yes"->Messages("calc.base.yes"),
-                        "No"->Messages("calc.base.no")),
-                    '_legend -> Messages("calc.privateResidenceRelief.question"),
-                    '_labelAfter -> true,
-                    '_labelClass -> "block-label",
-                    '_legendID -> "isClaimingPRR",
-                    '_legendClass -> "visuallyhidden"
-                )
+            @formInputRadioGroup(
+                field = privateResidenceReliefForm("isClaimingPRR"),
+                Seq(
+                    "Yes" -> Messages("calc.base.yes"),
+                    "No" -> Messages("calc.base.no")),
+                '_legend -> Messages("calc.privateResidenceRelief.question"),
+                '_labelAfter -> true,
+                '_labelClass -> "block-label",
+                '_legendID -> "isClaimingPRR",
+                '_legendClass -> "visuallyhidden"
+            )
             </div>
         } else {
             @formHiddenYesNoRadio(

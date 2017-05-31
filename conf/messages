@@ -278,8 +278,8 @@ calc.privateResidenceRelief.error.errorNegative = Enter a positive number for yo
 calc.privateResidenceRelief.error.errorDecimalPlaces = There are too many numbers after the decimal point in your days claimed
 calc.privateResidenceRelief.error.maxNumericExceeded = Enter a value for your days claimed that''s
 calc.privateResidenceRelief.error.maxNumericExceeded.OrLess = or less
-calc.privateResidenceRelief.
-calc.privateResidenceRelief.helpTextTitle = Why these specific dates?
+calc.privateResidenceRelief.helpTextBeforeAfter = Why these specific dates?
+calc.privateResidenceRelief.helpTextJustBefore = Why this date?
 calc.privateResidenceRelief.helpTextSubTitle = These dates are important because:
 calc.privateResidenceRelief.daysBetweenHelpText = is the date you transferred the property minus 18 months (you automatically get Private Residence Relief for the last 18 months that you owned the property)
 calc.privateResidenceRelief.daysBeforeHelpText = 6 April 2015 is when the Capital Gains Tax rules for non-UK residents came into effect

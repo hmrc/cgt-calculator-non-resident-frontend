@@ -1,10 +1,11 @@
-@(helpTextTitle: String, content: Html)
+@(helpTextTitle: String, content: Html, panelIndent: Boolean = true, formHint: Boolean = false)
 
-<details id="help" role="group">
+<details id="help" role="group" @if(formHint){class="form-hint"}>
     <summary role="button" aria-controls="details-content-0">
         <span class="summary" data-journey-click="help:reveal:@helpTextTitle">@helpTextTitle</span>
     </summary>
-    <div class="panel-indent">
+
+    <div class="@if(panelIndent){panel-indent}">
         @content
     </div>
 </details>
