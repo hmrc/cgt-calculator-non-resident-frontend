@@ -105,6 +105,37 @@ trait ReportController extends FrontendController with ValidActiveSession {
       }
     }
 
+    def getFinalSectionsAnswers(totalGainResultsModel: TotalGainResultsModel,
+                                calculationResultsWithPRRModel: Option[CalculationResultsWithPRRModel])(implicit hc: HeaderCarrier):
+    Future[Option[TotalPersonalDetailsCalculationModel]] = {
+      calculationResultsWithPRRModel match {
+
+        case Some(data) =>
+          val results = data.flatResult :: List(data.rebasedResult, data.timeApportionedResult).flatten
+
+          if (results.exists(_.taxableGain > 0)) {
+            answersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers(hc)
+          } else Future(None)
+
+        case None =>
+          val gains = totalGainResultsModel.flatGain :: List(totalGainResultsModel.rebasedGain, totalGainResultsModel.timeApportionedGain).flatten
+
+          if (gains.exists(_ > 0)) {
+            answersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers(hc)
+          } else Future(None)
+      }
+    }
+
+    def getPRRIfApplicable(totalGainAnswersModel: TotalGainAnswersModel,
+                           privateResidenceReliefModel: Option[PrivateResidenceReliefModel])(implicit hc: HeaderCarrier):
+    Future[Option[CalculationResultsWithPRRModel]] = {
+
+      privateResidenceReliefModel match {
+        case Some(data) => calcConnector.calculateTaxableGainAfterPRR(totalGainAnswersModel, data)
+        case None => Future.successful(None)
+      }
+    }
+
     def questionAnswerRows(totalGainAnswersModel: TotalGainAnswersModel,
                            totalGainResultsModel: TotalGainResultsModel,
                            privateResidenceReliefModel: Option[PrivateResidenceReliefModel] = None,
@@ -125,7 +156,10 @@ trait ReportController extends FrontendController with ValidActiveSession {
       totalGainResultsModel <- calcConnector.calculateTotalGain(answers)
 
       privateResidentReliefModel <- getPRRModel(hc, totalGainResultsModel.get)
-      finalAnswers <- answersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers
+
+      totalGainWithPRR <- getPRRIfApplicable(answers, privateResidentReliefModel)
+      finalAnswers <- getFinalSectionsAnswers(totalGainResultsModel.get, totalGainWithPRR)
+
       otherReliefsModel <- getAllOtherReliefs(finalAnswers)
       taxYearModel <- getTaxYear(answers)
       maxAEA <- getMaxAEA(taxYearModel)
