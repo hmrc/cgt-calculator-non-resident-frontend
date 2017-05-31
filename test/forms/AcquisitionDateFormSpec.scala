@@ -18,7 +18,6 @@ package forms
 
 import java.time.LocalDate
 
-import assets.MessageLookup
 import assets.MessageLookup.{NonResident => messages}
 import forms.AcquisitionDateForm._
 import models.AcquisitionDateModel
