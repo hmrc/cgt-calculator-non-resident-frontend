@@ -4,30 +4,49 @@
 
 @(privateResidenceReliefForm: Form[PrivateResidenceReliefModel], daysBetweenShow: Boolean, daysBeforeShow: Boolean, disposalDateLess18Months: String)(implicit request: Request[_], messages: Messages)
 
-@hiddenContent = {
-    @if(daysBeforeShow){
-        <div class="form-group">
-            @input(
-            privateResidenceReliefForm("daysClaimed"),
-            '_label -> (Messages("calc.privateResidenceRelief.questionBefore.partOne") + " " + disposalDateLess18Months + " " + Messages("calc.privateResidenceRelief.questionBefore.partTwo")),
-            '_type -> "text",
-            '_inputClass -> "form-group input--no-spinner",
-            '_type -> "number"
-            )
-        </div>
-    }
-    @if(daysBetweenShow){
-        <div class="form-group">
-            @input(
-                privateResidenceReliefForm("daysClaimedAfter"),
-                '_label -> (Messages("calc.privateResidenceRelief.questionBetween.partOne") + " " + disposalDateLess18Months + " " + Messages("calc.privateResidenceRelief.questionBetween.partTwo")),
-                '_type -> "text",
-                '_inputClass -> "form-group input--no-spinner",
-                '_type -> "number"
-            )
-        </div>
+@whyTheseDatesList = {
+
+    @if(daysBetweenShow && daysBeforeShow) {
+        <p>@Messages("calc.privateResidenceRelief.helpTextSubTitle")</p>
+
+        <ul class="list-bullet">
+            @if(daysBeforeShow) {
+                <li>@Messages("calc.privateResidenceRelief.daysBeforeHelpText")</li>
+            }
+
+            @if(daysBetweenShow) {
+                <li>@disposalDateLess18Months @Messages("calc.privateResidenceRelief.daysBetweenHelpText")</li>
+            }
+        </ul>
     }
 
+}
+
+@hiddenContent = {
+@if(daysBeforeShow) {
+    <div class="form-group bold">
+    @input(
+        privateResidenceReliefForm("daysClaimed"),
+        '_label -> Messages("calc.privateResidenceRelief.questionBefore.partOne"),
+        '_type -> "text",
+        '_inputClass -> "form-group input--no-spinner",
+        '_type -> "number"
+    )
+    </div>
+}
+@if(daysBetweenShow) {
+    <div class="form-group bold">
+    @input(
+        privateResidenceReliefForm("daysClaimedAfter"),
+        '_label -> (Messages("calc.privateResidenceRelief.questionBetween.partOne") + " " + disposalDateLess18Months + " " + Messages("calc.privateResidenceRelief.questionBetween.partTwo")),
+        '_type -> "text",
+        '_inputClass -> "form-group input--no-spinner",
+        '_type -> "number"
+    )
+    </div>
+}
+
+@expandableHelpTextHelper(Messages("calc.privateResidenceRelief.helpTextTitle"), whyTheseDatesList)
 }
 
 @main_template(Messages("calc.privateResidenceRelief.question")) {
@@ -68,6 +87,7 @@
                 hideLegend = true
             )
         }
+
         <button class="button" type="submit" id="continue-button">@Messages("calc.base.continue")</button>
     }
 }
