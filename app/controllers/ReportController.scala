@@ -84,11 +84,8 @@ trait ReportController extends FrontendController with ValidActiveSession {
                          totalPersonalDetailsCalculationModel: Option[TotalPersonalDetailsCalculationModel],
                          maxAEA: BigDecimal,
                          otherReliefs: Option[AllOtherReliefsModel]): Future[Option[CalculationResultsWithTaxOwedModel]] = {
-      totalPersonalDetailsCalculationModel match {
-        case Some(data) => calcConnector.calculateNRCGTTotalTax(totalGainAnswersModel,
-          privateResidenceReliefModel, data, maxAEA, otherReliefs)
-        case _ => Future.successful(None)
-      }
+      calcConnector.calculateNRCGTTotalTax(totalGainAnswersModel,
+        privateResidenceReliefModel, totalPersonalDetailsCalculationModel, maxAEA, otherReliefs)
     }
 
     def getAllOtherReliefs(totalPersonalDetailsCalculationModel: Option[TotalPersonalDetailsCalculationModel])
