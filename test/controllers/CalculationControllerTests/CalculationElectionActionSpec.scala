@@ -42,7 +42,7 @@ class CalculationElectionActionSpec extends UnitSpec with WithFakeApplication wi
   def setupTarget(getData: Option[CalculationElectionModel],
                   postData: Option[CalculationElectionModel],
                   totalGainResultsModel: Option[TotalGainResultsModel],
-                  contentElements: Seq[(String, String, String, Option[String], Option[BigDecimal])],
+                  contentElements: Seq[(String, String, String, String, Option[String], Option[BigDecimal])],
                   finalSummaryModel: TotalPersonalDetailsCalculationModel,
                   taxOwedResult: Option[CalculationResultsWithTaxOwedModel] = None
                  ): CalculationElectionController = {
@@ -101,7 +101,7 @@ class CalculationElectionActionSpec extends UnitSpec with WithFakeApplication wi
   // GET Tests
   "In CalculationController calling the .calculationElection action" when {
 
-    lazy val seq = Seq(("flat", "300", "A question", Some("Another bit of a question"), Some(BigDecimal(100))))
+    lazy val seq = Seq(("flat", "300", "A question", "description", Some("Another bit of a question"), Some(BigDecimal(100))))
 
     "supplied with no pre-existing session" should {
 
@@ -167,7 +167,7 @@ class CalculationElectionActionSpec extends UnitSpec with WithFakeApplication wi
 
   "In CalculationController calling the .submitCalculationElection action" when {
 
-    lazy val seq = Seq(("flat", "300", "A question", Some("Another bit of a question"), None))
+    lazy val seq = Seq(("flat", "300", "A question", "description", Some("Another bit of a question"), None))
 
     "submitting a valid calculation election" should {
 
