@@ -325,9 +325,9 @@ object MessageLookup {
     object PrivateResidenceRelief {
       val question = "Are you claiming Private Residence Relief?"
       val helpLink = "Private Residence Relief"
-      val questionBefore = "How many days before"
-      val questionEnd = "are you claiming relief for?"
-      val questionBetween = "How many days between 5 April 2015 and"
+      val questionBefore = "For how many days before 5th April 2015 did you live in this property as your main home?"
+      val questionBetween = "For how many days between 5 April 2015 and"
+      val questionBetweenEnd = "did you live in this property as your main home?"
       val errorNoValue = "Enter the value for your days claimed"
       val errorNegative = "Enter a positive number for your days claimed"
       val errorDecimalPlaces = "There are too many numbers after the decimal point in your days claimed"

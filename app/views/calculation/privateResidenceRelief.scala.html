@@ -25,6 +25,9 @@
 
 @hiddenContent = {
 @if(daysBeforeShow) {
+
+    <p>@Messages("calc.privateResidenceRelief.formHintExplanation")</p>
+
     <div class="form-group bold">
     @input(
         privateResidenceReliefForm("daysClaimed"),
@@ -56,6 +59,8 @@
     case (false, true) => {
         @expandableHelpTextHelper(Messages("calc.privateResidenceRelief.helpTextJustBefore"), whyThisDate(false), false, true)
     }
+
+    case (_, _) => {}
 }
 }
 

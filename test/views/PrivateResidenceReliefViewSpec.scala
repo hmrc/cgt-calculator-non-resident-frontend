@@ -150,8 +150,7 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
         }
 
         s"contains the question ${messages.PrivateResidenceRelief.questionBefore}" in {
-          hiddenContent.select("label").text() shouldBe s"${messages.PrivateResidenceRelief.questionBefore} " +
-            s"date-input ${messages.PrivateResidenceRelief.questionEnd}"
+          hiddenContent.select("label").text() shouldBe messages.PrivateResidenceRelief.questionBefore
         }
       }
     }
@@ -173,7 +172,7 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
 
         s"contains the question ${messages.PrivateResidenceRelief.questionBetween}" in {
           hiddenContent.select("label").text() shouldBe s"${messages.PrivateResidenceRelief.questionBetween} " +
-            s"date-input-two ${messages.PrivateResidenceRelief.questionEnd}"
+            s"date-input-two ${messages.PrivateResidenceRelief.questionBetweenEnd}"
         }
       }
     }
