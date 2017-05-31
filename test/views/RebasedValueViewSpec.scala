@@ -29,7 +29,7 @@ import play.api.Play.current
 
 class RebasedValueViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
 
-  "The mandatory rebased value view" when {
+  "The rebased value view" when {
 
     "not supplied with a pre-existing stored model" should {
 

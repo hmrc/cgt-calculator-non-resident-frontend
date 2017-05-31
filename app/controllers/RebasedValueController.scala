@@ -17,16 +17,14 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import common.TaxDates
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import forms.RebasedValueForm._
 import views.html.calculation
-import models.{AcquisitionDateModel, RebasedValueModel}
+import models.RebasedValueModel
 import play.api.data.Form
-import play.api.mvc.{Action, AnyContent, Result}
+import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
-import uk.gov.hmrc.play.http.HeaderCarrier
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 

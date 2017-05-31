@@ -20,11 +20,10 @@ import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import forms.HowBecameOwnerForm._
-import models.{AcquisitionDateModel, HowBecameOwnerModel, RebasedValueModel}
+import models.HowBecameOwnerModel
 import play.api.data.Form
 import play.api.mvc.{Action, AnyContent, Result}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
-import uk.gov.hmrc.play.http.HeaderCarrier
 import views.html.{calculation => views}
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current

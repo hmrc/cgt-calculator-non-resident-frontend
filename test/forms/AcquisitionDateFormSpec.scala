@@ -155,6 +155,15 @@ class AcquisitionDateFormSpec extends UnitSpec with WithFakeApplication {
   }
 
   "Calling .verifyDateInPast" when {
+    
+    "date is yesterday" should {
+      val today = LocalDate.now().minusDays(1)
+      val date = AcquisitionDateModel(today.getDayOfMonth, today.getMonthValue, today.getYear)
+
+      "return true" in {
+        AcquisitionDateForm.verifyDateInPast(date) shouldBe true
+      }
+    }
 
     "date is today" should {
       val today = LocalDate.now()
@@ -171,15 +180,6 @@ class AcquisitionDateFormSpec extends UnitSpec with WithFakeApplication {
 
       "return false" in {
         AcquisitionDateForm.verifyDateInPast(date) shouldBe false
-      }
-    }
-
-    "date is yesterday" should {
-      val today = LocalDate.now().minusDays(1)
-      val date = AcquisitionDateModel(today.getDayOfMonth, today.getMonthValue, today.getYear)
-
-      "return false" in {
-        AcquisitionDateForm.verifyDateInPast(date) shouldBe true
       }
     }
   }
