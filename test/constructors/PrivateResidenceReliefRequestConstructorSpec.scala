@@ -72,23 +72,6 @@ class PrivateResidenceReliefRequestConstructorSpec extends UnitSpec{
     None
   )
 
-  val modelNoRebased = TotalGainAnswersModel(
-    DisposalDateModel(10, 10, 2016),
-    SoldOrGivenAwayModel(false),
-    None,
-    DisposalValueModel(10000),
-    DisposalCostsModel(100),
-    Some(HowBecameOwnerModel("Gifted")),
-    None,
-    AcquisitionValueModel(5000),
-    AcquisitionCostsModel(200),
-    AcquisitionDateModel(10, 10, 2000),
-    Some(RebasedValueModel(None)),
-    None,
-    ImprovementsModel("No", None, None),
-    None
-  )
-
   val modelWithRebasedValue = TotalGainAnswersModel(
     DisposalDateModel(10, 10, 2016),
     SoldOrGivenAwayModel(false),
@@ -100,7 +83,7 @@ class PrivateResidenceReliefRequestConstructorSpec extends UnitSpec{
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
     AcquisitionDateModel(10, 10, 2000),
-    Some(RebasedValueModel(Some(1000))),
+    Some(RebasedValueModel(1000)),
     None,
     ImprovementsModel("No", None, None),
     None

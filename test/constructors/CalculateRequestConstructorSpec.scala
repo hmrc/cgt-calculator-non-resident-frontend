@@ -29,7 +29,7 @@ class CalculateRequestConstructorSpec extends UnitSpec {
     None,
     AcquisitionDateModel(9, 9, 1990),
     AcquisitionValueModel(100000),
-    Some(RebasedValueModel(None)),
+    Some(RebasedValueModel(1000)),
     None,
     ImprovementsModel("No", None),
     DisposalDateModel(10, 10, 2010),

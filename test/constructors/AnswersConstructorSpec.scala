@@ -166,7 +166,7 @@ class AnswersConstructorSpec extends UnitSpec with MockitoSugar {
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
     AcquisitionDateModel(1, 4, 2013),
-    Some(RebasedValueModel(Some(7500))),
+    Some(RebasedValueModel(7500)),
     Some(RebasedCostsModel("Yes", Some(150))),
     ImprovementsModel("Yes", Some(50), Some(25)),
     Some(OtherReliefsModel(1000))
@@ -183,7 +183,7 @@ class AnswersConstructorSpec extends UnitSpec with MockitoSugar {
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
     AcquisitionDateModel(1, 4, 1967),
-    Some(RebasedValueModel(Some(7500))),
+    Some(RebasedValueModel(7500)),
     Some(RebasedCostsModel("Yes", Some(150))),
     ImprovementsModel("Yes", Some(50), Some(25)),
     Some(OtherReliefsModel(1000))
@@ -200,7 +200,7 @@ class AnswersConstructorSpec extends UnitSpec with MockitoSugar {
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
     AcquisitionDateModel(1, 4, 2013),
-    Some(RebasedValueModel(Some(7500))),
+    Some(RebasedValueModel(7500)),
     Some(RebasedCostsModel("Yes", Some(150))),
     ImprovementsModel("Yes", Some(50), Some(25)),
     Some(OtherReliefsModel(1000))
@@ -217,7 +217,7 @@ class AnswersConstructorSpec extends UnitSpec with MockitoSugar {
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
     AcquisitionDateModel(1, 4, 2013),
-    Some(RebasedValueModel(Some(7500))),
+    Some(RebasedValueModel(7500)),
     Some(RebasedCostsModel("Yes", Some(150))),
     ImprovementsModel("Yes", Some(50), Some(25)),
     Some(OtherReliefsModel(1000))

@@ -25,7 +25,7 @@ import play.api.Play.current
 
 object DeductionDetailsConstructor {
 
-  def datesNotValidCheck(acquisitionDateModel: AcquisitionDateModel, disposalDateModel: DisposalDateModel): Boolean = {
+  def datesOutsideRangeCheck(acquisitionDateModel: AcquisitionDateModel, disposalDateModel: DisposalDateModel): Boolean = {
     acquisitionDateModel.get.plusMonths(18).isBefore(disposalDateModel.get)
   }
 
@@ -33,12 +33,12 @@ object DeductionDetailsConstructor {
                            privateResidenceReliefModel: Option[PrivateResidenceReliefModel] = None): Seq[QuestionAnswerModel[Any]] = {
 
     val privateResidenceReliefQuestion = privateResidenceReliefQuestionRow(privateResidenceReliefModel)
-    val privateResidenceReliefDaysClaimed = privateResidenceReliefDaysClaimedRow(privateResidenceReliefModel, answers)
+    val privateResidenceReliefDaysClaimedBefore = privateResidenceReliefDaysClaimedBeforeRow(privateResidenceReliefModel, answers)
     val privateResidenceReliefDaysClaimedAfter = privateResidenceReliefDaysClaimedAfterRow(privateResidenceReliefModel, answers)
 
     val sequence = Seq(
       privateResidenceReliefQuestion,
-      privateResidenceReliefDaysClaimed,
+      privateResidenceReliefDaysClaimedBefore,
       privateResidenceReliefDaysClaimedAfter)
 
     sequence.flatten
@@ -56,10 +56,10 @@ object DeductionDetailsConstructor {
     }
   }
 
-  def privateResidenceReliefDaysClaimedRow(prr: Option[PrivateResidenceReliefModel],
-                                           answers: TotalGainAnswersModel): Option[QuestionAnswerModel[String]] = {
+  def privateResidenceReliefDaysClaimedBeforeRow(prr: Option[PrivateResidenceReliefModel],
+                                                 answers: TotalGainAnswersModel): Option[QuestionAnswerModel[String]] = {
     prr match {
-      case Some(PrivateResidenceReliefModel("Yes", Some(value), _)) if datesNotValidCheck(answers.acquisitionDateModel, answers.disposalDateModel) =>
+      case Some(PrivateResidenceReliefModel("Yes", Some(value), _)) if datesOutsideRangeCheck(answers.acquisitionDateModel, answers.disposalDateModel) =>
         Some(QuestionAnswerModel(
           s"${keys.privateResidenceRelief}-daysClaimed",
           value.toString(),
@@ -83,7 +83,7 @@ object DeductionDetailsConstructor {
             s" ${Messages("calc.privateResidenceRelief.questionBetween.partTwo")}",
           Some(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief().url)
         ))
-      case (Some(PrivateResidenceReliefModel("Yes", _, Some(value))), Some(RebasedValueModel(Some(_))))
+      case (Some(PrivateResidenceReliefModel("Yes", _, Some(value))), Some(_))
       if TaxDates.dateAfterOctober(answers.disposalDateModel.get) =>
         Some(QuestionAnswerModel(
           s"${keys.privateResidenceRelief}-daysClaimedAfter",

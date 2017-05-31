@@ -171,7 +171,7 @@ trait SummaryController extends FrontendController with ValidActiveSession {
         case CalculationType.rebased =>
           Ok(calculation.summary(calculationResult, taxYearModel.get, calculationType.get.calculationType,
             answers.disposalValueModel.disposalValue,
-            answers.rebasedValueModel.get.rebasedValueAmt.get,
+            answers.rebasedValueModel.get.rebasedValueAmt,
             totalCosts,
             backUrl, None,
             reliefsUsed = calculationResult.prrUsed.getOrElse(BigDecimal(0)) + calculationResult.otherReliefsUsed.getOrElse(BigDecimal(0)))
