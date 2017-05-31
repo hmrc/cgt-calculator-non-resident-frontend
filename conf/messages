@@ -813,3 +813,5 @@ calc.whoDidYouGiveThePropertyTo.other = Someone else
 ## Claiming reliefs messages
 calc.claimingReliefs.title = Are you entitled to any other reliefs?
 calc.claimingReliefs.helpText = For example, Letting Relief (if you already claimed Private Residence Relief) or Rollover Relief.
+calc.claimingReliefs.errorMandatory = Tell us if you are entitled to any other reliefs
+
