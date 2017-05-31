@@ -636,6 +636,7 @@ object MessageLookup {
     val title = "You have no tax to pay"
     val spouseText = "This is because Capital Gains Tax doesn't apply if you give a property to your spouse or civil partner."
     val charityText = "This is because Capital Gains Tax doesn't apply if you give a property to a charity."
+    val returnToGov = "Return to GOV.UK"
   }
 
   //############ Sell For Less messages #################//
