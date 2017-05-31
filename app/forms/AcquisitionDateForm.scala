@@ -16,6 +16,8 @@
 
 package forms
 
+import java.time.LocalDate
+
 import common.Validation._
 import models.AcquisitionDateModel
 import play.api.data.Forms._
@@ -44,5 +46,12 @@ object AcquisitionDateForm {
     )(AcquisitionDateModel.apply)(AcquisitionDateModel.unapply)
       .verifying(Messages("calc.common.date.error.invalidDate"), fields =>
         isValidDate(fields.day, fields.month, fields.year))
+      .verifying(Messages("calc.nonResident.rebasedValue.errorFutureDate"), fields =>
+        verifyDateInPast(fields))
   )
+
+  def verifyDateInPast(data: AcquisitionDateModel): Boolean = {
+    if(isValidDate(data.day, data.month, data.year)) data.get.isBefore(LocalDate.now())
+    else true
+  }
 }

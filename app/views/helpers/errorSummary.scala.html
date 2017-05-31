@@ -1,4 +1,4 @@
-@(form: Form[_], page: String, errorKey: String = "")(implicit messages: Messages)
+@(form: Form[_], page: String, errorKey: String = "", additionalText: Boolean = true)(implicit messages: Messages)
 
 @summary = {
     <div
@@ -12,6 +12,9 @@
         <ul class="js-error-summary-messages">
             @form.errors.map { error =>
                 @if(error.key.equals("")) {
+                    @if(additionalText) {
+
+                    }
                     <li role="tooltip" data-journey="@page:error:@errorKey">
                         <a href="#@errorKey"
                            id="@{errorKey}-error-summary"

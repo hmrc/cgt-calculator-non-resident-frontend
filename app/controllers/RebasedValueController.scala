@@ -42,15 +42,15 @@ trait RebasedValueController extends FrontendController with ValidActiveSession 
 
   val rebasedValue: Action[AnyContent] = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[RebasedValueModel](KeystoreKeys.rebasedValue).map {
-      case Some(data) => Ok(calculation.mandatoryRebasedValue(rebasedValueForm.fill(data)))
-      case None => Ok(calculation.mandatoryRebasedValue(rebasedValueForm))
+      case Some(data) => Ok(calculation.rebasedValue(rebasedValueForm.fill(data)))
+      case None => Ok(calculation.rebasedValue(rebasedValueForm))
     }
   }
 
   val submitRebasedValue: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     def errorAction(errors: Form[RebasedValueModel]) = {
-      Future.successful(BadRequest(calculation.mandatoryRebasedValue(errors)))
+      Future.successful(BadRequest(calculation.rebasedValue(errors)))
     }
 
     def successAction(model: RebasedValueModel) = {

@@ -23,19 +23,17 @@ import org.jsoup.Jsoup
 import forms.RebasedValueForm._
 import controllers.routes
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
-import views.html.calculation.mandatoryRebasedValue
+import views.html.calculation.rebasedValue
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 
-class MandatoryRebasedValueViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
-
-
+class RebasedValueViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
 
   "The mandatory rebased value view" when {
 
     "not supplied with a pre-existing stored model" should {
 
-      lazy val view = mandatoryRebasedValue(rebasedValueForm)
+      lazy val view = rebasedValue(rebasedValueForm)
       lazy val document = Jsoup.parse(view.body)
 
       s"Have the title ${messages.question}" in {
@@ -142,7 +140,7 @@ class MandatoryRebasedValueViewSpec extends UnitSpec with WithFakeApplication wi
     "supplied with a form with errors" should {
 
       lazy val form = rebasedValueForm.bind(Map("rebasedValueAmt" -> ""))
-      lazy val view = mandatoryRebasedValue(form)
+      lazy val view = rebasedValue(form)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {
