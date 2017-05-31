@@ -1,0 +1,20 @@
+@import views.html.main_template
+
+@(outsideTaxYear: )(implicit request: Request[_], messages: Messages)
+
+@main_template(Messages("calc.nonresident.outsideTaxYears.title")) {
+
+<a id="back-link" class="back-link" href="@controllers.routes.DisposalDateController.disposalDate.url">@Messages("calc.base.back")</a>
+
+
+<h1 class="heading-large">@Messages("calc.nonresident.outsideTaxYears.title")</h1>
+
+<p class="helperText">@Messages("calc.nonresident.outsideTaxYears.message")</p>
+
+legend = Messages("calc.nonresident.outsideTaxYears.title"),
+legendClass = Some("visuallyhidden")
+
+
+<button class="button" type="submit" id="continue-button">@Messages("calc.base.continue")</button>
+}
+}

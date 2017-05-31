@@ -153,6 +153,10 @@ calc.acquisitionValue.bullet.three.link = someone else you''re connected to
 calc.acquisitionValue.bullet.four = bought it for less than it''s worth because the seller wanted to help you
 calc.acquisitionValue.bullet.five = became the owner before 1 April 1982
 
+## Outside Tax Years messages
+calc.nonresident.outsideTaxYears.title = The date you''ve entered isn''t supported by this calculator
+calc.nonresident.outsideTaxYears.message = You can continue to use it, but we''ll use the tax rates from the {0} tax year.
+
 
 ## Rebased Value ##
 calc.nonResident.rebasedValue.question = What was the market value of the property on
