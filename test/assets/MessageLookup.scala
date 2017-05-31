@@ -955,6 +955,11 @@ object MessageLookup {
     val errormandatory = "Please tell us who you gave the property to"
   }
 
+  object ClaimingReliefs {
+    val title = "Are you entitled to any other reliefs?"
+    val helpText = "For example, Letting Relief (if you already claimed Private Residence Relief) or Rollover Relief."
+  }
+
   object SummaryPartialMessages {
     val headingTwo: String => String = taxYear => s"Capital Gains Tax to pay for $taxYear tax year"
     val warningHidden: String = "Warning"
