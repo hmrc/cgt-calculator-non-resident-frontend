@@ -91,7 +91,7 @@ object TaxableGainCalculation {
                         calcConnector: CalculatorConnector)(implicit hc: HeaderCarrier): Future[Option[CalculationResultsWithTaxOwedModel]] = {
 
     personalDetailsModel match {
-      case Some(data) => calcConnector.calculateNRCGTTotalTax(totalGainAnswersModel, prrModel, data, maxAEA)
+      case Some(data) => calcConnector.calculateNRCGTTotalTax(totalGainAnswersModel, prrModel, personalDetailsModel, maxAEA)
       case None => Future(None)
     }
   }

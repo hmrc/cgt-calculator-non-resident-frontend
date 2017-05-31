@@ -24,68 +24,75 @@ import scala.math.BigDecimal
 
 object FinalTaxAnswersRequestConstructor {
 
-  def additionalParametersQuery(model: TotalPersonalDetailsCalculationModel,
+  def additionalParametersQuery(model: Option[TotalPersonalDetailsCalculationModel],
                                 maxAnnualExemptAmount: BigDecimal): String = {
-    currentIncome(model.currentIncomeModel) +
-      personalAllowanceAmt(model.personalAllowanceModel) +
-      allowableLoss(model.otherPropertiesModel, model.previousGainOrLoss, model.howMuchLossModel) +
-      previousGain(model.otherPropertiesModel, model.previousGainOrLoss, model.howMuchGainModel) +
-      broughtForwardLosses(model.broughtForwardLossesModel) +
-      annualExemptAmount(model.otherPropertiesModel, model.previousGainOrLoss, model.howMuchLossModel, model.howMuchGainModel,
-        model.annualExemptAmountModel, maxAnnualExemptAmount)
+    currentIncome(model.map {_.currentIncomeModel}) +
+      personalAllowanceAmt(model.flatMap {_.personalAllowanceModel}) +
+      allowableLoss(model.map {_.otherPropertiesModel}, model.flatMap {_.previousGainOrLoss}, model.flatMap {_.howMuchLossModel}) +
+      previousGain(model.map {_.otherPropertiesModel}, model.flatMap {_.previousGainOrLoss}, model.flatMap {_.howMuchGainModel}) +
+      broughtForwardLosses(model.map {_.broughtForwardLossesModel}) +
+      annualExemptAmount(model.map {_.otherPropertiesModel}, model.flatMap {_.previousGainOrLoss},
+        model.flatMap {_.howMuchLossModel}, model.flatMap {_.howMuchGainModel}, model.flatMap {_.annualExemptAmountModel}, maxAnnualExemptAmount)
   }
 
-  def currentIncome(currentIncomeModel: CurrentIncomeModel): String = {
-    s"&currentIncome=${currentIncomeModel.currentIncome}"
+  def currentIncome(currentIncomeModel: Option[CurrentIncomeModel]): String = {
+    currentIncomeModel match {
+      case Some(data) => s"&currentIncome=${data.currentIncome}"
+      case _ => ""
+    }
   }
 
   def personalAllowanceAmt(personalAllowanceModel: Option[PersonalAllowanceModel]): String =
-    if (personalAllowanceModel.isDefined) s"&personalAllowanceAmt=${personalAllowanceModel.get.personalAllowanceAmt}"
-    else ""
+    personalAllowanceModel match {
+      case Some(data) => s"&personalAllowanceAmt=${data.personalAllowanceAmt}"
+      case _ => ""
+    }
 
-
-  def allowableLoss(otherPropertiesModel: OtherPropertiesModel,
+  def allowableLoss(otherPropertiesModel: Option[OtherPropertiesModel],
                     previousLossOrGainModel: Option[PreviousLossOrGainModel],
                     howMuchLossModel: Option[HowMuchLossModel]): String = {
-    (otherPropertiesModel.otherProperties, previousLossOrGainModel) match {
-      case (YesNoKeys.yes, Some(PreviousLossOrGainModel(PreviousGainOrLossKeys.loss))) => s"&allowableLoss=${howMuchLossModel.get.loss}"
+    (otherPropertiesModel, previousLossOrGainModel) match {
+      case (Some(OtherPropertiesModel(YesNoKeys.yes)), Some(PreviousLossOrGainModel(PreviousGainOrLossKeys.loss))) =>
+        s"&allowableLoss=${howMuchLossModel.get.loss}"
       case _ => ""
     }
   }
 
-  def previousGain(otherPropertiesModel: OtherPropertiesModel,
+  def previousGain(otherPropertiesModel: Option[OtherPropertiesModel],
                    previousLossOrGainModel: Option[PreviousLossOrGainModel],
                    howMuchGainModel: Option[HowMuchGainModel]): String = {
-    (otherPropertiesModel.otherProperties, previousLossOrGainModel) match {
-      case (YesNoKeys.yes, Some(PreviousLossOrGainModel(PreviousGainOrLossKeys.gain))) => s"&previousGain=${howMuchGainModel.get.howMuchGain}"
+    (otherPropertiesModel, previousLossOrGainModel) match {
+      case (Some(OtherPropertiesModel(YesNoKeys.yes)),Some(PreviousLossOrGainModel(PreviousGainOrLossKeys.gain))) =>
+        s"&previousGain=${howMuchGainModel.get.howMuchGain}"
       case _ => ""
     }
   }
 
-  def annualExemptAmount(otherPropertiesModel: OtherPropertiesModel,
+  def annualExemptAmount(otherPropertiesModel: Option[OtherPropertiesModel],
                          previousLossOrGainModel: Option[PreviousLossOrGainModel],
                          howMuchLossModel: Option[HowMuchLossModel],
                          howMuchGainModel: Option[HowMuchGainModel],
                          annualExemptAmountModel: Option[AnnualExemptAmountModel],
                          maxAnnualExemptAmount: BigDecimal): String = {
 
-    (otherPropertiesModel.otherProperties, previousLossOrGainModel, howMuchLossModel, howMuchGainModel) match {
+    (otherPropertiesModel, previousLossOrGainModel, howMuchLossModel, howMuchGainModel) match {
 
-      case (YesNoKeys.yes, Some(PreviousLossOrGainModel(PreviousGainOrLossKeys.loss)), Some(HowMuchLossModel(loss)), _) if loss == 0.0 =>
-        s"&annualExemptAmount=${annualExemptAmountModel.get.annualExemptAmount}"
-      case (YesNoKeys.yes, Some(PreviousLossOrGainModel(PreviousGainOrLossKeys.gain)), _, Some(HowMuchGainModel(gain))) if gain == 0.0 =>
-        s"&annualExemptAmount=${annualExemptAmountModel.get.annualExemptAmount}"
-      case (YesNoKeys.yes, Some(PreviousLossOrGainModel(PreviousGainOrLossKeys.gain)), _, Some(HowMuchGainModel(_))) => "&annualExemptAmount=0"
-      case (YesNoKeys.yes, Some(PreviousLossOrGainModel(PreviousGainOrLossKeys.neither)), _, _) =>
+      case (Some(OtherPropertiesModel(YesNoKeys.yes)), Some(PreviousLossOrGainModel(PreviousGainOrLossKeys.loss)),
+      Some(HowMuchLossModel(loss)), _) if loss == 0.0 => s"&annualExemptAmount=${annualExemptAmountModel.get.annualExemptAmount}"
+      case (Some(OtherPropertiesModel(YesNoKeys.yes)), Some(PreviousLossOrGainModel(PreviousGainOrLossKeys.gain)), _,
+      Some(HowMuchGainModel(gain))) if gain == 0.0 => s"&annualExemptAmount=${annualExemptAmountModel.get.annualExemptAmount}"
+      case (Some(OtherPropertiesModel(YesNoKeys.yes)), Some(PreviousLossOrGainModel(PreviousGainOrLossKeys.gain)), _,
+      Some(HowMuchGainModel(_))) => "&annualExemptAmount=0"
+      case (Some(OtherPropertiesModel(YesNoKeys.yes)), Some(PreviousLossOrGainModel(PreviousGainOrLossKeys.neither)), _, _) =>
         s"&annualExemptAmount=${annualExemptAmountModel.get.annualExemptAmount}"
       case (_, _, _, _) =>
         s"&annualExemptAmount=$maxAnnualExemptAmount"
     }
   }
 
-  def broughtForwardLosses(model: BroughtForwardLossesModel): String = {
-    if (model.isClaiming) {
-      s"&broughtForwardLoss=${model.broughtForwardLoss.get}"
+  def broughtForwardLosses(model: Option[BroughtForwardLossesModel]): String = {
+    if (model.isDefined && model.get.isClaiming) {
+      s"&broughtForwardLoss=${model.get.broughtForwardLoss.get}"
     } else {
       ""
     }
