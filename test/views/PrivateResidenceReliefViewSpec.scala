@@ -119,8 +119,8 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
       }
     }
 
-    "supplied with no errors and the days before input displayed" should {
-      lazy val view = privateResidenceRelief(privateResidenceReliefForm(true, false), false, true, "date-input")
+    "supplied with no errors and the days before input displayed along with the days before " should {
+      lazy val view = privateResidenceRelief(privateResidenceReliefForm(true, false), true, true, "date-input")
       lazy val document = Jsoup.parse(view.body)
 
       s"have the question a hidden legend" which {
@@ -152,6 +152,18 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
         s"contains the question ${messages.PrivateResidenceRelief.questionBefore}" in {
           hiddenContent.select("label").text() shouldBe messages.PrivateResidenceRelief.questionBefore
         }
+
+        s"has form help text ${messages.PrivateResidenceRelief.helpTextSubtitle}" in {
+
+        }
+
+        s"contains a list" which {
+          lazy val list = hiddenContent.select("li")
+
+          "" in {
+
+          }
+        }
       }
     }
 
@@ -173,6 +185,10 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
         s"contains the question ${messages.PrivateResidenceRelief.questionBetween}" in {
           hiddenContent.select("label").text() shouldBe s"${messages.PrivateResidenceRelief.questionBetween} " +
             s"date-input-two ${messages.PrivateResidenceRelief.questionBetweenEnd}"
+        }
+
+        s"contains the text ${messages.PrivateResidenceRelief.questionBetweenWhyThisDate}" in {
+          hiddenContent.select("#helpTextBetween").text() shouldBe "date-input-two " + messages.PrivateResidenceRelief.questionBetweenWhyThisDate
         }
       }
     }
