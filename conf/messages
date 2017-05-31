@@ -213,6 +213,7 @@ nocgt.content.return = Return to GOV.UK
 calc.noTaxToPay.title = You have no tax to pay
 calc.noTaxToPay.spouseText = This is because Capital Gains Tax doesn''t apply if you give a property to your spouse or civil partner.
 calc.noTaxToPay.charityText = This is because Capital Gains Tax doesn''t apply if you give a property to a charity.
+calc.noTaxToPay.returnToGov = Return to GOV.UK
 
 ## Disposal Value ##
 calc.disposalValue.question = How much did you sell the property for?
