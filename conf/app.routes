@@ -168,6 +168,10 @@ POST        /property-lived-in                  controllers.PropertyLivedInContr
 GET         /no-tax-to-pay                      controllers.WhoDidYouGiveItToController.noTaxToPay
 ########################################################
 
+#Claiming Reliefs Route
+GET         /claiming-reliefs                   controllers.ClaimingReliefsController.claimingReliefs
+POST        /claiming-reliefs                   controllers.ClaimingReliefsController.submitClaimingReliefs
+
 #Report screen route
 GET         /summary-report                     controllers.ReportController.summaryReport
 
