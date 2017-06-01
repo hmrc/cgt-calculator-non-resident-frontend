@@ -339,11 +339,18 @@ calc.calculationElection.message.rebased = Based on the amount you''ve gained on
 calc.calculationElection.message.rebasedDate = 5 April 2015
 calc.calculationElection.message.flat = Based on the amount you''ve gained on the property since you became the owner
 calc.calculationElection.message.whyMore = Why you might choose a higher total
-calc.calculationElection.description.rebased = Rebased method
+calc.calculationElection.description.rebased = Rebasing method
 calc.calculationElection.description.flat = Gain over whole period of ownership method
 calc.calculationElection.description.time = Straight-line apportionment method
 calc.calculationElection.whyMoreDetails.one = You might pick a higher total if you''re planning to add more tax reliefs.
 calc.calculationElection.whyMoreDetails.two = Higher totals sometimes qualify for larger reliefs, which can reduce the amount you owe.
+
+## Calculation Election No Reliefs ##
+calc.calculationElectionNoReliefs.title = Your calculation options
+calc.calculationElectionNoReliefs.helpText = There are 3 ways we can calculate your Non-Resident Capital Gains Tax.
+calc.calculationElectionNoReliefs.helpTextMethodPartOne = Based on the answers you''ve given, the
+calc.calculationElectionNoReliefs.helpTextMethodPartTwo = will give you the lowest amount of tax to pay.
+calc.calculationElectionNoReliefs.helpTextChooseMethod = You''re free to choose another method if you wish.
 
 ## Other Reliefs ##
 calc.otherReliefs.question = How much extra tax relief are you claiming?
