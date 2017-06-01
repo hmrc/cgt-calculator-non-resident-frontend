@@ -16,6 +16,7 @@
 
 package constructors
 
+import assets.MessageLookup.NonResident.{CalculationElection => messages}
 import models._
 import org.scalatest.mock.MockitoSugar
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
@@ -257,6 +258,111 @@ class CalculationElectionConstructorSpec extends UnitSpec with MockitoSugar with
         "should have flat as the third element" in {
           calculations(2)._1 shouldEqual "flat"
         }
+      }
+    }
+  }
+
+  "Calling .rebasedElementConstructor" should {
+
+    "return a CalculationElectionOption" which {
+      lazy val model = target.rebasedElementConstructor(1000, "data", Some(5000))
+
+      "has a calcType of 'rebased'" in {
+        model.calcType shouldBe "rebased"
+      }
+
+      "has an amount of '1000.00'" in {
+        model.amount shouldBe BigDecimal(1000.00)
+      }
+
+      s"has a message of '${messages.rebased}'" in {
+        model.message shouldBe messages.rebased
+      }
+
+      s"has a calcDescription of '${messages.rebasedDescription}" in {
+        model.calcDescription shouldBe messages.rebasedDescription
+      }
+
+      s"has a date of ${messages.taxStartDate}" in {
+        model.date shouldBe Some(messages.taxStartDate)
+      }
+
+      "has some data as a string of 'data'" in {
+        model.data shouldBe "data"
+      }
+
+      "has other reliefs of 5000" in {
+        model.otherReliefs shouldBe Some(5000)
+      }
+    }
+  }
+
+  "Calling .flatElementConstructor" should {
+
+    "return a CalculationElectionOption" which {
+      lazy val model = target.flatElementConstructor(1000, 100, None)
+
+      "has a calcType of 'flat'" in {
+        model.calcType shouldBe "flat"
+      }
+
+      "has an amount of '1000.00'" in {
+        model.amount shouldBe BigDecimal(1000.00)
+      }
+
+      s"has a message of '${messages.flat}'" in {
+        model.message shouldBe messages.flat
+      }
+
+      s"has a calcDescription of '${messages.flatDescription}" in {
+        model.calcDescription shouldBe messages.flatDescription
+      }
+
+      s"has no date" in {
+        model.date shouldBe None
+      }
+
+      "has some data as an integer of '100'" in {
+        model.data shouldBe 100
+      }
+
+      "has no other reliefs" in {
+        model.otherReliefs shouldBe None
+      }
+    }
+  }
+
+  "Calling .timeElementConstructor" should {
+
+    "return a CalculationElectionOption" which {
+      lazy val model = target.timeElementConstructor(1000, "data", Some(5000))
+
+      "has a calcType of 'time'" in {
+        model.calcType shouldBe "time"
+      }
+
+      "has an amount of '1000.00'" in {
+        model.amount shouldBe BigDecimal(1000.00)
+      }
+
+      s"has a message of '${messages.timeApportioned}'" in {
+        model.message shouldBe messages.timeApportioned
+      }
+
+      s"has a calcDescription of '${messages.timeApportionedDescription}" in {
+        model.calcDescription shouldBe messages.timeApportionedDescription
+      }
+
+      s"has a date of ${messages.taxStartDate}" in {
+        model.date shouldBe Some(messages.taxStartDate)
+      }
+
+      "has some data as a string of 'data'" in {
+        model.data shouldBe "data"
+      }
+
+      "has other reliefs of 5000" in {
+        model.otherReliefs shouldBe Some(5000)
       }
     }
   }

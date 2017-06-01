@@ -34,8 +34,8 @@ class CalculationElectionViewSpec extends UnitSpec with WithFakeApplication with
   "The Calculation Election View" should {
 
     lazy val form = calculationElectionForm
-    lazy val seq: Seq[(String, String, String, Option[String], Option[BigDecimal])] =
-      Seq(("flat", "2000", Messages("calc.calculationElection.message.flat"), None, None))
+    lazy val seq: Seq[(String, String, String, String, Option[String], Option[BigDecimal])] =
+      Seq(("flat", "2000", Messages("calc.calculationElection.message.flat"), Messages("calc.calculationElection.description.flat"), None, None))
     lazy val view = views.calculationElection(form, seq)
     lazy val doc = Jsoup.parse(view.body)
 
