@@ -205,7 +205,7 @@ class CheckYourAnswersActionSpec extends UnitSpec with WithFakeApplication with 
         status(result) shouldBe 303
       }
 
-      "redirect the user to the calculation election page" in {
+      "redirect the user to the claiming other tax reliefs page" in {
         redirectLocation(result).get shouldBe controllers.routes.ClaimingReliefsController.claimingReliefs().url
       }
     }
