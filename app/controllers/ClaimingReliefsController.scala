@@ -14,12 +14,21 @@
  * limitations under the License.
  */
 
-package models
+package controllers
 
-import play.api.libs.json.{Json, OFormat}
+import connectors.CalculatorConnector
+import play.api.mvc.{Action, AnyContent}
+import uk.gov.hmrc.play.frontend.controller.FrontendController
 
-case class RebasedValueModel (rebasedValueAmt: BigDecimal)
+object ClaimingReliefsController extends ClaimingReliefsController {
+  val calcConnector = CalculatorConnector
+}
 
-object RebasedValueModel {
-  implicit val formats: OFormat[RebasedValueModel] = Json.format[RebasedValueModel]
+trait ClaimingReliefsController extends FrontendController {
+
+  val calcConnector: CalculatorConnector
+
+  val claimingReliefs: Action[AnyContent] = TODO
+
+  val submitClaimingReliefs: Action[AnyContent] = TODO
 }

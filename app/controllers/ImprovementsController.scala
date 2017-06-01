@@ -43,17 +43,13 @@ trait ImprovementsController extends FrontendController with ValidActiveSession 
   val calcConnector: CalculatorConnector
   val answersConstructor: AnswersConstructor
 
-  private def improvementsBackUrl(rebasedValue: Option[RebasedValueModel], acquisitionDate: Option[AcquisitionDateModel])
-                                 (implicit hc: HeaderCarrier): Future[String] = (rebasedValue, acquisitionDate) match {
-    case (_, Some(AcquisitionDateModel(day, month, year)))
-      if TaxDates.dateAfterStart(day, month, year) =>
-      Future.successful(routes.AcquisitionCostsController.acquisitionCosts().url)
-    case (Some(RebasedValueModel(None)), _) =>
-      Future.successful(routes.RebasedValueController.rebasedValue().url)
-    case (Some(RebasedValueModel(Some(_))), Some(AcquisitionDateModel(day, month, year)))
-      if !TaxDates.dateAfterStart(day, month, year) =>
-      Future.successful(routes.RebasedCostsController.rebasedCosts().url)
-    case (_, _) => Future.successful(common.DefaultRoutes.missingDataRoute)
+  private def improvementsBackUrl(acquisitionDate: Option[AcquisitionDateModel]): Future[String] = {
+    acquisitionDate match {
+      case Some(data) if TaxDates.dateAfterStart(data.get) =>
+        Future.successful(routes.AcquisitionCostsController.acquisitionCosts().url)
+      case Some(_) => Future.successful(routes.RebasedCostsController.rebasedCosts().url)
+      case _ => Future.successful(common.DefaultRoutes.missingDataRoute)
+    }
   }
 
   private def fetchAcquisitionDate(implicit headerCarrier: HeaderCarrier): Future[Option[AcquisitionDateModel]] = {
@@ -64,18 +60,11 @@ trait ImprovementsController extends FrontendController with ValidActiveSession 
     calcConnector.fetchAndGetFormData[ImprovementsModel](KeystoreKeys.improvements)
   }
 
-  private def fetchRebasedValue(implicit headerCarrier: HeaderCarrier): Future[Option[RebasedValueModel]] = {
-    calcConnector.fetchAndGetFormData[RebasedValueModel](KeystoreKeys.rebasedValue)
-  }
-
-  private def displayImprovementsSectionCheck(rebasedValueModel: Option[RebasedValueModel],
-                                              acquisitionDateModel: Option[AcquisitionDateModel]): Future[Boolean] = {
-    (rebasedValueModel, acquisitionDateModel) match {
-      case (Some(value), Some(data))
-        if !TaxDates.dateAfterStart(data.day, data.month, data.year) && value.rebasedValueAmt.isDefined =>
-          Future.successful(true)
-      case (_, _) =>
-        Future.successful(false)
+  private def displayImprovementsSectionCheck(acquisitionDateModel: Option[AcquisitionDateModel]): Future[Boolean] = {
+    acquisitionDateModel match {
+      case Some(data) if !TaxDates.dateAfterStart(data.get) =>
+        Future.successful(true)
+      case _ => Future.successful(false)
     }
   }
 
@@ -99,11 +88,10 @@ trait ImprovementsController extends FrontendController with ValidActiveSession 
     }
 
     for {
-      rebasedValue <- fetchRebasedValue(hc)
       acquisitionDate <- fetchAcquisitionDate(hc)
       improvements <- fetchImprovements(hc)
-      improvementsOptions <- displayImprovementsSectionCheck(rebasedValue, acquisitionDate)
-      backUrl <- improvementsBackUrl(rebasedValue, acquisitionDate)
+      improvementsOptions <- displayImprovementsSectionCheck(acquisitionDate)
+      backUrl <- improvementsBackUrl(acquisitionDate)
       ownerBeforeLegislationStart <- ownerBeforeLegislationStartCheck(acquisitionDate)
       route <- routeRequest(backUrl, improvements, improvementsOptions, ownerBeforeLegislationStart)
     } yield route
@@ -111,24 +99,13 @@ trait ImprovementsController extends FrontendController with ValidActiveSession 
 
   val submitImprovements: Action[AnyContent] = ValidateSession.async { implicit request =>
 
-    def skipPRR(rebasedValueModel: Option[RebasedValueModel]): Boolean =
-      rebasedValueModel match {
-        case (Some(rebasedValue)) => rebasedValue.rebasedValueAmt.isEmpty
-        case _ => false
-      }
-
-    def successRouteRequest(model: Option[TotalGainResultsModel], skipPRR: Boolean): Result = {
-
-      if (model.isEmpty) Redirect(common.DefaultRoutes.missingDataRoute)
-      else {
-        val optionSeq = Seq(model.get.rebasedGain, model.get.timeApportionedGain).flatten
-        val finalSeq = Seq(model.get.flatGain) ++ optionSeq
-
-        (!finalSeq.forall(_ <= 0), skipPRR) match {
-          case (true, false) => Redirect(routes.PropertyLivedInController.propertyLivedIn())
-          case (true, true) => Redirect(controllers.routes.CurrentIncomeController.currentIncome())
-          case (_, _) => Redirect(routes.CheckYourAnswersController.checkYourAnswers())
-        }
+    def successRouteRequest(totalGainResultsModel: Option[TotalGainResultsModel]): Result = {
+      totalGainResultsModel match {
+        case Some(model) =>
+          val totalGainResults: Seq[BigDecimal] = Seq(model.flatGain) ++ Seq(model.rebasedGain, model.timeApportionedGain).flatten
+          if(!totalGainResults.forall(_ <= 0)) Redirect(routes.PropertyLivedInController.propertyLivedIn())
+          else Redirect(routes.CheckYourAnswersController.checkYourAnswers())
+        case None => Redirect(common.DefaultRoutes.missingDataRoute)
       }
     }
 
@@ -137,38 +114,29 @@ trait ImprovementsController extends FrontendController with ValidActiveSession 
       Future.successful(BadRequest(calculation.improvements(errors, improvementsOptions, backUrl, ownerBeforeLegislationStart)))
     }
 
-    def successAction(rebasedValue: Option[RebasedValueModel],
-                      acquisitionDate: Option[AcquisitionDateModel],
-                      improvements: ImprovementsModel
-                     ): Future[Result] = {
-
-      val skipPrivateResidence = skipPRR(rebasedValue)
-
+    def successAction(improvements: ImprovementsModel): Future[Result] = {
       for {
-        save <- calcConnector.saveFormData(KeystoreKeys.improvements, improvements)
+        _ <- calcConnector.saveFormData(KeystoreKeys.improvements, improvements)
         allAnswersModel <- answersConstructor.getNRTotalGainAnswers
         gains <- calcConnector.calculateTotalGain(allAnswersModel)
-      } yield successRouteRequest(gains, skipPrivateResidence)
+      } yield successRouteRequest(gains)
     }
 
-    def routeRequest(rebasedValue: Option[RebasedValueModel],
-                     acquisitionDate: Option[AcquisitionDateModel],
-                     backUrl: String,
+    def routeRequest(backUrl: String,
                      improvementsOptions: Boolean,
                      ownerBeforeLegislationStart: Boolean): Future[Result] = {
       improvementsForm(improvementsOptions).bindFromRequest.fold(
         errors => errorAction(errors, backUrl, improvementsOptions, ownerBeforeLegislationStart),
-        success => successAction(rebasedValue, acquisitionDate, success)
+        success => successAction(success)
       )
     }
 
     for {
-      rebasedValue <- fetchRebasedValue(hc)
       acquisitionDate <- fetchAcquisitionDate(hc)
-      improvementsOptions <- displayImprovementsSectionCheck(rebasedValue, acquisitionDate)
-      backUrl <- improvementsBackUrl(rebasedValue, acquisitionDate)
+      improvementsOptions <- displayImprovementsSectionCheck(acquisitionDate)
+      backUrl <- improvementsBackUrl(acquisitionDate)
       ownerBeforeLegislationStart <- ownerBeforeLegislationStartCheck(acquisitionDate)
-      route <- routeRequest(rebasedValue, acquisitionDate, backUrl, improvementsOptions, ownerBeforeLegislationStart)
+      route <- routeRequest(backUrl, improvementsOptions, ownerBeforeLegislationStart)
     } yield route
   }
 }

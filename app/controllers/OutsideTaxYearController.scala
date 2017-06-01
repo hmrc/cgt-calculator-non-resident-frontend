@@ -14,12 +14,19 @@
  * limitations under the License.
  */
 
-package models
+package controllers
 
-import play.api.libs.json.{Json, OFormat}
+import controllers.predicates.ValidActiveSession
+import uk.gov.hmrc.play.frontend.controller.FrontendController
 
-case class RebasedValueModel (rebasedValueAmt: BigDecimal)
+object OutsideTaxYearController extends OutsideTaxYearController {
 
-object RebasedValueModel {
-  implicit val formats: OFormat[RebasedValueModel] = Json.format[RebasedValueModel]
+}
+
+trait OutsideTaxYearController extends FrontendController with ValidActiveSession {
+
+  val outsideTaxYear = TODO
+
+  val submitOutsideTaxYear = TODO
+
 }

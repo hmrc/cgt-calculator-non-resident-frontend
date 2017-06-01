@@ -162,17 +162,13 @@ calc.nonResident.rebasedValue.helpText = If you''re not a UK resident, you only 
 calc.nonResident.rebasedValue.helpHidden.title = Why we''re asking for this
 calc.nonResident.rebasedValue.hintText = If you don''t know the exact value, you must provide a realistic estimate. You might have to pay more if we think your estimate is unrealistic.
 calc.nonResident.rebasedValue.jointOwnership = If you owned the property with someone else, only enter your share of the property value.
-calc.nonResident.rebasedValue.optionalLine = Only tell us if you owned the property on that date
 calc.nonResident.rebasedValue.errorNegative = Enter a positive value for your property on 5 April 2015
 calc.nonResident.rebasedValue.error.no.value.supplied = Enter a value for your property on 5 April 2015
 calc.nonResident.rebasedValue.errorDecimalPlaces = The value for your property on 5 April 2015 has too many numbers after the decimal point
+calc.nonResident.rebasedValue.errorIncompleteDate = Date is not valid
+calc.nonResident.rebasedValue.errorFutureDate = Date must be in the past
+calc.nonResident.rebasedValue.errorFutureDateGuidance = Enter a date from the past
 
-## Mandatory Rebased Value ##
-calc.nonResident.mandatoryRebasedValue.question = What was the market value of the property on
-calc.nonResident.mandatoryRebasedValue.date = 5 April 2015?
-calc.nonResident.mandatoryRebasedValue.questionAndDate = What was the market value of the property on 5 April 2015?
-calc.nonResident.mandatoryRebasedValue.helpText = This value lets us calculate your tax in different ways, which means you may have less tax to pay.
-calc.nonResident.mandatoryRebasedValue.hintText = If you don''t know the exact value, you must provide a realistic estimate. You might have to pay more if we think your estimate is unrealistic.
 
 ## Rebased Costs ##
 calc.rebasedCosts.question = Did you pay to have the property valued at 5 April 2015?
@@ -213,6 +209,7 @@ nocgt.content.return = Return to GOV.UK
 calc.noTaxToPay.title = You have no tax to pay
 calc.noTaxToPay.spouseText = This is because Capital Gains Tax doesn''t apply if you give a property to your spouse or civil partner.
 calc.noTaxToPay.charityText = This is because Capital Gains Tax doesn''t apply if you give a property to a charity.
+calc.noTaxToPay.returnToGov = Return to GOV.UK
 
 ## Disposal Value ##
 calc.disposalValue.question = How much did you sell the property for?

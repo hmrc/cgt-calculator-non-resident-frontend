@@ -100,6 +100,10 @@ GET         /                                   controllers.DisposalDateControll
 GET         /disposal-date                      controllers.DisposalDateController.disposalDate
 POST        /disposal-date                      controllers.DisposalDateController.submitDisposalDate
 
+#Outside Tax Year
+GET         /outside-tax-year                   controllers.OutsideTaxYearController.outsideTaxYear
+POST        /outside-tax-year                   controllers.OutsideTaxYearController.submitOutsideTaxYear
+
 #No Capital Gains Tax
 GET         /no-capital-gains-tax               controllers.NoCapitalGainsTaxController.noCapitalGainsTax
 
@@ -162,6 +166,10 @@ POST        /property-lived-in                  controllers.PropertyLivedInContr
 
 #You Have No Tax To Pay
 GET         /no-tax-to-pay                      controllers.WhoDidYouGiveItToController.noTaxToPay
+
+#Claiming Reliefs Route
+GET         /claiming-reliefs                   controllers.ClaimingReliefsController.claimingReliefs
+POST        /claiming-reliefs                   controllers.ClaimingReliefsController.submitClaimingReliefs
 ########################################################
 
 #Report screen route

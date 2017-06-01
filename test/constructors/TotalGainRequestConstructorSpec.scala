@@ -120,20 +120,19 @@ class TotalGainRequestConstructorSpec extends UnitSpec {
     }
   }
 
-  "Calling .timeApportionedValues" should {
+  "Calling .acquisitionDate" should {
 
-    "produce a valid query string with both dates provided" in {
-      val result = TotalGainRequestConstructor.timeApportionedValues(
-        DisposalDateModel(15, 10, 2018),
-        AcquisitionDateModel(4, 5, 2013))
+    "produce a valid query string" in {
+      val result = TotalGainRequestConstructor.acquisitionDate(AcquisitionDateModel(4, 5, 2013))
 
-      result shouldBe "&disposalDate=2018-10-15&acquisitionDate=2013-5-4"
+      result shouldBe "&acquisitionDate=2013-5-4"
     }
+  }
 
-    "produce an empty string with an acquisition date after tax start" in {
-      val result = TotalGainRequestConstructor.timeApportionedValues(
-        DisposalDateModel(15, 10, 2018),
-        AcquisitionDateModel(4, 5, 2016))
+  "Calling .disposalDate" should {
+
+    "produce a valid query string" in {
+      val result = TotalGainRequestConstructor.disposalDate(DisposalDateModel(15, 10, 2018))
 
       result shouldBe "&disposalDate=2018-10-15"
     }
@@ -141,20 +140,20 @@ class TotalGainRequestConstructorSpec extends UnitSpec {
 
   "Calling .rebasedValues" should {
 
-    "produce a valid query string with an acquisition date before tax start and rebased value" in {
-      val result = TotalGainRequestConstructor.rebasedValues(Some(RebasedValueModel(Some(3000))),
+    "produce a valid query string with an acquisition date before tax start" in {
+      val result = TotalGainRequestConstructor.rebasedValues(Some(RebasedValueModel(3000)),
         Some(RebasedCostsModel("Yes", Some(300))),
         ImprovementsModel("Yes", None, Some(30)),
-        AcquisitionDateModel(1, 1, 2013))
+        AcquisitionDateModel(5, 4, 2015))
 
       result shouldBe "&rebasedValue=3000&rebasedCosts=300&improvementsAfterTaxStarted=30"
     }
 
-    "produce an empty query string with no rebased value" in {
-      val result = TotalGainRequestConstructor.rebasedValues(Some(RebasedValueModel(None)),
+    "produce an empty query string with an acquisition date after tax start" in {
+      val result = TotalGainRequestConstructor.rebasedValues(None,
         None,
         ImprovementsModel("Yes", None, None),
-        AcquisitionDateModel(1, 1, 2013))
+        AcquisitionDateModel(6, 4, 2015))
 
       result shouldBe ""
     }
@@ -162,7 +161,29 @@ class TotalGainRequestConstructorSpec extends UnitSpec {
 
   "Calling .totalGainQuery" should {
 
-    "produce a valid query string" in {
+    "produce a valid query string for a flat calculation" in {
+      val model = TotalGainAnswersModel(DisposalDateModel(5, 10, 2016),
+        SoldOrGivenAwayModel(true),
+        Some(SoldForLessModel(false)),
+        DisposalValueModel(1000),
+        DisposalCostsModel(100),
+        Some(HowBecameOwnerModel("Gifted")),
+        Some(BoughtForLessModel(false)),
+        AcquisitionValueModel(2000),
+        AcquisitionCostsModel(200),
+        AcquisitionDateModel(6, 4, 2015),
+        None,
+        None,
+        ImprovementsModel("Yes", Some(10), None),
+        None)
+
+      val result = TotalGainRequestConstructor.totalGainQuery(model)
+
+      result shouldBe "disposalValue=1000&disposalCosts=100&acquisitionValue=2000&acquisitionCosts=200&improvements=10" +
+        "&disposalDate=2016-10-5&acquisitionDate=2015-4-6"
+    }
+
+    "produce a valid query string for multiple types calculation" in {
       val model = TotalGainAnswersModel(DisposalDateModel(5, 10, 2016),
         SoldOrGivenAwayModel(true),
         Some(SoldForLessModel(false)),
@@ -173,7 +194,7 @@ class TotalGainRequestConstructorSpec extends UnitSpec {
         AcquisitionValueModel(2000),
         AcquisitionCostsModel(200),
         AcquisitionDateModel(4, 10, 2013),
-        Some(RebasedValueModel(Some(3000))),
+        Some(RebasedValueModel(3000)),
         Some(RebasedCostsModel("Yes", Some(300))),
         ImprovementsModel("Yes", Some(10), Some(20)),
         None)
