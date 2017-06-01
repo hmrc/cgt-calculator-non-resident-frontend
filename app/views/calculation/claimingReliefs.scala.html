@@ -1,0 +1,29 @@
+@import models.ClaimingReliefsModel
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import views.html.helpers._
+
+@(claimingReliefsForm: Form[ClaimingReliefsModel])(implicit request: Request[_], messages: Messages)
+
+@main_template(Messages("calc.claimingReliefs.title")) {
+
+  <a id="back-link" class="back-link" href="@controllers.routes.CheckYourAnswersController.checkYourAnswers().url">@Messages("calc.base.back")</a>
+
+  @errorSummary(claimingReliefsForm, "claimingReliefs")
+
+  <h1 class="heading-xlarge">@Messages("calc.claimingReliefs.title")</h1>
+
+  <p>@Messages("calc.claimingReliefs.helpText")</p>
+
+  @form(action = controllers.routes.ClaimingReliefsController.submitClaimingReliefs()) {
+
+    <div class="form-group">
+      @formYesNoRadio(
+        field = claimingReliefsForm("isClaimingReliefs"),
+        legend = Messages("calc.claimingReliefs.title"),
+        legendClass = Some("visuallyhidden")
+      )
+    </div>
+
+    <button class="button" type="submit" id="continue-button">@Messages("calc.base.continue")</button>
+  }
+}

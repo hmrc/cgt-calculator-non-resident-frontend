@@ -812,4 +812,10 @@ calc.whoDidYouGiveThePropertyTo.title = Who did you give the property to?
 calc.whoDidYouGiveThePropertyTo.spouse = Your spouse or a civil partner
 calc.whoDidYouGiveThePropertyTo.charity = A charity
 calc.whoDidYouGiveThePropertyTo.other = Someone else
-calc.whoDidYouGiveThePropertyTo.errormandatory = Please tell us who you gave the property to
+calc.whoDidYouGiveThePropertyTo.errormandatory = Tell us who you gave the property to
+
+## Claiming reliefs messages
+calc.claimingReliefs.title = Are you entitled to any other reliefs?
+calc.claimingReliefs.helpText = For example, Letting Relief (if you already claimed Private Residence Relief) or Rollover Relief.
+calc.claimingReliefs.errorMandatory = Tell us if you are entitled to any other reliefs
+

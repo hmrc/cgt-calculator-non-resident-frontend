@@ -16,19 +16,45 @@
 
 package controllers
 
+import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
+import controllers.predicates.ValidActiveSession
+import forms.ClaimingReliefsForm.claimingReliefsForm
+import models.ClaimingReliefsModel
 import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
+import views.html.calculation
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
+import play.api.data.Form
+
+import scala.concurrent.Future
 
 object ClaimingReliefsController extends ClaimingReliefsController {
   val calcConnector = CalculatorConnector
 }
 
-trait ClaimingReliefsController extends FrontendController {
+trait ClaimingReliefsController extends FrontendController with ValidActiveSession {
 
   val calcConnector: CalculatorConnector
 
-  val claimingReliefs: Action[AnyContent] = TODO
+  val claimingReliefs: Action[AnyContent] = ValidateSession.async { implicit request =>
+    calcConnector.fetchAndGetFormData[ClaimingReliefsModel](KeystoreKeys.claimingReliefs).map {
+      case Some(data) => Ok(calculation.claimingReliefs(claimingReliefsForm.fill(data)))
+      case None => Ok(calculation.claimingReliefs(claimingReliefsForm))
+    }
+  }
 
-  val submitClaimingReliefs: Action[AnyContent] = TODO
+  val submitClaimingReliefs: Action[AnyContent] = ValidateSession.async { implicit request =>
+
+    def errorAction(errors: Form[ClaimingReliefsModel]) =
+      Future.successful(BadRequest(views.html.calculation.claimingReliefs(errors)))
+
+    def successAction(model: ClaimingReliefsModel) = {
+      calcConnector.saveFormData(KeystoreKeys.claimingReliefs, model)
+      Future.successful(Redirect(routes.CalculationElectionController.calculationElection()))
+    }
+
+    claimingReliefsForm.bindFromRequest().fold(errorAction, successAction)
+  }
 }
