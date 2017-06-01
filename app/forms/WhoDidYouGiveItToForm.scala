@@ -28,8 +28,8 @@ import models.WhoDidYouGiveItToModel
 object WhoDidYouGiveItToForm {
   val whoDidYouGiveItToForm = Form(
     mapping("whoDidYouGiveItTo" -> text
-      .verifying(Messages("calc.resident.whoDidYouGiveThePropertyTo.errormandatory"), mandatoryCheck)
-      .verifying(Messages("calc.resident.whoDidYouGiveThePropertyTo.errormandatory"), whoDidYouGiveItToCheck)
+      .verifying(Messages("calc.whoDidYouGiveThePropertyTo.errormandatory"), mandatoryCheck)
+      .verifying(Messages("calc.whoDidYouGiveThePropertyTo.errormandatory"), whoDidYouGiveItToCheck)
     )(WhoDidYouGiveItToModel.apply)(WhoDidYouGiveItToModel.unapply)
   )
 }

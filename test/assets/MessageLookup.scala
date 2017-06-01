@@ -961,7 +961,7 @@ object MessageLookup {
     val spouse = "Your spouse or a civil partner"
     val charity = "A charity"
     val other = "Someone else"
-    val errormandatory = "Please tell us who you gave the property to"
+    val errormandatory = "Tell us who you gave the property to"
   }
 
   object SummaryPartialMessages {
