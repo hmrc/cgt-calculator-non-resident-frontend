@@ -314,12 +314,8 @@ class RoutesSpec extends UnitSpec with WithFakeApplication with Matchers {
     }
   }
 
-  "The URL for the submitOutsideTaxYear Action" should {
-    "be equal to /calculate-your-capital-gains/non-resident/outside-tax-year" in {
-      val path = controllers.routes.OutsideTaxYearController.submitOutsideTaxYear().url
-      path shouldEqual "/calculate-your-capital-gains/non-resident/outside-tax-year"
-    }
-  }
+
+
   /* No Capital Gains Tax routes */
   "The URL for the no capital gains tax Action" should {
     "be equal to /calculate-your-capital-gains/non-resident/no-capital-gains-tax" in {

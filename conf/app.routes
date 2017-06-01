@@ -102,7 +102,7 @@ POST        /disposal-date                      controllers.DisposalDateControll
 
 #Outside Tax Year
 GET         /outside-tax-year                   controllers.OutsideTaxYearController.outsideTaxYear
-POST        /outside-tax-year                   controllers.OutsideTaxYearController.submitOutsideTaxYear
+
 
 #No Capital Gains Tax
 GET         /no-capital-gains-tax               controllers.NoCapitalGainsTaxController.noCapitalGainsTax
