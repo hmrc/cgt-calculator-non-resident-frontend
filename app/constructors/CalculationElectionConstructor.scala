@@ -29,6 +29,7 @@ trait CalculationElectionConstructor {
   case class CalculationElectionOption[T](calcType: String,
                                           amount: BigDecimal,
                                           message: String,
+                                          calcDescription: String,
                                           date: Option[String],
                                           data: T,
                                           otherReliefs: Option[BigDecimal])
@@ -37,7 +38,7 @@ trait CalculationElectionConstructor {
                        totalGainWithPrr: Option[CalculationResultsWithPRRModel],
                        taxOwed: Option[CalculationResultsWithTaxOwedModel],
                        otherReliefs: Option[AllOtherReliefsModel]
-                      ): Future[Seq[(String, String, String, Option[String], Option[BigDecimal])]] = {
+                      ): Future[Seq[(String, String, String, String, Option[String], Option[BigDecimal])]] = {
 
     val electionOptions = (totalGain, totalGainWithPrr, taxOwed) match {
       case (_, _, Some(data)) => buildElectionWithTaxOwed(data, otherReliefs)
@@ -56,7 +57,7 @@ trait CalculationElectionConstructor {
 
     options
       .sortBy(option => option.data)
-      .map(o => (o.calcType, o.amount.toString(), o.message, o.date, o.otherReliefs))
+      .map(o => (o.calcType, o.amount.toString(), o.message, o.calcDescription, o.date, o.otherReliefs))
   }
 
   private def buildElectionWithPrr(data: CalculationResultsWithPRRModel) = {
@@ -67,7 +68,7 @@ trait CalculationElectionConstructor {
 
     options
       .sortBy(option => (option.data.totalGain, option.data.taxableGain))
-      .map(o => (o.calcType, o.amount.toString(), o.message, o.date, o.otherReliefs))
+      .map(o => (o.calcType, o.amount.toString(), o.message, o.calcDescription, o.date, o.otherReliefs))
   }
 
   private def buildElectionWithTaxOwed(data: CalculationResultsWithTaxOwedModel, otherReliefs: Option[AllOtherReliefsModel]) = {
@@ -81,36 +82,39 @@ trait CalculationElectionConstructor {
 
     options
       .sortBy(option => (option.data.totalGain, option.data.taxableGain, option.data.taxOwed))
-      .map(o => (o.calcType, o.amount.toString(), o.message, o.date, o.otherReliefs))
+      .map(o => (o.calcType, o.amount.toString(), o.message, o.calcDescription, o.date, o.otherReliefs))
   }
 
-  private def rebasedElementConstructor[T](amount: BigDecimal, data: T, otherReliefs: Option[BigDecimal]) = {
+  def rebasedElementConstructor[T](amount: BigDecimal, data: T, otherReliefs: Option[BigDecimal]): CalculationElectionOption[T] = {
     CalculationElectionOption(
       "rebased",
       amount.setScale(2),
       Messages("calc.calculationElection.message.rebased"),
+      Messages("calc.calculationElection.description.rebased"),
       Some(Messages("calc.calculationElection.message.rebasedDate")),
       data,
       otherReliefs
     )
   }
 
-  private def flatElementConstructor[T](amount: BigDecimal, data: T, otherReliefs: Option[BigDecimal]) = {
+  def flatElementConstructor[T](amount: BigDecimal, data: T, otherReliefs: Option[BigDecimal]): CalculationElectionOption[T] = {
     CalculationElectionOption(
       "flat",
       amount.setScale(2),
       Messages("calc.calculationElection.message.flat"),
+      Messages("calc.calculationElection.description.flat"),
       None,
       data,
       otherReliefs
     )
   }
 
-  private def timeElementConstructor[T](amount: BigDecimal, data: T, otherReliefs: Option[BigDecimal]) = {
+  def timeElementConstructor[T](amount: BigDecimal, data: T, otherReliefs: Option[BigDecimal]): CalculationElectionOption[T] = {
     CalculationElectionOption(
       "time",
       amount.setScale(2),
       Messages("calc.calculationElection.message.time"),
+      Messages("calc.calculationElection.description.time"),
       Some(Messages("calc.calculationElection.message.timeDate")),
       data,
       otherReliefs
