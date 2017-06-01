@@ -30,18 +30,46 @@ object DeductionDetailsConstructor {
   }
 
   def deductionDetailsRows(answers: TotalGainAnswersModel,
-                           privateResidenceReliefModel: Option[PrivateResidenceReliefModel] = None): Seq[QuestionAnswerModel[Any]] = {
+                           privateResidenceReliefModel: Option[PrivateResidenceReliefModel] = None,
+                           livedIn: Option[PropertyLivedInModel]): Seq[QuestionAnswerModel[Any]] = {
 
-    val privateResidenceReliefQuestion = privateResidenceReliefQuestionRow(privateResidenceReliefModel)
-    val privateResidenceReliefDaysClaimedBefore = privateResidenceReliefDaysClaimedBeforeRow(privateResidenceReliefModel, answers)
-    val privateResidenceReliefDaysClaimedAfter = privateResidenceReliefDaysClaimedAfterRow(privateResidenceReliefModel, answers)
+    val propertyLivedInRow = propertyLivedInQuestionRow(livedIn)
 
-    val sequence = Seq(
-      privateResidenceReliefQuestion,
-      privateResidenceReliefDaysClaimedBefore,
-      privateResidenceReliefDaysClaimedAfter)
+    if(propertyLivedInRow.isEmpty) {
 
-    sequence.flatten
+      Seq()
+
+    }
+
+    else {
+      if(propertyLivedInRow.head.data == "No") {
+        propertyLivedInRow
+      }
+      else {
+        val privateResidenceReliefQuestion = privateResidenceReliefQuestionRow(privateResidenceReliefModel)
+        val privateResidenceReliefDaysClaimedBefore = privateResidenceReliefDaysClaimedBeforeRow(privateResidenceReliefModel, answers)
+        val privateResidenceReliefDaysClaimedAfter = privateResidenceReliefDaysClaimedAfterRow(privateResidenceReliefModel, answers)
+
+        val sequence = Seq(
+          privateResidenceReliefQuestion,
+          privateResidenceReliefDaysClaimedBefore,
+          privateResidenceReliefDaysClaimedAfter)
+
+        propertyLivedInRow ++ sequence.flatten
+      }
+    }
+  }
+
+  def propertyLivedInQuestionRow(livedIn: Option[PropertyLivedInModel]): Seq[QuestionAnswerModel[String]] = {
+    livedIn match {
+      case Some(PropertyLivedInModel(answer)) => Seq(QuestionAnswerModel(
+        keys.propertyLivedIn,
+        if(answer) "Yes" else "No",
+        Messages("calc.propertyLivedIn.title"),
+        Some(controllers.routes.PropertyLivedInController.propertyLivedIn().url)
+      ))
+      case _ => Seq()
+    }
   }
 
   def privateResidenceReliefQuestionRow(prr: Option[PrivateResidenceReliefModel]): Option[QuestionAnswerModel[String]] = {
