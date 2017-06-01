@@ -16,28 +16,158 @@
 
 package views
 
+import assets.MessageLookup.{NonResident => commonMessages}
 import controllers.helpers.FakeRequestHelper
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import assets.MessageLookup.NonResident.{CalculationElectionNoReliefs => messages}
 import play.api.i18n.Messages
 import play.api.i18n.Messages.Implicits._
+import forms.CalculationElectionForm._
+import org.jsoup.Jsoup
 import play.api.Play.current
+import views.html.calculation.calculationElectionNoReliefs
 
 class CalculationElectionNoReliefsViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
 
-  "Calculation Election No Reliefs View" should {
+  "Calculation Election No Reliefs View" when {
 
-    val rebasedLowestTaxOwed: Seq[(String, String, String, String, Option[String], Option[BigDecimal])] =
+    lazy val rebasedLowestTaxOwed: Seq[(String, String, String, String, Option[String], Option[BigDecimal])] =
       Seq(
-        ("flat", "1000", Messages("calc.calculationElectionNoReliefs.flatGain"), "description", None, None),
-        ("rebased", "0", Messages("calc.calculationElectionNoReliefs.rebasing"), "description", None, None),
-        ("time", "2000", Messages("calc.calculationElectionNoReliefs.straightLine"), "description", None, None)
+        ("rebased", "0", "description", Messages("calc.calculationElection.description.rebased"), None, None),
+        ("flat", "1000", "description", Messages("calc.calculationElection.description.flat"), None, None),
+        ("time", "2000", "description", Messages("calc.calculationElection.description.time"), None, None)
       )
 
-    "have a h1 tag" which {
+    "supplied with no errors and lowest tax owed is rebased method" should {
 
-      s"has the text ${messages.title}" in {
+      lazy val view = calculationElectionNoReliefs(calculationElectionForm, rebasedLowestTaxOwed)
+      lazy val doc = Jsoup.parse(view.body)
 
+      "have a heading" which {
+
+        s"has the text ${messages.title}" in {
+          doc.title shouldBe messages.title
+        }
+      }
+
+      "have a h1" which {
+
+        s"has the text ${messages.title}" in {
+          doc.select("h1").text shouldBe messages.title
+        }
+      }
+
+      "have a back link" which {
+        lazy val back = doc.select("#back-link")
+
+        s"has the text ${commonMessages.back}" in {
+          back.text() shouldBe commonMessages.back
+        }
+
+        s"has a link to ${controllers.routes.ClaimingReliefsController.claimingReliefs().url}" in {
+          back.attr("href") shouldBe controllers.routes.ClaimingReliefsController.claimingReliefs().url
+        }
+      }
+
+      "have text in paragraphs" which {
+
+        lazy val helpText = doc.getElementsByTag("p")
+
+        s"contains the text ${messages.helpText}" in {
+          helpText.text should include(messages.helpText)
+        }
+
+        s"contains the text ${messages.helpTextMethodType(messages.rebasing)}" in {
+          helpText.text should include(messages.helpTextMethodType(messages.rebasing))
+        }
+      }
+
+      "has a form" which {
+
+        lazy val form = doc.select("form")
+
+        "has a submit action" in {
+          form.attr("action") shouldEqual "/calculate-your-capital-gains/non-resident/calculation-election"
+        }
+
+        "has method type POST" in {
+          form.attr("method") shouldBe "POST"
+        }
+
+        s"contains the text ${messages.helpTextChooseMethod}" in {
+          form.select("p").text should include(messages.helpTextChooseMethod)
+        }
+
+        "contains inputs" which {
+
+          lazy val input = form.select("input")
+
+          "has the first element calculationElection-rebased'" in {
+            input.get(0).attr("id") shouldBe "calculationElection-rebased"
+          }
+
+          "has the second element calculationElection-flat'" in {
+            input.get(1).attr("id") shouldBe "calculationElection-flat"
+          }
+
+          "has the third element calculationElection-time'" in {
+            input.get(2).attr("id") shouldBe "calculationElection-time"
+          }
+        }
+      }
+    }
+
+    "supplied with no errors and lowest tax owed is flat method" should {
+
+      lazy val flatLowestTaxOwed: Seq[(String, String, String, String, Option[String], Option[BigDecimal])] =
+        Seq(
+          ("flat", "0", "description", Messages("calc.calculationElection.description.flat"), None, None),
+          ("rebased", "1000", "description", Messages("calc.calculationElection.description.rebased"), None, None),
+          ("time", "2000", "description", Messages("calc.calculationElection.description.time"), None, None)
+        )
+
+      lazy val view = calculationElectionNoReliefs(calculationElectionForm, flatLowestTaxOwed)
+      lazy val doc = Jsoup.parse(view.body)
+
+      "have text in a paragraph" which {
+
+        lazy val helpText = doc.getElementsByTag("p")
+
+        s"contains the text ${messages.helpTextMethodType(messages.flatGain)}" in {
+          helpText.text should include(messages.helpTextMethodType(messages.flatGain))
+        }
+      }
+
+      "has a form" which {
+
+        lazy val form = doc.select("form")
+
+        "contains inputs" which {
+
+          lazy val input = form.select("input")
+
+          "has the first element calculationElection-flat'" in {
+            input.get(0).attr("id") shouldBe "calculationElection-flat"
+          }
+
+          "has the second element calculationElection-rebased'" in {
+            input.get(1).attr("id") shouldBe "calculationElection-rebased"
+          }
+
+          "has the third element calculationElection-time'" in {
+            input.get(2).attr("id") shouldBe "calculationElection-time"
+          }
+        }
+      }
+    }
+
+    "supplied with errors" should {
+      lazy val form = calculationElectionForm.bind(Map("calculationElection" -> "a"))
+      lazy val view = calculationElectionNoReliefs(form, rebasedLowestTaxOwed)
+      lazy val document = Jsoup.parse(view.body)
+
+      "have an error summary" in {
+        document.select("#error-summary-display").size() shouldBe 1
       }
     }
   }

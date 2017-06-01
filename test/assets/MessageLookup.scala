@@ -128,7 +128,7 @@ object MessageLookup {
       val timeApportioned = "Based on the percentage of your total gain made since"
       val timeApportionedDescription = "Straight-line apportionment method"
       val rebased = "Based on the amount you've gained on the property since"
-      val rebasedDescription = "Rebased method"
+      val rebasedDescription = "Rebasing method"
       val taxStartDate = "5 April 2015"
       val flat = "Based on the amount you've gained on the property since you became the owner"
       val flatDescription = "Gain over whole period of ownership method"
@@ -141,7 +141,7 @@ object MessageLookup {
       val title = "Your calculation options"
       val helpText = "There are 3 ways we can calculate your Non-Resident Capital Gains Tax."
       def helpTextMethodType(method: String): String =
-        s"Based on the answers you've given, the $method method will give you the lowest amount of tax to pay."
+        s"Based on the answers you've given, the $method will give you the lowest amount of tax to pay."
       val helpTextChooseMethod = "You're free to choose another method if you wish."
       val rebasing = "Rebasing method"
       val flatGain = "Gain over whole period of ownership method"

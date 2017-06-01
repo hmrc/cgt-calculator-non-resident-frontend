@@ -8,4 +8,41 @@
 
   <a id="back-link" class="back-link" href="@controllers.routes.ClaimingReliefsController.claimingReliefs()">@Messages("calc.base.back")</a>
 
+  @errorSummary(calculationElectionForm, "calculation-election")
+
+  <h1 class="heading-xlarge">@Messages("calc.calculationElectionNoReliefs.title")</h1>
+
+  <p>@Messages("calc.calculationElectionNoReliefs.helpText")</p>
+
+  <p>
+    @Messages("calc.calculationElectionNoReliefs.helpTextMethodPartOne")
+    <strong>@content.head._4</strong>
+    @Messages("calc.calculationElectionNoReliefs.helpTextMethodPartTwo")
+  </p>
+
+  @form(action = controllers.routes.CalculationElectionController.submitCalculationElection) {
+
+    <div class="form-group">
+      @calculationElectionHelperForm(
+        field = calculationElectionForm("calculationElection"),
+        Seq(content.head),
+        showErrorText = true,
+        '_labelClass -> "block-label election",
+        '_legendClass -> "bold-medium")
+
+      <div class="calculation-election-margin">
+        <p>@Messages("calc.calculationElectionNoReliefs.helpTextChooseMethod")</p>
+      </div>
+
+      @calculationElectionHelperForm(
+        field = calculationElectionForm("calculationElection"),
+        content.tail,
+        showErrorText = false,
+        '_labelClass -> "block-label election",
+        '_legendClass -> "bold-medium")
+    </div>
+
+    <button class="button" type="submit" id="continue-button">@Messages("calc.base.continue")</button>
+  }
+
 }

@@ -31,7 +31,10 @@ class CalculationElectionHelperFormSpec extends UnitSpec with WithFakeApplicatio
 
       val seq: Seq[(String, String, String, String, Option[String], Option[BigDecimal])] =
         Seq(("flat", "1000", "messages", "calcType", Some("dateMessages"), Some(BigDecimal(2000))))
-      lazy val partial = views.html.helpers.calculationElectionHelperForm(CalculationElectionForm.calculationElectionForm("calculationElection"), seq)
+      lazy val partial = views.html.helpers.calculationElectionHelperForm(
+        CalculationElectionForm.calculationElectionForm("calculationElection"),
+        seq,
+        showErrorText = true)
       lazy val doc = Jsoup.parse(partial.body)
 
       "has a value for the input of 'flat'" in {
@@ -63,7 +66,10 @@ class CalculationElectionHelperFormSpec extends UnitSpec with WithFakeApplicatio
 
       val seq: Seq[(String, String, String, String, Option[String], Option[BigDecimal])] =
         Seq(("flat", "1000", "messages", "calcType", None, None))
-      lazy val partial = views.html.helpers.calculationElectionHelperForm(CalculationElectionForm.calculationElectionForm("calculationElection"), seq)
+      lazy val partial = views.html.helpers.calculationElectionHelperForm(
+        CalculationElectionForm.calculationElectionForm("calculationElection"),
+        seq,
+        showErrorText = true)
       lazy val doc = Jsoup.parse(partial.body)
 
       "does not display the date message dateMessages" in {
@@ -79,7 +85,10 @@ class CalculationElectionHelperFormSpec extends UnitSpec with WithFakeApplicatio
 
       val seq: Seq[(String, String, String, String, Option[String], Option[BigDecimal])] =
         Seq(("flat", "1000", "messages", "calcType", None, Some(0)))
-      lazy val partial = views.html.helpers.calculationElectionHelperForm(CalculationElectionForm.calculationElectionForm("calculationElection"), seq)
+      lazy val partial = views.html.helpers.calculationElectionHelperForm(
+        CalculationElectionForm.calculationElectionForm("calculationElection"),
+        seq,
+        showErrorText = true)
       lazy val doc = Jsoup.parse(partial.body)
 
       "displays the other reliefs change link" in {
@@ -93,7 +102,10 @@ class CalculationElectionHelperFormSpec extends UnitSpec with WithFakeApplicatio
           ("one", "1000", "messages", "calcType", None, Some(0)),
           ("two", "1000", "messages", "calcType", None, Some(0))
         )
-      lazy val partial = views.html.helpers.calculationElectionHelperForm(CalculationElectionForm.calculationElectionForm("calculationElection"), seq)
+      lazy val partial = views.html.helpers.calculationElectionHelperForm(
+        CalculationElectionForm.calculationElectionForm("calculationElection"),
+        seq,
+        showErrorText = true)
       lazy val doc = Jsoup.parse(partial.body)
 
       "render the first element" in {
@@ -112,7 +124,10 @@ class CalculationElectionHelperFormSpec extends UnitSpec with WithFakeApplicatio
           ("two", "1000", "messages", "calcType", None, Some(0)),
           ("three", "1000", "messages", "calcType", None, Some(0))
         )
-      lazy val partial = views.html.helpers.calculationElectionHelperForm(CalculationElectionForm.calculationElectionForm("calculationElection"), seq)
+      lazy val partial = views.html.helpers.calculationElectionHelperForm(
+        CalculationElectionForm.calculationElectionForm("calculationElection"),
+        seq,
+        showErrorText = true)
       lazy val doc = Jsoup.parse(partial.body)
 
       "render the first element" in {

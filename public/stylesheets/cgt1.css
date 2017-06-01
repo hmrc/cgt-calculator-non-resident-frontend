@@ -454,3 +454,7 @@ span.election-text > .block {
     padding-top: 1em;
     padding-bottom: 1em;
 }
+
+.calculation-election-margin p {
+    padding-top: 2em;
+}
