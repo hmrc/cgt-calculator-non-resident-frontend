@@ -21,7 +21,7 @@ import connectors.CalculatorConnector
 import controllers.CurrentIncomeController
 import controllers.helpers.FakeRequestHelper
 import controllers.routes
-import models.CurrentIncomeModel
+import models.{CurrentIncomeModel, PropertyLivedInModel}
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
@@ -36,12 +36,15 @@ import scala.concurrent.Future
 class CurrentIncomeActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
   implicit val hc = new HeaderCarrier()
-  def setupTarget(getData: Option[CurrentIncomeModel]): CurrentIncomeController = {
+  def setupTarget(getData: Option[CurrentIncomeModel], getPropertyLivedIn: Option[PropertyLivedInModel] = None): CurrentIncomeController = {
 
     val mockCalcConnector = mock[CalculatorConnector]
 
     when(mockCalcConnector.fetchAndGetFormData[CurrentIncomeModel](ArgumentMatchers.anyString())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
+
+    when(mockCalcConnector.fetchAndGetFormData[PropertyLivedInModel](ArgumentMatchers.anyString())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      .thenReturn(Future.successful(getPropertyLivedIn))
 
     when(mockCalcConnector.saveFormData[CurrentIncomeModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(mock[CacheMap])
