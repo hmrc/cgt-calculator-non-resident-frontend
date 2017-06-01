@@ -1,6 +1,6 @@
 @import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
 
-@(form: Form[_], fieldName: String, questionText:String, content:Html, helpText:Option[String] = None, hideLegend: Boolean = false, hidePanel: Boolean = false, additionalContent: Option[Html] = None)(implicit messages: Messages)
+@(form: Form[_], fieldName: String, questionText:String, content:Html, helpText:Option[String] = None, hideLegend: Boolean = false, hidePanel: Boolean = false, additionalContent: Option[Html] = None, labelClass: Boolean = false)(implicit messages: Messages)
 
 @hiddenClasses = @{if(form.errors.filter(_.key == "").length > 0) "form-field--error" else "" }
 

@@ -253,8 +253,7 @@ class DeductionDetailsConstructorSpec extends UnitSpec with WithFakeApplication 
       }
 
       "return a question for Private Residence Relief" in {
-        assertExpectedResult[QuestionAnswerModel[String]](result)(_.question shouldBe
-          s"${messages.PrivateResidenceRelief.questionBefore} 10 April 2015 ${messages.PrivateResidenceRelief.questionEnd}")
+        assertExpectedResult[QuestionAnswerModel[String]](result)(_.question shouldBe messages.PrivateResidenceRelief.questionBefore)
       }
 
       "return a link to the Private Residence Relief page" in {
@@ -327,7 +326,7 @@ class DeductionDetailsConstructorSpec extends UnitSpec with WithFakeApplication 
 
       "return a question for Private Residence Relief" in {
         assertExpectedResult[QuestionAnswerModel[String]](result)(_.question shouldBe
-          s"${messages.PrivateResidenceRelief.questionBetween} 10 April 2017 ${messages.PrivateResidenceRelief.questionEnd}")
+          s"${messages.PrivateResidenceRelief.questionBetween} 10 April 2017 ${messages.PrivateResidenceRelief.questionBetweenEnd}")
       }
 
       "return a link to the Private Residence Relief page" in {
@@ -354,7 +353,7 @@ class DeductionDetailsConstructorSpec extends UnitSpec with WithFakeApplication 
 
       "return a question for Private Residence Relief" in {
         assertExpectedResult[QuestionAnswerModel[String]](result)(_.question shouldBe
-          s"${messages.PrivateResidenceRelief.questionBetween} 10 April 2015 ${messages.PrivateResidenceRelief.questionEnd}")
+          s"${messages.PrivateResidenceRelief.questionBetween} 10 April 2015 ${messages.PrivateResidenceRelief.questionBetweenEnd}")
       }
 
       "return a link to the Private Residence Relief page" in {

@@ -340,10 +340,19 @@ object MessageLookup {
 
     object PrivateResidenceRelief {
       val question = "Are you claiming Private Residence Relief?"
-      val helpLink = "Private Residence Relief"
-      val questionBefore = "How many days before"
-      val questionEnd = "are you claiming relief for?"
-      val questionBetween = "How many days between 5 April 2015 and"
+      val intro = "You may be entitled to Private Residence Relief if you ever lived in the property as your main home."
+      val findOut = "Find out more about "
+      val findOutAboutPRRLink = "Private Residence Relief"
+      val formHelp = "To work out your Private Residence Relief, we need some information about when you lived in the property."
+      val questionBefore = "For how many days before 5th April 2015 did you live in this property as your main home?"
+      val questionBetween = "For how many days between 5 April 2015 and"
+      val questionBetweenEnd = "did you live in this property as your main home?"
+      val questionBetweenWhyThisDate = "is the date you transferred the property minus 18 months (you automatically" +
+        " get Private Residence Relief for the last 18 months that you owned the property)"
+      val questionBeforeWhyThisDate = "6 April 2015 is when the Capital Gains Tax rules for non-UK residents came into effect"
+      val helpTextSubtitle = "These dates are important because:"
+      val helpTextBeforeAfter = "Why these specific dates?"
+      val helpTextJustBefore = "Why this date?"
       val errorNoValue = "Enter the value for your days claimed"
       val errorNegative = "Enter a positive number for your days claimed"
       val errorDecimalPlaces = "There are too many numbers after the decimal point in your days claimed"
