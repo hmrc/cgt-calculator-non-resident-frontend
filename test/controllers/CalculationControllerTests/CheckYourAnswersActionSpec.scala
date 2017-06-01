@@ -206,7 +206,7 @@ class CheckYourAnswersActionSpec extends UnitSpec with WithFakeApplication with 
       }
 
       "redirect the user to the calculation election page" in {
-        redirectLocation(result).get shouldBe controllers.routes.CalculationElectionController.calculationElection().url
+        redirectLocation(result).get shouldBe controllers.routes.ClaimingReliefsController.claimingReliefs().url
       }
     }
 
