@@ -40,7 +40,7 @@ class CalculationElectionNoReliefsViewSpec extends UnitSpec with WithFakeApplica
 
     "supplied with no errors and lowest tax owed is rebased method" should {
 
-      lazy val view = calculationElectionNoReliefs(calculationElectionForm, rebasedLowestTaxOwed)
+      lazy val view = calculationElectionNoReliefs(calculationElectionForm, rebasedLowestTaxOwed, "back-link")
       lazy val doc = Jsoup.parse(view.body)
 
       "have a heading" which {
@@ -64,8 +64,8 @@ class CalculationElectionNoReliefsViewSpec extends UnitSpec with WithFakeApplica
           back.text() shouldBe commonMessages.back
         }
 
-        s"has a link to ${controllers.routes.ClaimingReliefsController.claimingReliefs().url}" in {
-          back.attr("href") shouldBe controllers.routes.ClaimingReliefsController.claimingReliefs().url
+        s"has a link to 'back-link'" in {
+          back.attr("href") shouldBe "back-link"
         }
       }
 
@@ -126,7 +126,7 @@ class CalculationElectionNoReliefsViewSpec extends UnitSpec with WithFakeApplica
           ("time", "2000", "description", Messages("calc.calculationElection.description.time"), None, None)
         )
 
-      lazy val view = calculationElectionNoReliefs(calculationElectionForm, flatLowestTaxOwed)
+      lazy val view = calculationElectionNoReliefs(calculationElectionForm, flatLowestTaxOwed, "back-link")
       lazy val doc = Jsoup.parse(view.body)
 
       "have text in a paragraph" which {
@@ -163,7 +163,7 @@ class CalculationElectionNoReliefsViewSpec extends UnitSpec with WithFakeApplica
 
     "supplied with errors" should {
       lazy val form = calculationElectionForm.bind(Map("calculationElection" -> "a"))
-      lazy val view = calculationElectionNoReliefs(form, rebasedLowestTaxOwed)
+      lazy val view = calculationElectionNoReliefs(form, rebasedLowestTaxOwed, "back-link")
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {
