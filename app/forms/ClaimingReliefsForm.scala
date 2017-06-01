@@ -16,20 +16,23 @@
 
 package forms
 
-import common.Validation._
+import common.Transformers.{booleanToString, stringToBoolean}
+import common.Validation.{mandatoryCheck, yesNoCheck}
+import models.ClaimingReliefsModel
 import play.api.data.Form
 import play.api.data.Forms._
-import play.api.data._
 import play.api.i18n.Messages
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
-import models.WhoDidYouGiveItToModel
 
-object WhoDidYouGiveItToForm {
-  val whoDidYouGiveItToForm = Form(
-    mapping("whoDidYouGiveItTo" -> text
-      .verifying(Messages("calc.whoDidYouGiveThePropertyTo.errormandatory"), mandatoryCheck)
-      .verifying(Messages("calc.whoDidYouGiveThePropertyTo.errormandatory"), whoDidYouGiveItToCheck)
-    )(WhoDidYouGiveItToModel.apply)(WhoDidYouGiveItToModel.unapply)
+object ClaimingReliefsForm {
+
+  val claimingReliefsForm: Form[ClaimingReliefsModel] = Form(
+    mapping(
+      "isClaimingReliefs" -> text
+        .verifying(Messages("calc.claimingReliefs.errorMandatory"), mandatoryCheck)
+        .verifying(Messages("calc.claimingReliefs.errorMandatory"), yesNoCheck)
+        .transform(stringToBoolean, booleanToString)
+    )(ClaimingReliefsModel.apply)(ClaimingReliefsModel.unapply)
   )
 }

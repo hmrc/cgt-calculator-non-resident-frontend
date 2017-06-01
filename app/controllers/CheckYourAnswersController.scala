@@ -147,7 +147,7 @@ trait CheckYourAnswersController extends FrontendController with ValidActiveSess
 
     def routeRequest(model: Option[TotalGainResultsModel], taxableGainModel: Option[CalculationResultsWithPRRModel]) = model match {
       case (Some(data)) if data.rebasedGain.isDefined || data.timeApportionedGain.isDefined =>
-        Future.successful(Redirect(routes.CalculationElectionController.calculationElection()))
+        Future.successful(Redirect(routes.ClaimingReliefsController.claimingReliefs()))
       case (Some(_)) =>
         calculatorConnector.saveFormData[CalculationElectionModel](KeystoreKeys.calculationElection, CalculationElectionModel(CalculationType.flat))
         redirectRoute(taxableGainModel, model.get)

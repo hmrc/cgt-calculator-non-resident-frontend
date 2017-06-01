@@ -54,5 +54,6 @@ object KeystoreKeys {
     val broughtForwardLosses = "nr:broughtForwardLosses"
     val whoDidYouGiveItTo = "nr:whoDidYouGiveItTo"
     val propertyLivedIn = "nr:propertyLivedIn"
+    val claimingReliefs = "nr:claimingReliefs"
   }
 }

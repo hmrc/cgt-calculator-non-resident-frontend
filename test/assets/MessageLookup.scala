@@ -500,6 +500,12 @@ object MessageLookup {
       val logoText = "HM Revenue & Customs"
       val title = "Calculate your Capital Gains Tax"
     }
+
+    object ClaimingReliefs {
+      val title = "Are you entitled to any other reliefs?"
+      val helpText = "For example, Letting Relief (if you already claimed Private Residence Relief) or Rollover Relief."
+      val errorMandatory = "Tell us if you are entitled to any other reliefs"
+    }
   }
 
   object Resident extends Common {
@@ -966,7 +972,7 @@ object MessageLookup {
     val spouse = "Your spouse or a civil partner"
     val charity = "A charity"
     val other = "Someone else"
-    val errormandatory = "Please tell us who you gave the property to"
+    val errormandatory = "Tell us who you gave the property to"
   }
 
   object SummaryPartialMessages {
