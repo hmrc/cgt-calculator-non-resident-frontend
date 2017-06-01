@@ -46,12 +46,19 @@ trait CalculationElectionController extends FrontendController with ValidActiveS
   val calcAnswersConstructor: AnswersConstructor
 
   private def getPRRResponse(totalGainResultsModel: TotalGainResultsModel)(implicit hc: HeaderCarrier): Future[Option[PrivateResidenceReliefModel]] = {
-    val optionSeq = Seq(totalGainResultsModel.rebasedGain, totalGainResultsModel.timeApportionedGain).flatten
-    val finalSeq = Seq(totalGainResultsModel.flatGain) ++ optionSeq
+    val results = Seq(totalGainResultsModel.flatGain) ++ Seq(totalGainResultsModel.rebasedGain, totalGainResultsModel.timeApportionedGain).flatten
 
-    if (finalSeq.exists(_ > 0)) {
+    if (results.exists(_ > 0)) {
       calcConnector.fetchAndGetFormData[PrivateResidenceReliefModel](KeystoreKeys.privateResidenceRelief)
     } else Future(None)
+  }
+
+  private def getBackLink(totalGainResultsModel: TotalGainResultsModel): Future[String] = {
+    val results = Seq(totalGainResultsModel.flatGain) ++ Seq(totalGainResultsModel.rebasedGain, totalGainResultsModel.timeApportionedGain).flatten
+
+    if (!results.forall(_ <= 0)) {
+      Future.successful(routes.ClaimingReliefsController.claimingReliefs().url)
+    } else Future.successful(routes.CheckYourAnswersController.checkYourAnswers().url)
   }
 
   private def getPRRIfApplicable(totalGainAnswersModel: TotalGainAnswersModel,
@@ -127,19 +134,19 @@ trait CalculationElectionController extends FrontendController with ValidActiveS
 
   val calculationElection: Action[AnyContent] = ValidateSession.async { implicit request =>
 
-    def action(content: Seq[(String, String, String, String, Option[String], Option[BigDecimal])]) =
+    def action(content: Seq[(String, String, String, String, Option[String], Option[BigDecimal])], backLink: String) =
       calcConnector.fetchAndGetFormData[CalculationElectionModel](KeystoreKeys.calculationElection).map {
         case Some(data) =>
           Ok(calculation.calculationElection(
             calculationElectionForm.fill(data),
             content,
-            "backlink")
+            backLink)
           )
         case None =>
           Ok(calculation.calculationElection(
             calculationElectionForm,
             content,
-            "backlink")
+            backLink)
           )
       }
 
@@ -147,6 +154,7 @@ trait CalculationElectionController extends FrontendController with ValidActiveS
       totalGainAnswers <- calcAnswersConstructor.getNRTotalGainAnswers(hc)
       totalGain <- calcConnector.calculateTotalGain(totalGainAnswers)(hc)
       prrAnswers <- getPRRResponse(totalGain.get)(hc)
+      backLink <- getBackLink(totalGain.get)
       totalGainWithPRR <- getPRRIfApplicable(totalGainAnswers, prrAnswers)
       allAnswers <- getFinalSectionsAnswers(totalGain.get, totalGainWithPRR)
       otherReliefs <- getAllOtherReliefs(allAnswers)
@@ -154,7 +162,7 @@ trait CalculationElectionController extends FrontendController with ValidActiveS
       maxAEA <- getMaxAEA(taxYear)
       taxOwed <- getTaxOwedIfApplicable(totalGainAnswers, prrAnswers, allAnswers, maxAEA.get, otherReliefs)
       content <- calcElectionConstructor.generateElection(totalGain.get, totalGainWithPRR, taxOwed, otherReliefs)
-      finalResult <- action(content)
+      finalResult <- action(content, backLink)
     } yield finalResult
   }
 

@@ -144,7 +144,31 @@ class CalculationElectionActionSpec extends UnitSpec with WithFakeApplication wi
       }
     }
 
-    "supplied with a pre-existing model" which {
+    "supplied with a pre-existing model with tax owed" which {
+      lazy val target = setupTarget(
+        Some(CalculationElectionModel("flat")),
+        None,
+        Some(TotalGainResultsModel(200, None, None)),
+        seq,
+        finalAnswersModel
+      )
+      lazy val result = target.calculationElection(fakeRequestWithSession)
+      lazy val document = Jsoup.parse(bodyOf(result))
+
+      "return a 200" in {
+        status(result) shouldBe 200
+      }
+
+      "be on the calculation election page" in {
+        document.title() shouldEqual messages.question
+      }
+
+      s"has a back link of ${routes.ClaimingReliefsController.claimingReliefs().url}" in{
+        document.select("a#back-link").attr("href") shouldBe routes.ClaimingReliefsController.claimingReliefs().url
+      }
+    }
+
+    "supplied with a pre-existing model with no tax owed" which {
       lazy val target = setupTarget(
         Some(CalculationElectionModel("flat")),
         None,
@@ -161,6 +185,10 @@ class CalculationElectionActionSpec extends UnitSpec with WithFakeApplication wi
 
       "be on the calculation election page" in {
         document.title() shouldEqual messages.question
+      }
+
+      s"has a back link of ${routes.CheckYourAnswersController.checkYourAnswers().url}" in{
+        document.select("a#back-link").attr("href") shouldBe routes.CheckYourAnswersController.checkYourAnswers().url
       }
     }
   }
