@@ -46,7 +46,7 @@ class CurrentIncomeViewSpec extends UnitSpec with WithFakeApplication with Mocki
           backLink.text shouldBe messages.back
         }
 
-        s"has a route to 'customer-type'" in {
+        s"has a dynamic back link to 'google.com'" in {
           backLink.attr("href") shouldBe "google.com"
         }
       }
