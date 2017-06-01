@@ -68,8 +68,8 @@ class CalculationElectionViewSpec extends UnitSpec with WithFakeApplication with
         doc.select("a#back-link").hasClass("back-link") shouldBe true
       }
 
-      "has a back link to 'back'" in {
-        doc.select("a#back-link").attr("href") shouldBe "/calculate-your-capital-gains/non-resident/check-your-answers"
+      "has a back link to 'claiming-reliefs'" in {
+        doc.select("a#back-link").attr("href") shouldBe controllers.routes.ClaimingReliefsController.claimingReliefs().url
       }
     }
 
