@@ -324,6 +324,9 @@ object MessageLookup {
 
     object PrivateResidenceRelief {
       val question = "Are you claiming Private Residence Relief?"
+      val intro = "You may be entitled to Private Residence Relief if you ever lived in the property as your main home."
+      val findOut = "Find out more about "
+      val findOutAboutPRRLink = "Private Residence Relief"
       val formHelp = "To work out your Private Residence Relief, we need some information about when you lived in the property."
       val questionBefore = "For how many days before 5th April 2015 did you live in this property as your main home?"
       val questionBetween = "For how many days between 5 April 2015 and"
