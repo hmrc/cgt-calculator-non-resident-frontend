@@ -77,8 +77,10 @@ object MessageLookup {
       val question = "What date did you sign the contract to become the owner?"
       val questionTwo = "What was the date you signed the contract that made you the owner?"
       val hintText = "If you inherited the property, it is the date that the previous owner died."
+      val errorIncompleteDate = "Date is not valid"
+      val errorFutureDate = "Date must be in the past"
+      val errorFutureDateGuidance = "Enter a date from the past"
     }
-
 
     object AcquisitionValue {
       val question = "How much did you pay for the property?"
@@ -123,10 +125,13 @@ object MessageLookup {
       val linkOne = "Different ways of working out Capital Gains Tax"
       val otherTaxRelief = "Add other tax relief"
       val someOtherTaxRelief = "Other tax relief"
-      val timeApportioned = "Working out your total gain, then taxing you on the percentage of it you've made since"
-      val rebased = "How much you've gained on the property since"
+      val timeApportioned = "Based on the percentage of your total gain made since"
+      val timeApportionedDescription = "Straight-line apportionment method"
+      val rebased = "Based on the amount you've gained on the property since"
+      val rebasedDescription = "Rebased method"
       val taxStartDate = "5 April 2015"
-      val flat = "How much you've gained on the property since you became the owner"
+      val flat = "Based on the amount you've gained on the property since you became the owner"
+      val flatDescription = "Gain over whole period of ownership method"
       val whyMore = "Why you might choose a higher total"
       val whyMoreDetailsOne = "You might pick a higher total if you're planning to add more tax reliefs."
       val whyMoreDetailsTwo = "Higher totals sometimes qualify for larger reliefs, which can reduce the amount you owe."
@@ -636,6 +641,7 @@ object MessageLookup {
     val title = "You have no tax to pay"
     val spouseText = "This is because Capital Gains Tax doesn't apply if you give a property to your spouse or civil partner."
     val charityText = "This is because Capital Gains Tax doesn't apply if you give a property to a charity."
+    val returnToGov = "Return to GOV.UK"
   }
 
   //############ Sell For Less messages #################//
@@ -959,10 +965,10 @@ object MessageLookup {
       "Do not use these figures to report your Capital Gains Tax."
 
     val workingOutSectionHeading = "How we've worked this out"
-    val flatCalculationSummary = "How much you've gained on the property since you became the owner"
-    val timeCalculationSummary = "Working out your total gain, then taxing you on the percentage of it you've made since"
+    val flatCalculationSummary = "Based on the amount you've gained on the property since you became the owner"
+    val timeCalculationSummary = "Based on the percentage of your total gain made since"
     val timeCalculationSummaryDate = "5 April 2015"
-    val rebasedCalculationSummary = "How much you've gained on the property since"
+    val rebasedCalculationSummary = "Based on the amount you've gained on the property since"
     val rebasedCalculationSummaryDate = "5 April 2015"
     val yourTotalGain = "Your total gain"
     val yourTotalLoss = "Your total loss"

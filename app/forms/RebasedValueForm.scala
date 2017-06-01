@@ -29,18 +29,15 @@ import play.api.Play.current
 
 object RebasedValueForm {
 
-  def mandatoryField(data: Option[String], required: Boolean): Boolean = !(required && data.isEmpty)
-
-
-  def rebasedValueForm(required: Boolean): Form[RebasedValueModel] = Form(
+  val rebasedValueForm: Form[RebasedValueModel] = Form(
     mapping(
-      "rebasedValueAmt" -> optional(text)
-        .verifying(Messages("calc.nonResident.rebasedValue.error.no.value.supplied"), data => mandatoryField(data, required))
-        .verifying(Messages("error.number"), data => bigDecimalCheck(data.getOrElse("")))
-        .transform[Option[BigDecimal]](optionalStringToOptionalBigDecimal, optionalBigDecimalToOptionalString)
-        .verifying(Messages("calc.nonResident.rebasedValue.errorNegative"), data => isPositive(data.getOrElse(0)))
-        .verifying(Messages("calc.nonResident.rebasedValue.errorDecimalPlaces"), data => decimalPlacesCheck(data.getOrElse(0)))
-        .verifying(Messages("calc.common.error.maxAmountExceeded", MoneyPounds(Constants.maxNumeric, 0).quantity), data => maxCheck(data.getOrElse(0)))
+      "rebasedValueAmt" -> text
+        .verifying(Messages("calc.nonResident.rebasedValue.error.no.value.supplied"), mandatoryCheck)
+        .verifying(Messages("error.number"), bigDecimalCheck)
+        .transform[BigDecimal](stringToBigDecimal, bigDecimalToString)
+        .verifying(Messages("calc.nonResident.rebasedValue.errorNegative"), data => isPositive(data))
+        .verifying(Messages("calc.nonResident.rebasedValue.errorDecimalPlaces"), data => decimalPlacesCheck(data))
+        .verifying(Messages("calc.common.error.maxAmountExceeded", MoneyPounds(Constants.maxNumeric, 0).quantity), data => maxCheck(data))
     )(RebasedValueModel.apply)(RebasedValueModel.unapply)
   )
 }

@@ -38,19 +38,13 @@ class RebasedValueActionSpec extends UnitSpec with WithFakeApplication with Mock
 
   implicit val hc = new HeaderCarrier()
 
-  def setupTarget(getData: Option[RebasedValueModel],
-                  acquisitionDateModel: Option[AcquisitionDateModel]
-                 ): RebasedValueController = {
+  def setupTarget(getData: Option[RebasedValueModel]): RebasedValueController = {
 
     val mockCalcConnector = mock[CalculatorConnector]
 
     when(mockCalcConnector.fetchAndGetFormData[RebasedValueModel](
       ArgumentMatchers.eq(KeystoreKeys.rebasedValue))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
-
-    when(mockCalcConnector.fetchAndGetFormData[AcquisitionDateModel](
-      ArgumentMatchers.eq(KeystoreKeys.acquisitionDate))(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(acquisitionDateModel))
 
     when(mockCalcConnector.saveFormData[RebasedValueModel](
       ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
@@ -66,7 +60,7 @@ class RebasedValueActionSpec extends UnitSpec with WithFakeApplication with Mock
 
     "no session is active" should {
 
-      val target = setupTarget(None, Some(AcquisitionDateModel(1, 1, 2016)))
+      val target = setupTarget(None)
       lazy val result = target.rebasedValue(fakeRequest)
 
       "return a status of 303" in {
@@ -78,9 +72,9 @@ class RebasedValueActionSpec extends UnitSpec with WithFakeApplication with Mock
       }
     }
 
-    "not supplied with a pre-existing stored model and an acquisition date before 6/4/2015 (mandatory rebased value view)" should {
+    "not supplied with a pre-existing stored model" should {
 
-      val target = setupTarget(None, Some(AcquisitionDateModel(5, 4, 2015)))
+      val target = setupTarget(None)
       lazy val result = target.rebasedValue(fakeRequestWithSession)
       lazy val document = Jsoup.parse(bodyOf(result))
 
@@ -88,45 +82,56 @@ class RebasedValueActionSpec extends UnitSpec with WithFakeApplication with Mock
         status(result) shouldBe 200
       }
 
-      s"route to the mandatory rebased value view with the question ${messages.question}" in {
+      s"route to the rebased value view with the question ${messages.question}" in {
+        document.title shouldEqual messages.question
+      }
+    }
+
+    "supplied with a pre-existing stored model" should {
+      val target = setupTarget(Some(RebasedValueModel(1000)))
+      lazy val result = target.rebasedValue(fakeRequestWithSession)
+      lazy val document = Jsoup.parse(bodyOf(result))
+
+      "return a 200" in {
+        status(result) shouldBe 200
+      }
+
+      s"route to the rebased value view with the question ${messages.question}" in {
         document.title shouldEqual messages.question
       }
     }
   }
   //POST Tests
-  "In CalculationController calling the .submitRebasedValue action with no acquisition date" when {
+  "In CalculationController calling the .submitRebasedValue action" when {
 
-    "with an acquisition date before 6/4/2015 (mandatory rebased value view)" should {
+    lazy val target = setupTarget(None)
 
-      lazy val target = setupTarget(None, Some(AcquisitionDateModel(5, 4, 2015)))
+    "submitting a valid form with amount of 100" should {
 
-      "submitting a valid form with Yes" should {
+      lazy val request = fakeRequestToPOSTWithSession(("rebasedValueAmt", "100"))
+      lazy val result = target.submitRebasedValue(request)
 
-        lazy val request = fakeRequestToPOSTWithSession(("rebasedValueAmt", "100"))
-        lazy val result = target.submitRebasedValue(request)
-
-        "return a 303" in {
-          status(result) shouldBe 303
-        }
-
-        "redirect to the rebased costs page" in {
-          redirectLocation(result).get shouldEqual routes.RebasedCostsController.rebasedCosts().url
-        }
+      "return a 303" in {
+        status(result) shouldBe 303
       }
 
-      "submitting an invalid form" should {
+      "redirect to the rebased costs page" in {
+        redirectLocation(result).get shouldEqual routes.RebasedCostsController.rebasedCosts().url
+      }
+    }
 
-        lazy val request = fakeRequestToPOSTWithSession(("rebasedValueAmt", ""))
-        lazy val result = target.submitRebasedValue(request)
-        lazy val document = Jsoup.parse(bodyOf(result))
+    "submitting an invalid form" should {
 
-        "return a 400" in {
-          status(result) shouldBe 400
-        }
+      lazy val request = fakeRequestToPOSTWithSession(("rebasedValueAmt", ""))
+      lazy val result = target.submitRebasedValue(request)
+      lazy val document = Jsoup.parse(bodyOf(result))
 
-        s"return to the mandatory rebased value page that does NOT have a paragraph with the text ${messages.questionOptionalText}" in {
-          document.select("""article > p[class=""]""").text shouldEqual ""
-        }
+      "return a 400" in {
+        status(result) shouldBe 400
+      }
+
+      "return to the rebased value page" in {
+        document.title shouldEqual messages.question
       }
     }
   }

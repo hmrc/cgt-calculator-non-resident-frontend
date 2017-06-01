@@ -34,7 +34,7 @@ class YourAnswersConstructorSpec extends UnitSpec with WithFakeApplication {
         AcquisitionValueModel(2000),
         AcquisitionCostsModel(200),
         AcquisitionDateModel(4, 10, 2013),
-        Some(RebasedValueModel(Some(3000))),
+        Some(RebasedValueModel(3000)),
         Some(RebasedCostsModel("Yes", Some(300))),
         ImprovementsModel("Yes", Some(10), Some(20)),
         Some(OtherReliefsModel(30)))

@@ -51,7 +51,7 @@ class PropertyDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
     AcquisitionDateModel(6, 4, 2015),
-    Some(RebasedValueModel(None)),
+    None,
     Some(RebasedCostsModel("No", None)),
     ImprovementsModel("Yes", Some(50), None),
     None
@@ -68,7 +68,7 @@ class PropertyDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
     AcquisitionDateModel(1, 4, 2013),
-    Some(RebasedValueModel(Some(7500))),
+    Some(RebasedValueModel(7500)),
     Some(RebasedCostsModel("Yes", Some(150))),
     ImprovementsModel("Yes", Some(50), Some(25)),
     None

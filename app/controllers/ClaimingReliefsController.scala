@@ -14,12 +14,21 @@
  * limitations under the License.
  */
 
-package models
+package controllers
 
-import play.api.libs.json.Json
+import connectors.CalculatorConnector
+import play.api.mvc.{Action, AnyContent}
+import uk.gov.hmrc.play.frontend.controller.FrontendController
 
-case class PropertyLivedInModel (propertyLivedIn: Boolean)
+object ClaimingReliefsController extends ClaimingReliefsController {
+  val calcConnector = CalculatorConnector
+}
 
-object PropertyLivedInModel {
-  implicit val format = Json.format[PropertyLivedInModel]
+trait ClaimingReliefsController extends FrontendController {
+
+  val calcConnector: CalculatorConnector
+
+  val claimingReliefs: Action[AnyContent] = TODO
+
+  val submitClaimingReliefs: Action[AnyContent] = TODO
 }

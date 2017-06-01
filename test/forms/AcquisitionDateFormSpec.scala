@@ -16,6 +16,8 @@
 
 package forms
 
+import java.time.LocalDate
+
 import assets.MessageLookup.{NonResident => messages}
 import forms.AcquisitionDateForm._
 import models.AcquisitionDateModel
@@ -131,6 +133,53 @@ class AcquisitionDateFormSpec extends UnitSpec with WithFakeApplication {
 
       s"return an error message of '${messages.errorInvalidDate}" in {
         form.error("acquisitionDateYear").get.message shouldBe messages.errorInvalidDate
+      }
+    }
+
+    "passing in an invalid map with a future date" should {
+      val date: LocalDate = LocalDate.now().plusDays(1)
+      lazy val map = Map(
+        "acquisitionDateDay" -> date.getDayOfMonth.toString,
+        "acquisitionDateMonth" -> date.getMonthValue.toString,
+        "acquisitionDateYear" -> date.getYear.toString)
+      lazy val form = acquisitionDateForm.bind(map)
+
+      "return an invalid form with one error" in {
+        form.errors.size shouldBe 1
+      }
+
+      s"return an error message of '${messages.AcquisitionDate.errorFutureDate}" in {
+        form.error("").get.message shouldBe messages.AcquisitionDate.errorFutureDate
+      }
+    }
+  }
+
+  "Calling .verifyDateInPast" when {
+    
+    "date is yesterday" should {
+      val today = LocalDate.now().minusDays(1)
+      val date = AcquisitionDateModel(today.getDayOfMonth, today.getMonthValue, today.getYear)
+
+      "return true" in {
+        AcquisitionDateForm.verifyDateInPast(date) shouldBe true
+      }
+    }
+
+    "date is today" should {
+      val today = LocalDate.now()
+      val date = AcquisitionDateModel(today.getDayOfMonth, today.getMonthValue, today.getYear)
+
+      "return false" in {
+        AcquisitionDateForm.verifyDateInPast(date) shouldBe false
+      }
+    }
+
+    "date is tomorrow" should {
+      val today = LocalDate.now().plusDays(1)
+      val date = AcquisitionDateModel(today.getDayOfMonth, today.getMonthValue, today.getYear)
+
+      "return false" in {
+        AcquisitionDateForm.verifyDateInPast(date) shouldBe false
       }
     }
   }

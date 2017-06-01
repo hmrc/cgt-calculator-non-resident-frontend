@@ -103,7 +103,7 @@ trait CalculationElectionController extends FrontendController with ValidActiveS
                                     (implicit hc: HeaderCarrier): Future[Option[CalculationResultsWithTaxOwedModel]] = {
 
     totalTaxOwedModel match {
-      case Some(data) => calcConnector.calculateNRCGTTotalTax(totalGainAnswersModel, prrModel, data, maxAEA, otherReliefs)
+      case Some(_) => calcConnector.calculateNRCGTTotalTax(totalGainAnswersModel, prrModel, totalTaxOwedModel, maxAEA, otherReliefs)
       case None => Future(None)
     }
   }
@@ -127,7 +127,7 @@ trait CalculationElectionController extends FrontendController with ValidActiveS
 
   val calculationElection: Action[AnyContent] = ValidateSession.async { implicit request =>
 
-    def action(content: Seq[(String, String, String, Option[String], Option[BigDecimal])]) =
+    def action(content: Seq[(String, String, String, String, Option[String], Option[BigDecimal])]) =
       calcConnector.fetchAndGetFormData[CalculationElectionModel](KeystoreKeys.calculationElection).map {
         case Some(data) =>
           Ok(calculation.calculationElection(

@@ -23,8 +23,12 @@ class FinalTaxAnswersRequestConstructorSpec extends UnitSpec {
 
   "Calling .currentIncome" should {
     "produce a valid query string for current income" in {
-      FinalTaxAnswersRequestConstructor.currentIncome(CurrentIncomeModel(10000)) shouldEqual
+      FinalTaxAnswersRequestConstructor.currentIncome(Some(CurrentIncomeModel(10000))) shouldEqual
       "&currentIncome=10000"
+    }
+
+    "produce an empty query string for current income if not provided" in {
+      FinalTaxAnswersRequestConstructor.currentIncome(None) shouldEqual ""
     }
   }
 
@@ -42,46 +46,54 @@ class FinalTaxAnswersRequestConstructorSpec extends UnitSpec {
   "Calling .allowableLoss" should {
     "produce a valid query string when the user claims other properties and that was a loss" in {
       FinalTaxAnswersRequestConstructor.allowableLoss(
-        OtherPropertiesModel("Yes"),
+        Some(OtherPropertiesModel("Yes")),
         Some(PreviousLossOrGainModel("Loss")),
         Some(HowMuchLossModel(100))) shouldEqual "&allowableLoss=100"
     }
 
     "produce a blank query string when the user claims other properties and that was a gain" in {
       FinalTaxAnswersRequestConstructor.allowableLoss(
-        OtherPropertiesModel("Yes"),
+        Some(OtherPropertiesModel("Yes")),
         Some(PreviousLossOrGainModel("Gain")),
         Some(HowMuchLossModel(100))) shouldEqual ""
     }
 
     "produce a blank query string when the user does not claim other properties" in {
       FinalTaxAnswersRequestConstructor.allowableLoss(
-        OtherPropertiesModel("No"),
+        Some(OtherPropertiesModel("No")),
         Some(PreviousLossOrGainModel("Loss")),
         Some(HowMuchLossModel(100))) shouldEqual ""
+    }
+
+    "produce a blank query string with no data" in {
+      FinalTaxAnswersRequestConstructor.allowableLoss(None, None, None) shouldBe ""
     }
   }
 
   "Calling .previousGain" should {
     "produce a valid query string when the user claims other properties and that was a gain" in {
       FinalTaxAnswersRequestConstructor.previousGain(
-        OtherPropertiesModel("Yes"),
+        Some(OtherPropertiesModel("Yes")),
         Some(PreviousLossOrGainModel("Gain")),
         Some(HowMuchGainModel(100))) shouldEqual "&previousGain=100"
     }
 
     "produce a blank query string when the user claims other properties and that was a loss" in {
       FinalTaxAnswersRequestConstructor.previousGain(
-        OtherPropertiesModel("Yes"),
+        Some(OtherPropertiesModel("Yes")),
         Some(PreviousLossOrGainModel("Loss")),
         Some(HowMuchGainModel(100))) shouldEqual ""
     }
 
     "produce a blank query string when the user does not claim other properties" in {
       FinalTaxAnswersRequestConstructor.previousGain(
-        OtherPropertiesModel("No"),
+        Some(OtherPropertiesModel("No")),
         Some(PreviousLossOrGainModel("Loss")),
         Some(HowMuchGainModel(100))) shouldEqual ""
+    }
+
+    "produce a blank query string with no data" in {
+      FinalTaxAnswersRequestConstructor.previousGain(None, None, None) shouldBe ""
     }
   }
 
@@ -89,7 +101,7 @@ class FinalTaxAnswersRequestConstructorSpec extends UnitSpec {
 
     "produce the entered amount for aea if otherProperties = Yes, previousLossOrGain = Loss, howMuchLoss == 0.0" in {
       FinalTaxAnswersRequestConstructor.annualExemptAmount(
-        OtherPropertiesModel("Yes"),
+        Some(OtherPropertiesModel("Yes")),
         Some(PreviousLossOrGainModel("Loss")),
         Some(HowMuchLossModel(0.0)),
         None,
@@ -100,7 +112,7 @@ class FinalTaxAnswersRequestConstructorSpec extends UnitSpec {
 
     "produce the entered amount for aea if otherProperties = Yes, previousLossOrGain = Gain, howMuchGain == 0.0" in {
       FinalTaxAnswersRequestConstructor.annualExemptAmount(
-        OtherPropertiesModel("Yes"),
+        Some(OtherPropertiesModel("Yes")),
         Some(PreviousLossOrGainModel("Gain")),
         Some(HowMuchLossModel(1.0)),
         Some(HowMuchGainModel(0.0)),
@@ -111,7 +123,7 @@ class FinalTaxAnswersRequestConstructorSpec extends UnitSpec {
 
     "produce the entered amount for aea if otherProperties = Yes, previousLossOrGain = Gain, howMuchGain == 10000.0" in {
       FinalTaxAnswersRequestConstructor.annualExemptAmount(
-        OtherPropertiesModel("Yes"),
+        Some(OtherPropertiesModel("Yes")),
         Some(PreviousLossOrGainModel("Gain")),
         Some(HowMuchLossModel(1.0)),
         Some(HowMuchGainModel(10000.0)),
@@ -122,7 +134,7 @@ class FinalTaxAnswersRequestConstructorSpec extends UnitSpec {
 
     "produce the entered amount for aea if otherProperties = Yes, previousLossOrGain = Neither" in {
       FinalTaxAnswersRequestConstructor.annualExemptAmount(
-        OtherPropertiesModel("Yes"),
+        Some(OtherPropertiesModel("Yes")),
         Some(PreviousLossOrGainModel("Neither")),
         None,
         None,
@@ -133,7 +145,7 @@ class FinalTaxAnswersRequestConstructorSpec extends UnitSpec {
 
     "otherwise produce the maximum annual exempt amount supplied" in {
       FinalTaxAnswersRequestConstructor.annualExemptAmount(
-        OtherPropertiesModel("No"),
+        Some(OtherPropertiesModel("No")),
         Some(PreviousLossOrGainModel("Neither")),
         None,
         None,
@@ -141,16 +153,25 @@ class FinalTaxAnswersRequestConstructorSpec extends UnitSpec {
         1000
       ) shouldEqual "&annualExemptAmount=1000"
     }
+
+    "produce the maximum AEA value if no data is provided" in {
+      FinalTaxAnswersRequestConstructor.annualExemptAmount(None, None, None, None, None, 1000) shouldEqual "&annualExemptAmount=1000"
+    }
   }
 
   "Calling .broughtForwardLosses" should {
 
     "produce a valid query string when claiming" in {
-      FinalTaxAnswersRequestConstructor.broughtForwardLosses(BroughtForwardLossesModel(isClaiming = true, Some(10000))) shouldEqual "&broughtForwardLoss=10000"
+      FinalTaxAnswersRequestConstructor.broughtForwardLosses(Some(BroughtForwardLossesModel(isClaiming = true,
+        Some(10000)))) shouldEqual "&broughtForwardLoss=10000"
     }
 
     "produce a blank query string when not claiming" in {
-      FinalTaxAnswersRequestConstructor.broughtForwardLosses(BroughtForwardLossesModel(isClaiming = false, Some(10000))) shouldEqual ""
+      FinalTaxAnswersRequestConstructor.broughtForwardLosses(Some(BroughtForwardLossesModel(isClaiming = false, Some(10000)))) shouldEqual ""
+    }
+
+    "produce a blank query string with no data" in {
+      FinalTaxAnswersRequestConstructor.broughtForwardLosses(None) shouldBe ""
     }
   }
 }
