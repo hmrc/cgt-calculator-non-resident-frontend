@@ -7,7 +7,7 @@
 @whyThisDate(showBoth: Boolean) = {
 
     @if(showBoth) {
-        <p id="formHelpTextTitle">@Messages("calc.privateResidenceRelief.helpTextSubTitle")</p>
+        <p id="bulletPointTitle">@Messages("calc.privateResidenceRelief.helpTextSubTitle")</p>
 
         <ul class="list-bullet">
                 <li>@Messages("calc.privateResidenceRelief.daysBeforeHelpText")</li>
@@ -22,7 +22,7 @@
 @hiddenContent = {
 @if(daysBeforeShow) {
 
-    <p>@Messages("calc.privateResidenceRelief.formHintExplanation")</p>
+    <p id="formExplanation">@Messages("calc.privateResidenceRelief.formHintExplanation")</p>
 
     <div class="form-group bold">
     @input(
@@ -36,6 +36,8 @@
     </div>
 }
 @if(daysBetweenShow) {
+    <p id="formExplanation">@Messages("calc.privateResidenceRelief.formHintExplanation")</p>
+
     <div class="form-group bold">
     @input(
         privateResidenceReliefForm("daysClaimedAfter"),

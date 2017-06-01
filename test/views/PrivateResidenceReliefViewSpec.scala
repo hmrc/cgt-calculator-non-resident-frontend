@@ -141,31 +141,50 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
       "have some hidden content" which {
         lazy val hiddenContent = document.body().select("#hidden")
 
-        "which has a single div with a class of form-group" in {
-          hiddenContent.select("div.form-group").size() shouldBe 1
+        "which has a two divs with a class of form-group for the two questions" in {
+          hiddenContent.select("div.form-group").size() shouldBe 2
         }
 
         "contains an input with the id 'daysClaimed'" in {
           hiddenContent.select("input").attr("id") shouldBe "daysClaimed"
         }
 
-        s"contains the question ${messages.PrivateResidenceRelief.questionBefore}" in {
-          hiddenContent.select("label").text() shouldBe messages.PrivateResidenceRelief.questionBefore
+        s"has a paragraph with the text ${messages.PrivateResidenceRelief.helpTextSubtitle}" in {
+          document.getElementById("formExplanation").text() shouldBe messages.PrivateResidenceRelief.formHelp
+        }
+
+        s"contains the questions ${messages.PrivateResidenceRelief.questionBefore}" in {
+          hiddenContent.select("label").text() shouldBe messages.PrivateResidenceRelief.questionBefore + " " +
+            s"${messages.PrivateResidenceRelief.questionBetween} " +
+              s"date-input ${messages.PrivateResidenceRelief.questionBetweenEnd}"
+          }
+
+        s"contains the label ${messages.PrivateResidenceRelief.questionBefore}" in {
+          document.getElementsByTag("label").get(2).text() shouldBe messages.PrivateResidenceRelief.questionBefore
+        }
+
+        s"contains the label ${messages.PrivateResidenceRelief.questionBetween} date-input " +
+        s"${messages.PrivateResidenceRelief.questionBetweenEnd}" in {
+          document.getElementsByTag("label").get(3).text() shouldBe s"${messages.PrivateResidenceRelief.questionBetween} " +
+            s"date-input ${messages.PrivateResidenceRelief.questionBetweenEnd}"
         }
 
         s"has form help text ${messages.PrivateResidenceRelief.helpTextSubtitle}" in {
-
+          hiddenContent.select("#bulletPointTitle").text() shouldBe messages.PrivateResidenceRelief.helpTextSubtitle
         }
 
         s"contains a list" which {
-          lazy val list = hiddenContent.select("li")
 
-          "" in {
+          s"has a bullet point with the text ${messages.PrivateResidenceRelief.questionBeforeWhyThisDate}" in {
+            document.getElementsByTag("li").get(1).text() shouldBe messages.PrivateResidenceRelief.questionBeforeWhyThisDate
+          }
 
+          s"has a bullet point with the text 'date-input ${messages.PrivateResidenceRelief.questionBeforeWhyThisDate}'" in {
+            document.getElementsByTag("li").get(2).text() shouldBe "date-input " + messages.PrivateResidenceRelief.questionBetweenWhyThisDate
           }
         }
+        }
       }
-    }
 
     "supplied with no errors and the days after input displayed" should {
       lazy val view = privateResidenceRelief(privateResidenceReliefForm(false, true), true, false, "date-input-two")
