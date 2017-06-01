@@ -56,6 +56,34 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
         }
       }
 
+      "has a help link" which {
+        lazy val containingDiv = document.select("#privateResidenceReliefLink")
+        lazy val link = containingDiv.select("a")
+        "has the external link class" in {
+          link.hasClass("external-link") shouldEqual true
+          }
+
+          "has the attribute rel" in {
+          link.hasAttr("rel") shouldEqual true
+          }
+
+          "rel has the value of external" in {
+          link.attr("rel") shouldEqual "external"
+          }
+
+          "has a target attribute" in {
+          link.hasAttr("target") shouldEqual true
+          }
+
+          "has a target value of _blank" in {
+          link.attr("target") shouldEqual "_blank"
+          }
+
+        s"has the text ${messages.PrivateResidenceRelief.findOut} ${messages.PrivateResidenceRelief.findOutAboutPRRLink}" in {
+          containingDiv.text() shouldBe {s"${messages.PrivateResidenceRelief.findOut}${messages.PrivateResidenceRelief.findOutAboutPRRLink} ${messages.externalLink}"}
+        }
+      }
+
       "have a heading" which {
         lazy val heading = document.body().select("h1")
 
@@ -70,6 +98,10 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
 
       s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
         document.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
+      }
+
+      s"has the a paragraph with the text '${messages.PrivateResidenceRelief.intro}' " in {
+        document.select("p#intro").text() shouldBe messages.PrivateResidenceRelief.intro
       }
 
       "have a form" which {
@@ -149,8 +181,8 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
           hiddenContent.select("input").attr("id") shouldBe "daysClaimed"
         }
 
-        s"has the progressive disclosure title text ${messages.PrivateResidenceRelief.helpTextJustBefore}" in {
-          hiddenContent.select("span.summary").text() shouldBe messages.PrivateResidenceRelief.helpTextJustBefore
+        s"has the progressive disclosure title text ${messages.PrivateResidenceRelief.helpTextBeforeAfter}" in {
+          hiddenContent.select("span.summary").text() shouldBe messages.PrivateResidenceRelief.helpTextBeforeAfter
         }
 
         s"has a paragraph with the text ${messages.PrivateResidenceRelief.helpTextSubtitle}" in {

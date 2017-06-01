@@ -20,9 +20,10 @@
     }
 
 @hiddenContent = {
-@if(daysBeforeShow) {
 
     <p id="formExplanation">@Messages("calc.privateResidenceRelief.formHintExplanation")</p>
+
+@if(daysBeforeShow) {
 
     <div class="form-group bold">
     @input(
@@ -36,7 +37,6 @@
     </div>
 }
 @if(daysBetweenShow) {
-    <p id="formExplanation">@Messages("calc.privateResidenceRelief.formHintExplanation")</p>
 
     <div class="form-group bold">
     @input(
@@ -79,10 +79,12 @@
 
     <p id="intro">@Messages("calc.privateResidenceRelief.intro")</p>
 
-    @Messages("calc.privateResidenceRelief.helpText")
-    <a id="privateResidenceReliefLink" class="external-link" rel="external" href="https://www.gov.uk/tax-sell-home/private-residence-relief" target="_blank">
-        @Messages("calc.privateResidenceRelief.helpLink") <span>@Messages("calc.base.externalLink")</span>
-    </a>
+
+    <div id="privateResidenceReliefLink">@Messages("calc.privateResidenceRelief.helpText")
+        <a class="external-link" rel="external" href="https://www.gov.uk/tax-sell-home/private-residence-relief" target="_blank">
+            @Messages("calc.privateResidenceRelief.helpLink") <span>@Messages("calc.base.externalLink")</span>
+        </a>
+    </div>
 
     @form(action = controllers.routes.PrivateResidenceReliefController.submitPrivateResidenceRelief) {
 
