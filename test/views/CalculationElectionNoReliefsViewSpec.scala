@@ -29,9 +29,9 @@ class CalculationElectionNoReliefsViewSpec extends UnitSpec with WithFakeApplica
 
     val rebasedLowestTaxOwed: Seq[(String, String, String, String, Option[String], Option[BigDecimal])] =
       Seq(
-        ("flat", "1000", Messages("calc.calculationElectionNoReliefs.flatGain"), "", None, None),
-        ("rebased", "0", Messages("calc.calculationElectionNoReliefs.rebasing"), "", None, None),
-        ("time", "2000", Messages("calc.calculationElectionNoReliefs.straightLine"), "", None, None)
+        ("flat", "1000", Messages("calc.calculationElectionNoReliefs.flatGain"), "description", None, None),
+        ("rebased", "0", Messages("calc.calculationElectionNoReliefs.rebasing"), "description", None, None),
+        ("time", "2000", Messages("calc.calculationElectionNoReliefs.straightLine"), "description", None, None)
       )
 
     "have a h1 tag" which {

@@ -1,0 +1,11 @@
+@import models._
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import views.html.helpers._
+
+@(calculationElectionForm: Form[CalculationElectionModel], content: Seq[(String, String, String, String, Option[String], Option[BigDecimal])])(implicit request: Request[_], messages: Messages)
+
+@main_template(Messages("calc.calculationElectionNoReliefs.title")) {
+
+  <a id="back-link" class="back-link" href="@controllers.routes.ClaimingReliefsController.claimingReliefs()">@Messages("calc.base.back")</a>
+
+}
