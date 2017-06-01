@@ -134,6 +134,17 @@ object MessageLookup {
       val whyMoreDetailsTwo = "Higher totals sometimes qualify for larger reliefs, which can reduce the amount you owe."
     }
 
+    object CalculationElectionNoReliefs {
+      val title = "Your calculation options"
+      val helpText = "There are 3 ways we can calculate your Non-Resident Capital Gains Tax."
+      def helpTextMethodType(method: String): String =
+        s"Based on the answers you've given, the $method method will give you the lowest amount of tax to pay."
+      val helpTextChooseMethod = "You're free to choose another method if you wish."
+      val rebasing = "Rebasing method"
+      val flatGain = "Gain over whole period of ownership method"
+      val straightLine = "Straight-line apportionment method"
+    }
+
     object CheckYourAnswers {
       val question = "Check your answers"
       val tableHeading = "You've told us"

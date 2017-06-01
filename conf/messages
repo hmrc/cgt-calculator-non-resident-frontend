@@ -342,6 +342,16 @@ calc.calculationElection.message.whyMore = Why you might choose a higher total
 calc.calculationElection.whyMoreDetails.one = You might pick a higher total if you''re planning to add more tax reliefs.
 calc.calculationElection.whyMoreDetails.two = Higher totals sometimes qualify for larger reliefs, which can reduce the amount you owe.
 
+## Calculation Election No Reliefs ##
+calc.calculationElectionNoReliefs.title = Your calculation options
+calc.calculationElectionNoReliefs.helpText = There are 3 ways we can calculate your Non-Resident Capital Gains Tax.
+calc.calculationElectionNoReliefs.helpTextMethodPartOne = Based on the answers you''ve given, the
+calc.calculationElectionNoReliefs.helpTextMethodPartTwo = method will give you the lowest amount of tax to pay.
+calc.calculationElectionNoReliefs.helpTextChooseMethod = You''re free to choose another method if you wish.
+calc.calculationElectionNoReliefs.rebasing = Rebasing method
+calc.calculationElectionNoReliefs.flatGain = Gain over whole period of ownership method
+calc.calculationElectionNoReliefs.straightLine = Straight-line apportionment method
+
 ## Other Reliefs ##
 calc.otherReliefs.question = How much extra tax relief are you claiming?
 calc.otherReliefs.questionTwo = Do you want to add other tax relief?
