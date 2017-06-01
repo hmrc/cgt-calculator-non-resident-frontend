@@ -64,7 +64,7 @@ class YourAnswersConstructorSpec extends UnitSpec with WithFakeApplication {
       "contain the answers from deduction details" in {
         lazy val deductionDetails = DeductionDetailsConstructor.deductionDetailsRows(totalGainModel, livedIn = Some(PropertyLivedInModel(false)))
 
-        result.containsSlice(deductionDetails) shouldBe true
+        result.containsSlice(deductionDetails) shouldBe false
       }
     }
   }

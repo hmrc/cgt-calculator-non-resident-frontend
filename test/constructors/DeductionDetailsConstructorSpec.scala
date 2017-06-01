@@ -183,10 +183,15 @@ class DeductionDetailsConstructorSpec extends UnitSpec with WithFakeApplication 
     }
 
     "provided with a propertyLivedInModel with a false value" should {
-      "return an empty sequence" in {
-        lazy val result = DeductionDetailsConstructor.propertyLivedInQuestionRow(Some(PropertyLivedInModel(false)))
 
-        result shouldBe Seq()
+      lazy val result = DeductionDetailsConstructor.propertyLivedInQuestionRow(Some(PropertyLivedInModel(false)))
+
+      "has a head of type QuestionAnswerModel[String]" in {
+        result.head shouldBe an[QuestionAnswerModel[String]]
+      }
+
+      "and a length of 1" in {
+        result.length shouldBe 1
       }
     }
 
