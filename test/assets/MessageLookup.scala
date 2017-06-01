@@ -77,8 +77,10 @@ object MessageLookup {
       val question = "What date did you sign the contract to become the owner?"
       val questionTwo = "What was the date you signed the contract that made you the owner?"
       val hintText = "If you inherited the property, it is the date that the previous owner died."
+      val errorIncompleteDate = "Date is not valid"
+      val errorFutureDate = "Date must be in the past"
+      val errorFutureDateGuidance = "Enter a date from the past"
     }
-
 
     object AcquisitionValue {
       val question = "How much did you pay for the property?"
@@ -636,6 +638,7 @@ object MessageLookup {
     val title = "You have no tax to pay"
     val spouseText = "This is because Capital Gains Tax doesn't apply if you give a property to your spouse or civil partner."
     val charityText = "This is because Capital Gains Tax doesn't apply if you give a property to a charity."
+    val returnToGov = "Return to GOV.UK"
   }
 
   //############ Sell For Less messages #################//

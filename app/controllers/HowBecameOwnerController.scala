@@ -20,11 +20,10 @@ import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import forms.HowBecameOwnerForm._
-import models.{AcquisitionDateModel, HowBecameOwnerModel, RebasedValueModel}
+import models.HowBecameOwnerModel
 import play.api.data.Form
-import play.api.mvc.Result
+import play.api.mvc.{Action, AnyContent, Result}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
-import uk.gov.hmrc.play.http.HeaderCarrier
 import views.html.{calculation => views}
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
@@ -39,26 +38,16 @@ trait HowBecameOwnerController extends FrontendController with ValidActiveSessio
 
   val calcConnector: CalculatorConnector
 
-  def getAcquisitionDate(implicit hc: HeaderCarrier): Future[Option[AcquisitionDateModel]] = {
-    calcConnector.fetchAndGetFormData[AcquisitionDateModel](KeystoreKeys.acquisitionDate)
-  }
-
-  def getRebasedValue(implicit hc: HeaderCarrier): Future[Option[RebasedValueModel]] = {
-    calcConnector.fetchAndGetFormData[RebasedValueModel](KeystoreKeys.rebasedValue)
-  }
-
-  val howBecameOwner = ValidateSession.async { implicit request =>
+  val howBecameOwner: Action[AnyContent] = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[HowBecameOwnerModel](KeystoreKeys.howBecameOwner).map {
       case Some(data) => Ok(views.howBecameOwner(howBecameOwnerForm.fill(data)))
       case None => Ok(views.howBecameOwner(howBecameOwnerForm))
     }
   }
 
-  val submitHowBecameOwner = ValidateSession.async { implicit request =>
+  val submitHowBecameOwner: Action[AnyContent] = ValidateSession.async { implicit request =>
 
-    def errorAction(form: Form[HowBecameOwnerModel]) = {
-      Future.successful(BadRequest(views.howBecameOwner(form)))
-    }
+    def errorAction(form: Form[HowBecameOwnerModel]) = Future.successful(BadRequest(views.howBecameOwner(form)))
 
     def successAction(model: HowBecameOwnerModel) = {
       for {
@@ -69,7 +58,6 @@ trait HowBecameOwnerController extends FrontendController with ValidActiveSessio
 
     def routeRequest(data: HowBecameOwnerModel): Future[Result] = {
       data.gainedBy match {
-
         case "Gifted" => Future.successful(Redirect(routes.WorthWhenGiftedToController.worthWhenGiftedTo()))
         case "Inherited" => Future.successful(Redirect(routes.WorthWhenInheritedController.worthWhenInherited()))
         case _ => Future.successful(Redirect(routes.BoughtForLessController.boughtForLess()))

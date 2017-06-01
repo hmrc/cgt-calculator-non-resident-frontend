@@ -16,6 +16,8 @@
 
 package views
 
+import java.time.LocalDate
+
 import assets.MessageLookup.{NonResident => messages}
 import controllers.helpers.FakeRequestHelper
 import forms.AcquisitionDateForm._
@@ -105,13 +107,45 @@ class AcquisitionDateViewSpec extends UnitSpec with WithFakeApplication with Moc
       }
     }
 
-    "supplied with errors" should {
-      lazy val form = acquisitionDateForm.bind(Map("acquisitionDateDay" -> "1", "acquisitionDateMonth" -> "1"))
+    "supplied with an invalid date error" should {
+      lazy val form = acquisitionDateForm.bind(Map("acquisitionDateDay" -> "1",
+        "acquisitionDateMonth" -> "1",
+        "acquisitionDateYear" -> ""))
       lazy val view = acquisitionDate(form)
       lazy val document = Jsoup.parse(view.body)
 
-      "have an error summary" in {
-        document.select("#error-summary-display").size() shouldBe 1
+      "have an error summary" which {
+
+        "has size 1" in {
+          document.select("#error-summary-display").size() shouldBe 1
+        }
+
+        s"has the text ${messages.AcquisitionDate.errorIncompleteDate}" in {
+          document.select("#error-summary-display > p").text() shouldBe messages.AcquisitionDate.errorIncompleteDate
+        }
+      }
+    }
+
+    "supplied with a future date error" should {
+      val date: LocalDate = LocalDate.now().plusDays(1)
+      lazy val map = Map(
+        "acquisitionDateDay" -> date.getDayOfMonth.toString,
+        "acquisitionDateMonth" -> date.getMonthValue.toString,
+        "acquisitionDateYear" -> date.getYear.toString)
+
+      lazy val form = acquisitionDateForm.bind(map)
+      lazy val view = acquisitionDate(form)
+      lazy val document = Jsoup.parse(view.body)
+
+      "have an error summary" which {
+
+        "has size 1" in {
+          document.select("#error-summary-display").size() shouldBe 1
+        }
+
+        s"has the text ${messages.AcquisitionDate.errorFutureDateGuidance}" in {
+          document.select("#error-summary-display > p").text() shouldBe messages.AcquisitionDate.errorFutureDateGuidance
+        }
       }
     }
   }

@@ -29,7 +29,8 @@ object TotalGainRequestConstructor {
     improvements(totalGainAnswersModel.improvementsModel) +
     rebasedValues(totalGainAnswersModel.rebasedValueModel, totalGainAnswersModel.rebasedCostsModel,
       totalGainAnswersModel.improvementsModel, totalGainAnswersModel.acquisitionDateModel) +
-    timeApportionedValues(totalGainAnswersModel.disposalDateModel, totalGainAnswersModel.acquisitionDateModel)
+    disposalDate(totalGainAnswersModel.disposalDateModel) +
+    acquisitionDate(totalGainAnswersModel.acquisitionDateModel)
   }
 
   def disposalValue(disposalValueModel: DisposalValueModel): String = {
@@ -61,7 +62,7 @@ object TotalGainRequestConstructor {
                     improvementsModel: ImprovementsModel,
                     acquisitionDateModel: AcquisitionDateModel): String = {
     rebasedValueModel match {
-      case (Some(RebasedValueModel(Some(value))))
+      case (Some(RebasedValueModel(value)))
         if !TaxDates.dateAfterStart(acquisitionDateModel.get) =>
         s"&rebasedValue=$value${rebasedCosts(rebasedCostsModel.get)}${improvementsAfterTaxStarted(improvementsModel)}"
       case _ => ""
@@ -82,10 +83,11 @@ object TotalGainRequestConstructor {
     }
   }
 
-  def timeApportionedValues(disposalDateModel: DisposalDateModel, acquisitionDateModel: AcquisitionDateModel): String = {
-    if (!TaxDates.dateAfterStart(acquisitionDateModel.get))
-     s"&disposalDate=${disposalDateModel.year}-${disposalDateModel.month}-${disposalDateModel.day}&" +
-       s"acquisitionDate=${acquisitionDateModel.year}-${acquisitionDateModel.month}-${acquisitionDateModel.day}"
-     else s"&disposalDate=${disposalDateModel.year}-${disposalDateModel.month}-${disposalDateModel.day}"
+  def disposalDate(disposalDateModel: DisposalDateModel): String = {
+    s"&disposalDate=${disposalDateModel.year}-${disposalDateModel.month}-${disposalDateModel.day}"
+  }
+
+  def acquisitionDate(acquisitionDateModel: AcquisitionDateModel): String = {
+    s"&acquisitionDate=${acquisitionDateModel.year}-${acquisitionDateModel.month}-${acquisitionDateModel.day}"
   }
 }
