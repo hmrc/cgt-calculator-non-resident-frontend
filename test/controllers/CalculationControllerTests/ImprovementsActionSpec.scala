@@ -167,8 +167,8 @@ class ImprovementsActionSpec extends UnitSpec with WithFakeApplication with Mock
         status(result) shouldBe 303
       }
 
-      s"redirect to ${controllers.routes.PrivateResidenceReliefController.privateResidenceRelief()}" in {
-        redirectLocation(result) shouldBe Some(s"${controllers.routes.PrivateResidenceReliefController.privateResidenceRelief()}")
+      s"redirect to ${controllers.routes.PropertyLivedInController.propertyLivedIn()}" in {
+        redirectLocation(result) shouldBe Some(s"${controllers.routes.PropertyLivedInController.propertyLivedIn()}")
       }
     }
 

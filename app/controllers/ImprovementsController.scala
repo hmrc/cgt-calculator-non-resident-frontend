@@ -103,7 +103,7 @@ trait ImprovementsController extends FrontendController with ValidActiveSession 
       totalGainResultsModel match {
         case Some(model) =>
           val totalGainResults: Seq[BigDecimal] = Seq(model.flatGain) ++ Seq(model.rebasedGain, model.timeApportionedGain).flatten
-          if(!totalGainResults.forall(_ <= 0)) Redirect(routes.PrivateResidenceReliefController.privateResidenceRelief())
+          if(!totalGainResults.forall(_ <= 0)) Redirect(routes.PropertyLivedInController.propertyLivedIn())
           else Redirect(routes.CheckYourAnswersController.checkYourAnswers())
         case None => Redirect(common.DefaultRoutes.missingDataRoute)
       }

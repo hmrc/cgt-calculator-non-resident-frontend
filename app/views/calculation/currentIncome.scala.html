@@ -2,12 +2,12 @@
 @import uk.gov.hmrc.play.views.html.helpers.form
 @import views.html.helpers._
 
-@(currentIncomeForm: Form[CurrentIncomeModel])(implicit request: Request[_], messages: Messages)
+@(currentIncomeForm: Form[CurrentIncomeModel], backLink: String)(implicit request: Request[_], messages: Messages)
 
 
 @main_template(Messages("calc.currentIncome.question")) {
 
-    <a id="back-link" class="back-link" href="@controllers.routes.PrivateResidenceReliefController.privateResidenceRelief()">Back</a>
+    <a id="back-link" class="back-link" href="@backLink">Back</a>
 
     @errorSummary(currentIncomeForm, "current-income")
 
