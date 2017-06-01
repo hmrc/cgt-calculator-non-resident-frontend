@@ -149,6 +149,10 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
           hiddenContent.select("input").attr("id") shouldBe "daysClaimed"
         }
 
+        s"has the progressive disclosure title text ${messages.PrivateResidenceRelief.helpTextJustBefore}" in {
+          hiddenContent.select("span.summary").text() shouldBe messages.PrivateResidenceRelief.helpTextJustBefore
+        }
+
         s"has a paragraph with the text ${messages.PrivateResidenceRelief.helpTextSubtitle}" in {
           document.getElementById("formExplanation").text() shouldBe messages.PrivateResidenceRelief.formHelp
         }
@@ -201,6 +205,10 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
           hiddenContent.select("input").attr("id") shouldBe "daysClaimedAfter"
         }
 
+        s"has the progressive disclosure title text ${messages.PrivateResidenceRelief.helpTextJustBefore}" in {
+          hiddenContent.select("span.summary").text() shouldBe messages.PrivateResidenceRelief.helpTextJustBefore
+        }
+
         s"contains the question ${messages.PrivateResidenceRelief.questionBetween}" in {
           hiddenContent.select("label").text() shouldBe s"${messages.PrivateResidenceRelief.questionBetween} " +
             s"date-input-two ${messages.PrivateResidenceRelief.questionBetweenEnd}"
@@ -209,6 +217,7 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
         s"contains the text ${messages.PrivateResidenceRelief.questionBetweenWhyThisDate}" in {
           hiddenContent.select("#helpTextBetween").text() shouldBe "date-input-two " + messages.PrivateResidenceRelief.questionBetweenWhyThisDate
         }
+
       }
     }
 
