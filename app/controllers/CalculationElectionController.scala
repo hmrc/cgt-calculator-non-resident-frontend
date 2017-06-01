@@ -132,12 +132,14 @@ trait CalculationElectionController extends FrontendController with ValidActiveS
         case Some(data) =>
           Ok(calculation.calculationElection(
             calculationElectionForm.fill(data),
-            content)
+            content,
+            "backlink")
           )
         case None =>
           Ok(calculation.calculationElection(
             calculationElectionForm,
-            content)
+            content,
+            "backlink")
           )
       }
 
@@ -183,7 +185,8 @@ trait CalculationElectionController extends FrontendController with ValidActiveS
       } yield {
         BadRequest(calculation.calculationElection(
           form,
-          content
+          content,
+          "backlink"
         ))
       }
     }

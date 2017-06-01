@@ -36,7 +36,7 @@ class CalculationElectionViewSpec extends UnitSpec with WithFakeApplication with
     lazy val form = calculationElectionForm
     lazy val seq: Seq[(String, String, String, String, Option[String], Option[BigDecimal])] =
       Seq(("flat", "2000", Messages("calc.calculationElection.message.flat"), Messages("calc.calculationElection.description.flat"), None, None))
-    lazy val view = views.calculationElection(form, seq)
+    lazy val view = views.calculationElection(form, seq, "back-link")
     lazy val doc = Jsoup.parse(view.body)
 
     "have a h1 tag that" should {
@@ -54,18 +54,14 @@ class CalculationElectionViewSpec extends UnitSpec with WithFakeApplication with
       doc.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
     }
 
-    "have a back button" which {
+    "have a dynamic back button" which {
 
       "has the correct back link text" in {
         doc.select("a#back-link").text shouldBe commonMessages.back
       }
 
-      "has the back-link class" in {
-        doc.select("a#back-link").hasClass("back-link") shouldBe true
-      }
-
-      "has a back link to 'back'" in {
-        doc.select("a#back-link").attr("href") shouldBe "/calculate-your-capital-gains/non-resident/check-your-answers"
+      "has a back link to 'back-link'" in {
+        doc.select("a#back-link").attr("href") shouldBe "back-link"
       }
     }
 
@@ -130,7 +126,7 @@ class CalculationElectionViewSpec extends UnitSpec with WithFakeApplication with
 
     "supplied with errors" should {
       lazy val form = calculationElectionForm.bind(Map("calculationElection" -> "a"))
-      lazy val view = views.calculationElection(form, seq)
+      lazy val view = views.calculationElection(form, seq, "backlink")
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {
