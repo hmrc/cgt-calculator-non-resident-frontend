@@ -127,7 +127,7 @@ trait CalculationElectionController extends FrontendController with ValidActiveS
 
   val calculationElection: Action[AnyContent] = ValidateSession.async { implicit request =>
 
-    def action(content: Seq[(String, String, String, Option[String], Option[BigDecimal])]) =
+    def action(content: Seq[(String, String, String, String, Option[String], Option[BigDecimal])]) =
       calcConnector.fetchAndGetFormData[CalculationElectionModel](KeystoreKeys.calculationElection).map {
         case Some(data) =>
           Ok(calculation.calculationElection(
