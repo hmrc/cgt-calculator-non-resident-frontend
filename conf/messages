@@ -322,14 +322,10 @@ calc.broughtForwardLosses.errorDecimal = There are too many numbers after the de
 calc.broughtForwardLosses.errorNegative = Enter a positive number for your brought forward loss
 
 ## Calculation Election ##
-calc.calculationElection.pageHeading = Working out your total
-calc.calculationElection.question = Which method of calculation would you like?
-calc.calculationElection.h2 = How this affects your tax
-calc.calculationElection.paragraph.one = We can work out your tax in a number of ways. Before we give you a final total you have a choice about what to base it on.
-calc.calculationElection.paragraph.two = Because the options take different things into account they''ll usually give you different totals. Some totals may be much larger than others.
-calc.calculationElection.paragraph.three = Unless you want to add more tax reliefs, the total you choose is the amount of tax you''ll pay.
-calc.calculationElection.legend = Tax you''ll owe
-calc.calculationElection.based = Based on
+calc.calculationElection.pageHeading = Choose your calculation method
+calc.calculationElection.paragraph.one = There are 3 ways we can calculate your Capital Gains Tax
+calc.calculationElection.paragraph.two = If you''re entitled to other reliefs, these may change which method gives the lowest amount.
+calc.calculationElection.legend = Choose a method then add your other reliefs
 calc.calculationElection.link.one = Different ways of working out Capital Gains Tax
 calc.calculationElection.otherRelief = Add other tax relief
 calc.calculationElection.someOtherRelief = Other tax relief
@@ -338,12 +334,9 @@ calc.calculationElection.message.timeDate = 5 April 2015
 calc.calculationElection.message.rebased = Based on the amount you''ve gained on the property since
 calc.calculationElection.message.rebasedDate = 5 April 2015
 calc.calculationElection.message.flat = Based on the amount you''ve gained on the property since you became the owner
-calc.calculationElection.message.whyMore = Why you might choose a higher total
 calc.calculationElection.description.rebased = Rebasing method
 calc.calculationElection.description.flat = Gain over whole period of ownership method
 calc.calculationElection.description.time = Straight-line apportionment method
-calc.calculationElection.whyMoreDetails.one = You might pick a higher total if you''re planning to add more tax reliefs.
-calc.calculationElection.whyMoreDetails.two = Higher totals sometimes qualify for larger reliefs, which can reduce the amount you owe.
 
 ## Calculation Election No Reliefs ##
 calc.calculationElectionNoReliefs.title = Your calculation options

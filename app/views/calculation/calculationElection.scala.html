@@ -4,7 +4,7 @@
 
 @(calculationElectionForm: Form[CalculationElectionModel], content: Seq[(String, String, String, String, Option[String], Option[BigDecimal])])(implicit request: Request[_], messages: Messages)
 
-@main_template(Messages("calc.calculationElection.question")) {
+@main_template(Messages("calc.calculationElection.pageHeading")) {
 
     <a id="back-link" class="back-link" href="@controllers.routes.CheckYourAnswersController.checkYourAnswers">@Messages("calc.base.back")</a>
 
@@ -16,19 +16,7 @@
 
     <p>@Messages("calc.calculationElection.paragraph.one")</p>
 
-    <h2 class="heading-small">@Messages("calc.calculationElection.h2")</h2>
-
     <p>@Messages("calc.calculationElection.paragraph.two")</p>
-
-    <p>@Messages("calc.calculationElection.paragraph.three")</p>
-
-    <details role="group">
-        <summary role="button" aria-controls="details-content-0" aria-expanded="false"><span class="summary" data-journey-click="help:reveal:choose-calc-type">@Messages("calc.calculationElection.message.whyMore")</span></summary>
-        <div class="panel panel-indent" id="details-content-0" aria-hidden="true">
-            <p>@Messages("calc.calculationElection.whyMoreDetails.one")</p>
-            <p>@Messages("calc.calculationElection.whyMoreDetails.two")</p>
-        </div>
-    </details>
 
     @form(action = controllers.routes.CalculationElectionController.submitCalculationElection) {
 

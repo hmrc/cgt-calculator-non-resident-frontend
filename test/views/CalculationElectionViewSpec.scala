@@ -39,6 +39,10 @@ class CalculationElectionViewSpec extends UnitSpec with WithFakeApplication with
     lazy val view = views.calculationElection(form, seq)
     lazy val doc = Jsoup.parse(view.body)
 
+    s"have a title of '${messages.heading}" in {
+      doc.title() shouldBe messages.heading
+    }
+
     "have a h1 tag that" should {
 
       s"have the question of ${messages.heading}" in {
@@ -82,17 +86,6 @@ class CalculationElectionViewSpec extends UnitSpec with WithFakeApplication with
       }
     }
 
-    "contains a h2 heading" which {
-
-      "has the class of heading-small" in {
-        doc.select("h2").hasClass("heading-small") shouldBe true
-      }
-
-      s"contains the text ${messages.moreInformation}" in {
-        doc.body().getElementsByTag("h2").text should include(messages.moreInformation)
-      }
-    }
-
     "have the text in paragraphs" which {
 
       s"contains the text ${messages.moreInfoFirstP}" in {
@@ -102,26 +95,10 @@ class CalculationElectionViewSpec extends UnitSpec with WithFakeApplication with
       s"contains the text ${messages.moreInfoSecondP}" in {
         doc.body().getElementsByTag("p").text should include(messages.moreInfoSecondP)
       }
-
-      s"contains the text ${messages.moreInfoThirdP}" in {
-        doc.body().getElementsByTag("p").text should include(messages.moreInfoThirdP)
-      }
     }
 
     "display a 'Continue' button " in {
       doc.body.getElementById("continue-button").text shouldEqual commonMessages.continue
-    }
-
-    s"display a concertina information box with '${messages.whyMore} " in {
-      doc.select("summary span.summary").text shouldEqual messages.whyMore
-    }
-
-    s"display a concertina information box with '${messages.whyMoreDetailsOne} " in {
-      doc.select("div#details-content-0 p").text should include(messages.whyMoreDetailsOne)
-    }
-
-    s"display a concertina information box with '${messages.whyMoreDetailsTwo} " in {
-      doc.select("div#details-content-0 p").text should include(messages.whyMoreDetailsTwo)
     }
 
     "have no pre-selected option" in {

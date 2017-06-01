@@ -140,7 +140,7 @@ class CalculationElectionActionSpec extends UnitSpec with WithFakeApplication wi
       }
 
       "be on the calculation election page" in {
-        document.title() shouldEqual messages.question
+        document.title() shouldEqual messages.heading
       }
     }
 
@@ -160,7 +160,7 @@ class CalculationElectionActionSpec extends UnitSpec with WithFakeApplication wi
       }
 
       "be on the calculation election page" in {
-        document.title() shouldEqual messages.question
+        document.title() shouldEqual messages.heading
       }
     }
   }
@@ -268,7 +268,7 @@ class CalculationElectionActionSpec extends UnitSpec with WithFakeApplication wi
       }
 
       "return to the calculation election page" in {
-        document.title shouldEqual messages.question
+        document.title shouldEqual messages.heading
       }
     }
   }
