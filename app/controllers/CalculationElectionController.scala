@@ -45,6 +45,20 @@ trait CalculationElectionController extends FrontendController with ValidActiveS
   val calcElectionConstructor: CalculationElectionConstructor
   val calcAnswersConstructor: AnswersConstructor
 
+  def orderElements(content: Seq[(String, String, String, String, Option[String], Option[BigDecimal])],
+                    claimingReliefs: Boolean): Seq[(String, String, String, String, Option[String], Option[BigDecimal])] = {
+    if (claimingReliefs) {
+      val seq = Seq("rebased", "time", "flat")
+      def sort(s1: (String, String, String, String, Option[String], Option[BigDecimal]),
+                 s2: (String, String, String, String, Option[String], Option[BigDecimal])) = {
+        seq.indexOf(s1._1) < seq.indexOf(s2._1)
+      }
+
+      content.sortWith(sort)
+    }
+    else content
+  }
+
   private def getPRRResponse(totalGainResultsModel: TotalGainResultsModel)(implicit hc: HeaderCarrier): Future[Option[PrivateResidenceReliefModel]] = {
     val optionSeq = Seq(totalGainResultsModel.rebasedGain, totalGainResultsModel.timeApportionedGain).flatten
     val finalSeq = Seq(totalGainResultsModel.flatGain) ++ optionSeq

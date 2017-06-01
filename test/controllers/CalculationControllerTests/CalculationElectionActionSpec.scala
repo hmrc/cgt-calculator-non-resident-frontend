@@ -278,4 +278,25 @@ class CalculationElectionActionSpec extends UnitSpec with WithFakeApplication wi
       CalculationElectionController.calcConnector shouldBe CalculatorConnector
     }
   }
+
+  "Calling .orderElements" should {
+    val sequence: Seq[(String, String, String, String, Option[String], Option[BigDecimal])] = Seq(
+      ("flat", "test", "test", "test", None, None),
+      ("rebased", "test", "test", "test", None, None),
+      ("time", "test", "test", "test", None, None)
+    )
+    val orderedSequence: Seq[(String, String, String, String, Option[String], Option[BigDecimal])] = Seq(
+      ("rebased", "test", "test", "test", None, None),
+      ("time", "test", "test", "test", None, None),
+      ("flat", "test", "test", "test", None, None)
+    )
+
+    "return the original sequence if not claiming reliefs" in {
+      CalculationElectionController.orderElements(sequence, false) shouldBe sequence
+    }
+
+    "return the ordered sequence if claiming reliefs" in {
+      CalculationElectionController.orderElements(sequence, true) shouldBe orderedSequence
+    }
+  }
 }
