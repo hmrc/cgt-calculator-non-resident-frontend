@@ -62,7 +62,7 @@ class YourAnswersConstructorSpec extends UnitSpec with WithFakeApplication {
       }
 
       "contain the answers from deduction details" in {
-        lazy val deductionDetails = DeductionDetailsConstructor.deductionDetailsRows(totalGainModel)
+        lazy val deductionDetails = DeductionDetailsConstructor.deductionDetailsRows(totalGainModel, livedIn = Some(PropertyLivedInModel(false)))
 
         result.containsSlice(deductionDetails) shouldBe true
       }
@@ -83,7 +83,7 @@ class YourAnswersConstructorSpec extends UnitSpec with WithFakeApplication {
       }
 
       "contain the answers from PRR" in {
-        val deductionsSlice = DeductionDetailsConstructor.deductionDetailsRows(totalGainModel, Some(prrModel))
+        val deductionsSlice = DeductionDetailsConstructor.deductionDetailsRows(totalGainModel, Some(prrModel), Some(PropertyLivedInModel(true)))
         result.containsSlice(deductionsSlice) shouldBe true
       }
     }
@@ -99,7 +99,7 @@ class YourAnswersConstructorSpec extends UnitSpec with WithFakeApplication {
 
 
       "not contain the answers from PRR" in {
-        val deductionsSlice = DeductionDetailsConstructor.deductionDetailsRows(totalGainModel, Some(prrModel))
+        val deductionsSlice = DeductionDetailsConstructor.deductionDetailsRows(totalGainModel, Some(prrModel), Some(PropertyLivedInModel(true)))
         result.containsSlice(deductionsSlice) shouldBe false
       }
     }

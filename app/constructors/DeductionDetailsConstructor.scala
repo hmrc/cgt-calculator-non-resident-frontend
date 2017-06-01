@@ -30,18 +30,28 @@ object DeductionDetailsConstructor {
   }
 
   def deductionDetailsRows(answers: TotalGainAnswersModel,
-                           privateResidenceReliefModel: Option[PrivateResidenceReliefModel] = None): Seq[QuestionAnswerModel[Any]] = {
+                           privateResidenceReliefModel: Option[PrivateResidenceReliefModel] = None,
+                           livedIn: Option[PropertyLivedInModel]): Seq[QuestionAnswerModel[Any]] = {
 
-    val privateResidenceReliefQuestion = privateResidenceReliefQuestionRow(privateResidenceReliefModel)
-    val privateResidenceReliefDaysClaimed = privateResidenceReliefDaysClaimedRow(privateResidenceReliefModel, answers)
-    val privateResidenceReliefDaysClaimedAfter = privateResidenceReliefDaysClaimedAfterRow(privateResidenceReliefModel, answers)
+    val propertyLivedInRow = propertyLivedInQuestionRow(livedIn)
 
-    val sequence = Seq(
-      privateResidenceReliefQuestion,
-      privateResidenceReliefDaysClaimed,
-      privateResidenceReliefDaysClaimedAfter)
+    if(!propertyLivedInRow.isEmpty) {
 
-    sequence.flatten
+      val privateResidenceReliefQuestion = privateResidenceReliefQuestionRow(privateResidenceReliefModel)
+      val privateResidenceReliefDaysClaimed = privateResidenceReliefDaysClaimedRow(privateResidenceReliefModel, answers)
+      val privateResidenceReliefDaysClaimedAfter = privateResidenceReliefDaysClaimedAfterRow(privateResidenceReliefModel, answers)
+
+      val sequence = Seq(
+        privateResidenceReliefQuestion,
+        privateResidenceReliefDaysClaimed,
+        privateResidenceReliefDaysClaimedAfter)
+
+      propertyLivedInRow ++ sequence.flatten
+    }
+
+    else {
+      propertyLivedInRow
+    }
   }
 
   def propertyLivedInQuestionRow(livedIn: Option[PropertyLivedInModel]): Seq[QuestionAnswerModel[String]] = {

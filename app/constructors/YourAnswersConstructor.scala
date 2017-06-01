@@ -26,17 +26,10 @@ object YourAnswersConstructor {
                        propertyLivedInModel: Option[PropertyLivedInModel] = None): Seq[QuestionAnswerModel[Any]] = {
     val salesDetailsRows = SalesDetailsConstructor.salesDetailsRows(totalGainAnswersModel)
     val purchaseDetailsRows = PurchaseDetailsConstructor.getPurchaseDetailsSection(totalGainAnswersModel)
-    val propertyLivedInRow = DeductionDetailsConstructor.propertyLivedInQuestionRow(propertyLivedInModel)
     val propertyDetailsRows = PropertyDetailsConstructor.propertyDetailsRows(totalGainAnswersModel)
-    val deductionDetailsRows = DeductionDetailsConstructor.deductionDetailsRows(totalGainAnswersModel, privateResidenceReliefModel)
+    val deductionDetailsRows = DeductionDetailsConstructor.deductionDetailsRows(totalGainAnswersModel, privateResidenceReliefModel, propertyLivedInModel)
     val personalAndPreviousDetailsRows = PersonalAndPreviousDetailsConstructor.personalAndPreviousDetailsRows(personalAndPreviousDetailsModel)
 
-    if(!propertyLivedInRow.isEmpty) {
-      salesDetailsRows ++ purchaseDetailsRows ++ propertyDetailsRows ++ propertyLivedInRow ++  deductionDetailsRows ++ personalAndPreviousDetailsRows
-    }
-
-    else {
-      salesDetailsRows ++ purchaseDetailsRows ++ propertyDetailsRows ++ personalAndPreviousDetailsRows
-    }
+      salesDetailsRows ++ purchaseDetailsRows ++ propertyDetailsRows ++  deductionDetailsRows ++ personalAndPreviousDetailsRows
   }
 }

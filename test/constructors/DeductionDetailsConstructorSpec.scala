@@ -148,11 +148,15 @@ class DeductionDetailsConstructorSpec extends UnitSpec with WithFakeApplication 
 
   "Calling .deductionDetailsRows" when {
 
-    "provided with reliefs and prr" should {
-      lazy val result = DeductionDetailsConstructor.deductionDetailsRows(validDates, Some(yesPRRModel))
+    "provided with reliefs, prr and property lived in" should {
+      lazy val result = DeductionDetailsConstructor.deductionDetailsRows(validDates, Some(yesPRRModel), Some(PropertyLivedInModel(true)))
 
       "have a sequence of size 3" in {
-        result.size shouldBe 3
+        result.size shouldBe 4
+      }
+
+      "return a sequence with a property lived in question answer" in {
+        result.contains(DeductionDetailsConstructor.propertyLivedInQuestionRow(Some(PropertyLivedInModel(true))))
       }
 
       "return a sequence with a prr question answer" in {
