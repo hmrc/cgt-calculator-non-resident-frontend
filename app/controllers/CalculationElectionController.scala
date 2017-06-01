@@ -56,7 +56,9 @@ trait CalculationElectionController extends FrontendController with ValidActiveS
 
       content.sortWith(sort)
     }
-    else content
+    else content.map { element =>
+      (element._1, element._2, element._3, element._4, element._5, None)
+    }
   }
 
   private def getPRRResponse(totalGainResultsModel: TotalGainResultsModel)(implicit hc: HeaderCarrier): Future[Option[PrivateResidenceReliefModel]] = {

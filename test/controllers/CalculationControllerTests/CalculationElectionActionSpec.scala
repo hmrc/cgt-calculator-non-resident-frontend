@@ -281,6 +281,11 @@ class CalculationElectionActionSpec extends UnitSpec with WithFakeApplication wi
 
   "Calling .orderElements" should {
     val sequence: Seq[(String, String, String, String, Option[String], Option[BigDecimal])] = Seq(
+      ("flat", "test", "test", "test", None, Some(500)),
+      ("rebased", "test", "test", "test", None, None),
+      ("time", "test", "test", "test", None, None)
+    )
+    val sequenceNoReliefs: Seq[(String, String, String, String, Option[String], Option[BigDecimal])] = Seq(
       ("flat", "test", "test", "test", None, None),
       ("rebased", "test", "test", "test", None, None),
       ("time", "test", "test", "test", None, None)
@@ -288,11 +293,11 @@ class CalculationElectionActionSpec extends UnitSpec with WithFakeApplication wi
     val orderedSequence: Seq[(String, String, String, String, Option[String], Option[BigDecimal])] = Seq(
       ("rebased", "test", "test", "test", None, None),
       ("time", "test", "test", "test", None, None),
-      ("flat", "test", "test", "test", None, None)
+      ("flat", "test", "test", "test", None, Some(500))
     )
 
     "return the original sequence if not claiming reliefs" in {
-      CalculationElectionController.orderElements(sequence, false) shouldBe sequence
+      CalculationElectionController.orderElements(sequence, false) shouldBe sequenceNoReliefs
     }
 
     "return the ordered sequence if claiming reliefs" in {
