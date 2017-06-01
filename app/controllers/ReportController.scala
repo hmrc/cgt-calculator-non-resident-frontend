@@ -146,9 +146,9 @@ trait ReportController extends FrontendController with ValidActiveSession {
       val finalSeq = Seq(totalGainResultsModel.flatGain) ++ optionSeq
 
       if (finalSeq.forall(_ <= 0)) {
-        Future.successful(YourAnswersConstructor.fetchYourAnswers(totalGainAnswersModel, privateResidenceReliefModel, None))
+        Future.successful(YourAnswersConstructor.fetchYourAnswers(totalGainAnswersModel, privateResidenceReliefModel, None, propertyLivedInModel))
       }
-      else Future.successful(YourAnswersConstructor.fetchYourAnswers(totalGainAnswersModel, privateResidenceReliefModel, personalAndPreviousDetailsModel))
+      else Future.successful(YourAnswersConstructor.fetchYourAnswers(totalGainAnswersModel, privateResidenceReliefModel, personalAndPreviousDetailsModel, propertyLivedInModel))
     }
 
     for {
