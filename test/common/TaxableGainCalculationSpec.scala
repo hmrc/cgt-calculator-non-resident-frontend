@@ -81,9 +81,6 @@ class TaxableGainCalculationSpec extends UnitSpec with WithFakeApplication with 
   when(mockAnswersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers(ArgumentMatchers.any()))
     .thenReturn(Future.successful(Some(personalDetailsModel)))
 
-  when(mockCalcConnector.getPartialAEA(ArgumentMatchers.any())(ArgumentMatchers.any()))
-    .thenReturn(Future.successful(Some(BigDecimal(5500))))
-
   when(mockCalcConnector.getFullAEA(ArgumentMatchers.any())(ArgumentMatchers.any()))
     .thenReturn(Future.successful(Some(BigDecimal(11000))))
 

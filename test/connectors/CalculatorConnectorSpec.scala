@@ -314,41 +314,4 @@ class CalculatorConnectorSpec extends UnitSpec with MockitoSugar {
     }
 
   }
-
-  "Calling calculateFlat" should {
-
-    val validResponse = CalculationResultModel(8000, 40000, 32000, 18, 0, Some(8000), Some(28), None)
-    when(mockHttp.GET[Option[CalculationResultModel]](ArgumentMatchers.anyString())(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(Some(validResponse)))
-
-    "return a valid response" in {
-      val testModel: SummaryModel = sumModelFlat
-      val result = TargetCalculatorConnector.calculateFlat(testModel)
-      await(result) shouldBe Some(validResponse)
-    }
-  }
-
-  "Calling calculateTA" should {
-    val validResponse = CalculationResultModel(8000, 40000, 32000, 18, 0, Some(8000), Some(28), None)
-    when(mockHttp.GET[Option[CalculationResultModel]](ArgumentMatchers.anyString())(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(Some(validResponse)))
-
-    "return a valid response" in {
-      val testModel: SummaryModel = sumModelTA
-      val result = TargetCalculatorConnector.calculateTA(testModel)
-      await(result) shouldBe Some(validResponse)
-    }
-  }
-
-  "Calling calculateRebased" should {
-    val validResponse = CalculationResultModel(8000, 40000, 32000, 18, 0, Some(8000), Some(28), None)
-    when(mockHttp.GET[Option[CalculationResultModel]](ArgumentMatchers.anyString())(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(Some(validResponse)))
-
-    "return a valid response" in {
-      val testModel: SummaryModel = sumModelRebased
-      val result = TargetCalculatorConnector.calculateRebased(testModel)
-      await(result) shouldBe Some(validResponse)
-    }
-  }
 }
