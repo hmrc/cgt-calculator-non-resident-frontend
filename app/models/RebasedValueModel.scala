@@ -16,10 +16,10 @@
 
 package models
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
-case class RebasedValueModel (rebasedValueAmt: Option[BigDecimal])
+case class RebasedValueModel (rebasedValueAmt: BigDecimal)
 
 object RebasedValueModel {
-  implicit val formats = Json.format[RebasedValueModel]
+  implicit val formats: OFormat[RebasedValueModel] = Json.format[RebasedValueModel]
 }

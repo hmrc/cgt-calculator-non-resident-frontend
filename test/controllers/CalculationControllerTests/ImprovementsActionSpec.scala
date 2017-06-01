@@ -81,7 +81,7 @@ class ImprovementsActionSpec extends UnitSpec with WithFakeApplication with Mock
 
       "when Acquisition Date is > 5 April 2015" should {
 
-        lazy val target = setupTarget(None, Some(AcquisitionDateModel(1, 1, 2017)), Some(RebasedValueModel(Some(1000))))
+        lazy val target = setupTarget(None, Some(AcquisitionDateModel(1, 1, 2017)), Some(RebasedValueModel(1000)))
         lazy val result = target.improvements(fakeRequestWithSession)
         lazy val document = Jsoup.parse(bodyOf(result))
 
@@ -106,7 +106,7 @@ class ImprovementsActionSpec extends UnitSpec with WithFakeApplication with Mock
         lazy val target = setupTarget(
           None,
           Some(AcquisitionDateModel(1, 1, 2014)),
-          Some(RebasedValueModel(Some(500)))
+          Some(RebasedValueModel(500))
         )
         lazy val result = target.improvements(fakeRequestWithSession)
         lazy val document = Jsoup.parse(bodyOf(result))
@@ -159,7 +159,7 @@ class ImprovementsActionSpec extends UnitSpec with WithFakeApplication with Mock
     "submitting a valid form with a rebased value" should {
 
       lazy val gainsModel = Some(TotalGainResultsModel(1000, Some(2000), None))
-      lazy val target = setupTarget(None, Some(AcquisitionDateModel(1, 1, 2014)), Some(RebasedValueModel(Some(2000))), gainsModel)
+      lazy val target = setupTarget(None, Some(AcquisitionDateModel(1, 1, 2014)), Some(RebasedValueModel(2000)), gainsModel)
       lazy val request = fakeRequestToPOSTWithSession("isClaimingImprovements" -> "No", "improvementsAmt" -> "")
       lazy val result = target.submitImprovements(request)
 
@@ -167,8 +167,8 @@ class ImprovementsActionSpec extends UnitSpec with WithFakeApplication with Mock
         status(result) shouldBe 303
       }
 
-      s"redirect to ${controllers.routes.PrivateResidenceReliefController.privateResidenceRelief()}" in {
-        redirectLocation(result) shouldBe Some(s"${controllers.routes.PrivateResidenceReliefController.privateResidenceRelief()}")
+      s"redirect to ${controllers.routes.PropertyLivedInController.propertyLivedIn()}" in {
+        redirectLocation(result) shouldBe Some(s"${controllers.routes.PropertyLivedInController.propertyLivedIn()}")
       }
     }
 

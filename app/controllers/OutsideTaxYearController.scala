@@ -14,12 +14,19 @@
  * limitations under the License.
  */
 
-package models
+package controllers
 
-import play.api.libs.json.Json
+import controllers.predicates.ValidActiveSession
+import uk.gov.hmrc.play.frontend.controller.FrontendController
 
-case class PropertyLivedInModel (propertyLivedIn: Boolean)
+object OutsideTaxYearController extends OutsideTaxYearController {
 
-object PropertyLivedInModel {
-  implicit val format = Json.format[PropertyLivedInModel]
+}
+
+trait OutsideTaxYearController extends FrontendController with ValidActiveSession {
+
+  val outsideTaxYear = TODO
+
+  val submitOutsideTaxYear = TODO
+
 }

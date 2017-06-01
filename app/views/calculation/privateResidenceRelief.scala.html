@@ -32,7 +32,7 @@
 
 @main_template(Messages("calc.privateResidenceRelief.question")) {
 
-    <a id="back-link" class="back-link" href="@controllers.routes.ImprovementsController.improvements">@Messages("calc.base.back")</a>
+    <a id="back-link" class="back-link" href="@controllers.routes.PropertyLivedInController.propertyLivedIn()">@Messages("calc.base.back")</a>
 
     @if(daysBeforeShow){@errorSummary(privateResidenceReliefForm, "private-residence-relief", "daysClaimed")
     } else {

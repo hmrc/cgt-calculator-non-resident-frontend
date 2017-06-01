@@ -60,7 +60,7 @@ class TaxableGainCalculationSpec extends UnitSpec with WithFakeApplication with 
     AcquisitionValueModel(1250000),
     AcquisitionCostsModel(20000),
     AcquisitionDateModel(10, 10, 2001),
-    Some(RebasedValueModel(Some(950000))),
+    Some(RebasedValueModel(950000)),
     Some(RebasedCostsModel("No", None)),
     ImprovementsModel("No", None),
     Some(OtherReliefsModel(0))

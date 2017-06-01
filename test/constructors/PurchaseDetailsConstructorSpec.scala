@@ -36,7 +36,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
     AcquisitionValueModel(300000),
     AcquisitionCostsModel(2500),
     AcquisitionDateModel(1, 4, 2013),
-    Some(RebasedValueModel(Some(1000))),
+    Some(RebasedValueModel(1000)),
     Some(RebasedCostsModel("Yes", Some(150))),
     ImprovementsModel("No", None, None),
     None
@@ -70,7 +70,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
     AcquisitionDateModel(1, 4, 2013),
-    Some(RebasedValueModel(Some(7500))),
+    Some(RebasedValueModel(7500)),
     Some(RebasedCostsModel("Yes", Some(150))),
     ImprovementsModel("Yes", Some(50), Some(25)),
     None
@@ -87,7 +87,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
     AcquisitionDateModel(1, 4, 2013),
-    Some(RebasedValueModel(Some(7500))),
+    Some(RebasedValueModel(7500)),
     Some(RebasedCostsModel("Yes", Some(150))),
     ImprovementsModel("Yes", Some(50), Some(25)),
     None
@@ -386,7 +386,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
   "Calling .rebasedValueRow" when {
 
     "a value is applicable" should {
-      lazy val result = PurchaseDetailsConstructor.rebasedValueRow(Some(RebasedValueModel(Some(10))), useRebasedValues = true)
+      lazy val result = PurchaseDetailsConstructor.rebasedValueRow(Some(RebasedValueModel(10)), useRebasedValues = true)
 
       "return Some value" in {
         result.isDefined shouldBe true
@@ -411,7 +411,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
     }
 
     "a value is provided but not applicable" should {
-      lazy val result = PurchaseDetailsConstructor.rebasedValueRow(Some(RebasedValueModel(Some(10))), useRebasedValues = false)
+      lazy val result = PurchaseDetailsConstructor.rebasedValueRow(Some(RebasedValueModel(10)), useRebasedValues = false)
 
       "return a None" in {
         result shouldBe None
@@ -419,7 +419,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
     }
 
     "a value is not provided or applicable" should {
-      lazy val result = PurchaseDetailsConstructor.rebasedValueRow(Some(RebasedValueModel(None)), useRebasedValues = false)
+      lazy val result = PurchaseDetailsConstructor.rebasedValueRow(None, useRebasedValues = false)
 
       "return a None" in {
         result shouldBe None

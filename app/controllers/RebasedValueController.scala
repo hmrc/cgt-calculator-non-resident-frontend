@@ -17,16 +17,14 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import common.TaxDates
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import forms.RebasedValueForm._
 import views.html.calculation
-import models.{AcquisitionDateModel, RebasedValueModel}
+import models.RebasedValueModel
 import play.api.data.Form
-import play.api.mvc.{Action, AnyContent, Result}
+import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
-import uk.gov.hmrc.play.http.HeaderCarrier
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 
@@ -40,59 +38,24 @@ trait RebasedValueController extends FrontendController with ValidActiveSession 
 
   val calcConnector: CalculatorConnector
 
-  private def routeToMandatoryFuture(data: AcquisitionDateModel): Future[Boolean] = Future.successful(routeToMandatory(data))
-
-  private def routeToMandatory(data: AcquisitionDateModel): Boolean =
-    !TaxDates.dateAfterStart(data.day, data.month, data.year)
-
-  private def fetchAcquisitionDate(implicit headerCarrier: HeaderCarrier): Future[Option[AcquisitionDateModel]] = {
-    calcConnector.fetchAndGetFormData[AcquisitionDateModel](KeystoreKeys.acquisitionDate)
-  }
-
-  private def fetchRebasedValue(implicit headerCarrier: HeaderCarrier): Future[Option[RebasedValueModel]] = {
-    calcConnector.fetchAndGetFormData[RebasedValueModel](KeystoreKeys.rebasedValue)
-  }
-
   val rebasedValue: Action[AnyContent] = ValidateSession.async { implicit request =>
-    def routeRequest(routeToMandatory: Boolean, rebasedValue: Option[RebasedValueModel]): Future[Result] =
-      (routeToMandatory, rebasedValue) match {
-        case (true, Some(data)) => Future.successful(Ok(calculation.mandatoryRebasedValue(rebasedValueForm(routeToMandatory).fill(data))))
-        case (false, Some(data)) => Future.successful(Ok(calculation.rebasedValue(rebasedValueForm(routeToMandatory).fill(data))))
-        case (true, None) => Future.successful(Ok(calculation.mandatoryRebasedValue(rebasedValueForm(routeToMandatory))))
-        case (false, None) => Future.successful(Ok(calculation.rebasedValue(rebasedValueForm(routeToMandatory))))
+    calcConnector.fetchAndGetFormData[RebasedValueModel](KeystoreKeys.rebasedValue).map {
+      case Some(data) => Ok(calculation.rebasedValue(rebasedValueForm.fill(data)))
+      case None => Ok(calculation.rebasedValue(rebasedValueForm))
     }
-
-    for {
-      acquisitionDate <- fetchAcquisitionDate(hc)
-      rebasedVal <- fetchRebasedValue(hc)
-      routeToMandatory <- routeToMandatoryFuture(acquisitionDate.get)
-      route <- routeRequest(routeToMandatory, rebasedVal)
-    } yield route
   }
 
   val submitRebasedValue: Action[AnyContent] = ValidateSession.async { implicit request =>
 
-    def errorAction(errors: Form[RebasedValueModel], routeToMandatory: Boolean) = {
-      if(routeToMandatory) Future.successful(BadRequest(calculation.mandatoryRebasedValue(errors)))
-      else Future.successful(BadRequest(calculation.rebasedValue(errors)))
+    def errorAction(errors: Form[RebasedValueModel]) = {
+      Future.successful(BadRequest(calculation.rebasedValue(errors)))
     }
 
     def successAction(model: RebasedValueModel) = {
       calcConnector.saveFormData(KeystoreKeys.rebasedValue, model)
-      if (model.rebasedValueAmt.isDefined) Future.successful(Redirect(routes.RebasedCostsController.rebasedCosts()))
-      else Future.successful(Redirect(routes.ImprovementsController.improvements()))
+      Future.successful(Redirect(routes.RebasedCostsController.rebasedCosts()))
     }
 
-    def routeRequest(routeToMandatory: Boolean): Future[Result] = {
-      rebasedValueForm(routeToMandatory).bindFromRequest.fold(
-        errors => errorAction(errors, routeToMandatory),
-        success => successAction(success)
-      )
-    }
-    for {
-      acquisitionDate <- fetchAcquisitionDate(hc)
-      routeToMandatory <- routeToMandatoryFuture(acquisitionDate.get)
-      route <- routeRequest(routeToMandatory)
-    } yield route
+    rebasedValueForm.bindFromRequest.fold(errorAction, successAction)
   }
 }

@@ -15,11 +15,10 @@
  */
 
 package models
+import play.api.libs.json.{Json, OFormat}
 
-import play.api.libs.json.Json
+case class ClaimingReliefsModel (isClaimingReliefs: Boolean)
 
-case class PropertyLivedInModel (propertyLivedIn: Boolean)
-
-object PropertyLivedInModel {
-  implicit val format = Json.format[PropertyLivedInModel]
+object ClaimingReliefsModel {
+  implicit val format: OFormat[ClaimingReliefsModel] = Json.format[ClaimingReliefsModel]
 }

@@ -68,7 +68,7 @@ trait CalculatorConnector {
 
   def calculateNRCGTTotalTax(totalGainAnswersModel: TotalGainAnswersModel,
                              privateResidenceReliefModel: Option[PrivateResidenceReliefModel],
-                             totalTaxPersonalDetailsModel: TotalPersonalDetailsCalculationModel,
+                             totalTaxPersonalDetailsModel: Option[TotalPersonalDetailsCalculationModel],
                              maxAnnualExemptAmount: BigDecimal,
                              otherReliefs: Option[AllOtherReliefsModel] = None)(implicit hc: HeaderCarrier):
   Future[Option[CalculationResultsWithTaxOwedModel]] = {

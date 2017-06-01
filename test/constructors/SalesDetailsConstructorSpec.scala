@@ -54,7 +54,7 @@ class SalesDetailsConstructorSpec extends UnitSpec with WithFakeApplication with
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
     AcquisitionDateModel(1, 4,2013),
-    Some(RebasedValueModel(Some(7500))),
+    Some(RebasedValueModel(7500)),
     Some(RebasedCostsModel("Yes", Some(150))),
     ImprovementsModel("Yes", Some(50), Some(25)),
     None
@@ -71,7 +71,7 @@ class SalesDetailsConstructorSpec extends UnitSpec with WithFakeApplication with
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
     AcquisitionDateModel(1, 4, 2013),
-    Some(RebasedValueModel(Some(7500))),
+    Some(RebasedValueModel(7500)),
     Some(RebasedCostsModel("Yes", Some(150))),
     ImprovementsModel("Yes", Some(50), Some(25)),
     None
