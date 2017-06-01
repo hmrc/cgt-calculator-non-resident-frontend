@@ -19,7 +19,6 @@ package controllers.CalculationControllerTests
 import common.KeystoreKeys.NonResidentKeys
 import assets.MessageLookup.NonResident.{ClaimingReliefs => messages}
 import connectors.CalculatorConnector
-import constructors.AnswersConstructor
 import controllers.ClaimingReliefsController
 import controllers.helpers.FakeRequestHelper
 import models._
@@ -61,7 +60,7 @@ class ClaimingReliefsActionSpec extends UnitSpec with WithFakeApplication with F
         status(result) shouldBe 200
       }
 
-      "return the claimingReliefs view" in {
+      "return the claiming-reliefs view" in {
         Jsoup.parse(bodyOf(result)).title shouldBe messages.title
       }
     }
@@ -74,7 +73,7 @@ class ClaimingReliefsActionSpec extends UnitSpec with WithFakeApplication with F
         status(result) shouldBe 200
       }
 
-      "return the claimingReliefs view" in {
+      "return the claiming-reliefs view" in {
         Jsoup.parse(bodyOf(result)).title shouldBe messages.title
       }
     }
@@ -87,7 +86,7 @@ class ClaimingReliefsActionSpec extends UnitSpec with WithFakeApplication with F
         status(result) shouldBe 303
       }
 
-      "return you to the session timeout page" in {
+      "return to the session timeout page" in {
         redirectLocation(result) shouldBe Some("/calculate-your-capital-gains/non-resident/session-timeout")
       }
     }
@@ -132,7 +131,7 @@ class ClaimingReliefsActionSpec extends UnitSpec with WithFakeApplication with F
         status(result) shouldBe 400
       }
 
-      "return you to the claiming reliefs page" in {
+      "return to the claiming-reliefs page" in {
         Jsoup.parse(bodyOf(result)).title shouldBe messages.title
       }
     }
