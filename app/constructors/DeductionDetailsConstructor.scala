@@ -35,31 +35,36 @@ object DeductionDetailsConstructor {
 
     val propertyLivedInRow = propertyLivedInQuestionRow(livedIn)
 
-    if(!propertyLivedInRow.isEmpty) {
+    if(propertyLivedInRow.isEmpty) {
 
+      Seq()
 
-      val privateResidenceReliefQuestion = privateResidenceReliefQuestionRow(privateResidenceReliefModel)
-      val privateResidenceReliefDaysClaimedBefore = privateResidenceReliefDaysClaimedBeforeRow(privateResidenceReliefModel, answers)
-      val privateResidenceReliefDaysClaimedAfter = privateResidenceReliefDaysClaimedAfterRow(privateResidenceReliefModel, answers)
-
-      val sequence = Seq(
-        privateResidenceReliefQuestion,
-        privateResidenceReliefDaysClaimedBefore,
-        privateResidenceReliefDaysClaimedAfter)
-
-      propertyLivedInRow ++ sequence.flatten
     }
 
     else {
-      propertyLivedInRow
+      if(propertyLivedInRow.head.data == "No") {
+        propertyLivedInRow
+      }
+      else {
+        val privateResidenceReliefQuestion = privateResidenceReliefQuestionRow(privateResidenceReliefModel)
+        val privateResidenceReliefDaysClaimedBefore = privateResidenceReliefDaysClaimedBeforeRow(privateResidenceReliefModel, answers)
+        val privateResidenceReliefDaysClaimedAfter = privateResidenceReliefDaysClaimedAfterRow(privateResidenceReliefModel, answers)
+
+        val sequence = Seq(
+          privateResidenceReliefQuestion,
+          privateResidenceReliefDaysClaimedBefore,
+          privateResidenceReliefDaysClaimedAfter)
+
+        propertyLivedInRow ++ sequence.flatten
+      }
     }
   }
 
   def propertyLivedInQuestionRow(livedIn: Option[PropertyLivedInModel]): Seq[QuestionAnswerModel[String]] = {
     livedIn match {
-      case Some(PropertyLivedInModel(true)) => Seq(QuestionAnswerModel(
+      case Some(PropertyLivedInModel(answer)) => Seq(QuestionAnswerModel(
         keys.propertyLivedIn,
-        "Lived in property",
+        if(answer) "Yes" else "No",
         Messages("calc.propertyLivedIn.title"),
         Some(controllers.routes.PropertyLivedInController.propertyLivedIn().url)
       ))
