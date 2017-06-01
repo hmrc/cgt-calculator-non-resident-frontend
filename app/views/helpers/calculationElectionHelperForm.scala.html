@@ -45,7 +45,7 @@
                             <div class="form-group">
                                 <span class="election-text" id="@radioParaId">
                                     <span>@message</span>
-                                    <span class="no-wrap">@dateMessage</span>
+                                    @if(dateMessage.isDefined){<span class="no-wrap">@dateMessage</span>}
                                 </span>
                             </div>
                             <div>
@@ -68,7 +68,7 @@
                         </div>
                     }
                 }
-                   </div>
+                </div>
             }
         }
 
