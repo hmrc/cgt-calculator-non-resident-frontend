@@ -26,6 +26,9 @@ import uk.gov.hmrc.play.frontend.controller.FrontendController
 import views.html.calculation
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
+import play.api.data.Form
+
+import scala.concurrent.Future
 
 object ClaimingReliefsController extends ClaimingReliefsController {
   val calcConnector = CalculatorConnector
@@ -42,5 +45,16 @@ trait ClaimingReliefsController extends FrontendController with ValidActiveSessi
     }
   }
 
-  val submitClaimingReliefs: Action[AnyContent] = TODO
+  val submitClaimingReliefs: Action[AnyContent] = ValidateSession.async { implicit request =>
+
+    def errorAction(errors: Form[ClaimingReliefsModel]) =
+      Future.successful(BadRequest(views.html.calculation.claimingReliefs(errors)))
+
+    def successAction(model: ClaimingReliefsModel) = {
+      calcConnector.saveFormData(KeystoreKeys.claimingReliefs, model)
+      Future.successful(Redirect(routes.CalculationElectionController.calculationElection()))
+    }
+
+    claimingReliefsForm.bindFromRequest().fold(errorAction, successAction)
+  }
 }

@@ -16,11 +16,13 @@
 
   @form(action = controllers.routes.ClaimingReliefsController.submitClaimingReliefs()) {
 
-    @formYesNoRadio(
-      field = claimingReliefsForm("isClaimingReliefs"),
-      legend = Messages("calc.claimingReliefs.title"),
-      legendClass = Some("visuallyhidden")
-    )
+    <div class="form-group">
+      @formYesNoRadio(
+        field = claimingReliefsForm("isClaimingReliefs"),
+        legend = Messages("calc.claimingReliefs.title"),
+        legendClass = Some("visuallyhidden")
+      )
+    </div>
 
     <button class="button" type="submit" id="continue-button">@Messages("calc.base.continue")</button>
   }
