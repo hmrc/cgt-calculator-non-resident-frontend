@@ -17,6 +17,7 @@
 package controllers.CalculationControllerTests
 
 import assets.MessageLookup.NonResident.{CalculationElection => messages}
+import assets.MessageLookup.NonResident.{CalculationElectionNoReliefs => nRMessages}
 import common.TestModels
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
@@ -80,6 +81,17 @@ class CalculationElectionActionSpec extends UnitSpec with WithFakeApplication wi
     when(mockCalcConnector.getTaxYear(ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(TaxYearModel("2015/16", isValidYear = true, "2015/16"))))
 
+    when(mockCalcConnector.fetchAndGetFormData[ClaimingReliefsModel](
+      ArgumentMatchers.eq(KeystoreKeys.claimingReliefs))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      .thenReturn(Future.successful(Some(ClaimingReliefsModel(true))))
+
+    when(mockCalcConnector.fetchAndGetFormData[PrivateResidenceReliefModel](
+      ArgumentMatchers.eq(KeystoreKeys.privateResidenceRelief))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    .thenReturn(Future.successful(Some(PrivateResidenceReliefModel("Yes", Some(0), Some(0)))))
+
+    when(mockCalcConnector.calculateTaxableGainAfterPRR(ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any()))
+    .thenReturn(Future.successful(Some(CalculationResultsWithPRRModel(GainsAfterPRRModel(0, 0, 0), None, None))))
+
     new CalculationElectionController {
       override val calcConnector: CalculatorConnector = mockCalcConnector
       override val calcElectionConstructor: CalculationElectionConstructor = mockCalcElectionConstructor
@@ -140,7 +152,7 @@ class CalculationElectionActionSpec extends UnitSpec with WithFakeApplication wi
       }
 
       "be on the calculation election page" in {
-        document.title() shouldEqual messages.question
+        document.title() shouldEqual nRMessages.title
       }
     }
 
@@ -160,7 +172,7 @@ class CalculationElectionActionSpec extends UnitSpec with WithFakeApplication wi
       }
 
       "be on the calculation election page" in {
-        document.title() shouldEqual messages.question
+        document.title() shouldEqual messages.heading
       }
 
       s"has a back link of ${routes.ClaimingReliefsController.claimingReliefs().url}" in{
@@ -183,12 +195,32 @@ class CalculationElectionActionSpec extends UnitSpec with WithFakeApplication wi
         status(result) shouldBe 200
       }
 
-      "be on the calculation election page" in {
-        document.title() shouldEqual messages.question
+      "be on the calculation election no reliefs page" in {
+        document.title() shouldEqual nRMessages.title
+      }
+    }
+
+    "supplied with a pre-existing model claiming reliefs" which {
+      lazy val target = setupTarget(
+        Some(CalculationElectionModel("flat")),
+        None,
+        Some(TotalGainResultsModel(1000, Some(0), Some(0))),
+        seq,
+        finalAnswersModel
+      )
+      lazy val result = target.calculationElection(fakeRequestWithSession)
+      lazy val document = Jsoup.parse(bodyOf(result))
+
+      "return a 200" in {
+        status(result) shouldBe 200
       }
 
-      s"has a back link of ${routes.CheckYourAnswersController.checkYourAnswers().url}" in{
-        document.select("a#back-link").attr("href") shouldBe routes.CheckYourAnswersController.checkYourAnswers().url
+      "be on the calculation election page" in {
+        document.title() shouldEqual messages.heading
+      }
+
+      s"has a back link of ${routes.ClaimingReliefsController.claimingReliefs().url}" in{
+        document.select("a#back-link").attr("href") shouldBe routes.ClaimingReliefsController.claimingReliefs().url
       }
     }
   }
@@ -296,7 +328,7 @@ class CalculationElectionActionSpec extends UnitSpec with WithFakeApplication wi
       }
 
       "return to the calculation election page" in {
-        document.title shouldEqual messages.question
+        document.title shouldEqual nRMessages.title
       }
     }
   }
@@ -304,6 +336,32 @@ class CalculationElectionActionSpec extends UnitSpec with WithFakeApplication wi
   "CalculationElectionController" should {
     "use the correct keystore connector" in {
       CalculationElectionController.calcConnector shouldBe CalculatorConnector
+    }
+  }
+
+  "Calling .orderElements" should {
+    val sequence: Seq[(String, String, String, String, Option[String], Option[BigDecimal])] = Seq(
+      ("flat", "test", "test", "test", None, Some(500)),
+      ("rebased", "test", "test", "test", None, None),
+      ("time", "test", "test", "test", None, None)
+    )
+    val sequenceNoReliefs: Seq[(String, String, String, String, Option[String], Option[BigDecimal])] = Seq(
+      ("flat", "test", "test", "test", None, None),
+      ("rebased", "test", "test", "test", None, None),
+      ("time", "test", "test", "test", None, None)
+    )
+    val orderedSequence: Seq[(String, String, String, String, Option[String], Option[BigDecimal])] = Seq(
+      ("rebased", "test", "test", "test", None, None),
+      ("time", "test", "test", "test", None, None),
+      ("flat", "test", "test", "test", None, Some(500))
+    )
+
+    "return the original sequence if not claiming reliefs" in {
+      CalculationElectionController.orderElements(sequence, false) shouldBe sequenceNoReliefs
+    }
+
+    "return the ordered sequence if claiming reliefs" in {
+      CalculationElectionController.orderElements(sequence, true) shouldBe orderedSequence
     }
   }
 }

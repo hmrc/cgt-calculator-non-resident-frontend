@@ -128,15 +128,17 @@ trait CheckYourAnswersController extends FrontendController with ValidActiveSess
     }
   }
 
+
   val checkYourAnswers: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     for {
       model <- answersConstructor.getNRTotalGainAnswers
       totalGainResult <- calculatorConnector.calculateTotalGain(model)
       prrModel <- getPRRModel(totalGainResult)
+      propertyLivedInModel <-  calculatorConnector.fetchAndGetFormData[PropertyLivedInModel](KeystoreKeys.propertyLivedIn)
       totalGainWithPRRResult <- calculatePRRIfApplicable(model, prrModel)
       finalAnswers <- checkAndGetFinalSectionsAnswers(totalGainResult.get, totalGainWithPRRResult)
-      answers <- Future.successful(YourAnswersConstructor.fetchYourAnswers(model, prrModel, finalAnswers))
+      answers <- Future.successful(YourAnswersConstructor.fetchYourAnswers(model, prrModel, finalAnswers, propertyLivedInModel))
       backLink <- getBackLink(totalGainResult.get, model.acquisitionDateModel, finalAnswers)
     } yield {
       Ok(calculation.checkYourAnswers(answers, backLink))
@@ -147,7 +149,7 @@ trait CheckYourAnswersController extends FrontendController with ValidActiveSess
 
     def routeRequest(model: Option[TotalGainResultsModel], taxableGainModel: Option[CalculationResultsWithPRRModel]) = model match {
       case (Some(data)) if data.rebasedGain.isDefined || data.timeApportionedGain.isDefined =>
-        Future.successful(Redirect(routes.CalculationElectionController.calculationElection()))
+        Future.successful(Redirect(routes.ClaimingReliefsController.claimingReliefs()))
       case (Some(_)) =>
         calculatorConnector.saveFormData[CalculationElectionModel](KeystoreKeys.calculationElection, CalculationElectionModel(CalculationType.flat))
         redirectRoute(taxableGainModel, model.get)

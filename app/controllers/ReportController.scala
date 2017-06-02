@@ -139,16 +139,16 @@ trait ReportController extends FrontendController with ValidActiveSession {
     def questionAnswerRows(totalGainAnswersModel: TotalGainAnswersModel,
                            totalGainResultsModel: TotalGainResultsModel,
                            privateResidenceReliefModel: Option[PrivateResidenceReliefModel] = None,
-                           personalAndPreviousDetailsModel: Option[TotalPersonalDetailsCalculationModel] = None
-                          )(implicit hc: HeaderCarrier): Future[Seq[QuestionAnswerModel[Any]]] = {
+                           personalAndPreviousDetailsModel: Option[TotalPersonalDetailsCalculationModel] = None,
+                           propertyLivedInModel: Option[PropertyLivedInModel] = None)(implicit hc: HeaderCarrier): Future[Seq[QuestionAnswerModel[Any]]] = {
 
       val optionSeq = Seq(totalGainResultsModel.rebasedGain, totalGainResultsModel.timeApportionedGain).flatten
       val finalSeq = Seq(totalGainResultsModel.flatGain) ++ optionSeq
 
       if (finalSeq.forall(_ <= 0)) {
-        Future.successful(YourAnswersConstructor.fetchYourAnswers(totalGainAnswersModel, privateResidenceReliefModel, None))
+        Future.successful(YourAnswersConstructor.fetchYourAnswers(totalGainAnswersModel, privateResidenceReliefModel, None, propertyLivedInModel))
       }
-      else Future.successful(YourAnswersConstructor.fetchYourAnswers(totalGainAnswersModel, privateResidenceReliefModel, personalAndPreviousDetailsModel))
+      else Future.successful(YourAnswersConstructor.fetchYourAnswers(totalGainAnswersModel, privateResidenceReliefModel, personalAndPreviousDetailsModel, propertyLivedInModel))
     }
 
     for {
@@ -156,16 +156,15 @@ trait ReportController extends FrontendController with ValidActiveSession {
       totalGainResultsModel <- calcConnector.calculateTotalGain(answers)
 
       privateResidentReliefModel <- getPRRModel(hc, totalGainResultsModel.get)
-
+      propertyLivedInModel <-  calcConnector.fetchAndGetFormData[PropertyLivedInModel](KeystoreKeys.propertyLivedIn)
       totalGainWithPRR <- getPRRIfApplicable(answers, privateResidentReliefModel)
       finalAnswers <- getFinalSectionsAnswers(totalGainResultsModel.get, totalGainWithPRR)
-
       otherReliefsModel <- getAllOtherReliefs(finalAnswers)
       taxYearModel <- getTaxYear(answers)
       maxAEA <- getMaxAEA(taxYearModel)
       finalResult <- calculateTaxOwed(answers, privateResidentReliefModel, finalAnswers, maxAEA.get, otherReliefsModel)
 
-      questionAnswerRows <- questionAnswerRows(answers, totalGainResultsModel.get, privateResidentReliefModel, finalAnswers)
+      questionAnswerRows <- questionAnswerRows(answers, totalGainResultsModel.get, privateResidentReliefModel, finalAnswers, propertyLivedInModel)
 
       calculationType <- calcConnector.fetchAndGetFormData[CalculationElectionModel](KeystoreKeys.calculationElection)
       totalCosts <- calcConnector.calculateTotalCosts(answers, calculationType)

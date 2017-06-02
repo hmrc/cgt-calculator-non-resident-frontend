@@ -1,4 +1,4 @@
-@(field: Field, radioOptions: Seq[(String, String, String, String, Option[String], Option[BigDecimal])], args: (Symbol, Any)*)(implicit messages: Messages)
+@(field: Field, radioOptions: Seq[(String, String, String, String, Option[String], Option[BigDecimal])], showErrorText: Boolean, args: (Symbol, Any)*)(implicit messages: Messages)
 
 @import play.api.i18n._
 @import views.html.helper._
@@ -24,7 +24,7 @@
                 @elements.args.get('_helpText)
             </span>
         }
-        @elements.errors.map{error => <span class="error-notification">@Messages("calc.base.optionReqError")</span>}
+        @elements.errors.map{error => <span class="error-notification">@if(showErrorText){ @Messages("calc.base.optionReqError")}</span>}
 
         @radioOptions.map { case (value, amount, message, calcType, dateMessage, otherReliefs) =>
             @defining(s"${elements.field.name}-${value.toLowerCase.replace(" ","_")}")  { inputId =>

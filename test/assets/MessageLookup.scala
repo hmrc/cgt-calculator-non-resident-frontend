@@ -113,28 +113,30 @@ object MessageLookup {
     }
 
     object CalculationElection {
-      val heading = "Working out your total"
-      val question = "Which method of calculation would you like?"
-      val moreInformation = "How this affects your tax"
-      val moreInfoFirstP = "We can work out your tax in a number of ways. Before we give you a final total you have a choice about what to base it on."
-      val moreInfoSecondP = "Because the options take different things into account they'll usually give you different totals. " +
-        "Some totals may be much larger than others."
-      val moreInfoThirdP = "Unless you want to add more tax reliefs, the total you choose is the amount of tax you'll pay."
-      val legend = "Tax you'll owe"
-      val basedOn = "Based on"
-      val linkOne = "Different ways of working out Capital Gains Tax"
+      val heading = "Choose your calculation method"
+      val moreInfoFirstP = "There are 3 ways we can calculate your Capital Gains Tax."
+      val moreInfoSecondP = "If you're entitled to other reliefs, these may change which method gives the lowest amount."
+      val legend = "Choose a method then add your other reliefs"
       val otherTaxRelief = "Add other tax relief"
       val someOtherTaxRelief = "Other tax relief"
       val timeApportioned = "Based on the percentage of your total gain made since"
       val timeApportionedDescription = "Straight-line apportionment method"
       val rebased = "Based on the amount you've gained on the property since"
-      val rebasedDescription = "Rebased method"
+      val rebasedDescription = "Rebasing method"
       val taxStartDate = "5 April 2015"
       val flat = "Based on the amount you've gained on the property since you became the owner"
       val flatDescription = "Gain over whole period of ownership method"
-      val whyMore = "Why you might choose a higher total"
-      val whyMoreDetailsOne = "You might pick a higher total if you're planning to add more tax reliefs."
-      val whyMoreDetailsTwo = "Higher totals sometimes qualify for larger reliefs, which can reduce the amount you owe."
+    }
+
+    object CalculationElectionNoReliefs {
+      val title = "Your calculation options"
+      val helpText = "There are 3 ways we can calculate your Non-Resident Capital Gains Tax."
+      def helpTextMethodType(method: String): String =
+        s"Based on the answers you've given, the $method will give you the lowest amount of tax to pay."
+      val helpTextChooseMethod = "You're free to choose another method if you wish."
+      val rebasing = "Rebasing method"
+      val flatGain = "Gain over whole period of ownership method"
+      val straightLine = "Straight-line apportionment method"
     }
 
     object CheckYourAnswers {
@@ -636,9 +638,6 @@ object MessageLookup {
   //Outside Tax Years messages
   object OutsideTaxYears {
     val title = "The date you've entered isn't supported by this calculator"
-    val tooEarly = "You can use this calculator if you've sold a property since 5 April 2015."
-    val sharesTooEarly = "You can use this calculator if you've sold shares since 5 April 2015."
-    val changeDate = "Change your date"
     def content(year: String): String = s"You can continue to use it, but we'll use the tax rates from the $year tax year."
   }
 
