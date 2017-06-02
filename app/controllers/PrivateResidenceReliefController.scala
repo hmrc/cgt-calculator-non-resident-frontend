@@ -64,7 +64,7 @@ trait PrivateResidenceReliefController extends FrontendController with ValidActi
       case _ => false
     }
 
-  def displayBeforeQuestion(disposalDate: Option[LocalDate], acquisitionDate: Option[LocalDate]): Boolean =
+  def displayFirstQuestion(disposalDate: Option[LocalDate], acquisitionDate: Option[LocalDate]): Boolean =
     (disposalDate, acquisitionDate) match {
       case (Some(dDate), Some(aDate)) if !TaxDates.dateAfterOctober(dDate) || !dDate.minusMonths(18L).isAfter(aDate) => false
       case _ => true
@@ -81,7 +81,7 @@ trait PrivateResidenceReliefController extends FrontendController with ValidActi
     def action(disposalDate: Option[LocalDate], acquisitionDate: Option[LocalDate]) = {
 
       val showOnlyFlatQuestion = displayOnlyFlatCalculationQuestion(disposalDate, acquisitionDate)
-      val showBeforeQuestion = displayBeforeQuestion(disposalDate, acquisitionDate)
+      val showBeforeQuestion = displayFirstQuestion(disposalDate, acquisitionDate)
       val showBetweenQuestion = displayAfterQuestion(disposalDate, acquisitionDate)
       val disposalDateLess18Months = Dates.dateMinusMonths(disposalDate, 18)
 
@@ -105,7 +105,7 @@ trait PrivateResidenceReliefController extends FrontendController with ValidActi
     def action(disposalDate: Option[LocalDate], acquisitionDate: Option[LocalDate]): Future[Result] = {
 
       val showOnlyFlatQuestion = displayOnlyFlatCalculationQuestion(disposalDate, acquisitionDate)
-      val showBeforeQuestion = displayBeforeQuestion(disposalDate, acquisitionDate)
+      val showBeforeQuestion = displayFirstQuestion(disposalDate, acquisitionDate)
       val showBetweenQuestion = displayAfterQuestion(disposalDate, acquisitionDate)
       val disposalDateLess18Months = Dates.dateMinusMonths(disposalDate, 18)
 

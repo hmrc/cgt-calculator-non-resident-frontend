@@ -156,30 +156,38 @@ class PrivateResidenceReliefActionSpec extends UnitSpec with WithFakeApplication
     }
   }
 
-  "Calling the .displayBeforeQuestion method" when {
+  "Calling the .displayFirstQuestion method" when {
 
     "return false if disposal date is equal to tax start date + 18 months" in {
       val acquisitionDate = LocalDate.parse("2010-04-05")
       val disposalDate = LocalDate.parse("2016-10-06")
-      val result = PrivateResidenceReliefController.displayBeforeQuestion(Some(disposalDate), Some(acquisitionDate))
+      val result = PrivateResidenceReliefController.displayFirstQuestion(Some(disposalDate), Some(acquisitionDate))
 
       result shouldBe false
     }
 
-    "return true if the acquisition date is before the tax start and " +
-      "disposal date is after tax start date + 18 months" in {
-      val acquisitionDate = LocalDate.parse("2016-04-05")
+    "return false if disposal date within 18 months of the acquisition date" in {
+      val acquisitionDate = LocalDate.parse("2015-04-05")
+      val disposalDate = LocalDate.parse("2016-10-05")
+      val result = PrivateResidenceReliefController.displayFirstQuestion(Some(disposalDate), Some(acquisitionDate))
+
+      result shouldBe false
+    }
+
+    "return true if the acquisition date is after the tax start and " +
+      "disposal date is after acquisition date + 18 months" in {
+      val acquisitionDate = LocalDate.parse("2015-04-06")
       val disposalDate = LocalDate.parse("2016-10-07")
-      val result = PrivateResidenceReliefController.displayBeforeQuestion(Some(disposalDate), Some(acquisitionDate))
+      val result = PrivateResidenceReliefController.displayFirstQuestion(Some(disposalDate), Some(acquisitionDate))
 
       result shouldBe true
     }
 
-    "return true if the acquisition date is after the tax start and " +
+    "return true if the acquisition date is the tax start and " +
       "disposal date is after tax start date + 18 months" in {
-      val acquisitionDate = LocalDate.parse("2016-04-05")
+      val acquisitionDate = LocalDate.parse("2015-04-05")
       val disposalDate = LocalDate.parse("2016-10-07")
-      val result = PrivateResidenceReliefController.displayBeforeQuestion(Some(disposalDate), Some(acquisitionDate))
+      val result = PrivateResidenceReliefController.displayFirstQuestion(Some(disposalDate), Some(acquisitionDate))
 
       result shouldBe true
     }

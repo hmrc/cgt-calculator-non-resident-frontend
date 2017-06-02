@@ -28,247 +28,217 @@ import play.api.Play.current
 
 class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
-
-
   "Private Residence Relief view" when {
 
-    "supplied with no errors and neither day inputs displayed" should {
-      lazy val view = privateResidenceRelief(privateResidenceReliefForm(false, false), false, false, "")
-      lazy val document = Jsoup.parse(view.body)
+    "there are no errors" should {
 
-      s"have a title of '${messages.PrivateResidenceRelief.question}'" in {
-        document.title() shouldBe messages.PrivateResidenceRelief.question
-      }
+      "if both inputs should be displayed" should {
 
-      "have a back link" which {
-        lazy val backLink = document.body().select("#back-link")
+        lazy val view = privateResidenceRelief(
+          privateResidenceReliefForm(
+            showBefore = true,
+            showAfter = true),
+          daysBetweenShow = true,
+          daysBeforeShow = true,
+          "date-input",
+          showOnlyFlatQuestion = false)
+        lazy val document = Jsoup.parse(view.body)
 
-        "has a class of 'back-link'" in {
-          backLink.attr("class") shouldBe "back-link"
+        s"have a title of '${messages.PrivateResidenceRelief.question}'" in {
+          document.title() shouldBe messages.PrivateResidenceRelief.question
         }
 
-        "has the text" in {
-          backLink.text shouldBe messages.back
+        "have a back link" which {
+          lazy val backLink = document.body().select("#back-link")
+
+          "has the text" in {
+            backLink.text shouldBe messages.back
+          }
+
+          s"has a route to 'improvements'" in {
+            backLink.attr("href") shouldBe controllers.routes.PropertyLivedInController.propertyLivedIn().url
+          }
         }
 
-        s"has a route to 'improvements'" in {
-          backLink.attr("href") shouldBe controllers.routes.PropertyLivedInController.propertyLivedIn().url
+        s"have a heading of '${messages.PrivateResidenceRelief.question}'" in {
+          document.body().select("h1").text shouldBe messages.PrivateResidenceRelief.question
         }
-      }
 
-      "has a help link" which {
-        lazy val containingDiv = document.select("#privateResidenceReliefLink")
-        lazy val link = containingDiv.select("a")
-        "has the external link class" in {
-          link.hasClass("external-link") shouldEqual true
-          }
+        s"has the a paragraph with the text '${messages.PrivateResidenceRelief.intro}' " in {
+          document.select("p#intro").text() shouldBe messages.PrivateResidenceRelief.intro
+        }
 
-          "has the attribute rel" in {
-          link.hasAttr("rel") shouldEqual true
-          }
-
-          "rel has the value of external" in {
-          link.attr("rel") shouldEqual "external"
-          }
-
-          "has a target attribute" in {
-          link.hasAttr("target") shouldEqual true
-          }
+        "has a section with a help link" which {
+          lazy val containingDiv = document.select("#privateResidenceReliefLink")
+          lazy val link = containingDiv.select("a")
 
           "has a target value of _blank" in {
-          link.attr("target") shouldEqual "_blank"
+            link.attr("target") shouldEqual "_blank"
           }
 
-        s"has the text ${messages.PrivateResidenceRelief.findOut} ${messages.PrivateResidenceRelief.findOutAboutPRRLink}" in {
-          containingDiv.text() shouldBe {s"${messages.PrivateResidenceRelief.findOut}${messages.PrivateResidenceRelief.findOutAboutPRRLink} ${messages.externalLink}"}
-        }
-      }
-
-      "have a heading" which {
-        lazy val heading = document.body().select("h1")
-
-        "has a class of heading-xlarge" in {
-          heading.attr("class") shouldBe "heading-xlarge"
+          s"has the text ${messages.PrivateResidenceRelief.findOut} ${messages.PrivateResidenceRelief.findOutAboutPRRLink}" in {
+            containingDiv.text() shouldBe {s"${messages.PrivateResidenceRelief.findOut} " +
+              s"${messages.PrivateResidenceRelief.findOutAboutPRRLink} ${messages.externalLink}"}
+          }
         }
 
-        s"has the text '${messages.PrivateResidenceRelief.question}'" in {
-          heading.text shouldBe messages.PrivateResidenceRelief.question
-        }
-      }
+        "have a form" which {
+          lazy val form = document.body().select("form")
 
-      s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-        document.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
-      }
+          "has a method of POST" in {
+            form.attr("method") shouldBe "POST"
+          }
 
-      s"has the a paragraph with the text '${messages.PrivateResidenceRelief.intro}' " in {
-        document.select("p#intro").text() shouldBe messages.PrivateResidenceRelief.intro
-      }
-
-      "have a form" which {
-        lazy val form = document.body().select("form")
-
-        "has a method of POST" in {
-          form.attr("method") shouldBe "POST"
+          s"has an action of '${controllers.routes.PrivateResidenceReliefController.submitPrivateResidenceRelief().url}'" in {
+            form.attr("action") shouldBe controllers.routes.PrivateResidenceReliefController.submitPrivateResidenceRelief().url
+          }
         }
 
-        s"has an action of '${controllers.routes.PrivateResidenceReliefController.submitPrivateResidenceRelief().url}'" in {
-          form.attr("action") shouldBe controllers.routes.PrivateResidenceReliefController.submitPrivateResidenceRelief().url
-        }
-      }
+        "have some hidden content" which {
 
-      s"have a hidden legend '${messages.PrivateResidenceRelief.question}'" which {
-        lazy val legend = document.body.select("legend")
-        s"has the text '${messages.PrivateResidenceRelief.question}'" in {
-          legend.text shouldBe messages.PrivateResidenceRelief.question
-        }
-        s"has the class 'visuallyhidden'" in {
-          legend.attr("class") shouldBe "visuallyhidden"
-        }
-      }
+          lazy val hiddenContent = document.body().select("#hidden")
 
-      "have inputs containing the id isClaimingPRR" in {
-        document.body().select("input").attr("id") should include ("isClaimingPRR")
-      }
+          "which has a two divs with a class of form-group for the two questions" in {
+            hiddenContent.select("div.form-group").size() shouldBe 2
+          }
 
-      "have no hidden content" in {
-        document.body().select("#hidden").size() shouldBe 0
-      }
+          "contains an input with the id 'daysClaimed'" in {
+            hiddenContent.select("input").attr("id") shouldBe "daysClaimed"
+          }
 
-      "have a button" which {
-        lazy val button = document.select("button")
+          s"has a paragraph with the text ${messages.PrivateResidenceRelief.helpTextSubtitle}" in {
+            document.getElementById("formExplanation").text() shouldBe messages.PrivateResidenceRelief.formHelp
+          }
 
-        "has the class 'button'" in {
-          button.attr("class") shouldBe "button"
-        }
-
-        "has the type 'submit'" in {
-          button.attr("type") shouldBe "submit"
-        }
-
-        "has the id 'continue-button'" in {
-          button.attr("id") shouldBe "continue-button"
-        }
-      }
-    }
-
-    "supplied with no errors and the days before input displayed along with the days before " should {
-      lazy val view = privateResidenceRelief(privateResidenceReliefForm(true, false), true, true, "date-input")
-      lazy val document = Jsoup.parse(view.body)
-
-      s"have the question a hidden legend" which {
-        lazy val legend = document.body.select("legend")
-
-        s"has the text ${messages.PrivateResidenceRelief.question}" in {
-          legend.text shouldBe messages.PrivateResidenceRelief.question
-        }
-        "has the class 'visuallyhidden'" in {
-          legend.attr("class") shouldBe "visuallyhidden"
-        }
-      }
-
-      "have inputs containing the id isClaimingPRR" in {
-        document.body().select("input").attr("id") should include ("isClaimingPRR")
-      }
-
-      "have some hidden content" which {
-        lazy val hiddenContent = document.body().select("#hidden")
-
-        "which has a two divs with a class of form-group for the two questions" in {
-          hiddenContent.select("div.form-group").size() shouldBe 2
-        }
-
-        "contains an input with the id 'daysClaimed'" in {
-          hiddenContent.select("input").attr("id") shouldBe "daysClaimed"
-        }
-
-        s"has the progressive disclosure title text ${messages.PrivateResidenceRelief.helpTextBeforeAfter}" in {
-          hiddenContent.select("span.summary").text() shouldBe messages.PrivateResidenceRelief.helpTextBeforeAfter
-        }
-
-        s"has a paragraph with the text ${messages.PrivateResidenceRelief.helpTextSubtitle}" in {
-          document.getElementById("formExplanation").text() shouldBe messages.PrivateResidenceRelief.formHelp
-        }
-
-        s"contains the questions ${messages.PrivateResidenceRelief.questionBefore}" in {
-          hiddenContent.select("label").text() shouldBe messages.PrivateResidenceRelief.questionBefore + " " +
-            s"${messages.PrivateResidenceRelief.questionBetween} " +
+          s"contains the questions ${messages.PrivateResidenceRelief.questionBefore}" in {
+            hiddenContent.select("label").text() shouldBe messages.PrivateResidenceRelief.questionBefore + " " +
+              s"${messages.PrivateResidenceRelief.questionBetween} " +
               s"date-input ${messages.PrivateResidenceRelief.questionBetweenEnd}"
           }
 
-        s"contains the label ${messages.PrivateResidenceRelief.questionBefore}" in {
-          document.getElementsByTag("label").get(2).text() shouldBe messages.PrivateResidenceRelief.questionBefore
-        }
-
-        s"contains the label ${messages.PrivateResidenceRelief.questionBetween} date-input " +
-        s"${messages.PrivateResidenceRelief.questionBetweenEnd}" in {
-          document.getElementsByTag("label").get(3).text() shouldBe s"${messages.PrivateResidenceRelief.questionBetween} " +
-            s"date-input ${messages.PrivateResidenceRelief.questionBetweenEnd}"
-        }
-
-        s"has form help text ${messages.PrivateResidenceRelief.helpTextSubtitle}" in {
-          hiddenContent.select("#bulletPointTitle").text() shouldBe messages.PrivateResidenceRelief.helpTextSubtitle
-        }
-
-        s"contains a list" which {
-
-          s"has a bullet point with the text ${messages.PrivateResidenceRelief.questionBeforeWhyThisDate}" in {
-            document.getElementsByTag("li").get(1).text() shouldBe messages.PrivateResidenceRelief.questionBeforeWhyThisDate
+          s"contains the label ${messages.PrivateResidenceRelief.questionBefore}" in {
+            document.getElementsByTag("label").get(2).text() shouldBe messages.PrivateResidenceRelief.questionBefore
           }
 
-          s"has a bullet point with the text 'date-input ${messages.PrivateResidenceRelief.questionBeforeWhyThisDate}'" in {
-            document.getElementsByTag("li").get(2).text() shouldBe "date-input " + messages.PrivateResidenceRelief.questionBetweenWhyThisDate
+          s"contains the label ${messages.PrivateResidenceRelief.questionBetween} date-input " +
+            s"${messages.PrivateResidenceRelief.questionBetweenEnd}" in {
+            document.getElementsByTag("label").get(3).text() shouldBe s"${messages.PrivateResidenceRelief.questionBetween} " +
+              s"date-input ${messages.PrivateResidenceRelief.questionBetweenEnd}"
+          }
+
+          "has an expandable help section" which {
+
+            s"has the progressive disclosure title text ${messages.PrivateResidenceRelief.helpTextBeforeAfter}" in {
+              hiddenContent.select("span.summary").text() shouldBe messages.PrivateResidenceRelief.helpTextBeforeAfter
+            }
+
+            s"has form help text ${messages.PrivateResidenceRelief.helpTextSubtitle}" in {
+              hiddenContent.select("#bulletPointTitle").text() shouldBe messages.PrivateResidenceRelief.helpTextSubtitle
+            }
+
+            s"contains a bullet list of additional information list" which {
+
+              s"has a bullet point with the text ${messages.PrivateResidenceRelief.questionBeforeWhyThisDate}" in {
+                document.getElementsByTag("li").get(1).text() shouldBe messages.PrivateResidenceRelief.questionBeforeWhyThisDate
+              }
+
+              s"has a bullet point with the text 'date-input ${messages.PrivateResidenceRelief.questionBeforeWhyThisDate}'" in {
+                document.getElementsByTag("li").get(2).text() shouldBe "date-input " + messages.PrivateResidenceRelief.questionBetweenWhyThisDate
+              }
+            }
           }
         }
+
+        "have a button" which {
+          lazy val button = document.select("button")
+
+          "has the class 'button'" in {
+            button.attr("class") shouldBe "button"
+          }
+
+          "has the type 'submit'" in {
+            button.attr("type") shouldBe "submit"
+          }
+
+          "has the id 'continue-button'" in {
+            button.attr("id") shouldBe "continue-button"
+          }
         }
       }
 
-    "supplied with no errors and the days after input displayed" should {
-      lazy val view = privateResidenceRelief(privateResidenceReliefForm(false, true), true, false, "date-input-two")
-      lazy val document = Jsoup.parse(view.body)
+      "if only the acquisition date after tax start date input is displayed" should {
 
-      "have some hidden content" which {
-        lazy val hiddenContent = document.body().select("#hidden")
+        lazy val view = privateResidenceRelief(
+          privateResidenceReliefForm(
+            showBefore = true,
+            showAfter = false),
+          daysBetweenShow = false,
+          daysBeforeShow = true,
+          "date-input",
+          showOnlyFlatQuestion = true)
+        lazy val document = Jsoup.parse(view.body)
 
-        "which has a single div with a class of form-group" in {
-          hiddenContent.select("div.form-group").size() shouldBe 1
+        s"have a title of '${messages.PrivateResidenceRelief.question}'" in {
+          document.title() shouldBe messages.PrivateResidenceRelief.question
         }
 
-        "contains an input with the id 'daysClaimedAfter'" in {
-          hiddenContent.select("input").attr("id") shouldBe "daysClaimedAfter"
-        }
+        "have some hidden content" which {
 
-        s"has the progressive disclosure title text ${messages.PrivateResidenceRelief.helpTextJustBefore}" in {
-          hiddenContent.select("span.summary").text() shouldBe messages.PrivateResidenceRelief.helpTextJustBefore
-        }
+          lazy val hiddenContent = document.body().select("#hidden")
 
-        s"contains the question ${messages.PrivateResidenceRelief.questionBetween}" in {
-          hiddenContent.select("label").text() shouldBe s"${messages.PrivateResidenceRelief.questionBetween} " +
-            s"date-input-two ${messages.PrivateResidenceRelief.questionBetweenEnd}"
-        }
+          "which has a two divs with a class of form-group for one question" in {
+            hiddenContent.select("div.form-group").size() shouldBe 1
+          }
 
-        s"contains the text ${messages.PrivateResidenceRelief.questionBetweenWhyThisDate}" in {
-          hiddenContent.select("#helpTextBetween").text() shouldBe "date-input-two " + messages.PrivateResidenceRelief.questionBetweenWhyThisDate
-        }
+          "contains an input with the id 'daysClaimed'" in {
+            hiddenContent.select("input").attr("id") shouldBe "daysClaimed"
+          }
+          s"contains the label ${messages.PrivateResidenceRelief.questionAcquisitionDateAfterStartDate("date-input")}" in {
+            document.getElementsByTag("label").get(2).text() shouldBe messages.PrivateResidenceRelief.questionAcquisitionDateAfterStartDate("date-input")
+          }
 
+          "has an expandable help section" which {
+
+            s"has the progressive disclosure title text ${messages.PrivateResidenceRelief.helpTextJustBefore}" in {
+              hiddenContent.select("span.summary").text() shouldBe messages.PrivateResidenceRelief.helpTextJustBefore
+            }
+
+            s"has form help text ${"date-input " + messages.PrivateResidenceRelief.questionBetweenWhyThisDate}" in {
+              hiddenContent.select("p#helpTextBetween").text() shouldBe "date-input " + messages.PrivateResidenceRelief.questionBetweenWhyThisDate
+            }
+          }
+        }
       }
-    }
 
-    "supplied with no errors and both inputs displayed" should {
-      lazy val view = privateResidenceRelief(privateResidenceReliefForm(true, true), true, true, "date-input")
-      lazy val document = Jsoup.parse(view.body)
+      "if neither of the inputs are displayed" should {
 
-      "have some hidden content" which {
-        lazy val hiddenContent = document.body().select("#hidden")
+        lazy val view = privateResidenceRelief(
+          privateResidenceReliefForm(
+            showBefore = false,
+            showAfter = false),
+          daysBetweenShow = false,
+          daysBeforeShow = false,
+          "date-input",
+          showOnlyFlatQuestion = true)
+        lazy val document = Jsoup.parse(view.body)
 
-        "which has two divs with a class of form-group" in {
-          hiddenContent.select("div.form-group").size() shouldBe 2
+        s"have a title of '${messages.PrivateResidenceRelief.question}'" in {
+          document.title() shouldBe messages.PrivateResidenceRelief.question
+        }
+
+        "display the yes/no buttons" in {
+          document.select("label").size() shouldBe 2
+        }
+
+        "not have some hidden content" in {
+          document.body().select("#formExplanation").size() shouldBe 0
         }
       }
     }
 
     "supplied with errors" should {
       val map = Map("isClaimingPRR" -> "")
-      lazy val view = privateResidenceRelief(privateResidenceReliefForm(false, false).bind(map), false, false, "")
+      lazy val view = privateResidenceRelief(privateResidenceReliefForm(false, false).bind(map), false, false, "", false)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

@@ -38,9 +38,9 @@ object PrivateResidenceReliefRequestConstructor {
   def daysClaimed(totalGainAnswersModel: TotalGainAnswersModel,
                   privateResidenceReliefModel: Option[PrivateResidenceReliefModel]): String = {
     privateResidenceReliefModel match {
-      case (Some(PrivateResidenceReliefModel("Yes", Some(value), _)))
+      case (Some(PrivateResidenceReliefModel("Yes", Some(value), daysAfter)))
         if totalGainAnswersModel.acquisitionDateModel.get.plusMonths(18).isBefore(totalGainAnswersModel.disposalDateModel.get) =>
-        s"&daysClaimed=$value"
+        s"&daysClaimed=${value + daysAfter.getOrElse(0)}"
       case _ => ""
     }
   }
