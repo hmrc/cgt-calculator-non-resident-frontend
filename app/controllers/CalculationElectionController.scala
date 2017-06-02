@@ -23,6 +23,7 @@ import constructors.{AnswersConstructor, CalculationElectionConstructor}
 import controllers.predicates.ValidActiveSession
 import forms.CalculationElectionForm._
 import models._
+import play.api.Logger
 import play.api.Play.current
 import play.api.data.Form
 import play.api.i18n.Messages.Implicits._
@@ -58,6 +59,16 @@ trait CalculationElectionController extends FrontendController with ValidActiveS
     }
     else content.map { element =>
       (element._1, element._2, element._3, element._4, element._5, None)
+    }
+  }
+
+  def determineClaimingReliefs(privateResidenceReliefModel: Option[PrivateResidenceReliefModel])(implicit hc: HeaderCarrier): Future[Boolean] = {
+    privateResidenceReliefModel match {
+      case Some(_) => calcConnector.fetchAndGetFormData[ClaimingReliefsModel](KeystoreKeys.claimingReliefs).map {
+        case Some(model) => model.isClaimingReliefs
+        case _ => throw new Exception("Claiming reliefs model not found.")
+      }
+      case _ => Future.successful(false)
     }
   }
 
@@ -143,24 +154,22 @@ trait CalculationElectionController extends FrontendController with ValidActiveS
 
   val calculationElection: Action[AnyContent] = ValidateSession.async { implicit request =>
 
-    def action(content: Seq[(String, String, String, String, Option[String], Option[BigDecimal])]) =
-      calcConnector.fetchAndGetFormData[CalculationElectionModel](KeystoreKeys.calculationElection).map {
-        case Some(data) =>
-          Ok(calculation.calculationElection(
-            calculationElectionForm.fill(data),
-            content)
-          )
-        case None =>
-          Ok(calculation.calculationElection(
-            calculationElectionForm,
-            content)
-          )
+    def action(content: Seq[(String, String, String, String, Option[String], Option[BigDecimal])], isClaimingReliefs: Boolean) =
+      calcConnector.fetchAndGetFormData[CalculationElectionModel](KeystoreKeys.calculationElection).map { result =>
+        val form = result match {
+          case Some(data) => calculationElectionForm.fill(data)
+          case _ => calculationElectionForm
+        }
+
+        if (isClaimingReliefs) Ok(calculation.calculationElection(form, content))
+        else Ok(calculation.calculationElectionNoReliefs(form, content, ""))
       }
 
     for {
       totalGainAnswers <- calcAnswersConstructor.getNRTotalGainAnswers(hc)
       totalGain <- calcConnector.calculateTotalGain(totalGainAnswers)(hc)
       prrAnswers <- getPRRResponse(totalGain.get)(hc)
+      isClaimingReliefs <- determineClaimingReliefs(prrAnswers)
       totalGainWithPRR <- getPRRIfApplicable(totalGainAnswers, prrAnswers)
       allAnswers <- getFinalSectionsAnswers(totalGain.get, totalGainWithPRR)
       otherReliefs <- getAllOtherReliefs(allAnswers)
@@ -168,7 +177,7 @@ trait CalculationElectionController extends FrontendController with ValidActiveS
       maxAEA <- getMaxAEA(taxYear)
       taxOwed <- getTaxOwedIfApplicable(totalGainAnswers, prrAnswers, allAnswers, maxAEA.get, otherReliefs)
       content <- calcElectionConstructor.generateElection(totalGain.get, totalGainWithPRR, taxOwed, otherReliefs)
-      finalResult <- action(content)
+      finalResult <- action(orderElements(content, isClaimingReliefs), isClaimingReliefs)
     } yield finalResult
   }
 
