@@ -23,7 +23,6 @@ import constructors.{AnswersConstructor, CalculationElectionConstructor}
 import controllers.predicates.ValidActiveSession
 import forms.CalculationElectionForm._
 import models._
-import play.api.Logger
 import play.api.Play.current
 import play.api.data.Form
 import play.api.i18n.Messages.Implicits._
@@ -50,8 +49,9 @@ trait CalculationElectionController extends FrontendController with ValidActiveS
                     claimingReliefs: Boolean): Seq[(String, String, String, String, Option[String], Option[BigDecimal])] = {
     if (claimingReliefs) {
       val seq = Seq("rebased", "time", "flat")
+
       def sort(s1: (String, String, String, String, Option[String], Option[BigDecimal]),
-                 s2: (String, String, String, String, Option[String], Option[BigDecimal])) = {
+               s2: (String, String, String, String, Option[String], Option[BigDecimal])) = {
         seq.indexOf(s1._1) < seq.indexOf(s2._1)
       }
 
@@ -62,14 +62,14 @@ trait CalculationElectionController extends FrontendController with ValidActiveS
     }
   }
 
-  def determineClaimingReliefs(privateResidenceReliefModel: Option[PrivateResidenceReliefModel])(implicit hc: HeaderCarrier): Future[Boolean] = {
-    privateResidenceReliefModel match {
-      case Some(_) => calcConnector.fetchAndGetFormData[ClaimingReliefsModel](KeystoreKeys.claimingReliefs).map {
-        case Some(model) => model.isClaimingReliefs
-        case _ => throw new Exception("Claiming reliefs model not found.")
-      }
-      case _ => Future.successful(false)
+  def determineClaimingReliefs(totalGainResultsModel: TotalGainResultsModel)(implicit hc: HeaderCarrier): Future[Boolean] = {
+    val optionSeq = Seq(totalGainResultsModel.rebasedGain, totalGainResultsModel.timeApportionedGain).flatten
+    val finalSeq = Seq(totalGainResultsModel.flatGain) ++ optionSeq
+    if (finalSeq.exists(_ > 0)) calcConnector.fetchAndGetFormData[ClaimingReliefsModel](KeystoreKeys.claimingReliefs).map {
+      case Some(model) => model.isClaimingReliefs
+      case _ => throw new Exception("Claiming reliefs model not found.")
     }
+    else Future.successful(false)
   }
 
   private def getPRRResponse(totalGainResultsModel: TotalGainResultsModel)(implicit hc: HeaderCarrier): Future[Option[PrivateResidenceReliefModel]] = {
@@ -169,7 +169,7 @@ trait CalculationElectionController extends FrontendController with ValidActiveS
       totalGainAnswers <- calcAnswersConstructor.getNRTotalGainAnswers(hc)
       totalGain <- calcConnector.calculateTotalGain(totalGainAnswers)(hc)
       prrAnswers <- getPRRResponse(totalGain.get)(hc)
-      isClaimingReliefs <- determineClaimingReliefs(prrAnswers)
+      isClaimingReliefs <- determineClaimingReliefs(totalGain.get)
       totalGainWithPRR <- getPRRIfApplicable(totalGainAnswers, prrAnswers)
       allAnswers <- getFinalSectionsAnswers(totalGain.get, totalGainWithPRR)
       otherReliefs <- getAllOtherReliefs(allAnswers)
@@ -194,10 +194,17 @@ trait CalculationElectionController extends FrontendController with ValidActiveS
     }
 
     def errorAction(form: Form[CalculationElectionModel]) = {
+
+      def action(content: Seq[(String, String, String, String, Option[String], Option[BigDecimal])], isClaimingReliefs: Boolean) = {
+        if (isClaimingReliefs) BadRequest(calculation.calculationElection(form, content))
+        else BadRequest(calculation.calculationElectionNoReliefs(form, content, ""))
+      }
+
       for {
         totalGainAnswers <- calcAnswersConstructor.getNRTotalGainAnswers(hc)
         totalGain <- calcConnector.calculateTotalGain(totalGainAnswers)(hc)
         prrAnswers <- getPRRResponse(totalGain.get)(hc)
+        isClaimingReliefs <- determineClaimingReliefs(totalGain.get)
         totalGainWithPRR <- getPRRIfApplicable(totalGainAnswers, prrAnswers)
         allAnswers <- getFinalSectionsAnswers(totalGain.get, totalGainWithPRR)
         otherReliefs <- getAllOtherReliefs(allAnswers)
@@ -206,10 +213,7 @@ trait CalculationElectionController extends FrontendController with ValidActiveS
         taxOwed <- getTaxOwedIfApplicable(totalGainAnswers, prrAnswers, allAnswers, maxAEA.get, otherReliefs)
         content <- calcElectionConstructor.generateElection(totalGain.get, totalGainWithPRR, taxOwed, otherReliefs)
       } yield {
-        BadRequest(calculation.calculationElection(
-          form,
-          content
-        ))
+        action(orderElements(content, isClaimingReliefs), isClaimingReliefs)
       }
     }
 
