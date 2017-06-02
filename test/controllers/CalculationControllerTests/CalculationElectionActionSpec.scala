@@ -45,7 +45,8 @@ class CalculationElectionActionSpec extends UnitSpec with WithFakeApplication wi
                   totalGainResultsModel: Option[TotalGainResultsModel],
                   contentElements: Seq[(String, String, String, String, Option[String], Option[BigDecimal])],
                   finalSummaryModel: TotalPersonalDetailsCalculationModel,
-                  taxOwedResult: Option[CalculationResultsWithTaxOwedModel] = None
+                  taxOwedResult: Option[CalculationResultsWithTaxOwedModel] = None,
+                  claimingReliefs: Boolean = true
                  ): CalculationElectionController = {
 
     val mockCalcConnector = mock[CalculatorConnector]
@@ -83,7 +84,7 @@ class CalculationElectionActionSpec extends UnitSpec with WithFakeApplication wi
 
     when(mockCalcConnector.fetchAndGetFormData[ClaimingReliefsModel](
       ArgumentMatchers.eq(KeystoreKeys.claimingReliefs))(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(Some(ClaimingReliefsModel(true))))
+      .thenReturn(Future.successful(Some(ClaimingReliefsModel(claimingReliefs))))
 
     when(mockCalcConnector.fetchAndGetFormData[PrivateResidenceReliefModel](
       ArgumentMatchers.eq(KeystoreKeys.privateResidenceRelief))(ArgumentMatchers.any(), ArgumentMatchers.any()))
@@ -198,15 +199,20 @@ class CalculationElectionActionSpec extends UnitSpec with WithFakeApplication wi
       "be on the calculation election no reliefs page" in {
         document.title() shouldEqual nRMessages.title
       }
+
+      s"has a back link of ${routes.CheckYourAnswersController.checkYourAnswers().url}" in{
+        document.select("a#back-link").attr("href") shouldBe routes.CheckYourAnswersController.checkYourAnswers().url
+      }
     }
 
-    "supplied with a pre-existing model claiming reliefs" which {
+    "supplied with a pre-existing model and not claiming reliefs" which {
       lazy val target = setupTarget(
         Some(CalculationElectionModel("flat")),
         None,
         Some(TotalGainResultsModel(1000, Some(0), Some(0))),
         seq,
-        finalAnswersModel
+        finalAnswersModel,
+        claimingReliefs = false
       )
       lazy val result = target.calculationElection(fakeRequestWithSession)
       lazy val document = Jsoup.parse(bodyOf(result))
@@ -216,7 +222,7 @@ class CalculationElectionActionSpec extends UnitSpec with WithFakeApplication wi
       }
 
       "be on the calculation election page" in {
-        document.title() shouldEqual messages.heading
+        document.title() shouldEqual nRMessages.title
       }
 
       s"has a back link of ${routes.ClaimingReliefsController.claimingReliefs().url}" in{
