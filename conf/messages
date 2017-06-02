@@ -157,7 +157,6 @@ calc.acquisitionValue.bullet.five = became the owner before 1 April 1982
 calc.nonresident.outsideTaxYears.title = The date you''ve entered isn''t supported by this calculator
 calc.nonresident.outsideTaxYears.message = You can continue to use it, but we''ll use the tax rates from the {0} tax year.
 
-
 ## Rebased Value ##
 calc.nonResident.rebasedValue.question = What was the market value of the property on
 calc.nonResident.rebasedValue.date = 5 April 2015?

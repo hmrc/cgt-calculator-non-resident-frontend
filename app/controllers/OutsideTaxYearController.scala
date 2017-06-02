@@ -16,21 +16,19 @@
 
 package controllers
 
-import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import common.TaxDates
+import common.KeystoreKeys.{NonResidentKeys => keystoreKeys}
+import views.html.{calculation => views}
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import models.DisposalDateModel
+import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
-import views.html.calculation
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
-import play.api.mvc.{Action, AnyContent}
 
 object OutsideTaxYearController extends OutsideTaxYearController {
   val calcConnector = CalculatorConnector
 }
-
 
 trait OutsideTaxYearController extends FrontendController with ValidActiveSession {
 
@@ -38,16 +36,11 @@ trait OutsideTaxYearController extends FrontendController with ValidActiveSessio
 
   val outsideTaxYear: Action[AnyContent] = ValidateSession.async { implicit request =>
     for {
-      model <- calcConnector.fetchAndGetFormData[DisposalDateModel](KeystoreKeys.disposalDate)
-      taxYear <- calcConnector.getTaxYear(s"${model.get.year}-${model.get.month}-${model.get.day}")
+      disposalDate <- calcConnector.fetchAndGetFormData[DisposalDateModel](keystoreKeys.disposalDate)
+      taxYear <- calcConnector.getTaxYear(s"${disposalDate.get.year}-${disposalDate.get.month}-${disposalDate.get.day}")
     } yield {
-      if (!TaxDates.dateAfterStart(model.get.day, model.get.month, model.get.year)) {
-        Redirect(routes.NoCapitalGainsTaxController.noCapitalGainsTax())
-      } else if (!taxYear.get.isValidYear) {
-        Redirect(routes.OutsideTaxYearController.outsideTaxYear())
-      } else {
-        Redirect(routes.SoldOrGivenAwayController.soldOrGivenAway())
-      }
+      Ok(views.outsideTaxYear(
+        taxYear = taxYear.get))
     }
   }
 }

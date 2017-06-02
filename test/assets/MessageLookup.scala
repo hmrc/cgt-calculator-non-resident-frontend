@@ -630,9 +630,6 @@ object MessageLookup {
   //Outside Tax Years messages
   object OutsideTaxYears {
     val title = "The date you've entered isn't supported by this calculator"
-    val tooEarly = "You can use this calculator if you've sold a property since 5 April 2015."
-    val sharesTooEarly = "You can use this calculator if you've sold shares since 5 April 2015."
-    val changeDate = "Change your date"
     def content(year: String): String = s"You can continue to use it, but we'll use the tax rates from the $year tax year."
   }
 
