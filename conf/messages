@@ -323,7 +323,7 @@ calc.broughtForwardLosses.errorNegative = Enter a positive number for your broug
 
 ## Calculation Election ##
 calc.calculationElection.pageHeading = Choose your calculation method
-calc.calculationElection.paragraph.one = There are 3 ways we can calculate your Capital Gains Tax
+calc.calculationElection.paragraph.one = There are 3 ways we can calculate your Capital Gains Tax.
 calc.calculationElection.paragraph.two = If you''re entitled to other reliefs, these may change which method gives the lowest amount.
 calc.calculationElection.legend = Choose a method then add your other reliefs
 calc.calculationElection.link.one = Different ways of working out Capital Gains Tax

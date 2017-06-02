@@ -114,7 +114,7 @@ object MessageLookup {
 
     object CalculationElection {
       val heading = "Choose your calculation method"
-      val moreInfoFirstP = "There are 3 ways we can calculate your Capital Gains Tax"
+      val moreInfoFirstP = "There are 3 ways we can calculate your Capital Gains Tax."
       val moreInfoSecondP = "If you're entitled to other reliefs, these may change which method gives the lowest amount."
       val legend = "Choose a method then add your other reliefs"
       val otherTaxRelief = "Add other tax relief"
