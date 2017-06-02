@@ -2,64 +2,61 @@
 @import uk.gov.hmrc.play.views.html.helpers.{form, input}
 @import views.html.helpers._
 
-@(privateResidenceReliefForm: Form[PrivateResidenceReliefModel], daysBetweenShow: Boolean, daysBeforeShow: Boolean, disposalDateLess18Months: String)(implicit request: Request[_], messages: Messages)
+@(privateResidenceReliefForm: Form[PrivateResidenceReliefModel], daysBetweenShow: Boolean, daysBeforeShow: Boolean, disposalDateLess18Months: String, showOnlyFlatQuestion: Boolean)(implicit request: Request[_], messages: Messages)
 
 @whyThisDate(showBoth: Boolean) = {
-
-    @if(showBoth) {
+    @if(showBoth){
         <p id="bulletPointTitle">@Messages("calc.privateResidenceRelief.helpTextSubTitle")</p>
 
         <ul class="list-bullet">
                 <li>@Messages("calc.privateResidenceRelief.daysBeforeHelpText")</li>
-
                 <li>@disposalDateLess18Months @Messages("calc.privateResidenceRelief.daysBetweenHelpText")</li>
         </ul>
-    } else {
-            <p id="helpTextBetween">@disposalDateLess18Months @Messages("calc.privateResidenceRelief.daysBetweenHelpText")</p>
-        }
+    }else{
+        <p id="helpTextBetween">@disposalDateLess18Months @Messages("calc.privateResidenceRelief.daysBetweenHelpText")</p>
     }
+}
 
 @hiddenContent = {
 
     <p id="formExplanation">@Messages("calc.privateResidenceRelief.formHintExplanation")</p>
 
-@if(daysBeforeShow) {
+    @if(daysBeforeShow) {
 
-    <div class="form-group bold">
-    @input(
-        privateResidenceReliefForm("daysClaimed"),
-        '_label -> Messages("calc.privateResidenceRelief.questionBefore.partOne"),
-        '_labelClass -> "bold",
-        '_type -> "text",
-        '_inputClass -> "form-group input--no-spinner",
-        '_type -> "number"
-    )
-    </div>
-}
-@if(daysBetweenShow) {
-
-    <div class="form-group bold">
-    @input(
-        privateResidenceReliefForm("daysClaimedAfter"),
-        '_label -> (Messages("calc.privateResidenceRelief.questionBetween.partOne") + " " + disposalDateLess18Months + " " + Messages("calc.privateResidenceRelief.questionBetween.partTwo")),
-        '_labelClass -> "bold",
-        '_type -> "text",
-        '_inputClass -> "form-group input--no-spinner",
-        '_type -> "number"
-    )
-    </div>
-}
-
-@(daysBetweenShow, daysBeforeShow) match {
-    case (true, true) => {
-        @expandableHelpTextHelper(Messages("calc.privateResidenceRelief.helpTextBeforeAfter"), whyThisDate(true), false, true)
+        <div class="form-group bold">
+        @input(
+            privateResidenceReliefForm("daysClaimed"),
+            '_label ->{if(showOnlyFlatQuestion){Messages("calc.privateResidenceRelief.questionFlat", disposalDateLess18Months)}else{Messages("calc.privateResidenceRelief.questionBefore.partOne")}} ,
+            '_labelClass -> "bold",
+            '_type -> "text",
+            '_inputClass -> "form-group input--no-spinner",
+            '_type -> "number"
+        )
+        </div>
     }
-    case (true, false) => {
-        @expandableHelpTextHelper(Messages("calc.privateResidenceRelief.helpTextJustBefore"), whyThisDate(false), false, true)
+    @if(daysBetweenShow) {
+
+        <div class="form-group bold">
+        @input(
+            privateResidenceReliefForm("daysClaimedAfter"),
+            '_label -> (Messages("calc.privateResidenceRelief.questionBetween.partOne") + " " + disposalDateLess18Months + " " + Messages("calc.privateResidenceRelief.questionBetween.partTwo")),
+            '_labelClass -> "bold",
+            '_type -> "text",
+            '_inputClass -> "form-group input--no-spinner",
+            '_type -> "number"
+        )
+        </div>
     }
 
-    case (_, _) => {}
-}
+    @(daysBeforeShow, daysBetweenShow) match {
+        case (true, true) => {
+            @expandableHelpTextHelper(Messages("calc.privateResidenceRelief.helpTextBeforeAfter"), whyThisDate(true), false, true)
+        }
+        case (true, false) => {
+            @expandableHelpTextHelper(Messages("calc.privateResidenceRelief.helpTextJustBefore"), whyThisDate(false), false, true)
+        }
+        case _ => {}
+    }
 }
 
 @main_template(Messages("calc.privateResidenceRelief.question")) {
@@ -80,10 +77,12 @@
     <p id="intro">@Messages("calc.privateResidenceRelief.intro")</p>
 
 
-    <div id="privateResidenceReliefLink">@Messages("calc.privateResidenceRelief.helpText")
-        <a class="external-link" rel="external" href="https://www.gov.uk/tax-sell-home/private-residence-relief" target="_blank">
-            @Messages("calc.privateResidenceRelief.helpLink") <span>@Messages("calc.base.externalLink")</span>
-        </a>
+    <div id="privateResidenceReliefLink">
+        <p>@Messages("calc.privateResidenceRelief.helpText")
+            <a class="external-link" rel="external" href="https://www.gov.uk/tax-sell-home/private-residence-relief" target="_blank">
+                @Messages("calc.privateResidenceRelief.helpLink") <span>@Messages("calc.base.externalLink")</span>
+            </a>
+        </p>
     </div>
 
     @form(action = controllers.routes.PrivateResidenceReliefController.submitPrivateResidenceRelief) {
@@ -111,7 +110,6 @@
                 hideLegend = true
             )
         }
-
         <button class="button" type="submit" id="continue-button">@Messages("calc.base.continue")</button>
     }
 }

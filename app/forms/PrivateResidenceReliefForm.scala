@@ -16,6 +16,8 @@
 
 package forms
 
+import java.text.NumberFormat
+
 import common.Constants
 import common.Validation._
 import common.Transformers._
@@ -28,7 +30,7 @@ import play.api.Play.current
 
 object PrivateResidenceReliefForm {
 
-  val formatter = java.text.NumberFormat.getIntegerInstance
+  val formatter: NumberFormat = java.text.NumberFormat.getIntegerInstance
 
   def verifyAmountSupplied(data: PrivateResidenceReliefModel, showBefore: Boolean, showAfter: Boolean): Boolean = {
     data.isClaimingPRR match {
@@ -71,9 +73,9 @@ object PrivateResidenceReliefForm {
       "daysClaimedAfter" -> optional(text)
         .transform(optionalStringToOptionalBigDecimal, optionalBigDecimalToOptionalString)
     )(PrivateResidenceReliefModel.apply)(PrivateResidenceReliefModel.unapply)
-      .verifying(Messages("calc.privateResidenceRelief.error.noValueProvided"), improvementsForm => verifyAmountSupplied(improvementsForm, showBefore, showAfter))
-      .verifying(Messages("calc.privateResidenceRelief.error.errorNegative"), improvementsForm => verifyPositive(improvementsForm, showBefore, showAfter))
-      .verifying(Messages("calc.privateResidenceRelief.error.errorDecimalPlaces"), improvementsForm => verifyNoDecimalPlaces(improvementsForm, showBefore, showAfter))
+      .verifying(Messages("calc.privateResidenceRelief.error.noValueProvided"), form => verifyAmountSupplied(form, showBefore, showAfter))
+      .verifying(Messages("calc.privateResidenceRelief.error.errorNegative"), form => verifyPositive(form, showBefore, showAfter))
+      .verifying(Messages("calc.privateResidenceRelief.error.errorDecimalPlaces"), form => verifyNoDecimalPlaces(form, showBefore, showAfter))
       .verifying(Messages("calc.privateResidenceRelief.error.maxNumericExceeded") + " " + formatter.format(Constants.maxNumeric) + " " + Messages("calc.privateResidenceRelief.error.maxNumericExceeded.OrLess"),
         form => validateMax(form, showBefore, showAfter)
       )

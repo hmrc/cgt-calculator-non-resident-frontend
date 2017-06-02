@@ -66,23 +66,30 @@ trait PrivateResidenceReliefController extends FrontendController with ValidActi
 
   def displayBeforeQuestion(disposalDate: Option[LocalDate], acquisitionDate: Option[LocalDate]): Boolean =
     (disposalDate, acquisitionDate) match {
-      case (Some(dDate), Some(_)) if !TaxDates.dateAfterOctober(dDate) => false
+      case (Some(dDate), Some(aDate)) if !TaxDates.dateAfterOctober(dDate) || !dDate.minusMonths(18L).isAfter(aDate) => false
       case _ => true
+    }
+
+  def displayOnlyFlatCalculationQuestion(disposalDate: Option[LocalDate], acquisitionDate: Option[LocalDate]): Boolean =
+    (disposalDate, acquisitionDate) match {
+      case (Some(dDate), Some(aDate)) if TaxDates.dateAfterStart(aDate) && dDate.minusMonths(18L).isAfter(aDate) => true
+      case _ => false
     }
 
   val privateResidenceRelief: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     def action(disposalDate: Option[LocalDate], acquisitionDate: Option[LocalDate]) = {
 
-      val showBetweenQuestion = displayAfterQuestion(disposalDate, acquisitionDate)
+      val showOnlyFlatQuestion = displayOnlyFlatCalculationQuestion(disposalDate, acquisitionDate)
       val showBeforeQuestion = displayBeforeQuestion(disposalDate, acquisitionDate)
+      val showBetweenQuestion = displayAfterQuestion(disposalDate, acquisitionDate)
       val disposalDateLess18Months = Dates.dateMinusMonths(disposalDate, 18)
 
       calcConnector.fetchAndGetFormData[PrivateResidenceReliefModel](KeystoreKeys.privateResidenceRelief).map {
         case Some(data) => Ok(calculation.privateResidenceRelief(privateResidenceReliefForm(showBeforeQuestion,
-          showBetweenQuestion).fill(data), showBetweenQuestion, showBeforeQuestion, disposalDateLess18Months))
+          showBetweenQuestion).fill(data), showBetweenQuestion, showBeforeQuestion, disposalDateLess18Months, showOnlyFlatQuestion))
         case None => Ok(calculation.privateResidenceRelief(privateResidenceReliefForm(showBeforeQuestion, showBetweenQuestion),
-          showBetweenQuestion, showBeforeQuestion, disposalDateLess18Months))
+          showBetweenQuestion, showBeforeQuestion, disposalDateLess18Months, showOnlyFlatQuestion))
       }
     }
 
@@ -96,8 +103,10 @@ trait PrivateResidenceReliefController extends FrontendController with ValidActi
   val submitPrivateResidenceRelief: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     def action(disposalDate: Option[LocalDate], acquisitionDate: Option[LocalDate]): Future[Result] = {
-      val showBetweenQuestion = displayAfterQuestion(disposalDate, acquisitionDate)
+
+      val showOnlyFlatQuestion = displayOnlyFlatCalculationQuestion(disposalDate, acquisitionDate)
       val showBeforeQuestion = displayBeforeQuestion(disposalDate, acquisitionDate)
+      val showBetweenQuestion = displayAfterQuestion(disposalDate, acquisitionDate)
       val disposalDateLess18Months = Dates.dateMinusMonths(disposalDate, 18)
 
       def checkTaxableGainsZeroOrLess(calculationResultsWithPRRModel: CalculationResultsWithPRRModel) = {
@@ -114,7 +123,7 @@ trait PrivateResidenceReliefController extends FrontendController with ValidActi
 
       def errorAction(form: Form[PrivateResidenceReliefModel]) = {
         Future.successful(BadRequest(calculation.privateResidenceRelief(form, showBetweenQuestion,
-          showBeforeQuestion, disposalDateLess18Months)))
+          showBeforeQuestion, disposalDateLess18Months, showOnlyFlatQuestion)))
       }
 
       def successAction(model: PrivateResidenceReliefModel) = {
