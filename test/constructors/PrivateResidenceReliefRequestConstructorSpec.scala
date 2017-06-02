@@ -134,11 +134,11 @@ class PrivateResidenceReliefRequestConstructorSpec extends UnitSpec{
       result shouldBe ""
     }
 
-    "return a valid string with valid dates" in {
+    "return a valid string that is the sum of the two fields when prr is claimed" in {
       val privateResidenceReliefModel = PrivateResidenceReliefModel("Yes", Some(4), Some(5))
       val result = PrivateResidenceReliefRequestConstructor.daysClaimed(modelWithValidDates, Some(privateResidenceReliefModel))
 
-      result shouldBe "&daysClaimed=4"
+      result shouldBe "&daysClaimed=9"
     }
   }
 
