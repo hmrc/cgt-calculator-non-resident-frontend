@@ -74,7 +74,8 @@ class CalculationElectionActionSpec extends UnitSpec with WithFakeApplication wi
       .thenReturn(Future.successful(Some(BigDecimal(5500))))
 
     when(mockCalcConnector.calculateNRCGTTotalTax(
-      ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any()))
+      ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any(),
+      ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(Future.successful(taxOwedResult))
 
     when(mockCalcConnector.getTaxYear(ArgumentMatchers.any())(ArgumentMatchers.any()))

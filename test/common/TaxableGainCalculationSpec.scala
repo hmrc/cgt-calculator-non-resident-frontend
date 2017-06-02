@@ -70,12 +70,13 @@ class TaxableGainCalculationSpec extends UnitSpec with WithFakeApplication with 
     None,
     None
   )
+  val propertyLivedIn = PropertyLivedInModel(true)
 
   when(mockCalcConnector.fetchAndGetFormData[PrivateResidenceReliefModel](ArgumentMatchers.eq(KeystoreKeys.NonResidentKeys.privateResidenceRelief))
     (ArgumentMatchers.any(), ArgumentMatchers.any()))
     .thenReturn(Future.successful(Some(prrModel)))
 
-  when(mockCalcConnector.calculateTaxableGainAfterPRR(ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any()))
+  when(mockCalcConnector.calculateTaxableGainAfterPRR(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any()))
     .thenReturn(Some(calculationResultsWithPRRModel))
 
   when(mockAnswersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers(ArgumentMatchers.any()))
@@ -91,25 +92,25 @@ class TaxableGainCalculationSpec extends UnitSpec with WithFakeApplication with 
     .thenReturn(Future.successful(Some(TaxYearModel("2015/16", isValidYear = true, "2015/16"))))
 
   when(mockCalcConnector.calculateNRCGTTotalTax(
-    ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any()))
+    ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any(),
+    ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any()))
     .thenReturn(Future.successful(Some(calculationResultsModel)))
 
-  "Calling .getPRRResponse" should {
+  "Calling .getPrrResponse" should {
 
-    "when supplied with a totalGainResultsModel with at least one positive gain" should {
+    "when supplied with a property lived in model with true" should {
 
-      val totalGainModel = TotalGainResultsModel(BigDecimal(200), None, None)
-      val result = TaxableGainCalculation.getPRRResponse(totalGainModel, mockCalcConnector)
+      val result = TaxableGainCalculation.getPrrResponse(Some(propertyLivedIn), mockCalcConnector)
 
       "return a PRR model" in {
         await(result) shouldBe Some(prrModel)
       }
     }
 
-    "when supplied with a totalGainResultsModel no positive gains" should {
+    "when supplied with a property lived in model with false" should {
 
-      val totalGainModel = TotalGainResultsModel(BigDecimal(-200), None, None)
-      val result = TaxableGainCalculation.getPRRResponse(totalGainModel, mockCalcConnector)
+      val propertyLivedIn = PropertyLivedInModel(false)
+      val result = TaxableGainCalculation.getPrrResponse(Some(propertyLivedIn), mockCalcConnector)
 
       "return a None" in {
         await(result) shouldBe None
@@ -117,18 +118,18 @@ class TaxableGainCalculationSpec extends UnitSpec with WithFakeApplication with 
     }
   }
 
-  "Calling .getPRRIfApplicable" should {
+  "Calling .getPrrIfApplicable" should {
 
-    "when supplied with no PRR model" should {
-      val result = TaxableGainCalculation.getPRRIfApplicable(totalGainAnswersModel, None, mockCalcConnector)
+    "when supplied with no PRR model and no property lived in model" should {
+      val result = TaxableGainCalculation.getPrrIfApplicable(totalGainAnswersModel, None, None, mockCalcConnector)
 
       "return a None" in {
         await(result) shouldBe None
       }
     }
 
-    "when supplied with a PRR model" should {
-      val result = TaxableGainCalculation.getPRRIfApplicable(totalGainAnswersModel, Some(prrModel), mockCalcConnector)
+    "when supplied with a PRR model and property lived in model" should {
+      val result = TaxableGainCalculation.getPrrIfApplicable(totalGainAnswersModel, Some(prrModel), Some(propertyLivedIn), mockCalcConnector)
 
       "return a CalculationResultsWithPRRModel" in {
         await(result) shouldBe Some(calculationResultsWithPRRModel)
@@ -208,7 +209,8 @@ class TaxableGainCalculationSpec extends UnitSpec with WithFakeApplication with 
 
     "supplied with a totalPersonalDetailsCalculationModel" should {
 
-      val result = TaxableGainCalculation.getChargeableGain(totalGainAnswersModel, Some(prrModel), Some(personalDetailsModel), 11000, mockCalcConnector)
+      val result = TaxableGainCalculation.getChargeableGain(totalGainAnswersModel, Some(prrModel), Some(propertyLivedIn),
+        Some(personalDetailsModel), 11000, mockCalcConnector)
 
       "return a CalculationResultsWithTaxOwedModel" in {
         await(result) shouldBe Some(calculationResultsModel)
@@ -217,7 +219,7 @@ class TaxableGainCalculationSpec extends UnitSpec with WithFakeApplication with 
 
     "supplied with no totalPersonalDetailsCalculationModel" should {
 
-      val result = TaxableGainCalculation.getChargeableGain(totalGainAnswersModel, Some(prrModel), None, 11000, mockCalcConnector)
+      val result = TaxableGainCalculation.getChargeableGain(totalGainAnswersModel, Some(prrModel), Some(propertyLivedIn), None, 11000, mockCalcConnector)
 
       "return a None" in {
         await(result) shouldBe None

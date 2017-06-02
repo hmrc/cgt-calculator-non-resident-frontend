@@ -45,22 +45,39 @@ trait CalculationElectionController extends FrontendController with ValidActiveS
   val calcElectionConstructor: CalculationElectionConstructor
   val calcAnswersConstructor: AnswersConstructor
 
-  private def getPRRResponse(totalGainResultsModel: TotalGainResultsModel)(implicit hc: HeaderCarrier): Future[Option[PrivateResidenceReliefModel]] = {
+  private def checkGainExists(totalGainResultsModel: TotalGainResultsModel): Future[Boolean] = {
     val optionSeq = Seq(totalGainResultsModel.rebasedGain, totalGainResultsModel.timeApportionedGain).flatten
     val finalSeq = Seq(totalGainResultsModel.flatGain) ++ optionSeq
 
-    if (finalSeq.exists(_ > 0)) {
-      calcConnector.fetchAndGetFormData[PrivateResidenceReliefModel](KeystoreKeys.privateResidenceRelief)
+    Future.successful(finalSeq.exists(_ > 0))
+  }
+
+  private def getPrrResponse(propertyLivedInResponse: Option[PropertyLivedInModel])
+                            (implicit hc: HeaderCarrier): Future[Option[PrivateResidenceReliefModel]] = {
+    propertyLivedInResponse match {
+      case Some(data) if data.propertyLivedIn =>
+        calcConnector.fetchAndGetFormData[PrivateResidenceReliefModel](KeystoreKeys.privateResidenceRelief)
+      case _ => Future(None)
+    }
+  }
+
+  private def getPropertyLivedInResponse(gainExists: Boolean)(implicit hc: HeaderCarrier): Future[Option[PropertyLivedInModel]] = {
+    if (gainExists) {
+      calcConnector.fetchAndGetFormData[PropertyLivedInModel](KeystoreKeys.propertyLivedIn)
     } else Future(None)
   }
 
-  private def getPRRIfApplicable(totalGainAnswersModel: TotalGainAnswersModel,
-                                 privateResidenceReliefModel: Option[PrivateResidenceReliefModel])(implicit hc: HeaderCarrier):
-  Future[Option[CalculationResultsWithPRRModel]] = {
+  private def getPrrIfApplicable(totalGainAnswersModel: TotalGainAnswersModel,
+                                 privateResidenceReliefModel: Option[PrivateResidenceReliefModel],
+                                 propertyLivedInModel: Option[PropertyLivedInModel])
+                                (implicit hc: HeaderCarrier): Future[Option[CalculationResultsWithPRRModel]] = {
 
-    privateResidenceReliefModel match {
-      case Some(data) => calcConnector.calculateTaxableGainAfterPRR(totalGainAnswersModel, data)
-      case None => Future.successful(None)
+    (propertyLivedInModel, privateResidenceReliefModel) match {
+      case (Some(propertyLivedIn), Some(prrModel)) =>
+        calcConnector.calculateTaxableGainAfterPRR(totalGainAnswersModel,
+          prrModel,
+          propertyLivedIn)
+      case _ => Future.successful(None)
     }
   }
 
@@ -99,11 +116,17 @@ trait CalculationElectionController extends FrontendController with ValidActiveS
                                      prrModel: Option[PrivateResidenceReliefModel],
                                      totalTaxOwedModel: Option[TotalPersonalDetailsCalculationModel],
                                      maxAEA: BigDecimal,
-                                     otherReliefs: Option[AllOtherReliefsModel])
+                                     otherReliefs: Option[AllOtherReliefsModel],
+                                     propertyLivedInModel: Option[PropertyLivedInModel])
                                     (implicit hc: HeaderCarrier): Future[Option[CalculationResultsWithTaxOwedModel]] = {
 
     totalTaxOwedModel match {
-      case Some(_) => calcConnector.calculateNRCGTTotalTax(totalGainAnswersModel, prrModel, totalTaxOwedModel, maxAEA, otherReliefs)
+      case Some(_) => calcConnector.calculateNRCGTTotalTax(totalGainAnswersModel,
+        prrModel,
+        propertyLivedInModel,
+        totalTaxOwedModel,
+        maxAEA,
+        otherReliefs)
       case None => Future(None)
     }
   }
@@ -144,13 +167,15 @@ trait CalculationElectionController extends FrontendController with ValidActiveS
     for {
       totalGainAnswers <- calcAnswersConstructor.getNRTotalGainAnswers(hc)
       totalGain <- calcConnector.calculateTotalGain(totalGainAnswers)(hc)
-      prrAnswers <- getPRRResponse(totalGain.get)(hc)
-      totalGainWithPRR <- getPRRIfApplicable(totalGainAnswers, prrAnswers)
+      gainExists <- checkGainExists(totalGain.get)
+      propertyLivedIn <- getPropertyLivedInResponse(gainExists)(hc)
+      prrAnswers <- getPrrResponse(propertyLivedIn)(hc)
+      totalGainWithPRR <- getPrrIfApplicable(totalGainAnswers, prrAnswers, propertyLivedIn)
       allAnswers <- getFinalSectionsAnswers(totalGain.get, totalGainWithPRR)
       otherReliefs <- getAllOtherReliefs(allAnswers)
       taxYear <- getTaxYear(totalGainAnswers)
       maxAEA <- getMaxAEA(taxYear)
-      taxOwed <- getTaxOwedIfApplicable(totalGainAnswers, prrAnswers, allAnswers, maxAEA.get, otherReliefs)
+      taxOwed <- getTaxOwedIfApplicable(totalGainAnswers, prrAnswers, allAnswers, maxAEA.get, otherReliefs, propertyLivedIn)
       content <- calcElectionConstructor.generateElection(totalGain.get, totalGainWithPRR, taxOwed, otherReliefs)
       finalResult <- action(content)
     } yield finalResult
@@ -172,23 +197,21 @@ trait CalculationElectionController extends FrontendController with ValidActiveS
       for {
         totalGainAnswers <- calcAnswersConstructor.getNRTotalGainAnswers(hc)
         totalGain <- calcConnector.calculateTotalGain(totalGainAnswers)(hc)
-        prrAnswers <- getPRRResponse(totalGain.get)(hc)
-        totalGainWithPRR <- getPRRIfApplicable(totalGainAnswers, prrAnswers)
+        gainExists <- checkGainExists(totalGain.get)
+        propertyLivedIn <- getPropertyLivedInResponse(gainExists)(hc)
+        prrAnswers <- getPrrResponse(propertyLivedIn)(hc)
+        totalGainWithPRR <- getPrrIfApplicable(totalGainAnswers, prrAnswers, propertyLivedIn)
         allAnswers <- getFinalSectionsAnswers(totalGain.get, totalGainWithPRR)
         otherReliefs <- getAllOtherReliefs(allAnswers)
         taxYear <- getTaxYear(totalGainAnswers)
         maxAEA <- getMaxAEA(taxYear)
-        taxOwed <- getTaxOwedIfApplicable(totalGainAnswers, prrAnswers, allAnswers, maxAEA.get, otherReliefs)
+        taxOwed <- getTaxOwedIfApplicable(totalGainAnswers, prrAnswers, allAnswers, maxAEA.get, otherReliefs, propertyLivedIn)
         content <- calcElectionConstructor.generateElection(totalGain.get, totalGainWithPRR, taxOwed, otherReliefs)
       } yield {
-        BadRequest(calculation.calculationElection(
-          form,
-          content
-        ))
+        BadRequest(calculation.calculationElection(form, content))
       }
     }
 
     calculationElectionForm.bindFromRequest.fold(errorAction, successAction)
   }
-
 }

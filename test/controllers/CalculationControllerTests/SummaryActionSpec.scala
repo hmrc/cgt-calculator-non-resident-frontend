@@ -67,7 +67,7 @@ class SummaryActionSpec extends UnitSpec with WithFakeApplication with MockitoSu
     when(mockCalcConnector.calculateTotalCosts(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(BigDecimal(100)))
 
-    when(mockCalcConnector.calculateTaxableGainAfterPRR(ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any()))
+    when(mockCalcConnector.calculateTaxableGainAfterPRR(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(Future.successful(calculationResultsWithPRRModel))
 
     when(mockCalcConnector.fetchAndGetFormData[PrivateResidenceReliefModel](
@@ -81,7 +81,8 @@ class SummaryActionSpec extends UnitSpec with WithFakeApplication with MockitoSu
       .thenReturn(Future.successful(Some(BigDecimal(5500))))
 
     when(mockCalcConnector.calculateNRCGTTotalTax(
-      ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any()))
+      ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any(),
+      ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(Future.successful(taxOwedResult))
 
     when(mockCalcConnector.getTaxYear(ArgumentMatchers.any())(ArgumentMatchers.any()))
@@ -98,6 +99,10 @@ class SummaryActionSpec extends UnitSpec with WithFakeApplication with MockitoSu
     when(mockCalcConnector.fetchAndGetFormData[OtherReliefsModel](
       ArgumentMatchers.eq(KeystoreKeys.otherReliefsTA))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(None))
+
+    when(mockCalcConnector.fetchAndGetFormData[PropertyLivedInModel](ArgumentMatchers.eq(KeystoreKeys.propertyLivedIn))
+      (ArgumentMatchers.any(), ArgumentMatchers.any()))
+      .thenReturn(Future.successful(Some(PropertyLivedInModel(true))))
 
     new SummaryController {
       override val calcConnector: CalculatorConnector = mockCalcConnector
