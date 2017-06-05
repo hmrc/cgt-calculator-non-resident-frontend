@@ -60,12 +60,14 @@ trait OtherReliefsRebasedController extends FrontendController with ValidActiveS
     for {
       answers <- answersConstructor.getNRTotalGainAnswers(hc)
       gain <- calcConnector.calculateTotalGain(answers)(hc)
-      prrAnswers <- getPRRResponse(gain.get, calcConnector)
-      totalGainWithPRR <- getPRRIfApplicable(answers, prrAnswers, calcConnector)(hc)
+      gainExists <- checkGainExists(gain.get)
+      propertyLivedIn <- getPropertyLivedInResponse(gainExists, calcConnector)
+      prrAnswers <- getPrrResponse(propertyLivedIn, calcConnector)
+      totalGainWithPRR <- getPrrIfApplicable(answers, prrAnswers, propertyLivedIn, calcConnector)(hc)
       allAnswers <- getFinalSectionsAnswers(gain.get, totalGainWithPRR, calcConnector, answersConstructor)(hc)
       taxYear <- getTaxYear(answers, calcConnector)(hc)
       maxAEA <- getMaxAEA(taxYear, calcConnector)(hc)
-      chargeableGainResult <- getChargeableGain(answers, prrAnswers, allAnswers, maxAEA.get, calcConnector)(hc)
+      chargeableGainResult <- getChargeableGain(answers, prrAnswers, propertyLivedIn, allAnswers, maxAEA.get, calcConnector)(hc)
       reliefs <- calcConnector.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsRebased)
     } yield routeRequest(reliefs, gain, chargeableGainResult)
   }
@@ -76,12 +78,14 @@ trait OtherReliefsRebasedController extends FrontendController with ValidActiveS
       for {
         answers <- answersConstructor.getNRTotalGainAnswers(hc)
         gain <- calcConnector.calculateTotalGain(answers)(hc)
-        prrAnswers <- getPRRResponse(gain.get, calcConnector)
-        totalGainWithPRR <- getPRRIfApplicable(answers, prrAnswers, calcConnector)(hc)
+        gainExists <- checkGainExists(gain.get)
+        propertyLivedIn <- getPropertyLivedInResponse(gainExists, calcConnector)
+        prrAnswers <- getPrrResponse(propertyLivedIn, calcConnector)
+        totalGainWithPRR <- getPrrIfApplicable(answers, prrAnswers, propertyLivedIn, calcConnector)(hc)
         allAnswers <- getFinalSectionsAnswers(gain.get, totalGainWithPRR, calcConnector, answersConstructor)(hc)
         taxYear <- getTaxYear(answers, calcConnector)(hc)
         maxAEA <- getMaxAEA(taxYear, calcConnector)(hc)
-        chargeableGainResult <- getChargeableGain(answers, prrAnswers, allAnswers, maxAEA.get, calcConnector)(hc)
+        chargeableGainResult <- getChargeableGain(answers, prrAnswers, propertyLivedIn, allAnswers, maxAEA.get, calcConnector)(hc)
         route <- errorRoute(gain, chargeableGainResult, form)
       } yield route
     }

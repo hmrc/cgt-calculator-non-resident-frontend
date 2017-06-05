@@ -17,15 +17,18 @@
 package constructors
 
 import common.TaxDates
-import models.{AcquisitionDateModel, PrivateResidenceReliefModel, TotalGainAnswersModel}
+import models.{PrivateResidenceReliefModel, PropertyLivedInModel, TotalGainAnswersModel}
 
 object PrivateResidenceReliefRequestConstructor {
 
   def privateResidenceReliefQuery(totalGainAnswersModel: TotalGainAnswersModel,
-                                  privateResidenceReliefModel: Option[PrivateResidenceReliefModel]): String = {
-    eligibleForPrivateResidenceRelief(privateResidenceReliefModel) +
-    daysClaimed(totalGainAnswersModel, privateResidenceReliefModel) +
-    daysClaimedAfter(totalGainAnswersModel, privateResidenceReliefModel)
+                                  privateResidenceReliefModel: Option[PrivateResidenceReliefModel],
+                                  propertyLivedInModel: Option[PropertyLivedInModel]): String = {
+    if(checkLivedInProperty(propertyLivedInModel)) {
+      eligibleForPrivateResidenceRelief(privateResidenceReliefModel) +
+        daysClaimed(totalGainAnswersModel, privateResidenceReliefModel) +
+        daysClaimedAfter(totalGainAnswersModel, privateResidenceReliefModel)
+    } else "&claimingPRR=false"
   }
 
   def eligibleForPrivateResidenceRelief(privateResidenceReliefModel: Option[PrivateResidenceReliefModel]): String = {
@@ -53,6 +56,13 @@ object PrivateResidenceReliefRequestConstructor {
         !TaxDates.dateAfterStart(totalGainAnswersModel.acquisitionDateModel.get) =>
           s"&daysClaimedAfter=$value"
       case _ => ""
+    }
+  }
+
+  def checkLivedInProperty(propertyLivedInModel: Option[PropertyLivedInModel]): Boolean = {
+    propertyLivedInModel match {
+      case Some(data) if data.propertyLivedIn => true
+      case _ => false
     }
   }
 }

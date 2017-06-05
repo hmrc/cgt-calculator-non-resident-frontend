@@ -17,8 +17,8 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import common.TaxDates
 import common.nonresident.CalculationType
+import common.nonresident.TaxableGainCalculation._
 import connectors.CalculatorConnector
 import constructors.{AnswersConstructor, YourAnswersConstructor}
 import controllers.predicates.ValidActiveSession
@@ -52,24 +52,6 @@ trait ReportController extends FrontendController with ValidActiveSession {
 
   val summaryReport: Action[AnyContent] = ValidateSession.async { implicit request =>
 
-    def getPRRModel(implicit hc: HeaderCarrier, totalGainResultsModel: TotalGainResultsModel): Future[Option[PrivateResidenceReliefModel]] = {
-      val optionSeq = Seq(totalGainResultsModel.rebasedGain, totalGainResultsModel.timeApportionedGain).flatten
-      val finalSeq = Seq(totalGainResultsModel.flatGain) ++ optionSeq
-
-      if (!finalSeq.forall(_ <= 0)) {
-        calcConnector.fetchAndGetFormData[PrivateResidenceReliefModel](KeystoreKeys.privateResidenceRelief)
-      } else Future(None)
-    }
-
-    def getMaxAEA(taxYear: Option[TaxYearModel])(implicit hc: HeaderCarrier): Future[Option[BigDecimal]] = {
-      calcConnector.getFullAEA(TaxDates.taxYearStringToInteger(taxYear.get.calculationTaxYear))
-    }
-
-    def getTaxYear(totalGainAnswersModel: TotalGainAnswersModel)(implicit hc: HeaderCarrier): Future[Option[TaxYearModel]] = {
-      val date = totalGainAnswersModel.disposalDateModel
-      calcConnector.getTaxYear(s"${date.year}-${date.month}-${date.day}")(hc)
-    }
-
     def getCalculationResult(calculationResultsWithTaxOwedModel: Option[CalculationResultsWithTaxOwedModel],
                              calculationElection: String)(implicit hc: HeaderCarrier): Future[TotalTaxOwedModel] = {
       (calculationResultsWithTaxOwedModel, calculationElection) match {
@@ -81,11 +63,16 @@ trait ReportController extends FrontendController with ValidActiveSession {
 
     def calculateTaxOwed(totalGainAnswersModel: TotalGainAnswersModel,
                          privateResidenceReliefModel: Option[PrivateResidenceReliefModel],
+                         propertyLivedInModel: Option[PropertyLivedInModel],
                          totalPersonalDetailsCalculationModel: Option[TotalPersonalDetailsCalculationModel],
                          maxAEA: BigDecimal,
                          otherReliefs: Option[AllOtherReliefsModel]): Future[Option[CalculationResultsWithTaxOwedModel]] = {
       calcConnector.calculateNRCGTTotalTax(totalGainAnswersModel,
-        privateResidenceReliefModel, totalPersonalDetailsCalculationModel, maxAEA, otherReliefs)
+        privateResidenceReliefModel,
+        propertyLivedInModel,
+        totalPersonalDetailsCalculationModel,
+        maxAEA,
+        otherReliefs)
     }
 
     def getAllOtherReliefs(totalPersonalDetailsCalculationModel: Option[TotalPersonalDetailsCalculationModel])
@@ -105,71 +92,36 @@ trait ReportController extends FrontendController with ValidActiveSession {
       }
     }
 
-    def getFinalSectionsAnswers(totalGainResultsModel: TotalGainResultsModel,
-                                calculationResultsWithPRRModel: Option[CalculationResultsWithPRRModel])(implicit hc: HeaderCarrier):
-    Future[Option[TotalPersonalDetailsCalculationModel]] = {
-      calculationResultsWithPRRModel match {
-
-        case Some(data) =>
-          val results = data.flatResult :: List(data.rebasedResult, data.timeApportionedResult).flatten
-
-          if (results.exists(_.taxableGain > 0)) {
-            answersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers(hc)
-          } else Future(None)
-
-        case None =>
-          val gains = totalGainResultsModel.flatGain :: List(totalGainResultsModel.rebasedGain, totalGainResultsModel.timeApportionedGain).flatten
-
-          if (gains.exists(_ > 0)) {
-            answersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers(hc)
-          } else Future(None)
-      }
-    }
-
-    def getPRRIfApplicable(totalGainAnswersModel: TotalGainAnswersModel,
-                           privateResidenceReliefModel: Option[PrivateResidenceReliefModel])(implicit hc: HeaderCarrier):
-    Future[Option[CalculationResultsWithPRRModel]] = {
-
-      privateResidenceReliefModel match {
-        case Some(data) => calcConnector.calculateTaxableGainAfterPRR(totalGainAnswersModel, data)
-        case None => Future.successful(None)
-      }
-    }
-
     def questionAnswerRows(totalGainAnswersModel: TotalGainAnswersModel,
                            totalGainResultsModel: TotalGainResultsModel,
                            privateResidenceReliefModel: Option[PrivateResidenceReliefModel] = None,
-                           personalAndPreviousDetailsModel: Option[TotalPersonalDetailsCalculationModel] = None
-                          )(implicit hc: HeaderCarrier): Future[Seq[QuestionAnswerModel[Any]]] = {
+                           personalAndPreviousDetailsModel: Option[TotalPersonalDetailsCalculationModel] = None,
+                           propertyLivedInModel: Option[PropertyLivedInModel] = None)(implicit hc: HeaderCarrier): Future[Seq[QuestionAnswerModel[Any]]] = {
 
       val optionSeq = Seq(totalGainResultsModel.rebasedGain, totalGainResultsModel.timeApportionedGain).flatten
       val finalSeq = Seq(totalGainResultsModel.flatGain) ++ optionSeq
 
       if (finalSeq.forall(_ <= 0)) {
-        Future.successful(YourAnswersConstructor.fetchYourAnswers(totalGainAnswersModel, privateResidenceReliefModel, None))
+        Future.successful(YourAnswersConstructor.fetchYourAnswers(totalGainAnswersModel, privateResidenceReliefModel, None, propertyLivedInModel))
       }
-      else Future.successful(YourAnswersConstructor.fetchYourAnswers(totalGainAnswersModel, privateResidenceReliefModel, personalAndPreviousDetailsModel))
+      else Future.successful(YourAnswersConstructor.fetchYourAnswers(totalGainAnswersModel, privateResidenceReliefModel, personalAndPreviousDetailsModel, propertyLivedInModel))
     }
 
     for {
       answers <- answersConstructor.getNRTotalGainAnswers(hc)
       totalGainResultsModel <- calcConnector.calculateTotalGain(answers)
-
-      privateResidentReliefModel <- getPRRModel(hc, totalGainResultsModel.get)
-
-      totalGainWithPRR <- getPRRIfApplicable(answers, privateResidentReliefModel)
-      finalAnswers <- getFinalSectionsAnswers(totalGainResultsModel.get, totalGainWithPRR)
-
+      gainExists <- checkGainExists(totalGainResultsModel.get)
+      propertyLivedIn <- getPropertyLivedInResponse(gainExists, calcConnector)
+      prrModel <- getPrrResponse(propertyLivedIn, calcConnector)
+      totalGainWithPRR <- getPrrIfApplicable(answers, prrModel, propertyLivedIn, calcConnector)
+      finalAnswers <- getFinalSectionsAnswers(totalGainResultsModel.get, totalGainWithPRR, calcConnector, answersConstructor)
       otherReliefsModel <- getAllOtherReliefs(finalAnswers)
-      taxYearModel <- getTaxYear(answers)
-      maxAEA <- getMaxAEA(taxYearModel)
-      finalResult <- calculateTaxOwed(answers, privateResidentReliefModel, finalAnswers, maxAEA.get, otherReliefsModel)
-
-      questionAnswerRows <- questionAnswerRows(answers, totalGainResultsModel.get, privateResidentReliefModel, finalAnswers)
-
+      taxYearModel <- getTaxYear(answers, calcConnector)
+      maxAEA <- getMaxAEA(taxYearModel, calcConnector)
+      finalResult <- calculateTaxOwed(answers, prrModel, propertyLivedIn, finalAnswers, maxAEA.get, otherReliefsModel)
+      questionAnswerRows <- questionAnswerRows(answers, totalGainResultsModel.get, prrModel, finalAnswers, propertyLivedIn)
       calculationType <- calcConnector.fetchAndGetFormData[CalculationElectionModel](KeystoreKeys.calculationElection)
       totalCosts <- calcConnector.calculateTotalCosts(answers, calculationType)
-
       calculationResult <- getCalculationResult(finalResult, calculationType.get.calculationType)
     } yield {
       lazy val view = calculationType.get.calculationType match {

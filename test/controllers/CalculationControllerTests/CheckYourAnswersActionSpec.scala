@@ -51,7 +51,7 @@ class CheckYourAnswersActionSpec extends UnitSpec with WithFakeApplication with 
     when(mockAnswersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers(
       ArgumentMatchers.any())).thenReturn(Future.successful(totalPersonalDetailsModel))
 
-    when(mockCalcConnector.calculateTaxableGainAfterPRR(ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any()))
+    when(mockCalcConnector.calculateTaxableGainAfterPRR(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(Future.successful(calculationResultsWithPRRModel))
 
     when(mockCalcConnector.calculateTotalGain(ArgumentMatchers.any())(ArgumentMatchers.any())).thenReturn(Future.successful(Some(totalGainResultsModel)))
@@ -61,9 +61,6 @@ class CheckYourAnswersActionSpec extends UnitSpec with WithFakeApplication with 
 
     when(mockCalcConnector.calculateTotalGain(ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(totalGainsModel)
-
-    when(mockCalcConnector.calculateTaxableGainAfterPRR(ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any()))
-      .thenReturn(Future.successful(calculationResultsWithPRRModel))
 
     new CheckYourAnswersController {
       override val answersConstructor: AnswersConstructor = mockAnswersConstructor
@@ -197,7 +194,7 @@ class CheckYourAnswersActionSpec extends UnitSpec with WithFakeApplication with 
 
 
     "provided with a valid model with multiple calculations available" should {
-      lazy val results = Some(TotalGainResultsModel(1.0, Some(2.0), None))
+      lazy val results = Some(TotalGainResultsModel(0.0, Some(2.0), None))
       lazy val target = setupTarget(modelWithMultipleGains, results)
       lazy val result = target.submitCheckYourAnswers(fakeRequestWithSession)
 
@@ -224,16 +221,17 @@ class CheckYourAnswersActionSpec extends UnitSpec with WithFakeApplication with 
       }
     }
 
-    "provided with a valid session but no calculations available" should {
-      lazy val target = setupTarget(modelWithOnlyFlat, None)
+    "provided with a valid model with only losses" should {
+      lazy val results = Some(TotalGainResultsModel(-1000, Some(0), None))
+      lazy val target = setupTarget(modelWithOnlyFlat, results)
       lazy val result = target.submitCheckYourAnswers(fakeRequestWithSession)
 
       "return a status of 303" in {
         status(result) shouldBe 303
       }
 
-      "redirect the user to the missing data page" in {
-        redirectLocation(result).get shouldBe common.DefaultRoutes.missingDataRoute
+      "redirect the user to the calculation election page" in {
+        redirectLocation(result).get shouldBe controllers.routes.CalculationElectionController.calculationElection().url
       }
     }
 
@@ -249,74 +247,6 @@ class CheckYourAnswersActionSpec extends UnitSpec with WithFakeApplication with 
       "redirect the user to the session timeout page" in {
         redirectLocation(result).get should include("/calculate-your-capital-gains/non-resident/session-timeout")
       }
-    }
-  }
-
-  "Calling .getPRRModel" should {
-
-    "with a totalGainResultsModel with at least one positive gain and a PRR model" should {
-
-      val totalGainResultsModelWithGain = TotalGainResultsModel(100, None, None)
-      val prrModel = PrivateResidenceReliefModel("Yes", Some(0))
-
-      val target = setupTarget(modelWithMultipleGains, Some(totalGainResultsModelWithGain), Some(prrModel))
-      lazy val result = target.getPRRModel(Some(totalGainResultsModelWithGain))
-
-      "return a PrivateResidenceReliefModel" in {
-        await(result.get) shouldEqual prrModel
-      }
-    }
-
-    "with a totalGainResultsModel with at least one positive gain but no PRR model" should {
-
-      val totalGainResultsModelWithGain = TotalGainResultsModel(100, None, None)
-
-      val target = setupTarget(modelWithMultipleGains, Some(totalGainResultsModelWithGain), None)
-      lazy val result = target.getPRRModel(Some(totalGainResultsModelWithGain))
-
-      "return a PrivateResidenceReliefModel" in {
-        await(result) shouldEqual None
-      }
-    }
-
-    "with a totalGainResultsModel with no positive gains" should {
-
-      val totalGainResultsModelWithNoGain = TotalGainResultsModel(-100, Some(0), Some(-1))
-
-      val target = setupTarget(modelWithMultipleGains, Some(totalGainResultsModelWithNoGain), None)
-      lazy val result = target.getPRRModel(Some(totalGainResultsModelWithNoGain))
-
-      "return a None" in {
-        await(result) shouldEqual None
-      }
-    }
-
-    "with no totalGainsResultsModel" should {
-      val target = setupTarget(modelWithMultipleGains, None, None)
-
-      lazy val result = target.getPRRModel(None)
-
-      "return a None" in {
-        await(result) shouldEqual None
-      }
-    }
-  }
-
-  "Calling .calculateTaxableGainWithPRR" should {
-
-    "return a None with no acquisition date or rebased value" in {
-      val target = setupTarget(modelWithOnlyFlat, Some(totalGainResultsModel))
-      val result = target.calculateTaxableGainWithPRR(None, modelWithOnlyFlat)
-
-      await(result) shouldBe None
-    }
-
-    "return Some value with valid prr" in {
-      val model = mock[CalculationResultsWithPRRModel]
-      val target = setupTarget(modelWithMultipleGains, Some(totalGainResultsModel), calculationResultsWithPRRModel = Some(model))
-      val result = target.calculateTaxableGainWithPRR(Some(PrivateResidenceReliefModel("Yes", Some(1), Some(2))), modelWithMultipleGains)
-
-      await(result) shouldBe Some(model)
     }
   }
 
@@ -354,37 +284,6 @@ class CheckYourAnswersActionSpec extends UnitSpec with WithFakeApplication with 
       lazy val result = target.redirectRoute(None, totalGainModel)
 
       redirectLocation(result) shouldBe Some(controllers.routes.SummaryController.summary().url)
-    }
-  }
-
-  "Calling .calculatePRRIfApplicable" should {
-
-    "with no privateResidenceReliefModel" should {
-
-      val totalGainResultsModelWithGain = TotalGainResultsModel(100, None, None)
-      val prrModel = None
-
-      val target = setupTarget(modelWithMultipleGains, Some(totalGainResultsModelWithGain), prrModel, None)
-      lazy val result = target.calculatePRRIfApplicable(modelWithMultipleGains, prrModel)
-
-      "return a None" in {
-        await(result) shouldEqual None
-      }
-    }
-
-    "with a valid PRR model" should {
-
-      val totalGainResultsModelWithGain = TotalGainResultsModel(100, Some(100), None)
-      val prrModel = PrivateResidenceReliefModel("Yes", Some(3), None)
-      val calculationResultsWithPRRModel = CalculationResultsWithPRRModel(GainsAfterPRRModel(100, 0, 0), None, None)
-
-      val target = setupTarget(modelWithMultipleGains, Some(totalGainResultsModelWithGain),
-        Some(prrModel), Some(personalDetailsModel), Some(calculationResultsWithPRRModel))
-      lazy val result = target.calculatePRRIfApplicable(modelWithMultipleGains, Some(prrModel))
-
-      "return a CalculationResultsWithPRRModel" in {
-        await(result.get) shouldEqual calculationResultsWithPRRModel
-      }
     }
   }
 }

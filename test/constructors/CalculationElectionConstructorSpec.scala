@@ -140,10 +140,15 @@ class CalculationElectionConstructorSpec extends UnitSpec with MockitoSugar with
 
     "when a flat calculation and a rebased PRR calculation result are provided" should {
 
-      lazy val calculations = target.generateElection(flatAndRebased, Some(totalGainsAfterPRRFlatAndTASortByTotalGain), None, None)
+      lazy val calculations = target.generateElection(flatAndRebased, Some(totalGainsAfterPRRFlatAndTASortByTotalGain), None,
+        Some(AllOtherReliefsModel(Some(OtherReliefsModel(1000)), Some(OtherReliefsModel(1000)), Some(OtherReliefsModel(1000)))))
 
       "produce two entries in the sequence" in {
         calculations.size shouldBe 2
+      }
+
+      "should contain entries with reliefs included" in {
+        await(calculations).forall(_._6.isDefined) shouldBe true
       }
 
       "should be returned with an order" which {

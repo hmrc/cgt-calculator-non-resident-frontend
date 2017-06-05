@@ -19,6 +19,7 @@ package controllers
 import java.time.LocalDate
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import common.nonresident.TaxableGainCalculation.{checkGainExists, getPropertyLivedInResponse}
 import common.{Dates, TaxDates}
 import connectors.CalculatorConnector
 import constructors.AnswersConstructor
@@ -130,7 +131,10 @@ trait PrivateResidenceReliefController extends FrontendController with ValidActi
         for {
           _ <- calcConnector.saveFormData(KeystoreKeys.privateResidenceRelief, model)
           answers <- answersConstructor.getNRTotalGainAnswers
-          results <- calcConnector.calculateTaxableGainAfterPRR(answers, model)
+          totalGainResultsModel <- calcConnector.calculateTotalGain(answers)
+          gainExists <- checkGainExists(totalGainResultsModel.get)
+          propertyLivedIn <- getPropertyLivedInResponse(gainExists, calcConnector)
+          results <- calcConnector.calculateTaxableGainAfterPRR(answers, model, propertyLivedIn.get)
           taxableGainsZeroOrLess <- checkTaxableGainsZeroOrLess(results.get)
           route <- routeDestination(taxableGainsZeroOrLess)
         } yield route

@@ -58,16 +58,20 @@ trait CalculatorConnector {
   }
 
   def calculateTaxableGainAfterPRR(totalGainAnswersModel: TotalGainAnswersModel,
-                                   privateResidenceReliefModel: PrivateResidenceReliefModel)
+                                   privateResidenceReliefModel: PrivateResidenceReliefModel,
+                                   propertyLivedInModel: PropertyLivedInModel)
                                   (implicit hc: HeaderCarrier): Future[Option[CalculationResultsWithPRRModel]] = {
     http.GET[Option[CalculationResultsWithPRRModel]](s"$serviceUrl/capital-gains-calculator/non-resident/calculate-gain-after-prr?${
       TotalGainRequestConstructor.totalGainQuery(totalGainAnswersModel) +
-        PrivateResidenceReliefRequestConstructor.privateResidenceReliefQuery(totalGainAnswersModel, Some(privateResidenceReliefModel))
+        PrivateResidenceReliefRequestConstructor.privateResidenceReliefQuery(totalGainAnswersModel,
+          Some(privateResidenceReliefModel),
+          Some(propertyLivedInModel))
     }")
   }
 
   def calculateNRCGTTotalTax(totalGainAnswersModel: TotalGainAnswersModel,
                              privateResidenceReliefModel: Option[PrivateResidenceReliefModel],
+                             propertyLivedInModel: Option[PropertyLivedInModel],
                              totalTaxPersonalDetailsModel: Option[TotalPersonalDetailsCalculationModel],
                              maxAnnualExemptAmount: BigDecimal,
                              otherReliefs: Option[AllOtherReliefsModel] = None)(implicit hc: HeaderCarrier):
@@ -75,7 +79,9 @@ trait CalculatorConnector {
 
     http.GET[Option[CalculationResultsWithTaxOwedModel]](s"$serviceUrl/capital-gains-calculator/non-resident/calculate-tax-owed?${
       TotalGainRequestConstructor.totalGainQuery(totalGainAnswersModel) +
-        PrivateResidenceReliefRequestConstructor.privateResidenceReliefQuery(totalGainAnswersModel, privateResidenceReliefModel) +
+        PrivateResidenceReliefRequestConstructor.privateResidenceReliefQuery(totalGainAnswersModel,
+          privateResidenceReliefModel,
+          propertyLivedInModel) +
         FinalTaxAnswersRequestConstructor.additionalParametersQuery(totalTaxPersonalDetailsModel, maxAnnualExemptAmount) +
         OtherReliefsRequestConstructor.otherReliefsQuery(otherReliefs)
     }")

@@ -42,7 +42,7 @@ trait CalculationElectionConstructor {
 
     val electionOptions = (totalGain, totalGainWithPrr, taxOwed) match {
       case (_, _, Some(data)) => buildElectionWithTaxOwed(data, otherReliefs)
-      case (_, Some(data), _) => buildElectionWithPrr(data)
+      case (_, Some(data), _) => buildElectionWithPrr(data, otherReliefs)
       case _ => buildElectionWithTotalGain(totalGain)
     }
 
@@ -60,10 +60,13 @@ trait CalculationElectionConstructor {
       .map(o => (o.calcType, o.amount.toString(), o.message, o.calcDescription, o.date, o.otherReliefs))
   }
 
-  private def buildElectionWithPrr(data: CalculationResultsWithPRRModel) = {
-    val flatElement = Some(flatElementConstructor(0.0, data.flatResult, None))
-    val rebasedElement = data.rebasedResult.collect { case result => rebasedElementConstructor(0.0, result, None) }
-    val timeElement = data.timeApportionedResult.collect { case result => timeElementConstructor(0.0, result, None) }
+  private def buildElectionWithPrr(data: CalculationResultsWithPRRModel, otherReliefs: Option[AllOtherReliefsModel]) = {
+    val flatElement = Some(flatElementConstructor(0.0, data.flatResult,
+      Some(otherReliefs.flatMap(_.otherReliefsFlat.map(_.otherReliefs)).getOrElse(BigDecimal(0)))))
+    val rebasedElement = data.rebasedResult.collect { case result => rebasedElementConstructor(0.0, result,
+      Some(otherReliefs.flatMap(_.otherReliefsRebased.map(_.otherReliefs)).getOrElse(BigDecimal(0)))) }
+    val timeElement = data.timeApportionedResult.collect { case result => timeElementConstructor(0.0, result,
+      Some(otherReliefs.flatMap(_.otherReliefsTime.map(_.otherReliefs)).getOrElse(BigDecimal(0)))) }
     val options = Seq(flatElement, rebasedElement, timeElement).flatten
 
     options
