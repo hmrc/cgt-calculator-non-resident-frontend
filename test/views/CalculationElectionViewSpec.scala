@@ -29,8 +29,6 @@ import play.api.Play.current
 
 class CalculationElectionViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
 
-
-
   "The Calculation Election View" should {
 
     lazy val form = calculationElectionForm
@@ -58,7 +56,7 @@ class CalculationElectionViewSpec extends UnitSpec with WithFakeApplication with
       doc.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
     }
 
-    "have a back button" which {
+    "have a dynamic back button" which {
 
       "has the correct back link text" in {
         doc.select("a#back-link").text shouldBe commonMessages.back
