@@ -17,6 +17,7 @@
 package constructors
 
 import assets.MessageLookup.{NonResident => messages}
+import common.Dates
 import helpers.AssertHelpers
 import models._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
@@ -102,6 +103,23 @@ class DeductionDetailsConstructorSpec extends UnitSpec with WithFakeApplication 
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
     AcquisitionDateModel(10, 2, 2015),
+    None,
+    None,
+    ImprovementsModel("No", None, None),
+    Some(OtherReliefsModel(1450))
+  )
+
+  val edgeDatesJustDaysBefore = TotalGainAnswersModel(
+    DisposalDateModel(2, 3, 2017),
+    SoldOrGivenAwayModel(false),
+    None,
+    DisposalValueModel(150000),
+    DisposalCostsModel(600),
+    Some(HowBecameOwnerModel("Gifted")),
+    None,
+    AcquisitionValueModel(5000),
+    AcquisitionCostsModel(200),
+    AcquisitionDateModel(10, 4, 2015),
     None,
     None,
     ImprovementsModel("No", None, None),
@@ -300,6 +318,17 @@ class DeductionDetailsConstructorSpec extends UnitSpec with WithFakeApplication 
       "return a link to the Private Residence Relief page" in {
         assertExpectedResult[QuestionAnswerModel[String]](result)(_.link shouldBe
           Some(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief().url))
+      }
+    }
+
+    "provided with an acquisition date after 6th April 2015 and disposal date over 18 months later" should {
+      s"have the question message ${}" in {
+        lazy val result = DeductionDetailsConstructor.privateResidenceReliefDaysClaimedBeforeRow(
+          Some(PrivateResidenceReliefModel("Yes", Some(4), None)), edgeDatesJustDaysBefore)
+
+        lazy val beforeString = Dates.dateMinusMonths(edgeDatesJustDaysBefore.disposalDateModel, 18)
+
+        result.get.question shouldBe messages.PrivateResidenceRelief.questionAcquisitionDateAfterStartDate(beforeString)
       }
     }
   }
