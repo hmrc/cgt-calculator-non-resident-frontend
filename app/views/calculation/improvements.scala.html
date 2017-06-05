@@ -25,16 +25,20 @@
 
         <h1 class="heading-xlarge">@question</h1>
 
-        <span id="input-hint" class="form-hint">
-            <p>@Messages("calc.improvements.helpOne")
-                @Messages("calc.improvements.helpTwo")</p>
-        </span>
+        <p class="form-hint">
+            @Messages("calc.improvements.helpOne")
+            @Messages("calc.improvements.helpTwo")
+        </p>
+
+        <div class="panel-indent">
+            <p id="jointOwner">@Messages("calc.improvements.jointOwnership")</p>
+        </div>
 
         @expandableHelpTextHelper(Messages("calc.improvements.exampleTitle"), exampleContent)
 
         @form(action = controllers.routes.ImprovementsController.submitImprovements) {
 
-            @ImprovementsConstructor.generateImprovements(improvementsForm, improvementsOptions, jointOwnershipText, question)
+            @ImprovementsConstructor.generateImprovements(improvementsForm, improvementsOptions, question)
 
             <button class="button" type="submit" id="continue-button">@Messages("calc.base.continue")</button>
         }
