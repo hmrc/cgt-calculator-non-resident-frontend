@@ -76,10 +76,10 @@ object MessageLookup {
     object AcquisitionDate {
       val question = "What date did you sign the contract to become the owner?"
       val questionTwo = "What was the date you signed the contract that made you the owner?"
-      val hintText = "If you inherited the property, it is the date that the previous owner died."
+      val hintText = "If you inherited the property, it's the date that the previous owner died."
       val errorIncompleteDate = "Date is not valid"
-      val errorFutureDate = "Date must be in the past"
-      val errorFutureDateGuidance = "Enter a date from the past"
+      val errorFutureDate = "Enter a date from the past"
+      val errorFutureDateGuidance = "Date must be in the past"
     }
 
     object AcquisitionValue {
