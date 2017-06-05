@@ -17,7 +17,7 @@
 package constructors
 
 import common.TaxDates
-import models.{AcquisitionDateModel, PrivateResidenceReliefModel, TotalGainAnswersModel}
+import models.{PrivateResidenceReliefModel, TotalGainAnswersModel}
 
 object PrivateResidenceReliefRequestConstructor {
 

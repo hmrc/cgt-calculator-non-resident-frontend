@@ -2,7 +2,7 @@
 @import uk.gov.hmrc.play.views.html.helpers.{form, input}
 @import views.html.helpers._
 
-@(privateResidenceReliefForm: Form[PrivateResidenceReliefModel], daysBetweenShow: Boolean, daysBeforeShow: Boolean, disposalDateLess18Months: String, showOnlyFlatQuestion: Boolean)(implicit request: Request[_], messages: Messages)
+@(privateResidenceReliefForm: Form[PrivateResidenceReliefModel], daysBetweenShow: Boolean, showFirstQuestion: Boolean, disposalDateLess18Months: String, showOnlyFlatQuestion: Boolean)(implicit request: Request[_], messages: Messages)
 
 @whyThisDate(showBoth: Boolean) = {
     @if(showBoth){
@@ -21,12 +21,12 @@
 
     <p id="formExplanation">@Messages("calc.privateResidenceRelief.formHintExplanation")</p>
 
-    @if(daysBeforeShow) {
+    @if(showFirstQuestion) {
 
-        <div class="form-group bold">
+        <div class="form-group">
         @input(
             privateResidenceReliefForm("daysClaimed"),
-            '_label ->{if(showOnlyFlatQuestion){Messages("calc.privateResidenceRelief.questionFlat", disposalDateLess18Months)}else{Messages("calc.privateResidenceRelief.questionBefore.partOne")}} ,
+            '_label ->{if(showOnlyFlatQuestion){Messages("calc.privateResidenceRelief.questionFlat", disposalDateLess18Months)}else{Messages("calc.privateResidenceRelief.firstQuestion")}} ,
             '_labelClass -> "bold",
             '_type -> "text",
             '_inputClass -> "form-group input--no-spinner",
@@ -36,7 +36,7 @@
     }
     @if(daysBetweenShow) {
 
-        <div class="form-group bold">
+        <div class="form-group">
         @input(
             privateResidenceReliefForm("daysClaimedAfter"),
             '_label -> (Messages("calc.privateResidenceRelief.questionBetween.partOne") + " " + disposalDateLess18Months + " " + Messages("calc.privateResidenceRelief.questionBetween.partTwo")),
@@ -48,7 +48,7 @@
         </div>
     }
 
-    @(daysBeforeShow, daysBetweenShow) match {
+    @(showFirstQuestion, daysBetweenShow) match {
         case (true, true) => {
             @expandableHelpTextHelper(Messages("calc.privateResidenceRelief.helpTextBeforeAfter"), whyThisDate(true), false, true)
         }
@@ -63,7 +63,7 @@
 
     <a id="back-link" class="back-link" href="@controllers.routes.PropertyLivedInController.propertyLivedIn()">@Messages("calc.base.back")</a>
 
-    @if(daysBeforeShow) {@errorSummary(privateResidenceReliefForm, "private-residence-relief", "daysClaimed")
+    @if(showFirstQuestion) {@errorSummary(privateResidenceReliefForm, "private-residence-relief", "daysClaimed")
     } else {
         @if(daysBetweenShow) {@errorSummary(privateResidenceReliefForm, "private-residence-relief", "daysClaimedAfter")
         } else {
@@ -86,7 +86,7 @@
 
     @form(action = controllers.routes.PrivateResidenceReliefController.submitPrivateResidenceRelief) {
 
-        @if(!(daysBeforeShow || daysBetweenShow)) {
+        @if(!(showFirstQuestion || daysBetweenShow)) {
             <div class="inline form-group">
             @formInputRadioGroup(
                 field = privateResidenceReliefForm("isClaimingPRR"),

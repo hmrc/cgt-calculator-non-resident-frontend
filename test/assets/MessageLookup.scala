@@ -347,8 +347,9 @@ object MessageLookup {
       val questionBefore = "For how many days before 6 April 2015 did you live in this property as your main home?"
       val questionBetween = "For how many days between 6 April 2015 and"
       val questionBetweenEnd = "did you live in this property as your main home?"
-      def questionAcquisitionDateAfterStartDate(message: String) = s"For how many days before $message were you living in this property as your main home?"
-      val questionBetweenWhyThisDate = "is the date you transferred the property minus 18 months (you automatically" +
+      def questionAcquisitionDateAfterStartDate(message: String): String =
+        s"For how many days before $message were you living in this property as your main home?"
+      val questionBetweenWhyThisDate: String = "is the date you transferred the property minus 18 months (you automatically" +
         " get Private Residence Relief for the last 18 months that you owned the property)"
       val questionBeforeWhyThisDate = "6 April 2015 is when the Capital Gains Tax rules for non-UK residents came into effect"
       val helpTextSubtitle = "These dates are important because:"
