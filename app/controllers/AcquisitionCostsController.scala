@@ -42,6 +42,12 @@ trait AcquisitionCostsController extends FrontendController with ValidActiveSess
   val calcConnector: CalculatorConnector
   val calcElectionConstructor = CalculationElectionConstructor
 
+  private def isOwnerBeforeLegislationStart(implicit hc: HeaderCarrier): Future[Boolean] = {
+    calcConnector.fetchAndGetFormData[AcquisitionDateModel](KeystoreKeys.acquisitionDate).map { date =>
+      TaxDates.dateBeforeLegislationStart(date.get.get)
+    }
+  }
+
   def getBackLink(implicit hc:HeaderCarrier): Future[String] = {
     val getAcquisitionDate = calcConnector.fetchAndGetFormData[AcquisitionDateModel](KeystoreKeys.acquisitionDate)
     val getHowBecameOwner = calcConnector.fetchAndGetFormData[HowBecameOwnerModel](KeystoreKeys.howBecameOwner)
@@ -69,14 +75,17 @@ trait AcquisitionCostsController extends FrontendController with ValidActiveSess
   }
 
   val acquisitionCosts: Action[AnyContent] = ValidateSession.async { implicit request =>
-    def result(backLink: String) = calcConnector.fetchAndGetFormData[AcquisitionCostsModel](KeystoreKeys.acquisitionCosts).map {
-      case Some(data) => Ok(calculation.acquisitionCosts(acquisitionCostsForm.fill(data), backLink))
-      case None => Ok(calculation.acquisitionCosts(acquisitionCostsForm, backLink))
+    def result(backLink: String, isOwnerBeforeLegislationStart: Boolean) = {
+      calcConnector.fetchAndGetFormData[AcquisitionCostsModel](KeystoreKeys.acquisitionCosts).map {
+        case Some(data) => Ok(calculation.acquisitionCosts(acquisitionCostsForm.fill(data), backLink, isOwnerBeforeLegislationStart))
+        case None => Ok(calculation.acquisitionCosts(acquisitionCostsForm, backLink, isOwnerBeforeLegislationStart))
+      }
     }
 
     for {
       backLink <- getBackLink
-      result <- result(backLink)
+      isOwnerBeforeLegislationStart <- isOwnerBeforeLegislationStart
+      result <- result(backLink, isOwnerBeforeLegislationStart)
     } yield result
   }
 
@@ -103,11 +112,13 @@ trait AcquisitionCostsController extends FrontendController with ValidActiveSess
     }
 
     def errorAction(form: Form[AcquisitionCostsModel]) = {
-      def result(backLink: String) = Future.successful(BadRequest(calculation.acquisitionCosts(form, backLink)))
+      def result(backLink: String, isOwnerBeforeLegislationStart: Boolean) =
+        Future.successful(BadRequest(calculation.acquisitionCosts(form, backLink, isOwnerBeforeLegislationStart)))
 
       for {
         backLink <- getBackLink
-        result <- result(backLink)
+        isOwnerBeforeLegislationStart <- isOwnerBeforeLegislationStart
+        result <- result(backLink, isOwnerBeforeLegislationStart)
       } yield result
     }
 

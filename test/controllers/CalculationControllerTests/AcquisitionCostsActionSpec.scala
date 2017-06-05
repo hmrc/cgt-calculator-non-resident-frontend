@@ -37,7 +37,7 @@ class AcquisitionCostsActionSpec extends UnitSpec with WithFakeApplication with 
   implicit val hc = new HeaderCarrier()
 
   def setupTarget(getData: Option[AcquisitionCostsModel],
-                  acquisitionDateData: Option[AcquisitionDateModel] = None,
+                  acquisitionDateData: Option[AcquisitionDateModel] = Some(AcquisitionDateModel(10, 5, 2001)),
                   howBecameOwnerData: Option[HowBecameOwnerModel] = None,
                   boughtForLessData: Option[BoughtForLessModel] = None): AcquisitionCostsController = {
 
