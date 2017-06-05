@@ -32,7 +32,7 @@ object DeductionDetailsConstructor {
   def acquisitionAfterPropertyDisposalOver18Month(acquisitionDateModel: AcquisitionDateModel, disposalDateModel: DisposalDateModel): Boolean = {
     //When acquisition date is after 6th April 2015,
     // and property is disposed more than 18 months later
-    acquisitionDateModel.get.isAfter(TaxDates.taxStartDate) && acquisitionDateModel.get.plusMonths(18).isAfter(disposalDateModel.get)
+    acquisitionDateModel.get.isAfter(TaxDates.taxStartDate) && acquisitionDateModel.get.plusMonths(18).isBefore(disposalDateModel.get)
   }
 
   def deductionDetailsRows(answers: TotalGainAnswersModel,
@@ -92,10 +92,9 @@ object DeductionDetailsConstructor {
 
   def privateResidenceReliefDaysClaimedBeforeRow(prr: Option[PrivateResidenceReliefModel],
                                                  answers: TotalGainAnswersModel): Option[QuestionAnswerModel[String]] = {
-    val datesOutsideRangeCheck = datesOutsideRangeCheck(answers.acquisitionDateModel, answers.disposalDateModel)
+    val datesOutside = datesOutsideRangeCheck(answers.acquisitionDateModel, answers.disposalDateModel)
     val acquisitionPostTaxStartDisposalPost18Month = acquisitionAfterPropertyDisposalOver18Month(answers.acquisitionDateModel, answers.disposalDateModel)
-
-    (prr, datesOutsideRangeCheck, acquisitionPostTaxStartDisposalPost18Month) match {
+    (prr, datesOutside, acquisitionPostTaxStartDisposalPost18Month) match {
       case (Some(PrivateResidenceReliefModel("Yes", Some(value), _)), true, false) =>
         Some(QuestionAnswerModel(
           s"${keys.privateResidenceRelief}-daysClaimed",
@@ -107,7 +106,7 @@ object DeductionDetailsConstructor {
         Some(QuestionAnswerModel(
           s"${keys.privateResidenceRelief}-daysClaimed",
           value.toString(),
-          Messages("calc.privateResidenceRelief.questionFlat"),
+          Messages("calc.privateResidenceRelief.questionFlat", Dates.dateMinusMonths(answers.disposalDateModel, 18)),
           Some(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief().url)))
       case _ => None
     }
