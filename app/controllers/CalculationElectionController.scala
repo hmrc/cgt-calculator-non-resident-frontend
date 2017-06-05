@@ -79,6 +79,14 @@ trait CalculationElectionController extends FrontendController with ValidActiveS
     Future.successful(finalSeq.exists(_ > 0))
   }
 
+  private def getBackLink(totalGainResultsModel: TotalGainResultsModel): Future[String] = {
+    val results = Seq(totalGainResultsModel.flatGain) ++ Seq(totalGainResultsModel.rebasedGain, totalGainResultsModel.timeApportionedGain).flatten
+
+    if (results.exists(_ > 0)) {
+      Future.successful(routes.ClaimingReliefsController.claimingReliefs().url)
+    } else Future.successful(routes.CheckYourAnswersController.checkYourAnswers().url)
+  }
+
   private def getTaxOwedIfApplicable(totalGainAnswersModel: TotalGainAnswersModel,
                                      prrModel: Option[PrivateResidenceReliefModel],
                                      totalTaxOwedModel: Option[TotalPersonalDetailsCalculationModel],
@@ -117,7 +125,7 @@ trait CalculationElectionController extends FrontendController with ValidActiveS
 
   val calculationElection: Action[AnyContent] = ValidateSession.async { implicit request =>
 
-    def action(content: Seq[(String, String, String, String, Option[String], Option[BigDecimal])], isClaimingReliefs: Boolean) =
+    def action(content: Seq[(String, String, String, String, Option[String], Option[BigDecimal])], isClaimingReliefs: Boolean, backLink: String) =
       calcConnector.fetchAndGetFormData[CalculationElectionModel](KeystoreKeys.calculationElection).map { result =>
         val form = result match {
           case Some(data) => calculationElectionForm.fill(data)
@@ -125,7 +133,7 @@ trait CalculationElectionController extends FrontendController with ValidActiveS
         }
 
         if (isClaimingReliefs) Ok(calculation.calculationElection(form, content))
-        else Ok(calculation.calculationElectionNoReliefs(form, content, ""))
+        else Ok(calculation.calculationElectionNoReliefs(form, content, backLink))
       }
 
     for {
@@ -137,12 +145,13 @@ trait CalculationElectionController extends FrontendController with ValidActiveS
       isClaimingReliefs <- determineClaimingReliefs(totalGain.get)
       totalGainWithPRR <- getPrrIfApplicable(totalGainAnswers, prrAnswers, propertyLivedIn, calcConnector)
       allAnswers <- getFinalSectionsAnswers(totalGain.get, totalGainWithPRR, calcConnector, calcAnswersConstructor)
+      backLink <- getBackLink(totalGain.get)
       otherReliefs <- getAllOtherReliefs(allAnswers)
       taxYear <- getTaxYear(totalGainAnswers, calcConnector)
       maxAEA <- getMaxAEA(taxYear, calcConnector)
       taxOwed <- getTaxOwedIfApplicable(totalGainAnswers, prrAnswers, allAnswers, maxAEA.get, otherReliefs, propertyLivedIn)
       content <- calcElectionConstructor.generateElection(totalGain.get, totalGainWithPRR, taxOwed, otherReliefs)
-      finalResult <- action(orderElements(content, isClaimingReliefs), isClaimingReliefs)
+      finalResult <- action(orderElements(content, isClaimingReliefs), isClaimingReliefs, backLink)
     } yield finalResult
   }
 
@@ -160,9 +169,9 @@ trait CalculationElectionController extends FrontendController with ValidActiveS
 
     def errorAction(form: Form[CalculationElectionModel]) = {
 
-      def action(content: Seq[(String, String, String, String, Option[String], Option[BigDecimal])], isClaimingReliefs: Boolean) = {
+      def action(content: Seq[(String, String, String, String, Option[String], Option[BigDecimal])], isClaimingReliefs: Boolean, backLink: String) = {
         if (isClaimingReliefs) BadRequest(calculation.calculationElection(form, content))
-        else BadRequest(calculation.calculationElectionNoReliefs(form, content, ""))
+        else BadRequest(calculation.calculationElectionNoReliefs(form, content, backLink))
       }
 
       for {
@@ -174,13 +183,14 @@ trait CalculationElectionController extends FrontendController with ValidActiveS
         isClaimingReliefs <- determineClaimingReliefs(totalGain.get)
         totalGainWithPRR <- getPrrIfApplicable(totalGainAnswers, prrAnswers, propertyLivedIn, calcConnector)
         allAnswers <- getFinalSectionsAnswers(totalGain.get, totalGainWithPRR, calcConnector, calcAnswersConstructor)
+        backLink <- getBackLink(totalGain.get)
         otherReliefs <- getAllOtherReliefs(allAnswers)
         taxYear <- getTaxYear(totalGainAnswers, calcConnector)
         maxAEA <- getMaxAEA(taxYear, calcConnector)
         taxOwed <- getTaxOwedIfApplicable(totalGainAnswers, prrAnswers, allAnswers, maxAEA.get, otherReliefs, propertyLivedIn)
         content <- calcElectionConstructor.generateElection(totalGain.get, totalGainWithPRR, taxOwed, otherReliefs)
       } yield {
-        action(orderElements(content, isClaimingReliefs), isClaimingReliefs)
+        action(orderElements(content, isClaimingReliefs), isClaimingReliefs, backLink)
       }
     }
 

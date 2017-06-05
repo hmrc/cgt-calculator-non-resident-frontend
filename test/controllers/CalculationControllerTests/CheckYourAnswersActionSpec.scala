@@ -194,7 +194,7 @@ class CheckYourAnswersActionSpec extends UnitSpec with WithFakeApplication with 
 
 
     "provided with a valid model with multiple calculations available" should {
-      lazy val results = Some(TotalGainResultsModel(1.0, Some(2.0), None))
+      lazy val results = Some(TotalGainResultsModel(0.0, Some(2.0), None))
       lazy val target = setupTarget(modelWithMultipleGains, results)
       lazy val result = target.submitCheckYourAnswers(fakeRequestWithSession)
 
@@ -218,6 +218,20 @@ class CheckYourAnswersActionSpec extends UnitSpec with WithFakeApplication with 
 
       "redirect the user to the other reliefs page" in {
         redirectLocation(result).get shouldBe controllers.routes.OtherReliefsController.otherReliefs().url
+      }
+    }
+
+    "provided with a valid model with only losses" should {
+      lazy val results = Some(TotalGainResultsModel(-1000, Some(0), None))
+      lazy val target = setupTarget(modelWithOnlyFlat, results)
+      lazy val result = target.submitCheckYourAnswers(fakeRequestWithSession)
+
+      "return a status of 303" in {
+        status(result) shouldBe 303
+      }
+
+      "redirect the user to the calculation election page" in {
+        redirectLocation(result).get shouldBe controllers.routes.CalculationElectionController.calculationElection().url
       }
     }
 
