@@ -82,15 +82,15 @@ trait PrivateResidenceReliefController extends FrontendController with ValidActi
     def action(disposalDate: Option[LocalDate], acquisitionDate: Option[LocalDate]) = {
 
       val showOnlyFlatQuestion = displayOnlyFlatCalculationQuestion(disposalDate, acquisitionDate)
-      val showBeforeQuestion = displayFirstQuestion(disposalDate, acquisitionDate)
+      val showFirstQuestion = displayFirstQuestion(disposalDate, acquisitionDate)
       val showBetweenQuestion = displayAfterQuestion(disposalDate, acquisitionDate)
       val disposalDateLess18Months = Dates.dateMinusMonths(disposalDate, 18)
 
       calcConnector.fetchAndGetFormData[PrivateResidenceReliefModel](KeystoreKeys.privateResidenceRelief).map {
-        case Some(data) => Ok(calculation.privateResidenceRelief(privateResidenceReliefForm(showBeforeQuestion,
-          showBetweenQuestion).fill(data), showBetweenQuestion, showBeforeQuestion, disposalDateLess18Months, showOnlyFlatQuestion))
-        case None => Ok(calculation.privateResidenceRelief(privateResidenceReliefForm(showBeforeQuestion, showBetweenQuestion),
-          showBetweenQuestion, showBeforeQuestion, disposalDateLess18Months, showOnlyFlatQuestion))
+        case Some(data) => Ok(calculation.privateResidenceRelief(privateResidenceReliefForm(showFirstQuestion,
+          showBetweenQuestion).fill(data), showBetweenQuestion, showFirstQuestion, disposalDateLess18Months, showOnlyFlatQuestion))
+        case None => Ok(calculation.privateResidenceRelief(privateResidenceReliefForm(showFirstQuestion, showBetweenQuestion),
+          showBetweenQuestion, showFirstQuestion, disposalDateLess18Months, showOnlyFlatQuestion))
       }
     }
 
@@ -106,7 +106,7 @@ trait PrivateResidenceReliefController extends FrontendController with ValidActi
     def action(disposalDate: Option[LocalDate], acquisitionDate: Option[LocalDate]): Future[Result] = {
 
       val showOnlyFlatQuestion = displayOnlyFlatCalculationQuestion(disposalDate, acquisitionDate)
-      val showBeforeQuestion = displayFirstQuestion(disposalDate, acquisitionDate)
+      val showFirstQuestion = displayFirstQuestion(disposalDate, acquisitionDate)
       val showBetweenQuestion = displayAfterQuestion(disposalDate, acquisitionDate)
       val disposalDateLess18Months = Dates.dateMinusMonths(disposalDate, 18)
 
@@ -124,7 +124,7 @@ trait PrivateResidenceReliefController extends FrontendController with ValidActi
 
       def errorAction(form: Form[PrivateResidenceReliefModel]) = {
         Future.successful(BadRequest(calculation.privateResidenceRelief(form, showBetweenQuestion,
-          showBeforeQuestion, disposalDateLess18Months, showOnlyFlatQuestion)))
+          showFirstQuestion, disposalDateLess18Months, showOnlyFlatQuestion)))
       }
 
       def successAction(model: PrivateResidenceReliefModel) = {
@@ -140,7 +140,7 @@ trait PrivateResidenceReliefController extends FrontendController with ValidActi
         } yield route
       }
 
-      privateResidenceReliefForm(showBeforeQuestion, showBetweenQuestion).bindFromRequest.fold(errorAction, successAction)
+      privateResidenceReliefForm(showFirstQuestion, showBetweenQuestion).bindFromRequest.fold(errorAction, successAction)
     }
 
     for {

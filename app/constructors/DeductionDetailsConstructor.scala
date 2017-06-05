@@ -91,7 +91,7 @@ object DeductionDetailsConstructor {
         Some(QuestionAnswerModel(
           s"${keys.privateResidenceRelief}-daysClaimed",
           value.toString(),
-          Messages("calc.privateResidenceRelief.questionBefore.partOne"),
+          Messages("calc.privateResidenceRelief.firstQuestion"),
           Some(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief().url)
         ))
       case _ => None

@@ -39,7 +39,7 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
             showBefore = true,
             showAfter = true),
           daysBetweenShow = true,
-          daysBeforeShow = true,
+          showFirstQuestion = true,
           "date-input",
           showOnlyFlatQuestion = false)
         lazy val document = Jsoup.parse(view.body)
@@ -152,10 +152,6 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
         "have a button" which {
           lazy val button = document.select("button")
 
-          "has the class 'button'" in {
-            button.attr("class") shouldBe "button"
-          }
-
           "has the type 'submit'" in {
             button.attr("type") shouldBe "submit"
           }
@@ -173,7 +169,7 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
             showBefore = true,
             showAfter = false),
           daysBetweenShow = false,
-          daysBeforeShow = true,
+          showFirstQuestion = true,
           "date-input",
           showOnlyFlatQuestion = true)
         lazy val document = Jsoup.parse(view.body)
@@ -217,7 +213,7 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
             showBefore = false,
             showAfter = false),
           daysBetweenShow = false,
-          daysBeforeShow = false,
+          showFirstQuestion = false,
           "date-input",
           showOnlyFlatQuestion = true)
         lazy val document = Jsoup.parse(view.body)
