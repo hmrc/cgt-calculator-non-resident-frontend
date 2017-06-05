@@ -30,6 +30,8 @@ object DeductionDetailsConstructor {
   }
 
   def acquisitionAfterPropertyDisposalOver18Month(acquisitionDateModel: AcquisitionDateModel, disposalDateModel: DisposalDateModel): Boolean = {
+    //When acquisition date is after 6th April 2015,
+    // and property is disposed more than 18 months later
     acquisitionDateModel.get.isAfter(TaxDates.taxStartDate) && acquisitionDateModel.get.plusMonths(18).isAfter(disposalDateModel.get)
   }
 
@@ -90,14 +92,23 @@ object DeductionDetailsConstructor {
 
   def privateResidenceReliefDaysClaimedBeforeRow(prr: Option[PrivateResidenceReliefModel],
                                                  answers: TotalGainAnswersModel): Option[QuestionAnswerModel[String]] = {
-    prr match {
-      case Some(PrivateResidenceReliefModel("Yes", Some(value), _)) if datesOutsideRangeCheck(answers.acquisitionDateModel, answers.disposalDateModel) =>
+    val datesOutsideRangeCheck = datesOutsideRangeCheck(answers.acquisitionDateModel, answers.disposalDateModel)
+    val acqusitionPostTaxStartDisposalPost18Month = acquisitionAfterPropertyDisposalOver18Month(answers.acquisitionDateModel, answers.disposalDateModel)
+
+    (prr, datesOutsideRangeCheck, acqusitionPostTaxStartDisposalPost18Month) match {
+      case (Some(PrivateResidenceReliefModel("Yes", Some(value), _)), true, false) =>
         Some(QuestionAnswerModel(
           s"${keys.privateResidenceRelief}-daysClaimed",
           value.toString(),
           Messages("calc.privateResidenceRelief.firstQuestion"),
           Some(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief().url)
         ))
+      case (Some(PrivateResidenceReliefModel("Yes", Some(value), _)), _, true) =>
+        Some(QuestionAnswerModel(
+          s"${keys.privateResidenceRelief}-daysClaimed",
+          value.toString(),
+          Messages("EDGE MESSAGE"),
+          Some(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief().url)
       case _ => None
     }
   }
