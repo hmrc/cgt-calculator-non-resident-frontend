@@ -87,36 +87,8 @@ trait CalculatorConnector {
     }")
   }
 
-  def calculateFlat(input: SummaryModel)(implicit hc: HeaderCarrier): Future[Option[CalculationResultModel]] = {
-    http.GET[Option[CalculationResultModel]](s"$serviceUrl/capital-gains-calculator/calculate-flat?${
-      CalculateRequestConstructor.baseCalcUrl(input)
-    }${
-      CalculateRequestConstructor.flatCalcUrlExtra(input)
-    }")
-  }
-
-  def calculateTA(input: SummaryModel)(implicit hc: HeaderCarrier): Future[Option[CalculationResultModel]] = {
-    http.GET[Option[CalculationResultModel]](s"$serviceUrl/capital-gains-calculator/calculate-time-apportioned?${
-      CalculateRequestConstructor.baseCalcUrl(input)
-    }${
-      CalculateRequestConstructor.taCalcUrlExtra(input)
-    }")
-  }
-
-  def calculateRebased(input: SummaryModel)(implicit hc: HeaderCarrier): Future[Option[CalculationResultModel]] = {
-    http.GET[Option[CalculationResultModel]](s"$serviceUrl/capital-gains-calculator/calculate-rebased?${
-      CalculateRequestConstructor.baseCalcUrl(input)
-    }${
-      CalculateRequestConstructor.rebasedCalcUrlExtra(input)
-    }")
-  }
-
   def getFullAEA(taxYear: Int)(implicit hc: HeaderCarrier): Future[Option[BigDecimal]] = {
     http.GET[Option[BigDecimal]](s"$serviceUrl/capital-gains-calculator/tax-rates-and-bands/max-full-aea?taxYear=$taxYear")
-  }
-
-  def getPartialAEA(taxYear: Int)(implicit hc: HeaderCarrier): Future[Option[BigDecimal]] = {
-    http.GET[Option[BigDecimal]](s"$serviceUrl/capital-gains-calculator/tax-rates-and-bands/max-partial-aea?taxYear=$taxYear")
   }
 
   def getPA(taxYear: Int, isEligibleBlindPersonsAllowance: Boolean = false)(implicit hc: HeaderCarrier): Future[Option[BigDecimal]] = {
