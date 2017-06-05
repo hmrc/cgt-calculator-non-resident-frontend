@@ -981,10 +981,10 @@ object MessageLookup {
       "Do not use these figures to report your Capital Gains Tax."
 
     val workingOutSectionHeading = "How we've worked this out"
-    val flatCalculationSummary = "Based on the amount you've gained on the property since you became the owner"
-    val timeCalculationSummary = "Based on the percentage of your total gain made since"
+    val flatCalculationSummary = "Gain over whole period of ownership method: based on the amount you've gained on the property since you became the owner"
+    val timeCalculationSummary = "Straight-line apportionment method: based on the percentage of your total gain made since"
     val timeCalculationSummaryDate = "5 April 2015"
-    val rebasedCalculationSummary = "Based on the amount you've gained on the property since"
+    val rebasedCalculationSummary = "Rebasing method: based on the amount you've gained on the property since"
     val rebasedCalculationSummaryDate = "5 April 2015"
     val yourTotalGain = "Your total gain"
     val yourTotalLoss = "Your total loss"
