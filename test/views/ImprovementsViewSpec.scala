@@ -75,11 +75,7 @@ class ImprovementsViewSpec extends UnitSpec with WithFakeApplication with FakeRe
 
         "have hint text" which {
 
-          lazy val helpText = document.select("#input-hint")
-
-          "should have the class form-hint" in {
-            helpText.hasClass("form-hint") shouldEqual true
-          }
+          lazy val helpText = document.select(".form-hint")
 
           s"should have a first sentence of ${messages.Improvements.helpOne}" in {
             helpText.select("p").text() should include(messages.Improvements.helpOne)

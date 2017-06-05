@@ -1,0 +1,21 @@
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import views.html.main_template
+@import views.html.helpers._
+@import common.Dates
+@import models._
+
+@(taxYear: TaxYearModel)(implicit request: Request[_], messages: Messages)
+
+@main_template(
+    Messages("calc.nonresident.outsideTaxYears.title")
+) {
+
+    <a id="back-link" class="back-link" href="@controllers.routes.DisposalDateController.disposalDate().url">@Messages("calc.base.back")</a>
+
+    <h1 class="heading-large">@Messages("calc.nonresident.outsideTaxYears.title")</h1>
+
+    <p class="lede">@Messages("calc.nonresident.outsideTaxYears.message", taxYear.calculationTaxYear)</p>
+
+    <a href="@controllers.routes.SoldOrGivenAwayController.soldOrGivenAway().url" id="continue-button" class="button">@Messages("calc.base.button.continue")</a>
+
+}

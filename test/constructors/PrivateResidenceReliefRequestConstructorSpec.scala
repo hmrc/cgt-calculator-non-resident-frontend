@@ -88,12 +88,15 @@ class PrivateResidenceReliefRequestConstructorSpec extends UnitSpec{
     ImprovementsModel("No", None, None),
     None
   )
+  val propertyLivedInModel = PropertyLivedInModel(true)
 
   "Calling the privateResidenceReliefQuery method" should {
 
     "return a string made up of the smaller substring methods" in {
       val privateResidenceReliefModel = PrivateResidenceReliefModel("Yes", Some(4), Some(5))
-      val result = PrivateResidenceReliefRequestConstructor.privateResidenceReliefQuery(modelWithValidDates, Some(privateResidenceReliefModel))
+      val result = PrivateResidenceReliefRequestConstructor.privateResidenceReliefQuery(modelWithValidDates,
+        Some(privateResidenceReliefModel),
+        Some(propertyLivedInModel))
 
       result shouldBe PrivateResidenceReliefRequestConstructor.eligibleForPrivateResidenceRelief(Some(privateResidenceReliefModel)) +
       PrivateResidenceReliefRequestConstructor.daysClaimed(modelWithValidDates, Some(privateResidenceReliefModel)) +
@@ -170,6 +173,33 @@ class PrivateResidenceReliefRequestConstructorSpec extends UnitSpec{
       val result = PrivateResidenceReliefRequestConstructor.daysClaimedAfter(modelWithRebasedValue, Some(privateResidenceReliefModel))
 
       result shouldBe "&daysClaimedAfter=5"
+    }
+  }
+
+  "Calling the checkLivedInProperty method" when {
+
+    "supplied with None" should {
+      val result = PrivateResidenceReliefRequestConstructor.checkLivedInProperty(None)
+
+      "return false" in {
+        result shouldEqual false
+      }
+    }
+
+    "property was lived in" should {
+      val result = PrivateResidenceReliefRequestConstructor.checkLivedInProperty(Some(propertyLivedInModel))
+
+      "return true" in {
+        result shouldEqual true
+      }
+    }
+
+    "property was not lived in" should {
+      val result = PrivateResidenceReliefRequestConstructor.checkLivedInProperty(Some(PropertyLivedInModel(false)))
+
+      "return false" in {
+        result shouldEqual false
+      }
     }
   }
 }

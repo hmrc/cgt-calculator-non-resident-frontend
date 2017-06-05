@@ -148,11 +148,15 @@ class DeductionDetailsConstructorSpec extends UnitSpec with WithFakeApplication 
 
   "Calling .deductionDetailsRows" when {
 
-    "provided with reliefs and prr" should {
-      lazy val result = DeductionDetailsConstructor.deductionDetailsRows(validDates, Some(yesPRRModel))
+    "provided with reliefs, prr and property lived in" should {
+      lazy val result = DeductionDetailsConstructor.deductionDetailsRows(validDates, Some(yesPRRModel), Some(PropertyLivedInModel(true)))
 
       "have a sequence of size 3" in {
-        result.size shouldBe 3
+        result.size shouldBe 4
+      }
+
+      "return a sequence with a property lived in question answer" in {
+        result.contains(DeductionDetailsConstructor.propertyLivedInQuestionRow(Some(PropertyLivedInModel(true))))
       }
 
       "return a sequence with a prr question answer" in {
@@ -165,6 +169,43 @@ class DeductionDetailsConstructorSpec extends UnitSpec with WithFakeApplication 
 
       "return a sequence with the days claimed after answer" in {
         result.contains(DeductionDetailsConstructor.privateResidenceReliefDaysClaimedAfterRow(Some(yesPRRModel), validDates).get)
+      }
+    }
+  }
+
+  "Calling .propertyLivedInQuestionRow" when {
+    "provided with no propertyLivedInModel" should {
+      "return an empty sequence" in {
+        lazy val result = DeductionDetailsConstructor.propertyLivedInQuestionRow(None)
+
+        result shouldBe Seq()
+      }
+    }
+
+    "provided with a propertyLivedInModel with a false value" should {
+
+      lazy val result = DeductionDetailsConstructor.propertyLivedInQuestionRow(Some(PropertyLivedInModel(false)))
+
+      "has a head of type QuestionAnswerModel[String]" in {
+        result.head shouldBe an[QuestionAnswerModel[String]]
+      }
+
+      "and a length of 1" in {
+        result.length shouldBe 1
+      }
+    }
+
+    "provided with a propertyLivedInModel with a true value" should {
+      "return a sequence " which {
+        lazy val result = DeductionDetailsConstructor.propertyLivedInQuestionRow(Some(PropertyLivedInModel(true)))
+
+        "has a head of type QuestionAnswerModel[String]" in {
+          result.head shouldBe an[QuestionAnswerModel[String]]
+        }
+
+        "and a length of 1" in {
+          result.length shouldBe 1
+        }
       }
     }
   }

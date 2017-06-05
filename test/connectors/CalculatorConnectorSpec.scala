@@ -308,7 +308,8 @@ class CalculatorConnectorSpec extends UnitSpec with MockitoSugar {
     val target = setupMockedConnector(model, calculationResultsWithPRRModel = Some(validResponse))
 
     "return a valid response" in {
-      val result = target.calculateTaxableGainAfterPRR(model, PrivateResidenceReliefModel("No", None, None))
+      val result = target.calculateTaxableGainAfterPRR(model, PrivateResidenceReliefModel("No", None, None),
+        PropertyLivedInModel(true))
 
       await(result) shouldBe Some(validResponse)
     }
