@@ -52,6 +52,8 @@ class PrivateResidenceReliefActionSpec extends UnitSpec with WithFakeApplication
     val mockCalcConnector = mock[CalculatorConnector]
     val mockAnswersConstructor = mock[AnswersConstructor]
 
+    val totalGainResultsModel = TotalGainResultsModel(1, Some(0), Some(0))
+
     when(mockCalcConnector.saveFormData[PrivateResidenceReliefModel](
       ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(mock[CacheMap])
@@ -72,11 +74,19 @@ class PrivateResidenceReliefActionSpec extends UnitSpec with WithFakeApplication
       ArgumentMatchers.eq(KeystoreKeys.rebasedValue))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(rebasedValueData))
 
-    when(mockCalcConnector.calculateTaxableGainAfterPRR(ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any()))
+    when(mockCalcConnector.calculateTaxableGainAfterPRR(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(calculationResultsWithPRRModel)
 
     when(mockAnswersConstructor.getNRTotalGainAnswers(ArgumentMatchers.any()))
       .thenReturn(mock[TotalGainAnswersModel])
+
+    when(mockCalcConnector.fetchAndGetFormData[PropertyLivedInModel](ArgumentMatchers.eq(KeystoreKeys.propertyLivedIn))
+      (ArgumentMatchers.any(), ArgumentMatchers.any()))
+      .thenReturn(Future.successful(Some(PropertyLivedInModel(true))))
+
+    when(mockCalcConnector.calculateTotalGain(ArgumentMatchers.any())(ArgumentMatchers.any()))
+      .thenReturn(Future.successful(Some(totalGainResultsModel)))
+
 
     new PrivateResidenceReliefController {
       override val calcConnector: CalculatorConnector = mockCalcConnector

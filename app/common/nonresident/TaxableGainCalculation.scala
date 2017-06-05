@@ -28,25 +28,42 @@ import scala.concurrent.Future
 
 object TaxableGainCalculation {
 
-  def getPRRResponse(totalGainResultsModel: TotalGainResultsModel,
-                     calcConnector: CalculatorConnector)(implicit hc: HeaderCarrier):
-  Future[Option[PrivateResidenceReliefModel]] = {
+  def checkGainExists(totalGainResultsModel: TotalGainResultsModel): Future[Boolean]= {
     val optionSeq = Seq(totalGainResultsModel.rebasedGain, totalGainResultsModel.timeApportionedGain).flatten
     val finalSeq = Seq(totalGainResultsModel.flatGain) ++ optionSeq
 
-    if (finalSeq.exists(_ > 0)) {
-      calcConnector.fetchAndGetFormData[PrivateResidenceReliefModel](KeystoreKeys.privateResidenceRelief)
+    Future.successful(finalSeq.exists(_ > 0))
+  }
+
+  def getPropertyLivedInResponse(gainExists: Boolean, calcConnector: CalculatorConnector)
+                                (implicit hc: HeaderCarrier): Future[Option[PropertyLivedInModel]] = {
+    if (gainExists) {
+      calcConnector.fetchAndGetFormData[PropertyLivedInModel](KeystoreKeys.propertyLivedIn)
     } else Future(None)
   }
 
-  def getPRRIfApplicable(totalGainAnswersModel: TotalGainAnswersModel,
+  def getPrrResponse(propertyLivedInResponse: Option[PropertyLivedInModel],
+                     calcConnector: CalculatorConnector)(implicit hc: HeaderCarrier):
+  Future[Option[PrivateResidenceReliefModel]] = {
+    propertyLivedInResponse match {
+      case Some(data) if data.propertyLivedIn =>
+        calcConnector.fetchAndGetFormData[PrivateResidenceReliefModel](KeystoreKeys.privateResidenceRelief)
+      case _ => Future(None)
+    }
+  }
+
+  def getPrrIfApplicable(totalGainAnswersModel: TotalGainAnswersModel,
                          privateResidenceReliefModel: Option[PrivateResidenceReliefModel],
+                         propertyLivedInModel: Option[PropertyLivedInModel],
                          calcConnector: CalculatorConnector)(implicit hc: HeaderCarrier):
   Future[Option[CalculationResultsWithPRRModel]] = {
 
-    privateResidenceReliefModel match {
-      case Some(data) => calcConnector.calculateTaxableGainAfterPRR(totalGainAnswersModel, data)
-      case None => Future.successful(None)
+    (propertyLivedInModel, privateResidenceReliefModel) match {
+      case (Some(propertyLivedIn), Some(prrModel)) =>
+        calcConnector.calculateTaxableGainAfterPRR(totalGainAnswersModel,
+          prrModel,
+          propertyLivedIn)
+      case _ => Future.successful(None)
     }
   }
 
@@ -86,12 +103,17 @@ object TaxableGainCalculation {
 
   def getChargeableGain(totalGainAnswersModel: TotalGainAnswersModel,
                         prrModel: Option[PrivateResidenceReliefModel],
+                        propertyLivedInModel: Option[PropertyLivedInModel],
                         personalDetailsModel: Option[TotalPersonalDetailsCalculationModel],
                         maxAEA: BigDecimal,
                         calcConnector: CalculatorConnector)(implicit hc: HeaderCarrier): Future[Option[CalculationResultsWithTaxOwedModel]] = {
 
     personalDetailsModel match {
-      case Some(data) => calcConnector.calculateNRCGTTotalTax(totalGainAnswersModel, prrModel, personalDetailsModel, maxAEA)
+      case Some(_) => calcConnector.calculateNRCGTTotalTax(totalGainAnswersModel,
+        prrModel,
+        propertyLivedInModel,
+        personalDetailsModel,
+        maxAEA)
       case None => Future(None)
     }
   }

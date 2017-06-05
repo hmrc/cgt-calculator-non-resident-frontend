@@ -17,7 +17,7 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import common.TaxDates
+import common.nonresident.TaxableGainCalculation._
 import common.nonresident.CalculationType
 import connectors.CalculatorConnector
 import constructors.{AnswersConstructor, CalculationElectionConstructor, YourAnswersConstructor}
@@ -25,10 +25,10 @@ import controllers.predicates.ValidActiveSession
 import models._
 import play.api.mvc.{Action, AnyContent, Result}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
-import uk.gov.hmrc.play.http.HeaderCarrier
 import views.html.calculation
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
+import scala.concurrent.ExecutionContext.Implicits.global
 
 import scala.concurrent.Future
 
@@ -50,37 +50,10 @@ trait CheckYourAnswersController extends FrontendController with ValidActiveSess
     case Some(_) =>
       Future.successful(controllers.routes.BroughtForwardLossesController.broughtForwardLosses().url)
     case _ =>
-      val totalGainResults: Seq[BigDecimal] = Seq(totalGainResultsModel.flatGain) ++
-        Seq(totalGainResultsModel.rebasedGain, totalGainResultsModel.timeApportionedGain).flatten
-
-      if (!totalGainResults.forall(_ <= 0))
-        Future.successful(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief().url)
-      else
-        Future.successful(controllers.routes.ImprovementsController.improvements().url)
-
-  }
-
-  def getPRRModel(totalGainResultsModel: Option[TotalGainResultsModel])(implicit hc: HeaderCarrier): Future[Option[PrivateResidenceReliefModel]] = {
-    totalGainResultsModel match {
-      case Some(model) =>
-        val totalGainResults: Seq[BigDecimal] = Seq(model.flatGain) ++ Seq(model.rebasedGain, model.timeApportionedGain).flatten
-
-        if (!totalGainResults.forall(_ <= 0)) {
-          calculatorConnector.fetchAndGetFormData[PrivateResidenceReliefModel](KeystoreKeys.privateResidenceRelief)
-        } else Future(None)
-      case _ => Future(None)
-    }
-  }
-
-  def calculateTaxableGainWithPRR(privateResidenceReliefModel: Option[PrivateResidenceReliefModel],
-                                  totalGainAnswersModel: TotalGainAnswersModel)
-                                 (implicit hc: HeaderCarrier): Future[Option[CalculationResultsWithPRRModel]] = {
-    privateResidenceReliefModel match {
-      case Some(data) if !TaxDates.dateAfterStart(totalGainAnswersModel.acquisitionDateModel.get) => {
-        calculatorConnector.calculateTaxableGainAfterPRR(totalGainAnswersModel, data)
+      checkGainExists(totalGainResultsModel).map { gain =>
+        if(gain) controllers.routes.PrivateResidenceReliefController.privateResidenceRelief().url
+        else controllers.routes.ImprovementsController.improvements().url
       }
-      case _ => Future.successful(None)
-    }
   }
 
   def redirectRoute(calculationResultsWithPRRModel: Option[CalculationResultsWithPRRModel],
@@ -94,51 +67,17 @@ trait CheckYourAnswersController extends FrontendController with ValidActiveSess
     }
   }
 
-  def calculatePRRIfApplicable(totalGainAnswersModel: TotalGainAnswersModel,
-                               privateResidenceReliefModel: Option[PrivateResidenceReliefModel])(implicit hc: HeaderCarrier):
-  Future[Option[CalculationResultsWithPRRModel]] = {
-
-    privateResidenceReliefModel match {
-      case Some(data) => calculatorConnector.calculateTaxableGainAfterPRR(totalGainAnswersModel, data)
-      case None => Future.successful(None)
-    }
-  }
-
-  def checkAndGetFinalSectionsAnswers(totalGainResultsModel: TotalGainResultsModel,
-                                      calculationResultsWithPRRModel: Option[CalculationResultsWithPRRModel])(implicit hc: HeaderCarrier):
-  Future[Option[TotalPersonalDetailsCalculationModel]] = {
-
-    calculationResultsWithPRRModel match {
-
-      case Some(data) =>
-        val totalGainResults: Seq[GainsAfterPRRModel] = Seq(data.flatResult) ++
-          Seq(data.rebasedResult, data.timeApportionedResult).flatten
-
-        if (!totalGainResults.forall(_.taxableGain <= 0)) {
-          answersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers(hc)
-        } else Future(None)
-
-      case None =>
-        val results: Seq[BigDecimal] = Seq(totalGainResultsModel.flatGain) ++
-          Seq(totalGainResultsModel.rebasedGain, totalGainResultsModel.timeApportionedGain).flatten
-
-        if (!results.forall(_ <= 0)) {
-          answersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers(hc)
-        } else Future(None)
-    }
-  }
-
-
   val checkYourAnswers: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     for {
       model <- answersConstructor.getNRTotalGainAnswers
       totalGainResult <- calculatorConnector.calculateTotalGain(model)
-      prrModel <- getPRRModel(totalGainResult)
-      propertyLivedInModel <-  calculatorConnector.fetchAndGetFormData[PropertyLivedInModel](KeystoreKeys.propertyLivedIn)
-      totalGainWithPRRResult <- calculatePRRIfApplicable(model, prrModel)
-      finalAnswers <- checkAndGetFinalSectionsAnswers(totalGainResult.get, totalGainWithPRRResult)
-      answers <- Future.successful(YourAnswersConstructor.fetchYourAnswers(model, prrModel, finalAnswers, propertyLivedInModel))
+      gainExists <- checkGainExists(totalGainResult.get)
+      propertyLivedIn <- getPropertyLivedInResponse(gainExists, calculatorConnector)
+      prrModel <- getPrrResponse(propertyLivedIn, calculatorConnector)
+      totalGainWithPRRResult <- getPrrIfApplicable(model, prrModel, propertyLivedIn, calculatorConnector)
+      finalAnswers <- getFinalSectionsAnswers(totalGainResult.get, totalGainWithPRRResult, calculatorConnector, answersConstructor)
+      answers <- Future.successful(YourAnswersConstructor.fetchYourAnswers(model, prrModel, finalAnswers, propertyLivedIn))
       backLink <- getBackLink(totalGainResult.get, model.acquisitionDateModel, finalAnswers)
     } yield {
       Ok(calculation.checkYourAnswers(answers, backLink))
@@ -155,14 +94,15 @@ trait CheckYourAnswersController extends FrontendController with ValidActiveSess
       case (Some(_)) =>
         calculatorConnector.saveFormData[CalculationElectionModel](KeystoreKeys.calculationElection, CalculationElectionModel(CalculationType.flat))
         redirectRoute(taxableGainModel, model.get)
-      case (None) => Future.successful(Redirect(common.DefaultRoutes.missingDataRoute))
     }
 
     for {
       allAnswersModel <- answersConstructor.getNRTotalGainAnswers
       totalGains <- calculatorConnector.calculateTotalGain(allAnswersModel)
-      prrModel <- getPRRModel(totalGains)
-      taxableGainWithPrr <- calculateTaxableGainWithPRR(prrModel, allAnswersModel)
+      gainExists <- checkGainExists(totalGains.get)
+      propertyLivedIn <- getPropertyLivedInResponse(gainExists, calculatorConnector)
+      prrModel <- getPrrResponse(propertyLivedIn, calculatorConnector)
+      taxableGainWithPrr <- getPrrIfApplicable(allAnswersModel, prrModel, propertyLivedIn, calculatorConnector)
       route <- routeRequest(totalGains, taxableGainWithPrr)
     } yield route
   }

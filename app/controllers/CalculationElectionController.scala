@@ -17,7 +17,7 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import common.TaxDates
+import common.nonresident.TaxableGainCalculation._
 import connectors.CalculatorConnector
 import constructors.{AnswersConstructor, CalculationElectionConstructor}
 import controllers.predicates.ValidActiveSession
@@ -72,12 +72,11 @@ trait CalculationElectionController extends FrontendController with ValidActiveS
     else Future.successful(false)
   }
 
-  private def getPRRResponse(totalGainResultsModel: TotalGainResultsModel)(implicit hc: HeaderCarrier): Future[Option[PrivateResidenceReliefModel]] = {
-    val results = Seq(totalGainResultsModel.flatGain) ++ Seq(totalGainResultsModel.rebasedGain, totalGainResultsModel.timeApportionedGain).flatten
+  private def checkGainExists(totalGainResultsModel: TotalGainResultsModel): Future[Boolean] = {
+    val optionSeq = Seq(totalGainResultsModel.rebasedGain, totalGainResultsModel.timeApportionedGain).flatten
+    val finalSeq = Seq(totalGainResultsModel.flatGain) ++ optionSeq
 
-    if (results.exists(_ > 0)) {
-      calcConnector.fetchAndGetFormData[PrivateResidenceReliefModel](KeystoreKeys.privateResidenceRelief)
-    } else Future(None)
+    Future.successful(finalSeq.exists(_ > 0))
   }
 
   private def getBackLink(totalGainResultsModel: TotalGainResultsModel): Future[String] = {
@@ -88,56 +87,21 @@ trait CalculationElectionController extends FrontendController with ValidActiveS
     } else Future.successful(routes.CheckYourAnswersController.checkYourAnswers().url)
   }
 
-  private def getPRRIfApplicable(totalGainAnswersModel: TotalGainAnswersModel,
-                                 privateResidenceReliefModel: Option[PrivateResidenceReliefModel])(implicit hc: HeaderCarrier):
-  Future[Option[CalculationResultsWithPRRModel]] = {
-
-    privateResidenceReliefModel match {
-      case Some(data) => calcConnector.calculateTaxableGainAfterPRR(totalGainAnswersModel, data)
-      case None => Future.successful(None)
-    }
-  }
-
-  private def getFinalSectionsAnswers(totalGainResultsModel: TotalGainResultsModel,
-                                      calculationResultsWithPRRModel: Option[CalculationResultsWithPRRModel])(implicit hc: HeaderCarrier):
-  Future[Option[TotalPersonalDetailsCalculationModel]] = {
-
-    calculationResultsWithPRRModel match {
-
-      case Some(data) =>
-        val results = data.flatResult :: List(data.rebasedResult, data.timeApportionedResult).flatten
-
-        if (results.exists(_.taxableGain > 0)) {
-          calcAnswersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers(hc)
-        } else Future(None)
-
-      case None =>
-        val gains = totalGainResultsModel.flatGain :: List(totalGainResultsModel.rebasedGain, totalGainResultsModel.timeApportionedGain).flatten
-
-        if (gains.exists(_ > 0)) {
-          calcAnswersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers(hc)
-        } else Future(None)
-    }
-  }
-
-  private def getMaxAEA(taxYear: Option[TaxYearModel])(implicit hc: HeaderCarrier): Future[Option[BigDecimal]] = {
-    calcConnector.getFullAEA(TaxDates.taxYearStringToInteger(taxYear.get.calculationTaxYear))
-  }
-
-  private def getTaxYear(totalGainAnswersModel: TotalGainAnswersModel)(implicit hc: HeaderCarrier): Future[Option[TaxYearModel]] = {
-    val date = totalGainAnswersModel.disposalDateModel
-    calcConnector.getTaxYear(s"${date.year}-${date.month}-${date.day}")
-  }
-
   private def getTaxOwedIfApplicable(totalGainAnswersModel: TotalGainAnswersModel,
                                      prrModel: Option[PrivateResidenceReliefModel],
                                      totalTaxOwedModel: Option[TotalPersonalDetailsCalculationModel],
                                      maxAEA: BigDecimal,
-                                     otherReliefs: Option[AllOtherReliefsModel])
+                                     otherReliefs: Option[AllOtherReliefsModel],
+                                     propertyLivedInModel: Option[PropertyLivedInModel])
                                     (implicit hc: HeaderCarrier): Future[Option[CalculationResultsWithTaxOwedModel]] = {
 
     totalTaxOwedModel match {
-      case Some(_) => calcConnector.calculateNRCGTTotalTax(totalGainAnswersModel, prrModel, totalTaxOwedModel, maxAEA, otherReliefs)
+      case Some(_) => calcConnector.calculateNRCGTTotalTax(totalGainAnswersModel,
+        prrModel,
+        propertyLivedInModel,
+        totalTaxOwedModel,
+        maxAEA,
+        otherReliefs)
       case None => Future(None)
     }
   }
@@ -175,15 +139,17 @@ trait CalculationElectionController extends FrontendController with ValidActiveS
     for {
       totalGainAnswers <- calcAnswersConstructor.getNRTotalGainAnswers(hc)
       totalGain <- calcConnector.calculateTotalGain(totalGainAnswers)(hc)
-      prrAnswers <- getPRRResponse(totalGain.get)(hc)
+      gainExists <- checkGainExists(totalGain.get)
+      propertyLivedIn <- getPropertyLivedInResponse(gainExists, calcConnector)(hc)
+      prrAnswers <- getPrrResponse(propertyLivedIn, calcConnector)(hc)
       isClaimingReliefs <- determineClaimingReliefs(totalGain.get)
+      totalGainWithPRR <- getPrrIfApplicable(totalGainAnswers, prrAnswers, propertyLivedIn, calcConnector)
+      allAnswers <- getFinalSectionsAnswers(totalGain.get, totalGainWithPRR, calcConnector, calcAnswersConstructor)
       backLink <- getBackLink(totalGain.get)
-      totalGainWithPRR <- getPRRIfApplicable(totalGainAnswers, prrAnswers)
-      allAnswers <- getFinalSectionsAnswers(totalGain.get, totalGainWithPRR)
       otherReliefs <- getAllOtherReliefs(allAnswers)
-      taxYear <- getTaxYear(totalGainAnswers)
-      maxAEA <- getMaxAEA(taxYear)
-      taxOwed <- getTaxOwedIfApplicable(totalGainAnswers, prrAnswers, allAnswers, maxAEA.get, otherReliefs)
+      taxYear <- getTaxYear(totalGainAnswers, calcConnector)
+      maxAEA <- getMaxAEA(taxYear, calcConnector)
+      taxOwed <- getTaxOwedIfApplicable(totalGainAnswers, prrAnswers, allAnswers, maxAEA.get, otherReliefs, propertyLivedIn)
       content <- calcElectionConstructor.generateElection(totalGain.get, totalGainWithPRR, taxOwed, otherReliefs)
       finalResult <- action(orderElements(content, isClaimingReliefs), isClaimingReliefs, backLink)
     } yield finalResult
@@ -211,15 +177,17 @@ trait CalculationElectionController extends FrontendController with ValidActiveS
       for {
         totalGainAnswers <- calcAnswersConstructor.getNRTotalGainAnswers(hc)
         totalGain <- calcConnector.calculateTotalGain(totalGainAnswers)(hc)
-        prrAnswers <- getPRRResponse(totalGain.get)(hc)
+        gainExists <- checkGainExists(totalGain.get)
+        propertyLivedIn <- getPropertyLivedInResponse(gainExists, calcConnector)(hc)
+        prrAnswers <- getPrrResponse(propertyLivedIn, calcConnector)(hc)
         isClaimingReliefs <- determineClaimingReliefs(totalGain.get)
+        totalGainWithPRR <- getPrrIfApplicable(totalGainAnswers, prrAnswers, propertyLivedIn, calcConnector)
+        allAnswers <- getFinalSectionsAnswers(totalGain.get, totalGainWithPRR, calcConnector, calcAnswersConstructor)
         backLink <- getBackLink(totalGain.get)
-        totalGainWithPRR <- getPRRIfApplicable(totalGainAnswers, prrAnswers)
-        allAnswers <- getFinalSectionsAnswers(totalGain.get, totalGainWithPRR)
         otherReliefs <- getAllOtherReliefs(allAnswers)
-        taxYear <- getTaxYear(totalGainAnswers)
-        maxAEA <- getMaxAEA(taxYear)
-        taxOwed <- getTaxOwedIfApplicable(totalGainAnswers, prrAnswers, allAnswers, maxAEA.get, otherReliefs)
+        taxYear <- getTaxYear(totalGainAnswers, calcConnector)
+        maxAEA <- getMaxAEA(taxYear, calcConnector)
+        taxOwed <- getTaxOwedIfApplicable(totalGainAnswers, prrAnswers, allAnswers, maxAEA.get, otherReliefs, propertyLivedIn)
         content <- calcElectionConstructor.generateElection(totalGain.get, totalGainWithPRR, taxOwed, otherReliefs)
       } yield {
         action(orderElements(content, isClaimingReliefs), isClaimingReliefs, backLink)
@@ -228,5 +196,4 @@ trait CalculationElectionController extends FrontendController with ValidActiveS
 
     calculationElectionForm.bindFromRequest.fold(errorAction, successAction)
   }
-
 }

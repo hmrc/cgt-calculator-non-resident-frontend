@@ -76,7 +76,8 @@ class CalculationElectionActionSpec extends UnitSpec with WithFakeApplication wi
       .thenReturn(Future.successful(Some(BigDecimal(5500))))
 
     when(mockCalcConnector.calculateNRCGTTotalTax(
-      ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any()))
+      ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any(),
+      ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(Future.successful(taxOwedResult))
 
     when(mockCalcConnector.getTaxYear(ArgumentMatchers.any())(ArgumentMatchers.any()))
@@ -90,8 +91,12 @@ class CalculationElectionActionSpec extends UnitSpec with WithFakeApplication wi
       ArgumentMatchers.eq(KeystoreKeys.privateResidenceRelief))(ArgumentMatchers.any(), ArgumentMatchers.any()))
     .thenReturn(Future.successful(Some(PrivateResidenceReliefModel("Yes", Some(0), Some(0)))))
 
-    when(mockCalcConnector.calculateTaxableGainAfterPRR(ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any()))
+    when(mockCalcConnector.calculateTaxableGainAfterPRR(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any()))
     .thenReturn(Future.successful(Some(CalculationResultsWithPRRModel(GainsAfterPRRModel(0, 0, 0), None, None))))
+
+    when(mockCalcConnector.fetchAndGetFormData[PropertyLivedInModel](ArgumentMatchers.eq(KeystoreKeys.propertyLivedIn))
+      (ArgumentMatchers.any(), ArgumentMatchers.any()))
+      .thenReturn(Future.successful(Some(PropertyLivedInModel(true))))
 
     new CalculationElectionController {
       override val calcConnector: CalculatorConnector = mockCalcConnector
