@@ -8,9 +8,9 @@ percentageTotalGain: BigDecimal = 0, percentageOfGain: Int = 0)(implicit request
     <h2>@Messages("calc.summaryPartial.workingOutSectionHeading")</h2>
     <p class="lede">
         @{calculationType match {
-            case CalculationType.flat => Messages("calc.calculationElection.message.flat")
-            case CalculationType.rebased => <span>{Messages("calc.calculationElection.message.rebased")}</span> <span class="no-wrap"> {Messages("calc.calculationElection.message.rebasedDate")}</span>
-            case CalculationType.timeApportioned => <span>{Messages("calc.calculationElection.message.time")}</span> <span class="no-wrap"> {Messages("calc.calculationElection.message.timeDate")}</span>
+            case CalculationType.flat => Messages("calc.summary.flat.description")
+            case CalculationType.rebased => <span>{Messages("calc.summary.rebased.description")}</span> <span class="no-wrap"> {Messages("calc.calculationElection.message.rebasedDate")}</span>
+            case CalculationType.timeApportioned => <span>{Messages("calc.summary.time.description")}</span> <span class="no-wrap"> {Messages("calc.calculationElection.message.timeDate")}</span>
             }
         }
     </p>

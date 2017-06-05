@@ -445,6 +445,10 @@ calc.summary.calculation.details.flatCalculation = How much you''ve gained on th
 calc.summary.calculation.details.rebasedCalculation = How much you''ve gained on the property since 5 April 2015
 calc.summary.calculation.details.lossCarriedForward = Loss carried forward
 calc.summary.warning.taxYear = Your total might be less accurate because you didn''t sell or give away your property in this tax year
+calc.summary.flat.description = Gain over whole period of ownership method: based on the amount you''ve gained on the property since you became the owner
+calc.summary.time.description = Straight-line apportionment method: based on the percentage of your total gain made since
+calc.summary.rebased.description = Rebasing method: based on the amount you''ve gained on the property since
+
 
 calc.report.title = Calculate your Capital Gains Tax
 calc.report.logoText = HM Revenue & Customs
