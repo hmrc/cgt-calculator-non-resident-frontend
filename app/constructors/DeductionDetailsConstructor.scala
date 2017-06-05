@@ -29,6 +29,12 @@ object DeductionDetailsConstructor {
     acquisitionDateModel.get.plusMonths(18).isBefore(disposalDateModel.get)
   }
 
+  def acquisitionAfterPropertyDisposalOver18Month(acquisitionDateModel: AcquisitionDateModel, disposalDateModel: DisposalDateModel): Boolean = {
+    //When acquisition date is after 6th April 2015,
+    // and property is disposed more than 18 months later
+    acquisitionDateModel.get.isAfter(TaxDates.taxStartDate) && acquisitionDateModel.get.plusMonths(18).isBefore(disposalDateModel.get)
+  }
+
   def deductionDetailsRows(answers: TotalGainAnswersModel,
                            privateResidenceReliefModel: Option[PrivateResidenceReliefModel] = None,
                            livedIn: Option[PropertyLivedInModel]): Seq[QuestionAnswerModel[Any]] = {
@@ -86,14 +92,22 @@ object DeductionDetailsConstructor {
 
   def privateResidenceReliefDaysClaimedBeforeRow(prr: Option[PrivateResidenceReliefModel],
                                                  answers: TotalGainAnswersModel): Option[QuestionAnswerModel[String]] = {
-    prr match {
-      case Some(PrivateResidenceReliefModel("Yes", Some(value), _)) if datesOutsideRangeCheck(answers.acquisitionDateModel, answers.disposalDateModel) =>
+    val datesOutside = datesOutsideRangeCheck(answers.acquisitionDateModel, answers.disposalDateModel)
+    val acquisitionPostTaxStartDisposalPost18Month = acquisitionAfterPropertyDisposalOver18Month(answers.acquisitionDateModel, answers.disposalDateModel)
+    (prr, datesOutside, acquisitionPostTaxStartDisposalPost18Month) match {
+      case (Some(PrivateResidenceReliefModel("Yes", Some(value), _)), true, false) =>
         Some(QuestionAnswerModel(
           s"${keys.privateResidenceRelief}-daysClaimed",
           value.toString(),
           Messages("calc.privateResidenceRelief.firstQuestion"),
           Some(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief().url)
         ))
+      case (Some(PrivateResidenceReliefModel("Yes", Some(value), _)), _, true) =>
+        Some(QuestionAnswerModel(
+          s"${keys.privateResidenceRelief}-daysClaimed",
+          value.toString(),
+          Messages("calc.privateResidenceRelief.questionFlat", Dates.dateMinusMonths(answers.disposalDateModel, 18)),
+          Some(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief().url)))
       case _ => None
     }
   }
