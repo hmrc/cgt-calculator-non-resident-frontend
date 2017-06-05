@@ -67,7 +67,8 @@ object MessageLookup {
       val bulletTitle = "This is what you paid for:"
       val bulletOne = "estate agents or auctioneers"
       val bulletTwo = "solicitors or conveyancers, including Stamp Duty Land Tax"
-      val bulletThree = "any professional help to value the property, eg surveyor or valuer (this includes any valuations at 31 March 1982)"
+      val bulletThree = "any professional help to value the property, for example, surveyor or valuer"
+      val bulletThreeBeforeLegislation = "any professional help to value the property, for example, surveyor or valuer (this includes any valuations at 31 March 1982)"
       val hint ="If you owned the property with someone else, only enter your share of the costs, as agreed with your co-owner."
 
       def errorMaximum(value: String): String = s"Enter an amount that's £$value or less"
@@ -76,10 +77,10 @@ object MessageLookup {
     object AcquisitionDate {
       val question = "What date did you sign the contract to become the owner?"
       val questionTwo = "What was the date you signed the contract that made you the owner?"
-      val hintText = "If you inherited the property, it is the date that the previous owner died."
+      val hintText = "If you inherited the property, it's the date that the previous owner died."
       val errorIncompleteDate = "Date is not valid"
-      val errorFutureDate = "Date must be in the past"
-      val errorFutureDateGuidance = "Enter a date from the past"
+      val errorFutureDate = "Enter a date from the past"
+      val errorFutureDateGuidance = "Date must be in the past"
     }
 
     object AcquisitionValue {

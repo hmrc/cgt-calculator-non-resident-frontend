@@ -29,12 +29,10 @@ import play.api.Play.current
 
 class AcquisitionCostsViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
-
-
   "Acquisition costs view" when {
 
-    "supplied with no errors" should {
-      lazy val view = acquisitionCosts(acquisitionCostsForm, "back-link")
+    "supplied with no errors and is owner before legislation start" should {
+      lazy val view = acquisitionCosts(acquisitionCostsForm, "back-link", ownerBeforeLegislation = true)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${messages.AcquisitionCosts.question}'" in {
@@ -91,8 +89,8 @@ class AcquisitionCostsViewSpec extends UnitSpec with WithFakeApplication with Mo
           list.select(":nth-child(2)").text() shouldBe messages.AcquisitionCosts.bulletTwo
         }
 
-        s"has a bullet point with the text '${messages.AcquisitionCosts.bulletThree}'" in {
-          list.select(":last-child").text() shouldBe messages.AcquisitionCosts.bulletThree
+        s"has a bullet point with the text '${messages.AcquisitionCosts.bulletThreeBeforeLegislation}'" in {
+          list.select(":last-child").text() shouldBe messages.AcquisitionCosts.bulletThreeBeforeLegislation
         }
 
         "has the class 'list list-bullet'" in {
@@ -138,15 +136,28 @@ class AcquisitionCostsViewSpec extends UnitSpec with WithFakeApplication with Mo
         }
       }
     }
-    }
 
-    "supplied with errors" should {
-      lazy val form = acquisitionCostsForm.bind(Map("acquisitionCosts" -> "a"))
-      lazy val view = acquisitionCosts(form, "back-link")
+    "is owner after legislation start" should {
+      lazy val view = acquisitionCosts(acquisitionCostsForm, "back-link", ownerBeforeLegislation = false)
       lazy val document = Jsoup.parse(view.body)
 
-      "have an error summary" in {
-        document.select("#error-summary-display").size() shouldBe 1
+      "have a list" which {
+        lazy val list = document.body().select("#helpList")
+
+        s"has a bullet point with the text '${messages.AcquisitionCosts.bulletThree}'" in {
+          list.select(":last-child").text() shouldBe messages.AcquisitionCosts.bulletThree
+        }
       }
     }
+  }
+
+  "supplied with errors" should {
+    lazy val form = acquisitionCostsForm.bind(Map("acquisitionCosts" -> "a"))
+    lazy val view = acquisitionCosts(form, "back-link", ownerBeforeLegislation = true)
+    lazy val document = Jsoup.parse(view.body)
+
+    "have an error summary" in {
+      document.select("#error-summary-display").size() shouldBe 1
+    }
+  }
 }

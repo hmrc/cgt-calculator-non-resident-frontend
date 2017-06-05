@@ -46,7 +46,7 @@ object AcquisitionDateForm {
     )(AcquisitionDateModel.apply)(AcquisitionDateModel.unapply)
       .verifying(Messages("calc.common.date.error.invalidDate"), fields =>
         isValidDate(fields.day, fields.month, fields.year))
-      .verifying(Messages("calc.nonResident.rebasedValue.errorFutureDate"), fields =>
+      .verifying(Messages("calc.acquisitionDate.errorFutureDateGuidance"), fields =>
         verifyDateInPast(fields))
   )
 

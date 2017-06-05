@@ -134,7 +134,10 @@ calc.annualExemptAmount.errorDecimalPlaces = Your allowance has too many numbers
 ## Acquisition Date ##
 calc.acquisitionDate.question = What date did you sign the contract to become the owner?
 calc.acquisitionDate.questionTwo = What was the date you signed the contract that made you the owner?
-calc.acquisitionDate.hintText = If you inherited the property, it is the date that the previous owner died.
+calc.acquisitionDate.hintText = If you inherited the property, it''s the date that the previous owner died.
+calc.acquisitionDate.errorIncompleteDate = Date is not valid
+calc.acquisitionDate.errorFutureDate = Date must be in the past
+calc.acquisitionDate.errorFutureDateGuidance = Enter a date from the past
 
 
 ## Acquisition Value ##
@@ -168,10 +171,6 @@ calc.nonResident.rebasedValue.jointOwnership = If you owned the property with so
 calc.nonResident.rebasedValue.errorNegative = Enter a positive value for your property on 5 April 2015
 calc.nonResident.rebasedValue.error.no.value.supplied = Enter a value for your property on 5 April 2015
 calc.nonResident.rebasedValue.errorDecimalPlaces = The value for your property on 5 April 2015 has too many numbers after the decimal point
-calc.nonResident.rebasedValue.errorIncompleteDate = Date is not valid
-calc.nonResident.rebasedValue.errorFutureDate = Date must be in the past
-calc.nonResident.rebasedValue.errorFutureDateGuidance = Enter a date from the past
-
 
 ## Rebased Costs ##
 calc.rebasedCosts.question = Did you pay to have the property valued at 5 April 2015?
@@ -236,7 +235,8 @@ calc.acquisitionCosts.errorDecimalPlaces = There are too many numbers after the 
 calc.acquisitionCosts.bulletTitle = This is what you paid for:
 calc.acquisitionCosts.bulletOne = estate agents or auctioneers
 calc.acquisitionCosts.bulletTwo = solicitors or conveyancers, including Stamp Duty Land Tax
-calc.acquisitionCosts.bulletThree = any professional help to value the property, eg surveyor or valuer (this includes any valuations at 31 March 1982)
+calc.acquisitionCosts.bulletThree = any professional help to value the property, for example, surveyor or valuer
+calc.acquisitionCosts.valuationsOnLegislationStart = (this includes any valuations at 31 March 1982)
 calc.acquisitionCosts.hint = If you owned the property with someone else, only enter your share of the costs, as agreed with your co-owner.
 
 ## Disposal Costs ##

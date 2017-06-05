@@ -11,8 +11,8 @@
     @defining(
         if(acquisitionDateForm.hasErrors) {
             if(acquisitionDateForm.errors.exists(_.message.contains(Messages("calc.common.date.error.invalidDate"))))
-                Some(Messages("calc.nonResident.rebasedValue.errorIncompleteDate"))
-            else Some(Messages("calc.nonResident.rebasedValue.errorFutureDateGuidance"))
+                Some(Messages("calc.acquisitionDate.errorIncompleteDate"))
+            else Some(Messages("calc.acquisitionDate.errorFutureDate"))
         } else None
     ) { additionalMessage =>
         @errorSummary(acquisitionDateForm, "acquisition-date", "acquisitionDateDay", additionalMessage)
