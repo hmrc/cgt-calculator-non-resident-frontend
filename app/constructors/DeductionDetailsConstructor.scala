@@ -29,6 +29,10 @@ object DeductionDetailsConstructor {
     acquisitionDateModel.get.plusMonths(18).isBefore(disposalDateModel.get)
   }
 
+  def acquisitionAfterPropertyDisposalOver18Month(acquisitionDateModel: AcquisitionDateModel, disposalDateModel: DisposalDateModel): Boolean = {
+    acquisitionDateModel.get.isAfter(TaxDates.taxStartDate) && acquisitionDateModel.get.plusMonths(18).isAfter(disposalDateModel.get)
+  }
+
   def deductionDetailsRows(answers: TotalGainAnswersModel,
                            privateResidenceReliefModel: Option[PrivateResidenceReliefModel] = None,
                            livedIn: Option[PropertyLivedInModel]): Seq[QuestionAnswerModel[Any]] = {
