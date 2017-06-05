@@ -93,9 +93,9 @@ object DeductionDetailsConstructor {
   def privateResidenceReliefDaysClaimedBeforeRow(prr: Option[PrivateResidenceReliefModel],
                                                  answers: TotalGainAnswersModel): Option[QuestionAnswerModel[String]] = {
     val datesOutsideRangeCheck = datesOutsideRangeCheck(answers.acquisitionDateModel, answers.disposalDateModel)
-    val acqusitionPostTaxStartDisposalPost18Month = acquisitionAfterPropertyDisposalOver18Month(answers.acquisitionDateModel, answers.disposalDateModel)
+    val acquisitionPostTaxStartDisposalPost18Month = acquisitionAfterPropertyDisposalOver18Month(answers.acquisitionDateModel, answers.disposalDateModel)
 
-    (prr, datesOutsideRangeCheck, acqusitionPostTaxStartDisposalPost18Month) match {
+    (prr, datesOutsideRangeCheck, acquisitionPostTaxStartDisposalPost18Month) match {
       case (Some(PrivateResidenceReliefModel("Yes", Some(value), _)), true, false) =>
         Some(QuestionAnswerModel(
           s"${keys.privateResidenceRelief}-daysClaimed",
@@ -107,8 +107,8 @@ object DeductionDetailsConstructor {
         Some(QuestionAnswerModel(
           s"${keys.privateResidenceRelief}-daysClaimed",
           value.toString(),
-          Messages("EDGE MESSAGE"),
-          Some(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief().url)
+          Messages("calc.privateResidenceRelief.questionFlat"),
+          Some(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief().url)))
       case _ => None
     }
   }
