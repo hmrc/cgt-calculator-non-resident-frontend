@@ -71,14 +71,14 @@ class CalculationElectionNoReliefsViewSpec extends UnitSpec with WithFakeApplica
 
       "have text in paragraphs" which {
 
-        lazy val helpText = doc.getElementsByTag("p")
+        lazy val helpText = doc.select("#help-text")
 
         s"contains the text ${messages.helpText}" in {
-          helpText.text should include(messages.helpText)
+          helpText.select("p").get(0).text should include(messages.helpText)
         }
 
         s"contains the text ${messages.helpTextMethodType(messages.rebasing)}" in {
-          helpText.text should include(messages.helpTextMethodType(messages.rebasing))
+          helpText.select("p").get(1).text should include(messages.helpTextMethodType(messages.rebasing))
         }
       }
 
@@ -131,7 +131,7 @@ class CalculationElectionNoReliefsViewSpec extends UnitSpec with WithFakeApplica
 
       "have text in a paragraph" which {
 
-        lazy val helpText = doc.getElementsByTag("p")
+        lazy val helpText = doc.select("#help-text")
 
         s"contains the text ${messages.helpTextMethodType(messages.flatGain)}" in {
           helpText.text should include(messages.helpTextMethodType(messages.flatGain))

@@ -133,11 +133,12 @@ object MessageLookup {
       val title = "Your calculation options"
       val helpText = "There are 3 ways we can calculate your Non-Resident Capital Gains Tax."
       def helpTextMethodType(method: String): String =
-        s"Based on the answers you've given, the $method will give you the lowest amount of tax to pay."
+        s"Based on your answers, the $method gives you the lowest amount of tax to pay." +
+          s" If two or three answers show zero tax to pay, this method preserves more of your losses and Capital Gains Tax allowance (Annual Exempt Amount) for the future."
       val helpTextChooseMethod = "You're free to choose another method if you wish."
-      val rebasing = "Rebasing method"
-      val flatGain = "Gain over whole period of ownership method"
-      val straightLine = "Straight-line apportionment method"
+      val rebasing = "rebasing method"
+      val flatGain = "gain over whole period of ownership method"
+      val straightLine = "straight-line apportionment method"
     }
 
     object CheckYourAnswers {
