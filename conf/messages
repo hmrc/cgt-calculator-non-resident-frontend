@@ -353,7 +353,7 @@ calc.calculationElection.description.time = Straight-line apportionment method
 calc.calculationElectionNoReliefs.title = Your calculation options
 calc.calculationElectionNoReliefs.helpText = There are 3 ways we can calculate your Non-Resident Capital Gains Tax.
 calc.calculationElectionNoReliefs.helpTextMethodPartOne = Based on your answers, the
-calc.calculationElectionNoReliefs.helpTextMethodPartTwo = gives you the lowest amount of tax to pay. If two or three answers show zero tax to pay, this method preserves more of your losses and tax-free Capital Gains Tax allowance for the future.
+calc.calculationElectionNoReliefs.helpTextMethodPartTwo = gives you the lowest amount of tax to pay. If two or three answers show zero tax to pay, this method preserves more of your losses and Capital Gains Tax allowance (Annual Exempt Amount) for the future.
 calc.calculationElectionNoReliefs.helpTextChooseMethod = You''re free to choose another method if you wish.
 
 ## Other Reliefs ##
