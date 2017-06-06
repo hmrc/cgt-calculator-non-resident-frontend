@@ -53,6 +53,9 @@ class CalculationElectionActionSpec extends UnitSpec with WithFakeApplication wi
     val mockCalcElectionConstructor = mock[CalculationElectionConstructor]
     val mockCalcAnswersConstructor = mock[AnswersConstructor]
 
+    when(mockCalcConnector.fetchAndGetFormData[OtherReliefsModel](ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      .thenReturn(Future.successful(Some(OtherReliefsModel(1000))))
+
     when(mockCalcConnector.fetchAndGetFormData[CalculationElectionModel](
       ArgumentMatchers.eq(KeystoreKeys.calculationElection))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
