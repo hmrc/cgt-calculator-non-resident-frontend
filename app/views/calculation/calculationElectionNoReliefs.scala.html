@@ -13,13 +13,15 @@
 
   <h1 class="heading-xlarge">@Messages("calc.calculationElectionNoReliefs.title")</h1>
 
-  <p>@Messages("calc.calculationElectionNoReliefs.helpText")</p>
+  <div id="help-text">
+    <p>@Messages("calc.calculationElectionNoReliefs.helpText")</p>
 
-  <p>
-    @Messages("calc.calculationElectionNoReliefs.helpTextMethodPartOne")
-    <strong>@content.head._4</strong>
-    @Messages("calc.calculationElectionNoReliefs.helpTextMethodPartTwo")
-  </p>
+    <p>
+      @Messages("calc.calculationElectionNoReliefs.helpTextMethodPartOne")
+      <strong>@content.head._4.toLowerCase</strong>
+      @Messages("calc.calculationElectionNoReliefs.helpTextMethodPartTwo")
+    </p>
+  </div>
 
   @form(action = controllers.routes.CalculationElectionController.submitCalculationElection) {
 
