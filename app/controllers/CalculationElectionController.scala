@@ -106,21 +106,21 @@ trait CalculationElectionController extends FrontendController with ValidActiveS
     }
   }
 
-  private def getAllOtherReliefs(totalPersonalDetailsCalculationModel: Option[TotalPersonalDetailsCalculationModel])
+  private def getAllOtherReliefs(totalGainResultsModel: TotalGainResultsModel)
                                 (implicit hc: HeaderCarrier): Future[Option[AllOtherReliefsModel]] = {
-    totalPersonalDetailsCalculationModel match {
-      case Some(_) =>
-        val flat = calcConnector.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsFlat)
-        val rebased = calcConnector.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsRebased)
-        val time = calcConnector.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsTA)
+    val results = Seq(totalGainResultsModel.flatGain) ++ Seq(totalGainResultsModel.rebasedGain, totalGainResultsModel.timeApportionedGain).flatten
 
-        for {
-          flatReliefs <- flat
-          rebasedReliefs <- rebased
-          timeReliefs <- time
-        } yield Some(AllOtherReliefsModel(flatReliefs, rebasedReliefs, timeReliefs))
-      case _ => Future.successful(None)
-    }
+    if (results.exists(_ > 0)) {
+      val flat = calcConnector.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsFlat)
+      val rebased = calcConnector.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsRebased)
+      val time = calcConnector.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsTA)
+
+      for {
+        flatReliefs <- flat
+        rebasedReliefs <- rebased
+        timeReliefs <- time
+      } yield Some(AllOtherReliefsModel(flatReliefs, rebasedReliefs, timeReliefs))
+    } else Future.successful(None)
   }
 
   val calculationElection: Action[AnyContent] = ValidateSession.async { implicit request =>
@@ -146,7 +146,7 @@ trait CalculationElectionController extends FrontendController with ValidActiveS
       totalGainWithPRR <- getPrrIfApplicable(totalGainAnswers, prrAnswers, propertyLivedIn, calcConnector)
       allAnswers <- getFinalSectionsAnswers(totalGain.get, totalGainWithPRR, calcConnector, calcAnswersConstructor)
       backLink <- getBackLink(totalGain.get)
-      otherReliefs <- getAllOtherReliefs(allAnswers)
+      otherReliefs <- getAllOtherReliefs(totalGain.get)
       taxYear <- getTaxYear(totalGainAnswers, calcConnector)
       maxAEA <- getMaxAEA(taxYear, calcConnector)
       taxOwed <- getTaxOwedIfApplicable(totalGainAnswers, prrAnswers, allAnswers, maxAEA.get, otherReliefs, propertyLivedIn)
@@ -184,7 +184,7 @@ trait CalculationElectionController extends FrontendController with ValidActiveS
         totalGainWithPRR <- getPrrIfApplicable(totalGainAnswers, prrAnswers, propertyLivedIn, calcConnector)
         allAnswers <- getFinalSectionsAnswers(totalGain.get, totalGainWithPRR, calcConnector, calcAnswersConstructor)
         backLink <- getBackLink(totalGain.get)
-        otherReliefs <- getAllOtherReliefs(allAnswers)
+        otherReliefs <- getAllOtherReliefs(totalGain.get)
         taxYear <- getTaxYear(totalGainAnswers, calcConnector)
         maxAEA <- getMaxAEA(taxYear, calcConnector)
         taxOwed <- getTaxOwedIfApplicable(totalGainAnswers, prrAnswers, allAnswers, maxAEA.get, otherReliefs, propertyLivedIn)
