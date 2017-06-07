@@ -410,7 +410,7 @@ object MessageLookup {
 
     object WorthBeforeLegislationStart {
       val question = "What was the market value of the property on 31 March 1982?"
-      val information = "31 March 1982 is when the current Capital Gains Tax system came into effect."
+      val information = "Capital Gains Tax only applies to gains made since 31 March 1982."
       val hintText = "If you don't know the exact value, you must provide a realistic estimate. " +
         "You might have to pay more if we think your estimate is unrealistic."
       val jointOwnership = "If you owned the property with someone else, only enter your share of the property value."
