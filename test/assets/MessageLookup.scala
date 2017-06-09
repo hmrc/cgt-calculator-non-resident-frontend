@@ -567,6 +567,12 @@ object MessageLookup {
       object SellForLess {
         val title = "Did you sell the property for less than it was worth to help the buyer?"
       }
+
+      object CostsAtLegislationStart {
+        val title = "Did you pay to have the property valued at 31 March 1982?"
+        val howMuch = "How much did it cost to get the property valued?"
+        val helpText = "If you owned the property with someone else, only enter your share of the property"
+      }
     }
 
     object Shares {
