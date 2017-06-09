@@ -20,7 +20,7 @@ import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 
-object CostsAtLegislationStartController {
+object CostsAtLegislationStartController extends CostsAtLegislationStartController {
   val calcConnector = CalculatorConnector
 }
 
