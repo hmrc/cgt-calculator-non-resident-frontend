@@ -105,6 +105,7 @@ object PurchaseDetailsConstructor {
         Messages(""),
         Some(controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart().url)
       ))
+      case _ => None
     }
   }
 
