@@ -26,6 +26,7 @@ import uk.gov.hmrc.play.frontend.controller.FrontendController
 import views.html.{calculation => views}
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
+import play.api.mvc.{Action, AnyContent}
 
 import scala.concurrent.Future
 
@@ -37,20 +38,20 @@ trait WorthBeforeLegislationStartController extends FrontendController with Vali
 
   val calcConnector: CalculatorConnector
 
-  val worthBeforeLegislationStart = ValidateSession.async { implicit request =>
+  val worthBeforeLegislationStart: Action[AnyContent] = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[WorthBeforeLegislationStartModel](KeystoreKeys.worthBeforeLegislationStart).map {
       case Some(data) => Ok(views.worthBeforeLegislationStart(worthBeforeLegislationStartForm.fill(data)))
       case None => Ok(views.worthBeforeLegislationStart(worthBeforeLegislationStartForm))
     }
   }
 
-  val submitWorthBeforeLegislationStart = ValidateSession.async { implicit request =>
+  val submitWorthBeforeLegislationStart: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     def errorAction(form: Form[WorthBeforeLegislationStartModel]) = Future.successful(BadRequest(views.worthBeforeLegislationStart(form)))
 
     def successAction(model: WorthBeforeLegislationStartModel) = {
       calcConnector.saveFormData(KeystoreKeys.worthBeforeLegislationStart, model)
-      Future.successful(Redirect(routes.AcquisitionCostsController.acquisitionCosts()))
+      Future.successful(Redirect(routes.CostsAtLegislationStartController.costsAtLegislationStart()))
     }
 
     worthBeforeLegislationStartForm.bindFromRequest.fold(errorAction, successAction)
