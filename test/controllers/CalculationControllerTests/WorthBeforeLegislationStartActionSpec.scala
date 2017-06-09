@@ -109,7 +109,7 @@ class WorthBeforeLegislationStartActionSpec extends UnitSpec with WithFakeApplic
           status(result) shouldBe 303
         }
 
-        "redirect to the acquisition costs page" in {
+        "redirect to the costs at legislation start page" in {
           redirectLocation(result) shouldBe Some(controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart().url)
         }
       }
