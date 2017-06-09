@@ -110,7 +110,7 @@ class WorthBeforeLegislationStartActionSpec extends UnitSpec with WithFakeApplic
         }
 
         "redirect to the acquisition costs page" in {
-          redirectLocation(result) shouldBe Some("/calculate-your-capital-gains/non-resident/acquisition-costs")
+          redirectLocation(result) shouldBe Some(controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart().url)
         }
       }
 
