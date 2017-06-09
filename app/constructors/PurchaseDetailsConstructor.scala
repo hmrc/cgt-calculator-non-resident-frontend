@@ -47,6 +47,7 @@ object PurchaseDetailsConstructor {
       howBecameOwnerData,
       boughtForLessData,
       costsAtLegislationStart,
+      acquisitionValueData,
       acquisitionCostsData,
       rebasedValueData,
       rebasedCostsQuestionData,
