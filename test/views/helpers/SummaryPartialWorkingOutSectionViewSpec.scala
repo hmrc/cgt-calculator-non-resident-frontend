@@ -256,5 +256,38 @@ class SummaryPartialWorkingOutSectionViewSpec extends UnitSpec with WithFakeAppl
         }
       }
     }
+
+    "supplied with a time-apportioned calculation and a loss" should {
+
+      lazy val view = helpers.summaryPartialWorkingOutSection(
+        CalculationType.timeApportioned,
+        disposalValue = 100000,
+        acquisitionValue = 120000,
+        totalCosts = 4000,
+        totalGain = -20000,
+        percentageOfGain = 50
+      )(fakeRequestWithSession, applicationMessages)
+      lazy val doc = Jsoup.parse(view.body)
+
+      "has a row for the loss made on the property" which {
+        s"has the text ${messages.lossMadeOnProperty}" in {
+          doc.select("#totalGain-text").text shouldBe messages.lossMadeOnProperty
+        }
+
+        "has the value '£20,000" in {
+          doc.select("#totalGain-amount").text shouldBe "£20,000"
+        }
+      }
+
+      "has a row for the percentage loss made on the property" which {
+        s"has the text ${messages.percentageTotalLoss}" in {
+          doc.select("#percentageOfGain-text").text shouldBe messages.percentageTotalLoss
+        }
+
+        "has the value '50%" in {
+          doc.select("#percentageOfGain-value").text shouldBe "50%"
+        }
+      }
+    }
   }
 }

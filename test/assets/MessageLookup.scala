@@ -997,7 +997,9 @@ object MessageLookup {
     val totalGain = "Total gain"
     val totalLoss = "Total loss"
     val gainMadeOnProperty = "The gain you've made on the property"
+    val lossMadeOnProperty = "The loss you've made on the property"
     val percentageTotalGain = "The percentage gain you've made since 5 April 2015"
+    val percentageTotalLoss = "The percentage loss you've made since 5 April 2015"
 
     val deductionsSectionHeading = "Your deductions"
     val reliefsUsed = "Reliefs used"
