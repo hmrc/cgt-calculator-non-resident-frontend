@@ -68,7 +68,6 @@ object MessageLookup {
       val bulletOne = "estate agents or auctioneers"
       val bulletTwo = "solicitors or conveyancers, including Stamp Duty Land Tax"
       val bulletThree = "any professional help to value the property, for example, surveyor or valuer"
-      val bulletThreeBeforeLegislation = "any professional help to value the property, for example, surveyor or valuer (this includes any valuations at 31 March 1982)"
       val hint ="If you owned the property with someone else, only enter your share of the costs, as agreed with your co-owner."
 
       def errorMaximum(value: String): String = s"Enter an amount that's £$value or less"
