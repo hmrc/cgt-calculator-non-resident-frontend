@@ -576,6 +576,20 @@ class RoutesSpec extends UnitSpec with WithFakeApplication with Matchers {
     }
   }
 
+  "The URL for the costsAtLegislationStart Action" should {
+    "be equal to /calculate-your-capital-gains/non-resident/costs-at-legislation-start" in {
+      val path = controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart.url
+      path shouldEqual "/calculate-your-capital-gains/non-resident/costs-at-legislation-start"
+    }
+  }
+
+  "The URL for the submitCostsAtLegislationStart Action" should {
+    "be equal to /calculate-your-capital-gains/non-resident/costs-at-legislation-start" in {
+      val path = controllers.routes.CostsAtLegislationStartController.submitCostsAtlLegislationStart.url
+      path shouldEqual "/calculate-your-capital-gains/non-resident/costs-at-legislation-start"
+    }
+  }
+
   /* Report route*/
   "The URL for the save as pdf Action" should {
     "be equal to /calculate-your-capital-gains/non-resident/summary-report" in {

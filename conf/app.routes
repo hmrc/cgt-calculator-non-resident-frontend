@@ -170,6 +170,11 @@ GET         /no-tax-to-pay                      controllers.WhoDidYouGiveItToCon
 #Claiming Reliefs Route
 GET         /claiming-reliefs                   controllers.ClaimingReliefsController.claimingReliefs
 POST        /claiming-reliefs                   controllers.ClaimingReliefsController.submitClaimingReliefs
+
+#Costs At Legislation Start Route
+GET         /costs-at-legislation-start         controllers.CostsAtLegislationStartController.costsAtLegislationStart
+POST        /costs-at-legislation-start         controllers.CostsAtLegislationStartController.submitCostsAtlLegislationStart
+
 ########################################################
 
 #Report screen route
