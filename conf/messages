@@ -414,7 +414,7 @@ calc.propertyLivedIn.noSelectError = Tell us if you have ever lived in the prope
 ## Cost At Legislation Start ##
 calc.costsAtLegislationStart.title = Did you pay to have the property valued at 31 March 1982?
 calc.costsAtLegislationStart.howMuch = How much did it cost to get the property valued?
-calc.costsAtLegislationStart.helpText = If you owned the property with someone else, only enter your share of the property
+calc.costsAtLegislationStart.helpText = If you owned the property with someone else, only enter your share of the property.
 
 
 ## Summary ##
