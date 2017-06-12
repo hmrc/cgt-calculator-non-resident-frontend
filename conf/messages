@@ -236,7 +236,6 @@ calc.acquisitionCosts.bulletTitle = This is what you paid for:
 calc.acquisitionCosts.bulletOne = estate agents or auctioneers
 calc.acquisitionCosts.bulletTwo = solicitors or conveyancers, including Stamp Duty Land Tax
 calc.acquisitionCosts.bulletThree = any professional help to value the property, for example, surveyor or valuer
-calc.acquisitionCosts.valuationsOnLegislationStart = (this includes any valuations at 31 March 1982)
 calc.acquisitionCosts.hint = If you owned the property with someone else, only enter your share of the costs, as agreed with your co-owner.
 
 ## Disposal Costs ##
