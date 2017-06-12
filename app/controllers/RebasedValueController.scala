@@ -58,9 +58,9 @@ trait RebasedValueController extends FrontendController with ValidActiveSession 
     for {
       rebasedValueModel <- calcConnector.fetchAndGetFormData[RebasedValueModel](KeystoreKeys.rebasedValue)
       acquisitionDate <- calcConnector.fetchAndGetFormData[AcquisitionDateModel](KeystoreKeys.acquisitionDate)
-    } yield (rebasedValueModel, acquisitionDate) match {
-      case (Some(data), _) => Ok(calculation.rebasedValue(rebasedValueForm.fill(data), backLink(acquisitionDate)))
-      case (None, _) => Ok(calculation.rebasedValue(rebasedValueForm, backLink(acquisitionDate)))
+    } yield rebasedValueModel match {
+      case Some(data) => Ok(calculation.rebasedValue(rebasedValueForm.fill(data), backLink(acquisitionDate)))
+      case None => Ok(calculation.rebasedValue(rebasedValueForm, backLink(acquisitionDate)))
     }
   }
 
