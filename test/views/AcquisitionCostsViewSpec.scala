@@ -89,8 +89,8 @@ class AcquisitionCostsViewSpec extends UnitSpec with WithFakeApplication with Mo
           list.select(":nth-child(2)").text() shouldBe messages.AcquisitionCosts.bulletTwo
         }
 
-        s"has a bullet point with the text '${messages.AcquisitionCosts.bulletThreeBeforeLegislation}'" in {
-          list.select(":last-child").text() shouldBe messages.AcquisitionCosts.bulletThreeBeforeLegislation
+        s"has a bullet point with the text '${messages.AcquisitionCosts.bulletThree}'" in {
+          list.select(":last-child").text() shouldBe messages.AcquisitionCosts.bulletThree
         }
 
         "has the class 'list list-bullet'" in {
