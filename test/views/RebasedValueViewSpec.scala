@@ -67,7 +67,7 @@ class RebasedValueViewSpec extends UnitSpec with WithFakeApplication with FakeRe
           backLink.text shouldBe commonMessages.back
         }
 
-        s"has a route to 'acquisition-costs'" in {
+        s"has a route to 'google.com'" in {
           backLink.attr("href") shouldBe "google.com"
         }
       }
