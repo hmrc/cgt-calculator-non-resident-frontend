@@ -38,13 +38,18 @@ class RebasedValueActionSpec extends UnitSpec with WithFakeApplication with Mock
 
   implicit val hc = new HeaderCarrier()
 
-  def setupTarget(getData: Option[RebasedValueModel]): RebasedValueController = {
+  def setupTarget(getData: Option[RebasedValueModel],
+                  acquisitionDateModel: Option[AcquisitionDateModel] = Some(AcquisitionDateModel(10, 10, 2015))): RebasedValueController = {
 
     val mockCalcConnector = mock[CalculatorConnector]
 
     when(mockCalcConnector.fetchAndGetFormData[RebasedValueModel](
       ArgumentMatchers.eq(KeystoreKeys.rebasedValue))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
+
+    when(mockCalcConnector.fetchAndGetFormData[AcquisitionDateModel](
+      ArgumentMatchers.eq(KeystoreKeys.acquisitionDate))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      .thenReturn(Future.successful(acquisitionDateModel))
 
     when(mockCalcConnector.saveFormData[RebasedValueModel](
       ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
@@ -132,6 +137,22 @@ class RebasedValueActionSpec extends UnitSpec with WithFakeApplication with Mock
 
       "return to the rebased value page" in {
         document.title shouldEqual messages.question
+      }
+    }
+  }
+
+  "Calling .backLink in the CalculationController" should {
+    s"return the URL ${controllers.routes.AcquisitionCostsController.acquisitionCosts().url}" when {
+      "supplied with an acquisitionDate post-legislation start" in {
+        lazy val result = RebasedValueController.backLink(Some(AcquisitionDateModel(10, 10, 2015)))
+        result shouldEqual controllers.routes.AcquisitionCostsController.acquisitionCosts().url
+      }
+
+      s"return the URL ${controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart().url}" when {
+        "supplied with an acquisitionDate pre-legilsation start" in {
+          lazy val result = RebasedValueController.backLink(Some(AcquisitionDateModel(10, 10, 1970)))
+          result shouldEqual controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart().url
+        }
       }
     }
   }
