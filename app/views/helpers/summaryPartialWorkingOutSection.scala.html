@@ -30,11 +30,15 @@ percentageTotalGain: BigDecimal = 0, percentageOfGain: Int = 0)(implicit request
     @summaryNumericRow("totalCosts", Messages("calc.summaryPartial.totalCosts"), totalCosts)
 
     @if(calculationType == CalculationType.timeApportioned) {
-        @summaryNumericRow("totalGain", Messages("calc.summaryPartial.gainMadeOnProperty"), totalGain)
+        @summaryNumericRow("totalGain",
+            if (totalGain >= 0) Messages("calc.summaryPartial.gainMadeOnProperty")
+            else Messages("calc.summaryPartial.lossMadeOnProperty"),
+            totalGain)
 
         <div id="percentageOfGain" class="grid-layout grid-layout--no-margin font-small hint-text">
             <div id="percentageOfGain-text" class="grid-layout__column--1-2">
-                @Messages("calc.summaryPartial.percentageOfGain")
+                @{if (totalGain >= 0) Messages("calc.summaryPartial.percentageOfGain")
+                else Messages("calc.summaryPartial.percentageOfLoss")}
             </div>
 
             <div id="percentageOfGain-value" class="grid-layout__column--1-3 text--right">
