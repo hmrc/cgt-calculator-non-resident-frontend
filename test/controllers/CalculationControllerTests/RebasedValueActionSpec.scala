@@ -149,7 +149,7 @@ class RebasedValueActionSpec extends UnitSpec with WithFakeApplication with Mock
       }
 
       s"return the URL ${controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart().url}" when {
-        "supplied with an acquisitionDate pre-legilsation start" in {
+        "supplied with an acquisitionDate pre-legislation start" in {
           lazy val result = RebasedValueController.backLink(Some(AcquisitionDateModel(10, 10, 1970)))
           result shouldEqual controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart().url
         }
