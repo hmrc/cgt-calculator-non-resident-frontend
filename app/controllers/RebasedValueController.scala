@@ -24,7 +24,7 @@ import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import forms.RebasedValueForm._
 import views.html.calculation
-import models.RebasedValueModel
+import models.{AcquisitionDateModel, RebasedValueModel}
 import play.api.data.Form
 import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
@@ -41,26 +41,35 @@ trait RebasedValueController extends FrontendController with ValidActiveSession 
 
   val calcConnector: CalculatorConnector
 
-  def backLink(acquisitionDate: LocalDate): String = {
-    if(TaxDates.dateBeforeLegislationStart(acquisitionDate)) {
-      controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart().url
-    }
-    else {
-      controllers.routes.AcquisitionCostsController.acquisitionCosts().url
+  def backLink(acquisitionDate: Option[AcquisitionDateModel]): String = {
+
+    val localDate: Option[LocalDate] = acquisitionDate.map{x => x.get}
+
+    localDate match {
+      case Some(x) => {
+        if (TaxDates.dateBeforeLegislationStart(x)) controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart().url
+        else controllers.routes.AcquisitionCostsController.acquisitionCosts().url
+      }
+      case _ => controllers.routes.AcquisitionCostsController.acquisitionCosts().url
     }
   }
 
   val rebasedValue: Action[AnyContent] = ValidateSession.async { implicit request =>
-    calcConnector.fetchAndGetFormData[RebasedValueModel](KeystoreKeys.rebasedValue).map {
-      case Some(data) => Ok(calculation.rebasedValue(rebasedValueForm.fill(data)))
-      case None => Ok(calculation.rebasedValue(rebasedValueForm))
+    for {
+      rebasedValueModel <- calcConnector.fetchAndGetFormData[RebasedValueModel](KeystoreKeys.rebasedValue)
+      acquisitionDate <- calcConnector.fetchAndGetFormData[AcquisitionDateModel](KeystoreKeys.acquisitionDate)
+    } yield (rebasedValueModel, acquisitionDate) match {
+      case (Some(data), _) => Ok(calculation.rebasedValue(rebasedValueForm.fill(data), backLink(acquisitionDate)))
+      case (None, _) => Ok(calculation.rebasedValue(rebasedValueForm, backLink(acquisitionDate)))
     }
   }
 
   val submitRebasedValue: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     def errorAction(errors: Form[RebasedValueModel]) = {
-      Future.successful(BadRequest(calculation.rebasedValue(errors)))
+      calcConnector.fetchAndGetFormData[AcquisitionDateModel](KeystoreKeys.acquisitionDate).map{
+        x => BadRequest(calculation.rebasedValue(errors, backLink(x)))
+      }
     }
 
     def successAction(model: RebasedValueModel) = {
