@@ -16,7 +16,10 @@
 
 package controllers
 
+import java.time.LocalDate
+
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import common.TaxDates
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import forms.RebasedValueForm._
@@ -37,6 +40,15 @@ object RebasedValueController extends RebasedValueController {
 trait RebasedValueController extends FrontendController with ValidActiveSession {
 
   val calcConnector: CalculatorConnector
+
+  def backLink(acquisitionDate: LocalDate): String = {
+    if(TaxDates.dateBeforeLegislationStart(acquisitionDate)) {
+      controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart().url
+    }
+    else {
+      controllers.routes.AcquisitionCostsController.acquisitionCosts().url
+    }
+  }
 
   val rebasedValue: Action[AnyContent] = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[RebasedValueModel](KeystoreKeys.rebasedValue).map {
