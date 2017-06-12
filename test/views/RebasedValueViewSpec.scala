@@ -33,7 +33,7 @@ class RebasedValueViewSpec extends UnitSpec with WithFakeApplication with FakeRe
 
     "not supplied with a pre-existing stored model" should {
 
-      lazy val view = rebasedValue(rebasedValueForm)
+      lazy val view = rebasedValue(rebasedValueForm, "google.com")
       lazy val document = Jsoup.parse(view.body)
 
       s"Have the title ${messages.question}" in {
@@ -56,7 +56,7 @@ class RebasedValueViewSpec extends UnitSpec with WithFakeApplication with FakeRe
         }
       }
 
-      "have a back link" which {
+      "have a dynamic back link" which {
         lazy val backLink = document.body().select("#back-link")
 
         "has a class of 'back-link'" in {
@@ -67,8 +67,8 @@ class RebasedValueViewSpec extends UnitSpec with WithFakeApplication with FakeRe
           backLink.text shouldBe commonMessages.back
         }
 
-        s"has a route to 'acquisition-costs'" in {
-          backLink.attr("href") shouldBe routes.AcquisitionCostsController.acquisitionCosts().url
+        s"has a route to 'google.com'" in {
+          backLink.attr("href") shouldBe "google.com"
         }
       }
 
@@ -140,7 +140,7 @@ class RebasedValueViewSpec extends UnitSpec with WithFakeApplication with FakeRe
     "supplied with a form with errors" should {
 
       lazy val form = rebasedValueForm.bind(Map("rebasedValueAmt" -> ""))
-      lazy val view = rebasedValue(form)
+      lazy val view = rebasedValue(form, "google.com")
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

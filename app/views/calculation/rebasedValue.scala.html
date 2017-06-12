@@ -2,7 +2,7 @@
 @import uk.gov.hmrc.play.views.html.helpers.form
 @import views.html.helpers._
 
-@(rebasedValueForm: Form[RebasedValueModel])(implicit request: Request[_], messages: Messages)
+@(rebasedValueForm: Form[RebasedValueModel], backLink: String)(implicit request: Request[_], messages: Messages)
 
 @hiddenHelpTextContent = {
     <p>@Messages("calc.nonResident.rebasedValue.helpText")</p>
@@ -14,7 +14,7 @@
 
 @main_template(Messages("calc.nonResident.rebasedValue.questionAndDate")) {
 
-    <a id="back-link" class="back-link" href="@controllers.routes.AcquisitionCostsController.acquisitionCosts">@Messages("calc.base.back")</a>
+    <a id="back-link" class="back-link" href="@backLink">@Messages("calc.base.back")</a>
 
     @errorSummary(rebasedValueForm, "rebased-value", "rebasedValueAmt")
 
