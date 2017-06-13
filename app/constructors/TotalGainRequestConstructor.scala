@@ -23,12 +23,12 @@ object TotalGainRequestConstructor {
 
   def totalGainQuery(totalGainAnswersModel: TotalGainAnswersModel): String = {
     val costs:BigDecimal = if(totalGainAnswersModel.acquisitionCostsModel.isDefined) totalGainAnswersModel.acquisitionCostsModel.get.acquisitionCostsAmt
-    else totalGainAnswersModel.costsBeforeLegislationStart.get.costs.getOrElse(0.00)
+    else totalGainAnswersModel.costsAtLegislationStart.get.costs.getOrElse(0.00)
 
     disposalValue(totalGainAnswersModel.disposalValueModel) +
     disposalCosts(totalGainAnswersModel.disposalCostsModel) +
     acquisitionValue(totalGainAnswersModel.acquisitionValueModel) +
-    acquisitionCosts(totalGainAnswersModel.acquisitionCostsModel, totalGainAnswersModel.costsBeforeLegislationStart, totalGainAnswersModel.acquisitionDateModel) +
+    acquisitionCosts(totalGainAnswersModel.acquisitionCostsModel, totalGainAnswersModel.costsAtLegislationStart, totalGainAnswersModel.acquisitionDateModel) +
     improvements(totalGainAnswersModel.improvementsModel) +
     rebasedValues(totalGainAnswersModel.rebasedValueModel, totalGainAnswersModel.rebasedCostsModel,
       totalGainAnswersModel.improvementsModel, totalGainAnswersModel.acquisitionDateModel) +

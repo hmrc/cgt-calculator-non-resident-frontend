@@ -32,7 +32,7 @@ case class TotalGainAnswersModel(disposalDateModel: DisposalDateModel,
                                  rebasedCostsModel: Option[RebasedCostsModel],
                                  improvementsModel: ImprovementsModel,
                                  otherReliefsFlat: Option[OtherReliefsModel],
-                                 costsBeforeLegislationStart: Option[CostsAtLegislationStartModel] = None) {
+                                 costsAtLegislationStart: Option[CostsAtLegislationStartModel] = None) {
 
   lazy val salesDetailsRows: Seq[QuestionAnswerModel[Any]] = SalesDetailsConstructor.salesDetailsRows(this)
   lazy val purchaseDetailsRows: Seq[QuestionAnswerModel[Any]] = PurchaseDetailsConstructor.getPurchaseDetailsSection(this)

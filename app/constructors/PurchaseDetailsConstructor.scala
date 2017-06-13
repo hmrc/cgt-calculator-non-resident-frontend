@@ -48,9 +48,9 @@ object PurchaseDetailsConstructor {
       acquisitionDateData,
       howBecameOwnerData,
       boughtForLessData,
+      acquisitionValueData,
       payValuationLegislationStart,
       costsAtLegislationStart,
-      acquisitionValueData,
       acquisitionCostsData,
       rebasedValueData,
       rebasedCostsQuestionData,
@@ -103,7 +103,7 @@ object PurchaseDetailsConstructor {
 
     val beforeLegislationStart = TaxDates.dateBeforeLegislationStart(totalGainAnswersModel.acquisitionDateModel.get)
 
-    (totalGainAnswersModel.costsBeforeLegislationStart, beforeLegislationStart) match {
+    (totalGainAnswersModel.costsAtLegislationStart, beforeLegislationStart) match {
       case (Some(CostsAtLegislationStartModel(answer, _)), true) =>  Some(QuestionAnswerModel(
         KeystoreKeys.costAtLegislationStart,
         answer,
@@ -118,7 +118,7 @@ object PurchaseDetailsConstructor {
 
     val beforeLegislationStart = TaxDates.dateBeforeLegislationStart(totalGainAnswersModel.acquisitionDateModel.get)
 
-    (totalGainAnswersModel.costsBeforeLegislationStart, beforeLegislationStart) match {
+    (totalGainAnswersModel.costsAtLegislationStart, beforeLegislationStart) match {
       case (Some(CostsAtLegislationStartModel("Yes", Some(value))), true) => Some(QuestionAnswerModel(
         KeystoreKeys.costAtLegislationStart,
         value,
