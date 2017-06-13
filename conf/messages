@@ -327,7 +327,7 @@ calc.howMuchLoss.errorDecimal = There are too many numbers after the decimal poi
 ## Brought Forward Loss ##
 calc.broughtForwardLosses.question = Do you have losses you want to bring forward from previous tax years?
 calc.broughtForwardLosses.inputQuestion = How much would you like to bring forward?
-calc.broughtForwardLosses.helpText = These are unused losses that are covered by Capital Gains Tax and that you''ve already reported to HMRC.
+calc.broughtForwardLosses.helpText = These are unused losses that are covered by Non-Resident Capital Gains Tax.
 calc.broughtForwardLosses.errorDecimal = There are too many numbers after the decimal point in your brought forward loss
 calc.broughtForwardLosses.errorNegative = Enter a positive number for your brought forward loss
 
