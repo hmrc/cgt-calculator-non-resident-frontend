@@ -68,7 +68,6 @@ object MessageLookup {
       val bulletOne = "estate agents or auctioneers"
       val bulletTwo = "solicitors or conveyancers, including Stamp Duty Land Tax"
       val bulletThree = "any professional help to value the property, for example, surveyor or valuer"
-      val bulletThreeBeforeLegislation = "any professional help to value the property, for example, surveyor or valuer (this includes any valuations at 31 March 1982)"
       val hint ="If you owned the property with someone else, only enter your share of the costs, as agreed with your co-owner."
 
       def errorMaximum(value: String): String = s"Enter an amount that's £$value or less"
@@ -272,7 +271,7 @@ object MessageLookup {
       val CGTlink = "Capital Gains Tax"
       val previousTaxLink = "Previous tax years"
       val hintOne = "This is the combined loss or gain on these properties after accounting for costs, reliefs and any Capital Gains allowance (Annual Exempt Amount) you've used."
-      val hintTwo = "You should already have reported these properties to HMRC. Work out if you've made a loss or gain by adding up the final figures from these reports."
+      val hintTwo = "You should already have reported these properties to HMRC."
     }
 
     object OtherReliefs {
@@ -449,7 +448,7 @@ object MessageLookup {
     object BroughtForwardLosses {
       val question = "Do you have losses you want to bring forward from previous tax years?"
       val inputQuestion = "How much would you like to bring forward?"
-      val helpText = "These are unused losses that are covered by Capital Gains Tax and that you've already reported to HMRC."
+      val helpText = "These are unused losses that are covered by Non-Resident Capital Gains Tax."
       val linkOne = "Capital Gains Tax"
       val linkTwo = "Previous tax years"
       val errorDecimalPlaces = "There are too many numbers after the decimal point in your brought forward loss"
@@ -510,6 +509,17 @@ object MessageLookup {
       val helpText = "For example, Letting Relief (if you already claimed Private Residence Relief) or Rollover Relief."
       val errorMandatory = "Tell us if you are entitled to any other reliefs"
     }
+
+    object CostsAtLegislationStart {
+      val title = "Did you pay to have the property valued at 31 March 1982?"
+      val howMuch = "How much did it cost to get the property valued?"
+      val helpText = "If you owned the property with someone else, only enter your share of the costs, as agreed with your co-owner."
+      val errorNegative = "Enter a positive number for your costs"
+      val errorNoValue = "Enter the value for your costs"
+      val errorDecimalPlaces = "There are too many numbers after the decimal point in your costs"
+
+      def errorMaximum(value: String): String = s"Enter an amount that's £$value or less"
+    }
   }
 
   object Resident extends Common {
@@ -566,12 +576,6 @@ object MessageLookup {
 
       object SellForLess {
         val title = "Did you sell the property for less than it was worth to help the buyer?"
-      }
-
-      object CostsAtLegislationStart {
-        val title = "Did you pay to have the property valued at 31 March 1982?"
-        val howMuch = "How much did it cost to get the property valued?"
-        val helpText = "If you owned the property with someone else, only enter your share of the property."
       }
     }
 
@@ -1003,7 +1007,9 @@ object MessageLookup {
     val totalGain = "Total gain"
     val totalLoss = "Total loss"
     val gainMadeOnProperty = "The gain you've made on the property"
+    val lossMadeOnProperty = "The loss you've made on the property"
     val percentageTotalGain = "The percentage gain you've made since 5 April 2015"
+    val percentageTotalLoss = "The percentage loss you've made since 5 April 2015"
 
     val deductionsSectionHeading = "Your deductions"
     val reliefsUsed = "Reliefs used"

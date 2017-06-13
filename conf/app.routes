@@ -3,11 +3,6 @@
 #Assets routes
 GET         /assets/*file           controllers.Assets.at(path="/public", file)
 
-#Feedback routes
-GET         /feedback               controllers.utils.FeedbackController.show
-POST        /feedback               controllers.utils.FeedbackController.submit
-GET         /thankyou               controllers.utils.FeedbackController.thankyou
-
 #Session Timeout route
 GET         /session-timeout        controllers.utils.TimeoutController.timeout
 
@@ -173,7 +168,7 @@ POST        /claiming-reliefs                   controllers.ClaimingReliefsContr
 
 #Costs At Legislation Start Route
 GET         /costs-at-legislation-start         controllers.CostsAtLegislationStartController.costsAtLegislationStart
-POST        /costs-at-legislation-start         controllers.CostsAtLegislationStartController.submitCostsAtlLegislationStart
+POST        /costs-at-legislation-start         controllers.CostsAtLegislationStartController.submitCostsAtLegislationStart
 
 ########################################################
 
