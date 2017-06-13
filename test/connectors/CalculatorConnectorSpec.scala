@@ -124,7 +124,7 @@ class CalculatorConnectorSpec extends UnitSpec with MockitoSugar {
       ArgumentMatchers.any())).thenReturn(Future.successful(Some(totalGainAnswersModel.acquisitionValueModel)))
 
     when(mockSessionCache.fetchAndGetEntry[AcquisitionCostsModel](ArgumentMatchers.eq(KeystoreKeys.acquisitionCosts))(ArgumentMatchers.any(),
-      ArgumentMatchers.any())).thenReturn(Future.successful(Some(totalGainAnswersModel.acquisitionCostsModel)))
+      ArgumentMatchers.any())).thenReturn(Future.successful(Some(totalGainAnswersModel.acquisitionCostsModel.get)))
 
     when(mockSessionCache.fetchAndGetEntry[AcquisitionDateModel](ArgumentMatchers.eq(KeystoreKeys.acquisitionDate))(ArgumentMatchers.any(),
       ArgumentMatchers.any())).thenReturn(Future.successful(Some(totalGainAnswersModel.acquisitionDateModel)))

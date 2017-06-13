@@ -80,7 +80,7 @@ class AnswersConstructorSpec extends UnitSpec with MockitoSugar {
 
     when(mockConnector.fetchAndGetFormData[AcquisitionCostsModel](
       ArgumentMatchers.eq(KeystoreKeys.acquisitionCosts))(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(Some(totalGainAnswersModel.acquisitionCostsModel)))
+      .thenReturn(Future.successful(Some(totalGainAnswersModel.acquisitionCostsModel.get)))
 
     when(mockConnector.fetchAndGetFormData[AcquisitionDateModel](
       ArgumentMatchers.eq(KeystoreKeys.acquisitionDate))(ArgumentMatchers.any(), ArgumentMatchers.any()))

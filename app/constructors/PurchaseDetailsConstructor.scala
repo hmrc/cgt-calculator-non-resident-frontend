@@ -35,7 +35,7 @@ object PurchaseDetailsConstructor {
     val acquisitionDateData = acquisitionDateRow(totalGainAnswersModel)
     val howBecameOwnerData = howBecameOwnerRow(totalGainAnswersModel)
     val boughtForLessData = boughtForLessRow(totalGainAnswersModel)
-    val didYouPayValuationLegislationStart = didYouPayValuationLegislationStart(totalGainAnswersModel)
+    val payValuationLegislationStart = didYouPayValuationLegislationStart(totalGainAnswersModel)
     val costsAtLegislationStart = costsAtLegislationStartRow(totalGainAnswersModel)
     val acquisitionValueData = acquisitionValueRow(totalGainAnswersModel, useWorthBeforeLegislationStart)
     val acquisitionCostsData = acquisitionCostsRow(totalGainAnswersModel)
@@ -47,7 +47,7 @@ object PurchaseDetailsConstructor {
       acquisitionDateData,
       howBecameOwnerData,
       boughtForLessData,
-      didYouPayValuationLegislationStart,
+      payValuationLegislationStart,
       costsAtLegislationStart,
       acquisitionValueData,
       acquisitionCostsData,
@@ -60,10 +60,10 @@ object PurchaseDetailsConstructor {
 
   def acquisitionDateRow(totalGainAnswersModel: TotalGainAnswersModel): Option[QuestionAnswerModel[LocalDate]] = {
     Some(QuestionAnswerModel(
-        s"${KeystoreKeys.acquisitionDate}",
-        totalGainAnswersModel.acquisitionDateModel.get,
-        Messages("calc.acquisitionDate.questionTwo"),
-        Some(controllers.routes.AcquisitionDateController.acquisitionDate().url)
+      s"${KeystoreKeys.acquisitionDate}",
+      totalGainAnswersModel.acquisitionDateModel.get,
+      Messages("calc.acquisitionDate.questionTwo"),
+      Some(controllers.routes.AcquisitionDateController.acquisitionDate().url)
     ))
   }
 
@@ -98,7 +98,7 @@ object PurchaseDetailsConstructor {
     }
   }
 
-  def didYouPayValuationLegislationStart(totalGainAnswersModel: TotalGainAnswersModel) : Option[QuestionAnswerModel[String]] = {
+  def didYouPayValuationLegislationStart(totalGainAnswersModel: TotalGainAnswersModel): Option[QuestionAnswerModel[String]] = {
     totalGainAnswersModel.costsBeforeLegislationStart match {
       case Some(CostsAtLegislationStartModel(answer, _)) => Some(QuestionAnswerModel(
         KeystoreKeys.costAtLegislationStart,
@@ -110,7 +110,7 @@ object PurchaseDetailsConstructor {
         KeystoreKeys.costAtLegislationStart,
         "No",
         Messages("calc.costsAtLegislationStart.howMuch"),
-        Some(controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart().url)
+        Some(controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart().url)))
     }
   }
 
@@ -144,13 +144,18 @@ object PurchaseDetailsConstructor {
   }
 
   def acquisitionCostsRow(totalGainAnswersModel: TotalGainAnswersModel): Option[QuestionAnswerModel[BigDecimal]] = {
+    totalGainAnswersModel.acquisitionCostsModel match{
+    case Some(AcquisitionCostsModel(_)) =>
     Some(QuestionAnswerModel(
       KeystoreKeys.acquisitionCosts,
-      totalGainAnswersModel.acquisitionCostsModel.acquisitionCostsAmt,
+      totalGainAnswersModel.acquisitionCostsModel.get.acquisitionCostsAmt,
       Messages("calc.acquisitionCosts.question"),
       Some(controllers.routes.AcquisitionCostsController.acquisitionCosts().url)
     ))
+    case None => None
   }
+  }
+
 
   def rebasedValueRow(rebasedValueModel: Option[RebasedValueModel], useRebasedValues: Boolean): Option[QuestionAnswerModel[BigDecimal]] = {
     if (useRebasedValues) {

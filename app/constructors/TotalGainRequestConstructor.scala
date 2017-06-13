@@ -25,7 +25,7 @@ object TotalGainRequestConstructor {
     disposalValue(totalGainAnswersModel.disposalValueModel) +
     disposalCosts(totalGainAnswersModel.disposalCostsModel) +
     acquisitionValue(totalGainAnswersModel.acquisitionValueModel) +
-    acquisitionCosts(totalGainAnswersModel.acquisitionCostsModel) +
+    acquisitionCosts(totalGainAnswersModel.acquisitionCostsModel.get) +
     improvements(totalGainAnswersModel.improvementsModel) +
     rebasedValues(totalGainAnswersModel.rebasedValueModel, totalGainAnswersModel.rebasedCostsModel,
       totalGainAnswersModel.improvementsModel, totalGainAnswersModel.acquisitionDateModel) +
