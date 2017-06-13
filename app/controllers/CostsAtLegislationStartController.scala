@@ -39,7 +39,7 @@ trait CostsAtLegislationStartController extends FrontendController with ValidAct
   val calcConnector: CalculatorConnector
 
   val costsAtLegislationStart: Action[AnyContent] = ValidateSession.async { implicit request =>
-    calcConnector.fetchAndGetFormData[CostAtLegislationStartModel](KeystoreKeys.costAtLegislatioNStart).map {
+    calcConnector.fetchAndGetFormData[CostAtLegislationStartModel](KeystoreKeys.costAtLegislationStart).map {
       case Some(data) => Ok(views.costsAtLegislationStart(costsAtLegislationStartForm.fill(data)))
       case None => Ok(views.costsAtLegislationStart(costsAtLegislationStartForm))
     }
@@ -52,7 +52,7 @@ trait CostsAtLegislationStartController extends FrontendController with ValidAct
     }
 
     def successAction(model: CostAtLegislationStartModel) = {
-      calcConnector.saveFormData(KeystoreKeys.costAtLegislatioNStart, model).map { _ =>
+      calcConnector.saveFormData(KeystoreKeys.costAtLegislationStart, model).map { _ =>
         Redirect(routes.RebasedValueController.rebasedValue())
       }
     }

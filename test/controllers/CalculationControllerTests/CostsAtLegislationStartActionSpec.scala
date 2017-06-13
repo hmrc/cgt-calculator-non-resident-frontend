@@ -42,12 +42,12 @@ class CostsAtLegislationStartActionSpec extends UnitSpec with WithFakeApplicatio
     val mockCalcConnector = mock[CalculatorConnector]
 
     when(mockCalcConnector.fetchAndGetFormData[CostAtLegislationStartModel](
-      ArgumentMatchers.eq(KeystoreKeys.costAtLegislatioNStart))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      ArgumentMatchers.eq(KeystoreKeys.costAtLegislationStart))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
     val successfulSave = Future.successful(CacheMap("", Map()))
     when(mockCalcConnector.saveFormData[CostAtLegislationStartModel](
-      ArgumentMatchers.eq(KeystoreKeys.costAtLegislatioNStart), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      ArgumentMatchers.eq(KeystoreKeys.costAtLegislationStart), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(successfulSave)
 
     new CostsAtLegislationStartController {
