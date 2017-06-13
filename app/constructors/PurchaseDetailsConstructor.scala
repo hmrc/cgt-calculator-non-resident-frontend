@@ -27,6 +27,7 @@ import play.api.Play.current
 
 object PurchaseDetailsConstructor {
 
+
   def getPurchaseDetailsSection(totalGainAnswersModel: TotalGainAnswersModel): Seq[QuestionAnswerModel[Any]] = {
 
     val useRebasedValues = !TaxDates.dateAfterStart(totalGainAnswersModel.acquisitionDateModel.get)
@@ -99,26 +100,25 @@ object PurchaseDetailsConstructor {
   }
 
   def didYouPayValuationLegislationStart(totalGainAnswersModel: TotalGainAnswersModel): Option[QuestionAnswerModel[String]] = {
-    totalGainAnswersModel.costsBeforeLegislationStart match {
-      case Some(CostsAtLegislationStartModel(answer, _)) => Some(QuestionAnswerModel(
+
+    val beforeLegislationStart = TaxDates.dateBeforeLegislationStart(totalGainAnswersModel.acquisitionDateModel.get)
+
+    (totalGainAnswersModel.costsBeforeLegislationStart, beforeLegislationStart) match {
+      case (Some(CostsAtLegislationStartModel(answer, _)), true) =>  Some(QuestionAnswerModel(
         KeystoreKeys.costAtLegislationStart,
         answer,
-        Messages("calc.costsAtLegislationStart.howMuch"),
+        Messages("calc.costsAtLegislationStart.title"),
         Some(controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart().url)
       ))
-      case _ => Some(QuestionAnswerModel(
-        KeystoreKeys.costAtLegislationStart,
-        "No",
-        Messages("calc.costsAtLegislationStart.howMuch"),
-        Some(controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart().url)))
+      case _ => None
     }
   }
 
   def costsAtLegislationStartRow(totalGainAnswersModel: TotalGainAnswersModel): Option[QuestionAnswerModel[BigDecimal]] = {
     totalGainAnswersModel.costsBeforeLegislationStart match {
-      case Some(CostsAtLegislationStartModel("Yes", Some(x))) => Some(QuestionAnswerModel(
+      case Some(CostsAtLegislationStartModel("Yes", Some(value))) => Some(QuestionAnswerModel(
         KeystoreKeys.costAtLegislationStart,
-        totalGainAnswersModel.costsBeforeLegislationStart.get.costs.get,
+        value,
         Messages("calc.costsAtLegislationStart.howMuch"),
         Some(controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart().url)
       ))
@@ -144,15 +144,18 @@ object PurchaseDetailsConstructor {
   }
 
   def acquisitionCostsRow(totalGainAnswersModel: TotalGainAnswersModel): Option[QuestionAnswerModel[BigDecimal]] = {
-    totalGainAnswersModel.acquisitionCostsModel match{
-    case Some(AcquisitionCostsModel(_)) =>
+
+    val afterLegislationStart = TaxDates.legislationDate.isBefore(totalGainAnswersModel.acquisitionDateModel.get)
+
+    (totalGainAnswersModel.acquisitionCostsModel, afterLegislationStart) match{
+    case (Some(AcquisitionCostsModel(_)), true) =>
     Some(QuestionAnswerModel(
       KeystoreKeys.acquisitionCosts,
       totalGainAnswersModel.acquisitionCostsModel.get.acquisitionCostsAmt,
       Messages("calc.acquisitionCosts.question"),
       Some(controllers.routes.AcquisitionCostsController.acquisitionCosts().url)
     ))
-    case None => None
+    case _ => None
   }
   }
 

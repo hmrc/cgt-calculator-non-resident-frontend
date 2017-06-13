@@ -93,6 +93,28 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
     None
   )
 
+  def costsBeforeLegislationStart(hasCosts: Boolean): TotalGainAnswersModel = {
+      val model = if(hasCosts) CostsAtLegislationStartModel("Yes", Some(1000)) else CostsAtLegislationStartModel("No", None)
+
+      TotalGainAnswersModel(
+        DisposalDateModel(10, 10, 2016),
+        SoldOrGivenAwayModel(true),
+        Some(SoldForLessModel(true)),
+        DisposalValueModel(10000),
+        DisposalCostsModel(100),
+        Some(HowBecameOwnerModel("Bought")),
+        Some(BoughtForLessModel(true)),
+        AcquisitionValueModel(5000),
+        None,
+        AcquisitionDateModel(1, 4, 1970),
+        Some(RebasedValueModel(7500)),
+        Some(RebasedCostsModel("Yes", Some(150))),
+        ImprovementsModel("Yes", Some(50), Some(25)),
+        None,
+        Some(model)
+      )
+  }
+
   private def assertExpectedResult[T](option: Option[T])(test: T => Unit) = assertOption("expected option is None")(option)(test)
 
   "Calling purchaseDetailsRow" when {
@@ -171,6 +193,24 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
       "return a Sequence that will contain a rebasedCosts data item" in {
         result.contains(PurchaseDetailsConstructor.rebasedCostsRow(totalGainGiven.rebasedCostsModel, useRebasedValues = true).get) shouldBe true
       }
+    }
+
+    "using costsBeforeLegislationStart total gain answer model with a value of true" should {
+      lazy val model = costsBeforeLegislationStart(true)
+      lazy val result = PurchaseDetailsConstructor.getPurchaseDetailsSection(model)
+
+      "return a sequence of size 9" in {
+        result.size shouldBe 9
+      }
+
+      "return a Sequence that will contain a didYouPayValuationLegislationStart section" in {
+        result.contains(PurchaseDetailsConstructor.didYouPayValuationLegislationStart(model).get) shouldBe true
+      }
+
+      "return a Sequence that will contain a costsAtLegislationStart section" in {
+        result.contains(PurchaseDetailsConstructor.costsAtLegislationStartRow(model).get) shouldBe true
+      }
+
     }
   }
 
