@@ -120,7 +120,7 @@ object PurchaseDetailsConstructor {
 
     (totalGainAnswersModel.costsAtLegislationStart, beforeLegislationStart) match {
       case (Some(CostsAtLegislationStartModel("Yes", Some(value))), true) => Some(QuestionAnswerModel(
-        KeystoreKeys.costAtLegislationStart,
+        KeystoreKeys.costAtLegislationStartValue,
         value,
         Messages("calc.costsAtLegislationStart.howMuch"),
         Some(controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart().url)
