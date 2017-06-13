@@ -16,7 +16,7 @@
 
 package controllers.CalculationControllerTests
 
-import assets.MessageLookup.Resident.Properties.{CostsAtLegislationStart => messages}
+import assets.MessageLookup.NonResident.{CostsAtLegislationStart => messages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
 import controllers.CostsAtLegislationStartController
