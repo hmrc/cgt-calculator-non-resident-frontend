@@ -51,7 +51,7 @@ class TotalGainRequestConstructorSpec extends UnitSpec {
   "Calling .acquisitionCosts" should {
 
     "produce a valid query string" in {
-      val result = TotalGainRequestConstructor.acquisitionCosts(AcquisitionCostsModel(200))
+      val result = TotalGainRequestConstructor.acquisitionCosts(BigDecimal(200))
 
       result shouldBe "&acquisitionCosts=200"
     }

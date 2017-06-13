@@ -148,7 +148,7 @@ object PurchaseDetailsConstructor {
 
   def acquisitionCostsRow(totalGainAnswersModel: TotalGainAnswersModel): Option[QuestionAnswerModel[BigDecimal]] = {
 
-    val afterLegislationStart = TaxDates.legislationDate.isBefore(totalGainAnswersModel.acquisitionDateModel.get)
+    val afterLegislationStart = !TaxDates.dateBeforeLegislationStart(totalGainAnswersModel.acquisitionDateModel.get)
 
     (totalGainAnswersModel.acquisitionCostsModel, afterLegislationStart) match{
     case (Some(AcquisitionCostsModel(_)), true) =>
