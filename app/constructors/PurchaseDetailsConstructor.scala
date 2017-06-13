@@ -115,8 +115,11 @@ object PurchaseDetailsConstructor {
   }
 
   def costsAtLegislationStartRow(totalGainAnswersModel: TotalGainAnswersModel): Option[QuestionAnswerModel[BigDecimal]] = {
-    totalGainAnswersModel.costsBeforeLegislationStart match {
-      case Some(CostsAtLegislationStartModel("Yes", Some(value))) => Some(QuestionAnswerModel(
+
+    val beforeLegislationStart = TaxDates.dateBeforeLegislationStart(totalGainAnswersModel.acquisitionDateModel.get)
+
+    (totalGainAnswersModel.costsBeforeLegislationStart, beforeLegislationStart) match {
+      case (Some(CostsAtLegislationStartModel("Yes", Some(value))), true) => Some(QuestionAnswerModel(
         KeystoreKeys.costAtLegislationStart,
         value,
         Messages("calc.costsAtLegislationStart.howMuch"),

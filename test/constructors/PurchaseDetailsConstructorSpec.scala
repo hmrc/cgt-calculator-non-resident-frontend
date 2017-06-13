@@ -18,6 +18,7 @@ package constructors
 
 import java.time.LocalDate
 
+import assets.MessageLookup
 import assets.MessageLookup.{NonResident => messages}
 import models._
 import helpers.AssertHelpers
@@ -421,6 +422,15 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
         result.data shouldBe 200
       }
     }
+
+    "a tax date before legislation start is given" should {
+      lazy val result = PurchaseDetailsConstructor.acquisitionCostsRow(costsBeforeLegislationStart(true))
+
+      "return None" in {
+        result shouldBe None
+      }
+
+    }
   }
 
   "Calling .rebasedValueRow" when {
@@ -564,6 +574,66 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
 
     "no applicable value is required" should {
       lazy val result = PurchaseDetailsConstructor.rebasedCostsRow(Some(RebasedCostsModel("Yes", Some(1))), useRebasedValues = false)
+
+      "return a None" in {
+        result shouldBe None
+      }
+    }
+  }
+
+  "Calling .didYouPayValuationLegislationStart" when {
+    "supplied with a value of Yes" should {
+      lazy val result = PurchaseDetailsConstructor.didYouPayValuationLegislationStart(costsBeforeLegislationStart(true)).get
+
+      "have a value of Yes" in {
+        result.data shouldBe "Yes"
+      }
+
+      s"have the question ${messages.CostsAtLegislationStart.title}" in {
+        result.question shouldBe messages.CostsAtLegislationStart.title
+      }
+
+      s"have a link to ${controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart().url}" in {
+        result.link.get shouldBe controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart().url
+      }
+    }
+
+    "supplied with a value of No" should {
+      lazy val result = PurchaseDetailsConstructor.didYouPayValuationLegislationStart(costsBeforeLegislationStart(false)).get
+
+      "have a value of No" in {
+        result.data shouldBe "No"
+      }
+    }
+
+    "supplied with a totalGainModel with an acquisition data post-legislation start" should {
+      lazy val result = PurchaseDetailsConstructor.didYouPayValuationLegislationStart(totalGainInherited)
+
+      "be equal to None" in {
+        result shouldBe None
+      }
+    }
+  }
+
+  "Calling .costsAtLegislationStartRow" when {
+
+    "supplied with a value of Yes and costs of 1000" should {
+      lazy val result = PurchaseDetailsConstructor.costsAtLegislationStartRow(costsBeforeLegislationStart(true)).get
+      "have a value of 1000" in {
+        result.data shouldBe BigDecimal(1000)
+      }
+
+      s"have the question ${messages.CostsAtLegislationStart.howMuch}" in {
+        result.question shouldBe messages.CostsAtLegislationStart.howMuch
+      }
+
+      s"have a link to ${controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart().url}" in {
+        result.link.get shouldBe controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart().url
+      }
+    }
+
+    "supplied with a value of No" should {
+      lazy val result = PurchaseDetailsConstructor.costsAtLegislationStartRow(costsBeforeLegislationStart(false))
 
       "return a None" in {
         result shouldBe None
