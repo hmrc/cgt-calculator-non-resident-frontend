@@ -28,7 +28,7 @@ object TotalGainRequestConstructor {
     disposalValue(totalGainAnswersModel.disposalValueModel) +
     disposalCosts(totalGainAnswersModel.disposalCostsModel) +
     acquisitionValue(totalGainAnswersModel.acquisitionValueModel) +
-    acquisitionCosts(costs) +
+    acquisitionCosts(totalGainAnswersModel.acquisitionCostsModel, totalGainAnswersModel.costsBeforeLegislationStart, totalGainAnswersModel.acquisitionDateModel) +
     improvements(totalGainAnswersModel.improvementsModel) +
     rebasedValues(totalGainAnswersModel.rebasedValueModel, totalGainAnswersModel.rebasedCostsModel,
       totalGainAnswersModel.improvementsModel, totalGainAnswersModel.acquisitionDateModel) +
@@ -48,8 +48,15 @@ object TotalGainRequestConstructor {
     s"&acquisitionValue=${acquisitionValueModel.acquisitionValueAmt}"
   }
 
-  def acquisitionCosts(costs: BigDecimal): String = {
-    s"&acquisitionCosts=${costs}"
+  def acquisitionCosts(acquisitionCostsModel: Option[AcquisitionCostsModel],
+                       costsAtLegislationStartModel: Option[CostsAtLegislationStartModel],
+                       acquisitionDateModel: AcquisitionDateModel): String = {
+    s"&acquisitionCosts=${
+      if (TaxDates.dateBeforeLegislationStart(acquisitionDateModel.get)) {
+        if (costsAtLegislationStartModel.get.hasCosts == "Yes") costsAtLegislationStartModel.get.costs.get
+        else 0
+      } else acquisitionCostsModel.get.acquisitionCostsAmt
+    }"
   }
 
   def improvements(improvementsModel: ImprovementsModel): String = {

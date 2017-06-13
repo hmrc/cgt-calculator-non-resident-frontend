@@ -16,6 +16,8 @@
 
 package models
 
+import constructors.{PropertyDetailsConstructor, PurchaseDetailsConstructor, SalesDetailsConstructor}
+
 case class TotalGainAnswersModel(disposalDateModel: DisposalDateModel,
                                  soldOrGivenAwayModel: SoldOrGivenAwayModel,
                                  soldForLessModel: Option[SoldForLessModel],
@@ -30,4 +32,9 @@ case class TotalGainAnswersModel(disposalDateModel: DisposalDateModel,
                                  rebasedCostsModel: Option[RebasedCostsModel],
                                  improvementsModel: ImprovementsModel,
                                  otherReliefsFlat: Option[OtherReliefsModel],
-                                 costsBeforeLegislationStart: Option[CostsAtLegislationStartModel] = None)
+                                 costsBeforeLegislationStart: Option[CostsAtLegislationStartModel] = None) {
+
+  lazy val salesDetailsRows: Seq[QuestionAnswerModel[Any]] = SalesDetailsConstructor.salesDetailsRows(this)
+  lazy val purchaseDetailsRows: Seq[QuestionAnswerModel[Any]] = PurchaseDetailsConstructor.getPurchaseDetailsSection(this)
+  lazy val propertyDetailsRows: Seq[QuestionAnswerModel[Any]] = PropertyDetailsConstructor.propertyDetailsRows(this)
+}

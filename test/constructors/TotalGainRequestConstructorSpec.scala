@@ -50,10 +50,24 @@ class TotalGainRequestConstructorSpec extends UnitSpec {
 
   "Calling .acquisitionCosts" should {
 
-    "produce a valid query string" in {
-      val result = TotalGainRequestConstructor.acquisitionCosts(BigDecimal(200))
+    "use the acquisition costs for a post 31 March 1982 date" in {
+      val result = TotalGainRequestConstructor.acquisitionCosts(Some(AcquisitionCostsModel(200)), None, AcquisitionDateModel(1, 4, 1990))
 
       result shouldBe "&acquisitionCosts=200"
+    }
+
+    "use the cost of valuation from the 31 March 1982 for a prior date" in {
+      val result = TotalGainRequestConstructor.acquisitionCosts(None,
+        Some(CostsAtLegislationStartModel("Yes", Some(100))), AcquisitionDateModel(1, 4, 1980))
+
+      result shouldBe "&acquisitionCosts=100"
+    }
+
+    "return 0 costs for a prior date when not given" in {
+      val result = TotalGainRequestConstructor.acquisitionCosts(Some(AcquisitionCostsModel(200)),
+        Some(CostsAtLegislationStartModel("No", Some(100))), AcquisitionDateModel(1, 4, 1980))
+
+      result shouldBe "&acquisitionCosts=0"
     }
   }
 
