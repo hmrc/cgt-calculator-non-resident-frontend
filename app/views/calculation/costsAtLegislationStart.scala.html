@@ -1,0 +1,33 @@
+@import models.CostsAtLegislationStartModel
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import views.html.helpers._
+
+@(data: Form[CostsAtLegislationStartModel])(implicit request: Request[_], messages: Messages)
+
+@main_template(Messages("calc.costsAtLegislationStart.title")) {
+
+    <a id="back-link" class="back-link" href="@controllers.routes.WorthBeforeLegislationStartController.worthBeforeLegislationStart().url">Back</a>
+
+    @errorSummary(data, "costs", "costs")
+
+    <h1 class="heading-xlarge">@Messages("calc.costsAtLegislationStart.title")</h1>
+
+    @form(action = controllers.routes.CostsAtLegislationStartController.submitCostsAtLegislationStart) {
+
+        @formHiddenYesNoRadio(data,
+            "hasCosts",
+            Messages("calc.costsAtLegislationStart.title"),
+            formInputMoney(data,
+                "costs",
+                Messages("calc.costsAtLegislationStart.howMuch"),
+                additionalHTMLContent = Some(s"""<p>${Messages("calc.costsAtLegislationStart.helpText")}</p>"""),
+                labelClasses = "heading-small"
+            ),
+            hideLegend = true,
+            hidePanel = true
+        )
+
+        <button class="button" type="submit" id="continue-button">@Messages("calc.base.continue")</button>
+
+    }
+}

@@ -509,6 +509,17 @@ object MessageLookup {
       val helpText = "For example, Letting Relief (if you already claimed Private Residence Relief) or Rollover Relief."
       val errorMandatory = "Tell us if you are entitled to any other reliefs"
     }
+
+    object CostsAtLegislationStart {
+      val title = "Did you pay to have the property valued at 31 March 1982?"
+      val howMuch = "How much did it cost to get the property valued?"
+      val helpText = "If you owned the property with someone else, only enter your share of the costs, as agreed with your co-owner."
+      val errorNegative = "Enter a positive number for your costs"
+      val errorNoValue = "Enter the value for your costs"
+      val errorDecimalPlaces = "There are too many numbers after the decimal point in your costs"
+
+      def errorMaximum(value: String): String = s"Enter an amount that's £$value or less"
+    }
   }
 
   object Resident extends Common {
@@ -565,12 +576,6 @@ object MessageLookup {
 
       object SellForLess {
         val title = "Did you sell the property for less than it was worth to help the buyer?"
-      }
-
-      object CostsAtLegislationStart {
-        val title = "Did you pay to have the property valued at 31 March 1982?"
-        val howMuch = "How much did it cost to get the property valued?"
-        val helpText = "If you owned the property with someone else, only enter your share of the property."
       }
     }
 
