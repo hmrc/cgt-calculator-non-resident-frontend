@@ -30,5 +30,4 @@ case class TotalGainAnswersModel(disposalDateModel: DisposalDateModel,
                                  rebasedCostsModel: Option[RebasedCostsModel],
                                  improvementsModel: ImprovementsModel,
                                  otherReliefsFlat: Option[OtherReliefsModel],
-                                  //TODO: Update with actual model
                                  costsBeforeLegislationStart: Option[CostsAtLegislationStartModel] = None)
