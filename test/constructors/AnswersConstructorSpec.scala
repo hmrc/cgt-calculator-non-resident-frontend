@@ -64,7 +64,7 @@ class AnswersConstructorSpec extends UnitSpec with MockitoSugar {
       .thenReturn(Future.successful(totalGainAnswersModel.boughtForLessModel))
 
     when(mockConnector.fetchAndGetFormData[BigDecimal]
-      (ArgumentMatchers.eq(KeystoreKeys.costAtLegislatioNStart))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      (ArgumentMatchers.eq(KeystoreKeys.costAtLegislationStart))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(None))
 
     when(mockConnector.fetchAndGetFormData[WorthBeforeLegislationStartModel](ArgumentMatchers.eq(KeystoreKeys.worthBeforeLegislationStart))

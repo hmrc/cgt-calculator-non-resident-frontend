@@ -35,6 +35,7 @@ object PurchaseDetailsConstructor {
     val acquisitionDateData = acquisitionDateRow(totalGainAnswersModel)
     val howBecameOwnerData = howBecameOwnerRow(totalGainAnswersModel)
     val boughtForLessData = boughtForLessRow(totalGainAnswersModel)
+    val didYouPayValuationLegislationStart = didYouPayValuationLegislationStart(totalGainAnswersModel)
     val costsAtLegislationStart = costsAtLegislationStartRow(totalGainAnswersModel)
     val acquisitionValueData = acquisitionValueRow(totalGainAnswersModel, useWorthBeforeLegislationStart)
     val acquisitionCostsData = acquisitionCostsRow(totalGainAnswersModel)
@@ -46,6 +47,7 @@ object PurchaseDetailsConstructor {
       acquisitionDateData,
       howBecameOwnerData,
       boughtForLessData,
+      didYouPayValuationLegislationStart,
       costsAtLegislationStart,
       acquisitionValueData,
       acquisitionCostsData,
@@ -96,13 +98,28 @@ object PurchaseDetailsConstructor {
     }
   }
 
+  def didYouPayValuationLegislationStart(totalGainAnswersModel: TotalGainAnswersModel) : Option[QuestionAnswerModel[String]] = {
+    totalGainAnswersModel.costsBeforeLegislationStart match {
+      case Some(CostsAtLegislationStartModel(answer, _)) => Some(QuestionAnswerModel(
+        KeystoreKeys.costAtLegislationStart,
+        answer,
+        Messages("calc.costsAtLegislationStart.howMuch"),
+        Some(controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart().url)
+      ))
+      case _ => Some(QuestionAnswerModel(
+        KeystoreKeys.costAtLegislationStart,
+        "No",
+        Messages("calc.costsAtLegislationStart.howMuch"),
+        Some(controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart().url)
+    }
+  }
+
   def costsAtLegislationStartRow(totalGainAnswersModel: TotalGainAnswersModel): Option[QuestionAnswerModel[BigDecimal]] = {
     totalGainAnswersModel.costsBeforeLegislationStart match {
-      case Some(x) => Some(QuestionAnswerModel(
-        KeystoreKeys.costAtLegislatioNStart,
-        //TODO: Update with correct model call
-        totalGainAnswersModel.costsBeforeLegislationStart.get,
-        Messages(""),
+      case Some(CostsAtLegislationStartModel("Yes", Some(x))) => Some(QuestionAnswerModel(
+        KeystoreKeys.costAtLegislationStart,
+        totalGainAnswersModel.costsBeforeLegislationStart.get.costs.get,
+        Messages("calc.costsAtLegislationStart.howMuch"),
         Some(controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart().url)
       ))
       case _ => None

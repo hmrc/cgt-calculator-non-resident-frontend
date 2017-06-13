@@ -45,7 +45,7 @@ trait AnswersConstructor {
     val rebasedCosts = calculatorConnector.fetchAndGetFormData[RebasedCostsModel](KeystoreKeys.rebasedCosts)
     val improvements = calculatorConnector.fetchAndGetFormData[ImprovementsModel](KeystoreKeys.improvements).map(data => data.get)
     val otherReliefsFlat = calculatorConnector.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsFlat)
-    val costsBeforeLegislationStart = calculatorConnector.fetchAndGetFormData[BigDecimal](KeystoreKeys.costAtLegislatioNStart)
+    val costsBeforeLegislationStart = calculatorConnector.fetchAndGetFormData[CostsAtLegislationStartModel](KeystoreKeys.costAtLegislationStart)
 
     def disposalValue(soldOrGivenAwayModel: SoldOrGivenAwayModel,
                       soldForLessModel: Option[SoldForLessModel]): Future[DisposalValueModel] = (soldOrGivenAwayModel, soldForLessModel) match {
