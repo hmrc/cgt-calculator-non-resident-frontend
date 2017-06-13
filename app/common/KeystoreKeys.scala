@@ -56,5 +56,6 @@ object KeystoreKeys {
     val propertyLivedIn = "nr:propertyLivedIn"
     val claimingReliefs = "nr:claimingReliefs"
     val costAtLegislationStart = "nr:costsLegislationStart"
+    val costAtLegislationStartValue = "nr:costsLegislationStartValue"
   }
 }
