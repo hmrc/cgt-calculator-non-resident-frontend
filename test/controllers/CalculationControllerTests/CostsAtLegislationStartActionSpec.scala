@@ -21,7 +21,7 @@ import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
 import controllers.CostsAtLegislationStartController
 import controllers.helpers.FakeRequestHelper
-import models.CostAtLegislationStartModel
+import models.CostsAtLegislationStartModel
 import org.jsoup._
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
@@ -37,16 +37,16 @@ class CostsAtLegislationStartActionSpec extends UnitSpec with WithFakeApplicatio
 
   implicit val hc = new HeaderCarrier()
 
-  def setupTarget(getData: Option[CostAtLegislationStartModel]): CostsAtLegislationStartController = {
+  def setupTarget(getData: Option[CostsAtLegislationStartModel]): CostsAtLegislationStartController = {
 
     val mockCalcConnector = mock[CalculatorConnector]
 
-    when(mockCalcConnector.fetchAndGetFormData[CostAtLegislationStartModel](
+    when(mockCalcConnector.fetchAndGetFormData[CostsAtLegislationStartModel](
       ArgumentMatchers.eq(KeystoreKeys.costAtLegislationStart))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
     val successfulSave = Future.successful(CacheMap("", Map()))
-    when(mockCalcConnector.saveFormData[CostAtLegislationStartModel](
+    when(mockCalcConnector.saveFormData[CostsAtLegislationStartModel](
       ArgumentMatchers.eq(KeystoreKeys.costAtLegislationStart), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(successfulSave)
 
@@ -86,7 +86,7 @@ class CostsAtLegislationStartActionSpec extends UnitSpec with WithFakeApplicatio
     }
 
     "some data has already been supplied" should {
-      val target = setupTarget(Some(CostAtLegislationStartModel("Yes", Some(1500))))
+      val target = setupTarget(Some(CostsAtLegislationStartModel("Yes", Some(1500))))
       lazy val result = target.costsAtLegislationStart(fakeRequestWithSession)
       lazy val document = Jsoup.parse(bodyOf(result))
 

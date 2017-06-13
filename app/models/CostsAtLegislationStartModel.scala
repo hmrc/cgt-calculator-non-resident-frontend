@@ -18,8 +18,8 @@ package models
 
 import play.api.libs.json.Json
 
-case class CostAtLegislationStartModel(hasCosts: String, costs: Option[BigDecimal])
+case class CostsAtLegislationStartModel(hasCosts: String, costs: Option[BigDecimal])
 
-object CostAtLegislationStartModel {
-  implicit val format = Json.format[CostAtLegislationStartModel]
+object CostsAtLegislationStartModel {
+  implicit val format = Json.format[CostsAtLegislationStartModel]
 }

@@ -518,6 +518,8 @@ object MessageLookup {
       val errorNegative = "Enter a positive number for your costs"
       val errorNoValue = "Enter the value for your costs"
       val errorDecimalPlaces = "There are too many numbers after the decimal point in your costs"
+
+      def errorMaximum(value: String): String = s"Enter an amount that's £$value or less"
     }
   }
 

@@ -17,8 +17,8 @@
 package forms
 
 import assets.MessageLookup.{NonResident => messages}
-import forms.RebasedCostsForm._
-import models.RebasedCostsModel
+import forms.CostsAtLegislationStartForm._
+import models.CostsAtLegislationStartModel
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 class CostsAtLegislationStartFormSpec extends UnitSpec with WithFakeApplication {
@@ -26,8 +26,8 @@ class CostsAtLegislationStartFormSpec extends UnitSpec with WithFakeApplication 
   "Creating a form" when {
 
     "passing in a valid model" should {
-      val model = RebasedCostsModel("Yes", Some(BigDecimal(1500)))
-      lazy val form = rebasedCostsForm.fill(model)
+      val model = CostsAtLegislationStartModel("Yes", Some(BigDecimal(1500)))
+      lazy val form = costsAtLegislationStartForm.fill(model)
 
       "return a valid form with no errors" in {
         form.errors.size shouldBe 0
@@ -35,196 +35,196 @@ class CostsAtLegislationStartFormSpec extends UnitSpec with WithFakeApplication 
 
       "return a form containing the data" in {
         form.data shouldBe Map(
-          "hasRebasedCosts" -> "Yes",
-          "rebasedCosts" -> "1500")
+          "hasCosts" -> "Yes",
+          "costs" -> "1500")
       }
     }
 
     "passing in a valid map with 'No'" should {
       val map = Map(
-        "hasRebasedCosts" -> "No",
-        "rebasedCosts" -> "")
-      lazy val form = rebasedCostsForm.bind(map)
+        "hasCosts" -> "No",
+        "costs" -> "")
+      lazy val form = costsAtLegislationStartForm.bind(map)
 
       "return a valid form with no errors" in {
         form.errors.size shouldBe 0
       }
 
       "return a form containing the data" in {
-        form.value shouldBe Some(RebasedCostsModel("No", None))
+        form.value shouldBe Some(CostsAtLegislationStartModel("No", None))
       }
     }
 
     "passing in a valid map with 'No' and an invalid amount" should {
       val map = Map(
-        "hasRebasedCosts" -> "No",
-        "rebasedCosts" -> "50.234")
-      lazy val form = rebasedCostsForm.bind(map)
+        "hasCosts" -> "No",
+        "costs" -> "50.234")
+      lazy val form = costsAtLegislationStartForm.bind(map)
 
       "return a valid form with no errors" in {
         form.errors.size shouldBe 0
       }
 
       "return a form containing the data" in {
-        form.value shouldBe Some(RebasedCostsModel("No", Some(50.234)))
+        form.value shouldBe Some(CostsAtLegislationStartModel("No", Some(50.234)))
       }
     }
 
-    "passing in an invalid map with no answer to hasRebasedCosts" should {
+    "passing in an invalid map with no answer to hasCosts" should {
       val map = Map(
-        "hasRebasedCosts" -> "",
-        "rebasedCosts" -> "100")
-      lazy val form = rebasedCostsForm.bind(map)
+        "hasCosts" -> "",
+        "costs" -> "100")
+      lazy val form = costsAtLegislationStartForm.bind(map)
 
       "return an invalid form with one error" in {
         form.errors.size shouldBe 1
       }
 
       s"return an error message of '${messages.errorRequired}" in {
-        form.error("hasRebasedCosts").get.message shouldBe messages.errorRequired
+        form.error("hasCosts").get.message shouldBe messages.errorRequired
       }
     }
 
-    "passing in an invalid map with an invalid answer to hasRebasedCosts" should {
+    "passing in an invalid map with an invalid answer to hasCosts" should {
       val map = Map(
-        "hasRebasedCosts" -> "a",
-        "rebasedCosts" -> "100")
-      lazy val form = rebasedCostsForm.bind(map)
+        "hasCosts" -> "a",
+        "costs" -> "100")
+      lazy val form = costsAtLegislationStartForm.bind(map)
 
       "return an invalid form with one error" in {
         form.errors.size shouldBe 1
       }
 
       s"return an error message of '${messages.errorRequired}" in {
-        form.error("hasRebasedCosts").get.message shouldBe messages.errorRequired
+        form.error("hasCosts").get.message shouldBe messages.errorRequired
       }
     }
 
     "passing in an invalid map with 'Yes' and no amount" should {
       val map = Map(
-        "hasRebasedCosts" -> "Yes",
-        "rebasedCosts" -> "")
-      lazy val form = rebasedCostsForm.bind(map)
+        "hasCosts" -> "Yes",
+        "costs" -> "")
+      lazy val form = costsAtLegislationStartForm.bind(map)
 
       "return an invalid form with one error" in {
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.RebasedCosts.errorNoValue}" in {
-        form.error("").get.message shouldBe messages.RebasedCosts.errorNoValue
+      s"return an error message of '${messages.CostsAtLegislationStart.errorNoValue}" in {
+        form.error("").get.message shouldBe messages.CostsAtLegislationStart.errorNoValue
       }
     }
 
     "passing in an invalid map with 'Yes' and a non-numeric amount" should {
       val map = Map(
-        "hasRebasedCosts" -> "Yes",
-        "rebasedCosts" -> "a")
-      lazy val form = rebasedCostsForm.bind(map)
+        "hasCosts" -> "Yes",
+        "costs" -> "a")
+      lazy val form = costsAtLegislationStartForm.bind(map)
 
       "return an invalid form with one error" in {
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.RebasedCosts.errorNoValue}" in {
-        form.error("").get.message shouldBe messages.RebasedCosts.errorNoValue
+      s"return an error message of '${messages.CostsAtLegislationStart.errorNoValue}" in {
+        form.error("").get.message shouldBe messages.CostsAtLegislationStart.errorNoValue
       }
     }
 
     "passing in a valid map with 'Yes' and two decimal places" should {
       val map = Map(
-        "hasRebasedCosts" -> "Yes",
-        "rebasedCosts" -> "100.23")
-      lazy val form = rebasedCostsForm.bind(map)
+        "hasCosts" -> "Yes",
+        "costs" -> "100.23")
+      lazy val form = costsAtLegislationStartForm.bind(map)
 
       "return a valid form with no errors" in {
         form.errors.size shouldBe 0
       }
 
       "return a form containing the data" in {
-        form.value shouldBe Some(RebasedCostsModel("Yes", Some(100.23)))
+        form.value shouldBe Some(CostsAtLegislationStartModel("Yes", Some(100.23)))
       }
     }
 
     "passing in an invalid map with 'Yes' and three decimal places" should {
       val map = Map(
-        "hasRebasedCosts" -> "Yes",
-        "rebasedCosts" -> "100.231")
-      lazy val form = rebasedCostsForm.bind(map)
+        "hasCosts" -> "Yes",
+        "costs" -> "100.231")
+      lazy val form = costsAtLegislationStartForm.bind(map)
 
       "return an invalid form with one error" in {
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.RebasedCosts.errorDecimalPlaces}" in {
-        form.error("").get.message shouldBe messages.RebasedCosts.errorDecimalPlaces
+      s"return an error message of '${messages.CostsAtLegislationStart.errorDecimalPlaces}" in {
+        form.error("").get.message shouldBe messages.CostsAtLegislationStart.errorDecimalPlaces
       }
     }
 
     "passing in a valid map with 'Yes' and a value of 0" should {
       val map = Map(
-        "hasRebasedCosts" -> "Yes",
-        "rebasedCosts" -> "0")
-      lazy val form = rebasedCostsForm.bind(map)
+        "hasCosts" -> "Yes",
+        "costs" -> "0")
+      lazy val form = costsAtLegislationStartForm.bind(map)
 
       "return a valid form with no errors" in {
         form.errors.size shouldBe 0
       }
 
       "return a form containing the data" in {
-        form.value shouldBe Some(RebasedCostsModel("Yes", Some(0)))
+        form.value shouldBe Some(CostsAtLegislationStartModel("Yes", Some(0)))
       }
     }
 
     "passing in an invalid map with 'Yes' and a negative value" should {
       val map = Map(
-        "hasRebasedCosts" -> "Yes",
-        "rebasedCosts" -> "-100")
-      lazy val form = rebasedCostsForm.bind(map)
+        "hasCosts" -> "Yes",
+        "costs" -> "-100")
+      lazy val form = costsAtLegislationStartForm.bind(map)
 
       "return an invalid form with one error" in {
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.RebasedCosts.errorNegative}" in {
-        form.error("").get.message shouldBe messages.RebasedCosts.errorNegative
+      s"return an error message of '${messages.CostsAtLegislationStart.errorNegative}" in {
+        form.error("").get.message shouldBe messages.CostsAtLegislationStart.errorNegative
       }
     }
 
     "passing in a valid map with 'Yes' and a value of the maximum" should {
       val map = Map(
-        "hasRebasedCosts" -> "Yes",
-        "rebasedCosts" -> "1000000000")
-      lazy val form = rebasedCostsForm.bind(map)
+        "hasCosts" -> "Yes",
+        "costs" -> "1000000000")
+      lazy val form = costsAtLegislationStartForm.bind(map)
 
       "return a valid form with no errors" in {
         form.errors.size shouldBe 0
       }
 
       "return a form containing the data" in {
-        form.value shouldBe Some(RebasedCostsModel("Yes", Some(1000000000)))
+        form.value shouldBe Some(CostsAtLegislationStartModel("Yes", Some(1000000000)))
       }
     }
 
     "passing in an invalid map with 'Yes' and value above the maximum" should {
       val map = Map(
-        "hasRebasedCosts" -> "Yes",
-        "rebasedCosts" -> "1000000000.01")
-      lazy val form = rebasedCostsForm.bind(map)
+        "hasCosts" -> "Yes",
+        "costs" -> "1000000000.01")
+      lazy val form = costsAtLegislationStartForm.bind(map)
 
       "return an invalid form with one error" in {
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.RebasedCosts.errorMaximum("1,000,000,000")}" in {
-        form.error("").get.message shouldBe messages.RebasedCosts.errorMaximum("1,000,000,000")
+      s"return an error message of '${messages.CostsAtLegislationStart.errorMaximum("1,000,000,000")}" in {
+        form.error("").get.message shouldBe messages.CostsAtLegislationStart.errorMaximum("1,000,000,000")
       }
     }
 
     "passing in an invalid map with multiple failed validation" should {
       val map = Map(
-        "hasRebasedCosts" -> "Yes",
-        "rebasedCosts" -> "-1.011")
-      lazy val form = rebasedCostsForm.bind(map)
+        "hasCosts" -> "Yes",
+        "costs" -> "-1.011")
+      lazy val form = costsAtLegislationStartForm.bind(map)
 
       "return an invalid form with two errors" in {
         form.errors.size shouldBe 2

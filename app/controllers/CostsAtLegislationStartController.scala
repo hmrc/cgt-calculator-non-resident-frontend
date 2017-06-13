@@ -21,7 +21,7 @@ import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import forms.CostsAtLegislationStartForm._
 import views.html.{calculation => views}
-import models.CostAtLegislationStartModel
+import models.CostsAtLegislationStartModel
 import play.api.data.Form
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
@@ -39,7 +39,7 @@ trait CostsAtLegislationStartController extends FrontendController with ValidAct
   val calcConnector: CalculatorConnector
 
   val costsAtLegislationStart: Action[AnyContent] = ValidateSession.async { implicit request =>
-    calcConnector.fetchAndGetFormData[CostAtLegislationStartModel](KeystoreKeys.costAtLegislationStart).map {
+    calcConnector.fetchAndGetFormData[CostsAtLegislationStartModel](KeystoreKeys.costAtLegislationStart).map {
       case Some(data) => Ok(views.costsAtLegislationStart(costsAtLegislationStartForm.fill(data)))
       case None => Ok(views.costsAtLegislationStart(costsAtLegislationStartForm))
     }
@@ -47,11 +47,11 @@ trait CostsAtLegislationStartController extends FrontendController with ValidAct
 
   val submitCostsAtLegislationStart: Action[AnyContent] = ValidateSession.async { implicit request =>
 
-    def errorAction(form: Form[CostAtLegislationStartModel]) = {
+    def errorAction(form: Form[CostsAtLegislationStartModel]) = {
       Future.successful(BadRequest(views.costsAtLegislationStart(form)))
     }
 
-    def successAction(model: CostAtLegislationStartModel) = {
+    def successAction(model: CostsAtLegislationStartModel) = {
       calcConnector.saveFormData(KeystoreKeys.costAtLegislationStart, model).map { _ =>
         Redirect(routes.RebasedValueController.rebasedValue())
       }

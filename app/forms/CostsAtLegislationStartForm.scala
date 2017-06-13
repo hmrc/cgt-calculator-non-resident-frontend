@@ -18,7 +18,7 @@ package forms
 
 import common.Constants
 import common.Validation._
-import models.CostAtLegislationStartModel
+import models.CostsAtLegislationStartModel
 import play.api.data.Forms._
 import play.api.data._
 import play.api.i18n.Messages
@@ -29,28 +29,28 @@ import play.api.Play.current
 
 object CostsAtLegislationStartForm {
 
-  def verifyAmountSupplied(data: CostAtLegislationStartModel): Boolean = {
+  def verifyAmountSupplied(data: CostsAtLegislationStartModel): Boolean = {
     data.hasCosts match {
       case "Yes" => data.costs.isDefined
       case "No" => true
     }
   }
 
-  def verifyPositive(data: CostAtLegislationStartModel): Boolean = {
+  def verifyPositive(data: CostsAtLegislationStartModel): Boolean = {
     data.hasCosts match {
       case "Yes" => isPositive(data.costs.getOrElse(0))
       case "No" => true
     }
   }
 
-  def verifyTwoDecimalPlaces(data: CostAtLegislationStartModel): Boolean = {
+  def verifyTwoDecimalPlaces(data: CostsAtLegislationStartModel): Boolean = {
     data.hasCosts match {
       case "Yes" => decimalPlacesCheck(data.costs.getOrElse(0))
       case "No" => true
     }
   }
 
-  def validateMax(data: CostAtLegislationStartModel): Boolean = {
+  def validateMax(data: CostsAtLegislationStartModel): Boolean = {
     data.hasCosts match {
       case "Yes" => maxCheck(data.costs.getOrElse(0))
       case "No" => true
@@ -69,9 +69,9 @@ object CostsAtLegislationStartForm {
         .verifying(Messages("calc.common.error.fieldRequired"), yesNoCheck),
       "costs" -> text
         .transform(stringToOptionalBigDecimal, optionalBigDecimalToString)
-    )(CostAtLegislationStartModel.apply)(CostAtLegislationStartModel.unapply)
+    )(CostsAtLegislationStartModel.apply)(CostsAtLegislationStartModel.unapply)
       .verifying(Messages("calc.costsAtLegislationStart.error.no.value.supplied"),
-        form => verifyAmountSupplied(CostAtLegislationStartModel(form.hasCosts, form.costs)))
+        form => verifyAmountSupplied(CostsAtLegislationStartModel(form.hasCosts, form.costs)))
       .verifying(Messages("calc.costsAtLegislationStart.errorNegative"),
         form => verifyPositive(form))
       .verifying(Messages("calc.costsAtLegislationStart.errorDecimalPlaces"),
