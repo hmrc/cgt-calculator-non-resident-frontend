@@ -18,52 +18,46 @@ package views
 
 import assets.MessageLookup.{NonResident => messages}
 import controllers.helpers.FakeRequestHelper
-import forms.RebasedCostsForm._
+import forms.CostsAtLegislationStartForm._
 import org.jsoup.Jsoup
 import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
-import views.html.calculation.rebasedCosts
+import views.html.calculation.costsAtLegislationStart
 
 class CostsAtLegislationStartViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
 
-
-
-  "The costs are legislation start date view" when {
+  "The costs at legislation start date view" when {
 
     "not supplied with a pre-existing stored model" should {
-      lazy val view = rebasedCosts(rebasedCostsForm)
+      lazy val view = costsAtLegislationStart(costsAtLegislationStartForm)
       lazy val document = Jsoup.parse(view.body)
 
-      s"Have the title ${messages.RebasedCosts.question}" in {
-        document.title shouldEqual messages.RebasedCosts.question
+      s"Have the title ${messages.CostsAtLegislationStart.title}" in {
+        document.title shouldEqual messages.CostsAtLegislationStart.title
       }
 
       "have a back link" which {
-        lazy val backLink = document.body().select("#back-link")
+        lazy val backLink = document.select("#back-link")
 
-        "has the text" in {
+        "has the correct text" in {
           backLink.text shouldBe messages.back
         }
 
-        "has the class 'back-link'" in {
-          backLink.attr("class") shouldBe "back-link"
-        }
-
-        s"has a route to 'rebased-value'" in {
-          backLink.attr("href") shouldBe controllers.routes.RebasedValueController.rebasedValue().url
+        s"has a route to 'worth-before-legislation-start'" in {
+          backLink.attr("href") shouldBe controllers.routes.WorthBeforeLegislationStartController.worthBeforeLegislationStart().url
         }
       }
 
       "have a heading" which {
-        lazy val heading = document.body().select("h1")
+        lazy val heading = document.select("h1")
 
         "has a class of heading-xlarge" in {
           heading.attr("class") shouldBe "heading-xlarge"
         }
 
-        s"has the text '${messages.RebasedCosts.question}'" in {
-          heading.text shouldBe messages.RebasedCosts.question
+        s"has the text '${messages.CostsAtLegislationStart.title}'" in {
+          heading.text shouldBe messages.CostsAtLegislationStart.title
         }
       }
 
@@ -72,38 +66,34 @@ class CostsAtLegislationStartViewSpec extends UnitSpec with WithFakeApplication 
       }
 
       "have a form" which {
-        lazy val form = document.body().select("form")
+        lazy val form = document.select("form")
 
         "has a method of POST" in {
           form.attr("method") shouldBe "POST"
         }
 
-        s"has an action of '${controllers.routes.RebasedCostsController.rebasedCosts().url}'" in {
-          form.attr("action") shouldBe controllers.routes.RebasedCostsController.rebasedCosts().url
+        s"has an action of '${controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart().url}'" in {
+          form.attr("action") shouldBe controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart().url
         }
       }
 
-      s"have the question '${messages.RebasedCosts.question}'" in {
-        document.body.select("legend").first().text shouldBe messages.RebasedCosts.question
+      s"have an primary question with the correct text" in {
+        document.select("#hasCosts").first().text shouldBe messages.CostsAtLegislationStart.title
       }
 
-      "have option inputs with id 'hasRebasedCosts'" in {
-        document.body().select("input[type=radio]").attr("id") should include ("hasRebasedCosts")
+      s"have a secondary question with the correct text" in {
+        document.select("label[for=costs] > div").first().text() shouldBe messages.CostsAtLegislationStart.howMuch
       }
 
-      s"have the input question '${messages.RebasedCosts.inputQuestion}'" in {
-        document.body().select("label[for=rebasedCosts] div").first().text() shouldBe messages.RebasedCosts.inputQuestion
+      s"have help text for the secondary question" in {
+        document.select("label[for=costs] p").text() shouldBe messages.CostsAtLegislationStart.helpText
       }
 
-      s"have joint ownership text of ${messages.RebasedCosts.jointOwnership}" in {
-        document.body().select("label[for=rebasedCosts] p").text() shouldBe messages.RebasedCosts.jointOwnership
+      "have a value input with the id 'costs'" in {
+        document.select("#costs").size() shouldBe 1
       }
 
-      "have a value input with the id 'rebasedCosts'" in {
-        document.body().select("input[type=number]").attr("id") should include ("rebasedCosts")
-      }
-
-      "have a button" which {
+      "have a continue button" which {
         lazy val button = document.select("button")
 
         "has the class 'button'" in {
@@ -121,11 +111,11 @@ class CostsAtLegislationStartViewSpec extends UnitSpec with WithFakeApplication 
     }
 
     "supplied with errors" should {
-      lazy val form = rebasedCostsForm.bind(Map(
-        "hasRebasedCosts" -> "Yes",
-        "rebasedCosts" -> ""
+      lazy val form = costsAtLegislationStartForm.bind(Map(
+        "hasCosts" -> "Yes",
+        "costs" -> ""
       ))
-      lazy val view = rebasedCosts(form)
+      lazy val view = costsAtLegislationStart(form)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {
