@@ -22,10 +22,13 @@ import models._
 object TotalGainRequestConstructor {
 
   def totalGainQuery(totalGainAnswersModel: TotalGainAnswersModel): String = {
+    val costs:BigDecimal = if(totalGainAnswersModel.acquisitionCostsModel.isDefined) totalGainAnswersModel.acquisitionCostsModel.get.acquisitionCostsAmt
+    else totalGainAnswersModel.costsBeforeLegislationStart.get.costs.getOrElse(0.00)
+
     disposalValue(totalGainAnswersModel.disposalValueModel) +
     disposalCosts(totalGainAnswersModel.disposalCostsModel) +
     acquisitionValue(totalGainAnswersModel.acquisitionValueModel) +
-    acquisitionCosts(totalGainAnswersModel.acquisitionCostsModel.get) +
+    acquisitionCosts(costs) +
     improvements(totalGainAnswersModel.improvementsModel) +
     rebasedValues(totalGainAnswersModel.rebasedValueModel, totalGainAnswersModel.rebasedCostsModel,
       totalGainAnswersModel.improvementsModel, totalGainAnswersModel.acquisitionDateModel) +
@@ -45,8 +48,8 @@ object TotalGainRequestConstructor {
     s"&acquisitionValue=${acquisitionValueModel.acquisitionValueAmt}"
   }
 
-  def acquisitionCosts(acquisitionCostsModel: AcquisitionCostsModel): String = {
-    s"&acquisitionCosts=${acquisitionCostsModel.acquisitionCostsAmt}"
+  def acquisitionCosts(costs: BigDecimal): String = {
+    s"&acquisitionCosts=${costs}"
   }
 
   def improvements(improvementsModel: ImprovementsModel): String = {
