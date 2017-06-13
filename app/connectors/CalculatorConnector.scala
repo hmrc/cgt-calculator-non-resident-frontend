@@ -100,6 +100,16 @@ trait CalculatorConnector {
     )
   }
 
+  private def selectAcquisitionCosts(answers: TotalGainAnswersModel) = {
+    (answers.acquisitionCostsModel, answers.costsAtLegislationStart) match {
+      case (_, Some(model)) if TaxDates.dateBeforeLegislationStart(answers.acquisitionDateModel.get) && model.hasCosts == "Yes" =>
+        model.costs.get
+      case (Some(model), _) if !TaxDates.dateBeforeLegislationStart(answers.acquisitionDateModel.get) =>
+        model.acquisitionCostsAmt
+      case _ => 0
+    }
+  }
+
   def calculateTotalCosts(answers: TotalGainAnswersModel, calculationType: Option[CalculationElectionModel]): Future[BigDecimal] = calculationType match {
     case Some(calculationElection) =>
       if(calculationElection.calculationType == CalculationType.rebased) {
@@ -110,13 +120,7 @@ trait CalculatorConnector {
       } else {
         http.GET[BigDecimal](s"$serviceUrl/capital-gains-calculator/non-resident/calculate-total-costs?" +
           s"disposalCosts=${answers.disposalCostsModel.disposalCosts}" +
-          s"&acquisitionCosts=${(answers.acquisitionCostsModel, answers.costsAtLegislationStart) match {
-            case (_, Some(model)) if TaxDates.dateBeforeLegislationStart(answers.acquisitionDateModel.get) && model.hasCosts == "Yes" =>
-              model.costs.get
-            case (Some(model), _) if !TaxDates.dateBeforeLegislationStart(answers.acquisitionDateModel.get) =>
-              model.acquisitionCostsAmt
-            case _ => 0
-          }}" +
+          s"&acquisitionCosts=${selectAcquisitionCosts(answers)}" +
           improvementsQueryParameter(answers.improvementsModel,
             answers.improvementsModel.improvementsAmt.getOrElse(BigDecimal(0)) + answers.improvementsModel.improvementsAmtAfter.getOrElse(BigDecimal(0))))
       }

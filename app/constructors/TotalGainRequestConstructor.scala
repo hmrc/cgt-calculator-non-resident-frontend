@@ -51,7 +51,8 @@ object TotalGainRequestConstructor {
   def acquisitionCosts(acquisitionCostsModel: Option[AcquisitionCostsModel],
                        costsAtLegislationStartModel: Option[CostsAtLegislationStartModel],
                        acquisitionDateModel: AcquisitionDateModel): String = {
-    s"&acquisitionCosts=${
+
+    val selectAcquisitionCosts = {
       (acquisitionCostsModel, costsAtLegislationStartModel) match {
         case (_, Some(model)) if TaxDates.dateBeforeLegislationStart(acquisitionDateModel.get) && model.hasCosts == "Yes" =>
           model.costs.get
@@ -59,7 +60,9 @@ object TotalGainRequestConstructor {
           model.acquisitionCostsAmt
         case _ => 0
       }
-    }"
+    }
+
+    s"&acquisitionCosts=$selectAcquisitionCosts"
   }
 
   def improvements(improvementsModel: ImprovementsModel): String = {
