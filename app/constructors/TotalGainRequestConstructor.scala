@@ -52,10 +52,13 @@ object TotalGainRequestConstructor {
                        costsAtLegislationStartModel: Option[CostsAtLegislationStartModel],
                        acquisitionDateModel: AcquisitionDateModel): String = {
     s"&acquisitionCosts=${
-      if (TaxDates.dateBeforeLegislationStart(acquisitionDateModel.get)) {
-        if (costsAtLegislationStartModel.get.hasCosts == "Yes") costsAtLegislationStartModel.get.costs.get
-        else 0
-      } else acquisitionCostsModel.get.acquisitionCostsAmt
+      (acquisitionCostsModel, costsAtLegislationStartModel) match {
+        case (_, Some(model)) if TaxDates.dateBeforeLegislationStart(acquisitionDateModel.get) && model.hasCosts == "Yes" =>
+          model.costs.get
+        case (Some(model), _) if !TaxDates.dateBeforeLegislationStart(acquisitionDateModel.get) =>
+          model.acquisitionCostsAmt
+        case _ => 0
+      }
     }"
   }
 
