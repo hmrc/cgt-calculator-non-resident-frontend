@@ -110,7 +110,7 @@ trait CalculatorConnector {
       } else {
         http.GET[BigDecimal](s"$serviceUrl/capital-gains-calculator/non-resident/calculate-total-costs?" +
           s"disposalCosts=${answers.disposalCostsModel.disposalCosts}" +
-          s"&acquisitionCosts=${answers.acquisitionCostsModel.acquisitionCostsAmt}" +
+          s"&acquisitionCosts=${answers.acquisitionCostsModel.get.acquisitionCostsAmt}" +
           improvementsQueryParameter(answers.improvementsModel,
             answers.improvementsModel.improvementsAmt.getOrElse(BigDecimal(0)) + answers.improvementsModel.improvementsAmtAfter.getOrElse(BigDecimal(0))))
       }

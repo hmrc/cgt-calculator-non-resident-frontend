@@ -22,4 +22,5 @@ case class AcquisitionCostsModel (acquisitionCostsAmt: BigDecimal)
 
 object AcquisitionCostsModel {
   implicit val format = Json.format[AcquisitionCostsModel]
+  implicit val convertToSome: AcquisitionCostsModel => Option[AcquisitionCostsModel] = model => Some(model)
 }
