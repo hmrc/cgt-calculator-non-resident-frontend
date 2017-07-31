@@ -25,6 +25,7 @@ import controllers.predicates.ValidActiveSession
 import forms.DisposalDateForm._
 import views.html.calculation
 import models.DisposalDateModel
+import play.api.Logger
 import play.api.data.Form
 import play.api.mvc.Action
 import uk.gov.hmrc.play.frontend.controller.FrontendController
@@ -62,6 +63,7 @@ trait DisposalDateController extends FrontendController with ValidActiveSession 
     def errorAction(form: Form[DisposalDateModel]) = Future.successful(BadRequest(calculation.disposalDate(form)))
 
     def successAction(model: DisposalDateModel) = {
+      Logger.info("Saving disposalDate as : " + model)
       for {
         _ <- calcConnector.saveFormData(KeystoreKeys.disposalDate, model)
         taxYear <- calcConnector.getTaxYear(s"${model.year}-${model.month}-${model.day}")

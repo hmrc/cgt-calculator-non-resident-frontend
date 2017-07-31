@@ -20,6 +20,7 @@ import common.{TaxDates, YesNoKeys}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
 import models._
+import play.api.Logger
 import uk.gov.hmrc.play.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -33,7 +34,10 @@ trait AnswersConstructor {
   val calculatorConnector: CalculatorConnector
 
   def getNRTotalGainAnswers(implicit hc: HeaderCarrier): Future[TotalGainAnswersModel] = {
-    val disposalDate = calculatorConnector.fetchAndGetFormData[DisposalDateModel](KeystoreKeys.disposalDate).map(data => data.get)
+    val disposalDate = calculatorConnector.fetchAndGetFormData[DisposalDateModel](KeystoreKeys.disposalDate).map(data => {
+      Logger.info("Getting disposalDate as : " + data)
+      data.get
+    })
     val soldOrGivenAway = calculatorConnector.fetchAndGetFormData[SoldOrGivenAwayModel](KeystoreKeys.soldOrGivenAway).map(data => data.get)
     val soldForLess = calculatorConnector.fetchAndGetFormData[SoldForLessModel](KeystoreKeys.soldForLess)
     val disposalCosts = calculatorConnector.fetchAndGetFormData[DisposalCostsModel](KeystoreKeys.disposalCosts).map(data => data.get)
