@@ -33,6 +33,7 @@ import uk.gov.hmrc.play.frontend.controller.FrontendController
 import uk.gov.hmrc.play.http.HeaderCarrier
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
+import controllers.utils.RecoverableFuture
 
 import scala.concurrent.Future
 
@@ -94,11 +95,11 @@ trait PrivateResidenceReliefController extends FrontendController with ValidActi
       }
     }
 
-    for {
+    (for {
       disposalDate <- getDisposalDate
       acquisitionDate <- getAcquisitionDate
       finalResult <- action(disposalDate, acquisitionDate)
-    } yield finalResult
+    } yield finalResult).recoverToStart
   }
 
   val submitPrivateResidenceRelief: Action[AnyContent] = ValidateSession.async { implicit request =>
@@ -128,7 +129,7 @@ trait PrivateResidenceReliefController extends FrontendController with ValidActi
       }
 
       def successAction(model: PrivateResidenceReliefModel) = {
-        for {
+        (for {
           _ <- calcConnector.saveFormData(KeystoreKeys.privateResidenceRelief, model)
           answers <- answersConstructor.getNRTotalGainAnswers
           totalGainResultsModel <- calcConnector.calculateTotalGain(answers)
@@ -137,16 +138,16 @@ trait PrivateResidenceReliefController extends FrontendController with ValidActi
           results <- calcConnector.calculateTaxableGainAfterPRR(answers, model, propertyLivedIn.get)
           taxableGainsZeroOrLess <- checkTaxableGainsZeroOrLess(results.get)
           route <- routeDestination(taxableGainsZeroOrLess)
-        } yield route
+        } yield route).recoverToStart
       }
 
       privateResidenceReliefForm(showFirstQuestion, showBetweenQuestion).bindFromRequest.fold(errorAction, successAction)
     }
 
-    for {
+    (for {
       disposalDate <- getDisposalDate
       acquisitionDate <- getAcquisitionDate
       finalResult <- action(disposalDate, acquisitionDate)
-    } yield finalResult
+    } yield finalResult).recoverToStart
   }
 }

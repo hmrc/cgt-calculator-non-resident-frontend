@@ -30,6 +30,7 @@ import uk.gov.hmrc.play.frontend.controller.FrontendController
 import uk.gov.hmrc.play.http.HeaderCarrier
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
+import controllers.utils.RecoverableFuture
 
 import scala.concurrent.Future
 
@@ -87,14 +88,14 @@ trait ImprovementsController extends FrontendController with ValidActiveSession 
       }
     }
 
-    for {
+    (for {
       acquisitionDate <- fetchAcquisitionDate(hc)
       improvements <- fetchImprovements(hc)
       improvementsOptions <- displayImprovementsSectionCheck(acquisitionDate)
       backUrl <- improvementsBackUrl(acquisitionDate)
       ownerBeforeLegislationStart <- ownerBeforeLegislationStartCheck(acquisitionDate)
       route <- routeRequest(backUrl, improvements, improvementsOptions, ownerBeforeLegislationStart)
-    } yield route
+    } yield route).recoverToStart
   }
 
   val submitImprovements: Action[AnyContent] = ValidateSession.async { implicit request =>
@@ -115,11 +116,11 @@ trait ImprovementsController extends FrontendController with ValidActiveSession 
     }
 
     def successAction(improvements: ImprovementsModel): Future[Result] = {
-      for {
+      (for {
         _ <- calcConnector.saveFormData(KeystoreKeys.improvements, improvements)
         allAnswersModel <- answersConstructor.getNRTotalGainAnswers
         gains <- calcConnector.calculateTotalGain(allAnswersModel)
-      } yield successRouteRequest(gains)
+      } yield successRouteRequest(gains)).recoverToStart
     }
 
     def routeRequest(backUrl: String,
@@ -131,12 +132,12 @@ trait ImprovementsController extends FrontendController with ValidActiveSession 
       )
     }
 
-    for {
+    (for {
       acquisitionDate <- fetchAcquisitionDate(hc)
       improvementsOptions <- displayImprovementsSectionCheck(acquisitionDate)
       backUrl <- improvementsBackUrl(acquisitionDate)
       ownerBeforeLegislationStart <- ownerBeforeLegislationStartCheck(acquisitionDate)
       route <- routeRequest(backUrl, improvementsOptions, ownerBeforeLegislationStart)
-    } yield route
+    } yield route).recoverToStart
   }
 }

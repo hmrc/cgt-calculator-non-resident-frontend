@@ -27,6 +27,7 @@ import uk.gov.hmrc.play.frontend.controller.FrontendController
 import uk.gov.hmrc.play.http.HeaderCarrier
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
+import controllers.utils.RecoverableFuture
 
 import scala.concurrent.Future
 
@@ -68,10 +69,10 @@ trait BroughtForwardLossesController extends FrontendController with ValidActive
       case _ => broughtForwardLossesForm
     }
 
-    for {
+    (for {
       backLink <- generateBackLink(hc)
       form <- generateForm
-    } yield Ok(calculation.broughtForwardLosses(form, backLink))
+    } yield Ok(calculation.broughtForwardLosses(form, backLink))).recoverToStart
   }
 
   val submitBroughtForwardLosses = ValidateSession.async { implicit request =>
@@ -82,9 +83,9 @@ trait BroughtForwardLossesController extends FrontendController with ValidActive
     }
 
     def errorAction(form: Form[BroughtForwardLossesModel]) = {
-      for {
+      (for {
         backLink <- generateBackLink(hc)
-      } yield BadRequest(calculation.broughtForwardLosses(form, backLink))
+      } yield BadRequest(calculation.broughtForwardLosses(form, backLink))).recoverToStart
     }
 
     broughtForwardLossesForm.bindFromRequest.fold(

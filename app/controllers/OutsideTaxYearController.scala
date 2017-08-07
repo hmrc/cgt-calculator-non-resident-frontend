@@ -25,6 +25,7 @@ import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
+import controllers.utils.RecoverableFuture
 
 object OutsideTaxYearController extends OutsideTaxYearController {
   val calcConnector = CalculatorConnector
@@ -35,12 +36,12 @@ trait OutsideTaxYearController extends FrontendController with ValidActiveSessio
   val calcConnector: CalculatorConnector
 
   val outsideTaxYear: Action[AnyContent] = ValidateSession.async { implicit request =>
-    for {
+    (for {
       disposalDate <- calcConnector.fetchAndGetFormData[DisposalDateModel](keystoreKeys.disposalDate)
       taxYear <- calcConnector.getTaxYear(s"${disposalDate.get.year}-${disposalDate.get.month}-${disposalDate.get.day}")
     } yield {
       Ok(views.outsideTaxYear(
         taxYear = taxYear.get))
-    }
+    }).recoverToStart
   }
 }

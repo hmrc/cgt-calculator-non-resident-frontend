@@ -30,6 +30,7 @@ import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
+import controllers.utils.RecoverableFuture
 
 import scala.concurrent.Future
 
@@ -55,13 +56,13 @@ trait RebasedValueController extends FrontendController with ValidActiveSession 
   }
 
   val rebasedValue: Action[AnyContent] = ValidateSession.async { implicit request =>
-    for {
+    (for {
       rebasedValueModel <- calcConnector.fetchAndGetFormData[RebasedValueModel](KeystoreKeys.rebasedValue)
       acquisitionDate <- calcConnector.fetchAndGetFormData[AcquisitionDateModel](KeystoreKeys.acquisitionDate)
     } yield rebasedValueModel match {
       case Some(data) => Ok(calculation.rebasedValue(rebasedValueForm.fill(data), backLink(acquisitionDate)))
       case None => Ok(calculation.rebasedValue(rebasedValueForm, backLink(acquisitionDate)))
-    }
+    }).recoverToStart
   }
 
   val submitRebasedValue: Action[AnyContent] = ValidateSession.async { implicit request =>

@@ -29,6 +29,7 @@ import uk.gov.hmrc.play.frontend.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 import play.api.mvc.{Action, AnyContent}
+import controllers.utils.RecoverableFuture
 
 import scala.concurrent.Future
 
@@ -57,7 +58,7 @@ trait OtherReliefsController extends FrontendController with ValidActiveSession 
       Ok(result)
     }
 
-    for {
+    (for {
       answers <- answersConstructor.getNRTotalGainAnswers(hc)
       gain <- calcConnector.calculateTotalGain(answers)(hc)
       gainExists <- checkGainExists(gain.get)
@@ -69,7 +70,7 @@ trait OtherReliefsController extends FrontendController with ValidActiveSession 
       maxAEA <- getMaxAEA(taxYear, calcConnector)(hc)
       chargeableGainResult <- getChargeableGain(answers, prrAnswers, propertyLivedIn, allAnswers, maxAEA.get, calcConnector)(hc)
       reliefs <- calcConnector.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsFlat)
-    } yield routeRequest(reliefs, gain, chargeableGainResult)
+    } yield routeRequest(reliefs, gain, chargeableGainResult)).recoverToStart
 
   }
 
@@ -84,7 +85,7 @@ trait OtherReliefsController extends FrontendController with ValidActiveSession 
         BadRequest(calculation.otherReliefs(form, chargeableGain, gain))
       }
 
-      for {
+      (for {
         answers <- answersConstructor.getNRTotalGainAnswers(hc)
         gain <- calcConnector.calculateTotalGain(answers)(hc)
         gainExists <- checkGainExists(gain.get)
@@ -95,7 +96,7 @@ trait OtherReliefsController extends FrontendController with ValidActiveSession 
         taxYear <- getTaxYear(answers, calcConnector)(hc)
         maxAEA <- getMaxAEA(taxYear, calcConnector)(hc)
         chargeableGainResult <- getChargeableGain(answers, prrAnswers, propertyLivedIn, allAnswers, maxAEA.get, calcConnector)(hc)
-      } yield routeRequest(gain, chargeableGainResult)
+      } yield routeRequest(gain, chargeableGainResult)).recoverToStart
     }
 
     def successAction(model: OtherReliefsModel) = {

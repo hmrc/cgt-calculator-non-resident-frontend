@@ -26,6 +26,7 @@ import uk.gov.hmrc.play.frontend.controller.FrontendController
 import views.html.calculation
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
+import controllers.utils.RecoverableFuture
 
 import scala.concurrent.Future
 
@@ -54,10 +55,10 @@ trait BoughtForLessController extends FrontendController with ValidActiveSession
     }
 
     def successAction(model: BoughtForLessModel) = {
-      for {
+      (for {
         save <- calcConnector.saveFormData(KeystoreKeys.boughtForLess, model)
         route <- routeRequest(model)
-      } yield route
+      } yield route).recoverToStart
     }
 
 

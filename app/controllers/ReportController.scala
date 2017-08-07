@@ -31,6 +31,7 @@ import play.api.mvc.{Action, AnyContent, RequestHeader}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import uk.gov.hmrc.play.http.HeaderCarrier
 import views.html.calculation
+import controllers.utils.RecoverableFuture
 
 import scala.concurrent.Future
 
@@ -107,7 +108,7 @@ trait ReportController extends FrontendController with ValidActiveSession {
       else Future.successful(YourAnswersConstructor.fetchYourAnswers(totalGainAnswersModel, privateResidenceReliefModel, personalAndPreviousDetailsModel, propertyLivedInModel))
     }
 
-    for {
+    (for {
       answers <- answersConstructor.getNRTotalGainAnswers(hc)
       totalGainResultsModel <- calcConnector.calculateTotalGain(answers)
       gainExists <- checkGainExists(totalGainResultsModel.get)
@@ -150,6 +151,6 @@ trait ReportController extends FrontendController with ValidActiveSession {
       }
       pdfGenerator.ok(view, host).asScala()
         .withHeaders("Content-Disposition" ->s"""attachment; filename="${Messages("calc.summary.title")}.pdf"""")
-    }
+    }).recoverToStart
   }
 }

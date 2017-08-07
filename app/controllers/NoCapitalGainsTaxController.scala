@@ -24,6 +24,7 @@ import uk.gov.hmrc.play.frontend.controller.FrontendController
 import views.html.calculation
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
+import controllers.utils.RecoverableFuture
 
 object NoCapitalGainsTaxController extends NoCapitalGainsTaxController {
   val calcConnector = CalculatorConnector
@@ -36,6 +37,6 @@ trait NoCapitalGainsTaxController extends FrontendController with ValidActiveSes
   val noCapitalGainsTax = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[DisposalDateModel](KeystoreKeys.disposalDate).map {
       result => Ok(calculation.noCapitalGainsTax(result.get))
-    }
+    }.recoverToStart
   }
 }

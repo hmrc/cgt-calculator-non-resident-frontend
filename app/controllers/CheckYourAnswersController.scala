@@ -29,6 +29,7 @@ import views.html.calculation
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 import scala.concurrent.ExecutionContext.Implicits.global
+import controllers.utils.RecoverableFuture
 
 import scala.concurrent.Future
 
@@ -69,7 +70,7 @@ trait CheckYourAnswersController extends FrontendController with ValidActiveSess
 
   val checkYourAnswers: Action[AnyContent] = ValidateSession.async { implicit request =>
 
-    for {
+    (for {
       model <- answersConstructor.getNRTotalGainAnswers
       totalGainResult <- calculatorConnector.calculateTotalGain(model)
       gainExists <- checkGainExists(totalGainResult.get)
@@ -81,7 +82,7 @@ trait CheckYourAnswersController extends FrontendController with ValidActiveSess
       backLink <- getBackLink(totalGainResult.get, model.acquisitionDateModel, finalAnswers)
     } yield {
       Ok(calculation.checkYourAnswers(answers, backLink))
-    }
+    }).recoverToStart
   }
 
   val submitCheckYourAnswers: Action[AnyContent] = ValidateSession.async { implicit request =>
@@ -96,7 +97,7 @@ trait CheckYourAnswersController extends FrontendController with ValidActiveSess
         redirectRoute(taxableGainModel, model.get)
     }
 
-    for {
+    (for {
       allAnswersModel <- answersConstructor.getNRTotalGainAnswers
       totalGains <- calculatorConnector.calculateTotalGain(allAnswersModel)
       gainExists <- checkGainExists(totalGains.get)
@@ -104,6 +105,6 @@ trait CheckYourAnswersController extends FrontendController with ValidActiveSess
       prrModel <- getPrrResponse(propertyLivedIn, calculatorConnector)
       taxableGainWithPrr <- getPrrIfApplicable(allAnswersModel, prrModel, propertyLivedIn, calculatorConnector)
       route <- routeRequest(totalGains, taxableGainWithPrr)
-    } yield route
+    } yield route).recoverToStart
   }
 }

@@ -29,6 +29,7 @@ import forms.WhoDidYouGiveItToForm._
 import play.api.mvc.{Action, AnyContent, Result}
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
+import controllers.utils.RecoverableFuture
 
 import scala.concurrent.Future
 
@@ -76,10 +77,10 @@ trait WhoDidYouGiveItToController extends FrontendController with ValidActiveSes
       Future.successful(Ok(views.noTaxToPay(input)))
     }
 
-    for {
+    (for {
       givenToCharity <- isGivenToCharity
       result <- result(givenToCharity)
-    } yield result
+    } yield result).recoverToStart
   }
 
 }
