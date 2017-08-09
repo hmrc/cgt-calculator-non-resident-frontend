@@ -27,6 +27,7 @@ import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 import play.api.data.Form
 import uk.gov.hmrc.play.http.HeaderCarrier
+import controllers.utils.RecoverableFuture
 
 import scala.concurrent.Future
 
@@ -54,10 +55,10 @@ trait CurrentIncomeController extends FrontendController with ValidActiveSession
       }
     }
 
-    for {
+    (for {
       backLink <- getBackLink
       form <- getForm
-    } yield Ok(calculation.currentIncome(form, backLink))
+    } yield Ok(calculation.currentIncome(form, backLink))).recoverToStart
   }
 
   val submitCurrentIncome = ValidateSession.async { implicit request =>
@@ -68,10 +69,10 @@ trait CurrentIncomeController extends FrontendController with ValidActiveSession
     }
 
     def successAction(model: CurrentIncomeModel) = {
-      for {
+      (for {
         _ <- calcConnector.saveFormData(KeystoreKeys.currentIncome, model)
         route <- routeRequest(model)
-      } yield route
+      } yield route).recoverToStart
     }
 
     currentIncomeForm.bindFromRequest.fold(

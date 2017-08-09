@@ -27,6 +27,7 @@ import uk.gov.hmrc.play.frontend.controller.FrontendController
 import views.html.{calculation => views}
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
+import controllers.utils.RecoverableFuture
 
 import scala.concurrent.Future
 object PreviousGainOrLossController extends PreviousGainOrLossController {
@@ -51,10 +52,10 @@ trait PreviousGainOrLossController extends FrontendController with ValidActiveSe
         Future.successful(BadRequest(views.previousLossOrGain(form)))
       }
       def successAction(model: PreviousLossOrGainModel) = {
-        for {
+        (for {
           save <- calcConnector.saveFormData[PreviousLossOrGainModel](KeystoreKeys.previousLossOrGain, model)
           route <- routeRequest(model)
-        } yield route
+        } yield route).recoverToStart
       }
 
       def routeRequest(data: PreviousLossOrGainModel): Future[Result] = {

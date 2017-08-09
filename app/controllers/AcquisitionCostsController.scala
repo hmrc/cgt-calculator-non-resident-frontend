@@ -30,6 +30,7 @@ import uk.gov.hmrc.play.http.HeaderCarrier
 import views.html.calculation
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
+import controllers.utils.RecoverableFuture
 
 import scala.concurrent.Future
 
@@ -82,11 +83,11 @@ trait AcquisitionCostsController extends FrontendController with ValidActiveSess
       }
     }
 
-    for {
+    (for {
       backLink <- getBackLink
       isOwnerBeforeLegislationStart <- isOwnerBeforeLegislationStart
       result <- result(backLink, isOwnerBeforeLegislationStart)
-    } yield result
+    } yield result).recoverToStart
   }
 
   val submitAcquisitionCosts: Action[AnyContent] = ValidateSession.async { implicit request =>
@@ -100,10 +101,10 @@ trait AcquisitionCostsController extends FrontendController with ValidActiveSess
         case _ => Future.successful(Redirect(routes.RebasedValueController.rebasedValue()))
       }
 
-      for {
+      (for {
         acquisitionDate <- getAcquisitionDate
         result <- result(acquisitionDate)
-      } yield result
+      } yield result).recoverToStart
     }
 
     def successAction(model: AcquisitionCostsModel) = {
@@ -115,11 +116,11 @@ trait AcquisitionCostsController extends FrontendController with ValidActiveSess
       def result(backLink: String, isOwnerBeforeLegislationStart: Boolean) =
         Future.successful(BadRequest(calculation.acquisitionCosts(form, backLink, isOwnerBeforeLegislationStart)))
 
-      for {
+      (for {
         backLink <- getBackLink
         isOwnerBeforeLegislationStart <- isOwnerBeforeLegislationStart
         result <- result(backLink, isOwnerBeforeLegislationStart)
-      } yield result
+      } yield result).recoverToStart
     }
 
     acquisitionCostsForm.bindFromRequest.fold(errorAction, successAction)

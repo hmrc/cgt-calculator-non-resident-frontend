@@ -29,6 +29,7 @@ import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
+import controllers.utils.RecoverableFuture
 
 import scala.concurrent.Future
 
@@ -57,7 +58,7 @@ trait OtherReliefsRebasedController extends FrontendController with ValidActiveS
       Ok(result)
     }
 
-    for {
+    (for {
       answers <- answersConstructor.getNRTotalGainAnswers(hc)
       gain <- calcConnector.calculateTotalGain(answers)(hc)
       gainExists <- checkGainExists(gain.get)
@@ -69,13 +70,13 @@ trait OtherReliefsRebasedController extends FrontendController with ValidActiveS
       maxAEA <- getMaxAEA(taxYear, calcConnector)(hc)
       chargeableGainResult <- getChargeableGain(answers, prrAnswers, propertyLivedIn, allAnswers, maxAEA.get, calcConnector)(hc)
       reliefs <- calcConnector.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsRebased)
-    } yield routeRequest(reliefs, gain, chargeableGainResult)
+    } yield routeRequest(reliefs, gain, chargeableGainResult)).recoverToStart
   }
 
   val submitOtherReliefsRebased: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     def errorAction(form: Form[OtherReliefsModel]) = {
-      for {
+      (for {
         answers <- answersConstructor.getNRTotalGainAnswers(hc)
         gain <- calcConnector.calculateTotalGain(answers)(hc)
         gainExists <- checkGainExists(gain.get)
@@ -87,7 +88,7 @@ trait OtherReliefsRebasedController extends FrontendController with ValidActiveS
         maxAEA <- getMaxAEA(taxYear, calcConnector)(hc)
         chargeableGainResult <- getChargeableGain(answers, prrAnswers, propertyLivedIn, allAnswers, maxAEA.get, calcConnector)(hc)
         route <- errorRoute(gain, chargeableGainResult, form)
-      } yield route
+      } yield route).recoverToStart
     }
 
     def errorRoute(totalGain: Option[TotalGainResultsModel], chargeableGainResult: Option[CalculationResultsWithTaxOwedModel],

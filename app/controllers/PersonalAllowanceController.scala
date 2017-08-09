@@ -28,6 +28,7 @@ import play.api.i18n.Messages.Implicits._
 import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import views.html.calculation
+import controllers.utils.RecoverableFuture
 
 import scala.concurrent.Future
 
@@ -77,9 +78,9 @@ trait PersonalAllowanceController extends FrontendController with ValidActiveSes
       Future.successful(Redirect(routes.OtherPropertiesController.otherProperties()))
     }
 
-    for {
+    (for {
       allowance <- getPersonalAllowanceForYear
       action <- personalAllowanceForm(allowance).bindFromRequest.fold(errorAction, successAction)
-    } yield action
+    } yield action).recoverToStart
   }
 }

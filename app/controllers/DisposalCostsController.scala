@@ -29,6 +29,7 @@ import uk.gov.hmrc.play.frontend.controller.FrontendController
 import uk.gov.hmrc.play.http.HeaderCarrier
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
+import controllers.utils.RecoverableFuture
 
 import scala.concurrent.Future
 
@@ -67,12 +68,12 @@ trait DisposalCostsController extends FrontendController with ValidActiveSession
       }
     }
 
-    for {
+    (for {
       soldOrGivenAway <- fetchSoldOrGivenAway
       soldForLess <- fetchSoldForLess
       backLink <- backUrl(soldOrGivenAway, soldForLess)
       route <- routeRequest(backLink)
-    } yield route
+    } yield route).recoverToStart
   }
 
   val submitDisposalCosts = ValidateSession.async { implicit request =>
@@ -93,11 +94,11 @@ trait DisposalCostsController extends FrontendController with ValidActiveSession
       )
     }
 
-    for {
+    (for {
       soldOrGivenAway <- fetchSoldOrGivenAway
       soldForLess <- fetchSoldForLess
       backLink <- backUrl(soldOrGivenAway, soldForLess)
       route <- routeRequest(backLink)
-    } yield route
+    } yield route).recoverToStart
   }
 }

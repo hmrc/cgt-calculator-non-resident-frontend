@@ -31,6 +31,7 @@ import play.api.mvc.{Action, AnyContent, Result}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import uk.gov.hmrc.play.http.HeaderCarrier
 import views.html.calculation
+import controllers.utils.RecoverableFuture
 
 import scala.concurrent.Future
 
@@ -104,7 +105,7 @@ trait AnnualExemptAmountController extends FrontendController with ValidActiveSe
       }
     }
 
-    for {
+    (for {
       disposalDate <- fetchDisposalDate(hc)
       date <- formatDisposalDate(disposalDate)
       closestTaxYear <- calcConnector.getTaxYear(date)
@@ -116,7 +117,7 @@ trait AnnualExemptAmountController extends FrontendController with ValidActiveSe
       lossAmount <- fetchPreviousLossAmount(previousLossOrGain.get.previousLossOrGain)
       backUrl <- backUrl(previousLossOrGain.get, gainAmount, lossAmount)
       finalResult <- routeRequest(annualExemptAmount, maxAEA.get, backUrl)
-    } yield finalResult
+    } yield finalResult).recoverToStart
   }
 
   val submitAnnualExemptAmount: Action[AnyContent] = ValidateSession.async { implicit request =>
@@ -136,7 +137,7 @@ trait AnnualExemptAmountController extends FrontendController with ValidActiveSe
         success => successAction(success))
     }
 
-    for {
+    (for {
       disposalDate <- fetchDisposalDate(hc)
       date <- formatDisposalDate(disposalDate)
       closestTaxYear <- calcConnector.getTaxYear(date)
@@ -147,6 +148,6 @@ trait AnnualExemptAmountController extends FrontendController with ValidActiveSe
       lossAmount <- fetchPreviousLossAmount(previousLossOrGain.get.previousLossOrGain)
       backUrl <- backUrl(previousLossOrGain.get, gainAmount, lossAmount)
       finalResult <- routeRequest(maxAEA.get, backUrl)
-    } yield finalResult
+    } yield finalResult).recoverToStart
   }
 }

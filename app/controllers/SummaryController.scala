@@ -29,6 +29,7 @@ import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import uk.gov.hmrc.play.http.HeaderCarrier
 import views.html.calculation
+import controllers.utils.RecoverableFuture
 
 import scala.concurrent.Future
 
@@ -92,7 +93,7 @@ trait SummaryController extends FrontendController with ValidActiveSession {
       }
     }
 
-    for {
+    (for {
       answers <- answersConstructor.getNRTotalGainAnswers(hc)
       totalGainResultsModel <- calcConnector.calculateTotalGain(answers)
       gainExists <- checkGainExists(totalGainResultsModel.get)
@@ -135,7 +136,7 @@ trait SummaryController extends FrontendController with ValidActiveSession {
             reliefsUsed = calculationResult.prrUsed.getOrElse(BigDecimal(0)) + calculationResult.otherReliefsUsed.getOrElse(BigDecimal(0)))
           )
       }
-    }
+    }).recoverToStart
   }
 
   def restart(): Action[AnyContent] = Action.async { implicit request =>

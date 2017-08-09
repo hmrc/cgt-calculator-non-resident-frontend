@@ -26,6 +26,7 @@ import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 import play.api.data.Form
 import common.KeystoreKeys.{NonResidentKeys => keystoreKeys}
+import controllers.utils.RecoverableFuture
 
 import scala.concurrent.Future
 
@@ -57,10 +58,10 @@ trait PropertyLivedInController extends FrontendController with ValidActiveSessi
     }
 
     def successAction(model: PropertyLivedInModel) = {
-      for {
+      (for {
         save <- calcConnector.saveFormData(keystoreKeys.propertyLivedIn, model)
         route <- routeRequest(model)
-      } yield route
+      } yield route).recoverToStart
     }
 
     propertyLivedInForm.bindFromRequest().fold(errorAction, successAction)

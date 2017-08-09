@@ -30,6 +30,7 @@ import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import uk.gov.hmrc.play.http.HeaderCarrier
 import views.html.calculation
+import controllers.utils.RecoverableFuture
 
 import scala.concurrent.Future
 
@@ -136,7 +137,7 @@ trait CalculationElectionController extends FrontendController with ValidActiveS
         else Ok(calculation.calculationElectionNoReliefs(form, content, backLink))
       }
 
-    for {
+    (for {
       totalGainAnswers <- calcAnswersConstructor.getNRTotalGainAnswers(hc)
       totalGain <- calcConnector.calculateTotalGain(totalGainAnswers)(hc)
       gainExists <- checkGainExists(totalGain.get)
@@ -152,7 +153,7 @@ trait CalculationElectionController extends FrontendController with ValidActiveS
       taxOwed <- getTaxOwedIfApplicable(totalGainAnswers, prrAnswers, allAnswers, maxAEA.get, otherReliefs, propertyLivedIn)
       content <- calcElectionConstructor.generateElection(totalGain.get, totalGainWithPRR, taxOwed, otherReliefs)
       finalResult <- action(orderElements(content, isClaimingReliefs), isClaimingReliefs, backLink)
-    } yield finalResult
+    } yield finalResult).recoverToStart
   }
 
   val submitCalculationElection: Action[AnyContent] = ValidateSession.async { implicit request =>
@@ -174,7 +175,7 @@ trait CalculationElectionController extends FrontendController with ValidActiveS
         else BadRequest(calculation.calculationElectionNoReliefs(form, content, backLink))
       }
 
-      for {
+      (for {
         totalGainAnswers <- calcAnswersConstructor.getNRTotalGainAnswers(hc)
         totalGain <- calcConnector.calculateTotalGain(totalGainAnswers)(hc)
         gainExists <- checkGainExists(totalGain.get)
@@ -191,7 +192,7 @@ trait CalculationElectionController extends FrontendController with ValidActiveS
         content <- calcElectionConstructor.generateElection(totalGain.get, totalGainWithPRR, taxOwed, otherReliefs)
       } yield {
         action(orderElements(content, isClaimingReliefs), isClaimingReliefs, backLink)
-      }
+      }).recoverToStart
     }
 
     calculationElectionForm.bindFromRequest.fold(errorAction, successAction)
