@@ -182,7 +182,7 @@ calc.rebasedCosts.errorDecimalPlaces = There are too many numbers after the deci
 
 ## Improvements ##
 calc.improvements.question = Did you make any improvements to the property?
-calc.improvements.ownerBeforeLegislationStartQuestion = Did you make an improvement to the property after 31 March 1982?
+calc.improvements.ownerBeforeLegislationStartQuestion = Did you make an improvement to the property after 31&nbsp;March&nbsp;1982?
 calc.improvements.helpOne = Improvements are permanent changes that increase the value of a property, like adding extensions or garages.
 calc.improvements.helpTwo = Normal maintenance costs don''t count.
 calc.improvements.exampleTitle = Show me an example
@@ -401,8 +401,8 @@ calc.worthWhenBoughtForLess.hint = You can use a valuation from a surveyor. If y
 calc.worthWhenBoughtForLess.helpText = If you owned the property with someone else, only enter your share of the property value.
 
 ## Worth Before Legislation Start ##
-calc.worthBeforeLegislationStart.question = What was the market value of the property on 31 March 1982?
-calc.worthBeforeLegislationStart.information = Capital Gains Tax only applies to gains made since 31 March 1982.
+calc.worthBeforeLegislationStart.question = What was the market value of the property on 31&nbsp;March&nbsp;1982?
+calc.worthBeforeLegislationStart.information = If you had your property before 31&nbsp;March&nbsp;1982, use the market value on 31&nbsp;March&nbsp;1982 to work out your Capital Gains Tax. After this date, use the original cost.
 calc.worthBeforeLegislationStart.help = If you don''t know the exact value, you must provide a realistic estimate. You might have to pay more if we think your estimate is unrealistic.
 calc.worthBeforeLegislationStart.jointOwnership = If you owned the property with someone else, only enter your share of the property value.
 
@@ -411,7 +411,7 @@ calc.propertyLivedIn.title = Have you ever lived in the property since you becam
 calc.propertyLivedIn.noSelectError = Tell us if you have ever lived in the property since you became the owner
 
 ## Cost At Legislation Start ##
-calc.costsAtLegislationStart.title = Did you pay to have the property valued at 31 March 1982?
+calc.costsAtLegislationStart.title = Did you pay to have the property valued at 31&nbsp;March&nbsp;1982?
 calc.costsAtLegislationStart.howMuch = How much did it cost to get the property valued?
 calc.costsAtLegislationStart.helpText = If you owned the property with someone else, only enter your share of the costs, as agreed with your co-owner.
 calc.costsAtLegislationStart.errorNegative = Enter a positive number for your costs
@@ -541,7 +541,7 @@ calc.resident.howBecameOwner.gifted = Got it as a gift
 calc.resident.howBecameOwner.inherited= Inherited it
 
 ##Worth On messages
-calc.resident.properties.valueBeforeLegislationStart.question = What was the property worth on 31 March 1982?
+calc.resident.properties.valueBeforeLegislationStart.question = What was the property worth on 31&nbsp;March&nbsp;1982?
 
 ## Worth When Inherited messages
 calc.resident.properties.worthWhenInherited.question = What was the property worth when you inherited it?
@@ -567,7 +567,7 @@ calc.resident.acquisitionCosts.helpText = Costs include stamp duty, agent fees, 
 ## Improvements messages
 calc.resident.properties.improvements.question = How much have you spent on improvements since you became the property owner?
 calc.resident.properties.improvements.label = How much have you spent on improvements since you became the property owner?
-calc.resident.properties.improvements.questionBefore = How much have you spent on improvements since 31 March 1982?
+calc.resident.properties.improvements.questionBefore = How much have you spent on improvements since 31&nbsp;March&nbsp;1982?
 calc.resident.properties.improvements.hint = Improvements are permanent changes that raise the value of a property, like adding extensions or garages. Normal maintenance costs don''t count.
 calc.resident.properties.improvements.helpButton = Show me an example
 calc.resident.properties.improvements.additionalContent.one = Replacing a basic kitchen or bathroom with a luxury version is normally considered an improvement.
@@ -751,7 +751,7 @@ calc.resident.shares.disposalCosts.question = How much did you pay in costs when
 calc.resident.shares.disposalCosts.helpText = For example, stockbroker fees
 
 ## Worth On messages
-calc.resident.shares.valueBeforeLegislationStart.question = What were the shares worth on 31 March 1982?
+calc.resident.shares.valueBeforeLegislationStart.question = What were the shares worth on 31&nbsp;March&nbsp;1982?
 
 ## Owner Before Legislation Start Messages
 calc.resident.shares.ownerBeforeLegislationStart.title = Did you own the shares before 1 April 1982?
