@@ -78,8 +78,8 @@ trait BroughtForwardLossesController extends FrontendController with ValidActive
   val submitBroughtForwardLosses = ValidateSession.async { implicit request =>
 
     def successAction(model: BroughtForwardLossesModel) = {
-      calcConnector.saveFormData[BroughtForwardLossesModel](KeystoreKeys.broughtForwardLosses, model)
-      Future.successful(Redirect(controllers.routes.CheckYourAnswersController.checkYourAnswers()))
+      calcConnector.saveFormData[BroughtForwardLossesModel](KeystoreKeys.broughtForwardLosses, model).map(_ =>
+        Redirect(controllers.routes.CheckYourAnswersController.checkYourAnswers()))
     }
 
     def errorAction(form: Form[BroughtForwardLossesModel]) = {

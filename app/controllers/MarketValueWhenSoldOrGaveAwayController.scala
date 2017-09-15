@@ -68,8 +68,8 @@ trait MarketValueWhenSoldOrGaveAwayController extends FrontendController with Va
     def errorAction(form: Form[DisposalValueModel]) = Future.successful(BadRequest(calculation.marketValueGaveAway(form)))
 
     def successAction(model: DisposalValueModel) = {
-      calcConnector.saveFormData(KeystoreKeys.disposalMarketValue, model)
-      Future.successful(Redirect(routes.DisposalCostsController.disposalCosts()))
+      calcConnector.saveFormData(KeystoreKeys.disposalMarketValue, model).map(_ =>
+        Redirect(routes.DisposalCostsController.disposalCosts()))
     }
 
     marketValueWhenGaveAwayForm.bindFromRequest.fold(errorAction, successAction)

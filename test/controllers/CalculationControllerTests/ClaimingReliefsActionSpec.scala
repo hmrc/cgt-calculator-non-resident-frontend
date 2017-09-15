@@ -45,6 +45,9 @@ class ClaimingReliefsActionSpec extends UnitSpec with WithFakeApplication with F
     when(mockCalcConnector.saveFormData[ClaimingReliefsModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(mock[CacheMap])
 
+    when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      .thenReturn(Future.successful(CacheMap("", Map.empty)))
+
     new ClaimingReliefsController {
       override val calcConnector: CalculatorConnector = mockCalcConnector
     }

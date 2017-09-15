@@ -21,7 +21,7 @@ import connectors.CalculatorConnector
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import play.api.test.Helpers._
-import uk.gov.hmrc.play.http.HeaderCarrier
+import uk.gov.hmrc.play.http.{HeaderCarrier, HttpGet}
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import org.jsoup._
 import org.scalatest.mock.MockitoSugar
@@ -32,18 +32,22 @@ import controllers.helpers.FakeRequestHelper
 import scala.concurrent.Future
 import controllers.routes
 import models.AcquisitionValueModel
+import uk.gov.hmrc.http.cache.client.{CacheMap, SessionCache}
 
 class AcquisitionValueActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
   implicit val hc = new HeaderCarrier()
 
-  def setupTarget(getData: Option[AcquisitionValueModel]): AcquisitionValueController = {
+  val mockCalcConnector = mock[CalculatorConnector]
 
-    val mockCalcConnector = mock[CalculatorConnector]
+  def setupTarget(getData: Option[AcquisitionValueModel]): AcquisitionValueController = {
 
     when(mockCalcConnector.fetchAndGetFormData[AcquisitionValueModel](
       ArgumentMatchers.eq(KeystoreKeys.acquisitionValue))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
+
+    when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
     new AcquisitionValueController {
       override val calcConnector: CalculatorConnector = mockCalcConnector

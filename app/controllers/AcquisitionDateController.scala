@@ -53,13 +53,13 @@ trait AcquisitionDateController extends FrontendController with ValidActiveSessi
     def errorAction(form: Form[AcquisitionDateModel]) = Future.successful(BadRequest(calculation.acquisitionDate(form)))
 
     def successAction(model: AcquisitionDateModel) = {
-      calcConnector.saveFormData(KeystoreKeys.acquisitionDate, model)
-
-      if(TaxDates.dateBeforeLegislationStart(model.day, model.month, model.year)) {
-        Future.successful(Redirect(routes.WorthBeforeLegislationStartController.worthBeforeLegislationStart()))
-      } else {
-        Future.successful(Redirect(routes.HowBecameOwnerController.howBecameOwner()))
-      }
+      calcConnector.saveFormData(KeystoreKeys.acquisitionDate, model).map(_ =>
+        if(TaxDates.dateBeforeLegislationStart(model.day, model.month, model.year)) {
+          Redirect(routes.WorthBeforeLegislationStartController.worthBeforeLegislationStart())
+        } else {
+          Redirect(routes.HowBecameOwnerController.howBecameOwner())
+        }
+      )
     }
 
     acquisitionDateForm.bindFromRequest.fold(errorAction, successAction)

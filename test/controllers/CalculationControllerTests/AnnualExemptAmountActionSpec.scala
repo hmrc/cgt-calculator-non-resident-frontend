@@ -33,6 +33,7 @@ import org.scalatest.mock.MockitoSugar
 import scala.concurrent.Future
 import controllers.routes
 import models._
+import uk.gov.hmrc.http.cache.client.CacheMap
 
 class AnnualExemptAmountActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
@@ -71,6 +72,9 @@ class AnnualExemptAmountActionSpec extends UnitSpec with WithFakeApplication wit
 
     when(mockCalcConnector.getTaxYear(ArgumentMatchers.anyString())(ArgumentMatchers.any()))
       .thenReturn(Some(TaxYearModel("2016-5-6", isValidYear = true, "2016/17")))
+
+    when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
     new AnnualExemptAmountController {
       override val calcConnector: CalculatorConnector = mockCalcConnector

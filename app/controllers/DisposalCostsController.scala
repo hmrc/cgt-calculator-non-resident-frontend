@@ -83,8 +83,8 @@ trait DisposalCostsController extends FrontendController with ValidActiveSession
     }
 
     def successAction(model: DisposalCostsModel) = {
-      calcConnector.saveFormData(KeystoreKeys.disposalCosts, model)
-      Future.successful(Redirect(routes.AcquisitionDateController.acquisitionDate()))
+      calcConnector.saveFormData(KeystoreKeys.disposalCosts, model).map(_ =>
+        Redirect(routes.AcquisitionDateController.acquisitionDate()))
     }
 
     def routeRequest(backLink: String) = {

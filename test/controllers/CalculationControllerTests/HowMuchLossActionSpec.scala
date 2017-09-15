@@ -29,6 +29,9 @@ import org.mockito.Mockito._
 import assets.MessageLookup.{NonResident => messages}
 import controllers.HowMuchLossController
 import play.api.test.Helpers._
+import uk.gov.hmrc.http.cache.client.CacheMap
+
+import scala.concurrent.Future
 
 class HowMuchLossActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
@@ -40,6 +43,9 @@ class HowMuchLossActionSpec extends UnitSpec with WithFakeApplication with Mocki
 
     when(mockConnector.fetchAndGetFormData[HowMuchLossModel](ArgumentMatchers.eq(KeystoreKeys.howMuchLoss))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(getData)
+
+    when(mockConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
     new HowMuchLossController {
       val calcConnector: CalculatorConnector = mockConnector

@@ -47,8 +47,7 @@ trait AcquisitionValueController extends FrontendController with ValidActiveSess
     acquisitionValueForm.bindFromRequest.fold(
       errors => Future.successful(BadRequest(calculation.acquisitionValue(errors))),
       success => {
-        calcConnector.saveFormData(KeystoreKeys.acquisitionValue, success)
-        Future.successful(Redirect(routes.AcquisitionCostsController.acquisitionCosts()))
+        calcConnector.saveFormData(KeystoreKeys.acquisitionValue, success).map(_ => Redirect(routes.AcquisitionCostsController.acquisitionCosts()))
       }
     )
   }

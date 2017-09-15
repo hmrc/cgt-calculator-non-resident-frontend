@@ -103,8 +103,8 @@ trait OtherReliefsRebasedController extends FrontendController with ValidActiveS
     }
 
     def successAction(model: OtherReliefsModel) = {
-      calcConnector.saveFormData(KeystoreKeys.otherReliefsRebased, model)
-      Future.successful(Redirect(routes.CalculationElectionController.calculationElection()))
+      calcConnector.saveFormData(KeystoreKeys.otherReliefsRebased, model).map(_ =>
+        Redirect(routes.CalculationElectionController.calculationElection()))
     }
 
     otherReliefsForm.bindFromRequest.fold(errorAction, successAction)

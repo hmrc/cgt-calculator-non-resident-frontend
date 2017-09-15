@@ -74,8 +74,8 @@ trait PersonalAllowanceController extends FrontendController with ValidActiveSes
     }
 
     def successAction(model: PersonalAllowanceModel) = {
-      calcConnector.saveFormData[PersonalAllowanceModel](KeystoreKeys.personalAllowance, model)
-      Future.successful(Redirect(routes.OtherPropertiesController.otherProperties()))
+      calcConnector.saveFormData[PersonalAllowanceModel](KeystoreKeys.personalAllowance, model).map(_ =>
+        Redirect(routes.OtherPropertiesController.otherProperties()))
     }
 
     (for {

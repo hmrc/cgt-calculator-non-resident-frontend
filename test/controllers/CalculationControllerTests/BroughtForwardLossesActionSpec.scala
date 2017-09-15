@@ -28,6 +28,7 @@ import org.mockito.Mockito._
 import assets.MessageLookup.{NonResident => messages}
 import controllers.BroughtForwardLossesController
 import play.api.test.Helpers._
+import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.http.HeaderCarrier
 
 import scala.concurrent.Future
@@ -61,6 +62,9 @@ class BroughtForwardLossesActionSpec extends UnitSpec with WithFakeApplication w
 
     when(mockCalcConnector.fetchAndGetFormData[HowMuchLossModel](ArgumentMatchers.eq(KeystoreKeys.howMuchLoss))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(howMuchLossModel))
+
+    when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
     new BroughtForwardLossesController {
       override val calcConnector: CalculatorConnector = mockCalcConnector

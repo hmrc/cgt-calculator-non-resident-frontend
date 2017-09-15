@@ -107,12 +107,13 @@ trait AcquisitionCostsController extends FrontendController with ValidActiveSess
       } yield result).recoverToStart
     }
 
-    def successAction(model: AcquisitionCostsModel) = {
-      calcConnector.saveFormData(KeystoreKeys.acquisitionCosts, model)
-      getRedirectRoute
+    def successAction(model: AcquisitionCostsModel): Future[Result] = {
+      calcConnector.saveFormData(KeystoreKeys.acquisitionCosts, model).flatMap {
+        _ => getRedirectRoute
+      }
     }
 
-    def errorAction(form: Form[AcquisitionCostsModel]) = {
+    def errorAction(form: Form[AcquisitionCostsModel]): Future[Result] = {
       def result(backLink: String, isOwnerBeforeLegislationStart: Boolean) =
         Future.successful(BadRequest(calculation.acquisitionCosts(form, backLink, isOwnerBeforeLegislationStart)))
 

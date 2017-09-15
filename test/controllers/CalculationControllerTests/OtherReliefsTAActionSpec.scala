@@ -31,6 +31,7 @@ import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import common.TestModels
 import constructors.AnswersConstructor
 import controllers.OtherReliefsTAController
+import uk.gov.hmrc.http.cache.client.CacheMap
 
 import scala.concurrent.Future
 
@@ -84,6 +85,9 @@ class OtherReliefsTAActionSpec extends UnitSpec with WithFakeApplication with Mo
     when(mockCalcConnector.fetchAndGetFormData[PropertyLivedInModel](ArgumentMatchers.eq(KeystoreKeys.propertyLivedIn))
       (ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(PropertyLivedInModel(true))))
+
+    when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
     new OtherReliefsTAController {
       override val calcConnector: CalculatorConnector = mockCalcConnector
