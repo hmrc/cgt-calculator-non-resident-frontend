@@ -27,6 +27,7 @@ import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
 import play.api.test.Helpers._
+import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
@@ -58,6 +59,9 @@ class AcquisitionCostsActionSpec extends UnitSpec with WithFakeApplication with 
     when(mockCalcConnector.fetchAndGetFormData[BoughtForLessModel](
       ArgumentMatchers.eq(KeystoreKeys.boughtForLess))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(boughtForLessData)
+
+    when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
     new AcquisitionCostsController {
       override val calcConnector: CalculatorConnector = mockCalcConnector

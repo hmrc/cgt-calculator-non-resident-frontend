@@ -30,6 +30,7 @@ import org.jsoup.Jsoup
 import org.mockito.Mockito._
 import play.api.test.Helpers._
 import assets.MessageLookup.{NoTaxToPay => messages}
+import uk.gov.hmrc.http.cache.client.CacheMap
 
 import scala.concurrent.Future
 
@@ -41,6 +42,9 @@ class WhoDidYouGiveItToControllerSpec extends UnitSpec with WithFakeApplication 
 
     when(mockCalcConnector.fetchAndGetFormData[WhoDidYouGiveItToModel](ArgumentMatchers.eq(keystoreKeys.whoDidYouGiveItTo))
     (ArgumentMatchers.any(), ArgumentMatchers.any())).thenReturn(Future.successful(getData))
+
+    when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
     new WhoDidYouGiveItToController {
       override val calcConnector: CalculatorConnector = mockCalcConnector

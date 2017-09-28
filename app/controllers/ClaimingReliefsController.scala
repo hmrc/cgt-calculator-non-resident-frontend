@@ -51,8 +51,8 @@ trait ClaimingReliefsController extends FrontendController with ValidActiveSessi
       Future.successful(BadRequest(views.html.calculation.claimingReliefs(errors)))
 
     def successAction(model: ClaimingReliefsModel) = {
-      calcConnector.saveFormData(KeystoreKeys.claimingReliefs, model)
-      Future.successful(Redirect(routes.CalculationElectionController.calculationElection()))
+      calcConnector.saveFormData(KeystoreKeys.claimingReliefs, model).map(_ =>
+        Redirect(routes.CalculationElectionController.calculationElection()))
     }
 
     claimingReliefsForm.bindFromRequest().fold(errorAction, successAction)

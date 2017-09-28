@@ -49,8 +49,8 @@ trait DisposalValueController extends FrontendController with ValidActiveSession
     def errorAction(form: Form[DisposalValueModel]) = Future.successful(BadRequest(calculation.disposalValue(form)))
 
     def successAction(model: DisposalValueModel) = {
-      calcConnector.saveFormData(KeystoreKeys.disposalValue, model)
-      Future.successful(Redirect(routes.DisposalCostsController.disposalCosts()))
+      calcConnector.saveFormData(KeystoreKeys.disposalValue, model).map(_ =>
+        Redirect(routes.DisposalCostsController.disposalCosts()))
     }
 
     disposalValueForm.bindFromRequest.fold(errorAction, successAction)

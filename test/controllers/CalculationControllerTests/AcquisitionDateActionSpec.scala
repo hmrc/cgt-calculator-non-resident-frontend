@@ -26,6 +26,7 @@ import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
 import play.api.test.Helpers._
+import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
@@ -35,13 +36,16 @@ class AcquisitionDateActionSpec extends UnitSpec with WithFakeApplication with M
 
   implicit val hc = new HeaderCarrier()
 
+  val mockCalcConnector = mock[CalculatorConnector]
+
   def setupTarget(getData: Option[AcquisitionDateModel]
                  ): AcquisitionDateController = {
 
-    val mockCalcConnector = mock[CalculatorConnector]
-
     when(mockCalcConnector.fetchAndGetFormData[AcquisitionDateModel](ArgumentMatchers.anyString())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
+
+    when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
     new AcquisitionDateController {
       override val calcConnector: CalculatorConnector = mockCalcConnector

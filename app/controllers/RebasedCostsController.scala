@@ -52,8 +52,8 @@ trait RebasedCostsController extends FrontendController with ValidActiveSession 
     }
 
     def successAction(model: RebasedCostsModel) = {
-      calcConnector.saveFormData(KeystoreKeys.rebasedCosts, model)
-      Future.successful(Redirect(routes.ImprovementsController.improvements()))
+      calcConnector.saveFormData(KeystoreKeys.rebasedCosts, model).map(_ =>
+        Redirect(routes.ImprovementsController.improvements()))
     }
 
     rebasedCostsForm.bindFromRequest.fold(errorAction, successAction)

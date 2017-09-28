@@ -92,8 +92,8 @@ trait OtherReliefsTAController extends FrontendController with ValidActiveSessio
     }
 
     def successAction(model: OtherReliefsModel) = {
-      calcConnector.saveFormData(KeystoreKeys.otherReliefsTA, model)
-      Future.successful(Redirect(routes.CalculationElectionController.calculationElection()))
+      calcConnector.saveFormData(KeystoreKeys.otherReliefsTA, model).map(_ =>
+        Redirect(routes.CalculationElectionController.calculationElection()))
     }
 
     def errorRoute(totalGain: Option[TotalGainResultsModel], chargeableGainResult: Option[CalculationResultsWithTaxOwedModel],

@@ -32,6 +32,7 @@ import org.scalatest.mock.MockitoSugar
 import scala.concurrent.Future
 import controllers.routes
 import models.{DisposalDateModel, PersonalAllowanceModel, TaxYearModel}
+import uk.gov.hmrc.http.cache.client.CacheMap
 
 class PersonalAllowanceActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
@@ -54,6 +55,9 @@ class PersonalAllowanceActionSpec extends UnitSpec with WithFakeApplication with
 
     when(mockCalcConnector.getPA(ArgumentMatchers.anyInt(), ArgumentMatchers.anyBoolean())(ArgumentMatchers.any()))
       .thenReturn(Some(BigDecimal(11000)))
+
+    when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
     new PersonalAllowanceController {
       override val calcConnector: CalculatorConnector = mockCalcConnector

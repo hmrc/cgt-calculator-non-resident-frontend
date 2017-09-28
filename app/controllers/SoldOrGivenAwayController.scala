@@ -48,11 +48,11 @@ trait SoldOrGivenAwayController extends FrontendController with ValidActiveSessi
     soldOrGivenAwayForm.bindFromRequest.fold(
       errors => Future.successful(BadRequest(calculation.soldOrGivenAway(errors))),
       success => {
-        calcConnector.saveFormData[SoldOrGivenAwayModel](KeystoreKeys.soldOrGivenAway, success)
+        calcConnector.saveFormData[SoldOrGivenAwayModel](KeystoreKeys.soldOrGivenAway, success).map(_ =>
         success match {
-          case SoldOrGivenAwayModel(true) => Future.successful(Redirect(routes.SoldForLessController.soldForLess()))
-          case SoldOrGivenAwayModel(false) => Future.successful(Redirect(routes.WhoDidYouGiveItToController.whoDidYouGiveItTo()))
-        }
+          case SoldOrGivenAwayModel(true) => Redirect(routes.SoldForLessController.soldForLess())
+          case SoldOrGivenAwayModel(false) => Redirect(routes.WhoDidYouGiveItToController.whoDidYouGiveItTo())
+        })
       }
     )
   }

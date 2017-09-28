@@ -50,8 +50,8 @@ trait WorthBeforeLegislationStartController extends FrontendController with Vali
     def errorAction(form: Form[WorthBeforeLegislationStartModel]) = Future.successful(BadRequest(views.worthBeforeLegislationStart(form)))
 
     def successAction(model: WorthBeforeLegislationStartModel) = {
-      calcConnector.saveFormData(KeystoreKeys.worthBeforeLegislationStart, model)
-      Future.successful(Redirect(routes.CostsAtLegislationStartController.costsAtLegislationStart()))
+      calcConnector.saveFormData(KeystoreKeys.worthBeforeLegislationStart, model).map(_ =>
+        Redirect(routes.CostsAtLegislationStartController.costsAtLegislationStart()))
     }
 
     worthBeforeLegislationStartForm.bindFromRequest.fold(errorAction, successAction)

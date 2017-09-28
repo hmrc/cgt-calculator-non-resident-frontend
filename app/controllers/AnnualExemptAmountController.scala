@@ -127,8 +127,8 @@ trait AnnualExemptAmountController extends FrontendController with ValidActiveSe
     }
 
     def successAction(model: AnnualExemptAmountModel) = {
-      calcConnector.saveFormData(KeystoreKeys.annualExemptAmount, model)
-      Future.successful(Redirect(routes.BroughtForwardLossesController.broughtForwardLosses()))
+      calcConnector.saveFormData(KeystoreKeys.annualExemptAmount, model).map(_ =>
+        Redirect(routes.BroughtForwardLossesController.broughtForwardLosses()))
     }
 
     def routeRequest(maxAEA: BigDecimal, backUrl: String): Future[Result] = {

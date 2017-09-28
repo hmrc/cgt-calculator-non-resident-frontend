@@ -49,8 +49,8 @@ trait WorthWhenGiftedToController extends FrontendController with ValidActiveSes
     def errorAction(form: Form[AcquisitionValueModel]) = Future.successful(BadRequest(calculation.worthWhenGiftedTo(form)))
 
     def successAction(model: AcquisitionValueModel) = {
-      calcConnector.saveFormData(KeystoreKeys.acquisitionMarketValue, model)
-      Future.successful(Redirect(routes.AcquisitionCostsController.acquisitionCosts()))
+      calcConnector.saveFormData(KeystoreKeys.acquisitionMarketValue, model).map(_ =>
+        Redirect(routes.AcquisitionCostsController.acquisitionCosts()))
     }
 
     acquisitionMarketValueForm.bindFromRequest.fold(errorAction, successAction)

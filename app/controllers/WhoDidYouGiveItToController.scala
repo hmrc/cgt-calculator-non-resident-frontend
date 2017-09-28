@@ -55,12 +55,12 @@ trait WhoDidYouGiveItToController extends FrontendController with ValidActiveSes
     whoDidYouGiveItToForm.bindFromRequest.fold(
       errors => Future.successful(BadRequest(views.whoDidYouGiveItTo(errors))),
       success => {
-        calcConnector.saveFormData[WhoDidYouGiveItToModel](keystoreKeys.whoDidYouGiveItTo, success)
+        calcConnector.saveFormData[WhoDidYouGiveItToModel](keystoreKeys.whoDidYouGiveItTo, success).map(_ =>
         success match {
-          case WhoDidYouGiveItToModel("Spouse") => Future.successful(Redirect(routes.WhoDidYouGiveItToController.noTaxToPay()))
-          case WhoDidYouGiveItToModel("Charity") => Future.successful(Redirect(routes.WhoDidYouGiveItToController.noTaxToPay()))
-          case WhoDidYouGiveItToModel("Other") => Future.successful(Redirect(routes.MarketValueWhenSoldOrGaveAwayController.marketValueWhenGaveAway()))
-        }
+          case WhoDidYouGiveItToModel("Spouse") => Redirect(routes.WhoDidYouGiveItToController.noTaxToPay())
+          case WhoDidYouGiveItToModel("Charity") => Redirect(routes.WhoDidYouGiveItToController.noTaxToPay())
+          case WhoDidYouGiveItToModel("Other") => Redirect(routes.MarketValueWhenSoldOrGaveAwayController.marketValueWhenGaveAway())
+        })
       })
   }
 

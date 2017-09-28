@@ -51,9 +51,13 @@ trait HowMuchLossController extends FrontendController with ValidActiveSession {
     }
 
     def successAction(model: HowMuchLossModel) = {
-      calcConnector.saveFormData[HowMuchLossModel](KeystoreKeys.howMuchLoss, model)
-      if (model.loss > 0) Future.successful(Redirect(routes.BroughtForwardLossesController.broughtForwardLosses()))
-      else Future.successful(Redirect(routes.AnnualExemptAmountController.annualExemptAmount()))
+      calcConnector.saveFormData[HowMuchLossModel](KeystoreKeys.howMuchLoss, model).map(_ =>
+        if (model.loss > 0) {
+          Redirect(routes.BroughtForwardLossesController.broughtForwardLosses())
+        } else {
+          Redirect(routes.AnnualExemptAmountController.annualExemptAmount())
+        }
+      )
     }
 
     howMuchLossForm.bindFromRequest().fold(

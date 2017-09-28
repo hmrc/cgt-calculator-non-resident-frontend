@@ -27,6 +27,7 @@ import uk.gov.hmrc.play.http.HeaderCarrier
 import play.api.test.Helpers._
 import assets.MessageLookup.NonResident.{WorthBeforeLegislationStart => messages}
 import controllers.WorthBeforeLegislationStartController
+import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 import scala.concurrent.Future
@@ -41,6 +42,9 @@ class WorthBeforeLegislationStartActionSpec extends UnitSpec with WithFakeApplic
 
     when(mockCalcConnector.fetchAndGetFormData[WorthBeforeLegislationStartModel](ArgumentMatchers.anyString())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
+
+    when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
     new WorthBeforeLegislationStartController {
       override val calcConnector: CalculatorConnector = mockCalcConnector
