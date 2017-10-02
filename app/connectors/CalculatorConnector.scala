@@ -24,13 +24,14 @@ import models._
 import play.api.libs.json.Format
 import uk.gov.hmrc.http.cache.client.{CacheMap, SessionCache}
 import uk.gov.hmrc.play.config.ServicesConfig
-import uk.gov.hmrc.play.http.{HeaderCarrier, HttpGet, HttpResponse}
-
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import uk.gov.hmrc.http.{HeaderCarrier, HttpGet, HttpResponse}
+import uk.gov.hmrc.play.http.ws.WSGet
 
-object CalculatorConnector extends CalculatorConnector with ServicesConfig {
+object CalculatorConnector extends CalculatorConnector with ServicesConfig with WSHttp {
   override val sessionCache = CalculatorSessionCache
-  override val http = WSHttp
+  override val http = new WSHttp with WSGet
   override val serviceUrl = baseUrl("capital-gains-calculator")
 }
 

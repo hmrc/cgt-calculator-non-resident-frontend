@@ -22,7 +22,6 @@ import controllers.helpers.FakeRequestHelper
 import models.HowMuchLossModel
 import org.jsoup.Jsoup
 import org.scalatest.mock.MockitoSugar
-import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
@@ -32,6 +31,7 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap
 
 import scala.concurrent.Future
+import uk.gov.hmrc.http.HeaderCarrier
 
 class HowMuchLossActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 

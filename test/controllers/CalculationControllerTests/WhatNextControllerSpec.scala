@@ -22,8 +22,8 @@ import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
 import org.scalatest.mockito.MockitoSugar
 import play.api.test.Helpers._
-import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import uk.gov.hmrc.http.HeaderCarrier
 
 class WhatNextControllerSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
   implicit val hc: HeaderCarrier = mock[HeaderCarrier]

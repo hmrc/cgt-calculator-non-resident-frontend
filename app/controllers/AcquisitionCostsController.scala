@@ -26,13 +26,13 @@ import models.{AcquisitionCostsModel, AcquisitionDateModel, BoughtForLessModel, 
 import play.api.data.Form
 import play.api.mvc.{Action, AnyContent, Result}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
-import uk.gov.hmrc.play.http.HeaderCarrier
 import views.html.calculation
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 import controllers.utils.RecoverableFuture
 
 import scala.concurrent.Future
+import uk.gov.hmrc.http.HeaderCarrier
 
 object AcquisitionCostsController extends AcquisitionCostsController{
   val calcConnector = CalculatorConnector
