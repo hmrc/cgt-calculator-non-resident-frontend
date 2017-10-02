@@ -24,7 +24,6 @@ import controllers.helpers.FakeRequestHelper
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import play.api.test.Helpers._
-import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import org.jsoup._
 import org.scalatest.mock.MockitoSugar
@@ -33,6 +32,7 @@ import scala.concurrent.Future
 import controllers.routes
 import models.{DisposalDateModel, PersonalAllowanceModel, TaxYearModel}
 import uk.gov.hmrc.http.cache.client.CacheMap
+import uk.gov.hmrc.http.HeaderCarrier
 
 class PersonalAllowanceActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
