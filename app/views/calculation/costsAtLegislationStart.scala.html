@@ -4,7 +4,7 @@
 
 @(data: Form[CostsAtLegislationStartModel])(implicit request: Request[_], messages: Messages)
 
-@main_template(Messages("calc.costsAtLegislationStart.title")) {
+@main_template(Messages("calc.costsAtLegislationStart.title") {
 
     <a id="back-link" class="back-link" href="@controllers.routes.WorthBeforeLegislationStartController.worthBeforeLegislationStart().url">Back</a>
 
