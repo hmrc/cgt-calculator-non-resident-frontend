@@ -178,7 +178,7 @@ class ReportActionSpec extends UnitSpec with WithFakeApplication with FakeReques
       }
 
       "return the pdf with a filename of 'Summary'" in {
-        header("Content-Disposition", result).get should include(s"""filename="${messages.title}.pdf"""")
+        header("Content-Disposition", result).get should include(s"""filename="${messages.title}.pdf""")
       }
 
     }
@@ -213,7 +213,7 @@ class ReportActionSpec extends UnitSpec with WithFakeApplication with FakeReques
       }
 
       "return the pdf with a filename of 'Summary'" in {
-        header("Content-Disposition", result).get should include(s"""filename="${messages.title}.pdf"""")
+        header("Content-Disposition", result).get should include(s"""filename="${messages.title}.pdf""")
       }
     }
 
@@ -245,7 +245,7 @@ class ReportActionSpec extends UnitSpec with WithFakeApplication with FakeReques
       }
 
       "return the pdf with a filename of 'Summary'" in {
-        header("Content-Disposition", result).get should include(s"""filename="${messages.title}.pdf"""")
+        header("Content-Disposition", result).get should include(s"""filename="${messages.title}.pdf""")
       }
 
     }
@@ -278,7 +278,7 @@ class ReportActionSpec extends UnitSpec with WithFakeApplication with FakeReques
       }
 
       "return the pdf with a filename of 'Summary'" in {
-        header("Content-Disposition", result).get should include(s"""filename="${messages.title}.pdf"""")
+        header("Content-Disposition", result).get should include(s"""filename="${messages.title}.pdf""")
       }
     }
 
