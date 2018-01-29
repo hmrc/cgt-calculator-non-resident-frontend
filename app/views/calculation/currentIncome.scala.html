@@ -23,7 +23,7 @@
 
 @main_template(Messages("calc.currentIncome.question")) {
 
-    <a id="back-link" class="back-link" href="@backLink">Back</a>
+    <a id="back-link" class="back-link" href="@backLink">@Messages("calc.base.back")</a>
 
     @errorSummary(currentIncomeForm, "current-income")
 

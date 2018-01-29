@@ -22,7 +22,7 @@
 
 @main_template(Messages("calc.howMuchLoss.question")) {
 
-    <a id="back-link" class="back-link" href="@controllers.routes.PreviousGainOrLossController.previousGainOrLoss">Back</a>
+    <a id="back-link" class="back-link" href="@controllers.routes.PreviousGainOrLossController.previousGainOrLoss">@Messages("calc.base.back")</a>
 
     @errorSummary(howMuchLossForm, "loss")
 
