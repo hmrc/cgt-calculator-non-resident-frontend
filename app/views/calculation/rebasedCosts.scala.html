@@ -22,7 +22,7 @@
 
 @main_template(Messages("calc.rebasedCosts.question")) {
 
-    <a id="back-link" class="back-link" href="@controllers.routes.RebasedValueController.rebasedValue">Back</a>
+    <a id="back-link" class="back-link" href="@controllers.routes.RebasedValueController.rebasedValue">@Messages("calc.base.back")</a>
 
     @errorSummary(rebasedCosts, "rebased-costs", "rebasedCosts")
 
