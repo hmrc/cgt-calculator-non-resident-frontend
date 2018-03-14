@@ -49,4 +49,11 @@ $(document).ready($(function () {
     ga('send', 'event', parts[0], parts[1], parts[2]);
   });
 
+
+    var reportLink = $('#get-help-action');
+    var reportLocation = window.location.pathname;
+    reportLink.on('click', function () {
+    ga('send', 'event','non-resident-get-help', 'Get help' , reportLocation);
+    });
+
 }));
