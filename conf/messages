@@ -53,7 +53,7 @@ calc.currentIncome.errorDecimalPlaces = Your current income has too many numbers
 
 ## Personal Allowance ##
 calc.personalAllowance.question = What was your UK Personal Allowance in the tax year when you stopped owning the property?
-calc.personalAllowance.help = This the amount of your income that you don''t pay tax on. Find out more about
+calc.personalAllowance.help = This is the amount of your income that you don''t pay tax on. Find out more about
 calc.personalAllowance.link = Personal Allowances
 calc.personalAllowance.errorNegative = Enter a positive number for your Personal Allowance
 calc.personalAllowance.errorDecimalPlaces = Enter a whole number for your Personal Allowance
