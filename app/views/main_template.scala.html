@@ -20,6 +20,8 @@
   contentHeader: Option[Html] = None,
   bodyClasses: Option[String] = None,
   mainClass: Option[String] = None,
+  urBanner: Boolean = false,
+  gaCalls: Option[(String, String) => play.twirl.api.Html] = None,
   scriptElem: Option[Html] = None,
   articleLayout: Boolean = true)(mainContent: Html)(implicit request : Request[_], messages: Messages)
 
@@ -56,6 +58,7 @@
                contentHeader = contentHeader,
                mainContent = contentLayout,
                serviceInfoContent = serviceInfoContent,
+               urBanner = urBanner,
                scriptElem = scriptElem
 )
 

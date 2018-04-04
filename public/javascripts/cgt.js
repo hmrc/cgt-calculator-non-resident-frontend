@@ -56,4 +56,8 @@ $(document).ready($(function () {
     ga('send', 'event','non-resident-get-help', 'Get help' , reportLocation);
     });
 
+  $('#urBannerLinkNo').click(function(){
+   $('#urBanner').addClass('hidden');
+  });
+
 }));

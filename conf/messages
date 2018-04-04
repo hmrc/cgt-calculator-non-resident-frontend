@@ -439,3 +439,9 @@ calc.claimingReliefs.title = Are you entitled to any other reliefs?
 calc.claimingReliefs.helpText = For example, Letting Relief (if you already claimed Private Residence Relief) or Rollover Relief.
 calc.claimingReliefs.errorMandatory = Tell us if you are entitled to any other reliefs
 calc.resident.shares.outsideTaxYears.message.tooEarly = You can use this calculator if you''ve sold shares since 5 April 2015.
+
+## ur banner inclusion
+urBanner.title = Help improve GOV.UK
+urBanner.message = Help improve this digital service by joining the HMRC user panel (opens in new window)
+urBanner.message.link = https://signup.take-part-in-research.service.gov.uk/?utm_campaign=CGT_non_resident_summary&utm_source=Survey_Banner&utm_medium=other&t=HMRC&id=116
+urBanner.message.noThanks.link = No thanks

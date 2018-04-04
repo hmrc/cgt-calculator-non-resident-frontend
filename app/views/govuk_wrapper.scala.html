@@ -23,6 +23,7 @@
   contentHeader: Option[Html] = None,
   mainContent: Html = HtmlFormat.empty,
   serviceInfoContent: Html = HtmlFormat.empty,
+  urBanner: Boolean = false,
   scriptElem: Option[Html] = None
 )(implicit request: Request[_], messages: Messages)
 
@@ -73,9 +74,36 @@
 @footerTop = {}
 @footerLinks = {}
 
+@betaBanner = {
+    @if(urBanner) {
+        <div id="urBanner" class="ur-panel">
+            <div class="grid-row">
+                <div class="column-two-thirds">
+                    <p class="bold-small">@messages("urBanner.title")</p>
+                    <p><a target="_blank" rel="external" data-journey-click="link - click :@messages(" urBanner.title"):@messages("urBanner.message")"
+                     href=@messages("urBanner.message.link")>@messages("urBanner.message")
+                        <span class="visually-hidden">@messages("site.opens.new.window ")</span></a></p>
+                 </div>
+                <div class="column-one-third f-right">
+                    <p id="urBannerLinkNo">@messages("urBanner.message.noThanks.link")</p>
+                </div>
+             </div>
+        </div>
+}
+
+    @uiLayouts.betaBanner(
+        userLoggedIn = false,
+        betaFeedbackUrl = appConfig.betaFeedbackUrl,
+        betaFeedbackUnauthenticatedUrl = appConfig.betaFeedbackUnauthenticatedUrl,
+        showFeedbackLinkInBetaBanner = true)
+
+}
+
+
+
 @serviceInfo = {
     @uiLayouts.serviceInfo(
-      betaBanner = HtmlFormat.empty,
+      betaBanner = betaBanner,
       includeGridWrapper = false,
       serviceInfoContent = Some(serviceInfoContent))
 }

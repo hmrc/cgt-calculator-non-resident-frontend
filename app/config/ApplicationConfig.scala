@@ -29,6 +29,9 @@ trait AppConfig {
   val reportAProblemNonJSUrl: String
   val nrIFormLink: String
   val govUkLink: String
+  val betaFeedbackUrl: String
+  val betaFeedbackUnauthenticatedUrl: String
+
 }
 
 object ApplicationConfig extends AppConfig with ServicesConfig {
@@ -50,4 +53,7 @@ object ApplicationConfig extends AppConfig with ServicesConfig {
 
   override val nrIFormLink: String = loadConfig("links.non-resident-iForm")
   override val govUkLink: String = loadConfig("links.gov-uk")
+
+  lazy val betaFeedbackUrl = s"$contactHost/contact/beta-feedback"
+  lazy val betaFeedbackUnauthenticatedUrl = s"$contactHost/contact/beta-feedback-unauthenticated"
 }
