@@ -74,7 +74,7 @@
 @footerTop = {}
 @footerLinks = {}
 
-@betaBanner = {
+@userBanner = {
     @if(urBanner) {
         <div id="urBanner" class="ur-panel">
             <div class="grid-row">
@@ -89,21 +89,14 @@
                 </div>
              </div>
         </div>
-}
-
-    @uiLayouts.betaBanner(
-        userLoggedIn = false,
-        betaFeedbackUrl = appConfig.betaFeedbackUrl,
-        betaFeedbackUnauthenticatedUrl = appConfig.betaFeedbackUnauthenticatedUrl,
-        showFeedbackLinkInBetaBanner = true)
-
+    }
 }
 
 
 
 @serviceInfo = {
     @uiLayouts.serviceInfo(
-      betaBanner = betaBanner,
+      betaBanner = userBanner,
       includeGridWrapper = false,
       serviceInfoContent = Some(serviceInfoContent))
 }
