@@ -443,5 +443,4 @@ calc.resident.shares.outsideTaxYears.message.tooEarly = You can use this calcula
 ## ur banner inclusion
 urBanner.title = Help improve GOV.UK
 urBanner.message = Help improve this digital service by joining the HMRC user panel (opens in new window)
-urBanner.message.link = https://signup.take-part-in-research.service.gov.uk/?utm_campaign=CGT_non_resident_summary&utm_source=Survey_Banner&utm_medium=other&t=HMRC&id=116
 urBanner.message.noThanks.link = No thanks
