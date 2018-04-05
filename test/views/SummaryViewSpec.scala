@@ -16,6 +16,7 @@
 
 package views
 
+import assets.MessageLookup.NonResident.Summary
 import assets.MessageLookup.{NonResident => messages}
 import controllers.helpers.FakeRequestHelper
 import models.{QuestionAnswerModel, TaxYearModel, TotalTaxOwedModel}
@@ -98,6 +99,27 @@ class SummaryViewSpec extends UnitSpec with WithFakeApplication with FakeRequest
           continue.attr("href") shouldBe controllers.routes.WhatNextController.whatNext().url
         }
       }
+
+      "have a ur banner displayed" which {
+        lazy val userBanner = document.select("#urBanner")
+
+        "contains link option to help improve digital service" in {
+          userBanner.select("a").attr("href") shouldBe messages.Summary.userBannerLink
+        }
+
+        "contains text to help improve digital service" in {
+          userBanner.text() contains messages.Summary.userBannerHelpYes
+        }
+      }
+
+      "have a ur banner displayed with No option" which {
+        lazy val userBannerNo = document.select("#urBannerLinkNo")
+
+        "contains No thanks link" in {
+          userBannerNo.text() shouldBe messages.Summary.userBannerHelpNo
+        }
+      }
+
     }
 
     "supplied with a disposal date not within the valid tax years" should {

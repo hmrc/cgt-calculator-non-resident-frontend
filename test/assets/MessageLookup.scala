@@ -494,7 +494,10 @@ object MessageLookup {
       val noticeSummary: String = "Your result may be inaccurate because the calculator does not support the date of sale you entered. " +
         "Do not use these figures to report your Capital Gains Tax."
       val whoOwnedIt = "Who owned the property?"
+      val userBannerHelpYes = "Help improve this digital service by joining the HMRC user panel (opens in new window)"
+      val userBannerHelpNo = "No thanks"
 
+      val userBannerLink = "https://signup.take-part-in-research.service.gov.uk/?utm_campaign=CGT_non_resident_summary&utm_source=Survey_Banner&utm_medium=other&t=HMRC&id=116"
 
       def basedOnYear(year: String): String = s"These figures are based on the tax rates from the $year tax year"
     }
