@@ -17,13 +17,14 @@
 @import config.ApplicationConfig
 @import helpers.two_thirds_banner
 @import helpers.two_thirds_banner_content_ur
+
 @(title: String,
   sidebarLinks: Option[Html] = None,
   contentHeader: Option[Html] = None,
   bodyClasses: Option[String] = None,
   mainClass: Option[String] = None,
   scriptElem: Option[Html] = None,
-  isUserResearchBannerVisible:Boolean = false,
+  isUserResearchBannerVisible: Boolean = true,
   articleLayout: Boolean = true)(mainContent: Html)(implicit request : Request[_], messages: Messages)
 
 @import uk.gov.hmrc.play.views.html.layouts
@@ -63,8 +64,6 @@
             )
         )
     }
-} else {
-    println(Console.YELLOW + "Message not displayed" + Console.RESET)
 }
 
 @govuk_wrapper(appConfig = ApplicationConfig,
@@ -75,6 +74,7 @@
                contentHeader = contentHeader,
                mainContent = contentLayout,
                serviceInfoContent = serviceInfoContent,
-               scriptElem = scriptElem
+               scriptElem = scriptElem,
+               afterHeader = afterHeader
 )
 

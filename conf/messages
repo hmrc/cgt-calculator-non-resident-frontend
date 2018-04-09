@@ -355,7 +355,7 @@ calc.summary.rebased.description = Rebasing method: based on the amount you''ve 
 calc.summary.dismissBanner = No thanks
 calc.summary.dismissBanner.screenreader = I don’t want to answer any questions about joining the research panel
 calc.summary.userResearchLink.title = Help improve GOV.UK
-calc.summary.userResearchLink.link = Answer some questions about yourself to join the research panel.
+calc.summary.userResearchLink.link = Help improve this digital service by joining the HMRC user panel (opens in new window)
 calc.summary.userResearchLink.text = This link opens in a new tab. Please note that this service is not available in Welsh.
 
 calc.report.title = Calculate your Capital Gains Tax
