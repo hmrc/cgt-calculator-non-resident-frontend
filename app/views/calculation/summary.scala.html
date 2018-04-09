@@ -22,8 +22,7 @@
 @(calculationResult: TotalTaxOwedModel, taxYearModel: TaxYearModel, calculationType: String,
 disposalValue: BigDecimal, acquisitionValue: BigDecimal, totalCosts: BigDecimal, backUrl: String, flatGain: Option[BigDecimal] = None, reliefsUsed: BigDecimal = 0)(implicit request: Request[_], messages: Messages)
 
-@main_template(Messages("calc.summary.title")),
-    isUserResearchBannerVisible = true){
+@main_template(Messages("calc.summary.title"), isUserResearchBannerVisible = true){
 
     <a id="back-link" class="back-link" href="@backUrl">@Messages("calc.base.back")</a>
 

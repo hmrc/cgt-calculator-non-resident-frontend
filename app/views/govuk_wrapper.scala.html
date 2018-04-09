@@ -59,19 +59,7 @@
       navLinks = Some(headerNavLinks))
 }
 
-@afterHeader = {
-    @if(isUserResearchBannerVisible) {
-
-    @two_thirds_banner(Some(two_thirds_banner_ur(
-                messages("site.userResearchLink.title"),
-                messages("site.userResearchLink.link"),
-                IhtProperties.linkUserResearch,
-                Some(messages("site.userResearchLink.text"))
-            )
-        )
-    )
-}
-}
+@afterHeader = {}
 
 @bodyEnd = {
     @uiLayouts.footer(
