@@ -32,7 +32,7 @@ class SummaryViewSpec extends UnitSpec with WithFakeApplication with FakeRequest
     "supplied with a disposal date within the valid tax years" should {
       val totalTaxOwedModel = TotalTaxOwedModel(100000, 500, 20, None, None, 500, 500, None, None, None, None, 0, None, None, None, None, None, None, None)
       val taxYearModel: TaxYearModel = TaxYearModel("2016/17", isValidYear = true, "2016/17")
-      lazy val view = summary(totalTaxOwedModel, taxYearModel, "flat", 1000.0, 100, 100, "back-link")
+      lazy val view = summary(totalTaxOwedModel, taxYearModel, "flat", 1000.0, 100, 100, "back-link", showUserResearchPanel = false)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${messages.Summary.title}'" in {
@@ -103,7 +103,7 @@ class SummaryViewSpec extends UnitSpec with WithFakeApplication with FakeRequest
     "supplied with a disposal date not within the valid tax years" should {
       val totalTaxOwedModel = TotalTaxOwedModel(500, 500, 20, None, None, 500, 500, None, None, None, None, 0, None, None, None, None, None, None, None)
       val taxYearModel: TaxYearModel = TaxYearModel("2018/19", isValidYear = false, "2017/18")
-      lazy val view = summary(totalTaxOwedModel, taxYearModel, "flat", 1000.0, 100, 100, "back-url")
+      lazy val view = summary(totalTaxOwedModel, taxYearModel, "flat", 1000.0, 100, 100, "back-url", showUserResearchPanel = false)
       lazy val document = Jsoup.parse(view.body)
 
       "display a tax year warning" in {
