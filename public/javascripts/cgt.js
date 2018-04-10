@@ -84,7 +84,7 @@ $(document).ready($(function () {
 
     $(".banner-panel__close").on("click", function(e) {
         e.preventDefault();
-        setCookie("mdtpurr", "suppress_for_all_services", 30);
+        setCookie("mdtpurr", "suppress_for_all_services", 28);
          $("#ur-panel").removeClass("banner-panel--show");
     });
 
