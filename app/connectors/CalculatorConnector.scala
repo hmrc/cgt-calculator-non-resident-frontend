@@ -26,7 +26,7 @@ import uk.gov.hmrc.http.cache.client.{CacheMap, SessionCache}
 import uk.gov.hmrc.play.config.ServicesConfig
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import uk.gov.hmrc.http.{HeaderCarrier, HttpGet, HttpResponse}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpGet, HttpPost, HttpResponse}
 import uk.gov.hmrc.play.http.ws.WSGet
 
 object CalculatorConnector extends CalculatorConnector with ServicesConfig with WSHttp {
@@ -39,6 +39,7 @@ trait CalculatorConnector {
 
   val sessionCache: SessionCache
   val http: HttpGet
+  val httpPost: HttpPost
   val serviceUrl: String
 
   implicit val hc: HeaderCarrier = HeaderCarrier().withExtraHeaders("Accept" -> "application/vnd.hmrc.1.0+json")
@@ -53,7 +54,7 @@ trait CalculatorConnector {
 
   def calculateTotalGain(totalGainAnswersModel: TotalGainAnswersModel)
                         (implicit hc: HeaderCarrier): Future[Option[TotalGainResultsModel]] = {
-    http.GET[Option[TotalGainResultsModel]](s"$serviceUrl/capital-gains-calculator/non-resident/calculate-total-gain?${
+    httpPost.POST[Option[TotalGainResultsModel]](s"$serviceUrl/capital-gains-calculator/non-resident/calculate-total-gain?${
       TotalGainRequestConstructor.totalGainQuery(totalGainAnswersModel)
     }")
   }

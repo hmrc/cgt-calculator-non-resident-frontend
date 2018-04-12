@@ -16,6 +16,8 @@
 
 package models
 
+import play.api.libs.json.Json
+
 case class TotalGainAnswersModel(disposalDateModel: DisposalDateModel,
                                  soldOrGivenAwayModel: SoldOrGivenAwayModel,
                                  soldForLessModel: Option[SoldForLessModel],
@@ -31,3 +33,7 @@ case class TotalGainAnswersModel(disposalDateModel: DisposalDateModel,
                                  improvementsModel: ImprovementsModel,
                                  otherReliefsFlat: Option[OtherReliefsModel],
                                  costsAtLegislationStart: Option[CostsAtLegislationStartModel] = None)
+
+object TotalGainAnswersModel {
+  implicit val format = Json.format[TotalGainResultsModel]
+}
