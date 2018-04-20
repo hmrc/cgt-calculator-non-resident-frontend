@@ -16,10 +16,16 @@
 
 package models
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.{JsValue, Json, OFormat, Writes}
 
 case class RebasedValueModel (rebasedValueAmt: BigDecimal)
 
 object RebasedValueModel {
   implicit val formats: OFormat[RebasedValueModel] = Json.format[RebasedValueModel]
+
+  val postWrites = new Writes[RebasedValueModel] {
+    override def writes(model: RebasedValueModel): JsValue = {
+      Json.toJson(model.rebasedValueAmt)
+    }
+  }
 }

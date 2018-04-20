@@ -16,7 +16,8 @@
 
 package models
 
-import play.api.libs.json.Json
+import play.api.libs.json._
+import play.api.libs.functional.syntax._
 
 case class TotalGainAnswersModel(disposalDateModel: DisposalDateModel,
                                  soldOrGivenAwayModel: SoldOrGivenAwayModel,
@@ -35,5 +36,41 @@ case class TotalGainAnswersModel(disposalDateModel: DisposalDateModel,
                                  costsAtLegislationStart: Option[CostsAtLegislationStartModel] = None)
 
 object TotalGainAnswersModel {
-  implicit val format = Json.format[TotalGainResultsModel]
+  private val ignore = OWrites[Any](_ => Json.obj())
+
+  implicit val totalGainWrites: Writes[TotalGainAnswersModel] = (
+    (__ \ "disposalDate").write[DisposalDateModel](DisposalDateModel.postWrites) and
+      ignore and
+      ignore and
+      (__ \ "disposalValue").write[DisposalValueModel](DisposalValueModel.postWrites) and
+      (__ \ "disposalCosts").write[DisposalCostsModel](DisposalCostsModel.postWrites) and
+      ignore and
+      ignore and
+      (__ \ "acquisitionValue").write[AcquisitionValueModel](AcquisitionValueModel.postWrites) and
+      (__ \ "acquisitionCosts").writeNullable[AcquisitionCostsModel](AcquisitionCostsModel.postWrites) and
+      (__ \ "acquisitionDate").write[AcquisitionDateModel](AcquisitionDateModel.postWrites) and
+      (__ \ "rebasedValue").writeNullable[RebasedValueModel](RebasedValueModel.postWrites) and
+      (__ \ "rebasedCosts").writeNullable[RebasedCostsModel](RebasedCostsModel.postWrites) and
+      __.write[ImprovementsModel](ImprovementsModel.postWrites) and
+      ignore and
+      ignore
+    ) (unlift(TotalGainAnswersModel.unapply))
+
+  //  implicit val totalGainWrites: Writes[TotalGainAnswersModel] = (
+  //  (__ \ "disposalDate").write[DisposalDateModel](DisposalDateModel.postWrites) and
+  //      (__ \ "soldOrGivenAway").write[SoldOrGivenAwayModel](SoldOrGivenAwayModel.postWrites) and
+  //      (__ \ "soldForLess").writeNullable[SoldForLessModel](SoldForLessModel.postWrites) and
+  //      (__ \ "disposalValue").write[DisposalValueModel](DisposalValueModel.postWrites) and
+  //      (__ \ "disposalCosts").write[DisposalCostsModel](DisposalCostsModel.postWrites) and
+  //      (__ \ "howBecameOwner").writeNullable[HowBecameOwnerModel](HowBecameOwnerModel.postWrites) and
+  //      (__ \ "boughtForLess").writeNullable[BoughtForLessModel](BoughtForLessModel.postWrites) and
+  //      (__ \ "acquisitionValue").write[AcquisitionValueModel](AcquisitionValueModel.postWrites) and
+  //      (__ \ "acquisitionCosts").writeNullable[AcquisitionCostsModel](AcquisitionCostsModel.postWrites) and
+  //      (__ \ "acquisitionDate").write[AcquisitionDateModel](AcquisitionDateModel.postWrites) and
+  //      (__ \ "rebasedValue").writeNullable[RebasedValueModel](RebasedValueModel.postWrites) and
+  //      (__ \ "rebasedCosts").writeNullable[RebasedCostsModel](RebasedCostsModel.postWrites) and
+  //      __.write[ImprovementsModel](ImprovementsModel.postWrites) and
+  //      (__ \ "otherReliefsFlat").writeNullable[OtherReliefsModel](OtherReliefsModel.postWrites) and
+  //      (__ \ "costsAtLegislationStart").writeNullable[CostsAtLegislationStartModel](CostsAtLegislationStartModel.postWrites)
+  //    ) (unlift(TotalGainAnswersModel.unapply))
 }

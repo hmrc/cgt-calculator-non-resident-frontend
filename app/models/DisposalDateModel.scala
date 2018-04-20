@@ -19,7 +19,7 @@ package models
 import java.time.LocalDate
 
 import common.Dates
-import play.api.libs.json.Json
+import play.api.libs.json.{JsValue, Json, Writes}
 
 import scala.util.{Success, Try}
 
@@ -35,6 +35,12 @@ object DisposalDateModel {
     } match {
       case Success(date) => Some(date)
       case _ => None
+    }
+  }
+
+  val postWrites = new Writes[DisposalDateModel] {
+    override def writes(model: DisposalDateModel): JsValue = {
+      Json.toJson(LocalDate.of(model.year, model.month, model.day))
     }
   }
 }

@@ -59,11 +59,11 @@ trait CalculatorConnector {
     }")
   }
 
-  def calculateTotalGainJson(totalGainAnswersModel: TotalGainAnswersModel)
-                        (implicit hc: HeaderCarrier): Future[Option[TotalGainResultsModel]] = {
-    http.POST[TotalGainAnswersModel,Option[TotalGainResultsModel]](s"$serviceUrl/capital-gains-calculator/non-resident/calculate-total-gain",
-      totalGainAnswersModel)
-  }
+//  def calculateTotalGainJson(totalGainAnswersModel: TotalGainAnswersModel)
+//                            (implicit hc: HeaderCarrier): Future[Option[TotalGainResultsModel]] = {
+//    http.POST[TotalGainAnswersModel, Option[TotalGainResultsModel]](s"$serviceUrl/capital-gains-calculator/non-resident/calculate-total-gain",
+//      totalGainAnswersModel)
+//  }
 
   def calculateTaxableGainAfterPRR(totalGainAnswersModel: TotalGainAnswersModel,
                                    privateResidenceReliefModel: PrivateResidenceReliefModel,
