@@ -125,46 +125,5 @@ class TotalGainAnswersModelSpec extends UnitSpec with MockitoSugar {
 
       Json.toJson(model) shouldBe outputJson
     }
-
-    "return a Bad Request" in {
-      val outputJson = Json.parse(
-        """
-          |{
-          |"disposalCosts":200000,
-          |"acquisitionValue":350000,
-          |"acquisitionCosts":200000,
-          |"improvements":9000,
-          |"rebasedValue":450000,
-          |"rebasedCosts":20000,
-          |"disposalDate":"2017-05-12",
-          |"acquisitionDate":"2014-08-14",
-          |"improvementsAfterTaxStarted":250000
-          |}
-        """.
-          stripMargin)
-
-      val model = TotalGainAnswersModel(
-        DisposalDateModel(12, 5, 2017),
-        SoldOrGivenAwayModel(true),
-        None,
-        DisposalValueModel(),
-        DisposalCostsModel(20000),
-        None, None,
-        AcquisitionValueModel(350000),
-        Some(AcquisitionCostsModel(2000)),
-        AcquisitionDateModel(14, 8, 2014),
-        Some(RebasedValueModel(450000)),
-        Some(RebasedCostsModel("yes", Some(20000))),
-        ImprovementsModel("yes", Some(9000), Some(1000)),
-        None, None)
-
-      Json.toJson(model) shouldBe outputJson
-    }
-
-    "return a not_found/internal service error" in {
-
-    }
-
   }
-
 }
