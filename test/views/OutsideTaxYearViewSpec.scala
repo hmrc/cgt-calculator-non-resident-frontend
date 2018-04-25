@@ -31,7 +31,7 @@ class OutsideTaxYearViewSpec extends UnitSpec with WithFakeApplication with Fake
 
     "using a disposal date of 2018/19 " should {
       lazy val taxYear = TaxYearModel("2018/19", false, "2017/18")
-      lazy val view = views.outsideTaxYear(taxYear)(fakeRequestWithSession, applicationMessages)
+      lazy val view = views.outsideTaxYear(taxYear)(fakeRequestWithSession, applicationMessages, fakeApplication)
       lazy val doc = Jsoup.parse(view.body)
 
       "have charset UTF-8" in {

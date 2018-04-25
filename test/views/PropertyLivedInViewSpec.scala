@@ -196,7 +196,7 @@ class PropertyLivedInViewSpec extends UnitSpec with WithFakeApplication with Moc
     }
 
     "supplied with a filled form of 'Yes'" which {
-      lazy val view = propertyLivedIn(propertyLivedInForm.fill(PropertyLivedInModel(true)))(fakeRequest, applicationMessages)
+      lazy val view = propertyLivedIn(propertyLivedInForm.fill(PropertyLivedInModel(true)))(fakeRequest, applicationMessages, fakeApplication)
       lazy val document = Jsoup.parse(view.body)
 
       "for the option 'Yes'" should {
@@ -212,7 +212,7 @@ class PropertyLivedInViewSpec extends UnitSpec with WithFakeApplication with Moc
     "Property Lived In view with form errors" should {
 
       lazy val form = propertyLivedInForm.bind(Map("propertyLivedIn" -> ""))
-      lazy val view = propertyLivedIn(form)(fakeRequest, applicationMessages)
+      lazy val view = propertyLivedIn(form)(fakeRequest, applicationMessages, fakeApplication)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" which {

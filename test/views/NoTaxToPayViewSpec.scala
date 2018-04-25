@@ -27,7 +27,7 @@ import views.html.{calculation => views}
 class NoTaxToPayViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
 
   "No Tax to Pay View when gifted to spouse" should {
-    lazy val view = views.noTaxToPay(forCharity = false)(fakeRequest, applicationMessages)
+    lazy val view = views.noTaxToPay(forCharity = false)(fakeRequest, applicationMessages, fakeApplication)
     lazy val doc = Jsoup.parse(view.body)
 
     "have a charset of UTF-8" in {
@@ -63,7 +63,7 @@ class NoTaxToPayViewSpec extends UnitSpec with WithFakeApplication with FakeRequ
   }
 
   "No Tax to Pay View when gifted to charity" should {
-    lazy val view = views.noTaxToPay(forCharity = true)(fakeRequest, applicationMessages)
+    lazy val view = views.noTaxToPay(forCharity = true)(fakeRequest, applicationMessages, fakeApplication)
     lazy val doc = Jsoup.parse(view.body)
 
     "have text explaining why tax is not owed" in {
