@@ -50,7 +50,9 @@
             <p id="jointOwner">@Messages("calc.improvements.jointOwnership")</p>
         </div>
 
+        <div class="form-group">
         @expandableHelpTextHelper(Messages("calc.improvements.exampleTitle"), exampleContent)
+        </div>
 
         @form(action = controllers.routes.ImprovementsController.submitImprovements) {
 

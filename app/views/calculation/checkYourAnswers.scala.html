@@ -29,6 +29,7 @@
 
     <h1 class="heading-xlarge">@Messages("calc.checkYourAnswers.title")</h1>
 
+<div class="form-group">
         <table class="check-your-answers">
             <thead>
                 <th class="heading-medium" colspan="2">@Messages("calc.checkYourAnswers.tableHeading")</th>
@@ -53,6 +54,7 @@
                 }
             </tbody>
         </table>
+</div>
 
     @form(action = controllers.routes.CheckYourAnswersController.submitCheckYourAnswers()) {
         <div class="form-group">
