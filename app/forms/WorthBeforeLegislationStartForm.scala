@@ -32,13 +32,13 @@ object WorthBeforeLegislationStartForm {
   val worthBeforeLegislationStartForm: Form[WorthBeforeLegislationStartModel] = Form(
     mapping(
       "worthBeforeLegislationStart" -> text
-        .verifying(Messages("error.real"), mandatoryCheck)
-        .verifying(Messages("error.real"), bigDecimalCheck)
+        .verifying("error.real", mandatoryCheck)
+        .verifying("error.real", bigDecimalCheck)
         .transform[BigDecimal](stringToBigDecimal, bigDecimalToString)
-        .verifying(Messages("calc.acquisitionMarketValue.errorNegative"), isPositive)
-        .verifying(Messages("calc.acquisitionMarketValue.errorDecimalPlaces"), decimalPlacesCheck)
-        .verifying(Messages("calc.common.error.maxNumericExceeded") + MoneyPounds(Constants.maxNumeric, 0).quantity + " " +
-          Messages("calc.common.error.maxNumericExceeded.OrLess"), maxCheck)
+        .verifying("calc.acquisitionMarketValue.errorNegative", isPositive)
+        .verifying("calc.acquisitionMarketValue.errorDecimalPlaces", decimalPlacesCheck)
+        .verifying("calc.common.error.maxNumericExceeded" + MoneyPounds(Constants.maxNumeric, 0).quantity + " " +
+          "calc.common.error.maxNumericExceeded.OrLess", maxCheck)
     )(WorthBeforeLegislationStartModel.apply)(WorthBeforeLegislationStartModel.unapply)
   )
 

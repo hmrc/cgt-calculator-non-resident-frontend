@@ -23,10 +23,11 @@
 @import common.Dates._
 @import java.time._
 @import views.html.helpers._
+@import play.api.Application
 
 @(questions: Seq[QuestionAnswerModel[Any]],
 calculationResult: TotalTaxOwedModel, taxYearModel: TaxYearModel, calculationType: String,
-disposalValue: BigDecimal, acquisitionValue: BigDecimal, totalCosts: BigDecimal, flatGain: Option[BigDecimal] = None, reliefsUsed: BigDecimal = 0)(implicit request: Request[_], messages: Messages)
+disposalValue: BigDecimal, acquisitionValue: BigDecimal, totalCosts: BigDecimal, flatGain: Option[BigDecimal] = None, reliefsUsed: BigDecimal = 0)(implicit request: Request[_], messages: Messages, application: Application)
 
 <!DOCTYPE html>
 <html>

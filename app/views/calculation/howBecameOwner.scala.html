@@ -17,8 +17,9 @@
 @import models.HowBecameOwnerModel
 @import uk.gov.hmrc.play.views.html.helpers.form
 @import views.html.helpers._
+@import play.api.Application
 
-@(howBecameOwnerForm: Form[HowBecameOwnerModel])(implicit request: Request[_], messages: Messages)
+@(howBecameOwnerForm: Form[HowBecameOwnerModel])(implicit request: Request[_], messages: Messages, application: Application)
 
 @main_template(title = Messages("calc.howBecameOwner.question")) {
 

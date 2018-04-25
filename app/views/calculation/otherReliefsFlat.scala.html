@@ -18,8 +18,9 @@
 @import uk.gov.hmrc.play.views.html.helpers.form
 @import uk.gov.hmrc.play.views.helpers.MoneyPounds
 @import views.html.helpers._
+@import play.api.Application
 
-@(otherReliefsForm: Form[OtherReliefsModel], hasExistingReliefAmount: Boolean, chargeableGain: BigDecimal, gain: BigDecimal)(implicit request: Request[_], messages: Messages)
+@(otherReliefsForm: Form[OtherReliefsModel], hasExistingReliefAmount: Boolean, chargeableGain: BigDecimal, gain: BigDecimal)(implicit request: Request[_], messages: Messages, application: Application)
 
 @main_template(Messages("calc.otherReliefs.question")) {
 

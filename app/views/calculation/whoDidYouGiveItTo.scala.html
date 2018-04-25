@@ -16,10 +16,11 @@
 
 @import uk.gov.hmrc.play.views.html.helpers.form
 @import views.html.helpers._
+@import play.api.Application
 @import views.html.calculation._
 @import models.WhoDidYouGiveItToModel
 
-@(whoDidYouGiveItToForm: Form[WhoDidYouGiveItToModel])(implicit request: Request[_], messages: Messages)
+@(whoDidYouGiveItToForm: Form[WhoDidYouGiveItToModel])(implicit request: Request[_], messages: Messages, application: Application)
 
 @main_template(
   title = Messages("calc.whoDidYouGiveThePropertyTo.title")) {

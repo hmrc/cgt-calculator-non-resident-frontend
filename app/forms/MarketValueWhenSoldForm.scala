@@ -21,8 +21,8 @@ import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 
 object MarketValueWhenSoldForm extends MarketDisposalValueForm {
-  override val errorNegative = Messages("calc.marketValue.error.sold.negative")
-  override val errorDecimalPlaces = Messages("calc.marketValue.error.sold.decimalPlaces")
+  override val errorNegative = "calc.marketValue.error.sold.negative"
+  override val errorDecimalPlaces = "calc.marketValue.error.sold.decimalPlaces"
 
   val marketValueWhenSoldForm = marketValueForm
 }

@@ -31,13 +31,13 @@ object DisposalCostsForm {
   val disposalCostsForm = Form(
     mapping(
       "disposalCosts" -> text
-        .verifying(Messages("error.real"), mandatoryCheck)
-        .verifying(Messages("error.real"), bigDecimalCheck)
+        .verifying("error.real", mandatoryCheck)
+        .verifying("error.real", bigDecimalCheck)
         .transform(stringToBigDecimal, bigDecimalToString)
-        .verifying(Messages("calc.disposalCosts.errorNegativeNumber"), costs => isPositive(costs))
-        .verifying(Messages("calc.disposalCosts.errorDecimalPlaces"), costs => decimalPlacesCheck(costs))
-        .verifying(Messages("calc.common.error.maxNumericExceeded") + MoneyPounds(Constants.maxNumeric, 0).quantity + " " +
-          Messages("calc.common.error.maxNumericExceeded.OrLess"), maxCheck)
+        .verifying("calc.disposalCosts.errorNegativeNumber", costs => isPositive(costs))
+        .verifying("calc.disposalCosts.errorDecimalPlaces", costs => decimalPlacesCheck(costs))
+        .verifying("calc.common.error.maxNumericExceeded" + MoneyPounds(Constants.maxNumeric, 0).quantity + " " +
+          "calc.common.error.maxNumericExceeded.OrLess", maxCheck)
     )(DisposalCostsModel.apply)(DisposalCostsModel.unapply)
   )
 }

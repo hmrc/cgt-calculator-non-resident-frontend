@@ -17,8 +17,9 @@
 @import models.PersonalAllowanceModel
 @import uk.gov.hmrc.play.views.html.helpers.form
 @import views.html.helpers._
+@import play.api.Application
 
-@(personalAllowanceForm: Form[PersonalAllowanceModel])(implicit request: Request[_], messages: Messages)
+@(personalAllowanceForm: Form[PersonalAllowanceModel])(implicit request: Request[_], messages: Messages, application: Application)
 
 @helpLink = {
     <a id="helpLink2" class="external-link" rel="external" href="https://www.gov.uk/income-tax-rates/current-rates-and-allowances"

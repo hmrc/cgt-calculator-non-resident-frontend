@@ -34,13 +34,13 @@ trait MarketDisposalValueForm {
   val marketValueForm = Form(
     mapping(
       "disposalValue" -> text
-        .verifying(Messages("error.real"), mandatoryCheck)
-        .verifying(Messages("error.real"), bigDecimalCheck)
+        .verifying("error.real", mandatoryCheck)
+        .verifying("error.real", bigDecimalCheck)
         .transform(stringToBigDecimal, bigDecimalToString)
-        .verifying(Messages(errorNegative), isPositive)
-        .verifying(Messages(errorDecimalPlaces), decimalPlacesCheck)
-        .verifying(Messages("calc.common.error.maxNumericExceeded") + MoneyPounds(Constants.maxNumeric, 0).quantity + " " +
-          Messages("calc.common.error.maxNumericExceeded.OrLess"), maxCheck)
+        .verifying(errorNegative, isPositive)
+        .verifying(errorDecimalPlaces, decimalPlacesCheck)
+        .verifying("calc.common.error.maxNumericExceeded" + MoneyPounds(Constants.maxNumeric, 0).quantity + " " +
+          "calc.common.error.maxNumericExceeded.OrLess", maxCheck)
     )(DisposalValueModel.apply)(DisposalValueModel.unapply)
     )
 }

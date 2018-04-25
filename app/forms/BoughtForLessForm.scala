@@ -31,8 +31,8 @@ object BoughtForLessForm {
     Form(
       mapping(
         "boughtForLess" -> text
-          .verifying(Messages("error.required"), mandatoryCheck)
-          .verifying(Messages("error.required"), yesNoCheck)
+          .verifying("error.required", mandatoryCheck)
+          .verifying("error.required", yesNoCheck)
           .transform(stringToBoolean, booleanToString)
       )(BoughtForLessModel.apply)(BoughtForLessModel.unapply)
     )

@@ -20,10 +20,10 @@ import play.api.Play.current
 import javax.inject.Inject
 import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
-
 import play.api.Play
 import play.api.i18n.{I18nSupport, Lang, MessagesApi}
 import play.api.mvc.Call
+import play.twirl.api.Html
 import uk.gov.hmrc.play.config.RunMode
 import uk.gov.hmrc.play.language.LanguageController
 
@@ -40,5 +40,4 @@ class CgtLanguageController @Inject()(override val messagesApi: MessagesApi) ext
     "english" -> Lang("en"),
     "cymraeg" -> Lang("cy")
   )
-
 }

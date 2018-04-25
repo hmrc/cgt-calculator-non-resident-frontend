@@ -64,21 +64,21 @@ object ImprovementsForm {
   def improvementsForm(showHiddenQuestion: Boolean): Form[ImprovementsModel] = Form(
     mapping(
       "isClaimingImprovements" -> text
-      .verifying(Messages("calc.common.error.fieldRequired"), mandatoryCheck)
-      .verifying(Messages("calc.common.error.fieldRequired"), yesNoCheck),
+      .verifying("calc.common.error.fieldRequired", mandatoryCheck)
+      .verifying("calc.common.error.fieldRequired", yesNoCheck),
       "improvementsAmt" -> optional(text)
         .transform(optionalStringToOptionalBigDecimal, optionalBigDecimalToOptionalString),
       "improvementsAmtAfter" -> optional(text)
         .transform(optionalStringToOptionalBigDecimal, optionalBigDecimalToOptionalString)
     )(ImprovementsModel.apply)(ImprovementsModel.unapply)
-      .verifying(Messages("calc.improvements.error.no.value.supplied"),
+      .verifying("calc.improvements.error.no.value.supplied",
         improvementsForm => verifyAmountSupplied(improvementsForm, showHiddenQuestion))
-      .verifying(Messages("calc.improvements.errorNegative"),
+      .verifying("calc.improvements.errorNegative",
         improvementsForm => verifyPositive(improvementsForm, showHiddenQuestion))
-      .verifying(Messages("calc.improvements.errorDecimalPlaces"),
+      .verifying("calc.improvements.errorDecimalPlaces",
         improvementsForm => verifyTwoDecimalPlaces(improvementsForm, showHiddenQuestion))
-      .verifying(Messages("calc.common.error.maxNumericExceeded")  + MoneyPounds(Constants.maxNumeric, 0).quantity + " " +
-        Messages("calc.common.error.maxNumericExceeded.OrLess"),
+      .verifying("calc.common.error.maxNumericExceeded"  + MoneyPounds(Constants.maxNumeric, 0).quantity + " " +
+        "calc.common.error.maxNumericExceeded.OrLess",
           improvementsForm => validateMax(improvementsForm, showHiddenQuestion))
   )
 }

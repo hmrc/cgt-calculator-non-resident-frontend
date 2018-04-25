@@ -17,8 +17,9 @@
 @import views.html.helpers._
 @import common.Dates
 @import models._
+@import play.api.Application
 
-@(data: DisposalDateModel)(implicit request: Request[_], messages: Messages)
+@(data: DisposalDateModel)(implicit request: Request[_], messages: Messages, application: Application)
 
 @main_template(Messages("nocgt.invaliddate.title")) {
 

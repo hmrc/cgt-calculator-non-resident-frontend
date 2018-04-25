@@ -30,19 +30,19 @@ object DisposalDateForm {
   val disposalDateForm = Form(
     mapping(
       "disposalDateDay" -> text
-        .verifying(Messages("calc.common.date.error.invalidDate"), mandatoryCheck)
-        .verifying(Messages("calc.common.date.error.invalidDate"), integerCheck)
+        .verifying("calc.common.date.error.invalidDate", mandatoryCheck)
+        .verifying("calc.common.date.error.invalidDate", integerCheck)
         .transform[Int](stringToInteger, _.toString),
       "disposalDateMonth" -> text
-        .verifying(Messages("calc.common.date.error.invalidDate"), mandatoryCheck)
-        .verifying(Messages("calc.common.date.error.invalidDate"), integerCheck)
+        .verifying("calc.common.date.error.invalidDate", mandatoryCheck)
+        .verifying("calc.common.date.error.invalidDate", integerCheck)
         .transform[Int](stringToInteger, _.toString),
       "disposalDateYear" -> text
-        .verifying(Messages("calc.common.date.error.invalidDate"), mandatoryCheck)
-        .verifying(Messages("calc.common.date.error.invalidDate"), integerCheck)
+        .verifying("calc.common.date.error.invalidDate", mandatoryCheck)
+        .verifying("calc.common.date.error.invalidDate", integerCheck)
         .transform[Int](stringToInteger, _.toString)
     )(DisposalDateModel.apply)(DisposalDateModel.unapply)
-      .verifying(Messages("calc.common.date.error.invalidDate"), fields =>
+      .verifying("calc.common.date.error.invalidDate", fields =>
         isValidDate(fields.day, fields.month, fields.year))
   )
 }

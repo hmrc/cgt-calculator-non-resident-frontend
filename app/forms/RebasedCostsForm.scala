@@ -60,18 +60,18 @@ object RebasedCostsForm {
   val rebasedCostsForm = Form(
     mapping(
       "hasRebasedCosts" -> text
-        .verifying(Messages("calc.common.error.fieldRequired"), mandatoryCheck)
-        .verifying(Messages("calc.common.error.fieldRequired"), yesNoCheck),
+        .verifying("calc.common.error.fieldRequired", mandatoryCheck)
+        .verifying("calc.common.error.fieldRequired", yesNoCheck),
       "rebasedCosts" -> text
         .transform(stringToOptionalBigDecimal, optionalBigDecimalToString)
     )(RebasedCostsModel.apply)(RebasedCostsModel.unapply)
-      .verifying(Messages("calc.rebasedCosts.error.no.value.supplied"),
+      .verifying("calc.rebasedCosts.error.no.value.supplied",
         rebasedCostsForm => verifyAmountSupplied(RebasedCostsModel(rebasedCostsForm.hasRebasedCosts, rebasedCostsForm.rebasedCosts)))
-      .verifying(Messages("calc.rebasedCosts.errorNegative"),
+      .verifying("calc.rebasedCosts.errorNegative",
         rebasedCostsForm => verifyPositive(rebasedCostsForm))
-      .verifying(Messages("calc.rebasedCosts.errorDecimalPlaces"),
+      .verifying("calc.rebasedCosts.errorDecimalPlaces",
         rebasedCostsForm => verifyTwoDecimalPlaces(rebasedCostsForm))
-      .verifying(Messages("calc.common.error.maxNumericExceeded") + MoneyPounds(Constants.maxNumeric, 0).quantity + " " + Messages("calc.common.error.maxNumericExceeded.OrLess"),
+      .verifying("calc.common.error.maxNumericExceeded" + MoneyPounds(Constants.maxNumeric, 0).quantity + " " + "calc.common.error.maxNumericExceeded.OrLess",
         rebasedValueForm => validateMax(rebasedValueForm))
   )
 }

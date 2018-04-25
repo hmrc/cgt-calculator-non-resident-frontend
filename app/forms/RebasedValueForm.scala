@@ -32,12 +32,13 @@ object RebasedValueForm {
   val rebasedValueForm: Form[RebasedValueModel] = Form(
     mapping(
       "rebasedValueAmt" -> text
-        .verifying(Messages("calc.nonResident.rebasedValue.error.no.value.supplied"), mandatoryCheck)
-        .verifying(Messages("error.number"), bigDecimalCheck)
+        .verifying("calc.nonResident.rebasedValue.error.no.value.supplied", mandatoryCheck)
+        .verifying("error.number", bigDecimalCheck)
         .transform[BigDecimal](stringToBigDecimal, bigDecimalToString)
-        .verifying(Messages("calc.nonResident.rebasedValue.errorNegative"), data => isPositive(data))
-        .verifying(Messages("calc.nonResident.rebasedValue.errorDecimalPlaces"), data => decimalPlacesCheck(data))
-        .verifying(Messages("calc.common.error.maxAmountExceeded", MoneyPounds(Constants.maxNumeric, 0).quantity), data => maxCheck(data))
+        .verifying("calc.nonResident.rebasedValue.errorNegative", data => isPositive(data))
+        .verifying("calc.nonResident.rebasedValue.errorDecimalPlaces", data => decimalPlacesCheck(data))
+        .verifying("calc.common.error.maxNumericExceeded" + MoneyPounds(Constants.maxNumeric, 0).quantity + " " +
+          "calc.common.error.maxNumericExceeded.OrLess", maxCheck)
     )(RebasedValueModel.apply)(RebasedValueModel.unapply)
   )
 }
