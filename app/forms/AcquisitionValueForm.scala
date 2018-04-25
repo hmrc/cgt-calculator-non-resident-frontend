@@ -32,13 +32,13 @@ object AcquisitionValueForm {
   val acquisitionValueForm = Form(
     mapping(
       "acquisitionValue" -> text
-        .verifying(Messages("calc.common.error.mandatoryAmount"), mandatoryCheck)
-        .verifying(Messages("calc.common.error.mandatoryAmount"), bigDecimalCheck)
+        .verifying("calc.common.error.mandatoryAmount", mandatoryCheck)
+        .verifying("calc.common.error.mandatoryAmount", bigDecimalCheck)
         .transform(stringToBigDecimal, bigDecimalToString)
-        .verifying(Messages("calc.acquisitionValue.errorNegative"), isPositive)
-        .verifying(Messages("calc.acquisitionValue.errorDecimalPlaces"), decimalPlacesCheck)
-        .verifying(Messages("calc.common.error.maxNumericExceeded") + MoneyPounds(Constants.maxNumeric, 0).quantity + " " +
-          Messages("calc.common.error.maxNumericExceeded.OrLess"), maxCheck)
+        .verifying("calc.acquisitionValue.errorNegative", isPositive)
+        .verifying("calc.acquisitionValue.errorDecimalPlaces", decimalPlacesCheck)
+        .verifying("calc.common.error.maxNumericExceeded" + MoneyPounds(Constants.maxNumeric, 0).quantity + " " +
+          "calc.common.error.maxNumericExceeded.OrLess", maxCheck)
     )(AcquisitionValueModel.apply)(AcquisitionValueModel.unapply)
   )
 }

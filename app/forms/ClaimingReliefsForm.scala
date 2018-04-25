@@ -30,8 +30,8 @@ object ClaimingReliefsForm {
   val claimingReliefsForm: Form[ClaimingReliefsModel] = Form(
     mapping(
       "isClaimingReliefs" -> text
-        .verifying(Messages("calc.claimingReliefs.errorMandatory"), mandatoryCheck)
-        .verifying(Messages("calc.claimingReliefs.errorMandatory"), yesNoCheck)
+        .verifying("calc.claimingReliefs.errorMandatory", mandatoryCheck)
+        .verifying("calc.claimingReliefs.errorMandatory", yesNoCheck)
         .transform(stringToBoolean, booleanToString)
     )(ClaimingReliefsModel.apply)(ClaimingReliefsModel.unapply)
   )

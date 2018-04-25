@@ -34,7 +34,7 @@ object CalculationElectionForm {
 
   val calculationElectionForm = Form(
     mapping(
-      "calculationElection" -> text.verifying(Messages("calc.base.optionReqError"), validate)
+      "calculationElection" -> text.verifying("calc.base.optionReqError", validate)
     )(CalculationElectionModel.apply)(CalculationElectionModel.unapply)
   )
 

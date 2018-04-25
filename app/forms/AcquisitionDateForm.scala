@@ -32,21 +32,21 @@ object AcquisitionDateForm {
   val acquisitionDateForm = Form(
     mapping(
       "acquisitionDateDay" -> text
-        .verifying(Messages("calc.common.date.error.invalidDate"), mandatoryCheck)
-        .verifying(Messages("calc.common.date.error.invalidDate"), integerCheck)
+        .verifying("calc.common.date.error.invalidDate", mandatoryCheck)
+        .verifying("calc.common.date.error.invalidDate", integerCheck)
         .transform[Int](stringToInteger, _.toString),
       "acquisitionDateMonth" -> text
-        .verifying(Messages("calc.common.date.error.invalidDate"), mandatoryCheck)
-        .verifying(Messages("calc.common.date.error.invalidDate"), integerCheck)
+        .verifying("calc.common.date.error.invalidDate", mandatoryCheck)
+        .verifying("calc.common.date.error.invalidDate", integerCheck)
         .transform[Int](stringToInteger, _.toString),
       "acquisitionDateYear" -> text
-        .verifying(Messages("calc.common.date.error.invalidDate"), mandatoryCheck)
-        .verifying(Messages("calc.common.date.error.invalidDate"), integerCheck)
+        .verifying("calc.common.date.error.invalidDate", mandatoryCheck)
+        .verifying("calc.common.date.error.invalidDate", integerCheck)
         .transform[Int](stringToInteger, _.toString)
     )(AcquisitionDateModel.apply)(AcquisitionDateModel.unapply)
-      .verifying(Messages("calc.common.date.error.invalidDate"), fields =>
+      .verifying("calc.common.date.error.invalidDate", fields =>
         isValidDate(fields.day, fields.month, fields.year))
-      .verifying(Messages("calc.acquisitionDate.errorFutureDateGuidance"), fields =>
+      .verifying("calc.acquisitionDate.errorFutureDateGuidance", fields =>
         verifyDateInPast(fields))
   )
 

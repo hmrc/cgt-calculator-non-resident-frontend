@@ -32,13 +32,13 @@ object HowMuchLossForm {
   val howMuchLossForm: Form[HowMuchLossModel] = Form(
     mapping(
       "loss" -> text
-        .verifying(Messages("calc.common.error.mandatoryAmount"), mandatoryCheck)
-        .verifying(Messages("calc.common.error.mandatoryAmount"), bigDecimalCheck)
+        .verifying("calc.common.error.mandatoryAmount", mandatoryCheck)
+        .verifying("calc.common.error.mandatoryAmount", bigDecimalCheck)
         .transform(stringToBigDecimal, bigDecimalToString)
-        .verifying(Messages("calc.howMuchLoss.errorMinimum"), isPositive)
-        .verifying(Messages("calc.howMuchLoss.errorDecimal"), decimalPlacesCheck)
-        .verifying(Messages("calc.common.error.maxNumericExceeded") + MoneyPounds(Constants.maxNumeric, 0).quantity + " " +
-          Messages("calc.common.error.maxNumericExceeded.OrLess"), maxCheck)
+        .verifying("calc.howMuchLoss.errorMinimum", isPositive)
+        .verifying("calc.howMuchLoss.errorDecimal", decimalPlacesCheck)
+        .verifying("calc.common.error.maxNumericExceeded" + MoneyPounds(Constants.maxNumeric, 0).quantity + " " +
+          "calc.common.error.maxNumericExceeded.OrLess", maxCheck)
     )(HowMuchLossModel.apply)(HowMuchLossModel.unapply)
   )
 }

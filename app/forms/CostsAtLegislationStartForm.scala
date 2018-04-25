@@ -57,24 +57,24 @@ object CostsAtLegislationStartForm {
     }
   }
 
-  private lazy val greaterThanMaxMessage = Messages("calc.common.error.maxNumericExceeded") +
+  private lazy val greaterThanMaxMessage = "calc.common.error.maxNumericExceeded" +
     MoneyPounds(Constants.maxNumeric, 0).quantity +
     " " +
-    Messages("calc.common.error.maxNumericExceeded.OrLess")
+    "calc.common.error.maxNumericExceeded.OrLess"
 
   val costsAtLegislationStartForm = Form(
     mapping(
       "hasCosts" -> text
-        .verifying(Messages("calc.common.error.fieldRequired"), mandatoryCheck)
-        .verifying(Messages("calc.common.error.fieldRequired"), yesNoCheck),
+        .verifying("calc.common.error.fieldRequired", mandatoryCheck)
+        .verifying("calc.common.error.fieldRequired", yesNoCheck),
       "costs" -> text
         .transform(stringToOptionalBigDecimal, optionalBigDecimalToString)
     )(CostsAtLegislationStartModel.apply)(CostsAtLegislationStartModel.unapply)
-      .verifying(Messages("calc.costsAtLegislationStart.error.no.value.supplied"),
+      .verifying("calc.costsAtLegislationStart.error.no.value.supplied",
         form => verifyAmountSupplied(CostsAtLegislationStartModel(form.hasCosts, form.costs)))
-      .verifying(Messages("calc.costsAtLegislationStart.errorNegative"),
+      .verifying("calc.costsAtLegislationStart.errorNegative",
         form => verifyPositive(form))
-      .verifying(Messages("calc.costsAtLegislationStart.errorDecimalPlaces"),
+      .verifying("calc.costsAtLegislationStart.errorDecimalPlaces",
         form => verifyTwoDecimalPlaces(form))
       .verifying(greaterThanMaxMessage,
         form => validateMax(form))

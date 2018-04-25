@@ -66,17 +66,17 @@ object PrivateResidenceReliefForm {
   def privateResidenceReliefForm (showBefore: Boolean, showAfter: Boolean): Form[PrivateResidenceReliefModel] = Form(
     mapping(
       "isClaimingPRR" -> text
-        .verifying(Messages("calc.common.error.fieldRequired"), mandatoryCheck)
-        .verifying(Messages("calc.common.error.fieldRequired"), yesNoCheck),
+        .verifying("calc.common.error.fieldRequired", mandatoryCheck)
+        .verifying("calc.common.error.fieldRequired", yesNoCheck),
       "daysClaimed" -> optional(text)
         .transform(optionalStringToOptionalBigDecimal, optionalBigDecimalToOptionalString),
       "daysClaimedAfter" -> optional(text)
         .transform(optionalStringToOptionalBigDecimal, optionalBigDecimalToOptionalString)
     )(PrivateResidenceReliefModel.apply)(PrivateResidenceReliefModel.unapply)
-      .verifying(Messages("calc.privateResidenceRelief.error.noValueProvided"), form => verifyAmountSupplied(form, showBefore, showAfter))
-      .verifying(Messages("calc.privateResidenceRelief.error.errorNegative"), form => verifyPositive(form, showBefore, showAfter))
-      .verifying(Messages("calc.privateResidenceRelief.error.errorDecimalPlaces"), form => verifyNoDecimalPlaces(form, showBefore, showAfter))
-      .verifying(Messages("calc.privateResidenceRelief.error.maxNumericExceeded") + " " + formatter.format(Constants.maxNumeric) + " " + Messages("calc.privateResidenceRelief.error.maxNumericExceeded.OrLess"),
+      .verifying("calc.privateResidenceRelief.error.noValueProvided", form => verifyAmountSupplied(form, showBefore, showAfter))
+      .verifying("calc.privateResidenceRelief.error.errorNegative", form => verifyPositive(form, showBefore, showAfter))
+      .verifying("calc.privateResidenceRelief.error.errorDecimalPlaces", form => verifyNoDecimalPlaces(form, showBefore, showAfter))
+      .verifying("calc.privateResidenceRelief.error.maxNumericExceeded" + " " + formatter.format(Constants.maxNumeric) + " " + "calc.privateResidenceRelief.error.maxNumericExceeded.OrLess",
         form => validateMax(form, showBefore, showAfter)
       )
   )

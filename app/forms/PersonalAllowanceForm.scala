@@ -31,13 +31,13 @@ object PersonalAllowanceForm {
   def personalAllowanceForm (maxPA: BigDecimal = BigDecimal(0)): Form[PersonalAllowanceModel] = Form (
     mapping(
       "personalAllowance" -> text
-        .verifying(Messages("error.real"), mandatoryCheck)
-        .verifying(Messages("error.real"), bigDecimalCheck)
+        .verifying("error.real", mandatoryCheck)
+        .verifying("error.real", bigDecimalCheck)
         .transform(stringToBigDecimal, bigDecimalToString)
-        .verifying(Messages("calc.personalAllowance.errorNegative"), isPositive)
-        .verifying(Messages("calc.personalAllowance.errorDecimalPlaces"), decimalPlacesCheckNoDecimal)
-        .verifying(Messages("calc.personalAllowance.errorMaxLimit") + MoneyPounds(maxPA, 0).quantity + " " +
-          Messages("calc.personalAllowance.errorMaxLimitEnd"), personalAllowance => personalAllowance <= maxPA)
+        .verifying("calc.personalAllowance.errorNegative", isPositive)
+        .verifying("calc.personalAllowance.errorDecimalPlaces", decimalPlacesCheckNoDecimal)
+        .verifying("calc.personalAllowance.errorMaxLimit" + MoneyPounds(maxPA, 0).quantity + " " +
+          "calc.personalAllowance.errorMaxLimitEnd", personalAllowance => personalAllowance <= maxPA)
     )(PersonalAllowanceModel.apply)(PersonalAllowanceModel.unapply)
   )
 }

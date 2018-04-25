@@ -31,8 +31,8 @@ object PropertyLivedInForm {
     Form(
       mapping(
         "propertyLivedIn" -> text
-          .verifying(Messages("calc.propertyLivedIn.noSelectError"), mandatoryCheck)
-          .verifying(Messages("calc.propertyLivedIn.noSelectError"), yesNoCheck)
+          .verifying("calc.propertyLivedIn.noSelectError", mandatoryCheck)
+          .verifying("calc.propertyLivedIn.noSelectError", yesNoCheck)
           .transform(stringToBoolean, booleanToString)
       )(PropertyLivedInModel.apply)(PropertyLivedInModel.unapply)
     )

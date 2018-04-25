@@ -28,8 +28,8 @@ object PreviousLossOrGainForm {
   val previousLossOrGainForm = Form(
     mapping(
       "previousLossOrGain" -> text
-        .verifying(Messages("calc.previousLossOrGain.errors.required"), mandatoryCheck)
-        .verifying(Messages("calc.previousLossOrGain.errors.required"), previousLossOrGainCheck)
+        .verifying("calc.previousLossOrGain.errors.required", mandatoryCheck)
+        .verifying("calc.previousLossOrGain.errors.required", previousLossOrGainCheck)
     )(PreviousLossOrGainModel.apply)(PreviousLossOrGainModel.unapply)
   )
 }

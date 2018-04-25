@@ -22,10 +22,7 @@
 
 @(disposalDateForm: Form[DisposalDateModel])(implicit request: Request[_], messages: Messages, lang: Lang, application: Application)
 
-@lc = @{Application.instanceCache[CgtLanguageController].apply(application) }
-
 @main_template(Messages("calc.disposalDate.question")) {
-    @language_selection(lc.languageMap, lc.langToCall, None)
 
     @errorSummary(disposalDateForm, "disposal-date", "disposalDateDay")
 

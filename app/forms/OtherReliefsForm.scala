@@ -33,13 +33,13 @@ object OtherReliefsForm {
     Form(
       mapping(
         "otherReliefs" -> text
-          .verifying(Messages("error.real"), mandatoryCheck)
-          .verifying(Messages("error.real"), bigDecimalCheck)
+          .verifying("error.real", mandatoryCheck)
+          .verifying("error.real", bigDecimalCheck)
           .transform(stringToBigDecimal, bigDecimalToString)
-          .verifying(Messages("calc.otherReliefs.errorMinimum"), isPositive)
-          .verifying(Messages("calc.otherReliefs.errorDecimal"), decimalPlacesCheck)
-          .verifying(Messages("calc.common.error.maxNumericExceeded") + MoneyPounds(Constants.maxNumeric, 0).quantity +
-            " " + Messages("calc.common.error.maxNumericExceeded.OrLess"),
+          .verifying("calc.otherReliefs.errorMinimum", isPositive)
+          .verifying("calc.otherReliefs.errorDecimal", decimalPlacesCheck)
+          .verifying("calc.common.error.maxNumericExceeded" + MoneyPounds(Constants.maxNumeric, 0).quantity +
+            " " + "calc.common.error.maxNumericExceeded.OrLess",
             maxCheck)
       )(OtherReliefsModel.apply)(OtherReliefsModel.unapply)
     )

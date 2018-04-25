@@ -30,8 +30,8 @@ object OtherPropertiesForm {
   val otherPropertiesForm: Form[OtherPropertiesModel] = Form (
     mapping(
       "otherProperties" -> text
-        .verifying(Messages("calc.common.error.fieldRequired"), mandatoryCheck)
-        .verifying(Messages("calc.common.error.fieldRequired"), yesNoCheck)
+        .verifying("calc.common.error.fieldRequired", mandatoryCheck)
+        .verifying("calc.common.error.fieldRequired", yesNoCheck)
     )(OtherPropertiesModel.apply)(OtherPropertiesModel.unapply)
   )
 }
