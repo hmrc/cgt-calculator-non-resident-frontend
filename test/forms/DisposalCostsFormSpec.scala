@@ -16,7 +16,7 @@
 
 package forms
 
-import assets.MessageLookup.{NonResident => messages}
+import assets.KeyLookup.{NonResident => messages}
 import models.DisposalCostsModel
 import forms.DisposalCostsForm._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}

@@ -17,7 +17,7 @@
 package forms
 
 
-import assets.MessageLookup.NonResident.{HowBecameOwner => messages}
+import assets.KeyLookup.NonResident.{HowBecameOwner => messages}
 import models.HowBecameOwnerModel
 import forms.HowBecameOwnerForm._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}

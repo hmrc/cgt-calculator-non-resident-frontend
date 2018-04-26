@@ -16,8 +16,8 @@
 
 package forms
 
-import assets.MessageLookup.NonResident.{RebasedValue => messages}
-import assets.MessageLookup.{NonResident => commonMessages}
+import assets.KeyLookup.NonResident.{RebasedValue => messages}
+import assets.KeyLookup.{NonResident => commonMessages}
 import models.RebasedValueModel
 import forms.RebasedValueForm._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}

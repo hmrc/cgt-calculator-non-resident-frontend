@@ -25,15 +25,9 @@
 
     <a id="back-link" class="back-link" href="@controllers.routes.DisposalCostsController.disposalCosts.url">@Messages("calc.base.back")</a>
 
-    @defining(
-        if(acquisitionDateForm.hasErrors) {
-            if(acquisitionDateForm.errors.exists(_.message.contains(Messages("calc.common.date.error.invalidDate"))))
-                Some(Messages("calc.acquisitionDate.errorIncompleteDate"))
-            else Some(Messages("calc.acquisitionDate.errorFutureDate"))
-        } else None
-    ) { additionalMessage =>
-        @errorSummary(acquisitionDateForm, "acquisition-date", "acquisitionDateDay", additionalMessage)
-    }
+
+        @errorSummary(acquisitionDateForm, "acquisition-date", "acquisitionDateDay")
+
 
     <h1 class="heading-xlarge">@Messages("calc.acquisitionDate.question")</h1>
 

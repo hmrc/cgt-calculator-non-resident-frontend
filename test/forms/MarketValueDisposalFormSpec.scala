@@ -16,8 +16,8 @@
 
 package forms
 
-import assets.MessageLookup.NonResident.{MarketValue => marketValueMessages}
-import assets.MessageLookup.{NonResident => messages}
+import assets.KeyLookup.NonResident.{MarketValue => marketValueMessages}
+import assets.KeyLookup.{NonResident => messages}
 import forms.MarketValueGaveAwayForm._
 import forms.MarketValueWhenSoldForm._
 import models.DisposalValueModel

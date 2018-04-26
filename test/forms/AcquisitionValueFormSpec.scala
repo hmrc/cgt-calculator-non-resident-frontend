@@ -16,9 +16,9 @@
 
 package forms
 
-import assets.MessageLookup.NonResident.{AcquisitionValue => messages}
+import assets.KeyLookup.NonResident.{AcquisitionValue => messages}
 import common.Constants
-import assets.MessageLookup.{NonResident => common}
+import assets.KeyLookup.{NonResident => common}
 import models.AcquisitionValueModel
 import forms.AcquisitionValueForm._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
