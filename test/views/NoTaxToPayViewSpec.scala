@@ -47,7 +47,7 @@ class NoTaxToPayViewSpec extends UnitSpec with WithFakeApplication with FakeRequ
     }
 
     "have text explaining why tax is not owed" in {
-      doc.body().select("div#content p").text() shouldBe messages.spouseText
+      doc.body().select("article p").text() shouldBe messages.spouseText
     }
 
     "have a link to the Gov.Uk page" which {
@@ -67,7 +67,7 @@ class NoTaxToPayViewSpec extends UnitSpec with WithFakeApplication with FakeRequ
     lazy val doc = Jsoup.parse(view.body)
 
     "have text explaining why tax is not owed" in {
-      doc.body().select("div#content p").text() shouldBe messages.charityText
+      doc.body().select("article p").text() shouldBe messages.charityText
     }
   }
 }

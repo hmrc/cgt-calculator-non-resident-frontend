@@ -18,7 +18,7 @@ package forms
 
 import forms.WhoDidYouGiveItToForm._
 import models.WhoDidYouGiveItToModel
-import assets.MessageLookup.WhoDidYouGiveItTo
+import assets.KeyLookup.WhoDidYouGiveItTo
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 class WhoDidYouGiveItToFormSpec extends UnitSpec with WithFakeApplication {

@@ -31,7 +31,7 @@ class WhatNextViewSpec extends UnitSpec with GuiceOneAppPerSuite with MockitoSug
 
   "What next view" should {
     lazy val config = ApplicationConfig
-    lazy val view = whatNext()(FakeRequest("GET", ""), applicationMessages, fakeApplication(), config)
+    lazy val view = whatNext()(FakeRequest("GET", ""), applicationMessages, fakeApplication, config)
     lazy val doc = Jsoup.parse(view.body)
 
     s"have a title of ${messages.title}" in {

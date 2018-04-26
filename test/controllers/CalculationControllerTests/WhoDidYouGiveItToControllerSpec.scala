@@ -144,7 +144,7 @@ class WhoDidYouGiveItToControllerSpec extends UnitSpec with WithFakeApplication 
       }
 
       "have text explaining why tax is not owed" in {
-        doc.body().select("div#content p").text() shouldBe messages.charityText
+        doc.body().select("article p").text() shouldBe messages.charityText
       }
 
       "A valid session is provided when gifted to a spouse" should {
@@ -161,7 +161,7 @@ class WhoDidYouGiveItToControllerSpec extends UnitSpec with WithFakeApplication 
         }
 
         "have text explaining why tax is not owed" in {
-          doc.body().select("div#content p").text() shouldBe messages.spouseText
+          doc.body().select("article p").text() shouldBe messages.spouseText
         }
       }
 

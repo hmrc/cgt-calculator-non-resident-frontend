@@ -16,7 +16,7 @@
 
 package forms
 
-import assets.MessageLookup.{NonResident => commonMessages}
+import assets.KeyLookup.{NonResident => commonMessages}
 import models.SoldOrGivenAwayModel
 import forms.SoldOrGivenAwayForm._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}

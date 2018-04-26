@@ -16,7 +16,7 @@
 
 package forms
 
-import assets.MessageLookup.NonResident.{PreviousLossOrGain => messages}
+import assets.KeyLookup.NonResident.{PreviousLossOrGain => messages}
 import models.PreviousLossOrGainModel
 import forms.PreviousLossOrGainForm._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}

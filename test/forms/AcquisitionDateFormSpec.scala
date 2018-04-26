@@ -18,7 +18,7 @@ package forms
 
 import java.time.LocalDate
 
-import assets.MessageLookup.{NonResident => messages}
+import assets.KeyLookup.{NonResident => messages}
 import forms.AcquisitionDateForm._
 import models.AcquisitionDateModel
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
@@ -148,8 +148,8 @@ class AcquisitionDateFormSpec extends UnitSpec with WithFakeApplication {
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.AcquisitionDate.errorFutureDate}" in {
-        form.error("").get.message shouldBe messages.AcquisitionDate.errorFutureDate
+      s"return an error message of '${messages.AcquisitionDate.errorFutureDateGuidance}" in {
+        form.error("").get.message shouldBe messages.AcquisitionDate.errorFutureDateGuidance
       }
     }
   }

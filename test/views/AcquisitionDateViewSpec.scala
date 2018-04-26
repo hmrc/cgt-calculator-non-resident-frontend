@@ -107,7 +107,45 @@ class AcquisitionDateViewSpec extends UnitSpec with WithFakeApplication with Moc
       }
     }
 
-    "supplied with an invalid date error" should {
+    "supplied with an invalid date error day" should {
+      lazy val form = acquisitionDateForm.bind(Map("acquisitionDateDay" -> "",
+        "acquisitionDateMonth" -> "1",
+        "acquisitionDateYear" -> "2015"))
+      lazy val view = acquisitionDate(form)
+      lazy val document = Jsoup.parse(view.body)
+
+      "have an error summary" which {
+
+        "has size 1" in {
+          document.select("#error-summary-display").size() shouldBe 1
+        }
+
+        s"has the text ${messages.errorInvalidDate}" in {
+          document.select("#acquisitionDateDay-error-summary").text() shouldBe messages.errorInvalidDate
+        }
+      }
+    }
+
+    "supplied with an invalid date error month" should {
+      lazy val form = acquisitionDateForm.bind(Map("acquisitionDateDay" -> "1",
+        "acquisitionDateMonth" -> "",
+        "acquisitionDateYear" -> "2015"))
+      lazy val view = acquisitionDate(form)
+      lazy val document = Jsoup.parse(view.body)
+
+      "have an error summary" which {
+
+        "has size 1" in {
+          document.select("#error-summary-display").size() shouldBe 1
+        }
+
+        s"has the text ${messages.errorInvalidDate}" in {
+          document.select("#acquisitionDateMonth-error-summary").text() shouldBe messages.errorInvalidDate
+        }
+      }
+    }
+
+    "supplied with an invalid date error year" should {
       lazy val form = acquisitionDateForm.bind(Map("acquisitionDateDay" -> "1",
         "acquisitionDateMonth" -> "1",
         "acquisitionDateYear" -> ""))
@@ -120,8 +158,8 @@ class AcquisitionDateViewSpec extends UnitSpec with WithFakeApplication with Moc
           document.select("#error-summary-display").size() shouldBe 1
         }
 
-        s"has the text ${messages.AcquisitionDate.errorIncompleteDate}" in {
-          document.select("#error-summary-display > p").text() shouldBe messages.AcquisitionDate.errorIncompleteDate
+        s"has the text ${messages.errorInvalidDate}" in {
+          document.select("#acquisitionDateYear-error-summary").text() shouldBe messages.errorInvalidDate
         }
       }
     }
@@ -143,8 +181,8 @@ class AcquisitionDateViewSpec extends UnitSpec with WithFakeApplication with Moc
           document.select("#error-summary-display").size() shouldBe 1
         }
 
-        s"has the text ${messages.AcquisitionDate.errorFutureDateGuidance}" in {
-          document.select("#error-summary-display > p").text() shouldBe messages.AcquisitionDate.errorFutureDateGuidance
+        s"has the text ${messages.AcquisitionDate.errorFutureDate}" in {
+          document.select("#acquisitionDateDay-error-summary").text() shouldBe messages.AcquisitionDate.errorFutureDate
         }
       }
     }
