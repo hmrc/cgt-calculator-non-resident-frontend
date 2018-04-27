@@ -44,6 +44,7 @@
             privateResidenceReliefForm("daysClaimed"),
             '_label ->{if(showOnlyFlatQuestion){Messages("calc.privateResidenceRelief.questionFlat", disposalDateLess18Months)}else{Messages("calc.privateResidenceRelief.firstQuestion")}} ,
             '_labelClass -> "bold",
+            '_labelTextClass -> "form-group",
             '_type -> "text",
             '_inputClass -> "form-group input--no-spinner",
             '_type -> "number"
@@ -57,6 +58,7 @@
             privateResidenceReliefForm("daysClaimedAfter"),
             '_label -> (Messages("calc.privateResidenceRelief.questionBetween.partOne") + " " + disposalDateLess18Months + " " + Messages("calc.privateResidenceRelief.questionBetween.partTwo")),
             '_labelClass -> "bold",
+            '_labelTextClass -> "form-group",
             '_type -> "text",
             '_inputClass -> "form-group input--no-spinner",
             '_type -> "number"
