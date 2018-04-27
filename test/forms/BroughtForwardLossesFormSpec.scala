@@ -17,6 +17,7 @@
 package forms
 
 import assets.KeyLookup.{NonResident => messages}
+import assets.KeyLookup.{NonResident => commonMessages}
 import models.BroughtForwardLossesModel
 import forms.BroughtForwardLossesForm._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
@@ -160,8 +161,8 @@ class BroughtForwardLossesFormSpec extends UnitSpec with WithFakeApplication {
         form.errors.size shouldBe 1
       }
 
-      s"return the error message ${messages.BroughtForwardLosses.errorMaximum("1,000,000,000")}" in {
-        form.error("").get.message shouldBe messages.BroughtForwardLosses.errorMaximum("1,000,000,000")
+      s"return the error message ${commonMessages.maximumError("1,000,000,000")}" in {
+        form.error("").get.message shouldBe commonMessages.maximumError("1,000,000,000")
       }
     }
   }

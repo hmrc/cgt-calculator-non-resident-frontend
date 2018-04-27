@@ -112,8 +112,8 @@ class AcquisitionMarketValueFormSpec extends UnitSpec with WithFakeApplication {
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${commonMessages.maximumAmount}" in {
-        form.error("acquisitionMarketValue").get.message shouldBe commonMessages.maximumAmount
+      s"return an error message of '${commonMessages.maximumError("1,000,000,000")}" in {
+        form.error("acquisitionMarketValue").get.message shouldBe commonMessages.maximumError("1,000,000,000")
       }
     }
 

@@ -44,6 +44,9 @@ object KeyLookup {
 
     def maximumLimit(limit: String): String = s"Enter an amount that's £$limit or less"
 
+    def maximumError(value: String): String = s"calc.common.error.maxNumericExceeded" + s"$value " +
+      "calc.common.error.maxNumericExceeded.OrLess"
+
     val invalidAmount = "calc.common.error.mandatoryAmount"
     val invalidAmountNoDecimal = "error.real"
     val numericPlayErrorOverride = "error.number"
@@ -104,8 +107,8 @@ object KeyLookup {
       def hint(amount: String): String = s"calc.annualExemptAmount.helpOne$amount calc.annualExemptAmount.helpTwo"
       val errorMaxStart = "calc.annualExemptAmount.errorMax"
       val errorMaxEnd = "calc.annualExemptAmount.errorMaxEnd"
-      val errorNegative = "Enter a positive number for your allowance"
-      val errorDecimalPlaces = "calc.annualExemptAmount.errorNegative"
+      val errorNegative = "calc.annualExemptAmount.errorNegative"
+      val errorDecimalPlaces = "calc.annualExemptAmount.errorDecimalPlaces"
     }
 
     object BoughtForLess {
@@ -201,16 +204,17 @@ object KeyLookup {
     object DisposalValue {
 
       val question = "calc.disposalValue.question"
-      val errorNegativeNumber = "calc.disposalValue.errorNegative"
       val errorDecimalPlaces = "calc.disposalValue.errorDecimalPlaces"
-      val errorNegative = "Enter a positive number for the amount you sold the property for"
+      val errorNegative = "calc.disposalValue.errorNegative"
       val bulletIntro = "Put the market value of the property instead if you:"
       val bulletOne = "gave it away as a gift"
       val bulletTwo = "sold it to a relative, business partner or"
       val bulletTwoLink = "someone else you're connected to"
       val bulletThree = "sold it for less than it's worth to help the buyer"
       val jointOwnership = "calc.disposalValue.jointOwnership"
-      def errorMaximum(value: String): String = s"Enter an amount that's £$value or less"
+      //def errorMaximum(value: String): String = s"Enter an amount that's £$value or less"
+      def errorMaximum(value: String): String = s"calc.common.error.maxNumericExceeded" + s"$value " +
+        "calc.common.error.maxNumericExceeded.OrLess"
     }
 
     object HowMuchGain {
@@ -222,19 +226,19 @@ object KeyLookup {
 
     object Improvements extends Common {
       val helpOne = "calc.resident.properties.improvements.hint."
-      val helpTwo = "Normal maintenance costs don't count."
+      val helpTwo = "calc.improvements.helpTwo"
       val exampleTitle = "calc.resident.properties.improvements.helpButton"
       val exampleOne = "calc.resident.properties.improvements.additionalContent.one"
       val exampleTwo = "calc.resident.properties.improvements.additionalContent.two"
-      val question = "Did you make any improvements to the property?"
+      val question = "calc.improvements.question"
       val ownerBeforeLegislationStartQuestion = "calc.resident.properties.improvements.questionBefore"
-      val questionTwo = "How much did the improvements cost?"
-      val questionThree = "How much did you spend on improvements before 6 April 2015?"
-      val questionFour = "How much have you spent on improvements since 6 April 2015?"
-      val noValueSuppliedError = "Enter the value of your improvements"
-      val negativeValueError = "Enter a positive number for the cost of your improvements"
-      val excessDecimalPlacesError = "The cost of your improvements has too many numbers after the decimal point"
-      val jointOwnership = "If you owned the property with someone else, only enter your share of the improvement costs, as agreed with your co-owner."
+      val questionTwo = "calc.improvements.questionTwo"
+      val questionThree = "calc.improvements.questionThree"
+      val questionFour = "calc.improvements.questionFour"
+      val noValueSuppliedError = "calc.improvements.error.no.value.supplied"
+      val negativeValueError = "calc.improvements.errorNegative"
+      val excessDecimalPlacesError = "calc.improvements.errorDecimalPlaces"
+      val jointOwnership = "calc.improvements.jointOwnership"
 
       def errorMaximum(value: String): String = s"Enter an amount that's £$value or less"
 
@@ -274,16 +278,16 @@ object KeyLookup {
     }
 
     object OtherReliefs {
-      val help = "For example, lettings relief."
-      val question = "How much extra tax relief are you claiming?"
-      val totalGain = "Total gain"
-      val taxableGain = "Taxable gain"
-      val lossCarriedForward = "Loss carried forward"
-      val addRelief = "Add relief"
-      val updateRelief = "Update relief"
-      val errorDecimal = "There are too many numbers after the decimal point in your other reliefs"
-      val errorNegative = "Enter a positive number for your other reliefs"
-      val helpTwo = "Don't include any Private Residence Relief."
+      val help = "calc.otherReliefs.help"
+      val question = "calc.otherReliefs.question"
+      val totalGain = "calc.otherReliefs.totalGain"
+      val taxableGain = "calc.otherReliefs.taxableGain"
+      val lossCarriedForward = "calc.summary.calculation.details.lossCarriedForward"
+      val addRelief = "calc.otherReliefs.button.addRelief"
+      val updateRelief = "calc.otherReliefs.button.updateRelief"
+      val errorDecimal = "calc.otherReliefs.errorDecimal"
+      val errorNegative = "calc.otherReliefs.errorMinimum"
+      val helpTwo = "calc.otherReliefs.helpTwo"
       def additionalHelp(gain: Int, chargeableGain: Int): String = {
         val locale = new java.util.Locale("en", "EN")
         val amount = java.text.NumberFormat.getIntegerInstance(locale)
@@ -327,27 +331,27 @@ object KeyLookup {
     }
 
     object PrivateResidenceRelief {
-      val question = "Are you claiming Private Residence Relief?"
-      val intro = "You may be entitled to Private Residence Relief if you ever lived in the property as your main home."
-      val findOut = "Find out more about"
-      val findOutAboutPRRLink = "Private Residence Relief"
-      val formHelp = "To work out your Private Residence Relief, we need some information about when you lived in the property."
-      val questionBefore = "For how many days before 6 April 2015 did you live in this property as your main home?"
-      val questionBetween = "For how many days between 6 April 2015 and"
-      val questionBetweenEnd = "did you live in this property as your main home?"
+      val question = "calc.privateResidenceRelief.question"
+      val intro = "calc.privateResidenceRelief.intro"
+      val findOut = "calc.privateResidenceRelief.helpText"
+      val findOutAboutPRRLink = "calc.privateResidenceRelief.helpLink"
+      val formHelp = "calc.privateResidenceRelief.formHintExplanation"
+      val questionBefore = "calc.privateResidenceRelief.firstQuestion"
+      val questionBetween = "calc.privateResidenceRelief.questionBetween.partOne"
+      val questionBetweenEnd = "calc.privateResidenceRelief.questionBetween.partTwo"
       def questionAcquisitionDateAfterStartDate(message: String): String =
-        s"For how many days before $message were you living in this property as your main home?"
-      val questionBetweenWhyThisDate: String = "is the date you transferred the property minus 18 months (you automatically" +
-        " get Private Residence Relief for the last 18 months that you owned the property)"
-      val questionBeforeWhyThisDate = "6 April 2015 is when the Capital Gains Tax rules for non-UK residents came into effect"
-      val helpTextSubtitle = "These dates are important because:"
-      val helpTextBeforeAfter = "Why these specific dates?"
-      val helpTextJustBefore = "Why this date?"
-      val errorNoValue = "Enter the value for your days claimed"
-      val errorNegative = "Enter a positive number for your days claimed"
-      val errorDecimalPlaces = "There are too many numbers after the decimal point in your days claimed"
+        "calc.privateResidenceRelief.questionFlat"
+      val questionBetweenWhyThisDate: String = "calc.privateResidenceRelief.daysBetweenHelpText"
+      val questionBeforeWhyThisDate = "calc.privateResidenceRelief.daysBeforeHelpText"
+      val helpTextSubtitle = "calc.privateResidenceRelief.helpTextSubTitle"
+      val helpTextBeforeAfter = "calc.privateResidenceRelief.helpTextBeforeAfter"
+      val helpTextJustBefore = "calc.privateResidenceRelief.helpTextJustBefore"
+      val errorNoValue = "calc.privateResidenceRelief.error.noValueProvided"
+      val errorNegative = "calc.privateResidenceRelief.error.errorNegative"
+      val errorDecimalPlaces = "calc.privateResidenceRelief.error.errorDecimalPlaces"
 
-      def errorMaximum(value: String): String = s"Enter a value for your days claimed that's $value or less"
+      def errorMaximum(value: String): String = "calc.privateResidenceRelief.error.maxNumericExceeded" + s" $value " +
+      "calc.privateResidenceRelief.error.maxNumericExceeded.OrLess"
     }
 
     object RebasedCosts {
@@ -439,13 +443,13 @@ object KeyLookup {
     }
 
     object BroughtForwardLosses {
-      val question = "Do you have losses you want to bring forward from previous tax years?"
-      val inputQuestion = "How much would you like to bring forward?"
-      val helpText = "These are unused losses that are covered by Non-Resident Capital Gains Tax."
+      val question = "calc.broughtForwardLosses.question"
+      val inputQuestion = "calc.broughtForwardLosses.inputQuestion"
+      val helpText = "calc.broughtForwardLosses.helpText"
       val linkOne = "Capital Gains Tax"
       val linkTwo = "Previous tax years"
-      val errorDecimalPlaces = "There are too many numbers after the decimal point in your brought forward loss"
-      val errorNegative = "Enter a positive number for your brought forward loss"
+      val errorDecimalPlaces = "calc.broughtForwardLosses.errorDecimal"
+      val errorNegative = "calc.broughtForwardLosses.errorNegative"
 
       def errorMaximum(value: String): String = s"Enter an amount that's £$value or less"
     }
@@ -711,7 +715,7 @@ object KeyLookup {
 
   //############ Bought For Less Than Worth messages #################//
   object BoughtForLessThanWorth {
-    val title = "Did you buy the property for less than it was worth because the seller wanted to help you?"
+    val title = "calc.boughtForLess.question"
   }
 
   //Acquisition Value messages

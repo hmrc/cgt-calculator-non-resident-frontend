@@ -81,8 +81,8 @@ class RebasedValueFormSpec extends UnitSpec with WithFakeApplication {
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of ${commonMessages.errorRealNumber}" in {
-        form.error("rebasedValueAmt").get.message shouldBe commonMessages.errorRealNumber
+      s"return an error message of ${commonMessages.numericPlayErrorOverride}" in {
+        form.error("rebasedValueAmt").get.message shouldBe commonMessages.numericPlayErrorOverride
       }
     }
 
@@ -126,8 +126,8 @@ class RebasedValueFormSpec extends UnitSpec with WithFakeApplication {
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of ${messages.errorMaximum("1,000,000,000")}" in {
-        form.error("rebasedValueAmt").get.message shouldBe messages.errorMaximum("1,000,000,000")
+      s"return an error message of ${commonMessages.maximumError("1,000,000,000")}" in {
+        form.error("rebasedValueAmt").get.message shouldBe commonMessages.maximumError("1,000,000,000")
       }
     }
 

@@ -18,6 +18,7 @@ package forms
 
 import assets.KeyLookup.NonResident.{MarketValue => marketValueMessages}
 import assets.KeyLookup.{NonResident => messages}
+import assets.KeyLookup.{NonResident => commonMessages}
 import forms.MarketValueGaveAwayForm._
 import forms.MarketValueWhenSoldForm._
 import models.DisposalValueModel
@@ -146,7 +147,7 @@ class MarketValueDisposalFormSpec extends UnitSpec with WithFakeApplication {
       }
 
       "associate the correct error message to the error" in {
-        form.error("disposalValue").get.message shouldBe messages.maximumAmount
+        form.error("disposalValue").get.message shouldBe commonMessages.maximumError("1,000,000,000")
       }
     }
 

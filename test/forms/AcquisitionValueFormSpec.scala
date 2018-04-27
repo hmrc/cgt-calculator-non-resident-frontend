@@ -19,6 +19,7 @@ package forms
 import assets.KeyLookup.NonResident.{AcquisitionValue => messages}
 import common.Constants
 import assets.KeyLookup.{NonResident => common}
+import assets.KeyLookup.{NonResident => commonMessages}
 import models.AcquisitionValueModel
 import forms.AcquisitionValueForm._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
@@ -88,7 +89,7 @@ class AcquisitionValueFormSpec extends UnitSpec with WithFakeApplication{
 
     "supplied with data containing a value that exceeds the max numeric" should {
       val data = (Constants.maxNumeric + 0.01).toString()
-      val message = messages.errorMaximum(MoneyPounds(Constants.maxNumeric, 0).quantity)
+      val message = commonMessages.maximumError(MoneyPounds(Constants.maxNumeric, 0).quantity)
       checkMessageAndError(message, data)
     }
   }
