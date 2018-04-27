@@ -17,6 +17,7 @@
 package forms
 
 import assets.KeyLookup.{NonResident => messages}
+import assets.KeyLookup.{NonResident => commonMessages}
 import models.OtherReliefsModel
 import forms.OtherReliefsForm._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
@@ -140,8 +141,8 @@ class OtherReliefsFormSpec extends UnitSpec with WithFakeApplication {
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of ${messages.OtherReliefs.errorMaximum("1,000,000,000")}" in {
-        form.error("otherReliefs").get.message shouldBe messages.OtherReliefs.errorMaximum("1,000,000,000")
+      s"return an error message of ${commonMessages.maximumError("1,000,000,000")}" in {
+        form.error("otherReliefs").get.message shouldBe commonMessages.maximumError("1,000,000,000")
       }
     }
 
