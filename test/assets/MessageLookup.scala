@@ -31,26 +31,26 @@ object MessageLookup {
     val continue = "Continue"
     val yes = "Yes"
     val no = "No"
-    val day = "Day"
-    val month = "Month"
-    val year = "Year"
+//    val day = "Day"
+//    val month = "Month"
+//    val year = "Year"
 
-    val readMore = "Read more"
+//    val readMore = "Read more"
 
     val mandatoryAmount = "Enter an amount"
-    val minimumAmount = "Enter an amount that's £0 or more"
-    val maximumAmount = "Enter an amount that's £1,000,000,000 or less"
+//    val minimumAmount = "Enter an amount that's £0 or more"
+//    val maximumAmount = "Enter an amount that's £1,000,000,000 or less"
     val errorRequired = "This field is required"
 
-    def maximumLimit(limit: String): String = s"Enter an amount that's £$limit or less"
+//    def maximumLimit(limit: String): String = s"Enter an amount that's £$limit or less"
 
-    val invalidAmount = "Enter an amount in the correct format e.g. 10000.00"
-    val invalidAmountNoDecimal = "Enter an amount in the correct format e.g. 10000"
+//    val invalidAmount = "Enter an amount in the correct format e.g. 10000.00"
+//    val invalidAmountNoDecimal = "Enter an amount in the correct format e.g. 10000"
     val numericPlayErrorOverride = "Enter a number without commas, for example 10000.00"
     val optionReqError = "Choose one of the options"
 
-    val whatToDoNextTextTwo = "You need to tell HMRC about the property"
-    val whatToDoNextFurtherDetails = "Further details on how to tell HMRC about this property can be found at"
+//    val whatToDoNextTextTwo = "You need to tell HMRC about the property"
+//    val whatToDoNextFurtherDetails = "Further details on how to tell HMRC about this property can be found at"
   }
 
   object NonResident extends Common {
@@ -61,16 +61,16 @@ object MessageLookup {
 
     object AcquisitionCosts {
       val question = "How much did you pay in costs when you became the property owner?"
-      val helpText = "Costs include agent fees, legal fees and surveys"
+//      val helpText = "Costs include agent fees, legal fees and surveys"
       val errorNegative = "Enter a positive number for your costs"
-      val errorDecimalPlaces = "There are too many numbers after the decimal point in your costs"
+//      val errorDecimalPlaces = "There are too many numbers after the decimal point in your costs"
       val bulletTitle = "This is what you paid for:"
       val bulletOne = "estate agents or auctioneers"
       val bulletTwo = "solicitors or conveyancers, including Stamp Duty Land Tax"
       val bulletThree = "any professional help to value the property, for example, surveyor or valuer"
       val hint ="If you owned the property with someone else, only enter your share of the costs, as agreed with your co-owner."
 
-      def errorMaximum(value: String): String = s"Enter an amount that's £$value or less"
+//      def errorMaximum(value: String): String = s"Enter an amount that's £$value or less"
     }
 
     object AcquisitionDate {

@@ -31,15 +31,15 @@ object KeyLookup {
     val continue = "calc.base.continue"
     val yes = "calc.base.yes"
     val no = "calc.base.no"
-    val day = "calc.common.date.fields.day"
-    val month = "calc.common.date.fields.month"
-    val year = "calc.common.date.fields.year"
+//    val day = "calc.common.date.fields.day"
+//    val month = "calc.common.date.fields.month"
+//    val year = "calc.common.date.fields.year"
 
-    val readMore = "calc.common.readMore"
+//    val readMore = "calc.common.readMore"
 
     val mandatoryAmount = "calc.common.error.mandatoryAmount"
-    val minimumAmount = "calc.common.error.maxNumericExceeded"
-    val maximumAmount = "calc.common.error.maxAmountExceeded"
+//    val minimumAmount = "calc.common.error.maxNumericExceeded"
+//    val maximumAmount = "calc.common.error.maxAmountExceeded"
     val errorRequired = "calc.common.error.fieldRequired"
 
     def maximumLimit(limit: String): String = s"Enter an amount that's £$limit or less"
@@ -47,13 +47,13 @@ object KeyLookup {
     def maximumError(value: String): String = s"calc.common.error.maxNumericExceeded" + s"$value " +
       "calc.common.error.maxNumericExceeded.OrLess"
 
-    val invalidAmount = "calc.common.error.mandatoryAmount"
-    val invalidAmountNoDecimal = "error.real"
+//    val invalidAmount = "calc.common.error.mandatoryAmount"
+//    val invalidAmountNoDecimal = "error.real"
     val numericPlayErrorOverride = "error.number"
     val optionReqError = "calc.base.optionReqError"
 
-    val whatToDoNextTextTwo = "You need to tell HMRC about the property"
-    val whatToDoNextFurtherDetails = "Further details on how to tell HMRC about this property can be found at"
+//    val whatToDoNextTextTwo = "You need to tell HMRC about the property"
+//    val whatToDoNextFurtherDetails = "Further details on how to tell HMRC about this property can be found at"
   }
 
   object NonResident extends Common {
@@ -64,7 +64,7 @@ object KeyLookup {
 
     object AcquisitionCosts {
       val question = "calc.acquisitionCosts.question"
-      val helpText = "Costs include agent fees, legal fees and surveys"
+//      val helpText = "Costs include agent fees, legal fees and surveys"
       val errorNegative = "calc.acquisitionCosts.errorNegative"
       val errorDecimalPlaces = "calc.acquisitionCosts.errorDecimalPlaces"
       val bulletTitle = "calc.acquisitionCosts.bulletTitle"
@@ -73,38 +73,38 @@ object KeyLookup {
       val bulletThree = "calc.acquisitionCosts.bulletThree"
       val hint ="calc.acquisitionCosts.hint"
 
-      def errorMaximum(value: String): String = s"Enter an amount that's £$value or less"
+//      def errorMaximum(value: String): String = s"Enter an amount that's £$value or less"
     }
 
     object AcquisitionDate {
-      val question = "calc.acquisitionDate.question"
-      val questionTwo = "calc.acquisitionDate.questionTwo"
-      val hintText = "calc.acquisitionDate.hintText"
-      val errorIncompleteDate = "calc.acquisitionDate.errorIncompleteDate"
-      val errorFutureDate = "calc.acquisitionDate.errorFutureDate"
+//      val question = "calc.acquisitionDate.question"
+//      val questionTwo = "calc.acquisitionDate.questionTwo"
+//      val hintText = "calc.acquisitionDate.hintText"
+//      val errorIncompleteDate = "calc.acquisitionDate.errorIncompleteDate"
+//      val errorFutureDate = "calc.acquisitionDate.errorFutureDate"
       val errorFutureDateGuidance = "calc.acquisitionDate.errorFutureDateGuidance"
     }
 
     object AcquisitionValue {
-      val question = "calc.acquisitionValue.question"
-      val helpText = "calc.acquisitionValue.helpText"
-      val bulletTitle = "Put the market value of the property instead if you:"
-      val bulletOne = "inherited it"
-      val bulletTwo = "got it as a gift"
-      val bulletThree = "bought it from a relative, business partner or someone else you're connected to"
-      val bulletFour = "bought it for less than it's worth because the seller wanted to help you"
-      val bulletFive = "became the owner before 1 April 1982"
-      val bulletLink = "someone else you're connected to"
+//      val question = "calc.acquisitionValue.question"
+//      val helpText = "calc.acquisitionValue.helpText"
+//      val bulletTitle = "Put the market value of the property instead if you:"
+//      val bulletOne = "inherited it"
+//      val bulletTwo = "got it as a gift"
+//      val bulletThree = "bought it from a relative, business partner or someone else you're connected to"
+//      val bulletFour = "bought it for less than it's worth because the seller wanted to help you"
+//      val bulletFive = "became the owner before 1 April 1982"
+//      val bulletLink = "someone else you're connected to"
       val errorNegative = "calc.acquisitionValue.errorNegative"
       val errorDecimalPlaces = "calc.acquisitionValue.errorDecimalPlaces"
 
-      def errorMaximum(value: String): String = s"Enter an amount that's £$value or less"
+//      def errorMaximum(value: String): String = s"Enter an amount that's £$value or less"
     }
 
     object AnnualExemptAmount {
-      val question = "calc.annualExemptAmount.question"
-      val link = "Capital Gains Tax allowances"
-      def hint(amount: String): String = s"calc.annualExemptAmount.helpOne$amount calc.annualExemptAmount.helpTwo"
+//      val question = "calc.annualExemptAmount.question"
+//      val link = "Capital Gains Tax allowances"
+//      def hint(amount: String): String = s"calc.annualExemptAmount.helpOne$amount calc.annualExemptAmount.helpTwo"
       val errorMaxStart = "calc.annualExemptAmount.errorMax"
       val errorMaxEnd = "calc.annualExemptAmount.errorMaxEnd"
       val errorNegative = "calc.annualExemptAmount.errorNegative"
