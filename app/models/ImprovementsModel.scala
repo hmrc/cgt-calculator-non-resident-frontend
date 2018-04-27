@@ -26,10 +26,10 @@ object ImprovementsModel {
   val postWrites = new Writes[ImprovementsModel] {
     override def writes(model: ImprovementsModel): JsValue = {
       JsObject(
-        Map(
-          "improvements" -> Json.toJson(model.improvementsAmt),
-          "improvementsAfterTaxStarted" -> Json.toJson(model.improvementsAmtAfter)
-        )
+        Seq(
+          model.improvementsAmt.map{"improvements" -> Json.toJson[BigDecimal](_)},
+          model.improvementsAmtAfter.map{"improvementsAfterTaxStarted" -> Json.toJson[BigDecimal](_)}
+        ).flatten.toMap
       )
     }
   }

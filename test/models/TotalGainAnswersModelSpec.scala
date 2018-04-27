@@ -65,10 +65,8 @@ class TotalGainAnswersModelSpec extends UnitSpec with MockitoSugar {
           |"disposalValue":500000,
           |"disposalCosts":20000,
           |"acquisitionValue":350000,
-          |"improvements":9000,
           |"disposalDate":"2017-05-12",
-          |"acquisitionDate":"2015-04-06",
-          |"improvementsAfterTaxStarted":1000
+          |"acquisitionDate":"2015-04-06"
           |}
         """.stripMargin)
 
@@ -83,7 +81,7 @@ class TotalGainAnswersModelSpec extends UnitSpec with MockitoSugar {
         None,
         AcquisitionDateModel(6, 4, 2015),
         None, None,
-        ImprovementsModel("yes", Some(9000), Some(1000)),
+        ImprovementsModel("yes", None, None),
         None, None)
 
       Json.toJson(model) shouldBe outputJson

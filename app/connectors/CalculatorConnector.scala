@@ -52,18 +52,18 @@ trait CalculatorConnector {
     sessionCache.fetchAndGetEntry(key)
   }
 
-  def calculateTotalGain(totalGainAnswersModel: TotalGainAnswersModel)
-                        (implicit hc: HeaderCarrier): Future[Option[TotalGainResultsModel]] = {
-    http.GET[Option[TotalGainResultsModel]](s"$serviceUrl/capital-gains-calculator/non-resident/calculate-total-gain?${
-      TotalGainRequestConstructor.totalGainQuery(totalGainAnswersModel)
-    }")
-  }
-
-//  def calculateTotalGainJson(totalGainAnswersModel: TotalGainAnswersModel)
-//                            (implicit hc: HeaderCarrier): Future[Option[TotalGainResultsModel]] = {
-//    http.POST[TotalGainAnswersModel, Option[TotalGainResultsModel]](s"$serviceUrl/capital-gains-calculator/non-resident/calculate-total-gain",
-//      totalGainAnswersModel)
+//  def calculateTotalGain(totalGainAnswersModel: TotalGainAnswersModel)
+//                        (implicit hc: HeaderCarrier): Future[Option[TotalGainResultsModel]] = {
+//    http.GET[Option[TotalGainResultsModel]](s"$serviceUrl/capital-gains-calculator/non-resident/calculate-total-gain?${
+//      TotalGainRequestConstructor.totalGainQuery(totalGainAnswersModel)
+//    }")
 //  }
+
+  def calculateTotalGain(totalGainAnswersModel: TotalGainAnswersModel)
+                            (implicit hc: HeaderCarrier): Future[Option[TotalGainResultsModel]] = {
+    http.POST[TotalGainAnswersModel, Option[TotalGainResultsModel]](s"$serviceUrl/capital-gains-calculator/non-resident/calculate-total-gain",
+      totalGainAnswersModel)
+  }
 
   def calculateTaxableGainAfterPRR(totalGainAnswersModel: TotalGainAnswersModel,
                                    privateResidenceReliefModel: PrivateResidenceReliefModel,
