@@ -100,7 +100,7 @@ object CalculationDetailsWithAllAnswersConstructor {
   }
 
   def lossesRemainingRow(taxableGain: BigDecimal): Option[QuestionAnswerModel[BigDecimal]] = {
-    //TODO add correct wording from designers to messages
+    //TODO add correct wording from designers to messages.en
     if (taxableGain < 0) {
       val id = "calcDetails:lossesRemaining"
       val question = Messages("calc.summary.calculation.details.lossesRemaining")
