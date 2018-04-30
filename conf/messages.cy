@@ -301,7 +301,7 @@ calc.summary.title = Crynodeb
 calc.summary.warning.taxYear = Efallai y bydd eich cyfanswm yn llai cywir oherwydd na wnaethoch werthu'ch eiddo neu ei roi i ffwrdd yn y flwyddyn dreth hon
 
 calc.summaryPartial.aeaRemaining = Swm Blynyddol sydd wedi'i Eithrio rhag Treth sy'n weddill ar gyfer y flwyddyn dreth {0}
-calc.summaryPartial.aeaUsed = Swm Blynyddol sydd wedi'i Eithrio rhag Treth Enillion Cyfalaf a ddefnyddiwyd
+calc.summaryPartial.aeaUsed = Swm Blynyddol sydd wedi''i Eithrio rhag Treth Enillion Cyfalaf a ddefnyddiwyd
 calc.summaryPartial.broughtForwardLossesRemaining = Colledion i'w cario ymlaen o flynyddoedd treth blaenorol
 calc.summaryPartial.broughtForwardLossesUsed = Colledion a ddygwyd ymlaen a ddefnyddiwyd
 calc.summaryPartial.cgtToPay = Treth Enillion Cyfalaf i'w thalu ar gyfer y flwyddyn dreth {0}
