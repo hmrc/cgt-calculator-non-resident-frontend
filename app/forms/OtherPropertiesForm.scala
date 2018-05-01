@@ -20,9 +20,6 @@ import common.Validation._
 import models.OtherPropertiesModel
 import play.api.data.Forms._
 import play.api.data._
-import play.api.i18n.Messages
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 
 object OtherPropertiesForm {
 

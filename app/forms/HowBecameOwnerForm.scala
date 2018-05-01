@@ -20,9 +20,6 @@ import models.HowBecameOwnerModel
 import play.api.data.Form
 import play.api.data.Forms._
 import common.Validation._
-import play.api.i18n.Messages
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 
 object HowBecameOwnerForm {
 

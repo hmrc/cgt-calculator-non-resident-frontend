@@ -16,7 +16,6 @@
 
 package controllers
 
-import play.api.Play.current
 import javax.inject.Inject
 import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
