@@ -44,6 +44,8 @@ calc.common.error.maxAmountExceeded = Enter an amount that''s £{0} or less
 calc.common.error.fieldRequired = This field is required
 calc.common.error.mandatoryAmount = Enter an amount
 
+error.required = This field is required
+
 ## Current Income ##
 calc.currentIncome.question = What was your total UK income in the tax year when you stopped owning the property?
 calc.currentIncome.helpText.line1 = Give a realistic estimate if this was in the current tax year.
