@@ -21,10 +21,11 @@ import common.Validation._
 import models.SoldOrGivenAwayModel
 import play.api.data.Form
 import play.api.data.Forms._
+import play.api.i18n.Lang
 
 object SoldOrGivenAwayForm {
 
-  val soldOrGivenAwayForm = Form(
+  def soldOrGivenAwayForm(implicit lang:Lang): Form[SoldOrGivenAwayModel] = Form(
     mapping(
       "soldIt" -> text
         .verifying("calc.common.error.fieldRequired", mandatoryCheck)
