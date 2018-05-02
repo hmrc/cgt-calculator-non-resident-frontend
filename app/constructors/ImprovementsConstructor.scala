@@ -18,7 +18,7 @@ package constructors
 
 import models.ImprovementsModel
 import play.api.data.Form
-import play.api.i18n.Messages
+import play.api.i18n.{Messages, MessagesApi}
 import play.twirl.api.{Html, HtmlFormat}
 import views.html.helpers._
 import play.api.i18n.Messages.Implicits._
@@ -26,7 +26,7 @@ import play.api.Play.current
 
 object ImprovementsConstructor {
   def generateImprovements(improvementsForm: Form[ImprovementsModel], improvementsOptions: Boolean,
-                           question: String): HtmlFormat.Appendable = {
+                           question: String)(implicit messages: Messages, messagesApi: Option[MessagesApi] = None): HtmlFormat.Appendable = {
       if (improvementsOptions) {
       formHiddenYesNoRadio(
         improvementsForm,
@@ -35,23 +35,23 @@ object ImprovementsConstructor {
         formMultipleInputMoney(
           improvementsForm,
           Seq(
-            ("improvementsAmt", Messages("calc.improvements.questionThree"), None),
-            ("improvementsAmtAfter", Messages("calc.improvements.questionFour"), None)
+            ("improvementsAmt", "calc.improvements.questionThree", None),
+            ("improvementsAmtAfter", "calc.improvements.questionFour", None)
           ),
           boldText = true
-        ),
+        )(messages, messagesApi),
         None,
         hideLegend = true
-      )
+      )(messages)
     } else {
       formHiddenYesNoRadio(
         improvementsForm,
         "isClaimingImprovements",
         question,
-        formInputMoney(improvementsForm, "improvementsAmt", Messages("calc.improvements.questionTwo"), labelClasses = "bold-small"),
+        formInputMoney(improvementsForm, "improvementsAmt", "calc.improvements.questionTwo", labelClasses = "bold-small")(messages, messagesApi),
         None,
         hideLegend = true
-      )
+      )(messages)
     }
   }
 }
