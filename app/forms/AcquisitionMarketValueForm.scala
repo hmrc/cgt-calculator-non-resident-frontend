@@ -22,12 +22,13 @@ import common.Validation._
 import models.AcquisitionValueModel
 import play.api.data.Forms._
 import play.api.data.Form
+import play.api.i18n.Lang
 import uk.gov.hmrc.play.views.helpers.MoneyPounds
 
 object AcquisitionMarketValueForm {
 
-  val acquisitionMarketValueForm: Form[AcquisitionValueModel] = Form(
-    mapping(
+  def acquisitionMarketValueForm(implicit lang:Lang): Form[AcquisitionValueModel] = Form(
+    mapping {
       "acquisitionMarketValue" -> text
         .verifying("error.real", mandatoryCheck)
         .verifying("error.real", bigDecimalCheck)
@@ -36,6 +37,6 @@ object AcquisitionMarketValueForm {
         .verifying("calc.acquisitionMarketValue.errorDecimalPlaces", decimalPlacesCheck)
         .verifying("calc.common.error.maxNumericExceeded" + MoneyPounds(Constants.maxNumeric, 0).quantity + " " +
           "calc.common.error.maxNumericExceeded.OrLess", maxCheck)
-    )(AcquisitionValueModel.apply)(AcquisitionValueModel.unapply)
+    }(AcquisitionValueModel.apply)(AcquisitionValueModel.unapply)
   )
 }
