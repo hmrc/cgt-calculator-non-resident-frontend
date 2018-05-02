@@ -371,6 +371,8 @@ calc.worthWhenInherited.question = Beth oedd gwerth marchnadol yr eiddo pan wnae
 error.number = Nodwch rif heb atalnodau, er enghraifft 10000.00
 error.real = Nodwch rif heb atalnodau, er enghraifft 10000.00
 
+error.required = Mae angen llenwi''r blwch hwn
+
 messages.back = Yn ôl
 
 nocgt.content.change = Newid y dyddiad hwn
