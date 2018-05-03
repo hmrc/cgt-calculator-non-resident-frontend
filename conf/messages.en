@@ -19,6 +19,20 @@ calc.base.summary.dateWarning = These figures are based on the tax rates from th
 calc.base.home = Home
 messages.back = Back
 
+##Month Names##
+calc.month.1 = January
+calc.month.2 = February
+calc.month.3 = March
+calc.month.4 = April
+calc.month.5 = May
+calc.month.6 = June
+calc.month.7 = July
+calc.month.8 = August
+calc.month.9 = September
+calc.month.10 = October
+calc.month.11 = November
+calc.month.12 = December
+
 ## Error Summary ##
 calc.error.summary.heading = This page has errors
 
@@ -199,6 +213,9 @@ calc.marketValue.jointOwnership = If you owned the property with someone else, o
 calc.privateResidenceRelief.question = Are you claiming Private Residence Relief?
 calc.privateResidenceRelief.questionBetween.partOne = For how many days between 6 April 2015 and
 calc.privateResidenceRelief.questionBetween.partTwo = did you live in this property as your main home?
+calc.privateResidenceRelief.questionBetween.partOneAndTwo = For how many days between 6 April 2015 and {0} did you live in this property as your main home?
+
+
 calc.privateResidenceRelief.firstQuestion = For how many days before 6 April 2015 did you live in this property as your main home?
 calc.privateResidenceRelief.questionFlat = For how many days before {0} were you living in this property as your main home?
 calc.privateResidenceRelief.helpText = Find out more about

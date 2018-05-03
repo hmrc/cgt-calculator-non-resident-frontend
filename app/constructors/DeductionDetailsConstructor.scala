@@ -120,17 +120,16 @@ object DeductionDetailsConstructor {
         Some(QuestionAnswerModel(
           s"${keys.privateResidenceRelief}-daysClaimedAfter",
           value.toString(),
-          s"${"calc.privateResidenceRelief.questionBetween.partOne"} ${Dates.dateMinusMonths(answers.disposalDateModel, 18)}" +
-            s" ${"calc.privateResidenceRelief.questionBetween.partTwo"}",
-          Some(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief().url)
+         "calc.privateResidenceRelief.questionBetween.partOneAndTwo",
+          Some(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief().url),
+          Option(Dates.dateMinusMonths(answers.disposalDateModel, 18))
         ))
       case (Some(PrivateResidenceReliefModel("Yes", _, Some(value))), Some(_))
       if TaxDates.dateAfterOctober(answers.disposalDateModel.get) =>
         Some(QuestionAnswerModel(
           s"${keys.privateResidenceRelief}-daysClaimedAfter",
           value.toString(),
-          s"${"calc.privateResidenceRelief.questionBetween.partOne"} ${Dates.dateMinusMonths(answers.disposalDateModel, 18)}" +
-            s" ${"calc.privateResidenceRelief.questionBetween.partTwo"}",
+          Messages("calc.privateResidenceRelief.questionBetween.partOneAndTwo", Dates.dateMinusMonths(answers.disposalDateModel, 18)),
           Some(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief().url)
         ))
       case _ => None
