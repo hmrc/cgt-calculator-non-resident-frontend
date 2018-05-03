@@ -23,7 +23,7 @@
 @import common.Transformers.booleanToString
 @import play.api.Application
 
-@(questions: Seq[(QuestionAnswerModel[Any])], backLink: String)(implicit request: Request[_], messages: Messages, application: Application)
+@(questions: Seq[(QuestionAnswerModel[Any])], backLink: String)(implicit request: Request[_], messages: Messages, application: Application, messagesApi: Option[MessagesApi] = None)
 
 @main_template(Messages("calc.checkYourAnswers.title"), articleLayout = false){
 
@@ -40,16 +40,16 @@
             <tbody>
                 @questions.map { question =>
                     <tr data-question="@question.question">
-                        <td>@question.question</td>
+                        <td>@Messages(question.question)</td>
                         <td id="@{s"${question.id}-answer"}">
-                            @{question.data match {
+                            @Messages({question.data match {
                             case string: String => string
                             case int: Int => int.toString
                             case bigDecimal: BigDecimal => s"£${MoneyPounds(bigDecimal, 2).quantity}"
                             case date: LocalDate => datePageFormatNoZero.format(date)
                             case boolean: Boolean => booleanToString(boolean)
                             case _ => ""
-                            }}
+                            }})
                         </td>
                         <td class= "change-your-answer"><a href="@question.link">@Messages("calc.checkYourAnswers.change")<span class="visuallyhidden">@Messages("calc.checkYourAnswers.hidden.text") @question.question</span></a></td>
                     </tr>
