@@ -168,7 +168,7 @@ object PurchaseDetailsConstructor {
       Some(QuestionAnswerModel(
         KeystoreKeys.rebasedValue,
         rebasedValueModel.get.rebasedValueAmt,
-        s"${"calc.nonResident.rebasedValue.question"} ${"calc.nonResident.rebasedValue.date"}",
+        s"${"calc.nonResident.rebasedValue.questionAndDate"}",
         Some(controllers.routes.RebasedValueController.rebasedValue().url)
       ))
     }

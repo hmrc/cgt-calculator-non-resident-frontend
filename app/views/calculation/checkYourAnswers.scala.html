@@ -20,7 +20,7 @@
 @import java.time._
 @import uk.gov.hmrc.play.views.helpers._
 @import common.Dates._
-@import common.Transformers.booleanToString
+@import common.Transformers.{booleanToString, localDateMonthKey, checkIfBooleanAsString}
 @import play.api.Application
 
 @(questions: Seq[(QuestionAnswerModel[Any])], backLink: String)(implicit request: Request[_], messages: Messages, application: Application, messagesApi: Option[MessagesApi] = None)
@@ -40,16 +40,17 @@
             <tbody>
                 @questions.map { question =>
                     <tr data-question="@question.question">
-                        <td>@Messages(question.question)</td>
+                        <td>
+                            @if(question.exampe.isDefined) newtransformer else @Messages(question.question)</td>
                         <td id="@{s"${question.id}-answer"}">
-                            @Messages({question.data match {
-                            case string: String => string
+                        @{question.data match {
+                            case string: String => Messages(checkIfBooleanAsString(string))
                             case int: Int => int.toString
                             case bigDecimal: BigDecimal => s"£${MoneyPounds(bigDecimal, 2).quantity}"
-                            case date: LocalDate => datePageFormatNoZero.format(date)
-                            case boolean: Boolean => booleanToString(boolean)
+                            case date: LocalDate => s"${date.getDayOfMonth} ${Messages(localDateMonthKey(date.getMonthValue))} ${date.getYear}"
+                            case boolean: Boolean => Messages(booleanToString(boolean))
                             case _ => ""
-                            }})
+                            }}
                         </td>
                         <td class= "change-your-answer"><a href="@question.link">@Messages("calc.checkYourAnswers.change")<span class="visuallyhidden">@Messages("calc.checkYourAnswers.hidden.text") @question.question</span></a></td>
                     </tr>

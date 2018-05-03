@@ -16,4 +16,4 @@
 
 package models
 
-case class QuestionAnswerModel[+T](id: String, data: T, question: String, link: Option[String])
+case class QuestionAnswerModel[+T](id: String, data: T, question: String, link: Option[String], exampe: Option[String] = None)

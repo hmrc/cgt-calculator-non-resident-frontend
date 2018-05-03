@@ -1,3 +1,16 @@
+##Month Names##
+calc.month.1 = Ionawr
+calc.month.2 = Chwefror
+calc.month.3 = Mawrth
+calc.month.4 = Ebrill
+calc.month.5 = Mai
+calc.month.6 = Mehefin
+calc.month.7 = Gorffennaf
+calc.month.8 = Awst
+calc.month.9 = Medi
+calc.month.10 = Hydref
+calc.month.11 = Tachwedd
+calc.month.12 = Rhagfyr
 
 calc.acquisitionCosts.bulletOne = asiantau tai neu arwerthwyr
 calc.acquisitionCosts.bulletThree = cymorth proffesiynol i brisio''r eiddo, er enghraifft syrfëwr neu brisiwr
@@ -244,6 +257,7 @@ calc.privateResidenceRelief.intro = Efallai y bydd gennych hawl i Ryddhad Preswy
 calc.privateResidenceRelief.question = Ydych chi''n hawlio Rhyddhad Preswylfan Preifat?
 calc.privateResidenceRelief.questionBetween.partOne = Am sawl diwrnod rhwng 6 Ebrill 2015 a
 calc.privateResidenceRelief.questionBetween.partTwo = oeddech chi''n byw yn yr eiddo hwn fel eich prif gartref?
+calc.privateResidenceRelief.questionBetween.partOneAndTwo = Am sawl diwrnod rhwng 6 Ebrill 2015 a {0} oeddech chi''n byw yn yr eiddo hwn fel eich prif gartref?
 calc.privateResidenceRelief.questionFlat = Am sawl diwrnod cyn {0} oeddech chi''n byw yn yr eiddo hwn fel eich prif gartref?
 
 calc.propertyLivedIn.noSelectError = Rhowch wybod i ni a ydych wedi byw yn yr eiddo ar ryw adeg ers i chi ddod yn berchennog
