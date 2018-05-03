@@ -41,7 +41,7 @@ object PropertyDetailsConstructor {
   def constructClaimingImprovementsRow(answers: TotalGainAnswersModel): Option[QuestionAnswerModel[String]] = {
     Some(QuestionAnswerModel[String](s"${keys.improvements}-isClaiming",
       answers.improvementsModel.isClaimingImprovements,
-      Messages("calc.improvements.question"),
+      "calc.improvements.question",
       Some(controllers.routes.ImprovementsController.improvements().url)
     ))
   }
@@ -51,7 +51,7 @@ object PropertyDetailsConstructor {
       val total: BigDecimal = answers.improvementsModel.improvementsAmt.getOrElse(BigDecimal(0))
       Some(QuestionAnswerModel[BigDecimal](s"${keys.improvements}-total",
         total,
-        Messages("calc.improvements.questionThree"),
+        "calc.improvements.questionThree",
         Some(controllers.routes.ImprovementsController.improvements().url)
       ))
     }
@@ -59,7 +59,7 @@ object PropertyDetailsConstructor {
       val total: BigDecimal = answers.improvementsModel.improvementsAmt.getOrElse(BigDecimal(0))
       Some(QuestionAnswerModel[BigDecimal](s"${keys.improvements}-total",
         total,
-        Messages("calc.improvements.questionTwo"),
+        "calc.improvements.questionTwo",
         Some(controllers.routes.ImprovementsController.improvements().url)
       ))
     }
@@ -70,7 +70,7 @@ object PropertyDetailsConstructor {
     if (display && displayRebased) {
       Some(QuestionAnswerModel[BigDecimal](s"${keys.improvements}-after",
         answers.improvementsModel.improvementsAmtAfter.getOrElse(0),
-        Messages("calc.improvements.questionFour"),
+        "calc.improvements.questionFour",
         Some(controllers.routes.ImprovementsController.improvements().url)
       ))
     }

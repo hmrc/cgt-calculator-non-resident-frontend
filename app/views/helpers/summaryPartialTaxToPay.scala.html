@@ -16,7 +16,7 @@
 
 @import views.html.helpers._
 
-@(taxToPay: BigDecimal, gainAtBandOne: BigDecimal, gainAtBandTwo: BigDecimal, taxAtBandOne: BigDecimal, taxAtBandTwo: BigDecimal, taxRateOne: Int, taxRateTwo: Int)(implicit request: Request[_], messages: Messages)
+@(taxToPay: BigDecimal, gainAtBandOne: BigDecimal, gainAtBandTwo: BigDecimal, taxAtBandOne: BigDecimal, taxAtBandTwo: BigDecimal, taxRateOne: Int, taxRateTwo: Int)(implicit request: Request[_], messages: Messages, messagesApi: Option[MessagesApi] = None)
 
 <div id="yourTaxRate" class="resident summary-underline summary-details-padding">
     @if(taxToPay > 0) {

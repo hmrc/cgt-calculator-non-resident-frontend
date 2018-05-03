@@ -16,7 +16,7 @@
 
 @import views.html.helpers._
 
-@(gain: BigDecimal, totalDeductions: BigDecimal, taxableGain: BigDecimal)(implicit request: Request[_], messages: Messages)
+@(gain: BigDecimal, totalDeductions: BigDecimal, taxableGain: BigDecimal)(implicit request: Request[_], messages: Messages, messagesApi: Option[MessagesApi] = None)
 
 <div id="yourTaxableGain" class="summary-underline summary-details-padding">
 

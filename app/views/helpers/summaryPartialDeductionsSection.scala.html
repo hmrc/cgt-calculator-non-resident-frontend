@@ -17,7 +17,7 @@
 @import views.html.helpers._
 
 @(reliefsUsed: BigDecimal, aeaUsed: BigDecimal, inYearLossesUsed: BigDecimal, broughtForwardLossesUsed: BigDecimal,
-totalDeductions: BigDecimal)(implicit request: Request[_], messages: Messages)
+totalDeductions: BigDecimal)(implicit request: Request[_], messages: Messages, messagesApi: Option[MessagesApi] = None)
 
 <div id="deductionsSection" class="summary-underline summary-details-padding">
 

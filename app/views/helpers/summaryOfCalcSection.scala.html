@@ -16,7 +16,7 @@
 
 @import models.QuestionAnswerModel
 
-@(sectionID: String, rows: Seq[QuestionAnswerModel[Any]], decimalPlaces: Int = 2)(implicit messages: Messages)
+@(sectionID: String, rows: Seq[QuestionAnswerModel[Any]], decimalPlaces: Int = 2)(implicit messages: Messages, messagesApi: Option[MessagesApi] = None)
 
 @if(rows.nonEmpty) {
 <section id=@sectionID class="summary-section">
