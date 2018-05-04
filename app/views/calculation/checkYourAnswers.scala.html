@@ -20,7 +20,7 @@
 @import java.time._
 @import uk.gov.hmrc.play.views.helpers._
 @import common.Dates._
-@import common.Transformers.{booleanToString, localDateMonthKey, checkIfBooleanAsString}
+@import common.Transformers.{booleanToString, localDateMonthKey, checkIfBooleanAsString, finalDate}
 @import play.api.Application
 
 @(questions: Seq[(QuestionAnswerModel[Any])], backLink: String)(implicit request: Request[_], messages: Messages, application: Application, messagesApi: Option[MessagesApi] = None)
@@ -41,7 +41,8 @@
                 @questions.map { question =>
                     <tr data-question="@question.question">
                         <td>
-                            @if(question.exampe.isDefined) newtransformer else @Messages(question.question)</td>
+                            @Messages(question.question, question.exampe.getOrElse(""))
+                        </td>
                         <td id="@{s"${question.id}-answer"}">
                         @{question.data match {
                             case string: String => Messages(checkIfBooleanAsString(string))
