@@ -16,4 +16,6 @@
 
 package models
 
-case class QuestionAnswerModel[+T](id: String, data: T, question: String, link: Option[String], exampe: Option[String] = None)
+import java.time.LocalDate
+
+case class QuestionAnswerModel[+T](id: String, data: T, question: String, link: Option[String], exampe: Option[LocalDate] = None)

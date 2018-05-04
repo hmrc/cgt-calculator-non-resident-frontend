@@ -122,7 +122,7 @@ object DeductionDetailsConstructor {
           value.toString(),
          "calc.privateResidenceRelief.questionBetween.partOneAndTwo",
           Some(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief().url),
-          Option(Dates.dateMinusMonths(answers.disposalDateModel, 18))
+          Dates.dateMinusMonths(answers.disposalDateModel, 18)
         ))
       case (Some(PrivateResidenceReliefModel("Yes", _, Some(value))), Some(_))
       if TaxDates.dateAfterOctober(answers.disposalDateModel.get) =>

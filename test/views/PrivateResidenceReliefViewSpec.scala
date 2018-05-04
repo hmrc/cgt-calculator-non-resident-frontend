@@ -16,6 +16,8 @@
 
 package views
 
+import java.time.LocalDate
+
 import assets.MessageLookup.{NonResident => messages}
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
@@ -234,7 +236,7 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
 
     "supplied with errors" should {
       val map = Map("isClaimingPRR" -> "")
-      lazy val view = privateResidenceRelief(privateResidenceReliefForm(false, false).bind(map), false, false, "", false)
+      lazy val view = privateResidenceRelief(privateResidenceReliefForm(false, false).bind(map), false, false, exampe, false)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

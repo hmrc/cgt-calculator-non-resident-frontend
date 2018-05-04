@@ -18,8 +18,10 @@
 @import uk.gov.hmrc.play.views.html.helpers.{form, input}
 @import views.html.helpers._
 @import play.api.Application
+@import java.time.LocalDate
+@import common.Dates
 
-@(privateResidenceReliefForm: Form[PrivateResidenceReliefModel], daysBetweenShow: Boolean, showFirstQuestion: Boolean, disposalDateLess18Months: String, showOnlyFlatQuestion: Boolean)(implicit request: Request[_], messages: Messages, application: Application)
+@(privateResidenceReliefForm: Form[PrivateResidenceReliefModel], daysBetweenShow: Boolean, showFirstQuestion: Boolean, disposalDateLess18Months: Option[LocalDate], showOnlyFlatQuestion: Boolean)(implicit request: Request[_], messages: Messages, application: Application)
 
 @whyThisDate(showBoth: Boolean) = {
     @if(showBoth){
@@ -27,10 +29,10 @@
 
         <ul class="list-bullet">
                 <li>@Messages("calc.privateResidenceRelief.daysBeforeHelpText")</li>
-                <li>@disposalDateLess18Months @Messages("calc.privateResidenceRelief.daysBetweenHelpText")</li>
+                <li>@{Dates.localDateToTranslatedString(disposalDateLess18Months)} @Messages("calc.privateResidenceRelief.daysBetweenHelpText")</li>
         </ul>
     }else{
-        <p id="helpTextBetween">@disposalDateLess18Months @Messages("calc.privateResidenceRelief.daysBetweenHelpText")</p>
+        <p id="helpTextBetween">@{Dates.localDateToTranslatedString(disposalDateLess18Months)} @Messages("calc.privateResidenceRelief.daysBetweenHelpText")</p>
     }
 }
 

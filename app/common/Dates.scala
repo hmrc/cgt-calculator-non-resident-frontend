@@ -20,6 +20,8 @@ import java.time._
 import java.time.format.{DateTimeFormatter, ResolverStyle}
 import java.time.temporal.ChronoUnit
 
+import play.api.i18n.Messages
+
 import scala.concurrent.Future
 
 object Dates {
@@ -31,8 +33,13 @@ object Dates {
 
   def constructDate(day: Int, month: Int, year: Int): LocalDate = LocalDate.parse(s"$day/$month/$year", formatter)
 
-  def dateMinusMonths(date: Option[LocalDate], months: Int): String = date.fold("") {
-    a => a.minus(months, ChronoUnit.MONTHS).format(datePageFormatNoZero)
+  def dateMinusMonths(date: Option[LocalDate], months: Int): Option[LocalDate] = date.map {
+    a => a.minus(months, ChronoUnit.MONTHS)
+      //.format(datePageFormatNoZero)
+  }
+
+  def localDateToTranslatedString(date: Option[LocalDate])(implicit messages: Messages): String = date.fold(""){
+    date => s"${date.getDayOfMonth} ${Messages(Transformers.localDateMonthKey(date.getMonthValue))} ${date.getYear}"
   }
 
   def getDay(date: LocalDate): Int = date.getDayOfMonth
