@@ -31,7 +31,7 @@
                     case string: String => string
                     case int: Int => int.toString
                     case bigDecimal: BigDecimal => s"£${MoneyPounds(bigDecimal, decimalPlaces).quantity}"
-                    case date: LocalDate => datePageFormatNoZero.format(date)
+                    case date: LocalDate => datePageFormatNoZero().format(date)
                     case _ => ""
                 }
             }</a>

@@ -16,6 +16,8 @@
 
 package constructors
 
+import java.util.Locale
+
 import models._
 import common.{Dates, TaxDates}
 import common.KeystoreKeys.{NonResidentKeys => keys}
@@ -37,7 +39,8 @@ object DeductionDetailsConstructor {
 
   def deductionDetailsRows(answers: TotalGainAnswersModel,
                            privateResidenceReliefModel: Option[PrivateResidenceReliefModel] = None,
-                           livedIn: Option[PropertyLivedInModel]): Seq[QuestionAnswerModel[Any]] = {
+                           livedIn: Option[PropertyLivedInModel],
+                           locale: Option[Locale] = None): Seq[QuestionAnswerModel[Any]]= {
 
     val propertyLivedInRow = propertyLivedInQuestionRow(livedIn)
 
@@ -53,8 +56,8 @@ object DeductionDetailsConstructor {
       }
       else {
         val privateResidenceReliefQuestion = privateResidenceReliefQuestionRow(privateResidenceReliefModel)
-        val privateResidenceReliefDaysClaimedBefore = privateResidenceReliefDaysClaimedBeforeRow(privateResidenceReliefModel, answers)
-        val privateResidenceReliefDaysClaimedAfter = privateResidenceReliefDaysClaimedAfterRow(privateResidenceReliefModel, answers)
+        val privateResidenceReliefDaysClaimedBefore = privateResidenceReliefDaysClaimedBeforeRow(privateResidenceReliefModel, answers, locale)
+        val privateResidenceReliefDaysClaimedAfter = privateResidenceReliefDaysClaimedAfterRow(privateResidenceReliefModel, answers, locale)
 
         val sequence = Seq(
           privateResidenceReliefQuestion,
@@ -91,7 +94,7 @@ object DeductionDetailsConstructor {
   }
 
   def privateResidenceReliefDaysClaimedBeforeRow(prr: Option[PrivateResidenceReliefModel],
-                                                 answers: TotalGainAnswersModel): Option[QuestionAnswerModel[String]] = {
+                                                 answers: TotalGainAnswersModel, locale: Option[Locale] = None): Option[QuestionAnswerModel[String]] = {
     val datesOutside = datesOutsideRangeCheck(answers.acquisitionDateModel, answers.disposalDateModel)
     val acquisitionPostTaxStartDisposalPost18Month = acquisitionAfterPropertyDisposalOver18Month(answers.acquisitionDateModel, answers.disposalDateModel)
     (prr, datesOutside, acquisitionPostTaxStartDisposalPost18Month) match {
@@ -106,14 +109,14 @@ object DeductionDetailsConstructor {
         Some(QuestionAnswerModel(
           s"${keys.privateResidenceRelief}-daysClaimed",
           value.toString(),
-          Messages("calc.privateResidenceRelief.questionFlat", Dates.dateMinusMonths(answers.disposalDateModel, 18)),
+          Messages("calc.privateResidenceRelief.questionFlat", Dates.dateMinusMonths(answers.disposalDateModel, 18, locale)),
           Some(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief().url)))
       case _ => None
     }
   }
 
   def privateResidenceReliefDaysClaimedAfterRow(prr: Option[PrivateResidenceReliefModel],
-                                                answers: TotalGainAnswersModel): Option[QuestionAnswerModel[String]] = {
+                                                answers: TotalGainAnswersModel, locale: Option[Locale] = None): Option[QuestionAnswerModel[String]] = {
     (prr, answers.rebasedValueModel) match {
       case (Some(PrivateResidenceReliefModel("Yes", _, Some(value))), _)
       if !TaxDates.dateAfterStart(answers.acquisitionDateModel.get) && TaxDates.dateAfterOctober(answers.disposalDateModel.get) =>
@@ -122,14 +125,14 @@ object DeductionDetailsConstructor {
           value.toString(),
          "calc.privateResidenceRelief.questionBetween.partOneAndTwo",
           Some(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief().url),
-          Option(Dates.dateMinusMonths(answers.disposalDateModel, 18))
+          Option(Dates.dateMinusMonths(answers.disposalDateModel, 18, locale))
         ))
       case (Some(PrivateResidenceReliefModel("Yes", _, Some(value))), Some(_))
       if TaxDates.dateAfterOctober(answers.disposalDateModel.get) =>
         Some(QuestionAnswerModel(
           s"${keys.privateResidenceRelief}-daysClaimedAfter",
           value.toString(),
-          Messages("calc.privateResidenceRelief.questionBetween.partOneAndTwo", Dates.dateMinusMonths(answers.disposalDateModel, 18)),
+          Messages("calc.privateResidenceRelief.questionBetween.partOneAndTwo", Dates.dateMinusMonths(answers.disposalDateModel, 18, locale)),
           Some(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief().url)
         ))
       case _ => None

@@ -75,7 +75,7 @@ disposalValue: BigDecimal, acquisitionValue: BigDecimal, totalCosts: BigDecimal,
                         case string: String => string
                         case int: Int => int.toString
                         case bigDecimal: BigDecimal => s"£${MoneyPounds(bigDecimal, 2).quantity}"
-                        case date: LocalDate => datePageFormatNoZero.format(date)
+                        case date: LocalDate => datePageFormatNoZero().format(date)
                         case boolean: Boolean => booleanToString(boolean)
                         case _ => ""
                     }}

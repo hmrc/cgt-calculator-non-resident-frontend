@@ -16,6 +16,8 @@
 
 package constructors
 
+import java.util.Locale
+
 import models._
 
 object YourAnswersConstructor {
@@ -23,11 +25,12 @@ object YourAnswersConstructor {
   def fetchYourAnswers(totalGainAnswersModel: TotalGainAnswersModel,
                        privateResidenceReliefModel: Option[PrivateResidenceReliefModel] = None,
                        personalAndPreviousDetailsModel: Option[TotalPersonalDetailsCalculationModel] = None,
-                       propertyLivedInModel: Option[PropertyLivedInModel] = None): Seq[QuestionAnswerModel[Any]] = {
+                       propertyLivedInModel: Option[PropertyLivedInModel] = None,
+                       locale: Option[Locale] = None): Seq[QuestionAnswerModel[Any]] = {
     val salesDetailsRows = SalesDetailsConstructor.salesDetailsRows(totalGainAnswersModel)
     val purchaseDetailsRows = PurchaseDetailsConstructor.getPurchaseDetailsSection(totalGainAnswersModel)
     val propertyDetailsRows = PropertyDetailsConstructor.propertyDetailsRows(totalGainAnswersModel)
-    val deductionDetailsRows = DeductionDetailsConstructor.deductionDetailsRows(totalGainAnswersModel, privateResidenceReliefModel, propertyLivedInModel)
+    val deductionDetailsRows = DeductionDetailsConstructor.deductionDetailsRows(totalGainAnswersModel, privateResidenceReliefModel, propertyLivedInModel, locale)
     val personalAndPreviousDetailsRows = PersonalAndPreviousDetailsConstructor.personalAndPreviousDetailsRows(personalAndPreviousDetailsModel)
 
       salesDetailsRows ++ purchaseDetailsRows ++ propertyDetailsRows ++  deductionDetailsRows ++ personalAndPreviousDetailsRows

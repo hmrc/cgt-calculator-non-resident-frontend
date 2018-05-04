@@ -70,6 +70,8 @@ trait CheckYourAnswersController extends FrontendController with ValidActiveSess
 
   val checkYourAnswers: Action[AnyContent] = ValidateSession.async { implicit request =>
 
+    val locale = request.acceptLanguages.headOption.map(_.locale)
+
     (for {
       model <- answersConstructor.getNRTotalGainAnswers
       totalGainResult <- calculatorConnector.calculateTotalGain(model)
@@ -78,7 +80,7 @@ trait CheckYourAnswersController extends FrontendController with ValidActiveSess
       prrModel <- getPrrResponse(propertyLivedIn, calculatorConnector)
       totalGainWithPRRResult <- getPrrIfApplicable(model, prrModel, propertyLivedIn, calculatorConnector)
       finalAnswers <- getFinalSectionsAnswers(totalGainResult.get, totalGainWithPRRResult, calculatorConnector, answersConstructor)
-      answers <- Future.successful(YourAnswersConstructor.fetchYourAnswers(model, prrModel, finalAnswers, propertyLivedIn))
+      answers <- Future.successful(YourAnswersConstructor.fetchYourAnswers(model, prrModel, finalAnswers, propertyLivedIn, locale))
       backLink <- getBackLink(totalGainResult.get, model.acquisitionDateModel, finalAnswers)
     } yield {
       Ok(calculation.checkYourAnswers(answers, backLink))

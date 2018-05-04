@@ -19,6 +19,7 @@ package common
 import java.time._
 import java.time.format.{DateTimeFormatter, ResolverStyle}
 import java.time.temporal.ChronoUnit
+import java.util.Locale
 
 import scala.concurrent.Future
 
@@ -27,12 +28,17 @@ object Dates {
   val taxYearEnd = "04-05"
   val formatter = DateTimeFormatter.ofPattern("d/M/uuuu").withResolverStyle(ResolverStyle.STRICT)
   val requestFormatter = DateTimeFormatter.ofPattern("uuuu-MM-dd").withResolverStyle(ResolverStyle.STRICT)
-  val datePageFormatNoZero = DateTimeFormatter.ofPattern("d MMMM uuuu").withResolverStyle(ResolverStyle.STRICT)
+  def datePageFormatNoZero(optLocale: Option[Locale] = None): DateTimeFormatter = {
+    optLocale match {
+      case Some(locale) => DateTimeFormatter.ofPattern("d MMMM uuuu", locale).withResolverStyle(ResolverStyle.STRICT)
+      case _ => DateTimeFormatter.ofPattern("d MMMM uuuu").withResolverStyle(ResolverStyle.STRICT)
+    }
+  }
 
   def constructDate(day: Int, month: Int, year: Int): LocalDate = LocalDate.parse(s"$day/$month/$year", formatter)
 
-  def dateMinusMonths(date: Option[LocalDate], months: Int): String = date.fold("") {
-    a => a.minus(months, ChronoUnit.MONTHS).format(datePageFormatNoZero)
+  def dateMinusMonths(date: Option[LocalDate], months: Int, locale: Option[Locale] = None): String = date.fold("") {
+    a => a.minus(months, ChronoUnit.MONTHS).format(datePageFormatNoZero(locale))
   }
 
   def getDay(date: LocalDate): Int = date.getDayOfMonth
