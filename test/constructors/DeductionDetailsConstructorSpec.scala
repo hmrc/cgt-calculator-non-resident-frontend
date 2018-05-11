@@ -326,9 +326,9 @@ class DeductionDetailsConstructorSpec extends UnitSpec with WithFakeApplication 
         lazy val result = DeductionDetailsConstructor.privateResidenceReliefDaysClaimedBeforeRow(
           Some(PrivateResidenceReliefModel("Yes", Some(4), None)), edgeDatesJustDaysBefore)
 
-        lazy val beforeString = Dates.dateMinusMonths(edgeDatesJustDaysBefore.disposalDateModel, 18)
+        lazy val beforeDate = Dates.dateMinusMonths(edgeDatesJustDaysBefore.disposalDateModel, 18)
 
-        result.get.question shouldBe messages.PrivateResidenceRelief.questionAcquisitionDateAfterStartDate(beforeString)
+        result.get.question shouldBe messages.PrivateResidenceRelief.questionAcquisitionDateAfterStartDate("")
       }
     }
   }

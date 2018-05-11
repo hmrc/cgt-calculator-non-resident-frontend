@@ -42,7 +42,7 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
             showAfter = true),
           daysBetweenShow = true,
           showFirstQuestion = true,
-          "date-input",
+          None,
           showOnlyFlatQuestion = false)
         lazy val document = Jsoup.parse(view.body)
 
@@ -172,7 +172,7 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
             showAfter = false),
           daysBetweenShow = false,
           showFirstQuestion = true,
-          "date-input",
+          None,
           showOnlyFlatQuestion = true)
         lazy val document = Jsoup.parse(view.body)
 
@@ -216,7 +216,7 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
             showAfter = false),
           daysBetweenShow = false,
           showFirstQuestion = false,
-          "date-input",
+          None,
           showOnlyFlatQuestion = true)
         lazy val document = Jsoup.parse(view.body)
 
@@ -236,7 +236,7 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
 
     "supplied with errors" should {
       val map = Map("isClaimingPRR" -> "")
-      lazy val view = privateResidenceRelief(privateResidenceReliefForm(false, false).bind(map), false, false, exampe, false)
+      lazy val view = privateResidenceRelief(privateResidenceReliefForm(false, false).bind(map), false, false, None, false)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {
