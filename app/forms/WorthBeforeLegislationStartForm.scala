@@ -34,8 +34,7 @@ object WorthBeforeLegislationStartForm {
         .transform[BigDecimal](stringToBigDecimal, bigDecimalToString)
         .verifying("calc.acquisitionMarketValue.errorNegative", isPositive)
         .verifying("calc.acquisitionMarketValue.errorDecimalPlaces", decimalPlacesCheck)
-        .verifying("calc.common.error.maxNumericExceeded" + MoneyPounds(Constants.maxNumeric, 0).quantity + " " +
-          "calc.common.error.maxNumericExceeded.OrLess", maxCheck)
+        .verifying(maxMonetaryValueConstraint(Constants.maxNumeric))
     )(WorthBeforeLegislationStartModel.apply)(WorthBeforeLegislationStartModel.unapply)
   )
 

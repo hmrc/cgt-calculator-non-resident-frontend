@@ -47,17 +47,12 @@ object CostsAtLegislationStartForm {
     }
   }
 
-  def validateMax(data: CostsAtLegislationStartModel): Boolean = {
-    data.hasCosts match {
-      case "Yes" => maxCheck(data.costs.getOrElse(0))
-      case "No" => true
+  private def getLossesAmount(model: CostsAtLegislationStartModel): Option[BigDecimal] = {
+    model match {
+      case CostsAtLegislationStartModel("Yes", costs) => costs
+      case _ => None
     }
   }
-
-  private lazy val greaterThanMaxMessage = "calc.common.error.maxNumericExceeded" +
-    MoneyPounds(Constants.maxNumeric, 0).quantity +
-    " " +
-    "calc.common.error.maxNumericExceeded.OrLess"
 
   val costsAtLegislationStartForm = Form(
     mapping(
@@ -73,7 +68,6 @@ object CostsAtLegislationStartForm {
         form => verifyPositive(form))
       .verifying("calc.costsAtLegislationStart.errorDecimalPlaces",
         form => verifyTwoDecimalPlaces(form))
-      .verifying(greaterThanMaxMessage,
-        form => validateMax(form))
+      .verifying(maxMonetaryValueConstraint[CostsAtLegislationStartModel](Constants.maxNumeric, getLossesAmount))
   )
 }

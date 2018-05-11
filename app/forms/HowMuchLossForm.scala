@@ -34,8 +34,7 @@ object HowMuchLossForm {
         .transform(stringToBigDecimal, bigDecimalToString)
         .verifying("calc.howMuchLoss.errorMinimum", isPositive)
         .verifying("calc.howMuchLoss.errorDecimal", decimalPlacesCheck)
-        .verifying("calc.common.error.maxNumericExceeded" + MoneyPounds(Constants.maxNumeric, 0).quantity + " " +
-          "calc.common.error.maxNumericExceeded.OrLess", maxCheck)
+        .verifying(maxMonetaryValueConstraint(Constants.maxNumeric))
     )(HowMuchLossModel.apply)(HowMuchLossModel.unapply)
   )
 }

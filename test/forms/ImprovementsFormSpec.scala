@@ -277,8 +277,9 @@ class ImprovementsFormSpec extends UnitSpec with WithFakeApplication{
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of ${commonMessages.maximumError("1000000000.01")} containing the data" in {
-        form.error("").get.message shouldBe commonMessages.maximumError("1,000,000,000")
+      s"return the correct error message" in {
+        form.error("").get.message shouldBe "calc.common.error.maxNumericExceeded"
+        form.error("").get.args shouldBe Array("1,000,000,000")
       }
     }
 
@@ -294,8 +295,9 @@ class ImprovementsFormSpec extends UnitSpec with WithFakeApplication{
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of ${commonMessages.maximumError("1000000000.01")} containing the data" in {
-        form.error("").get.message shouldBe commonMessages.maximumError("1,000,000,000")
+      s"return the correct error message" in {
+        form.error("").get.message shouldBe "calc.common.error.maxNumericExceeded"
+        form.error("").get.args shouldBe Array("1,000,000,000")
       }
     }
 

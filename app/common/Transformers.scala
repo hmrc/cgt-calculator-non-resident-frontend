@@ -66,9 +66,11 @@ object Transformers {
     case _ => false
   }
 
-  val booleanToString: Boolean => String = (input) => if (input) "calc.base.yes" else "calc.base.no"
+  val booleanToString: Boolean => String = (input) => if (input) "Yes" else "No"
 
-  val checkIfBooleanAsString: String => String = (input) => input match {
+  val booleanToMessageString: Boolean => String = (input) => if (input) "calc.base.yes" else "calc.base.no"
+
+  def checkIfBooleanAsString(input: String): String = input match {
     case "Yes" => "calc.base.yes"
     case "No" => "calc.base.no"
     case _ => input

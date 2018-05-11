@@ -22,7 +22,6 @@ import common.Validation._
 import models.RebasedValueModel
 import play.api.data.Forms._
 import play.api.data._
-import uk.gov.hmrc.play.views.helpers.MoneyPounds
 
 object RebasedValueForm {
 
@@ -34,8 +33,7 @@ object RebasedValueForm {
         .transform[BigDecimal](stringToBigDecimal, bigDecimalToString)
         .verifying("calc.nonResident.rebasedValue.errorNegative", data => isPositive(data))
         .verifying("calc.nonResident.rebasedValue.errorDecimalPlaces", data => decimalPlacesCheck(data))
-        .verifying("calc.common.error.maxNumericExceeded" + MoneyPounds(Constants.maxNumeric, 0).quantity + " " +
-          "calc.common.error.maxNumericExceeded.OrLess", maxCheck)
+        .verifying(maxMonetaryValueConstraint(Constants.maxNumeric))
     )(RebasedValueModel.apply)(RebasedValueModel.unapply)
   )
 }

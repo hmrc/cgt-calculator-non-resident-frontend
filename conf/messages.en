@@ -52,9 +52,7 @@ calc.common.date.hint = For example, 4 9 2016
 calc.common.date.error.invalidDate = Enter a real date
 calc.common.readMore = Read more
 calc.common.next.actions.heading = What to do next
-calc.common.error.maxNumericExceeded = Enter an amount that''s £
-calc.common.error.maxNumericExceeded.OrLess = or less
-calc.common.error.maxAmountExceeded = Enter an amount that''s £{0} or less
+calc.common.error.maxNumericExceeded = Enter an amount that''s £{0} or less
 calc.common.error.fieldRequired = This field is required
 calc.common.error.mandatoryAmount = Enter an amount
 
@@ -73,8 +71,7 @@ calc.personalAllowance.help = This is the amount of your income that you don''t 
 calc.personalAllowance.link = Personal Allowances
 calc.personalAllowance.errorNegative = Enter a positive number for your Personal Allowance
 calc.personalAllowance.errorDecimalPlaces = Enter a whole number for your Personal Allowance
-calc.personalAllowance.errorMaxLimit = Enter a Personal Allowance that''s £
-calc.personalAllowance.errorMaxLimitEnd = or less
+calc.personalAllowance.errorMaxLimit = Enter a Personal Allowance that''s £{0} or less
 
 ## Other Properties ##
 calc.otherProperties.question = Did you sell or give away other UK residential properties in the tax year when you stopped owning the property?
@@ -224,8 +221,7 @@ calc.privateResidenceRelief.intro = You may be entitled to Private Residence Rel
 calc.privateResidenceRelief.error.noValueProvided = Enter the value for your days claimed
 calc.privateResidenceRelief.error.errorNegative = Enter a positive number for your days claimed
 calc.privateResidenceRelief.error.errorDecimalPlaces = There are too many numbers after the decimal point in your days claimed
-calc.privateResidenceRelief.error.maxNumericExceeded = Enter a value for your days claimed that''s
-calc.privateResidenceRelief.error.maxNumericExceeded.OrLess = or less
+calc.privateResidenceRelief.error.maxNumericExceeded = Enter a value for your days claimed that''s {0} or less
 calc.privateResidenceRelief.formHintExplanation = To work out your Private Residence Relief, we need some information about when you lived in the property.
 calc.privateResidenceRelief.helpTextBeforeAfter = Why these specific dates?
 calc.privateResidenceRelief.helpTextJustBefore = Why this date?

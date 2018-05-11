@@ -36,8 +36,7 @@ trait MarketDisposalValueForm {
         .transform(stringToBigDecimal, bigDecimalToString)
         .verifying(errorNegative, isPositive)
         .verifying(errorDecimalPlaces, decimalPlacesCheck)
-        .verifying("calc.common.error.maxNumericExceeded" + MoneyPounds(Constants.maxNumeric, 0).quantity + " " +
-          "calc.common.error.maxNumericExceeded.OrLess", maxCheck)
+        .verifying(maxMonetaryValueConstraint(Constants.maxNumeric))
     )(DisposalValueModel.apply)(DisposalValueModel.unapply)
     )
 }

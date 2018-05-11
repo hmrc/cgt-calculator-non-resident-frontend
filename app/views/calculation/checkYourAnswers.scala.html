@@ -20,7 +20,7 @@
 @import java.time._
 @import uk.gov.hmrc.play.views.helpers._
 @import common.Dates._
-@import common.Transformers.{booleanToString, localDateMonthKey, checkIfBooleanAsString, finalDate}
+@import common.Transformers.{booleanToMessageString, localDateMonthKey, checkIfBooleanAsString, finalDate}
 @import play.api.Application
 
 @(questions: Seq[(QuestionAnswerModel[Any])], backLink: String)(implicit request: Request[_], messages: Messages, application: Application, messagesApi: Option[MessagesApi] = None)
@@ -49,7 +49,7 @@
                             case int: Int => int.toString
                             case bigDecimal: BigDecimal => s"£${MoneyPounds(bigDecimal, 2).quantity}"
                             case date: LocalDate => s"${date.getDayOfMonth} ${Messages(localDateMonthKey(date.getMonthValue))} ${date.getYear}"
-                            case boolean: Boolean => Messages(booleanToString(boolean))
+                            case boolean: Boolean => Messages(booleanToMessageString(boolean))
                             case _ => ""
                             }}
                         </td>

@@ -33,8 +33,7 @@ object KeyLookup {
     val numericPlayErrorOverride = "error.number"
     val optionReqError = "calc.base.optionReqError"
 
-    def maximumError(value: String): String = s"calc.common.error.maxNumericExceeded" + s"$value " +
-      "calc.common.error.maxNumericExceeded.OrLess"
+    def maximumError(value: String): String = s"calc.common.error.maxNumericExceeded"
   }
 
   object NonResident extends Common {
@@ -77,8 +76,6 @@ object KeyLookup {
       val errorDecimalPlaces = "calc.disposalValue.errorDecimalPlaces"
       val errorNegative = "calc.disposalValue.errorNegative"
 
-      def errorMaximum(value: String): String = s"calc.common.error.maxNumericExceeded" + s"$value " +
-        "calc.common.error.maxNumericExceeded.OrLess"
     }
 
     object HowMuchGain {
@@ -126,9 +123,6 @@ object KeyLookup {
       val errorNoValue = "calc.privateResidenceRelief.error.noValueProvided"
       val errorNegative = "calc.privateResidenceRelief.error.errorNegative"
       val errorDecimalPlaces = "calc.privateResidenceRelief.error.errorDecimalPlaces"
-
-      def errorMaximum(value: String): String = "calc.privateResidenceRelief.error.maxNumericExceeded" + s" $value " +
-      "calc.privateResidenceRelief.error.maxNumericExceeded.OrLess"
     }
 
     object RebasedCosts {

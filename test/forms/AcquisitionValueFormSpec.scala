@@ -89,8 +89,17 @@ class AcquisitionValueFormSpec extends UnitSpec with WithFakeApplication{
 
     "supplied with data containing a value that exceeds the max numeric" should {
       val data = (Constants.maxNumeric + 0.01).toString()
-      val message = commonMessages.maximumError(MoneyPounds(Constants.maxNumeric, 0).quantity)
-      checkMessageAndError(message, data)
+      lazy val form = acquisitionValueForm.bind(Map("acquisitionValue" -> data))
+      "return a form with errors" in {
+        form.hasErrors shouldBe true
+      }
+      "return 1 error" in {
+        form.errors.size shouldBe 1
+      }
+      "return the correct error" in {
+        form.error("acquisitionValue").get.message shouldBe "calc.common.error.maxNumericExceeded"
+        form.error("acquisitionValue").get.args shouldBe Array("1,000,000,000")
+      }
     }
   }
 }

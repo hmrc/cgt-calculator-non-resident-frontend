@@ -34,8 +34,7 @@ object HowMuchGainForm {
         .transform(stringToBigDecimal, bigDecimalToString)
         .verifying("calc.howMuchGain.errorNegative", isPositive)
         .verifying("calc.howMuchGain.errorDecimalPlaces", decimalPlacesCheck)
-        .verifying("calc.common.error.maxNumericExceeded" + MoneyPounds(Constants.maxNumeric, 0).quantity + " " +
-          "calc.common.error.maxNumericExceeded.OrLess", maxCheck)
+        .verifying(maxMonetaryValueConstraint(Constants.maxNumeric))
     )(HowMuchGainModel.apply)(HowMuchGainModel.unapply)
   )
 }

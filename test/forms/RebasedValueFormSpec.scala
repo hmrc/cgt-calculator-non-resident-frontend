@@ -126,8 +126,9 @@ class RebasedValueFormSpec extends UnitSpec with WithFakeApplication {
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of ${commonMessages.maximumError("1,000,000,000")}" in {
-        form.error("rebasedValueAmt").get.message shouldBe commonMessages.maximumError("1,000,000,000")
+      s"return the correct error message" in {
+        form.error("rebasedValueAmt").get.message shouldBe "calc.common.error.maxNumericExceeded"
+        form.error("rebasedValueAmt").get.args shouldBe Array("1,000,000,000")
       }
     }
 

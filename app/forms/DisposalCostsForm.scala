@@ -33,8 +33,7 @@ object DisposalCostsForm {
         .transform(stringToBigDecimal, bigDecimalToString)
         .verifying("calc.disposalCosts.errorNegativeNumber", costs => isPositive(costs))
         .verifying("calc.disposalCosts.errorDecimalPlaces", costs => decimalPlacesCheck(costs))
-        .verifying("calc.common.error.maxNumericExceeded" + MoneyPounds(Constants.maxNumeric, 0).quantity + " " +
-          "calc.common.error.maxNumericExceeded.OrLess", maxCheck)
+        .verifying(maxMonetaryValueConstraint(Constants.maxNumeric))
     )(DisposalCostsModel.apply)(DisposalCostsModel.unapply)
   )
 }

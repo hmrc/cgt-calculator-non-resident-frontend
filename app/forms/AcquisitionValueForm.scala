@@ -34,8 +34,7 @@ object AcquisitionValueForm {
         .transform(stringToBigDecimal, bigDecimalToString)
         .verifying("calc.acquisitionValue.errorNegative", isPositive)
         .verifying("calc.acquisitionValue.errorDecimalPlaces", decimalPlacesCheck)
-        .verifying("calc.common.error.maxNumericExceeded" + MoneyPounds(Constants.maxNumeric, 0).quantity + " " +
-          "calc.common.error.maxNumericExceeded.OrLess", maxCheck)
+        .verifying(maxMonetaryValueConstraint(Constants.maxNumeric))
     )(AcquisitionValueModel.apply)(AcquisitionValueModel.unapply)
   )
 }

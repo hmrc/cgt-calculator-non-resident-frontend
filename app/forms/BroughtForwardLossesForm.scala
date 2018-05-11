@@ -22,7 +22,6 @@ import common.Validation._
 import models.BroughtForwardLossesModel
 import play.api.data.Forms._
 import play.api.data._
-import uk.gov.hmrc.play.views.helpers.MoneyPounds
 
 object BroughtForwardLossesForm {
 
@@ -41,9 +40,11 @@ object BroughtForwardLossesForm {
     case _ => true
   }
 
-  val verifyMaximum: BroughtForwardLossesModel => Boolean = {
-    case BroughtForwardLossesModel(true, Some(value)) => maxCheck(value)
-    case _ => true
+  private def getLossesAmount(model: BroughtForwardLossesModel): Option[BigDecimal] = {
+    model match {
+      case BroughtForwardLossesModel(true, losses) => losses
+      case _ => None
+    }
   }
 
   val broughtForwardLossesForm = Form(
@@ -58,7 +59,6 @@ object BroughtForwardLossesForm {
       .verifying("error.real", verifyMandatory)
       .verifying("calc.broughtForwardLosses.errorDecimal", verifyDecimal)
       .verifying("calc.broughtForwardLosses.errorNegative", verifyPositive)
-      .verifying("calc.common.error.maxNumericExceeded" + MoneyPounds(Constants.maxNumeric, 0).quantity + " " +
-        "calc.common.error.maxNumericExceeded.OrLess", verifyMaximum)
+      .verifying(maxMonetaryValueConstraint[BroughtForwardLossesModel](Constants.maxNumeric, getLossesAmount))
   )
 }

@@ -70,8 +70,9 @@ class WorthBeforeLegislationStartFormSpec extends UnitSpec with WithFakeApplicat
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of ${commonMessages.maximumError("1,000,000,000")}" in {
-        form.error("worthBeforeLegislationStart").get.message shouldBe commonMessages.maximumError("1,000,000,000")
+      s"return the correct error message" in {
+        form.error("worthBeforeLegislationStart").get.message shouldBe "calc.common.error.maxNumericExceeded"
+        form.error("worthBeforeLegislationStart").get.args shouldBe Array("1,000,000,000")
       }
     }
 

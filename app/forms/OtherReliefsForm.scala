@@ -22,7 +22,6 @@ import common.Transformers._
 import models.OtherReliefsModel
 import play.api.data.Forms._
 import play.api.data._
-import uk.gov.hmrc.play.views.helpers.MoneyPounds
 
 object OtherReliefsForm {
 
@@ -35,9 +34,7 @@ object OtherReliefsForm {
           .transform(stringToBigDecimal, bigDecimalToString)
           .verifying("calc.otherReliefs.errorMinimum", isPositive)
           .verifying("calc.otherReliefs.errorDecimal", decimalPlacesCheck)
-          .verifying("calc.common.error.maxNumericExceeded" + MoneyPounds(Constants.maxNumeric, 0).quantity +
-            " " + "calc.common.error.maxNumericExceeded.OrLess",
-            maxCheck)
+          .verifying(maxMonetaryValueConstraint(Constants.maxNumeric))
       )(OtherReliefsModel.apply)(OtherReliefsModel.unapply)
     )
 }

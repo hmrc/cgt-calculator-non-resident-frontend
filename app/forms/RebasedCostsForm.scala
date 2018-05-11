@@ -21,7 +21,6 @@ import common.Validation._
 import models.RebasedCostsModel
 import play.api.data.Forms._
 import play.api.data._
-import uk.gov.hmrc.play.views.helpers.MoneyPounds
 import common.Transformers._
 
 object RebasedCostsForm {
@@ -47,11 +46,8 @@ object RebasedCostsForm {
     }
   }
 
-  def validateMax(data: RebasedCostsModel): Boolean = {
-    data.hasRebasedCosts match {
-      case "Yes" => maxCheck(data.rebasedCosts.getOrElse(0))
-      case "No" => true
-    }
+  private def extractRebasedCosts(model: RebasedCostsModel): Option[BigDecimal] = {
+    if(model.hasRebasedCosts == "Yes") model.rebasedCosts else None
   }
 
   val rebasedCostsForm = Form(
@@ -68,7 +64,6 @@ object RebasedCostsForm {
         rebasedCostsForm => verifyPositive(rebasedCostsForm))
       .verifying("calc.rebasedCosts.errorDecimalPlaces",
         rebasedCostsForm => verifyTwoDecimalPlaces(rebasedCostsForm))
-      .verifying("calc.common.error.maxNumericExceeded" + MoneyPounds(Constants.maxNumeric, 0).quantity + " " + "calc.common.error.maxNumericExceeded.OrLess",
-        rebasedValueForm => validateMax(rebasedValueForm))
+      .verifying(maxMonetaryValueConstraint[RebasedCostsModel](Constants.maxNumeric, extractRebasedCosts))
   )
 }

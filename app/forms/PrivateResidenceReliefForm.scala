@@ -24,6 +24,7 @@ import common.Transformers._
 import models.PrivateResidenceReliefModel
 import play.api.data.Forms._
 import play.api.data._
+import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError}
 
 object PrivateResidenceReliefForm {
 
@@ -53,12 +54,16 @@ object PrivateResidenceReliefForm {
     }
   }
 
-  def validateMax (data: PrivateResidenceReliefModel, showBefore: Boolean, showAfter: Boolean): Boolean = {
-    data.isClaimingPRR match {
-      case "Yes" if showBefore || showAfter => maxCheck(data.daysClaimed.getOrElse(0)) && maxCheck(data.daysClaimedAfter.getOrElse(0))
-      case _ => true
+  def maxValueConstraint(maxValue: BigDecimal, showBefore: Boolean, showAfter: Boolean):
+    Constraint[PrivateResidenceReliefModel] = Constraint("constraints.residenceRelief")({
+    model => model.isClaimingPRR match {
+      case "Yes" if showBefore || showAfter =>
+        if(model.daysClaimed.getOrElse(BigDecimal(0)) > maxValue || model.daysClaimedAfter.getOrElse(BigDecimal(0)) > maxValue) {
+          Invalid(ValidationError("calc.privateResidenceRelief.error.maxNumericExceeded", formatter.format(Constants.maxNumeric)))
+        } else Valid
+      case _ => Valid
     }
-  }
+  })
 
   def privateResidenceReliefForm (showBefore: Boolean, showAfter: Boolean): Form[PrivateResidenceReliefModel] = Form(
     mapping(
@@ -73,8 +78,7 @@ object PrivateResidenceReliefForm {
       .verifying("calc.privateResidenceRelief.error.noValueProvided", form => verifyAmountSupplied(form, showBefore, showAfter))
       .verifying("calc.privateResidenceRelief.error.errorNegative", form => verifyPositive(form, showBefore, showAfter))
       .verifying("calc.privateResidenceRelief.error.errorDecimalPlaces", form => verifyNoDecimalPlaces(form, showBefore, showAfter))
-      .verifying("calc.privateResidenceRelief.error.maxNumericExceeded" + " " + formatter.format(Constants.maxNumeric) + " " + "calc.privateResidenceRelief.error.maxNumericExceeded.OrLess",
-        form => validateMax(form, showBefore, showAfter)
+      .verifying(maxValueConstraint(Constants.maxNumeric, showBefore, showAfter)
       )
   )
 }

@@ -19,7 +19,7 @@
 @import models._
 @import uk.gov.hmrc.play.views.helpers.MoneyPounds
 @import constructors.OtherReliefsDetailsConstructor
-@import common.Transformers.booleanToString
+@import common.Transformers.booleanToMessageString
 @import common.Dates._
 @import java.time._
 @import views.html.helpers._
@@ -76,7 +76,7 @@ disposalValue: BigDecimal, acquisitionValue: BigDecimal, totalCosts: BigDecimal,
                         case int: Int => int.toString
                         case bigDecimal: BigDecimal => s"£${MoneyPounds(bigDecimal, 2).quantity}"
                         case date: LocalDate => datePageFormatNoZero.format(date)
-                        case boolean: Boolean => booleanToString(boolean)
+                        case boolean: Boolean => booleanToMessageString(boolean)
                         case _ => ""
                     }}
                 </div>

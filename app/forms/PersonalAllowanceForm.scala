@@ -33,8 +33,7 @@ object PersonalAllowanceForm {
         .transform(stringToBigDecimal, bigDecimalToString)
         .verifying("calc.personalAllowance.errorNegative", isPositive)
         .verifying("calc.personalAllowance.errorDecimalPlaces", decimalPlacesCheckNoDecimal)
-        .verifying("calc.personalAllowance.errorMaxLimit" + MoneyPounds(maxPA, 0).quantity + " " +
-          "calc.personalAllowance.errorMaxLimitEnd", personalAllowance => personalAllowance <= maxPA)
+        .verifying(maxMonetaryValueConstraint(maxPA, "calc.personalAllowance.errorMaxLimit"))
     )(PersonalAllowanceModel.apply)(PersonalAllowanceModel.unapply)
   )
 }
