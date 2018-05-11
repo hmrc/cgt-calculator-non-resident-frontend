@@ -16,10 +16,16 @@
 
 package models
 
-import play.api.libs.json.Json
+import play.api.libs.json.{JsValue, Json, Writes}
 
 case class CostsAtLegislationStartModel(hasCosts: String, costs: Option[BigDecimal])
 
 object CostsAtLegislationStartModel {
   implicit val format = Json.format[CostsAtLegislationStartModel]
+
+  val postWrites = new Writes[CostsAtLegislationStartModel] {
+    override def writes(model: CostsAtLegislationStartModel): JsValue = {
+      Json.toJson(model.costs)
+    }
+  }
 }

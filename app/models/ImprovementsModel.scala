@@ -16,10 +16,21 @@
 
 package models
 
-import play.api.libs.json.Json
+import play.api.libs.json.{JsObject, JsValue, Json, Writes}
 
 case class ImprovementsModel (isClaimingImprovements: String, improvementsAmt: Option[BigDecimal], improvementsAmtAfter: Option[BigDecimal] = None)
 
 object ImprovementsModel {
   implicit val format = Json.format[ImprovementsModel]
+
+  val postWrites = new Writes[ImprovementsModel] {
+    override def writes(model: ImprovementsModel): JsValue = {
+      JsObject(
+        Seq(
+          model.improvementsAmt.map{"improvements" -> Json.toJson[BigDecimal](_)},
+          model.improvementsAmtAfter.map{"improvementsAfterTaxStarted" -> Json.toJson[BigDecimal](_)}
+        ).flatten.toMap
+      )
+    }
+  }
 }
