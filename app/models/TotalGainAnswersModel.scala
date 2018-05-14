@@ -16,6 +16,9 @@
 
 package models
 
+import play.api.libs.json._
+import play.api.libs.functional.syntax._
+
 case class TotalGainAnswersModel(disposalDateModel: DisposalDateModel,
                                  soldOrGivenAwayModel: SoldOrGivenAwayModel,
                                  soldForLessModel: Option[SoldForLessModel],
@@ -31,3 +34,25 @@ case class TotalGainAnswersModel(disposalDateModel: DisposalDateModel,
                                  improvementsModel: ImprovementsModel,
                                  otherReliefsFlat: Option[OtherReliefsModel],
                                  costsAtLegislationStart: Option[CostsAtLegislationStartModel] = None)
+
+object TotalGainAnswersModel {
+  private val ignore = OWrites[Any](_ => Json.obj())
+
+  implicit val totalGainWrites: Writes[TotalGainAnswersModel] = (
+    (__ \ "disposalDate").write[DisposalDateModel](DisposalDateModel.postWrites) and
+      ignore and
+      ignore and
+      (__ \ "disposalValue").write[DisposalValueModel](DisposalValueModel.postWrites) and
+      (__ \ "disposalCosts").write[DisposalCostsModel](DisposalCostsModel.postWrites) and
+      ignore and
+      ignore and
+      (__ \ "acquisitionValue").write[AcquisitionValueModel](AcquisitionValueModel.postWrites) and
+      (__ \ "acquisitionCosts").writeNullable[AcquisitionCostsModel](AcquisitionCostsModel.postWrites) and
+      (__ \ "acquisitionDate").write[AcquisitionDateModel](AcquisitionDateModel.postWrites) and
+      (__ \ "rebasedValue").writeNullable[RebasedValueModel](RebasedValueModel.postWrites) and
+      (__ \ "rebasedCosts").writeNullable[RebasedCostsModel](RebasedCostsModel.postWrites) and
+      __.write[ImprovementsModel](ImprovementsModel.postWrites) and
+      ignore and
+      ignore
+    ) (unlift(TotalGainAnswersModel.unapply))
+}

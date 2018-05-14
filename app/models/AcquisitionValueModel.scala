@@ -16,10 +16,19 @@
 
 package models
 
+import java.time.LocalDate
+
 import play.api.libs.json._
 
 case class AcquisitionValueModel (acquisitionValueAmt: BigDecimal)
 
 object AcquisitionValueModel {
   implicit val format = Json.format[AcquisitionValueModel]
+
+  val postWrites = new Writes[AcquisitionValueModel] {
+    override def writes(model: AcquisitionValueModel): JsValue = {
+      Json.toJson(model.acquisitionValueAmt)
+    }
+  }
+
 }

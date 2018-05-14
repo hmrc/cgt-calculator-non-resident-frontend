@@ -23,4 +23,11 @@ case class AcquisitionCostsModel (acquisitionCostsAmt: BigDecimal)
 object AcquisitionCostsModel {
   implicit val format = Json.format[AcquisitionCostsModel]
   implicit val convertToSome: AcquisitionCostsModel => Option[AcquisitionCostsModel] = model => Some(model)
+
+  val postWrites = new Writes[AcquisitionCostsModel] {
+    override def writes(model: AcquisitionCostsModel): JsValue = {
+      Json.toJson(model.acquisitionCostsAmt)
+    }
+  }
+
 }

@@ -19,6 +19,7 @@ package connectors
 import java.util.UUID
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import config.WSHttp
 import models._
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
@@ -29,18 +30,20 @@ import uk.gov.hmrc.http.cache.client.{CacheMap, SessionCache}
 import uk.gov.hmrc.play.test.UnitSpec
 
 import scala.concurrent.Future
-import uk.gov.hmrc.http.{ HeaderCarrier, HttpGet }
+import uk.gov.hmrc.http.{HeaderCarrier, HttpGet, HttpPost}
 import uk.gov.hmrc.http.logging.SessionId
+
+import scala.concurrent.ExecutionContext.Implicits.global
 
 class CalculatorConnectorSpec extends UnitSpec with MockitoSugar {
 
-  val mockHttp: HttpGet = mock[HttpGet]
+  val mockHttp: HttpPost with HttpGet= mock[WSHttp]
   val mockSessionCache: SessionCache = mock[SessionCache]
   val sessionId: String = UUID.randomUUID.toString
 
   object TargetCalculatorConnector extends CalculatorConnector {
     override val sessionCache: SessionCache = mockSessionCache
-    override val http: HttpGet = mockHttp
+    override val http: HttpPost with HttpGet = mockHttp
     override val serviceUrl = "dummy"
   }
 
@@ -117,7 +120,6 @@ class CalculatorConnectorSpec extends UnitSpec with MockitoSugar {
                            calculationResultsWithPRRModel: Option[CalculationResultsWithPRRModel] = None): CalculatorConnector = {
 
     val mockSessionCache = mock[SessionCache]
-    val mockHttpGet = mock[HttpGet]
 
     when(mockSessionCache.fetchAndGetEntry[DisposalDateModel](ArgumentMatchers.eq(KeystoreKeys.disposalDate))(ArgumentMatchers.any(), ArgumentMatchers.any(),
       ArgumentMatchers.any()))
@@ -153,19 +155,20 @@ class CalculatorConnectorSpec extends UnitSpec with MockitoSugar {
       .thenReturn(Future.successful(Some(totalGainAnswersModel.improvementsModel)))
 
     if (totalGainResultsModel.isDefined) {
-      when(mockHttpGet.GET[Option[TotalGainResultsModel]](ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any()))
-        .thenReturn(totalGainResultsModel)
+      when(mockHttp.POST[TotalGainAnswersModel, Option[TotalGainResultsModel]](ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any())(
+        ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any())
+      ).thenReturn(Future.successful(totalGainResultsModel))
     }
 
     if (calculationResultsWithPRRModel.isDefined) {
-      when(mockHttpGet.GET[Option[CalculationResultsWithPRRModel]](ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any(),
+      when(mockHttp.GET[Option[CalculationResultsWithPRRModel]](ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any(),
         ArgumentMatchers.any()))
         .thenReturn(calculationResultsWithPRRModel)
     }
 
     new CalculatorConnector {
       override val sessionCache: SessionCache = mockSessionCache
-      override val http: HttpGet = mockHttpGet
+      override val http: HttpPost with HttpGet = mockHttp
       override val serviceUrl: String = ""
     }
   }
@@ -293,7 +296,7 @@ class CalculatorConnectorSpec extends UnitSpec with MockitoSugar {
       None,
       ImprovementsModel("Yes", Some(10), Some(20)),
       None)
-    val target = setupMockedConnector(model, Some(validResponse))
+    val target = setupMockedConnector(model, totalGainResultsModel = Some(validResponse))
 
     "return a valid response" in {
 

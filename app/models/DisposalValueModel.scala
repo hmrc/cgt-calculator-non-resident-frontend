@@ -16,10 +16,16 @@
 
 package models
 
-import play.api.libs.json.Json
+import play.api.libs.json.{JsValue, Json, Writes}
 
 case class DisposalValueModel (disposalValue: BigDecimal)
 
 object DisposalValueModel {
   implicit val format = Json.format[DisposalValueModel]
+
+  val postWrites = new Writes[DisposalValueModel] {
+    override def writes(model: DisposalValueModel): JsValue = {
+      Json.toJson(model.disposalValue)
+    }
+  }
 }

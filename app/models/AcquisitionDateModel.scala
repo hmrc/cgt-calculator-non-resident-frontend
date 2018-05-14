@@ -40,4 +40,11 @@ object AcquisitionDateModel {
       case _ => None
     }
   }
+
+  val postWrites = new Writes[AcquisitionDateModel] {
+    override def writes(model: AcquisitionDateModel): JsValue = {
+      Json.toJson(LocalDate.of(model.year, model.month, model.day))
+    }
+  }
+
 }
