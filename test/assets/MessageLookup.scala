@@ -495,8 +495,8 @@ object MessageLookup {
         "Do not use these figures to report your Capital Gains Tax."
       val whoOwnedIt = "Who owned the property?"
       val bannerPanelTitle = "Help improve GOV.UK"
-      val bannerPanelLinkURL = "https://signup.take-part-in-research.service.gov.uk/?utm_campaign=CGT_non_resident_summary&amp;utm_source=Survey_Banner&amp;utm_medium=other&amp;t=HMRC&amp;id=116"
-      val bannerPanelLinkText = "Help improve this digital sevice by joining the HMRC user panel(opens in a new window)"
+      val bannerPanelLinkURL = "https://signup.take-part-in-research.service.gov.uk/?utm_campaign=CGT_non_resident_summary&utm_source=Survey_Banner&utm_medium=other&t=HMRC&id=116"
+      val bannerPanelLinkText = "Help improve this digital service by joining the HMRC user panel (opens in new window)"
       val bannerPanelCloseVisibleText = "No thanks"
       val bannerPanelCloseHiddenText = "I don't want to answer any questions about joining the research panel"
 

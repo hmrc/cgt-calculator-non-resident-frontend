@@ -101,7 +101,6 @@ class SummaryViewSpec extends UnitSpec with WithFakeApplication with FakeRequest
       }
 
       "does not have ur panel" in {
-
         document.select("div#ur-panel").size() shouldBe 0
       }
     }
@@ -117,17 +116,16 @@ class SummaryViewSpec extends UnitSpec with WithFakeApplication with FakeRequest
       }
 
       "does have ur panel" in {
-
         document.select("div#ur-panel").size() shouldBe 1
+
         document.select(".banner-panel__close").size() shouldBe 1
         document.select(".banner-panel__title").text() shouldBe messages.Summary.bannerPanelTitle
 
-//        document.select(".banner-panel__title").attr("href") shouldBe messages.Summary.bannerPanelLinkURL
-        document.select("section.a").text() shouldBe messages.Summary.bannerPanelLinkText
+        document.select("section > a").first().attr("href") shouldBe messages.Summary.bannerPanelLinkURL
+        document.select("section > a").first().text() shouldBe messages.Summary.bannerPanelLinkText
 
-
-        document.select(".banner-panel__close").text() contains Summary.bannerPanelCloseVisibleText
-        document.select(".banner-panel__close").text() contains Summary.bannerPanelCloseHiddenText
+        document.select("a > span").first().text() shouldBe Summary.bannerPanelCloseVisibleText
+        document.select("a > span").eq(1).text() shouldBe Summary.bannerPanelCloseHiddenText
 
       }
 

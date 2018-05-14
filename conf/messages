@@ -353,7 +353,7 @@ calc.summary.time.description = Straight-line apportionment method: based on the
 calc.summary.rebased.description = Rebasing method: based on the amount you''ve gained on the property since
 
 calc.summary.dismissBanner = No thanks
-calc.summary.dismissBanner.screenreader = I don’t want to answer any questions about joining the research panel
+calc.summary.dismissBanner.screenreader = I don''t want to answer any questions about joining the research panel
 calc.summary.userResearchLink.title = Help improve GOV.UK
 calc.summary.userResearchLink.link = Help improve this digital service by joining the HMRC user panel (opens in new window)
 
