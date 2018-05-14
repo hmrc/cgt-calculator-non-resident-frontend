@@ -15,8 +15,8 @@
  *@
 
 @import config.ApplicationConfig
-@import helpers.two_thirds_banner
-@import helpers.two_thirds_banner_content_ur
+@import helpers.full_width_banner
+@import helpers.full_width_banner_content_ur
 
 @(title: String,
   sidebarLinks: Option[Html] = None,
@@ -55,7 +55,7 @@
 @afterHeader = {
     @if(isUserResearchBannerVisible) {
 
-    @two_thirds_banner(Some(two_thirds_banner_content_ur(
+    @full_width_banner(Some(full_width_banner_content_ur(
                 messages("calc.summary.userResearchLink.title"),
                 messages("calc.summary.userResearchLink.link"),
                 ApplicationConfig.urBannerLink,
