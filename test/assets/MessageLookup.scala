@@ -76,7 +76,6 @@ object MessageLookup {
 
     object AcquisitionDate {
       val question = "What date did you sign the contract to become the owner?"
-      val questionTwo = "What was the date you signed the contract that made you the owner?"
       val hintText = "If you inherited the property, it's the date that the previous owner died."
       val errorIncompleteDate = "Date is not valid"
       val errorFutureDate = "Enter a date from the past"
@@ -246,14 +245,6 @@ object MessageLookup {
 
     object OtherProperties {
       val question = "Did you sell or give away other UK residential properties in the tax year when you stopped owning the property?"
-//      val questionTwo = "What was your taxable gain?"
-//      val questionTwoHelpTextStart = "How to"
-//      val questionTwoHelpTextLinkText = "work out your total taxable gains"
-//      val errorNegative = "Enter a positive number for your taxable gain"
-//      val errorDecimalPlaces = "Your taxable gain has too many numbers after the decimal point"
-//      val errorQuestion = "Enter a value for your taxable gain"
-//      val linkOne = "Capital Gains Tax"
-//      val linkTwo = "Previous tax years"
     }
 
     object PreviousLossOrGain {
@@ -381,15 +372,10 @@ object MessageLookup {
     object HowBecameOwner {
       val question = "How did you become the owner?"
       val errorMandatory = "Tell us how you became the owner"
-      val bought = "Bought it"
-      val gifted = "Got it as a gift"
-      val inherited = "Inherited it"
     }
 
     object SoldOrGivenAway {
       val question = "Did you sell or give away the property?"
-      val sold = "I sold it"
-      val gave = "I gave it away"
     }
 
     //Acquisition Market Value messages.en

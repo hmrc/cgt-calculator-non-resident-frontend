@@ -233,7 +233,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
       }
 
       "have the question for acquisition date entry" in {
-        assertExpectedResult[QuestionAnswerModel[LocalDate]](result)(_.question shouldBe messages.AcquisitionDate.questionTwo)
+        assertExpectedResult[QuestionAnswerModel[LocalDate]](result)(_.question shouldBe "calc.acquisitionDate.questionTwo")
       }
 
       "have a link to the acquisition date page" in {
@@ -253,11 +253,11 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
       }
 
       "have the value of Gifted" in {
-        result.data shouldBe messages.HowBecameOwner.gifted
+        result.data shouldBe "calc.howBecameOwner.gifted"
       }
 
       "have the question for how became owner" in {
-        result.question shouldBe messages.HowBecameOwner.question
+        result.question shouldBe "calc.howBecameOwner.question"
       }
 
       "have a link to the how became owner page" in {
@@ -269,7 +269,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
       lazy val result = PurchaseDetailsConstructor.howBecameOwnerRow(totalGainSold).get
 
       "have the value of Bought" in {
-        result.data shouldBe messages.HowBecameOwner.bought
+        result.data shouldBe "calc.howBecameOwner.bought"
       }
     }
 
@@ -277,7 +277,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
       lazy val result = PurchaseDetailsConstructor.howBecameOwnerRow(totalGainInherited).get
 
       "have the value of Inherited" in {
-        result.data shouldBe messages.HowBecameOwner.inherited
+        result.data shouldBe "calc.howBecameOwner.inherited"
       }
     }
   }
@@ -308,7 +308,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
       }
 
       "have the question for bought for less" in {
-        assertExpectedResult[QuestionAnswerModel[Boolean]](result)(_.question shouldBe messages.BoughtForLess.question)
+        assertExpectedResult[QuestionAnswerModel[Boolean]](result)(_.question shouldBe "calc.boughtForLess.question")
       }
 
       "have a link to the bought for less page" in {
@@ -344,7 +344,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
       }
 
       "have the question for worth when gifted to" in {
-        result.question shouldBe messages.WorthWhenGiftedTo.question
+        result.question shouldBe "calc.worthWhenGiftedTo.question"
       }
 
       "have a link to the acquisition date page" in {
@@ -364,7 +364,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
       lazy val result = PurchaseDetailsConstructor.acquisitionValueRow(totalGainSold, useWorthBeforeLegislationStart = false).get
 
       "have the question for acquisition value" in {
-        result.question shouldBe messages.AcquisitionValue.question
+        result.question shouldBe "calc.acquisitionValue.question"
       }
     }
 
@@ -372,7 +372,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
       lazy val result = PurchaseDetailsConstructor.acquisitionValueRow(totalGainInherited, useWorthBeforeLegislationStart = false).get
 
       "have the question for worth when inherited" in {
-        result.question shouldBe messages.WorthWhenInherited.question
+        result.question shouldBe "calc.worthWhenInherited.question"
       }
     }
 
@@ -380,7 +380,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
       lazy val result = PurchaseDetailsConstructor.acquisitionValueRow(totalGainSold, useWorthBeforeLegislationStart = true).get
 
       "have the question for worth before legislation start" in {
-        result.question shouldBe messages.WorthBeforeLegislationStart.question
+        result.question shouldBe "calc.worthBeforeLegislationStart.question"
       }
     }
 
@@ -388,7 +388,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
       lazy val result = PurchaseDetailsConstructor.acquisitionValueRow(totalGainForLess, useWorthBeforeLegislationStart = false).get
 
       "have the question for market value when bought for less" in {
-        result.question shouldBe messages.WorthWhenBoughtForLess.question
+        result.question shouldBe "calc.worthWhenBoughtForLess.question"
       }
     }
   }
@@ -407,7 +407,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
       }
 
       "have the question for acquisition value" in {
-        result.question shouldBe messages.AcquisitionCosts.question
+        result.question shouldBe "calc.acquisitionCosts.question"
       }
 
       "have a link to the acquisition date page" in {
@@ -451,7 +451,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
       }
 
       "have the question for rebased value" in {
-        assertExpectedResult[QuestionAnswerModel[BigDecimal]](result)(_.question shouldBe messages.RebasedValue.question)
+        assertExpectedResult[QuestionAnswerModel[BigDecimal]](result)(_.question shouldBe "calc.nonResident.rebasedValue.questionAndDate")
       }
 
       "have a link to the rebased value page" in {
@@ -503,7 +503,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
       }
 
       "have the question for rebased costs" in {
-        assertExpectedResult[QuestionAnswerModel[String]](result)(_.question shouldBe messages.RebasedCosts.question)
+        assertExpectedResult[QuestionAnswerModel[String]](result)(_.question shouldBe "calc.rebasedCosts.question")
       }
 
       "have a link to the rebased costs page" in {
@@ -547,7 +547,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
       }
 
       "have the question for rebased costs" in {
-        assertExpectedResult[QuestionAnswerModel[BigDecimal]](result)(_.question shouldBe messages.RebasedCosts.inputQuestion)
+        assertExpectedResult[QuestionAnswerModel[BigDecimal]](result)(_.question shouldBe "calc.rebasedCosts.questionTwo")
       }
 
       "have a link to the rebased costs page" in {
@@ -590,7 +590,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
       }
 
       s"have the question ${messages.CostsAtLegislationStart.title}" in {
-        result.question shouldBe messages.CostsAtLegislationStart.title
+        result.question shouldBe "calc.costsAtLegislationStart.title"
       }
 
       s"have a link to ${controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart().url}" in {
@@ -624,7 +624,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
       }
 
       s"have the question ${messages.CostsAtLegislationStart.howMuch}" in {
-        result.question shouldBe messages.CostsAtLegislationStart.howMuch
+        result.question shouldBe "calc.costsAtLegislationStart.howMuch"
       }
 
       s"have a link to ${controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart().url}" in {

@@ -124,7 +124,7 @@ class SalesDetailsConstructorSpec extends UnitSpec with WithFakeApplication with
       }
 
       "have the question for disposal date" in {
-        result.question shouldBe messages.DisposalDate.question
+        result.question shouldBe "calc.disposalDate.question"
       }
 
       "have a link to the disposal date page" in {
@@ -150,12 +150,12 @@ class SalesDetailsConstructorSpec extends UnitSpec with WithFakeApplication with
         result.id shouldBe "nr:soldOrGivenAway"
       }
 
-      s"have the data for '${messages.SoldOrGivenAway.gave}'" in {
-        result.data shouldBe messages.SoldOrGivenAway.gave
+      s"have the data for 'calc.soldOrGivenAway.gave'" in {
+        result.data shouldBe "calc.soldOrGivenAway.gave"
       }
 
       "have the question for sold or given away" in {
-        result.question shouldBe messages.SoldOrGivenAway.question
+        result.question shouldBe "calc.soldOrGivenAway.question"
       }
 
       "have a link to the sold or given away page" in {
@@ -170,12 +170,12 @@ class SalesDetailsConstructorSpec extends UnitSpec with WithFakeApplication with
         result.id shouldBe "nr:soldOrGivenAway"
       }
 
-      s"have the data for '${messages.SoldOrGivenAway.sold}'" in {
-        result.data shouldBe messages.SoldOrGivenAway.sold
+      s"have the data for 'calc.soldOrGivenAway.sold'" in {
+        result.data shouldBe "calc.soldOrGivenAway.sold"
       }
 
       "have the question for sold or given away" in {
-        result.question shouldBe messages.SoldOrGivenAway.question
+        result.question shouldBe "calc.soldOrGivenAway.question"
       }
 
       "have a link to the sold or given away page" in {
@@ -210,7 +210,7 @@ class SalesDetailsConstructorSpec extends UnitSpec with WithFakeApplication with
       }
 
       "have the question for sold for less page" in {
-        assertExpectedResult[QuestionAnswerModel[Boolean]](result)(_.question shouldBe messages.SoldForLess.question)
+        assertExpectedResult[QuestionAnswerModel[Boolean]](result)(_.question shouldBe "calc.nonResident.soldForLess.question")
       }
 
       "have a link to the sold for less page" in {
@@ -245,7 +245,7 @@ class SalesDetailsConstructorSpec extends UnitSpec with WithFakeApplication with
       }
 
       "have the question for market value gave away" in {
-        result.question shouldBe messages.MarketValue.disposalGaveAwayQuestion
+        result.question shouldBe "calc.marketValue.gaveItAway.question"
       }
 
       "have a link to the market value when gave away page" in {
@@ -261,7 +261,7 @@ class SalesDetailsConstructorSpec extends UnitSpec with WithFakeApplication with
       }
 
       "have the question for disposal value" in {
-        result.question shouldBe messages.DisposalValue.question
+        result.question shouldBe "calc.disposalValue.question"
       }
 
       "have a link to the disposal value page" in {
@@ -277,7 +277,7 @@ class SalesDetailsConstructorSpec extends UnitSpec with WithFakeApplication with
       }
 
       "have the question for market value sold" in {
-        result.question shouldBe messages.MarketValue.disposalSoldQuestion
+        result.question shouldBe "calc.marketValue.sold.question"
       }
 
       "have a link to the market value sold page" in {
@@ -300,7 +300,7 @@ class SalesDetailsConstructorSpec extends UnitSpec with WithFakeApplication with
       }
 
       "have the question for disposal costs" in {
-        result.question shouldBe messages.DisposalCosts.question
+        result.question shouldBe "calc.disposalCosts.question"
       }
 
       "have a link to the disposal costs page" in {
@@ -326,12 +326,12 @@ class SalesDetailsConstructorSpec extends UnitSpec with WithFakeApplication with
         result.id shouldBe "nr:whoDidYouGiveItTo"
       }
 
-      "have the data 'Someone else'" in {
-        result.data shouldBe "Someone else"
+      "have the data 'calc.whoDidYouGiveThePropertyTo.other'" in {
+        result.data shouldBe "calc.whoDidYouGiveThePropertyTo.other"
       }
 
       "have the question for who did you give it to" in {
-        result.question shouldBe MessageLookup.WhoDidYouGiveItTo.title
+        result.question shouldBe "calc.whoDidYouGiveThePropertyTo.title"
       }
 
       "have a link to who did you give it to page" in {
