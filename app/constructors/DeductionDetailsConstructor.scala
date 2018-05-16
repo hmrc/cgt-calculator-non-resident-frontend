@@ -19,9 +19,6 @@ package constructors
 import models._
 import common.{Dates, TaxDates}
 import common.KeystoreKeys.{NonResidentKeys => keys}
-import play.api.i18n.Messages
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 
 object DeductionDetailsConstructor {
 
@@ -106,8 +103,9 @@ object DeductionDetailsConstructor {
         Some(QuestionAnswerModel(
           s"${keys.privateResidenceRelief}-daysClaimed",
           value.toString(),
-          Messages("calc.privateResidenceRelief.questionFlat", Dates.dateMinusMonths(answers.disposalDateModel, 18)),
-          Some(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief().url)))
+          "calc.privateResidenceRelief.questionFlat",
+          Some(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief().url),
+          Dates.dateMinusMonths(answers.disposalDateModel, 18)))
       case _ => None
     }
   }
@@ -120,7 +118,7 @@ object DeductionDetailsConstructor {
         Some(QuestionAnswerModel(
           s"${keys.privateResidenceRelief}-daysClaimedAfter",
           value.toString(),
-         "calc.privateResidenceRelief.questionBetween.partOneAndTwo",
+         "calc.privateResidenceRelief.questionBetween",
           Some(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief().url),
           Dates.dateMinusMonths(answers.disposalDateModel, 18)
         ))
@@ -129,8 +127,9 @@ object DeductionDetailsConstructor {
         Some(QuestionAnswerModel(
           s"${keys.privateResidenceRelief}-daysClaimedAfter",
           value.toString(),
-          Messages("calc.privateResidenceRelief.questionBetween.partOneAndTwo", Dates.dateMinusMonths(answers.disposalDateModel, 18)),
-          Some(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief().url)
+          "calc.privateResidenceRelief.questionBetween",
+          Some(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief().url),
+          Dates.dateMinusMonths(answers.disposalDateModel, 18)
         ))
       case _ => None
     }

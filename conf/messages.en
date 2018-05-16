@@ -208,9 +208,7 @@ calc.marketValue.jointOwnership = If you owned the property with someone else, o
 
 ## Private Residence Relief ##
 calc.privateResidenceRelief.question = Are you claiming Private Residence Relief?
-calc.privateResidenceRelief.questionBetween.partOne = For how many days between 6 April 2015 and
-calc.privateResidenceRelief.questionBetween.partTwo = did you live in this property as your main home?
-calc.privateResidenceRelief.questionBetween.partOneAndTwo = For how many days between 6 April 2015 and {0} did you live in this property as your main home?
+calc.privateResidenceRelief.questionBetween = For how many days between 6 April 2015 and {0} did you live in this property as your main home?
 
 
 calc.privateResidenceRelief.firstQuestion = For how many days before 6 April 2015 did you live in this property as your main home?
@@ -226,7 +224,7 @@ calc.privateResidenceRelief.formHintExplanation = To work out your Private Resid
 calc.privateResidenceRelief.helpTextBeforeAfter = Why these specific dates?
 calc.privateResidenceRelief.helpTextJustBefore = Why this date?
 calc.privateResidenceRelief.helpTextSubTitle = These dates are important because:
-calc.privateResidenceRelief.daysBetweenHelpText = is the date you transferred the property minus 18 months (you automatically get Private Residence Relief for the last 18 months that you owned the property)
+calc.privateResidenceRelief.daysBetweenHelpText = {0} is the date you transferred the property minus 18 months (you automatically get Private Residence Relief for the last 18 months that you owned the property)
 calc.privateResidenceRelief.daysBeforeHelpText = 6 April 2015 is when the Capital Gains Tax rules for non-UK residents came into effect
 
 ## Previous Loss Or Gain ##

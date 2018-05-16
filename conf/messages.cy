@@ -109,7 +109,6 @@ calc.common.date.fields.year = Blwyddyn
 calc.common.date.hint = Er enghraifft, 4 9 2016
 calc.common.error.fieldRequired = Mae angen llenwi''r blwch hwn
 calc.common.error.mandatoryAmount = Nodwch swm
-calc.common.error.maxAmountExceeded = Nodwch swm sy''n £{0} neu lai
 calc.common.error.maxNumericExceeded = Nodwch swm sy''n £{0} neu lai
 calc.common.next.actions.heading = Yr hyn i''w wneud nesaf
 calc.common.readMore = Rhagor o wybodaeth
@@ -238,7 +237,7 @@ calc.previousLossOrGain.neither = Dim un (''dim enillion'')
 calc.previousLossOrGain.question = A wnaeth y gwarediadau hyn arwain at golledion neu enillion Treth Enillion Cyfalaf yn gyffredinol?
 
 calc.privateResidenceRelief.daysBeforeHelpText = 6 Ebrill 2015 yw pan ddaeth y rheolau Treth Enillion Cyfalaf ar gyfer rhai nad ydynt yn breswyl yn y DU i rym
-calc.privateResidenceRelief.daysBetweenHelpText = yw''r dyddiad y gwnaethoch drosglwyddo''r eiddo, llai 18 mis (byddwch yn cael Lwfans Preswylfan Preifat yn awtomatig am y 18 mis diwethaf yr oeddech yn berchen ar yr eiddo)
+calc.privateResidenceRelief.daysBetweenHelpText = {0} yw''r dyddiad y gwnaethoch drosglwyddo''r eiddo, llai 18 mis (byddwch yn cael Lwfans Preswylfan Preifat yn awtomatig am y 18 mis diwethaf yr oeddech yn berchen ar yr eiddo)
 calc.privateResidenceRelief.error.errorDecimalPlaces = Mae gormod o rifau ar ôl y pwynt degol yn nifer y diwrnodau rydych yn gwneud cais ar eu cyfer
 calc.privateResidenceRelief.error.errorNegative = Nodwch rif positif ar gyfer sawl diwrnod rydych yn gwneud cais ar eu cyfer
 calc.privateResidenceRelief.error.maxNumericExceeded = Nodwch rif ar gyfer sawl diwrnod rydych yn gwneud cais ar eu cyfer sy''n {0} neu lai
@@ -252,9 +251,7 @@ calc.privateResidenceRelief.helpTextJustBefore = Pam y dyddiad hwn?
 calc.privateResidenceRelief.helpTextSubTitle = Mae''r dyddiadau hyn yn bwysig oherwydd:
 calc.privateResidenceRelief.intro = Efallai y bydd gennych hawl i Ryddhad Preswylfan Preifat os ydych wedi byw yn yr eiddo fel eich prif gartref ar ryw adeg tra''ch bod yn berchen arno.
 calc.privateResidenceRelief.question = Ydych chi''n hawlio Rhyddhad Preswylfan Preifat?
-calc.privateResidenceRelief.questionBetween.partOne = Am sawl diwrnod rhwng 6 Ebrill 2015 a
-calc.privateResidenceRelief.questionBetween.partTwo = oeddech chi''n byw yn yr eiddo hwn fel eich prif gartref?
-calc.privateResidenceRelief.questionBetween.partOneAndTwo = Am sawl diwrnod rhwng 6 Ebrill 2015 a {0} oeddech chi''n byw yn yr eiddo hwn fel eich prif gartref?
+calc.privateResidenceRelief.questionBetween = Am sawl diwrnod rhwng 6 Ebrill 2015 a {0} oeddech chi''n byw yn yr eiddo hwn fel eich prif gartref?
 calc.privateResidenceRelief.questionFlat = Am sawl diwrnod cyn {0} oeddech chi''n byw yn yr eiddo hwn fel eich prif gartref?
 
 calc.propertyLivedIn.noSelectError = Rhowch wybod i ni a ydych wedi byw yn yr eiddo ar ryw adeg ers i chi ddod yn berchennog
