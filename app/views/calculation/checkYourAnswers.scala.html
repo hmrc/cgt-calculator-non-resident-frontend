@@ -49,7 +49,7 @@
                             case string: String => messages(checkIfBooleanAsString(string))
                             case int: Int => int.toString
                             case bigDecimal: BigDecimal => s"£${MoneyPounds(bigDecimal, 2).quantity}"
-                            case date: LocalDate => s"${date.getDayOfMonth} ${messages(localDateMonthKey(date.getMonthValue))} ${date.getYear}"
+                            case date: LocalDate => date.localFormat("d MMMM YYYY")
                             case boolean: Boolean => messages(booleanToMessageString(boolean))
                             case _ => ""
                             }}

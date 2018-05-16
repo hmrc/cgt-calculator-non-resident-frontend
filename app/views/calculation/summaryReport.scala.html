@@ -19,15 +19,16 @@
 @import models._
 @import uk.gov.hmrc.play.views.helpers.MoneyPounds
 @import constructors.OtherReliefsDetailsConstructor
-@import common.Transformers.booleanToMessageString
+@import common.Transformers.{booleanToMessageString, checkIfBooleanAsString}
 @import common.Dates._
+@import common.Dates.TemplateImplicits._
 @import java.time._
 @import views.html.helpers._
 @import play.api.Application
 
 @(questions: Seq[QuestionAnswerModel[Any]],
 calculationResult: TotalTaxOwedModel, taxYearModel: TaxYearModel, calculationType: String,
-disposalValue: BigDecimal, acquisitionValue: BigDecimal, totalCosts: BigDecimal, flatGain: Option[BigDecimal] = None, reliefsUsed: BigDecimal = 0)(implicit request: Request[_], messages: Messages, application: Application)
+disposalValue: BigDecimal, acquisitionValue: BigDecimal, totalCosts: BigDecimal, flatGain: Option[BigDecimal] = None, reliefsUsed: BigDecimal = 0)(implicit request: Request[_], messages: Messages, lang: Lang, application: Application)
 
 <!DOCTYPE html>
 <html>
@@ -36,7 +37,7 @@ disposalValue: BigDecimal, acquisitionValue: BigDecimal, totalCosts: BigDecimal,
     <meta name="viewport" content="width=device-width"/>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" type="text/css" href="/calculate-your-capital-gains/non-resident/assets/stylesheets/cgt1.css">
-    <title>@Messages("calc.summary.title")</title>
+    <title>@messages("calc.summary.title")</title>
 </head>
 
 <div class="pdf pdf-non-resident">
@@ -46,13 +47,13 @@ disposalValue: BigDecimal, acquisitionValue: BigDecimal, totalCosts: BigDecimal,
                 <span class="govuk-logo-text">GOV.UK</span>
             </span>
             <span class="calculate-your-cgt">
-            @Messages("calc.report.title")
+            @messages("calc.report.title")
             </span>
         </div>
 
         <div class="logo">
             <span class="organisation-logo organisation-logo-medium">
-                <span class="organisation-logo-text">@Messages("calc.report.logoText")</span>
+                <span class="organisation-logo-text">@messages("calc.report.logoText")</span>
             </span>
         </div>
     </span>
@@ -63,20 +64,20 @@ disposalValue: BigDecimal, acquisitionValue: BigDecimal, totalCosts: BigDecimal,
     </div>
 
     <div class="check-your-answers-report">
-        <h2>@Messages("calc.checkYourAnswers.tableHeading")</h2>
+        <h2>@messages("calc.checkYourAnswers.tableHeading")</h2>
 
         @questions.map { question =>
             <div id="@question.id" class="grid-layout report-answer-row grid-layout--stacked summary-underline">
                 <div id="@{question.id}-question" class="grid-layout__column grid-layout__column--1-2">
-                    @question.question
+                    @messages(question.question, question.oDate.map(_.localFormat("d MMMM YYYY")).getOrElse(""))
                 </div>
                 <div id="@{question.id}-amount" class="grid-layout__column grid-layout__column--1-3 text--right">
                     @{question.data match {
-                        case string: String => string
+                        case string: String => messages(checkIfBooleanAsString(string))
                         case int: Int => int.toString
                         case bigDecimal: BigDecimal => s"£${MoneyPounds(bigDecimal, 2).quantity}"
-                        case date: LocalDate => datePageFormatNoZero.format(date)
-                        case boolean: Boolean => booleanToMessageString(boolean)
+                        case date: LocalDate => date.localFormat("d MMMM YYYY")
+                        case boolean: Boolean => messages(booleanToMessageString(boolean))
                         case _ => ""
                     }}
                 </div>
