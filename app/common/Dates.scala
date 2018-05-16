@@ -39,10 +39,6 @@ object Dates {
       //.format(datePageFormatNoZero)
   }
 
-  def localDateToTranslatedString(date: Option[LocalDate])(implicit messages: Messages): String = date.fold(""){
-    date => s"${date.getDayOfMonth} ${Messages(Transformers.localDateMonthKey(date.getMonthValue))} ${date.getYear}"
-  }
-
   def getDay(date: LocalDate): Int = date.getDayOfMonth
 
   def getMonth(date: LocalDate): Int = date.getMonthValue
