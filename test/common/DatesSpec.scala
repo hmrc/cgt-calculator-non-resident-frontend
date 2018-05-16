@@ -16,12 +16,16 @@
 
 package common
 
-import uk.gov.hmrc.play.test.UnitSpec
+import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import java.time.LocalDate
-import common.Dates.formatter
+
+import common.Dates.{TemplateImplicits, formatter}
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
+import play.api.i18n.Lang
 import play.api.libs.concurrent.Execution.Implicits._
 
-class DatesSpec extends UnitSpec {
+class DatesSpec extends UnitSpec with WithFakeApplication {
 
   "Calling constructDate method" should {
 
@@ -89,6 +93,24 @@ class DatesSpec extends UnitSpec {
 
     "when called with 1999/4/5 return 1999 to 2000" in {
       Dates.taxYearOfDateLongHand(LocalDate.of(1999, 4, 5)) shouldBe "1998 to 1999"
+    }
+  }
+
+  "localFormat" should {
+    import TemplateImplicits._
+    "format an English date" in {
+      val date = LocalDate.of(2018, 3, 19)
+      date.localFormat("d MMMM YYYY") shouldBe "19 March 2018"
+    }
+    "format a Welsh date" in {
+      val date = LocalDate.of(2014, 11, 22)
+      implicit val lang: Lang = Lang("cy")
+      date.localFormat("d MMMM YYYY") shouldBe "22 Tachwedd 2014"
+    }
+    "format a Spanish date" in {
+      val date = LocalDate.of(1999, 1, 12)
+      implicit val lang: Lang = Lang("es")
+      date.localFormat("d MMMM YYYY") shouldBe "12 enero 1999"
     }
   }
 }
