@@ -29,9 +29,12 @@ import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import views.html.calculation
 import controllers.utils.RecoverableFuture
+import play.api.Logger
 
 import scala.concurrent.Future
 import uk.gov.hmrc.http.HeaderCarrier
+
+import scala.util.Random
 
 object SummaryController extends SummaryController {
   val calcConnector = CalculatorConnector
@@ -93,6 +96,8 @@ trait SummaryController extends FrontendController with ValidActiveSession {
       }
     }
 
+    val showUserResearchPanel = setURPanelFlag
+
     (for {
       answers <- answersConstructor.getNRTotalGainAnswers(hc)
       totalGainResultsModel <- calcConnector.calculateTotalGain(answers)
@@ -117,7 +122,8 @@ trait SummaryController extends FrontendController with ValidActiveSession {
             answers.acquisitionValueModel.acquisitionValueAmt,
             totalCosts,
             backUrl,
-            reliefsUsed = calculationResult.prrUsed.getOrElse(BigDecimal(0)) + calculationResult.otherReliefsUsed.getOrElse(BigDecimal(0)))
+            reliefsUsed = calculationResult.prrUsed.getOrElse(BigDecimal(0)) + calculationResult.otherReliefsUsed.getOrElse(BigDecimal(0)),
+            showUserResearchPanel = showUserResearchPanel)
           )
         case CalculationType.timeApportioned =>
           Ok(calculation.summary(calculationResult, taxYearModel.get, calculationType.get.calculationType,
@@ -125,7 +131,8 @@ trait SummaryController extends FrontendController with ValidActiveSession {
             answers.acquisitionValueModel.acquisitionValueAmt,
             totalCosts,
             backUrl, Some(finalResult.get.flatResult.totalGain),
-            reliefsUsed = calculationResult.prrUsed.getOrElse(BigDecimal(0)) + calculationResult.otherReliefsUsed.getOrElse(BigDecimal(0)))
+            reliefsUsed = calculationResult.prrUsed.getOrElse(BigDecimal(0)) + calculationResult.otherReliefsUsed.getOrElse(BigDecimal(0)),
+            showUserResearchPanel = showUserResearchPanel)
           )
         case CalculationType.rebased =>
           Ok(calculation.summary(calculationResult, taxYearModel.get, calculationType.get.calculationType,
@@ -133,10 +140,27 @@ trait SummaryController extends FrontendController with ValidActiveSession {
             answers.rebasedValueModel.get.rebasedValueAmt,
             totalCosts,
             backUrl, None,
-            reliefsUsed = calculationResult.prrUsed.getOrElse(BigDecimal(0)) + calculationResult.otherReliefsUsed.getOrElse(BigDecimal(0)))
+            reliefsUsed = calculationResult.prrUsed.getOrElse(BigDecimal(0)) + calculationResult.otherReliefsUsed.getOrElse(BigDecimal(0)),
+            showUserResearchPanel = showUserResearchPanel)
           )
       }
     }).recoverToStart
+  }
+
+  private[controllers] def setURPanelFlag(implicit hc: HeaderCarrier): Boolean = {
+    val random = new Random()
+    val seed = getLongFromSessionID(hc)
+    random.setSeed(seed)
+    random.nextInt(3) == 0
+  }
+
+  private[controllers] def getLongFromSessionID(hc: HeaderCarrier): Long = {
+    val session = hc.sessionId.map(_.value).getOrElse("0")
+    val numericSessionValues = session.replaceAll("[^0-9]", "") match {
+      case "" => "0"
+      case num => num
+    }
+    numericSessionValues.takeRight(10).toLong
   }
 
   def restart(): Action[AnyContent] = Action.async { implicit request =>

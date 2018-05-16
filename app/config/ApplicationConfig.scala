@@ -29,6 +29,7 @@ trait AppConfig {
   val reportAProblemNonJSUrl: String
   val nrIFormLink: String
   val govUkLink: String
+  val urBannerLink: String
 }
 
 object ApplicationConfig extends AppConfig with ServicesConfig {
@@ -50,4 +51,5 @@ object ApplicationConfig extends AppConfig with ServicesConfig {
 
   override val nrIFormLink: String = loadConfig("links.non-resident-iForm")
   override val govUkLink: String = loadConfig("links.gov-uk")
+  override val urBannerLink = "https://signup.take-part-in-research.service.gov.uk/?utm_campaign=CGT_non_resident_summary&utm_source=Survey_Banner&utm_medium=other&t=HMRC&id=116"
 }

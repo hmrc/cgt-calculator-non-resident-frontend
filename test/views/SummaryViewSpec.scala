@@ -16,6 +16,7 @@
 
 package views
 
+import assets.MessageLookup.NonResident.Summary
 import assets.MessageLookup.{NonResident => messages}
 import controllers.helpers.FakeRequestHelper
 import models.{QuestionAnswerModel, TaxYearModel, TotalTaxOwedModel}
@@ -32,7 +33,7 @@ class SummaryViewSpec extends UnitSpec with WithFakeApplication with FakeRequest
     "supplied with a disposal date within the valid tax years" should {
       val totalTaxOwedModel = TotalTaxOwedModel(100000, 500, 20, None, None, 500, 500, None, None, None, None, 0, None, None, None, None, None, None, None)
       val taxYearModel: TaxYearModel = TaxYearModel("2016/17", isValidYear = true, "2016/17")
-      lazy val view = summary(totalTaxOwedModel, taxYearModel, "flat", 1000.0, 100, 100, "back-link")
+      lazy val view = summary(totalTaxOwedModel, taxYearModel, "flat", 1000.0, 100, 100, "back-link", showUserResearchPanel = false)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${messages.Summary.title}'" in {
@@ -98,17 +99,36 @@ class SummaryViewSpec extends UnitSpec with WithFakeApplication with FakeRequest
           continue.attr("href") shouldBe controllers.routes.WhatNextController.whatNext().url
         }
       }
+
+      "does not have ur panel" in {
+        document.select("div#ur-panel").size() shouldBe 0
+      }
     }
 
     "supplied with a disposal date not within the valid tax years" should {
       val totalTaxOwedModel = TotalTaxOwedModel(500, 500, 20, None, None, 500, 500, None, None, None, None, 0, None, None, None, None, None, None, None)
       val taxYearModel: TaxYearModel = TaxYearModel("2018/19", isValidYear = false, "2017/18")
-      lazy val view = summary(totalTaxOwedModel, taxYearModel, "flat", 1000.0, 100, 100, "back-url")
+      lazy val view = summary(totalTaxOwedModel, taxYearModel, "flat", 1000.0, 100, 100, "back-url", showUserResearchPanel = true)
       lazy val document = Jsoup.parse(view.body)
 
       "display a tax year warning" in {
         document.select("div.notice-wrapper").size() shouldBe 1
       }
+
+      "does have ur panel" in {
+        document.select("div#ur-panel").size() shouldBe 1
+
+        document.select(".banner-panel__close").size() shouldBe 1
+        document.select(".banner-panel__title").text() shouldBe messages.Summary.bannerPanelTitle
+
+        document.select("section > a").first().attr("href") shouldBe messages.Summary.bannerPanelLinkURL
+        document.select("section > a").first().text() shouldBe messages.Summary.bannerPanelLinkText
+
+        document.select("a > span").first().text() shouldBe Summary.bannerPanelCloseVisibleText
+        document.select("a > span").eq(1).text() shouldBe Summary.bannerPanelCloseHiddenText
+
+      }
+
     }
   }
 }
