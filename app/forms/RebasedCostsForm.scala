@@ -21,11 +21,7 @@ import common.Validation._
 import models.RebasedCostsModel
 import play.api.data.Forms._
 import play.api.data._
-import play.api.i18n.Messages
-import uk.gov.hmrc.play.views.helpers.MoneyPounds
 import common.Transformers._
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 
 object RebasedCostsForm {
 
@@ -50,28 +46,24 @@ object RebasedCostsForm {
     }
   }
 
-  def validateMax(data: RebasedCostsModel): Boolean = {
-    data.hasRebasedCosts match {
-      case "Yes" => maxCheck(data.rebasedCosts.getOrElse(0))
-      case "No" => true
-    }
+  private def extractRebasedCosts(model: RebasedCostsModel): Option[BigDecimal] = {
+    if(model.hasRebasedCosts == "Yes") model.rebasedCosts else None
   }
 
   val rebasedCostsForm = Form(
     mapping(
       "hasRebasedCosts" -> text
-        .verifying(Messages("calc.common.error.fieldRequired"), mandatoryCheck)
-        .verifying(Messages("calc.common.error.fieldRequired"), yesNoCheck),
+        .verifying("calc.common.error.fieldRequired", mandatoryCheck)
+        .verifying("calc.common.error.fieldRequired", yesNoCheck),
       "rebasedCosts" -> text
         .transform(stringToOptionalBigDecimal, optionalBigDecimalToString)
     )(RebasedCostsModel.apply)(RebasedCostsModel.unapply)
-      .verifying(Messages("calc.rebasedCosts.error.no.value.supplied"),
+      .verifying("calc.rebasedCosts.error.no.value.supplied",
         rebasedCostsForm => verifyAmountSupplied(RebasedCostsModel(rebasedCostsForm.hasRebasedCosts, rebasedCostsForm.rebasedCosts)))
-      .verifying(Messages("calc.rebasedCosts.errorNegative"),
+      .verifying("calc.rebasedCosts.errorNegative",
         rebasedCostsForm => verifyPositive(rebasedCostsForm))
-      .verifying(Messages("calc.rebasedCosts.errorDecimalPlaces"),
+      .verifying("calc.rebasedCosts.errorDecimalPlaces",
         rebasedCostsForm => verifyTwoDecimalPlaces(rebasedCostsForm))
-      .verifying(Messages("calc.common.error.maxNumericExceeded") + MoneyPounds(Constants.maxNumeric, 0).quantity + " " + Messages("calc.common.error.maxNumericExceeded.OrLess"),
-        rebasedValueForm => validateMax(rebasedValueForm))
+      .verifying(maxMonetaryValueConstraint[RebasedCostsModel](Constants.maxNumeric, extractRebasedCosts))
   )
 }

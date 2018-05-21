@@ -49,7 +49,7 @@
 
 @headerNavLinks = {
   <li><a id="homeNavHref" href="@common.DefaultRoutes.homeUrl"
-         data-journey-click="primary-navigation:Click:Home">Home</a></li>
+         data-journey-click="primary-navigation:Click:Home">@messages("calc.base.home")</a></li>
 }
 
 @insideHeader = {
@@ -99,3 +99,12 @@
 }
 
 @hmrcGovUkTemplate(Some(title), bodyClasses)(head, bodyEnd, insideHeader, afterHeader, footerTop, Some(uiLayouts.footer_links()), true)(content)
+
+@isWelsh = @{
+    if(messages.lang.code == "cy"){
+      true
+    }
+    else {
+      false
+    }
+}

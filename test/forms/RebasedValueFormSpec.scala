@@ -16,8 +16,8 @@
 
 package forms
 
-import assets.MessageLookup.NonResident.{RebasedValue => messages}
-import assets.MessageLookup.{NonResident => commonMessages}
+import assets.KeyLookup.NonResident.{RebasedValue => messages}
+import assets.KeyLookup.{NonResident => commonMessages}
 import models.RebasedValueModel
 import forms.RebasedValueForm._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
@@ -81,8 +81,8 @@ class RebasedValueFormSpec extends UnitSpec with WithFakeApplication {
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of ${commonMessages.errorRealNumber}" in {
-        form.error("rebasedValueAmt").get.message shouldBe commonMessages.errorRealNumber
+      s"return an error message of ${commonMessages.numericPlayErrorOverride}" in {
+        form.error("rebasedValueAmt").get.message shouldBe commonMessages.numericPlayErrorOverride
       }
     }
 
@@ -126,8 +126,9 @@ class RebasedValueFormSpec extends UnitSpec with WithFakeApplication {
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of ${messages.errorMaximum("1,000,000,000")}" in {
-        form.error("rebasedValueAmt").get.message shouldBe messages.errorMaximum("1,000,000,000")
+      s"return the correct error message" in {
+        form.error("rebasedValueAmt").get.message shouldBe "calc.common.error.maxNumericExceeded"
+        form.error("rebasedValueAmt").get.args shouldBe Array("1,000,000,000")
       }
     }
 

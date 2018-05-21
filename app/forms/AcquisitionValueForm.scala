@@ -21,24 +21,20 @@ import common.Validation._
 import models.AcquisitionValueModel
 import play.api.data.Forms._
 import play.api.data._
-import play.api.i18n.Messages
 import uk.gov.hmrc.play.views.helpers.MoneyPounds
 import common.Transformers._
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 
 object AcquisitionValueForm {
 
   val acquisitionValueForm = Form(
     mapping(
       "acquisitionValue" -> text
-        .verifying(Messages("calc.common.error.mandatoryAmount"), mandatoryCheck)
-        .verifying(Messages("calc.common.error.mandatoryAmount"), bigDecimalCheck)
+        .verifying("calc.common.error.mandatoryAmount", mandatoryCheck)
+        .verifying("calc.common.error.mandatoryAmount", bigDecimalCheck)
         .transform(stringToBigDecimal, bigDecimalToString)
-        .verifying(Messages("calc.acquisitionValue.errorNegative"), isPositive)
-        .verifying(Messages("calc.acquisitionValue.errorDecimalPlaces"), decimalPlacesCheck)
-        .verifying(Messages("calc.common.error.maxNumericExceeded") + MoneyPounds(Constants.maxNumeric, 0).quantity + " " +
-          Messages("calc.common.error.maxNumericExceeded.OrLess"), maxCheck)
+        .verifying("calc.acquisitionValue.errorNegative", isPositive)
+        .verifying("calc.acquisitionValue.errorDecimalPlaces", decimalPlacesCheck)
+        .verifying(maxMonetaryValueConstraint(Constants.maxNumeric))
     )(AcquisitionValueModel.apply)(AcquisitionValueModel.unapply)
   )
 }

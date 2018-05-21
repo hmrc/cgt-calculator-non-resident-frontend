@@ -107,9 +107,9 @@ class PersonalAndPreviousDetailsConstructorSpec extends UnitSpec with WithFakeAp
         }
       }
 
-      s"return a question of ${messages.CurrentIncome.question}" in {
+      s"return a question of 'calc.currentIncome.question'" in {
         result.fold(cancel("expected result not computed")) { item =>
-          item.question shouldBe messages.CurrentIncome.question
+          item.question shouldBe "calc.currentIncome.question"
         }
       }
 
@@ -146,9 +146,9 @@ class PersonalAndPreviousDetailsConstructorSpec extends UnitSpec with WithFakeAp
         }
       }
 
-      s"return a question of ${messages.PersonalAllowance.question}" in {
+      s"return a question of 'calc.personalAllowance.question'" in {
         result.fold(cancel("expected result not computed")) { item =>
-          item.question shouldBe messages.PersonalAllowance.question
+          item.question shouldBe "calc.personalAllowance.question"
         }
       }
 
@@ -194,9 +194,9 @@ class PersonalAndPreviousDetailsConstructorSpec extends UnitSpec with WithFakeAp
         }
       }
 
-      s"return a question of ${messages.OtherProperties.question}" in {
+      s"return a question of 'calc.otherProperties.question'" in {
         result.fold(cancel("expected result not computed")) { item =>
-          item.question shouldBe messages.OtherProperties.question
+          item.question shouldBe "calc.otherProperties.question"
         }
       }
 
@@ -229,9 +229,9 @@ class PersonalAndPreviousDetailsConstructorSpec extends UnitSpec with WithFakeAp
         }
       }
 
-      s"return a question of ${messages.OtherProperties.question}" in {
+      s"return a question of 'calc.otherProperties.question'" in {
         result.fold(cancel("expected result not computed")) { item =>
-          item.question shouldBe messages.OtherProperties.question
+          item.question shouldBe "calc.otherProperties.question"
         }
       }
 
@@ -269,15 +269,15 @@ class PersonalAndPreviousDetailsConstructorSpec extends UnitSpec with WithFakeAp
         }
       }
 
-      s"return a question of ${messages.PreviousLossOrGain.question}" in {
+      s"return a question of 'calc.previousLossOrGain.question'" in {
         result.fold(cancel("expected result not computed")) { item =>
-          item.question shouldBe messages.PreviousLossOrGain.question
+          item.question shouldBe "calc.previousLossOrGain.question"
         }
       }
 
       s"return the correct answer" in {
         result.fold(cancel("expected result not computed")) { item =>
-          item.data shouldBe PreviousGainOrLossKeys.loss
+          item.data shouldBe "calc.previousLossOrGain.loss"
         }
       }
 
@@ -306,15 +306,15 @@ class PersonalAndPreviousDetailsConstructorSpec extends UnitSpec with WithFakeAp
         }
       }
 
-      s"return a question of ${messages.PreviousLossOrGain.question}" in {
+      s"return a question of 'calc.previousLossOrGain.question'" in {
         result.fold(cancel("expected result not computed")) { item =>
-          item.question shouldBe messages.PreviousLossOrGain.question
+          item.question shouldBe "calc.previousLossOrGain.question"
         }
       }
 
       s"return the correct answer" in {
         result.fold(cancel("expected result not computed")) { item =>
-          item.data shouldBe PreviousGainOrLossKeys.gain
+          item.data shouldBe "calc.previousLossOrGain.gain"
         }
       }
 
@@ -343,15 +343,15 @@ class PersonalAndPreviousDetailsConstructorSpec extends UnitSpec with WithFakeAp
         }
       }
 
-      s"return a question of ${messages.PreviousLossOrGain.question}" in {
+      s"return a question of 'calc.previousLossOrGain.question'" in {
         result.fold(cancel("expected result not computed")) { item =>
-          item.question shouldBe messages.PreviousLossOrGain.question
+          item.question shouldBe "calc.previousLossOrGain.question"
         }
       }
 
       s"return the correct answer" in {
         result.fold(cancel("expected result not computed")) { item =>
-          item.data shouldBe messages.PreviousLossOrGain.neither
+          item.data shouldBe "calc.previousLossOrGain.neither"
         }
       }
 
@@ -395,9 +395,9 @@ class PersonalAndPreviousDetailsConstructorSpec extends UnitSpec with WithFakeAp
         }
       }
 
-      s"return a question of ${messages.HowMuchLoss.question}" in {
+      s"return a question of 'calc.howMuchLoss.question'" in {
         result.fold(cancel("expected result not computed")) { item =>
-          item.question shouldBe messages.HowMuchLoss.question
+          item.question shouldBe "calc.howMuchLoss.question"
         }
       }
 
@@ -460,9 +460,9 @@ class PersonalAndPreviousDetailsConstructorSpec extends UnitSpec with WithFakeAp
         }
       }
 
-      s"return a question of ${messages.HowMuchGain.question}" in {
+      s"return a question of 'calc.howMuchGain.question'" in {
         result.fold(cancel("expected result not computed")) { item =>
-          item.question shouldBe messages.HowMuchGain.question
+          item.question shouldBe "calc.howMuchGain.question"
         }
       }
 
@@ -527,9 +527,9 @@ class PersonalAndPreviousDetailsConstructorSpec extends UnitSpec with WithFakeAp
         }
       }
 
-      s"return a question of ${messages.AnnualExemptAmount.question}" in {
+      s"return a question of 'calc.annualExemptAmount.question'" in {
         result.fold(cancel("expected result not computed")) { item =>
-          item.question shouldBe messages.AnnualExemptAmount.question
+          item.question shouldBe "calc.annualExemptAmount.question"
         }
       }
 
@@ -567,9 +567,9 @@ class PersonalAndPreviousDetailsConstructorSpec extends UnitSpec with WithFakeAp
         }
       }
 
-      s"return a question of ${messages.AnnualExemptAmount.question}" in {
+      s"return a question of 'calc.annualExemptAmount.question'" in {
         result.fold(cancel("expected result not computed")) { item =>
-          item.question shouldBe messages.AnnualExemptAmount.question
+          item.question shouldBe "calc.annualExemptAmount.question"
         }
       }
 
@@ -607,9 +607,9 @@ class PersonalAndPreviousDetailsConstructorSpec extends UnitSpec with WithFakeAp
         }
       }
 
-      s"return a question of ${messages.AnnualExemptAmount.question}" in {
+      s"return a question of 'calc.annualExemptAmount.question'" in {
         result.fold(cancel("expected result not computed")) { item =>
-          item.question shouldBe messages.AnnualExemptAmount.question
+          item.question shouldBe "calc.annualExemptAmount.question"
         }
       }
 
@@ -659,9 +659,9 @@ class PersonalAndPreviousDetailsConstructorSpec extends UnitSpec with WithFakeAp
         }
       }
 
-      s"return a question of ${messages.BroughtForwardLosses.question}" in {
+      s"return a question of 'calc.broughtForwardLosses.question'" in {
         result.fold(cancel("expected result not computed")) { item =>
-          item.question shouldBe messages.BroughtForwardLosses.question
+          item.question shouldBe "calc.broughtForwardLosses.question"
         }
       }
 
@@ -694,9 +694,9 @@ class PersonalAndPreviousDetailsConstructorSpec extends UnitSpec with WithFakeAp
         }
       }
 
-      s"return a question of ${messages.BroughtForwardLosses.question}" in {
+      s"return a question of 'calc.broughtForwardLosses.question'" in {
         result.fold(cancel("expected result not computed")) { item =>
-          item.question shouldBe messages.BroughtForwardLosses.question
+          item.question shouldBe "calc.broughtForwardLosses.question"
         }
       }
 
@@ -732,9 +732,9 @@ class PersonalAndPreviousDetailsConstructorSpec extends UnitSpec with WithFakeAp
         }
       }
 
-      s"return a question of ${messages.BroughtForwardLosses.inputQuestion}" in {
+      s"return a question of 'calc.broughtForwardLosses.inputQuestion'" in {
         result.fold(cancel("expected result not computed")) { item =>
-          item.question shouldBe messages.BroughtForwardLosses.inputQuestion
+          item.question shouldBe "calc.broughtForwardLosses.inputQuestion"
         }
       }
 

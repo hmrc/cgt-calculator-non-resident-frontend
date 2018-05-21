@@ -16,7 +16,7 @@
 
 package forms
 
-import assets.MessageLookup.{NonResident => messages}
+import assets.KeyLookup.{NonResident => messages}
 import models.PersonalAllowanceModel
 import forms.PersonalAllowanceForm._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
@@ -119,10 +119,9 @@ class PersonalAllowanceFormSpec extends UnitSpec with WithFakeApplication {
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of " +
-        s"'${messages.PersonalAllowance.errorMaxLimit}${MoneyPounds(11000, 0).quantity} ${messages.PersonalAllowance.errorMaxLimitEnd}" in {
-        form.error("personalAllowance").get.message shouldBe
-          s"${messages.PersonalAllowance.errorMaxLimit}${MoneyPounds(11000, 0).quantity} ${messages.PersonalAllowance.errorMaxLimitEnd}"
+      s"return the correct error message" in {
+        form.error("personalAllowance").get.message shouldBe "calc.personalAllowance.errorMaxLimit"
+        form.error("personalAllowance").get.args shouldBe Array("11,000")
       }
     }
   }

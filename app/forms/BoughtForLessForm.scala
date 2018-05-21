@@ -21,9 +21,6 @@ import common.Validation._
 import models.BoughtForLessModel
 import play.api.data.Forms._
 import play.api.data._
-import play.api.i18n.Messages
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 
 object BoughtForLessForm {
 
@@ -31,8 +28,8 @@ object BoughtForLessForm {
     Form(
       mapping(
         "boughtForLess" -> text
-          .verifying(Messages("error.required"), mandatoryCheck)
-          .verifying(Messages("error.required"), yesNoCheck)
+          .verifying("calc.common.error.fieldRequired", mandatoryCheck)
+          .verifying("calc.common.error.fieldRequired", yesNoCheck)
           .transform(stringToBoolean, booleanToString)
       )(BoughtForLessModel.apply)(BoughtForLessModel.unapply)
     )

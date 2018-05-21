@@ -280,16 +280,16 @@ class CalculationElectionConstructorSpec extends UnitSpec with MockitoSugar with
         model.amount shouldBe BigDecimal(1000.00)
       }
 
-      s"has a message of '${messages.rebased}'" in {
-        model.message shouldBe messages.rebased
+      s"has a message of 'calc.calculationElection.message.rebased'" in {
+        model.message shouldBe "calc.calculationElection.message.rebased"
       }
 
-      s"has a calcDescription of '${messages.rebasedDescription}" in {
-        model.calcDescription shouldBe messages.rebasedDescription
+      s"has a calcDescription of 'calc.calculationElection.description.rebased'" in {
+        model.calcDescription shouldBe "calc.calculationElection.description.rebased"
       }
 
-      s"has a date of ${messages.taxStartDate}" in {
-        model.date shouldBe Some(messages.taxStartDate)
+      s"has a date of 'calc.calculationElection.message.rebasedDate'" in {
+        model.date shouldBe Some("calc.calculationElection.message.rebasedDate")
       }
 
       "has some data as a string of 'data'" in {
@@ -315,12 +315,12 @@ class CalculationElectionConstructorSpec extends UnitSpec with MockitoSugar with
         model.amount shouldBe BigDecimal(1000.00)
       }
 
-      s"has a message of '${messages.flat}'" in {
-        model.message shouldBe messages.flat
+      s"has a message of 'calc.calculationElection.message.flat'" in {
+        model.message shouldBe "calc.calculationElection.message.flat"
       }
 
-      s"has a calcDescription of '${messages.flatDescription}" in {
-        model.calcDescription shouldBe messages.flatDescription
+      s"has a calcDescription of 'calc.calculationElection.description.flat'" in {
+        model.calcDescription shouldBe "calc.calculationElection.description.flat"
       }
 
       s"has no date" in {
@@ -350,16 +350,16 @@ class CalculationElectionConstructorSpec extends UnitSpec with MockitoSugar with
         model.amount shouldBe BigDecimal(1000.00)
       }
 
-      s"has a message of '${messages.timeApportioned}'" in {
-        model.message shouldBe messages.timeApportioned
+      s"has a message of 'calc.calculationElection.message.time'" in {
+        model.message shouldBe "calc.calculationElection.message.time"
       }
 
-      s"has a calcDescription of '${messages.timeApportionedDescription}" in {
-        model.calcDescription shouldBe messages.timeApportionedDescription
+      s"has a calcDescription of 'calc.calculationElection.description.time'" in {
+        model.calcDescription shouldBe "calc.calculationElection.description.time"
       }
 
-      s"has a date of ${messages.taxStartDate}" in {
-        model.date shouldBe Some(messages.taxStartDate)
+      s"has a date of 'calc.calculationElection.message.timeDate'" in {
+        model.date shouldBe Some("calc.calculationElection.message.timeDate")
       }
 
       "has some data as a string of 'data'" in {

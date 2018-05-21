@@ -16,7 +16,7 @@
 
 package forms
 
-import assets.MessageLookup.NonResident.{ClaimingReliefs => messages}
+import assets.KeyLookup.NonResident.{ClaimingReliefs => messages}
 import forms.ClaimingReliefsForm._
 import models.ClaimingReliefsModel
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}

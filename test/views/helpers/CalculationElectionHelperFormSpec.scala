@@ -45,7 +45,7 @@ class CalculationElectionHelperFormSpec extends UnitSpec with WithFakeApplicatio
         doc.select("label > div > span.bold-small").text shouldBe "£1,000.00"
       }
 
-      "has the message messages" in {
+      "has the message messages.en" in {
         doc.select("div.form-group > span > span").get(0).text shouldBe "messages"
       }
 

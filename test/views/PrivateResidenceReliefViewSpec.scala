@@ -16,6 +16,8 @@
 
 package views
 
+import java.time.LocalDate
+
 import assets.MessageLookup.{NonResident => messages}
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
@@ -27,6 +29,9 @@ import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 
 class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
+
+  private val testDate = LocalDate.of(2018, 2, 19)
+  private val testDateString = "19 February 2018"
 
   "Private Residence Relief view" when {
 
@@ -40,7 +45,7 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
             showAfter = true),
           daysBetweenShow = true,
           showFirstQuestion = true,
-          "date-input",
+          Some(testDate),
           showOnlyFlatQuestion = false)
         lazy val document = Jsoup.parse(view.body)
 
@@ -113,17 +118,17 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
           s"contains the questions ${messages.PrivateResidenceRelief.questionBefore}" in {
             hiddenContent.select("label").text() shouldBe messages.PrivateResidenceRelief.questionBefore + " " +
               s"${messages.PrivateResidenceRelief.questionBetween} " +
-              s"date-input ${messages.PrivateResidenceRelief.questionBetweenEnd}"
+              s"$testDateString ${messages.PrivateResidenceRelief.questionBetweenEnd}"
           }
 
           s"contains the label ${messages.PrivateResidenceRelief.questionBefore}" in {
             document.getElementsByTag("label").get(2).text() shouldBe messages.PrivateResidenceRelief.questionBefore
           }
 
-          s"contains the label ${messages.PrivateResidenceRelief.questionBetween} date-input " +
+          s"contains the label ${messages.PrivateResidenceRelief.questionBetween} $testDateString " +
             s"${messages.PrivateResidenceRelief.questionBetweenEnd}" in {
             document.getElementsByTag("label").get(3).text() shouldBe s"${messages.PrivateResidenceRelief.questionBetween} " +
-              s"date-input ${messages.PrivateResidenceRelief.questionBetweenEnd}"
+              s"$testDateString ${messages.PrivateResidenceRelief.questionBetweenEnd}"
           }
 
           "has an expandable help section" which {
@@ -142,8 +147,8 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
                 document.getElementsByTag("li").get(1).text() shouldBe messages.PrivateResidenceRelief.questionBeforeWhyThisDate
               }
 
-              s"has a bullet point with the text 'date-input ${messages.PrivateResidenceRelief.questionBeforeWhyThisDate}'" in {
-                document.getElementsByTag("li").get(2).text() shouldBe "date-input " + messages.PrivateResidenceRelief.questionBetweenWhyThisDate
+              s"has a bullet point with the text '$testDateString ${messages.PrivateResidenceRelief.questionBeforeWhyThisDate}'" in {
+                document.getElementsByTag("li").get(2).text() shouldBe s"$testDateString " + messages.PrivateResidenceRelief.questionBetweenWhyThisDate
               }
             }
           }
@@ -170,7 +175,7 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
             showAfter = false),
           daysBetweenShow = false,
           showFirstQuestion = true,
-          "date-input",
+          Some(testDate),
           showOnlyFlatQuestion = true)
         lazy val document = Jsoup.parse(view.body)
 
@@ -189,8 +194,8 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
           "contains an input with the id 'daysClaimed'" in {
             hiddenContent.select("input").attr("id") shouldBe "daysClaimed"
           }
-          s"contains the label ${messages.PrivateResidenceRelief.questionAcquisitionDateAfterStartDate("date-input")}" in {
-            document.getElementsByTag("label").get(2).text() shouldBe messages.PrivateResidenceRelief.questionAcquisitionDateAfterStartDate("date-input")
+          s"contains the label ${messages.PrivateResidenceRelief.questionAcquisitionDateAfterStartDate(testDateString)}" in {
+            document.getElementsByTag("label").get(2).text() shouldBe messages.PrivateResidenceRelief.questionAcquisitionDateAfterStartDate(testDateString)
           }
 
           "has an expandable help section" which {
@@ -199,8 +204,8 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
               hiddenContent.select("span.summary").text() shouldBe messages.PrivateResidenceRelief.helpTextJustBefore
             }
 
-            s"has form help text ${"date-input " + messages.PrivateResidenceRelief.questionBetweenWhyThisDate}" in {
-              hiddenContent.select("p#helpTextBetween").text() shouldBe "date-input " + messages.PrivateResidenceRelief.questionBetweenWhyThisDate
+            s"has form help text ${s"$testDateString " + messages.PrivateResidenceRelief.questionBetweenWhyThisDate}" in {
+              hiddenContent.select("p#helpTextBetween").text() shouldBe s"$testDateString " + messages.PrivateResidenceRelief.questionBetweenWhyThisDate
             }
           }
         }
@@ -214,7 +219,7 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
             showAfter = false),
           daysBetweenShow = false,
           showFirstQuestion = false,
-          "date-input",
+          Some(testDate),
           showOnlyFlatQuestion = true)
         lazy val document = Jsoup.parse(view.body)
 
@@ -234,7 +239,7 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
 
     "supplied with errors" should {
       val map = Map("isClaimingPRR" -> "")
-      lazy val view = privateResidenceRelief(privateResidenceReliefForm(false, false).bind(map), false, false, "", false)
+      lazy val view = privateResidenceRelief(privateResidenceReliefForm(false, false).bind(map), false, false, None, false)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

@@ -21,23 +21,19 @@ import common.Validation._
 import models.PersonalAllowanceModel
 import play.api.data.Forms._
 import play.api.data._
-import play.api.i18n.Messages
 import uk.gov.hmrc.play.views.helpers.MoneyPounds
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 
 object PersonalAllowanceForm {
 
   def personalAllowanceForm (maxPA: BigDecimal = BigDecimal(0)): Form[PersonalAllowanceModel] = Form (
     mapping(
       "personalAllowance" -> text
-        .verifying(Messages("error.real"), mandatoryCheck)
-        .verifying(Messages("error.real"), bigDecimalCheck)
+        .verifying("error.real", mandatoryCheck)
+        .verifying("error.real", bigDecimalCheck)
         .transform(stringToBigDecimal, bigDecimalToString)
-        .verifying(Messages("calc.personalAllowance.errorNegative"), isPositive)
-        .verifying(Messages("calc.personalAllowance.errorDecimalPlaces"), decimalPlacesCheckNoDecimal)
-        .verifying(Messages("calc.personalAllowance.errorMaxLimit") + MoneyPounds(maxPA, 0).quantity + " " +
-          Messages("calc.personalAllowance.errorMaxLimitEnd"), personalAllowance => personalAllowance <= maxPA)
+        .verifying("calc.personalAllowance.errorNegative", isPositive)
+        .verifying("calc.personalAllowance.errorDecimalPlaces", decimalPlacesCheckNoDecimal)
+        .verifying(maxMonetaryValueConstraint(maxPA, "calc.personalAllowance.errorMaxLimit"))
     )(PersonalAllowanceModel.apply)(PersonalAllowanceModel.unapply)
   )
 }

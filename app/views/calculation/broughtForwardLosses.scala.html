@@ -17,8 +17,9 @@
 @import models.BroughtForwardLossesModel
 @import uk.gov.hmrc.play.views.html.helpers.{form, input}
 @import views.html.helpers._
+@import play.api.Application
 
-@(broughtForwardLossesForm: Form[BroughtForwardLossesModel], backLink: String)(implicit request: Request[_], messages: Messages)
+@(broughtForwardLossesForm: Form[BroughtForwardLossesModel], backLink: String)(implicit request: Request[_], messages: Messages, application: Application)
 
 @hiddenContent = {
     <div class="form-group">

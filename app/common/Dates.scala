@@ -19,6 +19,9 @@ package common
 import java.time._
 import java.time.format.{DateTimeFormatter, ResolverStyle}
 import java.time.temporal.ChronoUnit
+import java.util.Locale
+
+import play.api.i18n.Messages
 
 import scala.concurrent.Future
 
@@ -26,13 +29,12 @@ object Dates {
 
   val taxYearEnd = "04-05"
   val formatter = DateTimeFormatter.ofPattern("d/M/uuuu").withResolverStyle(ResolverStyle.STRICT)
-  val requestFormatter = DateTimeFormatter.ofPattern("uuuu-MM-dd").withResolverStyle(ResolverStyle.STRICT)
-  val datePageFormatNoZero = DateTimeFormatter.ofPattern("d MMMM uuuu").withResolverStyle(ResolverStyle.STRICT)
 
   def constructDate(day: Int, month: Int, year: Int): LocalDate = LocalDate.parse(s"$day/$month/$year", formatter)
 
-  def dateMinusMonths(date: Option[LocalDate], months: Int): String = date.fold("") {
-    a => a.minus(months, ChronoUnit.MONTHS).format(datePageFormatNoZero)
+  def dateMinusMonths(date: Option[LocalDate], months: Int): Option[LocalDate] = date.map {
+    a => a.minus(months, ChronoUnit.MONTHS)
+      //.format(datePageFormatNoZero)
   }
 
   def getDay(date: LocalDate): Int = date.getDayOfMonth
@@ -74,6 +76,21 @@ object Dates {
     }
     else {
       year
+    }
+  }
+
+  object TemplateImplicits {
+    implicit class RichDate(date: LocalDate) {
+      def localFormat(pattern: String)(implicit lang: play.api.i18n.Lang, messages: Messages): String = {
+        if(lang.language == "cy") {
+          val monthNum = date.getMonthValue
+          val welshFormatter = DateTimeFormatter.ofPattern(s"""d '${messages(s"calc.month.$monthNum")}' YYYY""")
+          date.format(welshFormatter)
+        } else {
+          val localFormatter = DateTimeFormatter.ofPattern(pattern, lang.toLocale)
+          date.format(localFormatter)
+        }
+      }
     }
   }
 }

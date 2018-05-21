@@ -21,17 +21,14 @@ import common.Validation._
 import models.SoldOrGivenAwayModel
 import play.api.data.Form
 import play.api.data.Forms._
-import play.api.i18n.Messages
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 
 object SoldOrGivenAwayForm {
 
   val soldOrGivenAwayForm = Form(
     mapping(
       "soldIt" -> text
-        .verifying(Messages("error.required"), mandatoryCheck)
-        .verifying(Messages("error.required"), yesNoCheck)
+        .verifying("calc.common.error.fieldRequired", mandatoryCheck)
+        .verifying("calc.common.error.fieldRequired", yesNoCheck)
         .transform[Boolean](stringToBoolean, booleanToString)
     )(SoldOrGivenAwayModel.apply)(SoldOrGivenAwayModel.unapply)
   )

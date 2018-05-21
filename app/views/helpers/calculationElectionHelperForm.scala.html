@@ -56,12 +56,12 @@
                         @elements.args.get('_inputClass).map{inputClass => class="@inputClass"}
                         @if(elements.args.contains('_dataAttributes) ){ @elements.args.get('_dataAttributes)}
                         @field.value.filter( _ == value).map{_ => checked="checked"} />
-                    <span class="bold-small">@calcType</span>
+                    <span class="bold-small">@Messages(calcType)</span>
                     @defining(s"${value.toLowerCase.replace(" ","_")}-para") { radioParaId =>
                             <div class="form-group">
                                 <span class="election-text" id="@radioParaId">
-                                    <span>@message</span>
-                                    @if(dateMessage.isDefined){<span class="no-wrap">@dateMessage</span>}
+                                    <span>@Messages(message)</span>
+                                    @if(dateMessage.isDefined){<span class="no-wrap">@Messages(dateMessage.get)</span>}
                                 </span>
                             </div>
                             <div>
@@ -71,7 +71,7 @@
                 </label>
 
                 @{
-                    if(otherReliefs.isDefined && otherReliefs.get > 0){
+                    if(otherReliefs.exists(_ > 0)){
                         <div class="panel panel-indent additional-option-block">
                             <span class="align-bottom">{Messages("calc.calculationElection.someOtherRelief")}</span>
                             <button id={s"$value-button"} name="action" value={value} class="button button--link">

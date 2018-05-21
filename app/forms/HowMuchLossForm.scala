@@ -22,23 +22,19 @@ import common.Validation._
 import models.HowMuchLossModel
 import play.api.data.Form
 import play.api.data.Forms._
-import play.api.i18n.Messages
 import uk.gov.hmrc.play.views.helpers.MoneyPounds
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 
 object HowMuchLossForm {
 
   val howMuchLossForm: Form[HowMuchLossModel] = Form(
     mapping(
       "loss" -> text
-        .verifying(Messages("calc.common.error.mandatoryAmount"), mandatoryCheck)
-        .verifying(Messages("calc.common.error.mandatoryAmount"), bigDecimalCheck)
+        .verifying("calc.common.error.mandatoryAmount", mandatoryCheck)
+        .verifying("calc.common.error.mandatoryAmount", bigDecimalCheck)
         .transform(stringToBigDecimal, bigDecimalToString)
-        .verifying(Messages("calc.howMuchLoss.errorMinimum"), isPositive)
-        .verifying(Messages("calc.howMuchLoss.errorDecimal"), decimalPlacesCheck)
-        .verifying(Messages("calc.common.error.maxNumericExceeded") + MoneyPounds(Constants.maxNumeric, 0).quantity + " " +
-          Messages("calc.common.error.maxNumericExceeded.OrLess"), maxCheck)
+        .verifying("calc.howMuchLoss.errorMinimum", isPositive)
+        .verifying("calc.howMuchLoss.errorDecimal", decimalPlacesCheck)
+        .verifying(maxMonetaryValueConstraint(Constants.maxNumeric))
     )(HowMuchLossModel.apply)(HowMuchLossModel.unapply)
   )
 }

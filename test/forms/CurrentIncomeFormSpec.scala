@@ -16,7 +16,7 @@
 
 package forms
 
-import assets.MessageLookup.{NonResident => messages}
+import assets.KeyLookup.{NonResident => messages}
 import models.CurrentIncomeModel
 import forms.CurrentIncomeForm._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
@@ -111,8 +111,9 @@ class CurrentIncomeFormSpec extends UnitSpec with WithFakeApplication {
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.CurrentIncome.errorMaximum("1,000,000,000")}" in {
-        form.error("currentIncome").get.message shouldBe messages.CurrentIncome.errorMaximum("1,000,000,000")
+      s"return the correct error message" in {
+        form.error("currentIncome").get.message shouldBe "calc.common.error.maxNumericExceeded"
+        form.error("currentIncome").get.args shouldBe Array("1,000,000,000")
       }
     }
 

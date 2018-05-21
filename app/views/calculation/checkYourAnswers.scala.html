@@ -20,36 +20,41 @@
 @import java.time._
 @import uk.gov.hmrc.play.views.helpers._
 @import common.Dates._
-@import common.Transformers.booleanToString
-@(questions: Seq[(QuestionAnswerModel[Any])], backLink: String)(implicit request: Request[_], messages: Messages)
+@import common.Dates.TemplateImplicits._
+@import common.Transformers.{booleanToMessageString, localDateMonthKey, checkIfBooleanAsString, finalDate}
+@import play.api.Application
 
-@main_template(Messages("calc.checkYourAnswers.title"), articleLayout = false){
+@(questions: Seq[(QuestionAnswerModel[Any])], backLink: String)(implicit request: Request[_], messages: Messages, lang: Lang, application: Application, messagesApi: Option[MessagesApi] = None)
 
-    <a id="back-link" class="back-link" href="@backLink">@Messages("calc.base.back")</a>
+@main_template(messages("calc.checkYourAnswers.title"), articleLayout = false){
 
-    <h1 class="heading-xlarge">@Messages("calc.checkYourAnswers.title")</h1>
+    <a id="back-link" class="back-link" href="@backLink">@messages("calc.base.back")</a>
+
+    <h1 class="heading-xlarge">@messages("calc.checkYourAnswers.title")</h1>
 
 <div class="form-group">
         <table class="check-your-answers">
             <thead>
-                <th class="heading-medium" colspan="2">@Messages("calc.checkYourAnswers.tableHeading")</th>
+                <th class="heading-medium" colspan="2">@messages("calc.checkYourAnswers.tableHeading")</th>
                 <th></th>
             </thead>
             <tbody>
                 @questions.map { question =>
                     <tr data-question="@question.question">
-                        <td>@question.question</td>
+                        <td>
+                            @messages(question.question, question.oDate.map(_.localFormat("d MMMM YYYY")).getOrElse(""))
+                        </td>
                         <td id="@{s"${question.id}-answer"}">
-                            @{question.data match {
-                            case string: String => string
+                        @{question.data match {
+                            case string: String => messages(checkIfBooleanAsString(string))
                             case int: Int => int.toString
                             case bigDecimal: BigDecimal => s"£${MoneyPounds(bigDecimal, 2).quantity}"
-                            case date: LocalDate => datePageFormatNoZero.format(date)
-                            case boolean: Boolean => booleanToString(boolean)
+                            case date: LocalDate => date.localFormat("d MMMM YYYY")
+                            case boolean: Boolean => messages(booleanToMessageString(boolean))
                             case _ => ""
                             }}
                         </td>
-                        <td class= "change-your-answer"><a href="@question.link">@Messages("calc.checkYourAnswers.change")<span class="visuallyhidden">@Messages("calc.checkYourAnswers.hidden.text") @question.question</span></a></td>
+                        <td class= "change-your-answer"><a href="@question.link">@messages("calc.checkYourAnswers.change")<span class="visuallyhidden">@messages("calc.checkYourAnswers.hidden.text") @question.question</span></a></td>
                     </tr>
                 }
             </tbody>
@@ -58,7 +63,7 @@
 
     @form(action = controllers.routes.CheckYourAnswersController.submitCheckYourAnswers()) {
         <div class="form-group">
-            <button class="button" type="submit" id="continue-button">@Messages("calc.base.continue")</button>
+            <button class="button" type="submit" id="continue-button">@messages("calc.base.continue")</button>
         </div>
     }
 }

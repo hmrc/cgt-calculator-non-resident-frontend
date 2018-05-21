@@ -16,20 +16,17 @@
 
 package forms
 
-import play.api.i18n.Messages
 import common.Validation.{mandatoryCheck, previousLossOrGainCheck}
 import models.PreviousLossOrGainModel
 import play.api.data.Form
 import play.api.data.Forms._
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 
 object PreviousLossOrGainForm {
   val previousLossOrGainForm = Form(
     mapping(
       "previousLossOrGain" -> text
-        .verifying(Messages("calc.previousLossOrGain.errors.required"), mandatoryCheck)
-        .verifying(Messages("calc.previousLossOrGain.errors.required"), previousLossOrGainCheck)
+        .verifying("calc.previousLossOrGain.errors.required", mandatoryCheck)
+        .verifying("calc.previousLossOrGain.errors.required", previousLossOrGainCheck)
     )(PreviousLossOrGainModel.apply)(PreviousLossOrGainModel.unapply)
   )
 }

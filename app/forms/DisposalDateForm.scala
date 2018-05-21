@@ -19,30 +19,27 @@ package forms
 import common.Transformers._
 import common.Validation._
 import models.DisposalDateModel
-import play.api.Play.current
 import play.api.data.Forms._
 import play.api.data._
-import play.api.i18n.Messages
-import play.api.i18n.Messages.Implicits._
 
 object DisposalDateForm {
 
   val disposalDateForm = Form(
     mapping(
       "disposalDateDay" -> text
-        .verifying(Messages("calc.common.date.error.invalidDate"), mandatoryCheck)
-        .verifying(Messages("calc.common.date.error.invalidDate"), integerCheck)
+        .verifying("calc.common.date.error.invalidDate", mandatoryCheck)
+        .verifying("calc.common.date.error.invalidDate", integerCheck)
         .transform[Int](stringToInteger, _.toString),
       "disposalDateMonth" -> text
-        .verifying(Messages("calc.common.date.error.invalidDate"), mandatoryCheck)
-        .verifying(Messages("calc.common.date.error.invalidDate"), integerCheck)
+        .verifying("calc.common.date.error.invalidDate", mandatoryCheck)
+        .verifying("calc.common.date.error.invalidDate", integerCheck)
         .transform[Int](stringToInteger, _.toString),
       "disposalDateYear" -> text
-        .verifying(Messages("calc.common.date.error.invalidDate"), mandatoryCheck)
-        .verifying(Messages("calc.common.date.error.invalidDate"), integerCheck)
+        .verifying("calc.common.date.error.invalidDate", mandatoryCheck)
+        .verifying("calc.common.date.error.invalidDate", integerCheck)
         .transform[Int](stringToInteger, _.toString)
     )(DisposalDateModel.apply)(DisposalDateModel.unapply)
-      .verifying(Messages("calc.common.date.error.invalidDate"), fields =>
+      .verifying("calc.common.date.error.invalidDate", fields =>
         isValidDate(fields.day, fields.month, fields.year))
   )
 }

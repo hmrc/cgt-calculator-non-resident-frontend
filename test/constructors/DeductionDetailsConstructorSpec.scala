@@ -16,6 +16,8 @@
 
 package constructors
 
+import java.time.LocalDate
+
 import assets.MessageLookup.{NonResident => messages}
 import common.Dates
 import helpers.AssertHelpers
@@ -257,7 +259,7 @@ class DeductionDetailsConstructorSpec extends UnitSpec with WithFakeApplication 
         }
 
         "return a question for Private Residence Relief" in {
-          assertExpectedResult[QuestionAnswerModel[String]](result)(_.question shouldBe messages.PrivateResidenceRelief.question)
+          assertExpectedResult[QuestionAnswerModel[String]](result)(_.question shouldBe "calc.privateResidenceRelief.question")
         }
 
         "return a link to the Private Residence Relief page" in {
@@ -312,7 +314,7 @@ class DeductionDetailsConstructorSpec extends UnitSpec with WithFakeApplication 
       }
 
       "return a question for Private Residence Relief" in {
-        assertExpectedResult[QuestionAnswerModel[String]](result)(_.question shouldBe messages.PrivateResidenceRelief.questionBefore)
+        assertExpectedResult[QuestionAnswerModel[String]](result)(_.question shouldBe "calc.privateResidenceRelief.firstQuestion")
       }
 
       "return a link to the Private Residence Relief page" in {
@@ -326,9 +328,10 @@ class DeductionDetailsConstructorSpec extends UnitSpec with WithFakeApplication 
         lazy val result = DeductionDetailsConstructor.privateResidenceReliefDaysClaimedBeforeRow(
           Some(PrivateResidenceReliefModel("Yes", Some(4), None)), edgeDatesJustDaysBefore)
 
-        lazy val beforeString = Dates.dateMinusMonths(edgeDatesJustDaysBefore.disposalDateModel, 18)
+        lazy val beforeDate = Dates.dateMinusMonths(edgeDatesJustDaysBefore.disposalDateModel, 18)
 
-        result.get.question shouldBe messages.PrivateResidenceRelief.questionAcquisitionDateAfterStartDate(beforeString)
+        result.get.question shouldBe "calc.privateResidenceRelief.questionFlat"
+        result.get.oDate shouldBe Some(LocalDate.of(2015, 9, 2))
       }
     }
   }
@@ -395,8 +398,8 @@ class DeductionDetailsConstructorSpec extends UnitSpec with WithFakeApplication 
       }
 
       "return a question for Private Residence Relief" in {
-        assertExpectedResult[QuestionAnswerModel[String]](result)(_.question shouldBe
-          s"${messages.PrivateResidenceRelief.questionBetween} 10 April 2017 ${messages.PrivateResidenceRelief.questionBetweenEnd}")
+        assertExpectedResult[QuestionAnswerModel[String]](result)(_.question shouldBe "calc.privateResidenceRelief.questionBetween")
+        assertExpectedResult[QuestionAnswerModel[String]](result)(_.oDate shouldBe Some(LocalDate.of(2017, 4, 10)))
       }
 
       "return a link to the Private Residence Relief page" in {
@@ -422,8 +425,8 @@ class DeductionDetailsConstructorSpec extends UnitSpec with WithFakeApplication 
       }
 
       "return a question for Private Residence Relief" in {
-        assertExpectedResult[QuestionAnswerModel[String]](result)(_.question shouldBe
-          s"${messages.PrivateResidenceRelief.questionBetween} 10 April 2015 ${messages.PrivateResidenceRelief.questionBetweenEnd}")
+        assertExpectedResult[QuestionAnswerModel[String]](result)(_.question shouldBe "calc.privateResidenceRelief.questionBetween")
+        assertExpectedResult[QuestionAnswerModel[String]](result)(_.oDate shouldBe Some(LocalDate.of(2015, 4, 10)))
       }
 
       "return a link to the Private Residence Relief page" in {

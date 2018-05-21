@@ -16,7 +16,8 @@
 
 package forms
 
-import assets.MessageLookup.{NonResident => messages}
+import assets.KeyLookup.{NonResident => messages}
+import assets.KeyLookup.{NonResident => commonMessages}
 import models.HowMuchLossModel
 import forms.HowMuchLossForm._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
@@ -107,8 +108,9 @@ class HowMuchLossFormSpec extends UnitSpec with WithFakeApplication {
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.HowMuchLoss.errorMaximum("1,000,000,000")}" in {
-        form.error("loss").get.message shouldBe messages.HowMuchLoss.errorMaximum("1,000,000,000")
+      s"return the correct error message" in {
+        form.error("loss").get.message shouldBe "calc.common.error.maxNumericExceeded"
+        form.error("loss").get.args shouldBe Array("1,000,000,000")
       }
     }
   }

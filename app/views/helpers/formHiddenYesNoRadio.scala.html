@@ -53,7 +53,7 @@
 
     <div class="@{if (!hidePanel) "panel-indent panel-indent--wide panel-indent--gutter"}" id='hidden'>
         <div class="@hiddenClasses">
-            @form.errors.filter(_.key == "").map { error => <span class="error-notification">@Messages(error.message)</span>}
+            @form.errors.filter(_.key == "").map { error => <span class="error-notification">@Messages(error.message, error.args: _*)</span>}
             @if(additionalContent.isDefined) { @additionalContent }
             @content
         </div>

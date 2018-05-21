@@ -20,9 +20,6 @@ import common.Validation._
 import models.OtherPropertiesModel
 import play.api.data.Forms._
 import play.api.data._
-import play.api.i18n.Messages
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 
 object OtherPropertiesForm {
 
@@ -30,8 +27,8 @@ object OtherPropertiesForm {
   val otherPropertiesForm: Form[OtherPropertiesModel] = Form (
     mapping(
       "otherProperties" -> text
-        .verifying(Messages("calc.common.error.fieldRequired"), mandatoryCheck)
-        .verifying(Messages("calc.common.error.fieldRequired"), yesNoCheck)
+        .verifying("calc.common.error.fieldRequired", mandatoryCheck)
+        .verifying("calc.common.error.fieldRequired", yesNoCheck)
     )(OtherPropertiesModel.apply)(OtherPropertiesModel.unapply)
   )
 }

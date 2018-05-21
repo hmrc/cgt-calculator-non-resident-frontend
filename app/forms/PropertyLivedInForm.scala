@@ -18,12 +18,9 @@ package forms
 
 import common.Transformers._
 import common.Validation._
-import models.{PropertyLivedInModel}
+import models.PropertyLivedInModel
 import play.api.data.Forms._
 import play.api.data._
-import play.api.i18n.Messages
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 
 object PropertyLivedInForm {
 
@@ -31,8 +28,8 @@ object PropertyLivedInForm {
     Form(
       mapping(
         "propertyLivedIn" -> text
-          .verifying(Messages("calc.propertyLivedIn.noSelectError"), mandatoryCheck)
-          .verifying(Messages("calc.propertyLivedIn.noSelectError"), yesNoCheck)
+          .verifying("calc.propertyLivedIn.noSelectError", mandatoryCheck)
+          .verifying("calc.propertyLivedIn.noSelectError", yesNoCheck)
           .transform(stringToBoolean, booleanToString)
       )(PropertyLivedInModel.apply)(PropertyLivedInModel.unapply)
     )

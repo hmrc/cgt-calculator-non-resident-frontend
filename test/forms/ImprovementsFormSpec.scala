@@ -16,7 +16,8 @@
 
 package forms
 
-import assets.MessageLookup.{NonResident => messages}
+import assets.KeyLookup.{NonResident => messages}
+import assets.KeyLookup.{NonResident => commonMessages}
 import models.ImprovementsModel
 import forms.ImprovementsForm._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
@@ -26,7 +27,7 @@ class ImprovementsFormSpec extends UnitSpec with WithFakeApplication{
   "Creating a form" when {
 
     "passing a in a valid model" should {
-      val model = ImprovementsModel(messages.yes, Some(1000.0), Some(1000.0))
+      val model = ImprovementsModel("Yes", Some(1000.0), Some(1000.0))
       lazy val form = improvementsForm(true).fill(model)
 
       "return a valid form with no errors" in {
@@ -34,12 +35,12 @@ class ImprovementsFormSpec extends UnitSpec with WithFakeApplication{
       }
 
       "return a form containing the data" in {
-        form.data shouldBe Map("isClaimingImprovements" -> messages.yes, "improvementsAmt" -> "1000.0", "improvementsAmtAfter" -> "1000.0")
+        form.data shouldBe Map("isClaimingImprovements" -> "Yes", "improvementsAmt" -> "1000.0", "improvementsAmtAfter" -> "1000.0")
       }
     }
 
     "passing a in a valid yes map" should {
-      val map = Map("isClaimingImprovements" -> messages.yes, "improvementsAmt" -> "3000.0", "improvementsAmtAfter" -> "3000.0")
+      val map = Map("isClaimingImprovements" -> "Yes", "improvementsAmt" -> "3000.0", "improvementsAmtAfter" -> "3000.0")
       lazy val form = improvementsForm(true).bind(map)
 
       "return a valid form with no errors" in {
@@ -52,7 +53,7 @@ class ImprovementsFormSpec extends UnitSpec with WithFakeApplication{
     }
 
     "passing a in a valid no map" should {
-      val map = Map("isClaimingImprovements" -> messages.no, "improvementsAmt" -> "", "improvementsAmtAfter" -> "")
+      val map = Map("isClaimingImprovements" -> "No", "improvementsAmt" -> "", "improvementsAmtAfter" -> "")
       lazy val form = improvementsForm(true).bind(map)
 
       "return a valid form with no errors" in {
@@ -65,7 +66,7 @@ class ImprovementsFormSpec extends UnitSpec with WithFakeApplication{
     }
 
     "passing a in a valid map with two decimal places" should {
-      val map = Map("isClaimingImprovements" -> messages.yes, "improvementsAmt" -> "3000.05", "improvementsAmtAfter" -> "3000.0")
+      val map = Map("isClaimingImprovements" -> "Yes", "improvementsAmt" -> "3000.05", "improvementsAmtAfter" -> "3000.0")
       lazy val form = improvementsForm(true).bind(map)
 
       "return a valid form with no errors" in {
@@ -78,7 +79,7 @@ class ImprovementsFormSpec extends UnitSpec with WithFakeApplication{
     }
 
     "passing in a valid map with a improvementsAmt on the max amount" should {
-      val map = Map("isClaimingImprovements" -> messages.yes, "improvementsAmt" -> "1000000000.00", "improvementsAmtAfter" -> "3000.0")
+      val map = Map("isClaimingImprovements" -> "Yes", "improvementsAmt" -> "1000000000.00", "improvementsAmtAfter" -> "3000.0")
       lazy val form = improvementsForm(true).bind(map)
 
       "return a form with errors" in {
@@ -95,7 +96,7 @@ class ImprovementsFormSpec extends UnitSpec with WithFakeApplication{
     }
 
     "passing in a valid map with a improvementsAmt on the max amount and improvementsAmtAfter is empty" should {
-      val map = Map("isClaimingImprovements" -> messages.yes, "improvementsAmt" -> "1000000000.00", "improvementsAmtAfter" -> "")
+      val map = Map("isClaimingImprovements" -> "Yes", "improvementsAmt" -> "1000000000.00", "improvementsAmtAfter" -> "")
       lazy val form = improvementsForm(true).bind(map)
 
       "return a form with errors" in {
@@ -112,7 +113,7 @@ class ImprovementsFormSpec extends UnitSpec with WithFakeApplication{
     }
 
     "passing in a valid map with a 'isClaimingImprovements' no and an error in improvementsAmt" should {
-      val map = Map("isClaimingImprovements" -> messages.no, "improvementsAmt" -> "testData", "improvementsAmtAfter" -> "3000.0")
+      val map = Map("isClaimingImprovements" -> "No", "improvementsAmt" -> "testData", "improvementsAmtAfter" -> "3000.0")
       lazy val form = improvementsForm(true).bind(map)
 
       "return a form with errors" in {
@@ -129,7 +130,7 @@ class ImprovementsFormSpec extends UnitSpec with WithFakeApplication{
     }
 
     "passing in a valid map with a 'isClaimingImprovements' yes actionspec" should {
-      val map = Map("isClaimingImprovements" -> messages.yes, "improvementsAmt" -> "12045", "improvementsAmtAfter" -> "12045")
+      val map = Map("isClaimingImprovements" -> "Yes", "improvementsAmt" -> "12045", "improvementsAmtAfter" -> "12045")
       lazy val form = improvementsForm(true).bind(map)
 
       "return a form with errors" in {
@@ -146,7 +147,7 @@ class ImprovementsFormSpec extends UnitSpec with WithFakeApplication{
     }
 
     "passing in a valid map with a 'isClaimingImprovements' no and an error in improvementsAmtAfter" should {
-      val map = Map("isClaimingImprovements" -> messages.no, "improvementsAmt" -> "3000.0", "improvementsAmtAfter" -> "testData")
+      val map = Map("isClaimingImprovements" -> "No", "improvementsAmt" -> "3000.0", "improvementsAmtAfter" -> "testData")
       lazy val form = improvementsForm(true).bind(map)
 
       "return a form with errors" in {
@@ -163,7 +164,7 @@ class ImprovementsFormSpec extends UnitSpec with WithFakeApplication{
     }
 
     "selecting 'Yes' but not supplying any amounts when both improvements are shown" should {
-      val map = Map("isClaimingImprovements" -> messages.yes, "improvementsAmt" -> "", "improvementsAmtAfter" -> "")
+      val map = Map("isClaimingImprovements" -> "Yes", "improvementsAmt" -> "", "improvementsAmtAfter" -> "")
       lazy val form = improvementsForm(true).bind(map)
 
       "return a form with errors" in {
@@ -180,7 +181,7 @@ class ImprovementsFormSpec extends UnitSpec with WithFakeApplication{
     }
 
     "selecting 'Yes' but not supplying a before amount when only before amount is shown" should {
-      val map = Map("isClaimingImprovements" -> messages.yes, "improvementsAmt" -> "", "improvementsAmtAfter" -> "1.11")
+      val map = Map("isClaimingImprovements" -> "Yes", "improvementsAmt" -> "", "improvementsAmtAfter" -> "1.11")
       lazy val form = improvementsForm(false).bind(map)
 
       "return a form with errors" in {
@@ -197,7 +198,7 @@ class ImprovementsFormSpec extends UnitSpec with WithFakeApplication{
     }
 
     "passing in an invalid map with three decimal places for improvementsAmt" should {
-      val map = Map("isClaimingImprovements" -> messages.yes, "improvementsAmt" -> "3000.051", "improvementsAmtAfter" -> "3000.0")
+      val map = Map("isClaimingImprovements" -> "Yes", "improvementsAmt" -> "3000.051", "improvementsAmtAfter" -> "3000.0")
       lazy val form = improvementsForm(true).bind(map)
 
       "return a form with errors" in {
@@ -214,7 +215,7 @@ class ImprovementsFormSpec extends UnitSpec with WithFakeApplication{
     }
 
     "passing in an invalid map with three decimal places for improvementsAmtAfter" should {
-      val map = Map("isClaimingImprovements" -> messages.yes, "improvementsAmt" -> "3000.51", "improvementsAmtAfter" -> "3000.009")
+      val map = Map("isClaimingImprovements" -> "Yes", "improvementsAmt" -> "3000.51", "improvementsAmtAfter" -> "3000.009")
       lazy val form = improvementsForm(true).bind(map)
 
       "return a form with errors" in {
@@ -231,7 +232,7 @@ class ImprovementsFormSpec extends UnitSpec with WithFakeApplication{
     }
 
     "passing in an invalid map with a negative number for improvementsAmt" should {
-      val map = Map("isClaimingImprovements" -> messages.yes, "improvementsAmt" -> "-3000.01", "improvementsAmtAfter" -> "3000.0")
+      val map = Map("isClaimingImprovements" -> "Yes", "improvementsAmt" -> "-3000.01", "improvementsAmtAfter" -> "3000.0")
       lazy val form = improvementsForm(true).bind(map)
 
       "return a form with errors" in {
@@ -248,7 +249,7 @@ class ImprovementsFormSpec extends UnitSpec with WithFakeApplication{
     }
 
     "passing in an invalid map with a negative number for improvementsAmtAfter" should {
-      val map = Map("isClaimingImprovements" -> messages.yes, "improvementsAmt" -> "3000.01", "improvementsAmtAfter" -> "-3000.0")
+      val map = Map("isClaimingImprovements" -> "Yes", "improvementsAmt" -> "3000.01", "improvementsAmtAfter" -> "-3000.0")
       lazy val form = improvementsForm(true).bind(map)
 
       "return a form with errors" in {
@@ -265,7 +266,7 @@ class ImprovementsFormSpec extends UnitSpec with WithFakeApplication{
     }
 
     "passing in a invalid map with a improvementsAmt over the max amount" should {
-      val map = Map("isClaimingImprovements" -> messages.yes, "improvementsAmt" -> "1000000000.01", "improvementsAmtAfter" -> "3000.0")
+      val map = Map("isClaimingImprovements" -> "Yes", "improvementsAmt" -> "1000000000.01", "improvementsAmtAfter" -> "3000.0")
       lazy val form = improvementsForm(true).bind(map)
 
       "return a form with errors" in {
@@ -276,13 +277,14 @@ class ImprovementsFormSpec extends UnitSpec with WithFakeApplication{
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of ${messages.Improvements.errorMaximum("1000000000.01")} containing the data" in {
-        form.error("").get.message shouldBe messages.Improvements.errorMaximum("1,000,000,000")
+      s"return the correct error message" in {
+        form.error("").get.message shouldBe "calc.common.error.maxNumericExceeded"
+        form.error("").get.args shouldBe Array("1,000,000,000")
       }
     }
 
     "passing in a invalid map with a improvementsAmtAfter over the max amount" should {
-      val map = Map("isClaimingImprovements" -> messages.yes, "improvementsAmt" -> "1000.01", "improvementsAmtAfter" -> "1000000000.01")
+      val map = Map("isClaimingImprovements" -> "Yes", "improvementsAmt" -> "1000.01", "improvementsAmtAfter" -> "1000000000.01")
       lazy val form = improvementsForm(true).bind(map)
 
       "return a form with errors" in {
@@ -293,13 +295,14 @@ class ImprovementsFormSpec extends UnitSpec with WithFakeApplication{
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of ${messages.Improvements.errorMaximum("1000000000.01")} containing the data" in {
-        form.error("").get.message shouldBe messages.Improvements.errorMaximum("1,000,000,000")
+      s"return the correct error message" in {
+        form.error("").get.message shouldBe "calc.common.error.maxNumericExceeded"
+        form.error("").get.args shouldBe Array("1,000,000,000")
       }
     }
 
     "passing in a invalid map with a improvementsAmtAfter over the max amount and having three decimal places" should {
-      val map = Map("isClaimingImprovements" -> messages.yes, "improvementsAmt" -> "1000.01", "improvementsAmtAfter" -> "1000000000.013")
+      val map = Map("isClaimingImprovements" -> "Yes", "improvementsAmt" -> "1000.01", "improvementsAmtAfter" -> "1000000000.013")
       lazy val form = improvementsForm(true).bind(map)
 
       "return a form with errors" in {
@@ -316,7 +319,7 @@ class ImprovementsFormSpec extends UnitSpec with WithFakeApplication{
     }
 
     "passing in a invalid map with no improvementsAmt or improvementsAmtAfter" should {
-      val map = Map("isClaimingImprovements" -> messages.yes, "improvementsAmt" -> "", "improvementsAmtAfter" -> "")
+      val map = Map("isClaimingImprovements" -> "Yes", "improvementsAmt" -> "", "improvementsAmtAfter" -> "")
       lazy val form = improvementsForm(true).bind(map)
 
       "return a form with errors" in {
@@ -333,7 +336,7 @@ class ImprovementsFormSpec extends UnitSpec with WithFakeApplication{
     }
 
     "passing in a invalid map with a string for improvementsAmt" should {
-      val map = Map("isClaimingImprovements" -> messages.yes, "improvementsAmt" -> "testData", "improvementsAmtAfter" -> "")
+      val map = Map("isClaimingImprovements" -> "Yes", "improvementsAmt" -> "testData", "improvementsAmtAfter" -> "")
       lazy val form = improvementsForm(true).bind(map)
 
       "return a form with errors" in {
@@ -350,7 +353,7 @@ class ImprovementsFormSpec extends UnitSpec with WithFakeApplication{
     }
 
     "passing in a invalid map with a string for improvementsAmtAfter" should {
-      val map = Map("isClaimingImprovements" -> messages.yes, "improvementsAmt" -> "", "improvementsAmtAfter" -> "testData")
+      val map = Map("isClaimingImprovements" -> "Yes", "improvementsAmt" -> "", "improvementsAmtAfter" -> "testData")
       lazy val form = improvementsForm(true).bind(map)
 
       "return a form with errors" in {
