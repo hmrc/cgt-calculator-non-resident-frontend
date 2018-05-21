@@ -16,6 +16,7 @@
 
 package forms
 
+import common.Constants
 import common.Transformers._
 import common.Validation._
 import models.AnnualExemptAmountModel
@@ -34,7 +35,7 @@ object AnnualExemptAmountForm {
         .verifying("error.real", mandatoryCheck)
         .verifying("error.real", bigDecimalCheck)
         .transform(stringToBigDecimal, bigDecimalToString)
-        .verifying(errorMaxMessage(maxAEA), _ <= maxAEA)
+        .verifying(maxMonetaryValueConstraint(Constants.maxAllowance))
         .verifying("calc.annualExemptAmount.errorNegative", annualExemptAmount => isPositive(annualExemptAmount))
         .verifying("calc.annualExemptAmount.errorDecimalPlaces", annualExemptAmount => decimalPlacesCheck(annualExemptAmount))
     )(AnnualExemptAmountModel.apply)(AnnualExemptAmountModel.unapply)
