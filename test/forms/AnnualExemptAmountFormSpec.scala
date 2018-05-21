@@ -108,28 +108,28 @@ class AnnualExemptAmountFormSpec extends UnitSpec with WithFakeApplication {
     }
 
     "passing in an invalid map with a value above maximum" should {
-      val map = Map("annualExemptAmount" -> "11100.01")
+      val map = Map("annualExemptAmount" -> "10600.01")
       lazy val form = annualExemptAmountForm(BigDecimal(10600)).bind(map)
+
 
       "return an invalid form with one error" in {
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of " +
-        s"'${maxMonetaryValueConstraint(Constants.maxAllowance)}'" in {
+      s"return an error message of '${messages.maximumError("maxAEA")}'" in {
         form.error("annualExemptAmount").get.message shouldBe "calc.common.error.maxNumericExceeded"
       }
     }
 
     "passing in an invalid map with a value above a different maximum" should {
-      val map = Map("annualExemptAmount" -> "12000")
+      val map = Map("annualExemptAmount" -> "10600")
       lazy val form = annualExemptAmountForm(BigDecimal(10000)).bind(map)
 
       "return an invalid form with one error" in {
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${maxMonetaryValueConstraint(Constants.maxAllowance)}"in {
+      s"return an error message of '${messages.maximumError("maxAEA")}'"in {
         form.error("annualExemptAmount").get.message shouldBe "calc.common.error.maxNumericExceeded"
       }
     }
