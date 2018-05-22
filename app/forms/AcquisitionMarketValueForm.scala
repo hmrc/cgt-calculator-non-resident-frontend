@@ -22,12 +22,10 @@ import common.Validation._
 import models.AcquisitionValueModel
 import play.api.data.Forms._
 import play.api.data.Form
-import play.api.i18n.Lang
-import uk.gov.hmrc.play.views.helpers.MoneyPounds
 
 object AcquisitionMarketValueForm {
 
-  def acquisitionMarketValueForm(implicit lang:Lang): Form[AcquisitionValueModel] = Form(
+  def acquisitionMarketValueForm(): Form[AcquisitionValueModel] = Form(
     mapping {
       "acquisitionMarketValue" -> text
         .verifying("error.real", mandatoryCheck)

@@ -34,7 +34,6 @@ object Dates {
 
   def dateMinusMonths(date: Option[LocalDate], months: Int): Option[LocalDate] = date.map {
     a => a.minus(months, ChronoUnit.MONTHS)
-      //.format(datePageFormatNoZero)
   }
 
   def getDay(date: LocalDate): Int = date.getDayOfMonth

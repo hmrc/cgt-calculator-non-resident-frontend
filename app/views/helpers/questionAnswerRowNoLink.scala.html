@@ -30,7 +30,7 @@
         case string: String => string
         case int: Int => int.toString
         case bigDecimal: BigDecimal => s"£${MoneyPounds(bigDecimal, decimalPlaces).quantity}"
-        case date: LocalDate => date.localFormat("d MMMM uuuu")
+        case date: LocalDate => date.localFormat("d MMMM yyyy")
         case boolean: Boolean => if (boolean) "Yes" else "No"
         case (taxGain: BigDecimal, taxRate: Int, additionalGain: BigDecimal, additionalRate: Int) => {
             <p class="lede">{Messages("calc.summary.calculation.details.taxRateValue", s"£${MoneyPounds(taxGain, 2).quantity}", taxRate)}</p>

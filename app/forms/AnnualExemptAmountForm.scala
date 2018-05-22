@@ -16,7 +16,6 @@
 
 package forms
 
-import common.Constants
 import common.Transformers._
 import common.Validation._
 import models.AnnualExemptAmountModel

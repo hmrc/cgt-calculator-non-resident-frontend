@@ -19,5 +19,4 @@ package common
 object Constants {
   val maxNumeric: BigDecimal = 1000000000
   val maxLettingsRelief: BigDecimal = 40000
-  val maxAllowance: BigDecimal = 11100
 }
