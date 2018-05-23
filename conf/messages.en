@@ -89,7 +89,7 @@ calc.annualExemptAmount.errorDecimalPlaces = Your allowance has too many numbers
 calc.acquisitionDate.question = What date did you sign the contract to become the owner?
 calc.acquisitionDate.questionTwo = What was the date you signed the contract that made you the owner?
 calc.acquisitionDate.hintText = If you inherited the property, it''s the date that the previous owner died.
-calc.acquisitionDate.errorIncompleteDate = Date is not valid
+calc.acquisitionDate.errorFutureDateGuidance = Enter a date from the past
 
 ## Acquisition Value ##
 calc.acquisitionValue.question = How much did you pay for the property?

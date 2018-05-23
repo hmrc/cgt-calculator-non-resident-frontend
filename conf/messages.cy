@@ -21,9 +21,7 @@ calc.acquisitionCosts.errorNegative = Nodwch rif positif ar gyfer eich costau
 calc.acquisitionCosts.hint = Os oeddech yn berchen ar yr eiddo gyda rhywun arall, dylech ond nodi''ch cyfran chi o''r costau, fel y cytunwyd gyda''ch cydberchennog.
 calc.acquisitionCosts.question = Faint y gwnaethoch ei dalu o ran costau pan ddaethoch yn berchennog yr eiddo?
 
-calc.acquisitionDate.errorFutureDate = Rhaid i''r dyddiad fod yn y gorffennol
 calc.acquisitionDate.errorFutureDateGuidance = Nodwch ddyddiad o''r gorffennol
-calc.acquisitionDate.errorIncompleteDate = Nid yw''r dyddiad yn ddilys
 calc.acquisitionDate.hintText = Os ydych wedi etifeddu''r eiddo, dyma''r dyddiad y bu farw''r perchennog blaenorol.
 calc.acquisitionDate.question = Ar ba ddyddiad y gwnaethoch lofnodi''r contract i ddod yn berchennog?
 calc.acquisitionDate.questionTwo = Beth oedd y dyddiad pan wnaethoch lofnodi''r contract a wnaethoch yn berchennog?
