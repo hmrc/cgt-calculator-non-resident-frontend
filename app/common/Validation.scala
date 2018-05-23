@@ -17,6 +17,8 @@
 package common
 
 import common.Dates.constructDate
+import play.api.data.validation._
+import uk.gov.hmrc.play.views.helpers.MoneyPounds
 
 import scala.util.{Failure, Success, Try}
 
@@ -51,6 +53,29 @@ object Validation {
   val decimalPlacesCheckNoDecimal: BigDecimal => Boolean = input => input.scale < 1
 
   val maxCheck: BigDecimal => Boolean = input => input <= Constants.maxNumeric
+
+  def maxMonetaryValueConstraint(
+                                  maxValue: BigDecimal,
+                                  errMsgKey: String = "calc.common.error.maxNumericExceeded"
+                                ): Constraint[BigDecimal] = Constraint("constraints.maxValue")({
+    value => maxMoneyCheck(value, maxValue, errMsgKey)
+  })
+
+  def maxMonetaryValueConstraint[T](maxValue: BigDecimal, extractMoney: T => Option[BigDecimal]): Constraint[T] = {
+    Constraint("constraints.maxValueCustom")({
+      data => extractMoney(data).map {
+        maxMoneyCheck(_, maxValue, "calc.common.error.maxNumericExceeded")
+      }.getOrElse(Valid)
+    })
+  }
+
+  private def maxMoneyCheck(value: BigDecimal, maxValue: BigDecimal, errMsgKey: String): ValidationResult = {
+    if(value <= maxValue) {
+      Valid
+    } else {
+      Invalid(ValidationError(errMsgKey, MoneyPounds(maxValue, 0).quantity))
+    }
+  }
 
   val isPositive: BigDecimal => Boolean = input => input >= 0
 

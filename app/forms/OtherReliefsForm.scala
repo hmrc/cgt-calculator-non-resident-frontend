@@ -22,10 +22,6 @@ import common.Transformers._
 import models.OtherReliefsModel
 import play.api.data.Forms._
 import play.api.data._
-import play.api.i18n.Messages
-import uk.gov.hmrc.play.views.helpers.MoneyPounds
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 
 object OtherReliefsForm {
 
@@ -33,14 +29,12 @@ object OtherReliefsForm {
     Form(
       mapping(
         "otherReliefs" -> text
-          .verifying(Messages("error.real"), mandatoryCheck)
-          .verifying(Messages("error.real"), bigDecimalCheck)
+          .verifying("error.real", mandatoryCheck)
+          .verifying("error.real", bigDecimalCheck)
           .transform(stringToBigDecimal, bigDecimalToString)
-          .verifying(Messages("calc.otherReliefs.errorMinimum"), isPositive)
-          .verifying(Messages("calc.otherReliefs.errorDecimal"), decimalPlacesCheck)
-          .verifying(Messages("calc.common.error.maxNumericExceeded") + MoneyPounds(Constants.maxNumeric, 0).quantity +
-            " " + Messages("calc.common.error.maxNumericExceeded.OrLess"),
-            maxCheck)
+          .verifying("calc.otherReliefs.errorMinimum", isPositive)
+          .verifying("calc.otherReliefs.errorDecimal", decimalPlacesCheck)
+          .verifying(maxMonetaryValueConstraint(Constants.maxNumeric))
       )(OtherReliefsModel.apply)(OtherReliefsModel.unapply)
     )
 }

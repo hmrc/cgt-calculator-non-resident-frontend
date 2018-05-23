@@ -108,7 +108,7 @@ class PropertyDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
       }
 
       "have the question for improvements is claiming" in {
-        result.question shouldBe messages.question
+        result.question shouldBe "calc.improvements.question"
       }
 
       "have a link to the improvements page" in {
@@ -143,7 +143,7 @@ class PropertyDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
       }
 
       "have the question for improvements values" in {
-        result.get.question shouldBe messages.questionTwo
+        result.get.question shouldBe "calc.improvements.questionTwo"
       }
 
       "have a link to the improvements page" in {
@@ -175,7 +175,7 @@ class PropertyDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
       }
 
       "have the question for improvements values" in {
-        result.get.question shouldBe messages.questionThree
+        result.get.question shouldBe "calc.improvements.questionThree"
       }
 
       "have a link to the improvements page" in {
@@ -202,7 +202,7 @@ class PropertyDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
       }
 
       "have the question for improvements value" in {
-        result.get.question shouldBe messages.questionFour
+        result.get.question shouldBe "calc.improvements.questionFour"
       }
 
       "have a link to the improvements page" in {

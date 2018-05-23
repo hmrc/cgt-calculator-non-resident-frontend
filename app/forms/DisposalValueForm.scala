@@ -22,23 +22,18 @@ import common.Validation._
 import models.DisposalValueModel
 import play.api.data.Forms._
 import play.api.data._
-import play.api.i18n.Messages
-import uk.gov.hmrc.play.views.helpers.MoneyPounds
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 
 object DisposalValueForm {
 
   val disposalValueForm = Form(
     mapping(
       "disposalValue" -> text
-        .verifying(Messages("error.real"), mandatoryCheck)
-        .verifying(Messages("error.real"), bigDecimalCheck)
+        .verifying("error.real", mandatoryCheck)
+        .verifying("error.real", bigDecimalCheck)
         .transform(stringToBigDecimal, bigDecimalToString)
-        .verifying(Messages("calc.disposalValue.errorNegative"), isPositive)
-        .verifying(Messages("calc.disposalValue.errorDecimalPlaces"), decimalPlacesCheck)
-        .verifying(Messages("calc.common.error.maxNumericExceeded") + MoneyPounds(Constants.maxNumeric, 0).quantity + " " +
-          Messages("calc.common.error.maxNumericExceeded.OrLess"), maxCheck)
+        .verifying("calc.disposalValue.errorNegative", isPositive)
+        .verifying("calc.disposalValue.errorDecimalPlaces", decimalPlacesCheck)
+        .verifying(maxMonetaryValueConstraint(Constants.maxNumeric))
     )(DisposalValueModel.apply)(DisposalValueModel.unapply)
   )
 }

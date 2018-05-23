@@ -22,22 +22,18 @@ import common.Validation._
 import models.RebasedValueModel
 import play.api.data.Forms._
 import play.api.data._
-import play.api.i18n.Messages
-import uk.gov.hmrc.play.views.helpers.MoneyPounds
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 
 object RebasedValueForm {
 
   val rebasedValueForm: Form[RebasedValueModel] = Form(
     mapping(
       "rebasedValueAmt" -> text
-        .verifying(Messages("calc.nonResident.rebasedValue.error.no.value.supplied"), mandatoryCheck)
-        .verifying(Messages("error.number"), bigDecimalCheck)
+        .verifying("calc.nonResident.rebasedValue.error.no.value.supplied", mandatoryCheck)
+        .verifying("error.number", bigDecimalCheck)
         .transform[BigDecimal](stringToBigDecimal, bigDecimalToString)
-        .verifying(Messages("calc.nonResident.rebasedValue.errorNegative"), data => isPositive(data))
-        .verifying(Messages("calc.nonResident.rebasedValue.errorDecimalPlaces"), data => decimalPlacesCheck(data))
-        .verifying(Messages("calc.common.error.maxAmountExceeded", MoneyPounds(Constants.maxNumeric, 0).quantity), data => maxCheck(data))
+        .verifying("calc.nonResident.rebasedValue.errorNegative", data => isPositive(data))
+        .verifying("calc.nonResident.rebasedValue.errorDecimalPlaces", data => decimalPlacesCheck(data))
+        .verifying(maxMonetaryValueConstraint(Constants.maxNumeric))
     )(RebasedValueModel.apply)(RebasedValueModel.unapply)
   )
 }

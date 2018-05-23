@@ -17,9 +17,10 @@
 @import models._
 @import uk.gov.hmrc.play.views.html.helpers.form
 @import views.html.helpers._
+@import play.api.Application
 
 @(calculationElectionForm: Form[CalculationElectionModel], content: Seq[(String, String, String, String, Option[String], Option[BigDecimal])],
-        backLink: String)(implicit request: Request[_], messages: Messages)
+        backLink: String)(implicit request: Request[_], messages: Messages, application: Application)
 
 @main_template(Messages("calc.calculationElectionNoReliefs.title")) {
 
@@ -34,7 +35,7 @@
 
     <p>
       @Messages("calc.calculationElectionNoReliefs.helpTextMethodPartOne")
-      <strong>@content.head._4.toLowerCase</strong>
+      <strong>@(Messages(content.head._4).toLowerCase)</strong>
       @Messages("calc.calculationElectionNoReliefs.helpTextMethodPartTwo")
     </p>
   </div>

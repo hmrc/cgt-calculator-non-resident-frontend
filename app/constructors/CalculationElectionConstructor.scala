@@ -92,9 +92,9 @@ trait CalculationElectionConstructor {
     CalculationElectionOption(
       "rebased",
       amount.setScale(2),
-      Messages("calc.calculationElection.message.rebased"),
-      Messages("calc.calculationElection.description.rebased"),
-      Some(Messages("calc.calculationElection.message.rebasedDate")),
+      "calc.calculationElection.message.rebased",
+      "calc.calculationElection.description.rebased",
+      Some("calc.calculationElection.message.rebasedDate"),
       data,
       otherReliefs
     )
@@ -104,8 +104,8 @@ trait CalculationElectionConstructor {
     CalculationElectionOption(
       "flat",
       amount.setScale(2),
-      Messages("calc.calculationElection.message.flat"),
-      Messages("calc.calculationElection.description.flat"),
+      "calc.calculationElection.message.flat",
+      "calc.calculationElection.description.flat",
       None,
       data,
       otherReliefs
@@ -116,9 +116,9 @@ trait CalculationElectionConstructor {
     CalculationElectionOption(
       "time",
       amount.setScale(2),
-      Messages("calc.calculationElection.message.time"),
-      Messages("calc.calculationElection.description.time"),
-      Some(Messages("calc.calculationElection.message.timeDate")),
+      "calc.calculationElection.message.time",
+      "calc.calculationElection.description.time",
+      Some("calc.calculationElection.message.timeDate"),
       data,
       otherReliefs
     )

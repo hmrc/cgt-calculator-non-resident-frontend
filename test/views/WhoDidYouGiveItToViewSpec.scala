@@ -30,7 +30,7 @@ import play.api.Play.current
 class WhoDidYouGiveItToViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
   "Property Recipient view" should {
 
-    lazy val view = whoDidYouGiveItTo(whoDidYouGiveItToForm)(fakeRequest, applicationMessages)
+    lazy val view = whoDidYouGiveItTo(whoDidYouGiveItToForm)(fakeRequest, applicationMessages, fakeApplication)
     lazy val doc = Jsoup.parse(view.body)
 
     "have a charset of UTF-8" in {
@@ -114,7 +114,7 @@ class WhoDidYouGiveItToViewSpec extends UnitSpec with WithFakeApplication with F
 
   "WhoDidYouGiveItToView with form with errors" should {
     lazy val form = whoDidYouGiveItToForm.bind(Map("whoDidYouGiveItTo" -> ""))
-    lazy val view = whoDidYouGiveItTo(form)(fakeRequest, applicationMessages)
+    lazy val view = whoDidYouGiveItTo(form)(fakeRequest, applicationMessages, fakeApplication)
     lazy val doc = Jsoup.parse(view.body)
 
     "display an error summary message regarding incorrect value being inputted" in {

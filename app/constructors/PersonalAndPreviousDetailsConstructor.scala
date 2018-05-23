@@ -78,7 +78,7 @@ object PersonalAndPreviousDetailsConstructor {
     Some(QuestionAnswerModel(
       s"${KeystoreKeys.currentIncome}-question",
       currentIncomeModel.currentIncome,
-      Messages("calc.currentIncome.question"),
+      "calc.currentIncome.question",
       Some(controllers.routes.CurrentIncomeController.currentIncome().url)
     ))
   }
@@ -91,7 +91,7 @@ object PersonalAndPreviousDetailsConstructor {
         Some(QuestionAnswerModel(
           s"${KeystoreKeys.personalAllowance}-question",
           data.personalAllowanceAmt,
-          Messages("calc.personalAllowance.question"),
+          "calc.personalAllowance.question",
           Some(controllers.routes.PersonalAllowanceController.personalAllowance().url)
         ))
       case _ => None
@@ -103,7 +103,7 @@ object PersonalAndPreviousDetailsConstructor {
     Some(QuestionAnswerModel(
       s"${KeystoreKeys.otherProperties}-question",
       otherPropertiesModel.otherProperties,
-      Messages("calc.otherProperties.question"),
+      "calc.otherProperties.question",
       Some(controllers.routes.OtherPropertiesController.otherProperties().url)
     ))
   }
@@ -112,9 +112,9 @@ object PersonalAndPreviousDetailsConstructor {
                                    previousLossOrGainModel: Option[PreviousLossOrGainModel]): Option[QuestionAnswerModel[String]] = {
 
     val message = previousLossOrGainModel match {
-      case Some(model) if model.previousLossOrGain == PreviousGainOrLossKeys.gain => Messages("calc.previousLossOrGain.gain")
-      case Some(model) if model.previousLossOrGain == PreviousGainOrLossKeys.loss => Messages("calc.previousLossOrGain.loss")
-      case Some(model) if model.previousLossOrGain == PreviousGainOrLossKeys.neither => Messages("calc.previousLossOrGain.neither")
+      case Some(model) if model.previousLossOrGain == PreviousGainOrLossKeys.gain => "calc.previousLossOrGain.gain"
+      case Some(model) if model.previousLossOrGain == PreviousGainOrLossKeys.loss => "calc.previousLossOrGain.loss"
+      case Some(model) if model.previousLossOrGain == PreviousGainOrLossKeys.neither => "calc.previousLossOrGain.neither"
       case _ => ""
     }
 
@@ -123,7 +123,7 @@ object PersonalAndPreviousDetailsConstructor {
         Some(QuestionAnswerModel(
           s"${KeystoreKeys.previousLossOrGain}-question",
           message,
-          Messages("calc.previousLossOrGain.question"),
+          "calc.previousLossOrGain.question",
           Some(controllers.routes.PreviousGainOrLossController.previousGainOrLoss().url)
         ))
       case _ => None
@@ -139,7 +139,7 @@ object PersonalAndPreviousDetailsConstructor {
         Some(QuestionAnswerModel(
           s"${KeystoreKeys.howMuchLoss}-question",
           howMuchLossModel.get.loss,
-          Messages("calc.howMuchLoss.question"),
+          "calc.howMuchLoss.question",
           Some(controllers.routes.HowMuchLossController.howMuchLoss().url)
         ))
       case (_, _) => None
@@ -155,7 +155,7 @@ object PersonalAndPreviousDetailsConstructor {
         Some(QuestionAnswerModel(
           s"${KeystoreKeys.howMuchGain}-question",
           howMuchGainModel.get.howMuchGain,
-          Messages("calc.howMuchGain.question"),
+          "calc.howMuchGain.question",
           Some(controllers.routes.HowMuchGainController.howMuchGain().url)
         ))
       case (_, _) => None
@@ -172,7 +172,7 @@ object PersonalAndPreviousDetailsConstructor {
       Some(QuestionAnswerModel(
         s"${KeystoreKeys.annualExemptAmount}-question",
         annualExemptAmountModel.get.annualExemptAmount,
-        Messages("calc.annualExemptAmount.question"),
+        "calc.annualExemptAmount.question",
         Some(controllers.routes.AnnualExemptAmountController.annualExemptAmount().url)
       ))
     }
@@ -194,7 +194,7 @@ object PersonalAndPreviousDetailsConstructor {
     Some(QuestionAnswerModel(
       s"${KeystoreKeys.broughtForwardLosses}-question",
       Transformers.booleanToString(broughtForwardLossesModel.isClaiming),
-      Messages("calc.broughtForwardLosses.question"),
+      "calc.broughtForwardLosses.question",
       Some(controllers.routes.BroughtForwardLossesController.broughtForwardLosses().url)
     ))
   }
@@ -205,7 +205,7 @@ object PersonalAndPreviousDetailsConstructor {
       Some(QuestionAnswerModel(
         s"${KeystoreKeys.broughtForwardLosses}-value-question",
         broughtForwardLossesModel.broughtForwardLoss.get,
-        Messages("calc.broughtForwardLosses.inputQuestion"),
+        "calc.broughtForwardLosses.inputQuestion",
         Some(controllers.routes.BroughtForwardLossesController.broughtForwardLosses().url)
       ))
     }

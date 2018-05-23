@@ -19,9 +19,6 @@ package constructors
 import models._
 import common.{Dates, TaxDates}
 import common.KeystoreKeys.{NonResidentKeys => keys}
-import play.api.i18n.Messages
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 
 object DeductionDetailsConstructor {
 
@@ -71,7 +68,7 @@ object DeductionDetailsConstructor {
       case Some(PropertyLivedInModel(answer)) => Seq(QuestionAnswerModel(
         keys.propertyLivedIn,
         if(answer) "Yes" else "No",
-        Messages("calc.propertyLivedIn.title"),
+        "calc.propertyLivedIn.title",
         Some(controllers.routes.PropertyLivedInController.propertyLivedIn().url)
       ))
       case _ => Seq()
@@ -83,7 +80,7 @@ object DeductionDetailsConstructor {
       case Some(PrivateResidenceReliefModel(answer, _, _)) => Some(QuestionAnswerModel(
         keys.privateResidenceRelief,
         answer,
-        Messages("calc.privateResidenceRelief.question"),
+        "calc.privateResidenceRelief.question",
         Some(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief().url)
       ))
       case _ => None
@@ -99,15 +96,16 @@ object DeductionDetailsConstructor {
         Some(QuestionAnswerModel(
           s"${keys.privateResidenceRelief}-daysClaimed",
           value.toString(),
-          Messages("calc.privateResidenceRelief.firstQuestion"),
+          "calc.privateResidenceRelief.firstQuestion",
           Some(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief().url)
         ))
       case (Some(PrivateResidenceReliefModel("Yes", Some(value), _)), _, true) =>
         Some(QuestionAnswerModel(
           s"${keys.privateResidenceRelief}-daysClaimed",
           value.toString(),
-          Messages("calc.privateResidenceRelief.questionFlat", Dates.dateMinusMonths(answers.disposalDateModel, 18)),
-          Some(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief().url)))
+          "calc.privateResidenceRelief.questionFlat",
+          Some(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief().url),
+          Dates.dateMinusMonths(answers.disposalDateModel, 18)))
       case _ => None
     }
   }
@@ -120,18 +118,18 @@ object DeductionDetailsConstructor {
         Some(QuestionAnswerModel(
           s"${keys.privateResidenceRelief}-daysClaimedAfter",
           value.toString(),
-          s"${Messages("calc.privateResidenceRelief.questionBetween.partOne")} ${Dates.dateMinusMonths(answers.disposalDateModel, 18)}" +
-            s" ${Messages("calc.privateResidenceRelief.questionBetween.partTwo")}",
-          Some(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief().url)
+         "calc.privateResidenceRelief.questionBetween",
+          Some(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief().url),
+          Dates.dateMinusMonths(answers.disposalDateModel, 18)
         ))
       case (Some(PrivateResidenceReliefModel("Yes", _, Some(value))), Some(_))
       if TaxDates.dateAfterOctober(answers.disposalDateModel.get) =>
         Some(QuestionAnswerModel(
           s"${keys.privateResidenceRelief}-daysClaimedAfter",
           value.toString(),
-          s"${Messages("calc.privateResidenceRelief.questionBetween.partOne")} ${Dates.dateMinusMonths(answers.disposalDateModel, 18)}" +
-            s" ${Messages("calc.privateResidenceRelief.questionBetween.partTwo")}",
-          Some(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief().url)
+          "calc.privateResidenceRelief.questionBetween",
+          Some(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief().url),
+          Dates.dateMinusMonths(answers.disposalDateModel, 18)
         ))
       case _ => None
     }

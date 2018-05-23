@@ -63,7 +63,7 @@ object PurchaseDetailsConstructor {
     Some(QuestionAnswerModel(
       s"${KeystoreKeys.acquisitionDate}",
       totalGainAnswersModel.acquisitionDateModel.get,
-      Messages("calc.acquisitionDate.questionTwo"),
+      "calc.acquisitionDate.questionTwo",
       Some(controllers.routes.AcquisitionDateController.acquisitionDate().url)
     ))
   }
@@ -71,16 +71,16 @@ object PurchaseDetailsConstructor {
   def howBecameOwnerRow(totalGainAnswersModel: TotalGainAnswersModel): Option[QuestionAnswerModel[String]] = {
 
     lazy val answer = totalGainAnswersModel.howBecameOwnerModel.get.gainedBy match {
-      case "Bought" => Messages("calc.howBecameOwner.bought")
-      case "Inherited" => Messages("calc.howBecameOwner.inherited")
-      case _ => Messages("calc.howBecameOwner.gifted")
+      case "Bought" => "calc.howBecameOwner.bought"
+      case "Inherited" => "calc.howBecameOwner.inherited"
+      case _ => "calc.howBecameOwner.gifted"
     }
 
     totalGainAnswersModel.howBecameOwnerModel match {
       case Some(_) => Some(QuestionAnswerModel(
         s"${KeystoreKeys.howBecameOwner}",
         answer,
-        Messages("calc.howBecameOwner.question"),
+        "calc.howBecameOwner.question",
         Some(controllers.routes.HowBecameOwnerController.howBecameOwner().url)
       ))
       case _ => None
@@ -92,7 +92,7 @@ object PurchaseDetailsConstructor {
       case Some(HowBecameOwnerModel("Bought")) => Some(QuestionAnswerModel(
         s"${KeystoreKeys.boughtForLess}",
         totalGainAnswersModel.boughtForLessModel.get.boughtForLess,
-        Messages("calc.boughtForLess.question"),
+        "calc.boughtForLess.question",
         Some(controllers.routes.BoughtForLessController.boughtForLess().url)
       ))
       case _ => None
@@ -107,7 +107,7 @@ object PurchaseDetailsConstructor {
       case (Some(CostsAtLegislationStartModel(answer, _)), true) =>  Some(QuestionAnswerModel(
         KeystoreKeys.costAtLegislationStart,
         answer,
-        Messages("calc.costsAtLegislationStart.title"),
+        "calc.costsAtLegislationStart.title",
         Some(controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart().url)
       ))
       case _ => None
@@ -122,7 +122,7 @@ object PurchaseDetailsConstructor {
       case (Some(CostsAtLegislationStartModel("Yes", Some(value))), true) => Some(QuestionAnswerModel(
         KeystoreKeys.costAtLegislationStartValue,
         value,
-        Messages("calc.costsAtLegislationStart.howMuch"),
+        "calc.costsAtLegislationStart.howMuch",
         Some(controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart().url)
       ))
       case _ => None
@@ -131,11 +131,11 @@ object PurchaseDetailsConstructor {
 
   def acquisitionValueRow(totalGainAnswersModel: TotalGainAnswersModel, useWorthBeforeLegislationStart: Boolean): Option[QuestionAnswerModel[BigDecimal]] = {
     val question = (useWorthBeforeLegislationStart, totalGainAnswersModel.howBecameOwnerModel, totalGainAnswersModel.boughtForLessModel) match {
-      case (true, _, _) => Messages("calc.worthBeforeLegislationStart.question")
-      case (_, Some(HowBecameOwnerModel("Gifted")), _) => Messages("calc.worthWhenGiftedTo.question")
-      case (_, Some(HowBecameOwnerModel("Inherited")), _) => Messages("calc.worthWhenInherited.question")
-      case (_, _, Some(BoughtForLessModel(true))) => Messages("calc.worthWhenBoughtForLess.question")
-      case _ => Messages("calc.acquisitionValue.question")
+      case (true, _, _) => "calc.worthBeforeLegislationStart.question"
+      case (_, Some(HowBecameOwnerModel("Gifted")), _) => "calc.worthWhenGiftedTo.question"
+      case (_, Some(HowBecameOwnerModel("Inherited")), _) => "calc.worthWhenInherited.question"
+      case (_, _, Some(BoughtForLessModel(true))) => "calc.worthWhenBoughtForLess.question"
+      case _ => "calc.acquisitionValue.question"
     }
 
     Some(QuestionAnswerModel(
@@ -155,7 +155,7 @@ object PurchaseDetailsConstructor {
     Some(QuestionAnswerModel(
       KeystoreKeys.acquisitionCosts,
       totalGainAnswersModel.acquisitionCostsModel.get.acquisitionCostsAmt,
-      Messages("calc.acquisitionCosts.question"),
+      "calc.acquisitionCosts.question",
       Some(controllers.routes.AcquisitionCostsController.acquisitionCosts().url)
     ))
     case _ => None
@@ -168,7 +168,7 @@ object PurchaseDetailsConstructor {
       Some(QuestionAnswerModel(
         KeystoreKeys.rebasedValue,
         rebasedValueModel.get.rebasedValueAmt,
-        s"${Messages("calc.nonResident.rebasedValue.question")} ${Messages("calc.nonResident.rebasedValue.date")}",
+        s"${"calc.nonResident.rebasedValue.questionAndDate"}",
         Some(controllers.routes.RebasedValueController.rebasedValue().url)
       ))
     }
@@ -180,7 +180,7 @@ object PurchaseDetailsConstructor {
       Some(QuestionAnswerModel(
         s"${KeystoreKeys.rebasedCosts}-question",
         rebasedCostsModel.get.hasRebasedCosts,
-        Messages("calc.rebasedCosts.question"),
+        "calc.rebasedCosts.question",
         Some(controllers.routes.RebasedCostsController.rebasedCosts().url)
       ))
     } else None
@@ -191,7 +191,7 @@ object PurchaseDetailsConstructor {
       case (true, Some(RebasedCostsModel("Yes", Some(value)))) => Some(QuestionAnswerModel(
         KeystoreKeys.rebasedCosts,
         value,
-        Messages("calc.rebasedCosts.questionTwo"),
+        "calc.rebasedCosts.questionTwo",
         Some(controllers.routes.RebasedCostsController.rebasedCosts().url)
       ))
       case _ => None

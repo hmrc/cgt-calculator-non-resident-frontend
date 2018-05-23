@@ -43,8 +43,8 @@ object SalesDetailsConstructor {
   def whoDidYouGiveItToRow(answers: TotalGainAnswersModel): Option[QuestionAnswerModel[String]] = {
     if (!answers.soldOrGivenAwayModel.soldIt) {
       Some(QuestionAnswerModel[String](keys.whoDidYouGiveItTo,
-        Messages("calc.whoDidYouGiveThePropertyTo.other"),
-        Messages("calc.whoDidYouGiveThePropertyTo.title"),
+        "calc.whoDidYouGiveThePropertyTo.other",
+        "calc.whoDidYouGiveThePropertyTo.title",
         Some(controllers.routes.WhoDidYouGiveItToController.whoDidYouGiveItTo().url)
       ))
     }
@@ -57,22 +57,22 @@ object SalesDetailsConstructor {
 
     Some(QuestionAnswerModel[LocalDate](keys.disposalDate,
       date,
-      Messages("calc.disposalDate.question"),
+      "calc.disposalDate.question",
       Some(controllers.routes.DisposalDateController.disposalDate().url)))
   }
 
   def soldOrGivenAwayRow(answers: TotalGainAnswersModel): Option[QuestionAnswerModel[String]] = {
     if (answers.soldOrGivenAwayModel.soldIt) {
       Some(QuestionAnswerModel[String](keys.soldOrGivenAway,
-        Messages("calc.soldOrGivenAway.sold"),
-        Messages("calc.soldOrGivenAway.question"),
+        "calc.soldOrGivenAway.sold",
+        "calc.soldOrGivenAway.question",
         Some(controllers.routes.SoldOrGivenAwayController.soldOrGivenAway().url)
       ))
     }
     else {
       Some(QuestionAnswerModel[String](keys.soldOrGivenAway,
-        Messages("calc.soldOrGivenAway.gave"),
-        Messages("calc.soldOrGivenAway.question"),
+        "calc.soldOrGivenAway.gave",
+        "calc.soldOrGivenAway.question",
         Some(controllers.routes.SoldOrGivenAwayController.soldOrGivenAway().url)
       ))
     }
@@ -82,7 +82,7 @@ object SalesDetailsConstructor {
     if (answers.soldOrGivenAwayModel.soldIt) {
       Some(QuestionAnswerModel[Boolean](keys.soldForLess,
         answers.soldForLessModel.get.soldForLess,
-        Messages("calc.nonResident.soldForLess.question"),
+        "calc.nonResident.soldForLess.question",
         Some(controllers.routes.SoldForLessController.soldForLess().url)
       ))
     }
@@ -92,9 +92,9 @@ object SalesDetailsConstructor {
   def disposalValueRow(answers: TotalGainAnswersModel): Option[QuestionAnswerModel[BigDecimal]] = {
 
     val question = (answers.soldOrGivenAwayModel.soldIt, answers.soldForLessModel) match {
-      case (true, Some(SoldForLessModel(true))) => Messages("calc.marketValue.sold.question")
-      case (true, Some(_)) => Messages("calc.disposalValue.question")
-      case _ => Messages("calc.marketValue.gaveItAway.question")
+      case (true, Some(SoldForLessModel(true))) => "calc.marketValue.sold.question"
+      case (true, Some(_)) => "calc.disposalValue.question"
+      case _ => "calc.marketValue.gaveItAway.question"
     }
 
     val route = (answers.soldOrGivenAwayModel.soldIt, answers.soldForLessModel) match {
@@ -113,7 +113,7 @@ object SalesDetailsConstructor {
   def disposalCostsRow(answers: TotalGainAnswersModel): Option[QuestionAnswerModel[BigDecimal]] = {
     Some(QuestionAnswerModel[BigDecimal](keys.disposalCosts,
       answers.disposalCostsModel.disposalCosts,
-      Messages("calc.disposalCosts.question"),
+      "calc.disposalCosts.question",
       Some(controllers.routes.DisposalCostsController.disposalCosts().url)))
   }
 }

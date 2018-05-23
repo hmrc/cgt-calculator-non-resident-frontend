@@ -22,10 +22,6 @@ import common.Validation._
 import models.BroughtForwardLossesModel
 import play.api.data.Forms._
 import play.api.data._
-import play.api.i18n.Messages
-import uk.gov.hmrc.play.views.helpers.MoneyPounds
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 
 object BroughtForwardLossesForm {
 
@@ -44,24 +40,25 @@ object BroughtForwardLossesForm {
     case _ => true
   }
 
-  val verifyMaximum: BroughtForwardLossesModel => Boolean = {
-    case BroughtForwardLossesModel(true, Some(value)) => maxCheck(value)
-    case _ => true
+  private def getLossesAmount(model: BroughtForwardLossesModel): Option[BigDecimal] = {
+    model match {
+      case BroughtForwardLossesModel(true, losses) => losses
+      case _ => None
+    }
   }
 
   val broughtForwardLossesForm = Form(
     mapping(
       "isClaiming" -> text
-        .verifying(Messages("calc.common.error.fieldRequired"), mandatoryCheck)
-        .verifying(Messages("calc.common.error.fieldRequired"), yesNoCheck)
+        .verifying("calc.common.error.fieldRequired", mandatoryCheck)
+        .verifying("calc.common.error.fieldRequired", yesNoCheck)
         .transform(stringToBoolean, booleanToString),
       "broughtForwardLoss" -> text
         .transform(stringToOptionalBigDecimal, optionalBigDecimalToString)
     )(BroughtForwardLossesModel.apply)(BroughtForwardLossesModel.unapply)
-      .verifying(Messages("error.real"), verifyMandatory)
-      .verifying(Messages("calc.broughtForwardLosses.errorDecimal"), verifyDecimal)
-      .verifying(Messages("calc.broughtForwardLosses.errorNegative"), verifyPositive)
-      .verifying(Messages("calc.common.error.maxNumericExceeded") + MoneyPounds(Constants.maxNumeric, 0).quantity + " " +
-        Messages("calc.common.error.maxNumericExceeded.OrLess"), verifyMaximum)
+      .verifying("error.real", verifyMandatory)
+      .verifying("calc.broughtForwardLosses.errorDecimal", verifyDecimal)
+      .verifying("calc.broughtForwardLosses.errorNegative", verifyPositive)
+      .verifying(maxMonetaryValueConstraint[BroughtForwardLossesModel](Constants.maxNumeric, getLossesAmount))
   )
 }

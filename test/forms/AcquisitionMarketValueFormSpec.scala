@@ -16,8 +16,8 @@
 
 package forms
 
-import assets.MessageLookup.NonResident.{AcquisitionMarketValue => messages}
-import assets.MessageLookup.{NonResident => commonMessages}
+import assets.KeyLookup.NonResident.{AcquisitionMarketValue => messages}
+import assets.KeyLookup.{NonResident => commonMessages}
 import models.AcquisitionValueModel
 import forms.AcquisitionMarketValueForm._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
@@ -112,8 +112,9 @@ class AcquisitionMarketValueFormSpec extends UnitSpec with WithFakeApplication {
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${commonMessages.maximumAmount}" in {
-        form.error("acquisitionMarketValue").get.message shouldBe commonMessages.maximumAmount
+      s"return the correct error message" in {
+        form.error("acquisitionMarketValue").get.message shouldBe "calc.common.error.maxNumericExceeded"
+        form.error("acquisitionMarketValue").get.args shouldBe Array("1,000,000,000")
       }
     }
 

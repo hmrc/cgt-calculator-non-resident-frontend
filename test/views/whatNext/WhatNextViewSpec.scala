@@ -16,22 +16,22 @@
 
 package views.whatNext
 
-import assets.MessageLookup
-import org.scalatest.mockito.MockitoSugar
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import uk.gov.hmrc.play.test.UnitSpec
+import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import assets.MessageLookup.{WhatNext => messages}
 import config.ApplicationConfig
 import org.jsoup.Jsoup
+import play.api.Application
 import views.html.whatNext.whatNext
 import play.api.i18n.Messages.Implicits._
 import play.api.test.FakeRequest
 
-class WhatNextViewSpec extends UnitSpec with GuiceOneAppPerSuite with MockitoSugar {
+class WhatNextViewSpec extends UnitSpec with WithFakeApplication {
 
-  "What next view" should {
+  "What next view should" when {
+    implicit lazy val fakeApp: Application = fakeApplication
+
     lazy val config = ApplicationConfig
-    lazy val view = whatNext()(FakeRequest("GET", ""), applicationMessages, config)
+    lazy val view = whatNext()(FakeRequest("GET", ""), applicationMessages, fakeApp, config)
     lazy val doc = Jsoup.parse(view.body)
 
     s"have a title of ${messages.title}" in {

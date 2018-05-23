@@ -22,23 +22,19 @@ import common.Validation._
 import models.HowMuchGainModel
 import play.api.data.Forms._
 import play.api.data._
-import play.api.i18n.Messages
 import uk.gov.hmrc.play.views.helpers.MoneyPounds
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 
 object HowMuchGainForm {
 
   val howMuchGainForm = Form(
     mapping(
       "howMuchGain" -> text
-        .verifying(Messages("error.real"), mandatoryCheck)
-        .verifying(Messages("error.real"), bigDecimalCheck)
+        .verifying("error.real", mandatoryCheck)
+        .verifying("error.real", bigDecimalCheck)
         .transform(stringToBigDecimal, bigDecimalToString)
-        .verifying(Messages("calc.howMuchGain.errorNegative"), isPositive)
-        .verifying(Messages("calc.howMuchGain.errorDecimalPlaces"), decimalPlacesCheck)
-        .verifying(Messages("calc.common.error.maxNumericExceeded") + MoneyPounds(Constants.maxNumeric, 0).quantity + " " +
-          Messages("calc.common.error.maxNumericExceeded.OrLess"), maxCheck)
+        .verifying("calc.howMuchGain.errorNegative", isPositive)
+        .verifying("calc.howMuchGain.errorDecimalPlaces", decimalPlacesCheck)
+        .verifying(maxMonetaryValueConstraint(Constants.maxNumeric))
     )(HowMuchGainModel.apply)(HowMuchGainModel.unapply)
   )
 }

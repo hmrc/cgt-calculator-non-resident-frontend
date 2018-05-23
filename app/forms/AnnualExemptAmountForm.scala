@@ -21,25 +21,22 @@ import common.Validation._
 import models.AnnualExemptAmountModel
 import play.api.data.Forms._
 import play.api.data._
-import play.api.i18n.Messages
 import uk.gov.hmrc.play.views.helpers.MoneyPounds
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 
 object AnnualExemptAmountForm {
 
   def errorMaxMessage(maxAEA: BigDecimal): String =
-    Messages("calc.annualExemptAmount.errorMax") + MoneyPounds(maxAEA, 0).quantity + " " + Messages("calc.annualExemptAmount.errorMaxEnd")
+    "calc.annualExemptAmount.errorMax" + MoneyPounds(maxAEA, 0).quantity + " " + "calc.annualExemptAmount.errorMaxEnd"
 
   def annualExemptAmountForm(maxAEA: BigDecimal = BigDecimal(0)): Form[AnnualExemptAmountModel] = Form(
     mapping(
       "annualExemptAmount" -> text
-        .verifying(Messages("error.real"), mandatoryCheck)
-        .verifying(Messages("error.real"), bigDecimalCheck)
+        .verifying("error.real", mandatoryCheck)
+        .verifying("error.real", bigDecimalCheck)
         .transform(stringToBigDecimal, bigDecimalToString)
-        .verifying(errorMaxMessage(maxAEA), _ <= maxAEA)
-        .verifying(Messages("calc.annualExemptAmount.errorNegative"), annualExemptAmount => isPositive(annualExemptAmount))
-        .verifying(Messages("calc.annualExemptAmount.errorDecimalPlaces"), annualExemptAmount => decimalPlacesCheck(annualExemptAmount))
+        .verifying(maxMonetaryValueConstraint(maxAEA))
+        .verifying("calc.annualExemptAmount.errorNegative", annualExemptAmount => isPositive(annualExemptAmount))
+        .verifying("calc.annualExemptAmount.errorDecimalPlaces", annualExemptAmount => decimalPlacesCheck(annualExemptAmount))
     )(AnnualExemptAmountModel.apply)(AnnualExemptAmountModel.unapply)
   )
 }

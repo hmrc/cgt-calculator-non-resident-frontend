@@ -21,11 +21,8 @@ import common.Validation._
 import models.CostsAtLegislationStartModel
 import play.api.data.Forms._
 import play.api.data._
-import play.api.i18n.Messages
 import uk.gov.hmrc.play.views.helpers.MoneyPounds
 import common.Transformers._
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 
 object CostsAtLegislationStartForm {
 
@@ -50,33 +47,27 @@ object CostsAtLegislationStartForm {
     }
   }
 
-  def validateMax(data: CostsAtLegislationStartModel): Boolean = {
-    data.hasCosts match {
-      case "Yes" => maxCheck(data.costs.getOrElse(0))
-      case "No" => true
+  private def getLossesAmount(model: CostsAtLegislationStartModel): Option[BigDecimal] = {
+    model match {
+      case CostsAtLegislationStartModel("Yes", costs) => costs
+      case _ => None
     }
   }
-
-  private lazy val greaterThanMaxMessage = Messages("calc.common.error.maxNumericExceeded") +
-    MoneyPounds(Constants.maxNumeric, 0).quantity +
-    " " +
-    Messages("calc.common.error.maxNumericExceeded.OrLess")
 
   val costsAtLegislationStartForm = Form(
     mapping(
       "hasCosts" -> text
-        .verifying(Messages("calc.common.error.fieldRequired"), mandatoryCheck)
-        .verifying(Messages("calc.common.error.fieldRequired"), yesNoCheck),
+        .verifying("calc.common.error.fieldRequired", mandatoryCheck)
+        .verifying("calc.common.error.fieldRequired", yesNoCheck),
       "costs" -> text
         .transform(stringToOptionalBigDecimal, optionalBigDecimalToString)
     )(CostsAtLegislationStartModel.apply)(CostsAtLegislationStartModel.unapply)
-      .verifying(Messages("calc.costsAtLegislationStart.error.no.value.supplied"),
+      .verifying("calc.costsAtLegislationStart.error.no.value.supplied",
         form => verifyAmountSupplied(CostsAtLegislationStartModel(form.hasCosts, form.costs)))
-      .verifying(Messages("calc.costsAtLegislationStart.errorNegative"),
+      .verifying("calc.costsAtLegislationStart.errorNegative",
         form => verifyPositive(form))
-      .verifying(Messages("calc.costsAtLegislationStart.errorDecimalPlaces"),
+      .verifying("calc.costsAtLegislationStart.errorDecimalPlaces",
         form => verifyTwoDecimalPlaces(form))
-      .verifying(greaterThanMaxMessage,
-        form => validateMax(form))
+      .verifying(maxMonetaryValueConstraint[CostsAtLegislationStartModel](Constants.maxNumeric, getLossesAmount))
   )
 }

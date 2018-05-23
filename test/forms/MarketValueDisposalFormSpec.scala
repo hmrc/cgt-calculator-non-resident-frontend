@@ -16,8 +16,8 @@
 
 package forms
 
-import assets.MessageLookup.NonResident.{MarketValue => marketValueMessages}
-import assets.MessageLookup.{NonResident => messages}
+import assets.KeyLookup.NonResident.{MarketValue => marketValueMessages}
+import assets.KeyLookup.{NonResident => messages}
 import forms.MarketValueGaveAwayForm._
 import forms.MarketValueWhenSoldForm._
 import models.DisposalValueModel
@@ -98,8 +98,6 @@ class MarketValueDisposalFormSpec extends UnitSpec with WithFakeApplication {
 
     "supplied with an amount with 3 numbers after the decimal" when {
 
-      lazy val form = marketValueWhenGaveAwayForm.bind(Map("disposalValue" -> "1.000"))
-
       "using the marketValueWhenGaveAwayForm" should {
         lazy val form = marketValueWhenGaveAwayForm.bind(Map("disposalValue" -> "1.000"))
 
@@ -146,7 +144,8 @@ class MarketValueDisposalFormSpec extends UnitSpec with WithFakeApplication {
       }
 
       "associate the correct error message to the error" in {
-        form.error("disposalValue").get.message shouldBe messages.maximumAmount
+        form.error("disposalValue").get.message shouldBe "calc.common.error.maxNumericExceeded"
+        form.error("disposalValue").get.args shouldBe Array("1,000,000,000")
       }
     }
 

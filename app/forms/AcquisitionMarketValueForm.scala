@@ -22,23 +22,18 @@ import common.Validation._
 import models.AcquisitionValueModel
 import play.api.data.Forms._
 import play.api.data.Form
-import play.api.i18n.Messages
-import uk.gov.hmrc.play.views.helpers.MoneyPounds
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 
 object AcquisitionMarketValueForm {
 
-  val acquisitionMarketValueForm: Form[AcquisitionValueModel] = Form(
-    mapping(
+  def acquisitionMarketValueForm(): Form[AcquisitionValueModel] = Form(
+    mapping {
       "acquisitionMarketValue" -> text
-        .verifying(Messages("error.real"), mandatoryCheck)
-        .verifying(Messages("error.real"), bigDecimalCheck)
+        .verifying("error.real", mandatoryCheck)
+        .verifying("error.real", bigDecimalCheck)
         .transform(stringToBigDecimal, bigDecimalToString)
-        .verifying(Messages("calc.acquisitionMarketValue.errorNegative"), isPositive)
-        .verifying(Messages("calc.acquisitionMarketValue.errorDecimalPlaces"), decimalPlacesCheck)
-        .verifying(Messages("calc.common.error.maxNumericExceeded") + MoneyPounds(Constants.maxNumeric, 0).quantity + " " +
-          Messages("calc.common.error.maxNumericExceeded.OrLess"), maxCheck)
-    )(AcquisitionValueModel.apply)(AcquisitionValueModel.unapply)
+        .verifying("calc.acquisitionMarketValue.errorNegative", isPositive)
+        .verifying("calc.acquisitionMarketValue.errorDecimalPlaces", decimalPlacesCheck)
+        .verifying(maxMonetaryValueConstraint(Constants.maxNumeric))
+    }(AcquisitionValueModel.apply)(AcquisitionValueModel.unapply)
   )
 }

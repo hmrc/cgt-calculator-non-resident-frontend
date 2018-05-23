@@ -67,4 +67,17 @@ object Transformers {
   }
 
   val booleanToString: Boolean => String = (input) => if (input) "Yes" else "No"
+
+  val booleanToMessageString: Boolean => String = (input) => if (input) "calc.base.yes" else "calc.base.no"
+
+  def checkIfBooleanAsString(input: String): String = input match {
+    case "Yes" => "calc.base.yes"
+    case "No" => "calc.base.no"
+    case _ => input
+  }
+
+  val finalDate: Boolean => String = (input) => if (input)
+    "calc.privateResidenceRelief.questionBetween.partOneAndTwo" else ""
+
+  val localDateMonthKey: Int => String = (input) => s"calc.month.$input"
 }

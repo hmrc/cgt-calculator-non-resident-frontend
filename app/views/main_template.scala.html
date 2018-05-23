@@ -17,6 +17,10 @@
 @import config.ApplicationConfig
 @import helpers.full_width_banner
 @import helpers.full_width_banner_content_ur
+@import controllers.CgtLanguageController
+@import uk.gov.hmrc.play.views.html.layouts
+@import play.api.Application
+@import views.html.helpers._
 
 @(title: String,
   sidebarLinks: Option[Html] = None,
@@ -25,11 +29,11 @@
   mainClass: Option[String] = None,
   scriptElem: Option[Html] = None,
   isUserResearchBannerVisible: Boolean = false,
-  articleLayout: Boolean = true)(mainContent: Html)(implicit request : Request[_], messages: Messages)
-
-@import uk.gov.hmrc.play.views.html.layouts
+  articleLayout: Boolean = true)(mainContent: Html)(implicit request : Request[_], messages: Messages, application: Application)
 
 @serviceInfoContent = {}
+
+@lc = @{Application.instanceCache[CgtLanguageController].apply(application) }
 
 @sidebarContent = {
     <div class="service-info">
@@ -39,6 +43,9 @@
 }
 
 @sidebar = {
+
+    @language_selection(lc.languageMap, lc.langToCall, None)
+
     @if(sidebarLinks.isDefined) {
         @layouts.sidebar(sidebarContent, Some("sidebar"))
     }

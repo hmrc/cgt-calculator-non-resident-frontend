@@ -18,7 +18,7 @@ package forms
 
 import java.time.LocalDate
 
-import assets.MessageLookup.{NonResident => messages}
+import assets.KeyLookup.{NonResident => messages}
 import models.DisposalDateModel
 import forms.DisposalDateForm._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}

@@ -18,8 +18,9 @@
 @import java.time._
 @import uk.gov.hmrc.play.views.helpers._
 @import common.Dates._
+@import common.Dates.TemplateImplicits._
 
-@(questionAnswer: QuestionAnswerModel[Any], decimalPlaces: Int)(implicit messages: Messages)
+@(questionAnswer: QuestionAnswerModel[Any], decimalPlaces: Int)(implicit messages: Messages, lang: Lang)
 
 <div id="@{s"${questionAnswer.id}-question"}" class="grid-layout__column grid-layout__column--1-2">
     <span class="lede">@questionAnswer.question</span>
@@ -29,7 +30,7 @@
         case string: String => string
         case int: Int => int.toString
         case bigDecimal: BigDecimal => s"£${MoneyPounds(bigDecimal, decimalPlaces).quantity}"
-        case date: LocalDate => datePageFormatNoZero.format(date)
+        case date: LocalDate => date.localFormat("d MMMM yyyy")
         case boolean: Boolean => if (boolean) "Yes" else "No"
         case (taxGain: BigDecimal, taxRate: Int, additionalGain: BigDecimal, additionalRate: Int) => {
             <p class="lede">{Messages("calc.summary.calculation.details.taxRateValue", s"£${MoneyPounds(taxGain, 2).quantity}", taxRate)}</p>

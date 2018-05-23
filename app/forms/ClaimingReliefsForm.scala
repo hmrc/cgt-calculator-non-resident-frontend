@@ -21,17 +21,14 @@ import common.Validation.{mandatoryCheck, yesNoCheck}
 import models.ClaimingReliefsModel
 import play.api.data.Form
 import play.api.data.Forms._
-import play.api.i18n.Messages
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 
 object ClaimingReliefsForm {
 
   val claimingReliefsForm: Form[ClaimingReliefsModel] = Form(
     mapping(
       "isClaimingReliefs" -> text
-        .verifying(Messages("calc.claimingReliefs.errorMandatory"), mandatoryCheck)
-        .verifying(Messages("calc.claimingReliefs.errorMandatory"), yesNoCheck)
+        .verifying("calc.claimingReliefs.errorMandatory", mandatoryCheck)
+        .verifying("calc.claimingReliefs.errorMandatory", yesNoCheck)
         .transform(stringToBoolean, booleanToString)
     )(ClaimingReliefsModel.apply)(ClaimingReliefsModel.unapply)
   )

@@ -16,7 +16,7 @@
 
 package forms
 
-import assets.MessageLookup.{NonResident => messages}
+import assets.KeyLookup.{NonResident => commonMessages}
 import models.DisposalValueModel
 import forms.DisposalValueForm._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
@@ -59,8 +59,8 @@ class DisposalValueFormSpec extends UnitSpec with WithFakeApplication {
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.DisposalValue.errorDecimalPlaces}" in {
-        form.error("disposalValue").get.message shouldBe messages.DisposalValue.errorDecimalPlaces
+      s"return an error message of '${commonMessages.DisposalValue.errorDecimalPlaces}" in {
+        form.error("disposalValue").get.message shouldBe commonMessages.DisposalValue.errorDecimalPlaces
       }
     }
 
@@ -85,8 +85,8 @@ class DisposalValueFormSpec extends UnitSpec with WithFakeApplication {
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.DisposalValue.errorNegative}" in {
-        form.error("disposalValue").get.message shouldBe messages.DisposalValue.errorNegative
+      s"return an error message of '${commonMessages.DisposalValue.errorNegative}" in {
+        form.error("disposalValue").get.message shouldBe commonMessages.DisposalValue.errorNegative
       }
     }
 
@@ -111,8 +111,9 @@ class DisposalValueFormSpec extends UnitSpec with WithFakeApplication {
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.DisposalValue.errorMaximum("1,000,000,000")}" in {
-        form.error("disposalValue").get.message shouldBe messages.DisposalValue.errorMaximum("1,000,000,000")
+      s"return the correct error message" in {
+        form.error("disposalValue").get.message shouldBe "calc.common.error.maxNumericExceeded"
+        form.error("disposalValue").get.args shouldBe Array("1,000,000,000")
       }
     }
 
@@ -124,8 +125,8 @@ class DisposalValueFormSpec extends UnitSpec with WithFakeApplication {
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.errorRealNumber}" in {
-        form.error("disposalValue").get.message shouldBe messages.errorRealNumber
+      s"return an error message of '${commonMessages.errorRealNumber}" in {
+        form.error("disposalValue").get.message shouldBe commonMessages.errorRealNumber
       }
     }
 
@@ -137,8 +138,8 @@ class DisposalValueFormSpec extends UnitSpec with WithFakeApplication {
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.errorRealNumber}" in {
-        form.error("disposalValue").get.message shouldBe messages.errorRealNumber
+      s"return an error message of '${commonMessages.errorRealNumber}" in {
+        form.error("disposalValue").get.message shouldBe commonMessages.errorRealNumber
       }
     }
   }

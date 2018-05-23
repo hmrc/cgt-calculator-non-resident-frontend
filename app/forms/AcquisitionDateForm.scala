@@ -16,15 +16,12 @@
 
 package forms
 
-import java.time.{LocalDate, ZoneId, ZonedDateTime}
+import java.time.{ZoneId, ZonedDateTime}
 
 import common.Validation._
 import models.AcquisitionDateModel
 import play.api.data.Forms._
 import play.api.data._
-import play.api.i18n.Messages
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 import common.Transformers._
 
 object AcquisitionDateForm {
@@ -32,21 +29,21 @@ object AcquisitionDateForm {
   val acquisitionDateForm = Form(
     mapping(
       "acquisitionDateDay" -> text
-        .verifying(Messages("calc.common.date.error.invalidDate"), mandatoryCheck)
-        .verifying(Messages("calc.common.date.error.invalidDate"), integerCheck)
+        .verifying("calc.common.date.error.invalidDate", mandatoryCheck)
+        .verifying("calc.common.date.error.invalidDate", integerCheck)
         .transform[Int](stringToInteger, _.toString),
       "acquisitionDateMonth" -> text
-        .verifying(Messages("calc.common.date.error.invalidDate"), mandatoryCheck)
-        .verifying(Messages("calc.common.date.error.invalidDate"), integerCheck)
+        .verifying("calc.common.date.error.invalidDate", mandatoryCheck)
+        .verifying("calc.common.date.error.invalidDate", integerCheck)
         .transform[Int](stringToInteger, _.toString),
       "acquisitionDateYear" -> text
-        .verifying(Messages("calc.common.date.error.invalidDate"), mandatoryCheck)
-        .verifying(Messages("calc.common.date.error.invalidDate"), integerCheck)
+        .verifying("calc.common.date.error.invalidDate", mandatoryCheck)
+        .verifying("calc.common.date.error.invalidDate", integerCheck)
         .transform[Int](stringToInteger, _.toString)
     )(AcquisitionDateModel.apply)(AcquisitionDateModel.unapply)
-      .verifying(Messages("calc.common.date.error.invalidDate"), fields =>
+      .verifying("calc.common.date.error.invalidDate", fields =>
         isValidDate(fields.day, fields.month, fields.year))
-      .verifying(Messages("calc.acquisitionDate.errorFutureDateGuidance"), fields =>
+      .verifying("calc.acquisitionDate.errorFutureDateGuidance", fields =>
         verifyDateInPast(fields))
   )
 

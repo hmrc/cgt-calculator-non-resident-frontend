@@ -21,17 +21,14 @@ import common.Validation._
 import models.SoldForLessModel
 import play.api.data.Form
 import play.api.data.Forms._
-import play.api.i18n.Messages
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 
 object SoldForLessForm {
 
   val soldForLessForm: Form[SoldForLessModel] = Form(
     mapping(
       "soldForLess" -> text
-        .verifying(Messages("calc.common.error.fieldRequired"), mandatoryCheck)
-        .verifying(Messages("calc.common.error.fieldRequired"), yesNoCheck)
+        .verifying("calc.common.error.fieldRequired", mandatoryCheck)
+        .verifying("calc.common.error.fieldRequired", yesNoCheck)
         .transform[Boolean](stringToBoolean, booleanToString)
     )(SoldForLessModel.apply)(SoldForLessModel.unapply)
   )

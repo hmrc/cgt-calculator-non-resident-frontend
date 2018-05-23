@@ -17,22 +17,17 @@
 @import models.AcquisitionDateModel
 @import uk.gov.hmrc.play.views.html.helpers.form
 @import views.html.helpers._
+@import play.api.Application
 
-@(acquisitionDateForm: Form[AcquisitionDateModel])(implicit request: Request[_], messages: Messages)
+@(acquisitionDateForm: Form[AcquisitionDateModel])(implicit request: Request[_], messages: Messages, application: Application)
 
 @main_template(Messages("calc.acquisitionDate.question")) {
 
     <a id="back-link" class="back-link" href="@controllers.routes.DisposalCostsController.disposalCosts.url">@Messages("calc.base.back")</a>
 
-    @defining(
-        if(acquisitionDateForm.hasErrors) {
-            if(acquisitionDateForm.errors.exists(_.message.contains(Messages("calc.common.date.error.invalidDate"))))
-                Some(Messages("calc.acquisitionDate.errorIncompleteDate"))
-            else Some(Messages("calc.acquisitionDate.errorFutureDate"))
-        } else None
-    ) { additionalMessage =>
-        @errorSummary(acquisitionDateForm, "acquisition-date", "acquisitionDateDay", additionalMessage)
-    }
+
+        @errorSummary(acquisitionDateForm, "acquisition-date", "acquisitionDateDay")
+
 
     <h1 class="heading-xlarge">@Messages("calc.acquisitionDate.question")</h1>
 

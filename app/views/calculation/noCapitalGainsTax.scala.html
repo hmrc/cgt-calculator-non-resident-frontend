@@ -17,8 +17,10 @@
 @import views.html.helpers._
 @import common.Dates
 @import models._
+@import play.api.Application
+@import common.Dates.TemplateImplicits._
 
-@(data: DisposalDateModel)(implicit request: Request[_], messages: Messages)
+@(data: DisposalDateModel)(implicit request: Request[_], messages: Messages, lang: Lang, application: Application)
 
 @main_template(Messages("nocgt.invaliddate.title")) {
 
@@ -29,7 +31,7 @@
     <p>
         @Messages("nocgt.content.two")
         <span class = "no-wrap">
-            <span class="bold-small">@Dates.datePageFormatNoZero.format(Dates.constructDate(data.day, data.month, data.year))</span>.
+            <span class="bold-small">@Dates.constructDate(data.day, data.month, data.year).localFormat("d MMMM uuuu")</span>.
         </span>
     </p>
     <div class="form-group">

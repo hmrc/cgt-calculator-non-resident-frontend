@@ -16,7 +16,10 @@
 
 package forms
 
-import assets.MessageLookup.{NonResident => messages}
+import assets.KeyLookup
+import assets.KeyLookup.{NonResident => messages}
+import common.Constants
+import common.Validation._
 import models.AnnualExemptAmountModel
 import forms.AnnualExemptAmountForm._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
@@ -108,14 +111,13 @@ class AnnualExemptAmountFormSpec extends UnitSpec with WithFakeApplication {
       val map = Map("annualExemptAmount" -> "10600.01")
       lazy val form = annualExemptAmountForm(BigDecimal(10600)).bind(map)
 
+
       "return an invalid form with one error" in {
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of " +
-        s"'${messages.AnnualExemptAmount.errorMaxStart}${MoneyPounds(BigDecimal(10600), 0).quantity} ${messages.AnnualExemptAmount.errorMaxEnd}'" in {
-        form.error("annualExemptAmount").get.message shouldBe
-          s"${messages.AnnualExemptAmount.errorMaxStart}${MoneyPounds(BigDecimal(10600), 0).quantity} ${messages.AnnualExemptAmount.errorMaxEnd}"
+      s"return an error message of '${messages.maximumError("maxAEA")}'" in {
+        form.error("annualExemptAmount").get.message shouldBe "calc.common.error.maxNumericExceeded"
       }
     }
 
@@ -127,10 +129,8 @@ class AnnualExemptAmountFormSpec extends UnitSpec with WithFakeApplication {
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of " +
-        s"'${messages.AnnualExemptAmount.errorMaxStart}${MoneyPounds(BigDecimal(10000), 0).quantity} ${messages.AnnualExemptAmount.errorMaxEnd}'" in {
-        form.error("annualExemptAmount").get.message shouldBe
-          s"${messages.AnnualExemptAmount.errorMaxStart}${MoneyPounds(BigDecimal(10000), 0).quantity} ${messages.AnnualExemptAmount.errorMaxEnd}"
+      s"return an error message of '${messages.maximumError("maxAEA")}'"in {
+        form.error("annualExemptAmount").get.message shouldBe "calc.common.error.maxNumericExceeded"
       }
     }
 
