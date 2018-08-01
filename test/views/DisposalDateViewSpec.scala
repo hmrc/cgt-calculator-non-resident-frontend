@@ -36,6 +36,9 @@ class DisposalDateViewSpec extends UnitSpec with WithFakeApplication with FakeRe
       lazy val view = disposalDate(disposalDateForm)(fakeRequest, implicitly[Messages].copy(lang = Lang("en")), Lang("en"), fakeApplication)
       lazy val document = Jsoup.parse(view.body)
 
+      lazy val welshView = disposalDate(disposalDateForm)(fakeRequest, implicitly[Messages].copy(lang = Lang("cy")), Lang("cy"), fakeApplication)
+      lazy val welshDocument = Jsoup.parse(welshView.body)
+
       "have the title 'When did you sign the contract that made someone else the owner?'" in {
         document.title shouldEqual messages.question
       }
@@ -50,6 +53,14 @@ class DisposalDateViewSpec extends UnitSpec with WithFakeApplication with FakeRe
 
       s"have the English language option selected on the first page" in {
         document.body.getElementById("cymraeg-switch").parent().text() should include("English |")
+      }
+
+      s"have the English language option on the first page when viewed in Welsh" in {
+        welshDocument.body.getElementById("english-switch").attr("href") shouldEqual "/calculate-your-capital-gains/non-resident/language/english"
+      }
+
+      s"have the Welsh language option selected on the first page when viewed in Welsh" in {
+        welshDocument.body.getElementById("english-switch").parent().text() should include("| Cymraeg")
       }
 
       s"have the question '${messages.question}'" in {
