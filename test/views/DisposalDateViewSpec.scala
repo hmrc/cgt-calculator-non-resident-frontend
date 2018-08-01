@@ -37,6 +37,12 @@ class DisposalDateViewSpec extends UnitSpec with WithFakeApplication with FakeRe
       lazy val document = Jsoup.parse(view.body)
 
       "have the title 'When did you sign the contract that made someone else the owner?'" in {
+        println("**********************************")
+        println(implicitly[Messages].lang)
+        println(implicitly[Messages].lang.language)
+        println(implicitly[Messages].lang.code)
+        println(implicitly[Messages].lang.country)
+        println("**********************************")
         document.title shouldEqual messages.question
       }
 
