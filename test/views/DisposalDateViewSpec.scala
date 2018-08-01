@@ -25,6 +25,7 @@ import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.disposalDate
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
+import play.api.i18n.{Lang, Messages}
 
 class DisposalDateViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
 
@@ -32,7 +33,7 @@ class DisposalDateViewSpec extends UnitSpec with WithFakeApplication with FakeRe
 
     "return some HTML" which {
 
-      lazy val view = disposalDate(disposalDateForm)
+      lazy val view = disposalDate(disposalDateForm)(fakeRequest, implicitly[Messages].copy(lang = Lang("en")), Lang("en"), fakeApplication)
       lazy val document = Jsoup.parse(view.body)
 
       "have the title 'When did you sign the contract that made someone else the owner?'" in {
@@ -47,11 +48,8 @@ class DisposalDateViewSpec extends UnitSpec with WithFakeApplication with FakeRe
         document.body.getElementById("cymraeg-switch").attr("href") shouldEqual "/calculate-your-capital-gains/non-resident/language/cymraeg"
       }
 
-      s"have the English language option on the first page" in {
-        println("*******************************")
-        println(document)
-        println("*******************************")
-        document.body.getElementById("english-switch").attr("href") shouldEqual "/calculate-your-capital-gains/non-resident/language/english"
+      s"have the English language option selected on the first page" in {
+        document.body.getElementById("cymraeg-switch").parent().text() should include("English |")
       }
 
       s"have the question '${messages.question}'" in {
