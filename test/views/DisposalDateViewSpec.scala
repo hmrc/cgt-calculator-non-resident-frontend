@@ -48,7 +48,10 @@ class DisposalDateViewSpec extends UnitSpec with WithFakeApplication with FakeRe
       }
 
       s"have the English language option on the first page" in {
-        document.body.getElementById("english-switch").attr("href") shouldEqual "/calculate-your-capital-gains/non-resident/language/english"
+        println("*******************************")
+        println(document)
+        println("*******************************")
+        document.body.getElementById("cymraeg-switch").attr("href") shouldEqual "/calculate-your-capital-gains/non-resident/language/cymraeg"
       }
 
       s"have the question '${messages.question}'" in {
