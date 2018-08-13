@@ -35,8 +35,9 @@
 <div class="form-group">
         <table class="check-your-answers">
             <thead>
-                <th class="heading-medium" colspan="2">@messages("calc.checkYourAnswers.tableHeading")</th>
-                <th></th>
+                <tr>
+                    <th class="heading-medium" colspan="2">@messages("calc.checkYourAnswers.tableHeading")</th>
+                </tr>
             </thead>
             <tbody>
                 @questions.map { question =>

@@ -43,9 +43,6 @@
 }
 
 @sidebar = {
-
-    @language_selection(lc.languageMap, lc.langToCall, None)
-
     @if(sidebarLinks.isDefined) {
         @layouts.sidebar(sidebarContent, Some("sidebar"))
     }
@@ -57,6 +54,10 @@
     } else {
         @mainContent
     }
+}
+
+@contentHeader = {
+    <div class="float--right">@language_selection(lc.languageMap, lc.langToCall, None)</div>
 }
 
 @afterHeader = {
@@ -78,7 +79,7 @@
                mainClass = mainClass,
                bodyClasses = bodyClasses,
                sidebar = sidebar,
-               contentHeader = contentHeader,
+               contentHeader = Some(contentHeader),
                mainContent = contentLayout,
                serviceInfoContent = serviceInfoContent,
                scriptElem = scriptElem,
