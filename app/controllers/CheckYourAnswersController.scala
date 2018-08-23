@@ -45,7 +45,7 @@ trait CheckYourAnswersController extends FrontendController with ValidActiveSess
   val calculatorConnector: CalculatorConnector
 
   def getBackLink(totalGainResultsModel: TotalGainResultsModel,
-                  acquisitionDateController: AcquisitionDateModel,
+                  acquisitionDateController: DateModel,
                   totalTaxOwedAnswers: Option[TotalPersonalDetailsCalculationModel]): Future[String] = totalTaxOwedAnswers match {
 
     case Some(_) =>

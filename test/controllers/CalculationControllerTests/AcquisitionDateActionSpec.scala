@@ -20,7 +20,7 @@ import assets.MessageLookup.NonResident.{AcquisitionDate => messages}
 import connectors.CalculatorConnector
 import controllers.AcquisitionDateController
 import controllers.helpers.FakeRequestHelper
-import models.AcquisitionDateModel
+import models.DateModel
 import org.jsoup._
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
@@ -38,10 +38,10 @@ class AcquisitionDateActionSpec extends UnitSpec with WithFakeApplication with M
 
   val mockCalcConnector = mock[CalculatorConnector]
 
-  def setupTarget(getData: Option[AcquisitionDateModel]
+  def setupTarget(getData: Option[DateModel]
                  ): AcquisitionDateController = {
 
-    when(mockCalcConnector.fetchAndGetFormData[AcquisitionDateModel](ArgumentMatchers.anyString())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockCalcConnector.fetchAndGetFormData[DateModel](ArgumentMatchers.anyString())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
@@ -84,7 +84,7 @@ class AcquisitionDateActionSpec extends UnitSpec with WithFakeApplication with M
 
     "supplied with a model already filled with data" should {
 
-      val testAcquisitionDateModel = new AcquisitionDateModel(10, 12, 2016)
+      val testAcquisitionDateModel = new DateModel(10, 12, 2016)
       val target = setupTarget(Some(testAcquisitionDateModel))
       lazy val result = target.acquisitionDate(fakeRequestWithSession)
       lazy val document = Jsoup.parse(bodyOf(result))

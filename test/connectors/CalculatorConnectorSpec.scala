@@ -66,7 +66,7 @@ class CalculatorConnectorSpec extends UnitSpec with MockitoSugar {
     when(mockSessionCache.fetchAndGetEntry[AnnualExemptAmountModel](ArgumentMatchers.eq(KeystoreKeys.annualExemptAmount))(ArgumentMatchers.any(),
       ArgumentMatchers.any(), ArgumentMatchers.any())).thenReturn(Future.successful(summary.annualExemptAmountModel))
 
-    when(mockSessionCache.fetchAndGetEntry[AcquisitionDateModel](ArgumentMatchers.eq(KeystoreKeys.acquisitionDate))(ArgumentMatchers.any(),
+    when(mockSessionCache.fetchAndGetEntry[DateModel](ArgumentMatchers.eq(KeystoreKeys.acquisitionDate))(ArgumentMatchers.any(),
       ArgumentMatchers.any(), ArgumentMatchers.any())).thenReturn(Future.successful(Some(summary.acquisitionDateModel)))
 
     when(mockSessionCache.fetchAndGetEntry[AcquisitionValueModel](ArgumentMatchers.eq(KeystoreKeys.acquisitionValue))(ArgumentMatchers.any(),
@@ -84,7 +84,7 @@ class CalculatorConnectorSpec extends UnitSpec with MockitoSugar {
       ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(summary.improvementsModel)))
 
-    when(mockSessionCache.fetchAndGetEntry[DisposalDateModel](ArgumentMatchers.eq(KeystoreKeys.disposalDate))(ArgumentMatchers.any(), ArgumentMatchers.any(),
+    when(mockSessionCache.fetchAndGetEntry[DateModel](ArgumentMatchers.eq(KeystoreKeys.disposalDate))(ArgumentMatchers.any(), ArgumentMatchers.any(),
       ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(summary.disposalDateModel)))
 
@@ -121,7 +121,7 @@ class CalculatorConnectorSpec extends UnitSpec with MockitoSugar {
 
     val mockSessionCache = mock[SessionCache]
 
-    when(mockSessionCache.fetchAndGetEntry[DisposalDateModel](ArgumentMatchers.eq(KeystoreKeys.disposalDate))(ArgumentMatchers.any(), ArgumentMatchers.any(),
+    when(mockSessionCache.fetchAndGetEntry[DateModel](ArgumentMatchers.eq(KeystoreKeys.disposalDate))(ArgumentMatchers.any(), ArgumentMatchers.any(),
       ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(totalGainAnswersModel.disposalDateModel)))
 
@@ -139,7 +139,7 @@ class CalculatorConnectorSpec extends UnitSpec with MockitoSugar {
     when(mockSessionCache.fetchAndGetEntry[AcquisitionCostsModel](ArgumentMatchers.eq(KeystoreKeys.acquisitionCosts))(ArgumentMatchers.any(),
       ArgumentMatchers.any(), ArgumentMatchers.any())).thenReturn(Future.successful(Some(totalGainAnswersModel.acquisitionCostsModel.get)))
 
-    when(mockSessionCache.fetchAndGetEntry[AcquisitionDateModel](ArgumentMatchers.eq(KeystoreKeys.acquisitionDate))(ArgumentMatchers.any(),
+    when(mockSessionCache.fetchAndGetEntry[DateModel](ArgumentMatchers.eq(KeystoreKeys.acquisitionDate))(ArgumentMatchers.any(),
       ArgumentMatchers.any(), ArgumentMatchers.any())).thenReturn(Future.successful(Some(totalGainAnswersModel.acquisitionDateModel)))
 
     when(mockSessionCache.fetchAndGetEntry[RebasedValueModel](ArgumentMatchers.eq(KeystoreKeys.rebasedValue))(ArgumentMatchers.any(), ArgumentMatchers.any(),
@@ -178,12 +178,12 @@ class CalculatorConnectorSpec extends UnitSpec with MockitoSugar {
     Some(PersonalAllowanceModel(11100)),
     OtherPropertiesModel("No"),
     None,
-    AcquisitionDateModel(1, 1, 2016),
+    DateModel(1, 1, 2016),
     AcquisitionValueModel(100000),
     None,
     None,
     ImprovementsModel("No", None),
-    DisposalDateModel(10, 10, 2010),
+    DateModel(10, 10, 2010),
     DisposalValueModel(150000),
     AcquisitionCostsModel(0),
     DisposalCostsModel(0),
@@ -199,12 +199,12 @@ class CalculatorConnectorSpec extends UnitSpec with MockitoSugar {
     Some(PersonalAllowanceModel(11100)),
     OtherPropertiesModel("No"),
     None,
-    AcquisitionDateModel(9, 9, 1999),
+    DateModel(9, 9, 1999),
     AcquisitionValueModel(100000),
     Some(RebasedValueModel(1000)),
     None,
     ImprovementsModel("No", None),
-    DisposalDateModel(10, 10, 2010),
+    DateModel(10, 10, 2010),
     DisposalValueModel(150000),
     AcquisitionCostsModel(0),
     DisposalCostsModel(0),
@@ -220,12 +220,12 @@ class CalculatorConnectorSpec extends UnitSpec with MockitoSugar {
     Some(PersonalAllowanceModel(11100)),
     OtherPropertiesModel("No"),
     None,
-    AcquisitionDateModel(9, 9, 1999),
+    DateModel(9, 9, 1999),
     AcquisitionValueModel(100000),
     Some(RebasedValueModel(1000)),
     Some(RebasedCostsModel("No", None)),
     ImprovementsModel("No", None),
-    DisposalDateModel(10, 10, 2010),
+    DateModel(10, 10, 2010),
     DisposalValueModel(150000),
     AcquisitionCostsModel(0),
     DisposalCostsModel(0),
@@ -241,12 +241,12 @@ class CalculatorConnectorSpec extends UnitSpec with MockitoSugar {
     Some(PersonalAllowanceModel(11100)),
     OtherPropertiesModel("No"),
     None,
-    AcquisitionDateModel(1, 1, 2016),
+    DateModel(1, 1, 2016),
     AcquisitionValueModel(100000),
     None,
     None,
     ImprovementsModel("No", None),
-    DisposalDateModel(10, 10, 2010),
+    DateModel(10, 10, 2010),
     DisposalValueModel(150000),
     AcquisitionCostsModel(0),
     DisposalCostsModel(0),
@@ -282,7 +282,7 @@ class CalculatorConnectorSpec extends UnitSpec with MockitoSugar {
   "Calling calculateTotalGain" should {
 
     val validResponse = TotalGainResultsModel(1000, None, None)
-    val model = TotalGainAnswersModel(DisposalDateModel(5, 10, 2016),
+    val model = TotalGainAnswersModel(DateModel(5, 10, 2016),
       SoldOrGivenAwayModel(true),
       Some(SoldForLessModel(false)),
       DisposalValueModel(1000),
@@ -291,7 +291,7 @@ class CalculatorConnectorSpec extends UnitSpec with MockitoSugar {
       Some(BoughtForLessModel(false)),
       AcquisitionValueModel(2000),
       AcquisitionCostsModel(200),
-      AcquisitionDateModel(1, 1, 2016),
+      DateModel(1, 1, 2016),
       None,
       None,
       ImprovementsModel("Yes", Some(10), Some(20)),
@@ -309,7 +309,7 @@ class CalculatorConnectorSpec extends UnitSpec with MockitoSugar {
   "Calling calculateTaxableGainAfterPRR" should {
 
     val validResponse = mock[CalculationResultsWithPRRModel]
-    val model = TotalGainAnswersModel(DisposalDateModel(5, 10, 2016),
+    val model = TotalGainAnswersModel(DateModel(5, 10, 2016),
       SoldOrGivenAwayModel(true),
       Some(SoldForLessModel(false)),
       DisposalValueModel(1000),
@@ -318,7 +318,7 @@ class CalculatorConnectorSpec extends UnitSpec with MockitoSugar {
       Some(BoughtForLessModel(false)),
       AcquisitionValueModel(2000),
       AcquisitionCostsModel(200),
-      AcquisitionDateModel(1, 1, 2016),
+      DateModel(1, 1, 2016),
       None,
       None,
       ImprovementsModel("Yes", Some(10), Some(20)),

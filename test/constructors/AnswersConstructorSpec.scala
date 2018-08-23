@@ -36,7 +36,7 @@ class AnswersConstructorSpec extends UnitSpec with MockitoSugar {
 
     val mockConnector = mock[CalculatorConnector]
 
-    when(mockConnector.fetchAndGetFormData[DisposalDateModel](ArgumentMatchers.eq(KeystoreKeys.disposalDate))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockConnector.fetchAndGetFormData[DateModel](ArgumentMatchers.eq(KeystoreKeys.disposalDate))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(totalGainAnswersModel.disposalDateModel)))
 
     when(mockConnector.fetchAndGetFormData[SoldOrGivenAwayModel](
@@ -82,7 +82,7 @@ class AnswersConstructorSpec extends UnitSpec with MockitoSugar {
       ArgumentMatchers.eq(KeystoreKeys.acquisitionCosts))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(totalGainAnswersModel.acquisitionCostsModel.get)))
 
-    when(mockConnector.fetchAndGetFormData[AcquisitionDateModel](
+    when(mockConnector.fetchAndGetFormData[DateModel](
       ArgumentMatchers.eq(KeystoreKeys.acquisitionDate))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(totalGainAnswersModel.acquisitionDateModel)))
 
@@ -143,7 +143,7 @@ class AnswersConstructorSpec extends UnitSpec with MockitoSugar {
   }
 
   val totalGainNoOptionalModel = TotalGainAnswersModel(
-    DisposalDateModel(10, 10, 2016),
+    DateModel(10, 10, 2016),
     SoldOrGivenAwayModel(false),
     None,
     DisposalValueModel(10000),
@@ -152,7 +152,7 @@ class AnswersConstructorSpec extends UnitSpec with MockitoSugar {
     None,
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
-    AcquisitionDateModel(1, 1, 2016),
+    DateModel(1, 1, 2016),
     None,
     None,
     ImprovementsModel("No", None, None),
@@ -160,7 +160,7 @@ class AnswersConstructorSpec extends UnitSpec with MockitoSugar {
   )
 
   val totalGainAllOptionalModel = TotalGainAnswersModel(
-    DisposalDateModel(10, 10, 2016),
+    DateModel(10, 10, 2016),
     SoldOrGivenAwayModel(true),
     Some(SoldForLessModel(false)),
     DisposalValueModel(10000),
@@ -169,7 +169,7 @@ class AnswersConstructorSpec extends UnitSpec with MockitoSugar {
     Some(BoughtForLessModel(false)),
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
-    AcquisitionDateModel(1, 4, 2013),
+    DateModel(1, 4, 2013),
     Some(RebasedValueModel(7500)),
     Some(RebasedCostsModel("Yes", Some(150))),
     ImprovementsModel("Yes", Some(50), Some(25)),
@@ -177,7 +177,7 @@ class AnswersConstructorSpec extends UnitSpec with MockitoSugar {
   )
 
   val modelDateBeforeLegislationStart = TotalGainAnswersModel(
-    DisposalDateModel(10, 10, 2016),
+    DateModel(10, 10, 2016),
     SoldOrGivenAwayModel(true),
     Some(SoldForLessModel(false)),
     DisposalValueModel(10000),
@@ -186,7 +186,7 @@ class AnswersConstructorSpec extends UnitSpec with MockitoSugar {
     Some(BoughtForLessModel(false)),
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
-    AcquisitionDateModel(1, 4, 1967),
+    DateModel(1, 4, 1967),
     Some(RebasedValueModel(7500)),
     Some(RebasedCostsModel("Yes", Some(150))),
     ImprovementsModel("Yes", Some(50), Some(25)),
@@ -194,7 +194,7 @@ class AnswersConstructorSpec extends UnitSpec with MockitoSugar {
   )
 
   val totalGainBoughtForLess = TotalGainAnswersModel(
-    DisposalDateModel(10, 10, 2016),
+    DateModel(10, 10, 2016),
     SoldOrGivenAwayModel(true),
     Some(SoldForLessModel(false)),
     DisposalValueModel(10000),
@@ -203,7 +203,7 @@ class AnswersConstructorSpec extends UnitSpec with MockitoSugar {
     Some(BoughtForLessModel(true)),
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
-    AcquisitionDateModel(1, 4, 2013),
+    DateModel(1, 4, 2013),
     Some(RebasedValueModel(7500)),
     Some(RebasedCostsModel("Yes", Some(150))),
     ImprovementsModel("Yes", Some(50), Some(25)),
@@ -211,7 +211,7 @@ class AnswersConstructorSpec extends UnitSpec with MockitoSugar {
   )
 
   val totalGainSoldForLess = TotalGainAnswersModel(
-    DisposalDateModel(10, 10, 2016),
+    DateModel(10, 10, 2016),
     SoldOrGivenAwayModel(true),
     Some(SoldForLessModel(true)),
     DisposalValueModel(11000),
@@ -220,7 +220,7 @@ class AnswersConstructorSpec extends UnitSpec with MockitoSugar {
     Some(BoughtForLessModel(true)),
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
-    AcquisitionDateModel(1, 4, 2013),
+    DateModel(1, 4, 2013),
     Some(RebasedValueModel(7500)),
     Some(RebasedCostsModel("Yes", Some(150))),
     ImprovementsModel("Yes", Some(50), Some(25)),

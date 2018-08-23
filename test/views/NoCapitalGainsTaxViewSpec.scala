@@ -18,7 +18,7 @@ package views
 
 import assets.MessageLookup.{NonResident => messages}
 import controllers.helpers.FakeRequestHelper
-import models.DisposalDateModel
+import models.DateModel
 import org.jsoup.Jsoup
 import org.scalatest.mock.MockitoSugar
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
@@ -31,7 +31,7 @@ class NoCapitalGainsTaxViewSpec extends UnitSpec with WithFakeApplication with M
   "No Capital Gains Tax view" when {
 
     "supplied with a date of 5-4-2014" should {
-      lazy val view = noCapitalGainsTax(DisposalDateModel(5, 4, 2014))
+      lazy val view = noCapitalGainsTax(DateModel(5, 4, 2014))
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${messages.NoCapitalGainsTax.title}'" in {
@@ -108,7 +108,7 @@ class NoCapitalGainsTaxViewSpec extends UnitSpec with WithFakeApplication with M
     }
 
     "supplied with a date of 12-11-2013" should {
-      lazy val view = noCapitalGainsTax(DisposalDateModel(12, 11, 2013))
+      lazy val view = noCapitalGainsTax(DateModel(12, 11, 2013))
       lazy val document = Jsoup.parse(view.body)
 
       "has the date 12-11-2013" in {

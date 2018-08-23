@@ -22,7 +22,7 @@ import connectors.CalculatorConnector
 import constructors.CalculationElectionConstructor
 import controllers.predicates.ValidActiveSession
 import forms.AcquisitionCostsForm._
-import models.{AcquisitionCostsModel, AcquisitionDateModel, BoughtForLessModel, HowBecameOwnerModel}
+import models.{AcquisitionCostsModel, DateModel, BoughtForLessModel, HowBecameOwnerModel}
 import play.api.data.Form
 import play.api.mvc.{Action, AnyContent, Result}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
@@ -44,16 +44,16 @@ trait AcquisitionCostsController extends FrontendController with ValidActiveSess
   val calcElectionConstructor = CalculationElectionConstructor
 
   private def isOwnerBeforeLegislationStart(implicit hc: HeaderCarrier): Future[Boolean] = {
-    calcConnector.fetchAndGetFormData[AcquisitionDateModel](KeystoreKeys.acquisitionDate).map { date =>
+    calcConnector.fetchAndGetFormData[DateModel](KeystoreKeys.acquisitionDate).map { date =>
       TaxDates.dateBeforeLegislationStart(date.get.get)
     }
   }
 
   def getBackLink(implicit hc:HeaderCarrier): Future[String] = {
-    val getAcquisitionDate = calcConnector.fetchAndGetFormData[AcquisitionDateModel](KeystoreKeys.acquisitionDate)
+    val getAcquisitionDate = calcConnector.fetchAndGetFormData[DateModel](KeystoreKeys.acquisitionDate)
     val getHowBecameOwner = calcConnector.fetchAndGetFormData[HowBecameOwnerModel](KeystoreKeys.howBecameOwner)
     val getBoughtForLess = calcConnector.fetchAndGetFormData[BoughtForLessModel](KeystoreKeys.boughtForLess)
-    def result(acquisitionDateModel: Option[AcquisitionDateModel],
+    def result(acquisitionDateModel: Option[DateModel],
                howBecameOwnerModel: Option[HowBecameOwnerModel],
                boughtForLessModel: Option[BoughtForLessModel]) = (acquisitionDateModel, howBecameOwnerModel, boughtForLessModel) match {
       case (Some(_), _, _) if TaxDates.dateBeforeLegislationStart(acquisitionDateModel.get.get) =>
@@ -93,9 +93,9 @@ trait AcquisitionCostsController extends FrontendController with ValidActiveSess
   val submitAcquisitionCosts: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     val getRedirectRoute: Future[Result] = {
-      val getAcquisitionDate = calcConnector.fetchAndGetFormData[AcquisitionDateModel](KeystoreKeys.acquisitionDate)
+      val getAcquisitionDate = calcConnector.fetchAndGetFormData[DateModel](KeystoreKeys.acquisitionDate)
 
-      def result(acquisitionDateModel: Option[AcquisitionDateModel]) = acquisitionDateModel match {
+      def result(acquisitionDateModel: Option[DateModel]) = acquisitionDateModel match {
         case Some(_) if TaxDates.dateAfterStart(acquisitionDateModel.get.get) =>
           Future.successful(Redirect(routes.ImprovementsController.improvements()))
         case _ => Future.successful(Redirect(routes.RebasedValueController.rebasedValue()))

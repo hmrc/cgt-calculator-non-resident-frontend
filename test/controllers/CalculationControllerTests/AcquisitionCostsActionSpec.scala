@@ -21,7 +21,7 @@ import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
 import controllers.AcquisitionCostsController
 import controllers.helpers.FakeRequestHelper
-import models.{AcquisitionCostsModel, AcquisitionDateModel, BoughtForLessModel, HowBecameOwnerModel}
+import models.{AcquisitionCostsModel, DateModel, BoughtForLessModel, HowBecameOwnerModel}
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
@@ -38,7 +38,7 @@ class AcquisitionCostsActionSpec extends UnitSpec with WithFakeApplication with 
   implicit val hc = new HeaderCarrier()
 
   def setupTarget(getData: Option[AcquisitionCostsModel],
-                  acquisitionDateData: Option[AcquisitionDateModel] = Some(AcquisitionDateModel(10, 5, 2001)),
+                  acquisitionDateData: Option[DateModel] = Some(DateModel(10, 5, 2001)),
                   howBecameOwnerData: Option[HowBecameOwnerModel] = None,
                   boughtForLessData: Option[BoughtForLessModel] = None): AcquisitionCostsController = {
 
@@ -48,7 +48,7 @@ class AcquisitionCostsActionSpec extends UnitSpec with WithFakeApplication with 
       ArgumentMatchers.eq(KeystoreKeys.acquisitionCosts))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    when(mockCalcConnector.fetchAndGetFormData[AcquisitionDateModel](
+    when(mockCalcConnector.fetchAndGetFormData[DateModel](
       ArgumentMatchers.eq(KeystoreKeys.acquisitionDate))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(acquisitionDateData)
 
@@ -71,7 +71,7 @@ class AcquisitionCostsActionSpec extends UnitSpec with WithFakeApplication with 
   "Calling the .backLink method" should {
 
     "return a link to WorthOnLegislationStart page with an acquisition date before legislation start" in {
-      val target = setupTarget(None, acquisitionDateData = Some(AcquisitionDateModel(10, 5, 1972)))
+      val target = setupTarget(None, acquisitionDateData = Some(DateModel(10, 5, 1972)))
       val result = target.getBackLink
 
       await(result) shouldBe controllers.routes.WorthBeforeLegislationStartController.worthBeforeLegislationStart().url
@@ -79,7 +79,7 @@ class AcquisitionCostsActionSpec extends UnitSpec with WithFakeApplication with 
 
     "return a link to WorthWhenGifted page with an acquisition date after legislation start and gifted option" in {
       val target = setupTarget(None,
-        acquisitionDateData = Some(AcquisitionDateModel(10, 5, 2000)),
+        acquisitionDateData = Some(DateModel(10, 5, 2000)),
         howBecameOwnerData = Some(HowBecameOwnerModel("Gifted")))
       val result = target.getBackLink
 
@@ -101,7 +101,7 @@ class AcquisitionCostsActionSpec extends UnitSpec with WithFakeApplication with 
     }
 
     "return a link to acquisition value when not bought for less" in {
-      val target = setupTarget(None, acquisitionDateData = Some(AcquisitionDateModel(1, 1, 2016)),
+      val target = setupTarget(None, acquisitionDateData = Some(DateModel(1, 1, 2016)),
         howBecameOwnerData = Some(HowBecameOwnerModel("Bought")),
         boughtForLessData = Some(BoughtForLessModel(false)))
       val result = target.getBackLink
@@ -113,7 +113,7 @@ class AcquisitionCostsActionSpec extends UnitSpec with WithFakeApplication with 
   "Calling the .acquisitionCosts action " should {
 
     "not supplied with a pre-existing stored model" should {
-      val target = setupTarget(None, acquisitionDateData = Some(AcquisitionDateModel(1, 1, 2016)), Some(HowBecameOwnerModel("Gifted")))
+      val target = setupTarget(None, acquisitionDateData = Some(DateModel(1, 1, 2016)), Some(HowBecameOwnerModel("Gifted")))
       lazy val result = target.acquisitionCosts(fakeRequestWithSession)
       lazy val document = Jsoup.parse(bodyOf(result))
 
@@ -162,7 +162,7 @@ class AcquisitionCostsActionSpec extends UnitSpec with WithFakeApplication with 
   "Calling the .submitAcquisitionCosts action" when {
 
     "supplied with an acquisition date after the tax start" should{
-      val target = setupTarget(None, acquisitionDateData = Some(AcquisitionDateModel(10, 5, 2016)))
+      val target = setupTarget(None, acquisitionDateData = Some(DateModel(10, 5, 2016)))
       lazy val request = fakeRequestToPOSTWithSession(("acquisitionCosts", "1000"))
       lazy val result = target.submitAcquisitionCosts(request)
 
@@ -176,7 +176,7 @@ class AcquisitionCostsActionSpec extends UnitSpec with WithFakeApplication with 
     }
 
     "supplied with an acquisition date before the tax start" should {
-      val target = setupTarget(None, acquisitionDateData = Some(AcquisitionDateModel(10, 5, 2000)))
+      val target = setupTarget(None, acquisitionDateData = Some(DateModel(10, 5, 2000)))
       lazy val request = fakeRequestToPOSTWithSession(("acquisitionCosts", "1000"))
       lazy val result = target.submitAcquisitionCosts(request)
 
@@ -190,7 +190,7 @@ class AcquisitionCostsActionSpec extends UnitSpec with WithFakeApplication with 
     }
 
     "supplied with an invalid form" should {
-      val target = setupTarget(None, acquisitionDateData = Some(AcquisitionDateModel(1, 1, 2016)), Some(HowBecameOwnerModel("Inherited")))
+      val target = setupTarget(None, acquisitionDateData = Some(DateModel(1, 1, 2016)), Some(HowBecameOwnerModel("Inherited")))
       lazy val request = fakeRequestToPOSTWithSession(("acquisitionCosts", "a"))
       lazy val result = target.submitAcquisitionCosts(request)
       lazy val document = Jsoup.parse(bodyOf(result))

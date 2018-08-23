@@ -27,7 +27,7 @@ import models._
 class SalesDetailsConstructorSpec extends UnitSpec with WithFakeApplication with AssertHelpers {
 
   val totalGainGiven = TotalGainAnswersModel(
-    DisposalDateModel(10, 10, 2010),
+    DateModel(10, 10, 2010),
     SoldOrGivenAwayModel(false),
     None,
     DisposalValueModel(150000),
@@ -36,7 +36,7 @@ class SalesDetailsConstructorSpec extends UnitSpec with WithFakeApplication with
     None,
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
-    AcquisitionDateModel(1, 4, 2013),
+    DateModel(1, 4, 2013),
     None,
     None,
     ImprovementsModel("No", None, None),
@@ -44,7 +44,7 @@ class SalesDetailsConstructorSpec extends UnitSpec with WithFakeApplication with
   )
 
   val totalGainSold = TotalGainAnswersModel(
-    DisposalDateModel(10, 10, 2018),
+    DateModel(10, 10, 2018),
     SoldOrGivenAwayModel(true),
     Some(SoldForLessModel(false)),
     DisposalValueModel(90000),
@@ -53,7 +53,7 @@ class SalesDetailsConstructorSpec extends UnitSpec with WithFakeApplication with
     Some(BoughtForLessModel(false)),
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
-    AcquisitionDateModel(1, 4,2013),
+    DateModel(1, 4,2013),
     Some(RebasedValueModel(7500)),
     Some(RebasedCostsModel("Yes", Some(150))),
     ImprovementsModel("Yes", Some(50), Some(25)),
@@ -61,7 +61,7 @@ class SalesDetailsConstructorSpec extends UnitSpec with WithFakeApplication with
   )
 
   val totalGainForLess = TotalGainAnswersModel(
-    DisposalDateModel(10, 10, 2016),
+    DateModel(10, 10, 2016),
     SoldOrGivenAwayModel(true),
     Some(SoldForLessModel(true)),
     DisposalValueModel(10000),
@@ -70,7 +70,7 @@ class SalesDetailsConstructorSpec extends UnitSpec with WithFakeApplication with
     Some(BoughtForLessModel(true)),
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
-    AcquisitionDateModel(1, 4, 2013),
+    DateModel(1, 4, 2013),
     Some(RebasedValueModel(7500)),
     Some(RebasedCostsModel("Yes", Some(150))),
     ImprovementsModel("Yes", Some(50), Some(25)),

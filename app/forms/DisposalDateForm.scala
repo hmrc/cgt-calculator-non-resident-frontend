@@ -18,7 +18,7 @@ package forms
 
 import common.Transformers._
 import common.Validation._
-import models.DisposalDateModel
+import models.DateModel
 import play.api.data.Forms._
 import play.api.data._
 
@@ -38,7 +38,7 @@ object DisposalDateForm {
         .verifying("calc.common.date.error.invalidDate", mandatoryCheck)
         .verifying("calc.common.date.error.invalidDate", integerCheck)
         .transform[Int](stringToInteger, _.toString)
-    )(DisposalDateModel.apply)(DisposalDateModel.unapply)
+    )(DateModel.apply)(DateModel.unapply)
       .verifying("calc.common.date.error.invalidDate", fields =>
         isValidDate(fields.day, fields.month, fields.year))
   )

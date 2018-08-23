@@ -22,7 +22,7 @@ import connectors.CalculatorConnector
 import constructors.CalculationElectionConstructor
 import controllers.predicates.ValidActiveSession
 import forms.AcquisitionDateForm._
-import models.AcquisitionDateModel
+import models.DateModel
 import play.api.data.Form
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import views.html.calculation
@@ -42,7 +42,7 @@ trait AcquisitionDateController extends FrontendController with ValidActiveSessi
   val calcElectionConstructor = CalculationElectionConstructor
 
   val acquisitionDate: Action[AnyContent] = ValidateSession.async { implicit request =>
-    calcConnector.fetchAndGetFormData[AcquisitionDateModel](KeystoreKeys.acquisitionDate).map {
+    calcConnector.fetchAndGetFormData[DateModel](KeystoreKeys.acquisitionDate).map {
       case Some(data) => Ok(calculation.acquisitionDate(acquisitionDateForm.fill(data)))
       case None => Ok(calculation.acquisitionDate(acquisitionDateForm))
     }
@@ -50,9 +50,9 @@ trait AcquisitionDateController extends FrontendController with ValidActiveSessi
 
   val submitAcquisitionDate: Action[AnyContent] = ValidateSession.async { implicit request =>
 
-    def errorAction(form: Form[AcquisitionDateModel]) = Future.successful(BadRequest(calculation.acquisitionDate(form)))
+    def errorAction(form: Form[DateModel]) = Future.successful(BadRequest(calculation.acquisitionDate(form)))
 
-    def successAction(model: AcquisitionDateModel) = {
+    def successAction(model: DateModel) = {
       calcConnector.saveFormData(KeystoreKeys.acquisitionDate, model).map(_ =>
         if(TaxDates.dateBeforeLegislationStart(model.day, model.month, model.year)) {
           Redirect(routes.WorthBeforeLegislationStartController.worthBeforeLegislationStart())

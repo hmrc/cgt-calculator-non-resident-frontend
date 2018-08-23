@@ -23,7 +23,7 @@ import assets.MessageLookup.{OutsideTaxYears => messages}
 import config.AppConfig
 import connectors.CalculatorConnector
 import controllers.OutsideTaxYearController
-import models.{DisposalDateModel, TaxYearModel}
+import models.{DateModel, TaxYearModel}
 import org.jsoup.Jsoup
 import org.scalatest.mockito.MockitoSugar
 import org.mockito.ArgumentMatchers
@@ -33,10 +33,10 @@ import scala.concurrent.Future
 
 class OutsideTaxYearActionSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper with MockitoSugar {
 
-  def setupTarget(disposalDateModel: Option[DisposalDateModel], taxYearModel: Option[TaxYearModel]): OutsideTaxYearController = {
+  def setupTarget(disposalDateModel: Option[DateModel], taxYearModel: Option[TaxYearModel]): OutsideTaxYearController = {
     val mockCalcConnector: CalculatorConnector = mock[CalculatorConnector]
 
-    when(mockCalcConnector.fetchAndGetFormData[DisposalDateModel](ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockCalcConnector.fetchAndGetFormData[DateModel](ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(disposalDateModel))
 
     when(mockCalcConnector.getTaxYear(ArgumentMatchers.any())(ArgumentMatchers.any()))
@@ -50,7 +50,7 @@ class OutsideTaxYearActionSpec extends UnitSpec with WithFakeApplication with Fa
   "Calling .outsideTaxYears from the outsideTaxYearController" when {
 
     "there is a valid session" should {
-      lazy val target = setupTarget(Some(DisposalDateModel(10, 10, 2018)), Some(TaxYearModel("2018/19", false, "2018/19")))
+      lazy val target = setupTarget(Some(DateModel(10, 10, 2018)), Some(TaxYearModel("2018/19", false, "2018/19")))
       lazy val result = target.outsideTaxYear(fakeRequestWithSession)
 
       "return a 200" in {

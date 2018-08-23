@@ -19,7 +19,7 @@ package models
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 
-case class TotalGainAnswersModel(disposalDateModel: DisposalDateModel,
+case class TotalGainAnswersModel(disposalDateModel: DateModel,
                                  soldOrGivenAwayModel: SoldOrGivenAwayModel,
                                  soldForLessModel: Option[SoldForLessModel],
                                  disposalValueModel: DisposalValueModel,
@@ -28,7 +28,7 @@ case class TotalGainAnswersModel(disposalDateModel: DisposalDateModel,
                                  boughtForLessModel: Option[BoughtForLessModel],
                                  acquisitionValueModel: AcquisitionValueModel,
                                  acquisitionCostsModel: Option[AcquisitionCostsModel],
-                                 acquisitionDateModel: AcquisitionDateModel,
+                                 acquisitionDateModel: DateModel,
                                  rebasedValueModel: Option[RebasedValueModel],
                                  rebasedCostsModel: Option[RebasedCostsModel],
                                  improvementsModel: ImprovementsModel,
@@ -38,8 +38,13 @@ case class TotalGainAnswersModel(disposalDateModel: DisposalDateModel,
 object TotalGainAnswersModel {
   private val ignore = OWrites[Any](_ => Json.obj())
 
-  implicit val totalGainWrites: Writes[TotalGainAnswersModel] = (
-    (__ \ "disposalDate").write[DisposalDateModel](DisposalDateModel.postWrites) and
+  implicit val postWrites: Writes[TotalGainAnswersModel] = new Writes[TotalGainAnswersModel] {
+    override def writes(o: TotalGainAnswersModel): JsValue =
+      postWrites(o).writes(o)
+  }
+
+  private def postWrites(model: TotalGainAnswersModel): Writes[TotalGainAnswersModel] = (
+    (__ \ "disposalDate").write[DateModel](DateModel.postWrites) and
       ignore and
       ignore and
       (__ \ "disposalValue").write[DisposalValueModel](DisposalValueModel.postWrites) and
@@ -47,11 +52,11 @@ object TotalGainAnswersModel {
       ignore and
       ignore and
       (__ \ "acquisitionValue").write[AcquisitionValueModel](AcquisitionValueModel.postWrites) and
-      (__ \ "acquisitionCosts").writeNullable[AcquisitionCostsModel](AcquisitionCostsModel.postWrites) and
-      (__ \ "acquisitionDate").write[AcquisitionDateModel](AcquisitionDateModel.postWrites) and
-      (__ \ "rebasedValue").writeNullable[RebasedValueModel](RebasedValueModel.postWrites) and
-      (__ \ "rebasedCosts").writeNullable[RebasedCostsModel](RebasedCostsModel.postWrites) and
-      __.write[ImprovementsModel](ImprovementsModel.postWrites) and
+      __.write[Option[AcquisitionCostsModel]](AcquisitionCostsModel.postWrites(model.costsAtLegislationStart, model.acquisitionDateModel)) and
+      (__ \ "acquisitionDate").write[DateModel](DateModel.postWrites) and
+       __.writeNullable[RebasedValueModel](RebasedValueModel.postWrites(model.acquisitionDateModel)) and
+       __.writeNullable[RebasedCostsModel](RebasedCostsModel.postWrites(model.rebasedValueModel, model.acquisitionDateModel)) and
+       __.write[ImprovementsModel](ImprovementsModel.postWrites(model.rebasedValueModel, model.acquisitionDateModel)) and
       ignore and
       ignore
     ) (unlift(TotalGainAnswersModel.unapply))

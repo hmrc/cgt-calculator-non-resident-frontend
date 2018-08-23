@@ -19,7 +19,7 @@ package forms
 import java.time.{ZoneId, ZonedDateTime}
 
 import common.Validation._
-import models.AcquisitionDateModel
+import models.DateModel
 import play.api.data.Forms._
 import play.api.data._
 import common.Transformers._
@@ -40,14 +40,14 @@ object AcquisitionDateForm {
         .verifying("calc.common.date.error.invalidDate", mandatoryCheck)
         .verifying("calc.common.date.error.invalidDate", integerCheck)
         .transform[Int](stringToInteger, _.toString)
-    )(AcquisitionDateModel.apply)(AcquisitionDateModel.unapply)
+    )(DateModel.apply)(DateModel.unapply)
       .verifying("calc.common.date.error.invalidDate", fields =>
         isValidDate(fields.day, fields.month, fields.year))
       .verifying("calc.acquisitionDate.errorFutureDateGuidance", fields =>
         verifyDateInPast(fields))
   )
 
-  def verifyDateInPast(data: AcquisitionDateModel): Boolean = {
+  def verifyDateInPast(data: DateModel): Boolean = {
     if(isValidDate(data.day, data.month, data.year)) data.get.isBefore(ZonedDateTime.now(ZoneId.of("Europe/London")).toLocalDate)
     else true
   }

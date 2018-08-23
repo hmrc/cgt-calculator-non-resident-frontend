@@ -14,12 +14,12 @@
  * limitations under the License.
  *@
 
-@import models.AcquisitionDateModel
+@import models.DateModel
 @import uk.gov.hmrc.play.views.html.helpers.form
 @import views.html.helpers._
 @import play.api.Application
 
-@(acquisitionDateForm: Form[AcquisitionDateModel])(implicit request: Request[_], messages: Messages, application: Application)
+@(acquisitionDateForm: Form[DateModel])(implicit request: Request[_], messages: Messages, application: Application)
 
 @main_template(Messages("calc.acquisitionDate.question")) {
 

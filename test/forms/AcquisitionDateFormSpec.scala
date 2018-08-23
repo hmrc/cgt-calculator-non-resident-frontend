@@ -20,7 +20,7 @@ import java.time.LocalDate
 
 import assets.KeyLookup.{NonResident => messages}
 import forms.AcquisitionDateForm._
-import models.AcquisitionDateModel
+import models.DateModel
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 class AcquisitionDateFormSpec extends UnitSpec with WithFakeApplication {
@@ -28,7 +28,7 @@ class AcquisitionDateFormSpec extends UnitSpec with WithFakeApplication {
   "Creating a form" when {
 
     "passing in a valid model" should {
-      val model = AcquisitionDateModel(1, 1, 2015)
+      val model = DateModel(1, 1, 2015)
       lazy val form = acquisitionDateForm.fill(model)
 
       "return a valid form with no errors" in {
@@ -52,7 +52,7 @@ class AcquisitionDateFormSpec extends UnitSpec with WithFakeApplication {
       }
 
       "return a form containing the data" in {
-        form.value shouldBe Some(AcquisitionDateModel(1, 5, 2015))
+        form.value shouldBe Some(DateModel(1, 5, 2015))
       }
     }
 
@@ -158,7 +158,7 @@ class AcquisitionDateFormSpec extends UnitSpec with WithFakeApplication {
     
     "date is yesterday" should {
       val today = LocalDate.now().minusDays(1)
-      val date = AcquisitionDateModel(today.getDayOfMonth, today.getMonthValue, today.getYear)
+      val date = DateModel(today.getDayOfMonth, today.getMonthValue, today.getYear)
 
       "return true" in {
         AcquisitionDateForm.verifyDateInPast(date) shouldBe true
@@ -167,7 +167,7 @@ class AcquisitionDateFormSpec extends UnitSpec with WithFakeApplication {
 
     "date is today" should {
       val today = LocalDate.now()
-      val date = AcquisitionDateModel(today.getDayOfMonth, today.getMonthValue, today.getYear)
+      val date = DateModel(today.getDayOfMonth, today.getMonthValue, today.getYear)
 
       "return false" in {
         AcquisitionDateForm.verifyDateInPast(date) shouldBe false
@@ -176,7 +176,7 @@ class AcquisitionDateFormSpec extends UnitSpec with WithFakeApplication {
 
     "date is tomorrow" should {
       val today = LocalDate.now().plusDays(1)
-      val date = AcquisitionDateModel(today.getDayOfMonth, today.getMonthValue, today.getYear)
+      val date = DateModel(today.getDayOfMonth, today.getMonthValue, today.getYear)
 
       "return false" in {
         AcquisitionDateForm.verifyDateInPast(date) shouldBe false

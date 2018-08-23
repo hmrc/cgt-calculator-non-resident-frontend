@@ -19,7 +19,7 @@ package controllers
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
-import models.DisposalDateModel
+import models.DateModel
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import views.html.calculation
 import play.api.i18n.Messages.Implicits._
@@ -35,7 +35,7 @@ trait NoCapitalGainsTaxController extends FrontendController with ValidActiveSes
   val calcConnector: CalculatorConnector
 
   val noCapitalGainsTax = ValidateSession.async { implicit request =>
-    calcConnector.fetchAndGetFormData[DisposalDateModel](KeystoreKeys.disposalDate).map {
+    calcConnector.fetchAndGetFormData[DateModel](KeystoreKeys.disposalDate).map {
       result => Ok(calculation.noCapitalGainsTax(result.get))
     }.recoverToStart
   }

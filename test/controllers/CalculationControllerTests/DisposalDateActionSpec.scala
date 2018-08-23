@@ -21,7 +21,7 @@ import connectors.CalculatorConnector
 import controllers.DisposalDateController
 import controllers.helpers.FakeRequestHelper
 import controllers.routes
-import models.{DisposalDateModel, TaxYearModel}
+import models.{DateModel, TaxYearModel}
 import org.jsoup._
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
@@ -37,14 +37,14 @@ class DisposalDateActionSpec extends UnitSpec with WithFakeApplication with Mock
 
   implicit val hc = new HeaderCarrier()
 
-  def setupTarget(getData: Option[DisposalDateModel], taxYearModel: Option[TaxYearModel] = None): DisposalDateController = {
+  def setupTarget(getData: Option[DateModel], taxYearModel: Option[TaxYearModel] = None): DisposalDateController = {
 
     val mockCalcConnector = mock[CalculatorConnector]
 
-    when(mockCalcConnector.fetchAndGetFormData[DisposalDateModel](ArgumentMatchers.anyString())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockCalcConnector.fetchAndGetFormData[DateModel](ArgumentMatchers.anyString())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    when(mockCalcConnector.saveFormData[DisposalDateModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockCalcConnector.saveFormData[DateModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(mock[CacheMap]))
 
     when(mockCalcConnector.getTaxYear(ArgumentMatchers.any())(ArgumentMatchers.any()))
@@ -75,7 +75,7 @@ class DisposalDateActionSpec extends UnitSpec with WithFakeApplication with Mock
 
     "supplied with a pre-existing stored model" should {
 
-      lazy val target = setupTarget(Some(DisposalDateModel(1, 3, 2016)))
+      lazy val target = setupTarget(Some(DateModel(1, 3, 2016)))
       lazy val result = target.disposalDate(fakeRequestWithSession)
       lazy val document = Jsoup.parse(bodyOf(result))
 
@@ -89,7 +89,7 @@ class DisposalDateActionSpec extends UnitSpec with WithFakeApplication with Mock
     }
 
     "supplied with a pre-existing stored model without a session" should {
-      lazy val target = setupTarget(Some(DisposalDateModel(1, 3, 2016)))
+      lazy val target = setupTarget(Some(DateModel(1, 3, 2016)))
       lazy val result = target.disposalDate(fakeRequest)
       lazy val document = Jsoup.parse(bodyOf(result))
 

@@ -68,7 +68,7 @@ class CheckYourAnswersActionSpec extends UnitSpec with WithFakeApplication with 
     }
   }
 
-  val modelWithMultipleGains = TotalGainAnswersModel(DisposalDateModel(5, 10, 2016),
+  val modelWithMultipleGains = TotalGainAnswersModel(DateModel(5, 10, 2016),
     SoldOrGivenAwayModel(true),
     Some(SoldForLessModel(false)),
     DisposalValueModel(1000),
@@ -77,7 +77,7 @@ class CheckYourAnswersActionSpec extends UnitSpec with WithFakeApplication with 
     Some(BoughtForLessModel(false)),
     AcquisitionValueModel(2000),
     AcquisitionCostsModel(200),
-    AcquisitionDateModel(4, 10, 2013),
+    DateModel(4, 10, 2013),
     Some(RebasedValueModel(3000)),
     Some(RebasedCostsModel("Yes", Some(300))),
     ImprovementsModel("Yes", Some(10), Some(20)),
@@ -86,7 +86,7 @@ class CheckYourAnswersActionSpec extends UnitSpec with WithFakeApplication with 
   val totalGainResultsModel = TotalGainResultsModel(0, Some(0), Some(0))
   val totalGainWithValueResultsModel = TotalGainResultsModel(100, Some(-100), None)
 
-  val modelWithOnlyFlat = TotalGainAnswersModel(DisposalDateModel(5, 10, 2016),
+  val modelWithOnlyFlat = TotalGainAnswersModel(DateModel(5, 10, 2016),
     SoldOrGivenAwayModel(true),
     Some(SoldForLessModel(false)),
     DisposalValueModel(1000),
@@ -95,7 +95,7 @@ class CheckYourAnswersActionSpec extends UnitSpec with WithFakeApplication with 
     Some(BoughtForLessModel(false)),
     AcquisitionValueModel(2000),
     AcquisitionCostsModel(200),
-    AcquisitionDateModel(4, 10, 2016),
+    DateModel(4, 10, 2016),
     None,
     None,
     ImprovementsModel("Yes", Some(10), Some(20)),

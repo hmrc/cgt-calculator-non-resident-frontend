@@ -24,7 +24,7 @@ import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import forms.RebasedValueForm._
 import views.html.calculation
-import models.{AcquisitionDateModel, RebasedValueModel}
+import models.{DateModel, RebasedValueModel}
 import play.api.data.Form
 import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
@@ -42,7 +42,7 @@ trait RebasedValueController extends FrontendController with ValidActiveSession 
 
   val calcConnector: CalculatorConnector
 
-  def backLink(acquisitionDate: Option[AcquisitionDateModel]): String = {
+  def backLink(acquisitionDate: Option[DateModel]): String = {
 
     val localDate: Option[LocalDate] = acquisitionDate.map{x => x.get}
 
@@ -58,7 +58,7 @@ trait RebasedValueController extends FrontendController with ValidActiveSession 
   val rebasedValue: Action[AnyContent] = ValidateSession.async { implicit request =>
     (for {
       rebasedValueModel <- calcConnector.fetchAndGetFormData[RebasedValueModel](KeystoreKeys.rebasedValue)
-      acquisitionDate <- calcConnector.fetchAndGetFormData[AcquisitionDateModel](KeystoreKeys.acquisitionDate)
+      acquisitionDate <- calcConnector.fetchAndGetFormData[DateModel](KeystoreKeys.acquisitionDate)
     } yield rebasedValueModel match {
       case Some(data) => Ok(calculation.rebasedValue(rebasedValueForm.fill(data), backLink(acquisitionDate)))
       case None => Ok(calculation.rebasedValue(rebasedValueForm, backLink(acquisitionDate)))
@@ -68,7 +68,7 @@ trait RebasedValueController extends FrontendController with ValidActiveSession 
   val submitRebasedValue: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     def errorAction(errors: Form[RebasedValueModel]) = {
-      calcConnector.fetchAndGetFormData[AcquisitionDateModel](KeystoreKeys.acquisitionDate).map{
+      calcConnector.fetchAndGetFormData[DateModel](KeystoreKeys.acquisitionDate).map{
         x => BadRequest(calculation.rebasedValue(errors, backLink(x)))
       }
     }

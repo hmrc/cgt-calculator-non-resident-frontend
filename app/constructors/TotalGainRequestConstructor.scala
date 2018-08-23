@@ -22,8 +22,6 @@ import models._
 object TotalGainRequestConstructor {
 
   def totalGainQuery(totalGainAnswersModel: TotalGainAnswersModel): String = {
-    val costs:BigDecimal = if(totalGainAnswersModel.acquisitionCostsModel.isDefined) totalGainAnswersModel.acquisitionCostsModel.get.acquisitionCostsAmt
-    else totalGainAnswersModel.costsAtLegislationStart.get.costs.getOrElse(0.00)
 
     disposalValue(totalGainAnswersModel.disposalValueModel) +
     disposalCosts(totalGainAnswersModel.disposalCostsModel) +
@@ -50,7 +48,7 @@ object TotalGainRequestConstructor {
 
   def acquisitionCosts(acquisitionCostsModel: Option[AcquisitionCostsModel],
                        costsAtLegislationStartModel: Option[CostsAtLegislationStartModel],
-                       acquisitionDateModel: AcquisitionDateModel): String = {
+                       acquisitionDateModel: DateModel): String = {
 
     val selectAcquisitionCosts = {
       (acquisitionCostsModel, costsAtLegislationStartModel) match {
@@ -65,6 +63,15 @@ object TotalGainRequestConstructor {
     s"&acquisitionCosts=$selectAcquisitionCosts"
   }
 
+  def includeLegislationCosts(costsAtLegislationStartModel: CostsAtLegislationStartModel, acquisitionDateModel: DateModel): Boolean = {
+    costsAtLegislationStartModel.hasCosts == "Yes" && TaxDates.dateBeforeLegislationStart(acquisitionDateModel.get)
+  }
+
+  def afterLegislation(acquisitionDateModel: DateModel): Boolean = {
+    !TaxDates.dateBeforeLegislationStart(acquisitionDateModel.get)
+  }
+
+
   def improvements(improvementsModel: ImprovementsModel): String = {
     improvementsModel match {
       case ImprovementsModel("Yes", Some(value), _) =>
@@ -76,7 +83,7 @@ object TotalGainRequestConstructor {
   def rebasedValues(rebasedValueModel: Option[RebasedValueModel],
                     rebasedCostsModel: Option[RebasedCostsModel],
                     improvementsModel: ImprovementsModel,
-                    acquisitionDateModel: AcquisitionDateModel): String = {
+                    acquisitionDateModel: DateModel): String = {
     rebasedValueModel match {
       case (Some(RebasedValueModel(value)))
         if !TaxDates.dateAfterStart(acquisitionDateModel.get) =>
@@ -99,11 +106,17 @@ object TotalGainRequestConstructor {
     }
   }
 
-  def disposalDate(disposalDateModel: DisposalDateModel): String = {
-    s"&disposalDate=${disposalDateModel.year}-${disposalDateModel.month}-${disposalDateModel.day}"
+  def includeRebasedValuesInCalculation(oRebasedValueModel: Option[RebasedValueModel], acquisitionDateModel: DateModel): Boolean = {
+    oRebasedValueModel.isDefined && !TaxDates.dateAfterStart(acquisitionDateModel.get)
   }
 
-  def acquisitionDate(acquisitionDateModel: AcquisitionDateModel): String = {
-    s"&acquisitionDate=${acquisitionDateModel.year}-${acquisitionDateModel.month}-${acquisitionDateModel.day}"
+  def disposalDate(disposalDateModel: DateModel): String = {
+    s"&disposalDate=${dateToString(disposalDateModel)}"
   }
+
+  def acquisitionDate(acquisitionDateModel: DateModel): String = {
+    s"&acquisitionDate=${dateToString(acquisitionDateModel)}"
+  }
+
+  private def dateToString(date: DateModel) = s"${date.year}-${date.month}-${date.day}"
 }

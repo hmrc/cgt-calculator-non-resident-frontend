@@ -111,7 +111,7 @@ class ReportActionSpec extends UnitSpec with WithFakeApplication with FakeReques
     }
   }
 
-  val model = TotalGainAnswersModel(DisposalDateModel(5, 10, 2016),
+  val model = TotalGainAnswersModel(DateModel(5, 10, 2016),
     SoldOrGivenAwayModel(true),
     Some(SoldForLessModel(false)),
     DisposalValueModel(1000),
@@ -120,7 +120,7 @@ class ReportActionSpec extends UnitSpec with WithFakeApplication with FakeReques
     Some(BoughtForLessModel(false)),
     AcquisitionValueModel(2000),
     AcquisitionCostsModel(200),
-    AcquisitionDateModel(4, 10, 2013),
+    DateModel(4, 10, 2013),
     Some(RebasedValueModel(3000)),
     Some(RebasedCostsModel("Yes", Some(300))),
     ImprovementsModel("Yes", Some(10), Some(20)),

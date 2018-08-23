@@ -22,7 +22,7 @@ import uk.gov.hmrc.play.test.UnitSpec
 class PrivateResidenceReliefRequestConstructorSpec extends UnitSpec{
 
   val modelDatesWithin18Months = TotalGainAnswersModel(
-    DisposalDateModel(7, 7, 2016),
+    DateModel(7, 7, 2016),
     SoldOrGivenAwayModel(false),
     None,
     DisposalValueModel(10000),
@@ -31,7 +31,7 @@ class PrivateResidenceReliefRequestConstructorSpec extends UnitSpec{
     None,
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
-    AcquisitionDateModel(7, 1, 2015),
+    DateModel(7, 1, 2015),
     None,
     None,
     ImprovementsModel("No", None, None),
@@ -39,7 +39,7 @@ class PrivateResidenceReliefRequestConstructorSpec extends UnitSpec{
   )
 
   val modelDatesAcquisitionDateAfterStart = TotalGainAnswersModel(
-    DisposalDateModel(10, 10, 2016),
+    DateModel(10, 10, 2016),
     SoldOrGivenAwayModel(false),
     None,
     DisposalValueModel(10000),
@@ -48,7 +48,7 @@ class PrivateResidenceReliefRequestConstructorSpec extends UnitSpec{
     None,
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
-    AcquisitionDateModel(10, 10, 2015),
+    DateModel(10, 10, 2015),
     None,
     None,
     ImprovementsModel("No", None, None),
@@ -56,7 +56,7 @@ class PrivateResidenceReliefRequestConstructorSpec extends UnitSpec{
   )
 
   val modelWithValidDates = TotalGainAnswersModel(
-    DisposalDateModel(10, 10, 2016),
+    DateModel(10, 10, 2016),
     SoldOrGivenAwayModel(false),
     None,
     DisposalValueModel(10000),
@@ -65,7 +65,7 @@ class PrivateResidenceReliefRequestConstructorSpec extends UnitSpec{
     None,
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
-    AcquisitionDateModel(10, 10, 2000),
+    DateModel(10, 10, 2000),
     None,
     None,
     ImprovementsModel("No", None, None),
@@ -73,7 +73,7 @@ class PrivateResidenceReliefRequestConstructorSpec extends UnitSpec{
   )
 
   val modelWithRebasedValue = TotalGainAnswersModel(
-    DisposalDateModel(10, 10, 2016),
+    DateModel(10, 10, 2016),
     SoldOrGivenAwayModel(false),
     None,
     DisposalValueModel(10000),
@@ -82,7 +82,7 @@ class PrivateResidenceReliefRequestConstructorSpec extends UnitSpec{
     None,
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
-    AcquisitionDateModel(10, 10, 2000),
+    DateModel(10, 10, 2000),
     Some(RebasedValueModel(1000)),
     None,
     ImprovementsModel("No", None, None),

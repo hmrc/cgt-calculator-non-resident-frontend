@@ -50,7 +50,7 @@ class TaxableGainCalculationSpec extends UnitSpec with WithFakeApplication with 
     BroughtForwardLossesModel(isClaiming = false, None)
   )
   val totalGainAnswersModel = TotalGainAnswersModel(
-    DisposalDateModel(5, 6, 2015),
+    DateModel(5, 6, 2015),
     SoldOrGivenAwayModel(true),
     Some(SoldForLessModel(true)),
     DisposalValueModel(950000),
@@ -59,7 +59,7 @@ class TaxableGainCalculationSpec extends UnitSpec with WithFakeApplication with 
     Some(BoughtForLessModel(false)),
     AcquisitionValueModel(1250000),
     AcquisitionCostsModel(20000),
-    AcquisitionDateModel(10, 10, 2001),
+    DateModel(10, 10, 2001),
     Some(RebasedValueModel(950000)),
     Some(RebasedCostsModel("No", None)),
     ImprovementsModel("No", None),
