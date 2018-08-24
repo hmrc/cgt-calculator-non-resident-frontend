@@ -42,7 +42,7 @@ class AnnualExemptAmountActionSpec extends UnitSpec with WithFakeApplication wit
   def setupTarget(
                    getData: Option[AnnualExemptAmountModel],
                    disabledTrustee: String = "",
-                   disposalDate: Option[DisposalDateModel] = Some(DisposalDateModel(12, 12, 2016)),
+                   disposalDate: Option[DateModel] = Some(DateModel(12, 12, 2016)),
                    previousLossOrGain: Option[PreviousLossOrGainModel] = Some(PreviousLossOrGainModel("Neither")),
                    howMuchLoss: Option[HowMuchLossModel] = None,
                    howMuchGain: Option[HowMuchGainModel] = None
@@ -50,7 +50,7 @@ class AnnualExemptAmountActionSpec extends UnitSpec with WithFakeApplication wit
 
     val mockCalcConnector = mock[CalculatorConnector]
 
-    when(mockCalcConnector.fetchAndGetFormData[DisposalDateModel](
+    when(mockCalcConnector.fetchAndGetFormData[DateModel](
       ArgumentMatchers.eq(KeystoreKeys.disposalDate))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(disposalDate))
 
@@ -99,7 +99,7 @@ class AnnualExemptAmountActionSpec extends UnitSpec with WithFakeApplication wit
     }
 
     "supplied with a 2016/17 tax year date" should {
-      val target = setupTarget(None, "Yes", disposalDate = Some(DisposalDateModel(12, 12, 2016)))
+      val target = setupTarget(None, "Yes", disposalDate = Some(DateModel(12, 12, 2016)))
       lazy val result = target.annualExemptAmount(fakeRequestWithSession)
       lazy val document = Jsoup.parse(bodyOf(result))
 
@@ -113,7 +113,7 @@ class AnnualExemptAmountActionSpec extends UnitSpec with WithFakeApplication wit
     }
 
     "supplied with a 2015/16 tax year date" should {
-      val target = setupTarget(None, disposalDate = Some(DisposalDateModel(12, 12, 2015)))
+      val target = setupTarget(None, disposalDate = Some(DateModel(12, 12, 2015)))
       lazy val result = target.annualExemptAmount(fakeRequestWithSession)
       lazy val document = Jsoup.parse(bodyOf(result))
 
@@ -127,7 +127,7 @@ class AnnualExemptAmountActionSpec extends UnitSpec with WithFakeApplication wit
     }
 
     "supplied with a date outside 2015/16, 2016/17 tax years" should {
-      val target = setupTarget(None, disposalDate = Some(DisposalDateModel(12, 12, 2013)))
+      val target = setupTarget(None, disposalDate = Some(DateModel(12, 12, 2013)))
       lazy val result = target.annualExemptAmount(fakeRequestWithSession)
       lazy val document = Jsoup.parse(bodyOf(result))
 
@@ -141,7 +141,7 @@ class AnnualExemptAmountActionSpec extends UnitSpec with WithFakeApplication wit
     }
 
     "not supplied with a valid session" should {
-      val target = setupTarget(None, disposalDate = Some(DisposalDateModel(12, 12, 2016)))
+      val target = setupTarget(None, disposalDate = Some(DateModel(12, 12, 2016)))
       lazy val result = target.annualExemptAmount(fakeRequest)
 
       "return a 303" in {

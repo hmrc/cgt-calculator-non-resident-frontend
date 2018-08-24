@@ -22,11 +22,11 @@ import common.KeystoreKeys.{NonResidentKeys => keys}
 
 object DeductionDetailsConstructor {
 
-  def datesOutsideRangeCheck(acquisitionDateModel: AcquisitionDateModel, disposalDateModel: DisposalDateModel): Boolean = {
+  def datesOutsideRangeCheck(acquisitionDateModel: DateModel, disposalDateModel: DateModel): Boolean = {
     acquisitionDateModel.get.plusMonths(18).isBefore(disposalDateModel.get)
   }
 
-  def acquisitionAfterPropertyDisposalOver18Month(acquisitionDateModel: AcquisitionDateModel, disposalDateModel: DisposalDateModel): Boolean = {
+  def acquisitionAfterPropertyDisposalOver18Month(acquisitionDateModel: DateModel, disposalDateModel: DateModel): Boolean = {
     //When acquisition date is after 6th April 2015,
     // and property is disposed more than 18 months later
     acquisitionDateModel.get.isAfter(TaxDates.taxStartDate) && acquisitionDateModel.get.plusMonths(18).isBefore(disposalDateModel.get)

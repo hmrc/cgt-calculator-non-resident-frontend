@@ -27,7 +27,7 @@ import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 class DeductionDetailsConstructorSpec extends UnitSpec with WithFakeApplication with AssertHelpers {
 
   val noneOtherReliefs = TotalGainAnswersModel(
-    DisposalDateModel(10, 10, 2010),
+    DateModel(10, 10, 2010),
     SoldOrGivenAwayModel(false),
     None,
     DisposalValueModel(150000),
@@ -36,7 +36,7 @@ class DeductionDetailsConstructorSpec extends UnitSpec with WithFakeApplication 
     None,
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
-    AcquisitionDateModel(1, 1, 2009),
+    DateModel(1, 1, 2009),
     None,
     None,
     ImprovementsModel("No", None, None),
@@ -44,7 +44,7 @@ class DeductionDetailsConstructorSpec extends UnitSpec with WithFakeApplication 
   )
 
   val noOtherReliefs = TotalGainAnswersModel(
-    DisposalDateModel(10, 10, 2010),
+    DateModel(10, 10, 2010),
     SoldOrGivenAwayModel(false),
     None,
     DisposalValueModel(150000),
@@ -53,7 +53,7 @@ class DeductionDetailsConstructorSpec extends UnitSpec with WithFakeApplication 
     None,
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
-    AcquisitionDateModel(1, 1, 2009),
+    DateModel(1, 1, 2009),
     None,
     None,
     ImprovementsModel("No", None, None),
@@ -61,7 +61,7 @@ class DeductionDetailsConstructorSpec extends UnitSpec with WithFakeApplication 
   )
 
   val yesOtherReliefs = TotalGainAnswersModel(
-    DisposalDateModel(10, 10, 2018),
+    DateModel(10, 10, 2018),
     SoldOrGivenAwayModel(false),
     None,
     DisposalValueModel(150000),
@@ -70,7 +70,7 @@ class DeductionDetailsConstructorSpec extends UnitSpec with WithFakeApplication 
     None,
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
-    AcquisitionDateModel(1, 1, 2016),
+    DateModel(1, 1, 2016),
     Some(RebasedValueModel(1)),
     Some(RebasedCostsModel("No", None)),
     ImprovementsModel("No", None, None),
@@ -78,7 +78,7 @@ class DeductionDetailsConstructorSpec extends UnitSpec with WithFakeApplication 
   )
 
   val within18Months = TotalGainAnswersModel(
-    DisposalDateModel(10, 10, 2016),
+    DateModel(10, 10, 2016),
     SoldOrGivenAwayModel(false),
     None,
     DisposalValueModel(150000),
@@ -87,7 +87,7 @@ class DeductionDetailsConstructorSpec extends UnitSpec with WithFakeApplication 
     None,
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
-    AcquisitionDateModel(10, 4, 2015),
+    DateModel(10, 4, 2015),
     None,
     None,
     ImprovementsModel("No", None, None),
@@ -95,7 +95,7 @@ class DeductionDetailsConstructorSpec extends UnitSpec with WithFakeApplication 
   )
 
   val validDates = TotalGainAnswersModel(
-    DisposalDateModel(10, 10, 2016),
+    DateModel(10, 10, 2016),
     SoldOrGivenAwayModel(false),
     None,
     DisposalValueModel(150000),
@@ -104,7 +104,7 @@ class DeductionDetailsConstructorSpec extends UnitSpec with WithFakeApplication 
     None,
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
-    AcquisitionDateModel(10, 2, 2015),
+    DateModel(10, 2, 2015),
     None,
     None,
     ImprovementsModel("No", None, None),
@@ -112,7 +112,7 @@ class DeductionDetailsConstructorSpec extends UnitSpec with WithFakeApplication 
   )
 
   val edgeDatesJustDaysBefore = TotalGainAnswersModel(
-    DisposalDateModel(2, 3, 2017),
+    DateModel(2, 3, 2017),
     SoldOrGivenAwayModel(false),
     None,
     DisposalValueModel(150000),
@@ -121,7 +121,7 @@ class DeductionDetailsConstructorSpec extends UnitSpec with WithFakeApplication 
     None,
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
-    AcquisitionDateModel(10, 4, 2015),
+    DateModel(10, 4, 2015),
     None,
     None,
     ImprovementsModel("No", None, None),
@@ -129,7 +129,7 @@ class DeductionDetailsConstructorSpec extends UnitSpec with WithFakeApplication 
   )
 
   val acquisitionDateAfterStart = TotalGainAnswersModel(
-    DisposalDateModel(10, 10, 2018),
+    DateModel(10, 10, 2018),
     SoldOrGivenAwayModel(false),
     None,
     DisposalValueModel(150000),
@@ -138,7 +138,7 @@ class DeductionDetailsConstructorSpec extends UnitSpec with WithFakeApplication 
     None,
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
-    AcquisitionDateModel(10, 2, 2016),
+    DateModel(10, 2, 2016),
     None,
     None,
     ImprovementsModel("No", None, None),
@@ -146,7 +146,7 @@ class DeductionDetailsConstructorSpec extends UnitSpec with WithFakeApplication 
   )
 
   val disposalDateWithin18Months = TotalGainAnswersModel(
-    DisposalDateModel(10, 4, 2016),
+    DateModel(10, 4, 2016),
     SoldOrGivenAwayModel(false),
     None,
     DisposalValueModel(150000),
@@ -155,7 +155,7 @@ class DeductionDetailsConstructorSpec extends UnitSpec with WithFakeApplication 
     None,
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
-    AcquisitionDateModel(10, 2, 1990),
+    DateModel(10, 2, 1990),
     None,
     None,
     ImprovementsModel("No", None, None),

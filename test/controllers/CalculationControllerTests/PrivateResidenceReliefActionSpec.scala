@@ -43,8 +43,8 @@ class PrivateResidenceReliefActionSpec extends UnitSpec with WithFakeApplication
   def setupTarget
   (
     getData: Option[PrivateResidenceReliefModel],
-    disposalDateData: Option[DisposalDateModel] = None,
-    acquisitionDateData: Option[AcquisitionDateModel] = None,
+    disposalDateData: Option[DateModel] = None,
+    acquisitionDateData: Option[DateModel] = None,
     rebasedValueData: Option[RebasedValueModel] = None,
     calculationResultsWithPRRModel: Option[CalculationResultsWithPRRModel] = None
   ): PrivateResidenceReliefController = {
@@ -62,11 +62,11 @@ class PrivateResidenceReliefActionSpec extends UnitSpec with WithFakeApplication
       ArgumentMatchers.eq(KeystoreKeys.privateResidenceRelief))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    when(mockCalcConnector.fetchAndGetFormData[DisposalDateModel](
+    when(mockCalcConnector.fetchAndGetFormData[DateModel](
       ArgumentMatchers.eq(KeystoreKeys.disposalDate))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(disposalDateData))
 
-    when(mockCalcConnector.fetchAndGetFormData[AcquisitionDateModel]
+    when(mockCalcConnector.fetchAndGetFormData[DateModel]
       (ArgumentMatchers.eq(KeystoreKeys.acquisitionDate))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(acquisitionDateData))
 
@@ -97,7 +97,7 @@ class PrivateResidenceReliefActionSpec extends UnitSpec with WithFakeApplication
   "Calling the .getAcquisitionDate method" should {
 
     "return a valid date when one is found with an answer of yes" in {
-      val target = setupTarget(None, acquisitionDateData = Some(AcquisitionDateModel(10, 5, 2015)))
+      val target = setupTarget(None, acquisitionDateData = Some(DateModel(10, 5, 2015)))
       val result = target.getAcquisitionDate(hc: HeaderCarrier)
 
       await(result) shouldBe Some(LocalDate.parse("2015-05-10"))
@@ -114,7 +114,7 @@ class PrivateResidenceReliefActionSpec extends UnitSpec with WithFakeApplication
   "Calling the .getDisposalDate method" should {
 
     "return a valid date when one is found" in {
-      val target = setupTarget(None, disposalDateData = Some(DisposalDateModel(10, 5, 2015)))
+      val target = setupTarget(None, disposalDateData = Some(DateModel(10, 5, 2015)))
       val result = target.getDisposalDate(hc: HeaderCarrier)
 
       await(result) shouldBe Some(LocalDate.parse("2015-05-10"))
@@ -209,8 +209,8 @@ class PrivateResidenceReliefActionSpec extends UnitSpec with WithFakeApplication
     "not supplied wth a pre-existing stored model" should {
       val target = setupTarget(
         None,
-        disposalDateData = Some(DisposalDateModel(5, 8, 2015)),
-        acquisitionDateData = Some(AcquisitionDateModel(1, 1, 2016)),
+        disposalDateData = Some(DateModel(5, 8, 2015)),
+        acquisitionDateData = Some(DateModel(1, 1, 2016)),
         rebasedValueData = Some(RebasedValueModel(1000)))
       lazy val result = target.privateResidenceRelief(fakeRequestWithSession)
       lazy val document = Jsoup.parse(bodyOf(result))
@@ -227,8 +227,8 @@ class PrivateResidenceReliefActionSpec extends UnitSpec with WithFakeApplication
     "supplied wth a pre-existing stored model" should {
       val target = setupTarget(
         Some(PrivateResidenceReliefModel("Yes", None, None)),
-        disposalDateData = Some(DisposalDateModel(5, 8, 2015)),
-        acquisitionDateData = Some(AcquisitionDateModel(1, 1, 2016)),
+        disposalDateData = Some(DateModel(5, 8, 2015)),
+        acquisitionDateData = Some(DateModel(1, 1, 2016)),
         rebasedValueData = Some(RebasedValueModel(1000)))
       lazy val result = target.privateResidenceRelief(fakeRequestWithSession)
       lazy val document = Jsoup.parse(bodyOf(result))
@@ -245,8 +245,8 @@ class PrivateResidenceReliefActionSpec extends UnitSpec with WithFakeApplication
     "supplied without a valid session" should {
       val target = setupTarget(
         None,
-        disposalDateData = Some(DisposalDateModel(5, 8, 2015)),
-        acquisitionDateData = Some(AcquisitionDateModel(1, 1, 2016)),
+        disposalDateData = Some(DateModel(5, 8, 2015)),
+        acquisitionDateData = Some(DateModel(1, 1, 2016)),
         rebasedValueData = Some(RebasedValueModel(1000)))
       lazy val result = target.privateResidenceRelief(fakeRequest)
 
@@ -267,8 +267,8 @@ class PrivateResidenceReliefActionSpec extends UnitSpec with WithFakeApplication
       val model = CalculationResultsWithPRRModel(GainsAfterPRRModel(1000, 0, 0), None, None)
       val target = setupTarget(
         None,
-        disposalDateData = Some(DisposalDateModel(5, 8, 2015)),
-        acquisitionDateData = Some(AcquisitionDateModel(1, 1, 2016)),
+        disposalDateData = Some(DateModel(5, 8, 2015)),
+        acquisitionDateData = Some(DateModel(1, 1, 2016)),
         rebasedValueData = Some(RebasedValueModel(1000)),
         calculationResultsWithPRRModel = Some(model))
       lazy val request = fakeRequestToPOSTWithSession(("isClaimingPRR", "No"))
@@ -287,8 +287,8 @@ class PrivateResidenceReliefActionSpec extends UnitSpec with WithFakeApplication
       val model = CalculationResultsWithPRRModel(GainsAfterPRRModel(1000, 500, 0), None, None)
       val target = setupTarget(
         None,
-        disposalDateData = Some(DisposalDateModel(5, 8, 2015)),
-        acquisitionDateData = Some(AcquisitionDateModel(1, 1, 2016)),
+        disposalDateData = Some(DateModel(5, 8, 2015)),
+        acquisitionDateData = Some(DateModel(1, 1, 2016)),
         rebasedValueData = Some(RebasedValueModel(1000)),
         calculationResultsWithPRRModel = Some(model))
       lazy val request = fakeRequestToPOSTWithSession(("isClaimingPRR", "No"))
@@ -306,8 +306,8 @@ class PrivateResidenceReliefActionSpec extends UnitSpec with WithFakeApplication
     "submitting an invalid form" should {
       val target = setupTarget(
         None,
-        disposalDateData = Some(DisposalDateModel(5, 8, 2015)),
-        acquisitionDateData = Some(AcquisitionDateModel(1, 1, 2016)),
+        disposalDateData = Some(DateModel(5, 8, 2015)),
+        acquisitionDateData = Some(DateModel(1, 1, 2016)),
         rebasedValueData = Some(RebasedValueModel(1000)))
       lazy val request = fakeRequestToPOSTWithSession(("isClaimingPRR", ""))
       lazy val result = target.submitPrivateResidenceRelief(request)

@@ -34,7 +34,7 @@ trait AnswersConstructor {
   val calculatorConnector: CalculatorConnector
 
   def getNRTotalGainAnswers(implicit hc: HeaderCarrier): Future[TotalGainAnswersModel] = {
-    val disposalDate = calculatorConnector.fetchAndGetFormData[DisposalDateModel](KeystoreKeys.disposalDate).map(data => {
+    val disposalDate = calculatorConnector.fetchAndGetFormData[DateModel](KeystoreKeys.disposalDate).map(data => {
       Logger.info("Getting disposalDate as : " + data)
       data.get
     })
@@ -44,7 +44,7 @@ trait AnswersConstructor {
     val howBecameOwner = calculatorConnector.fetchAndGetFormData[HowBecameOwnerModel](KeystoreKeys.howBecameOwner)
     val boughtForLess = calculatorConnector.fetchAndGetFormData[BoughtForLessModel](KeystoreKeys.boughtForLess)
     val acquisitionCosts = calculatorConnector.fetchAndGetFormData[AcquisitionCostsModel](KeystoreKeys.acquisitionCosts)
-    val acquisitionDate = calculatorConnector.fetchAndGetFormData[AcquisitionDateModel](KeystoreKeys.acquisitionDate).map(data => data.get)
+    val acquisitionDate = calculatorConnector.fetchAndGetFormData[DateModel](KeystoreKeys.acquisitionDate).map(data => data.get)
     val rebasedValue = calculatorConnector.fetchAndGetFormData[RebasedValueModel](KeystoreKeys.rebasedValue)
     val rebasedCosts = calculatorConnector.fetchAndGetFormData[RebasedCostsModel](KeystoreKeys.rebasedCosts)
     val improvements = calculatorConnector.fetchAndGetFormData[ImprovementsModel](KeystoreKeys.improvements).map(data => data.get)
@@ -61,7 +61,7 @@ trait AnswersConstructor {
         calculatorConnector.fetchAndGetFormData[DisposalValueModel](KeystoreKeys.disposalMarketValue).map(data => data.get)
     }
 
-    def acquisitionValue(acquisitionDateModel: AcquisitionDateModel,
+    def acquisitionValue(acquisitionDateModel: DateModel,
                          howBecameOwnerModel: Option[HowBecameOwnerModel],
                          boughtForLessModel: Option[BoughtForLessModel]): Future[AcquisitionValueModel] =
       (acquisitionDateModel, howBecameOwnerModel, boughtForLessModel) match {

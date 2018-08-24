@@ -21,7 +21,7 @@ import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
 import controllers.HowBecameOwnerController
 import controllers.helpers.FakeRequestHelper
-import models.{AcquisitionDateModel, HowBecameOwnerModel, RebasedValueModel}
+import models.{DateModel, HowBecameOwnerModel, RebasedValueModel}
 import org.jsoup._
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._

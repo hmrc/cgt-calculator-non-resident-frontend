@@ -21,7 +21,7 @@ import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
 import controllers.NoCapitalGainsTaxController
 import controllers.helpers.FakeRequestHelper
-import models.DisposalDateModel
+import models.DateModel
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
@@ -36,11 +36,11 @@ class NoCapitalGainsTaxActionSpec extends UnitSpec with WithFakeApplication with
 
   implicit val hc = new HeaderCarrier()
 
-  def setupTarget(getData: Option[DisposalDateModel]): NoCapitalGainsTaxController = {
+  def setupTarget(getData: Option[DateModel]): NoCapitalGainsTaxController = {
 
     val mockCalcConnector = mock[CalculatorConnector]
 
-    when(mockCalcConnector.fetchAndGetFormData[DisposalDateModel](
+    when(mockCalcConnector.fetchAndGetFormData[DateModel](
       ArgumentMatchers.eq(KeystoreKeys.disposalDate))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
@@ -53,7 +53,7 @@ class NoCapitalGainsTaxActionSpec extends UnitSpec with WithFakeApplication with
   "In CalculationController calling the .noCapitalGainsTax action " when {
 
     "called with a valid session" should {
-      val target = setupTarget(Some(DisposalDateModel(1, 1, 2015)))
+      val target = setupTarget(Some(DateModel(1, 1, 2015)))
       lazy val result = target.noCapitalGainsTax(fakeRequestWithSession)
       lazy val document = Jsoup.parse(bodyOf(result))
 
@@ -67,7 +67,7 @@ class NoCapitalGainsTaxActionSpec extends UnitSpec with WithFakeApplication with
     }
 
     "called with an invalid session" should {
-      val target = setupTarget(Some(DisposalDateModel(2, 4, 2013)))
+      val target = setupTarget(Some(DateModel(2, 4, 2013)))
       lazy val result = target.noCapitalGainsTax(fakeRequest)
 
       "return a 303" in {

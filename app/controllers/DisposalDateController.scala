@@ -24,7 +24,7 @@ import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import forms.DisposalDateForm._
 import views.html.calculation
-import models.DisposalDateModel
+import models.DateModel
 import play.api.Logger
 import play.api.data.Form
 import play.api.mvc.Action
@@ -51,7 +51,7 @@ trait DisposalDateController extends FrontendController with ValidActiveSession 
         (SessionKeys.sessionId -> s"session-$sessionId")))
     }
     else {
-      calcConnector.fetchAndGetFormData[DisposalDateModel](KeystoreKeys.disposalDate).map {
+      calcConnector.fetchAndGetFormData[DateModel](KeystoreKeys.disposalDate).map {
         case Some(data) => Ok(calculation.disposalDate(disposalDateForm.fill(data)))
         case None => Ok(calculation.disposalDate(disposalDateForm))
       }
@@ -60,9 +60,9 @@ trait DisposalDateController extends FrontendController with ValidActiveSession 
 
   val submitDisposalDate = ValidateSession.async { implicit request =>
 
-    def errorAction(form: Form[DisposalDateModel]) = Future.successful(BadRequest(calculation.disposalDate(form)))
+    def errorAction(form: Form[DateModel]) = Future.successful(BadRequest(calculation.disposalDate(form)))
 
-    def successAction(model: DisposalDateModel) = {
+    def successAction(model: DateModel) = {
       Logger.info("Saving disposalDate as : " + model)
       for {
         _ <- calcConnector.saveFormData(KeystoreKeys.disposalDate, model)

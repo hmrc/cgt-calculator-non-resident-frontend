@@ -27,7 +27,7 @@ import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication with AssertHelpers {
 
   val totalGainGiven = TotalGainAnswersModel(
-    DisposalDateModel(10, 10, 2016),
+    DateModel(10, 10, 2016),
     SoldOrGivenAwayModel(false),
     None,
     DisposalValueModel(150000),
@@ -36,7 +36,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
     None,
     AcquisitionValueModel(300000),
     AcquisitionCostsModel(2500),
-    AcquisitionDateModel(1, 4, 2013),
+    DateModel(1, 4, 2013),
     Some(RebasedValueModel(1000)),
     Some(RebasedCostsModel("Yes", Some(150))),
     ImprovementsModel("No", None, None),
@@ -44,7 +44,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
   )
 
   val totalGainInherited = TotalGainAnswersModel(
-    DisposalDateModel(10, 10, 2010),
+    DateModel(10, 10, 2010),
     SoldOrGivenAwayModel(false),
     None,
     DisposalValueModel(150000),
@@ -53,7 +53,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
     None,
     AcquisitionValueModel(300000),
     AcquisitionCostsModel(2500),
-    AcquisitionDateModel(1, 4, 2013),
+    DateModel(1, 4, 2013),
     None,
     None,
     ImprovementsModel("No", None, None),
@@ -61,7 +61,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
   )
 
   val totalGainSold = TotalGainAnswersModel(
-    DisposalDateModel(10, 10, 2018),
+    DateModel(10, 10, 2018),
     SoldOrGivenAwayModel(true),
     Some(SoldForLessModel(false)),
     DisposalValueModel(90000),
@@ -70,7 +70,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
     Some(BoughtForLessModel(false)),
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
-    AcquisitionDateModel(1, 4, 2013),
+    DateModel(1, 4, 2013),
     Some(RebasedValueModel(7500)),
     Some(RebasedCostsModel("Yes", Some(150))),
     ImprovementsModel("Yes", Some(50), Some(25)),
@@ -78,7 +78,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
   )
 
   val totalGainForLess = TotalGainAnswersModel(
-    DisposalDateModel(10, 10, 2016),
+    DateModel(10, 10, 2016),
     SoldOrGivenAwayModel(true),
     Some(SoldForLessModel(true)),
     DisposalValueModel(10000),
@@ -87,7 +87,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
     Some(BoughtForLessModel(true)),
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
-    AcquisitionDateModel(1, 4, 2013),
+    DateModel(1, 4, 2013),
     Some(RebasedValueModel(7500)),
     Some(RebasedCostsModel("Yes", Some(150))),
     ImprovementsModel("Yes", Some(50), Some(25)),
@@ -98,7 +98,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
       val model = if(hasCosts) CostsAtLegislationStartModel("Yes", Some(1000)) else CostsAtLegislationStartModel("No", None)
 
       TotalGainAnswersModel(
-        DisposalDateModel(10, 10, 2016),
+        DateModel(10, 10, 2016),
         SoldOrGivenAwayModel(true),
         Some(SoldForLessModel(true)),
         DisposalValueModel(10000),
@@ -107,7 +107,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
         Some(BoughtForLessModel(true)),
         AcquisitionValueModel(5000),
         None,
-        AcquisitionDateModel(1, 4, 1970),
+        DateModel(1, 4, 1970),
         Some(RebasedValueModel(7500)),
         Some(RebasedCostsModel("Yes", Some(150))),
         ImprovementsModel("Yes", Some(50), Some(25)),

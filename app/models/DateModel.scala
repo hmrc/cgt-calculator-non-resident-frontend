@@ -23,12 +23,12 @@ import play.api.libs.json.{JsValue, Json, Writes}
 
 import scala.util.{Success, Try}
 
-case class DisposalDateModel (day: Int, month: Int, year: Int)
+case class DateModel(day: Int, month: Int, year: Int)
 
-object DisposalDateModel {
-  implicit val format = Json.format[DisposalDateModel]
+object DateModel {
+  implicit val format = Json.format[DateModel]
 
-  implicit val createDate: DisposalDateModel => Option[LocalDate] = model => {
+  implicit val createDate: DateModel => Option[LocalDate] = model => {
     val dateFormatter = Dates.formatter
     Try {
       LocalDate.parse(s"${model.day}/${model.month}/${model.year}", dateFormatter)
@@ -38,8 +38,8 @@ object DisposalDateModel {
     }
   }
 
-  val postWrites = new Writes[DisposalDateModel] {
-    override def writes(model: DisposalDateModel): JsValue = {
+  val postWrites = new Writes[DateModel] {
+    override def writes(model: DateModel): JsValue = {
       Json.toJson(LocalDate.of(model.year, model.month, model.day))
     }
   }

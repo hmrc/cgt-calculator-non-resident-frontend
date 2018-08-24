@@ -30,7 +30,7 @@ import org.scalatest.mock.MockitoSugar
 
 import scala.concurrent.Future
 import controllers.routes
-import models.{DisposalDateModel, PersonalAllowanceModel, TaxYearModel}
+import models.{DateModel, PersonalAllowanceModel, TaxYearModel}
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -46,9 +46,9 @@ class PersonalAllowanceActionSpec extends UnitSpec with WithFakeApplication with
       ArgumentMatchers.eq(KeystoreKeys.personalAllowance))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    when(mockCalcConnector.fetchAndGetFormData[DisposalDateModel](
+    when(mockCalcConnector.fetchAndGetFormData[DateModel](
       ArgumentMatchers.eq(KeystoreKeys.disposalDate))(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(Some(DisposalDateModel(6, 5, 2016))))
+      .thenReturn(Future.successful(Some(DateModel(6, 5, 2016))))
 
     when(mockCalcConnector.getTaxYear(ArgumentMatchers.anyString())(ArgumentMatchers.any()))
       .thenReturn(Some(TaxYearModel("2016-5-6", isValidYear = true, "2016/17")))

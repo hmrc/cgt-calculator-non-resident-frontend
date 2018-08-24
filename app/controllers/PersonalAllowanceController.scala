@@ -21,7 +21,7 @@ import common.TaxDates
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import forms.PersonalAllowanceForm._
-import models.{DisposalDateModel, PersonalAllowanceModel, TaxYearModel}
+import models.{DateModel, PersonalAllowanceModel, TaxYearModel}
 import play.api.Play.current
 import play.api.data.Form
 import play.api.i18n.Messages.Implicits._
@@ -49,7 +49,7 @@ trait PersonalAllowanceController extends FrontendController with ValidActiveSes
 
   val submitPersonalAllowance: Action[AnyContent] = ValidateSession.async { implicit request =>
 
-    def formatDisposalDate(disposalDateModel: Option[DisposalDateModel]): Future[String] = {
+    def formatDisposalDate(disposalDateModel: Option[DateModel]): Future[String] = {
       val date = disposalDateModel.get
       Future.successful(s"${date.year}-${date.month}-${date.day}")
     }
@@ -61,7 +61,7 @@ trait PersonalAllowanceController extends FrontendController with ValidActiveSes
 
     def getPersonalAllowanceForYear: Future[BigDecimal] = {
       for {
-        disposalDate <- calcConnector.fetchAndGetFormData[DisposalDateModel](KeystoreKeys.disposalDate)
+        disposalDate <- calcConnector.fetchAndGetFormData[DateModel](KeystoreKeys.disposalDate)
         date <- formatDisposalDate(disposalDate)
         taxYearDetails <- calcConnector.getTaxYear(date)
         taxYear <- getTaxYear(taxYearDetails)

@@ -44,7 +44,7 @@ trait ImprovementsController extends FrontendController with ValidActiveSession 
   val calcConnector: CalculatorConnector
   val answersConstructor: AnswersConstructor
 
-  private def improvementsBackUrl(acquisitionDate: Option[AcquisitionDateModel]): Future[String] = {
+  private def improvementsBackUrl(acquisitionDate: Option[DateModel]): Future[String] = {
     acquisitionDate match {
       case Some(data) if TaxDates.dateAfterStart(data.get) =>
         Future.successful(routes.AcquisitionCostsController.acquisitionCosts().url)
@@ -53,15 +53,15 @@ trait ImprovementsController extends FrontendController with ValidActiveSession 
     }
   }
 
-  private def fetchAcquisitionDate(implicit headerCarrier: HeaderCarrier): Future[Option[AcquisitionDateModel]] = {
-    calcConnector.fetchAndGetFormData[AcquisitionDateModel](KeystoreKeys.acquisitionDate)
+  private def fetchAcquisitionDate(implicit headerCarrier: HeaderCarrier): Future[Option[DateModel]] = {
+    calcConnector.fetchAndGetFormData[DateModel](KeystoreKeys.acquisitionDate)
   }
 
   private def fetchImprovements(implicit headerCarrier: HeaderCarrier): Future[Option[ImprovementsModel]] = {
     calcConnector.fetchAndGetFormData[ImprovementsModel](KeystoreKeys.improvements)
   }
 
-  private def displayImprovementsSectionCheck(acquisitionDateModel: Option[AcquisitionDateModel]): Future[Boolean] = {
+  private def displayImprovementsSectionCheck(acquisitionDateModel: Option[DateModel]): Future[Boolean] = {
     acquisitionDateModel match {
       case Some(data) if !TaxDates.dateAfterStart(data.get) =>
         Future.successful(true)
@@ -69,7 +69,7 @@ trait ImprovementsController extends FrontendController with ValidActiveSession 
     }
   }
 
-  private def ownerBeforeLegislationStartCheck(model: Option[AcquisitionDateModel]): Future[Boolean] = {
+  private def ownerBeforeLegislationStartCheck(model: Option[DateModel]): Future[Boolean] = {
     if(TaxDates.dateBeforeLegislationStart(model.get.day, model.get.month, model.get.year)) Future.successful(true)
     else Future.successful(false)
   }

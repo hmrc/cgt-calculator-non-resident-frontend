@@ -20,7 +20,7 @@ import common.KeystoreKeys.{NonResidentKeys => keystoreKeys}
 import views.html.{calculation => views}
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
-import models.DisposalDateModel
+import models.DateModel
 import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
@@ -37,7 +37,7 @@ trait OutsideTaxYearController extends FrontendController with ValidActiveSessio
 
   val outsideTaxYear: Action[AnyContent] = ValidateSession.async { implicit request =>
     (for {
-      disposalDate <- calcConnector.fetchAndGetFormData[DisposalDateModel](keystoreKeys.disposalDate)
+      disposalDate <- calcConnector.fetchAndGetFormData[DateModel](keystoreKeys.disposalDate)
       taxYear <- calcConnector.getTaxYear(s"${disposalDate.get.year}-${disposalDate.get.month}-${disposalDate.get.day}")
     } yield {
       Ok(views.outsideTaxYear(

@@ -24,7 +24,7 @@ import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 class PropertyDetailsConstructorSpec extends UnitSpec with WithFakeApplication with AssertHelpers {
 
   val noImprovements = TotalGainAnswersModel(
-    DisposalDateModel(10, 10, 2010),
+    DateModel(10, 10, 2010),
     SoldOrGivenAwayModel(false),
     None,
     DisposalValueModel(150000),
@@ -33,7 +33,7 @@ class PropertyDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
     None,
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
-    AcquisitionDateModel(1, 1, 2015),
+    DateModel(1, 1, 2015),
     None,
     None,
     ImprovementsModel("No", None, None),
@@ -41,7 +41,7 @@ class PropertyDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
   )
 
   val flatOnlyImprovements = TotalGainAnswersModel(
-    DisposalDateModel(10, 10, 2018),
+    DateModel(10, 10, 2018),
     SoldOrGivenAwayModel(true),
     Some(SoldForLessModel(false)),
     DisposalValueModel(90000),
@@ -50,7 +50,7 @@ class PropertyDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
     Some(BoughtForLessModel(false)),
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
-    AcquisitionDateModel(6, 4, 2015),
+    DateModel(6, 4, 2015),
     None,
     Some(RebasedCostsModel("No", None)),
     ImprovementsModel("Yes", Some(50), None),
@@ -58,7 +58,7 @@ class PropertyDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
   )
 
   val claimingRebasedImprovements = TotalGainAnswersModel(
-    DisposalDateModel(10, 10, 2016),
+    DateModel(10, 10, 2016),
     SoldOrGivenAwayModel(true),
     Some(SoldForLessModel(true)),
     DisposalValueModel(10000),
@@ -67,7 +67,7 @@ class PropertyDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
     Some(BoughtForLessModel(true)),
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
-    AcquisitionDateModel(1, 4, 2013),
+    DateModel(1, 4, 2013),
     Some(RebasedValueModel(7500)),
     Some(RebasedCostsModel("Yes", Some(150))),
     ImprovementsModel("Yes", Some(50), Some(25)),

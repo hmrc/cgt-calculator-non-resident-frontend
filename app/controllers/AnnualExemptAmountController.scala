@@ -70,8 +70,8 @@ trait AnnualExemptAmountController extends FrontendController with ValidActiveSe
     }
   }
 
-  private def fetchDisposalDate(implicit hc: HeaderCarrier): Future[Option[DisposalDateModel]] = {
-    calcConnector.fetchAndGetFormData[DisposalDateModel](KeystoreKeys.disposalDate)
+  private def fetchDisposalDate(implicit hc: HeaderCarrier): Future[Option[DateModel]] = {
+    calcConnector.fetchAndGetFormData[DateModel](KeystoreKeys.disposalDate)
   }
 
   private def backUrl(lossOrGain: PreviousLossOrGainModel, gainAmount: Option[HowMuchGainModel], lossAmount: Option[HowMuchLossModel]): Future[String] = {
@@ -86,7 +86,7 @@ trait AnnualExemptAmountController extends FrontendController with ValidActiveSe
     }
   }
 
-  private def formatDisposalDate(disposalDateModel: Option[DisposalDateModel]): Future[String] = {
+  private def formatDisposalDate(disposalDateModel: Option[DateModel]): Future[String] = {
     val date = disposalDateModel.get
     Future.successful(s"${date.year}-${date.month}-${date.day}")
   }

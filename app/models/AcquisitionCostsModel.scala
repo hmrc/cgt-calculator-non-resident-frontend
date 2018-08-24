@@ -16,7 +16,10 @@
 
 package models
 
+import common.TaxDates
 import play.api.libs.json._
+import constructors.TotalGainRequestConstructor.includeLegislationCosts
+import constructors.TotalGainRequestConstructor.afterLegislation
 
 case class AcquisitionCostsModel (acquisitionCostsAmt: BigDecimal)
 
@@ -24,10 +27,18 @@ object AcquisitionCostsModel {
   implicit val format = Json.format[AcquisitionCostsModel]
   implicit val convertToSome: AcquisitionCostsModel => Option[AcquisitionCostsModel] = model => Some(model)
 
-  val postWrites = new Writes[AcquisitionCostsModel] {
-    override def writes(model: AcquisitionCostsModel): JsValue = {
-      Json.toJson(model.acquisitionCostsAmt)
+
+  def postWrites(oCostsAtLegislationStartModel: Option[CostsAtLegislationStartModel], acquisitionDateModel: DateModel):
+    Writes[Option[AcquisitionCostsModel]] = new Writes[Option[AcquisitionCostsModel]] {
+    override def writes(o: Option[AcquisitionCostsModel])= {
+        (o, oCostsAtLegislationStartModel) match {
+          case (_, Some(value)) if includeLegislationCosts(value, acquisitionDateModel)=>
+            Json.obj(("acquisitionCosts",value.costs.get))
+          case (Some(value), _) if afterLegislation(acquisitionDateModel) =>
+            Json.obj(("acquisitionCosts", value.acquisitionCostsAmt))
+          case _ => Json.obj(("acquisitionCosts", 0))
+        }
+      }
     }
   }
 
-}

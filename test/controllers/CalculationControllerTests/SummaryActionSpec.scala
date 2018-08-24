@@ -108,7 +108,7 @@ class SummaryActionSpec extends UnitSpec with WithFakeApplication with MockitoSu
   }
 
   lazy val answerModel = TotalGainAnswersModel(
-    DisposalDateModel(10, 10, 2016),
+    DateModel(10, 10, 2016),
     SoldOrGivenAwayModel(false),
     None,
     DisposalValueModel(10000),
@@ -117,7 +117,7 @@ class SummaryActionSpec extends UnitSpec with WithFakeApplication with MockitoSu
     None,
     AcquisitionValueModel(5000),
     AcquisitionCostsModel(200),
-    AcquisitionDateModel(1, 1, 2016),
+    DateModel(1, 1, 2016),
     None,
     None,
     ImprovementsModel("No", None, None),

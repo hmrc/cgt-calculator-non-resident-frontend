@@ -51,21 +51,21 @@ class TotalGainRequestConstructorSpec extends UnitSpec {
   "Calling .acquisitionCosts" should {
 
     "use the acquisition costs for a post 31 March 1982 date" in {
-      val result = TotalGainRequestConstructor.acquisitionCosts(Some(AcquisitionCostsModel(200)), None, AcquisitionDateModel(1, 4, 1990))
+      val result = TotalGainRequestConstructor.acquisitionCosts(Some(AcquisitionCostsModel(200)), None, DateModel(1, 4, 1990))
 
       result shouldBe "&acquisitionCosts=200"
     }
 
     "use the cost of valuation from the 31 March 1982 for a prior date" in {
       val result = TotalGainRequestConstructor.acquisitionCosts(None,
-        Some(CostsAtLegislationStartModel("Yes", Some(100))), AcquisitionDateModel(1, 4, 1980))
+        Some(CostsAtLegislationStartModel("Yes", Some(100))), DateModel(1, 4, 1980))
 
       result shouldBe "&acquisitionCosts=100"
     }
 
     "return 0 costs for a prior date when not given" in {
       val result = TotalGainRequestConstructor.acquisitionCosts(Some(AcquisitionCostsModel(200)),
-        Some(CostsAtLegislationStartModel("No", Some(100))), AcquisitionDateModel(1, 4, 1980))
+        Some(CostsAtLegislationStartModel("No", Some(100))), DateModel(1, 4, 1980))
 
       result shouldBe "&acquisitionCosts=0"
     }
@@ -137,7 +137,7 @@ class TotalGainRequestConstructorSpec extends UnitSpec {
   "Calling .acquisitionDate" should {
 
     "produce a valid query string" in {
-      val result = TotalGainRequestConstructor.acquisitionDate(AcquisitionDateModel(4, 5, 2013))
+      val result = TotalGainRequestConstructor.acquisitionDate(DateModel(4, 5, 2013))
 
       result shouldBe "&acquisitionDate=2013-5-4"
     }
@@ -146,7 +146,7 @@ class TotalGainRequestConstructorSpec extends UnitSpec {
   "Calling .disposalDate" should {
 
     "produce a valid query string" in {
-      val result = TotalGainRequestConstructor.disposalDate(DisposalDateModel(15, 10, 2018))
+      val result = TotalGainRequestConstructor.disposalDate(DateModel(15, 10, 2018))
 
       result shouldBe "&disposalDate=2018-10-15"
     }
@@ -158,7 +158,7 @@ class TotalGainRequestConstructorSpec extends UnitSpec {
       val result = TotalGainRequestConstructor.rebasedValues(Some(RebasedValueModel(3000)),
         Some(RebasedCostsModel("Yes", Some(300))),
         ImprovementsModel("Yes", None, Some(30)),
-        AcquisitionDateModel(5, 4, 2015))
+        DateModel(5, 4, 2015))
 
       result shouldBe "&rebasedValue=3000&rebasedCosts=300&improvementsAfterTaxStarted=30"
     }
@@ -167,7 +167,7 @@ class TotalGainRequestConstructorSpec extends UnitSpec {
       val result = TotalGainRequestConstructor.rebasedValues(None,
         None,
         ImprovementsModel("Yes", None, None),
-        AcquisitionDateModel(6, 4, 2015))
+        DateModel(6, 4, 2015))
 
       result shouldBe ""
     }
@@ -176,7 +176,7 @@ class TotalGainRequestConstructorSpec extends UnitSpec {
   "Calling .totalGainQuery" should {
 
     "produce a valid query string for a flat calculation" in {
-      val model = TotalGainAnswersModel(DisposalDateModel(5, 10, 2016),
+      val model = TotalGainAnswersModel(DateModel(5, 10, 2016),
         SoldOrGivenAwayModel(true),
         Some(SoldForLessModel(false)),
         DisposalValueModel(1000),
@@ -185,7 +185,7 @@ class TotalGainRequestConstructorSpec extends UnitSpec {
         Some(BoughtForLessModel(false)),
         AcquisitionValueModel(2000),
         AcquisitionCostsModel(200),
-        AcquisitionDateModel(6, 4, 2015),
+        DateModel(6, 4, 2015),
         None,
         None,
         ImprovementsModel("Yes", Some(10), None),
@@ -198,7 +198,7 @@ class TotalGainRequestConstructorSpec extends UnitSpec {
     }
 
     "produce a valid query string for multiple types calculation" in {
-      val model = TotalGainAnswersModel(DisposalDateModel(5, 10, 2016),
+      val model = TotalGainAnswersModel(DateModel(5, 10, 2016),
         SoldOrGivenAwayModel(true),
         Some(SoldForLessModel(false)),
         DisposalValueModel(1000),
@@ -207,7 +207,7 @@ class TotalGainRequestConstructorSpec extends UnitSpec {
         Some(BoughtForLessModel(false)),
         AcquisitionValueModel(2000),
         AcquisitionCostsModel(200),
-        AcquisitionDateModel(4, 10, 2013),
+        DateModel(4, 10, 2013),
         Some(RebasedValueModel(3000)),
         Some(RebasedCostsModel("Yes", Some(300))),
         ImprovementsModel("Yes", Some(10), Some(20)),
@@ -217,6 +217,88 @@ class TotalGainRequestConstructorSpec extends UnitSpec {
 
       result shouldBe "disposalValue=1000&disposalCosts=100&acquisitionValue=2000&acquisitionCosts=200&improvements=10" +
       "&rebasedValue=3000&rebasedCosts=300&improvementsAfterTaxStarted=20&disposalDate=2016-10-5&acquisitionDate=2013-10-4"
+    }
+
+    "calling afterLegislation" should {
+      "return true" when {
+        "the legislation date is after 1/4/1982" in {
+          val afterDate = DateModel(
+            day = 1,
+            month = 4,
+            year = 1982)
+
+          TotalGainRequestConstructor.afterLegislation(afterDate) shouldBe true
+        }
+        "return false" when {
+          "the legislation date is before 1/4/1982" in {
+            val beforeDate = DateModel(
+              day = 31,
+              month = 3,
+              year = 1982)
+
+            TotalGainRequestConstructor.afterLegislation(beforeDate) shouldBe false
+          }
+        }
+      }
+    }
+  }
+
+  "calling includeLegislationCosts" should {
+    "return true" when {
+      "costsLegislation hasCost is defined and date is before 1/4/1982" in {
+        val value = CostsAtLegislationStartModel("Yes", Some(100))
+        val beforeDate = DateModel(
+          day = 31,
+          month = 3,
+          year = 1982)
+
+        TotalGainRequestConstructor.includeLegislationCosts(value, beforeDate) shouldBe true
+      }
+    }
+    "return false" when {
+      "costsLegislation hasCost is not defined and date is before 1/4/1982" in {
+        val value = CostsAtLegislationStartModel("No", None)
+        val beforeDate = DateModel(
+          day = 31,
+          month = 3,
+          year = 1982)
+
+        TotalGainRequestConstructor.includeLegislationCosts(value, beforeDate) shouldBe false
+      }
+      "costsLegislation hasCost is defined and date is after 1/4/1982" in {
+        val value = CostsAtLegislationStartModel("Yes", Some(100))
+        val afterDate = DateModel(
+          day = 2,
+          month = 4,
+          year = 1982)
+
+        TotalGainRequestConstructor.includeLegislationCosts(value, afterDate) shouldBe false
+      }
+    }
+  }
+
+  "calling includeRebasedValuesInCalculation" should {
+    "return true" when {
+      "RebasedValueModel is defined and date is before 5/4/2015" in {
+        val value = RebasedValueModel(rebasedValueAmt = 100)
+        val beforeDate = DateModel(
+          day = 5,
+          month = 4,
+          year = 2015)
+
+        TotalGainRequestConstructor.includeRebasedValuesInCalculation(Some(value), beforeDate) shouldBe true
+      }
+    }
+    "return false" when {
+      "RebasedValueModel is defined and date is after 5/4/2015" in {
+        val value = RebasedValueModel(rebasedValueAmt = 100)
+        val afterDate = DateModel(
+          day = 6,
+          month = 4,
+          year = 2015)
+
+        TotalGainRequestConstructor.includeRebasedValuesInCalculation(Some(value), afterDate) shouldBe false
+      }
     }
   }
 }

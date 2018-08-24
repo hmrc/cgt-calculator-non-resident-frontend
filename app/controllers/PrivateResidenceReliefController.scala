@@ -48,13 +48,13 @@ trait PrivateResidenceReliefController extends FrontendController with ValidActi
   val answersConstructor: AnswersConstructor
 
   def getAcquisitionDate(implicit hc: HeaderCarrier): Future[Option[LocalDate]] =
-    calcConnector.fetchAndGetFormData[AcquisitionDateModel](KeystoreKeys.acquisitionDate).map {
-      case Some(AcquisitionDateModel(day, month, year)) => Some(Dates.constructDate(day, month, year))
+    calcConnector.fetchAndGetFormData[DateModel](KeystoreKeys.acquisitionDate).map {
+      case Some(DateModel(day, month, year)) => Some(Dates.constructDate(day, month, year))
       case _ => None
     }
 
   def getDisposalDate(implicit hc: HeaderCarrier): Future[Option[LocalDate]] =
-    calcConnector.fetchAndGetFormData[DisposalDateModel](KeystoreKeys.disposalDate).map {
+    calcConnector.fetchAndGetFormData[DateModel](KeystoreKeys.disposalDate).map {
       case Some(data) => Some(Dates.constructDate(data.day, data.month, data.year))
       case _ => None
     }
