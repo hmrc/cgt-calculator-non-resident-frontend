@@ -29,8 +29,8 @@ object AcquisitionValueForm {
   val acquisitionValueForm = Form(
     mapping(
       "acquisitionValue" -> text
-        .verifying("calc.common.error.mandatoryAmount", mandatoryCheck)
-        .verifying("calc.common.error.mandatoryAmount", bigDecimalCheck)
+        .verifying("error.real", mandatoryCheck)
+        .verifying("error.real", bigDecimalCheck)
         .transform(stringToBigDecimal, bigDecimalToString)
         .verifying("calc.acquisitionValue.errorNegative", isPositive)
         .verifying("calc.acquisitionValue.errorDecimalPlaces", decimalPlacesCheck)

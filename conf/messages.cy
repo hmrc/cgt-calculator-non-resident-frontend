@@ -12,6 +12,10 @@ calc.month.10 = Hydref
 calc.month.11 = Tachwedd
 calc.month.12 = Rhagfyr
 
+calc.common.date.invalidDayError = Nodwch ddiwrnod
+calc.common.date.invalidMonthError = Nodwch fis
+calc.common.date.invalidYearError = Nodwch flwyddyn
+
 calc.acquisitionCosts.bulletOne = asiantau tai neu arwerthwyr
 calc.acquisitionCosts.bulletThree = cymorth proffesiynol i brisio''r eiddo, er enghraifft syrfëwr neu brisiwr
 calc.acquisitionCosts.bulletTitle = Dyma''r hyn yr ydych wedi talu amdano:

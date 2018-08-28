@@ -15,7 +15,7 @@
  *@
 
 @import models.CurrentIncomeModel
-@import uk.gov.hmrc.play.views.html.helpers.form
+@import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
 @import views.html.helpers._
 @import play.api.Application
 
@@ -26,11 +26,11 @@
 
     <a id="back-link" class="back-link" href="@backLink">@Messages("calc.base.back")</a>
 
-    @errorSummary(currentIncomeForm, "current-income")
+    @govHelpers.errorSummary(Messages("calc.error.summary.heading"), currentIncomeForm, Seq("error-summary-heading"), dataJourney = Some("current-income"), forceDivToAppear = false)
 
     <h1 class="heading-xlarge">@Messages("calc.currentIncome.question")</h1>
 
-    @form(action = controllers.routes.CurrentIncomeController.submitCurrentIncome) {
+    @govHelpers.form(action = controllers.routes.CurrentIncomeController.submitCurrentIncome) {
 
         <span class="form-hint">@Messages("calc.currentIncome.helpText.line1")</span>
         <span class="form-hint">@Messages("calc.currentIncome.helpText.line2")</span>

@@ -15,7 +15,7 @@
  *@
 
 @import models.SoldForLessModel
-@import uk.gov.hmrc.play.views.html.helpers.form
+@import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
 @import views.html.helpers._
 @import views.html.main_template
 @import play.api.Application
@@ -28,13 +28,13 @@
 
     <a id="back-link" class="back-link" href="@controllers.routes.SoldOrGivenAwayController.soldOrGivenAway">@Messages("calc.base.back")</a>
 
-    @errorSummary(soldForLessForm, "soldForLess")
+    @govHelpers.errorSummary(Messages("calc.error.summary.heading"), soldForLessForm, Seq("error-summary-heading"), dataJourney = Some("soldForLess"), forceDivToAppear = false)
 
     <h1 class="heading-xlarge">@Messages("calc.nonResident.soldForLess.question")</h1>
 
-    @form(action = controllers.routes.SoldForLessController.submitSoldForLess) {
+    @govHelpers.form(action = controllers.routes.SoldForLessController.submitSoldForLess) {
 
-        @formInputRadioGroup(
+        @govHelpers.inputRadioGroup(
             field = soldForLessForm("soldForLess"),
             Seq(
                 "Yes"->Messages("calc.base.yes"),

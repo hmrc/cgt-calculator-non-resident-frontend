@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
+@import uk.gov.hmrc.play.views.html.helpers.inputRadioGroup
 
 @(form: Form[_], fieldName: String, questionText:String, content:Html, helpText:Option[String] = None, hideLegend: Boolean = false, hidePanel: Boolean = false, additionalContent: Option[Html] = None, labelClass: Boolean = false)(implicit messages: Messages)
 
@@ -23,7 +23,7 @@
 <div class="form-group" data-hidden='hidden'>
 
     @if(hideLegend) {
-        @formInputRadioGroup(
+        @inputRadioGroup(
             field = form(fieldName),
             Seq(
             "Yes"->Messages("calc.base.yes"),
@@ -37,7 +37,7 @@
             '_groupClass -> "inline"
         )
     } else {
-        @formInputRadioGroup(
+        @inputRadioGroup(
             field = form(fieldName),
             Seq(
                 "Yes"->Messages("calc.base.yes"),

@@ -15,7 +15,7 @@
  *@
 
 @import models.DisposalValueModel
-@import uk.gov.hmrc.play.views.html.helpers.form
+@import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
 @import views.html.helpers._
 @import play.api.Application
 
@@ -25,13 +25,13 @@
 
     <a id="back-link" class="back-link" href="@controllers.routes.SoldForLessController.soldForLess">@Messages("calc.base.back")</a>
 
-    @errorSummary(marketValueForm, "disposalValue")
+    @govHelpers.errorSummary(Messages("calc.error.summary.heading"), marketValueForm, Seq("error-summary-heading"), dataJourney = Some("disposalValue"), forceDivToAppear = false)
 
     <h1 class="heading-xlarge" for="disposal-value">@Messages("calc.marketValue.sold.question")</h1>
 
     <p class="form-hint">@Messages("calc.marketValue.helpText") @Messages("calc.marketValue.helpTextAdditional")</p>
 
-    @form(action = controllers.routes.MarketValueWhenSoldOrGaveAwayController.submitMarketValueWhenSold()) {
+    @govHelpers.form(action = controllers.routes.MarketValueWhenSoldOrGaveAwayController.submitMarketValueWhenSold()) {
 
         <p class="panel-indent panel-indent--wide panel-indent--gutter">@Messages("calc.marketValue.jointOwnership")</p>
 

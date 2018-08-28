@@ -15,7 +15,7 @@
  *@
 
 @import models.OtherPropertiesModel
-@import uk.gov.hmrc.play.views.html.helpers.form
+@import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
 @import views.html.helpers._
 @import play.api.Application
 
@@ -25,15 +25,15 @@
 
     <a id="back-link" class="back-link" href="@{routes.PersonalAllowanceController.personalAllowance().url}">@Messages("calc.base.back")</a>
 
-    @errorSummary(otherPropertiesForm, "other-properties", "otherPropertiesAmt")
+    @govHelpers.errorSummary(Messages("calc.error.summary.heading"), otherPropertiesForm, Seq("error-summary-heading"), dataJourney = Some("other-properties"), forceDivToAppear = false)
 
     <h1 class="heading-xlarge">@Messages("calc.otherProperties.question")</h1>
 
-    @form(action = controllers.routes.OtherPropertiesController.submitOtherProperties) {
+    @govHelpers.form(action = controllers.routes.OtherPropertiesController.submitOtherProperties) {
 
         <fieldset>
             <div class="inline form-group">
-                @formInputRadioGroup(
+                @govHelpers.inputRadioGroup(
                     field = otherPropertiesForm("otherProperties"),
                     Seq(
                     "Yes"->Messages("calc.base.yes"),

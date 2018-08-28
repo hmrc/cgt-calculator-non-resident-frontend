@@ -15,7 +15,7 @@
  *@
 
 @import models.DateModel
-@import uk.gov.hmrc.play.views.html.helpers.form
+@import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
 @import views.html.helpers._
 @import controllers.CgtLanguageController
 @import play.api.Application
@@ -24,11 +24,11 @@
 
 @main_template(Messages("calc.disposalDate.question")) {
 
-    @errorSummary(disposalDateForm, "disposal-date", "disposalDateDay")
+    @govHelpers.errorSummary(Messages("calc.error.summary.heading"), disposalDateForm, Seq("error-summary-heading"), dataJourney = Some("disposal-date"), forceDivToAppear = false)
 
     <h1 class="heading-xlarge">@Messages("calc.disposalDate.question")</h1>
 
-    @form(action = controllers.routes.DisposalDateController.submitDisposalDate) {
+    @govHelpers.form(action = controllers.routes.DisposalDateController.submitDisposalDate) {
 
         @formInlineDateInput(disposalDateForm,
         "disposalDate",

@@ -15,12 +15,13 @@
  *@
 
 @import models.PrivateResidenceReliefModel
-@import uk.gov.hmrc.play.views.html.helpers.{form, input}
+@import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
 @import views.html.helpers._
 @import play.api.Application
 @import java.time.LocalDate
 @import common.Dates
 @import common.Dates.TemplateImplicits._
+@import uk.gov.hmrc.play.views.html.helpers.inputRadioGroup
 
 @(privateResidenceReliefForm: Form[PrivateResidenceReliefModel], daysBetweenShow: Boolean, showFirstQuestion: Boolean, disposalDateLess18Months: Option[LocalDate], showOnlyFlatQuestion: Boolean)(implicit request: Request[_], messages: Messages, lang: Lang, application: Application)
 
@@ -47,7 +48,7 @@
     @if(showFirstQuestion) {
 
         <div class="form-group">
-        @input(
+        @govHelpers.input(
             privateResidenceReliefForm("daysClaimed"),
             '_label ->{if(showOnlyFlatQuestion){messages("calc.privateResidenceRelief.questionFlat", disposalDateLess18MonthsString)}else{messages("calc.privateResidenceRelief.firstQuestion")}} ,
             '_labelClass -> "bold",
@@ -61,7 +62,7 @@
     @if(daysBetweenShow) {
 
         <div class="form-group">
-        @input(
+        @govHelpers.input(
             privateResidenceReliefForm("daysClaimedAfter"),
             '_label -> messages("calc.privateResidenceRelief.questionBetween", disposalDateLess18MonthsString),
             '_labelClass -> "bold",
@@ -88,11 +89,12 @@
 
     <a id="back-link" class="back-link" href="@controllers.routes.PropertyLivedInController.propertyLivedIn()">@messages("calc.base.back")</a>
 
-    @if(showFirstQuestion) {@errorSummary(privateResidenceReliefForm, "private-residence-relief", "daysClaimed")
+    @if(showFirstQuestion) { @govHelpers.errorSummary(Messages("calc.error.summary.heading"), privateResidenceReliefForm, Seq("error-summary-heading"), dataJourney = Some("private-residence-relief"), forceDivToAppear = false)
+
     } else {
-        @if(daysBetweenShow) {@errorSummary(privateResidenceReliefForm, "private-residence-relief", "daysClaimedAfter")
+        @if(daysBetweenShow) {@govHelpers.errorSummary(Messages("calc.error.summary.heading"), privateResidenceReliefForm, Seq("error-summary-heading"), dataJourney = Some("private-residence-relief"), forceDivToAppear = false)
         } else {
-            @errorSummary(privateResidenceReliefForm, "private-residence-relief")
+            @govHelpers.errorSummary(Messages("calc.error.summary.heading"), privateResidenceReliefForm, Seq("error-summary-heading"), dataJourney = Some("private-residence-relief"), forceDivToAppear = false)
         }
     }
 
@@ -109,11 +111,11 @@
         </p>
     </div>
 
-    @form(action = controllers.routes.PrivateResidenceReliefController.submitPrivateResidenceRelief) {
+    @govHelpers.form(action = controllers.routes.PrivateResidenceReliefController.submitPrivateResidenceRelief) {
 
         @if(!(showFirstQuestion || daysBetweenShow)) {
             <div class="inline form-group">
-            @formInputRadioGroup(
+            @inputRadioGroup(
                 field = privateResidenceReliefForm("isClaimingPRR"),
                 Seq(
                     "Yes" -> messages("calc.base.yes"),
