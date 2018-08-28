@@ -62,6 +62,10 @@ class formYesNoRadioSpec extends UnitSpec with WithFakeApplication {
         "have a legend with the text 'legend'" in {
           legend.text() shouldBe "legend"
         }
+
+        "have a legend with the id 'boughtForLess'" in {
+          legend.attr("id") shouldBe "boughtForLess"
+        }
       }
 
       "have labels with the class block-label" in {
