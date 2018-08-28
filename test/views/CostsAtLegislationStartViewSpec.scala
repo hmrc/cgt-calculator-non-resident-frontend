@@ -78,7 +78,7 @@ class CostsAtLegislationStartViewSpec extends UnitSpec with WithFakeApplication 
       }
 
       s"have an primary question with the correct text" in {
-        document.select("#hasCosts").first().text shouldBe messages.CostsAtLegislationStart.title
+        document.select("h1").text() shouldBe messages.CostsAtLegislationStart.title
       }
 
       s"have a secondary question with the correct text" in {

@@ -99,8 +99,8 @@ class AcquisitionDateFormSpec extends UnitSpec with WithFakeApplication {
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.errorInvalidDate}" in {
-        form.error("acquisitionDateDay").get.message shouldBe messages.errorInvalidDate
+      s"return an error message of '${messages.errorInvalidDay}" in {
+        form.error("acquisitionDateDay").get.message shouldBe messages.errorInvalidDay
       }
     }
 
@@ -115,8 +115,8 @@ class AcquisitionDateFormSpec extends UnitSpec with WithFakeApplication {
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.errorInvalidDate}" in {
-        form.error("acquisitionDateMonth").get.message shouldBe messages.errorInvalidDate
+      s"return an error message of '${messages.errorInvalidMonth}" in {
+        form.error("acquisitionDateMonth").get.message shouldBe messages.errorInvalidMonth
       }
     }
 
@@ -131,8 +131,8 @@ class AcquisitionDateFormSpec extends UnitSpec with WithFakeApplication {
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.errorInvalidDate}" in {
-        form.error("acquisitionDateYear").get.message shouldBe messages.errorInvalidDate
+      s"return an error message of '${messages.errorInvalidYear}" in {
+        form.error("acquisitionDateYear").get.message shouldBe messages.errorInvalidYear
       }
     }
 

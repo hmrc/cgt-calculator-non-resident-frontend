@@ -15,7 +15,7 @@
  *@
 
 @import models.AcquisitionValueModel
-@import uk.gov.hmrc.play.views.html.helpers.form
+@import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
 @import views.html.helpers._
 @import play.api.Application
 @import views.html.main_template
@@ -26,7 +26,7 @@
 
     <a id="back-link" class="back-link" href="@controllers.routes.HowBecameOwnerController.howBecameOwner">@Messages("calc.base.back")</a>
 
-    @errorSummary(acquisitionMarketValue, "acquisitionMarketValue")
+    @govHelpers.errorSummary(Messages("calc.error.summary.heading"), acquisitionMarketValue, Seq("error-summary-heading"), dataJourney = Some("acquisitionMarketValue"), forceDivToAppear = false)
 
     <h1 class="heading-xlarge">@Messages("calc.worthWhenGiftedTo.question")</h1>
 
@@ -39,7 +39,7 @@
     </div>
 
 
-    @form(action = controllers.routes.WorthWhenGiftedToController.submitWorthWhenGiftedTo) {
+    @govHelpers.form(action = controllers.routes.WorthWhenGiftedToController.submitWorthWhenGiftedTo) {
 
         @formInputMoney(acquisitionMarketValue, "acquisitionMarketValue", Messages("calc.worthWhenGiftedTo.question"), hideLabel = true)
 

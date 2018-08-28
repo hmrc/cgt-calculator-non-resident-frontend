@@ -83,15 +83,15 @@ class WhoDidYouGiveItToViewSpec extends UnitSpec with WithFakeApplication with F
 
     "have additional content that" should {
       s"have a label for the Your Spouse or Civil Partner option" in {
-        doc.select("label:nth-of-type(1)").text() shouldEqual messages.spouse
+        doc.select("label").get(0).text() shouldEqual messages.spouse
       }
 
       s"have a label for the A Charity option" in {
-        doc.select("label:nth-of-type(2)").text() shouldEqual messages.charity
+        doc.select("label").get(1).text() shouldEqual messages.charity
       }
 
       s"have a label for the Someone Else option" in {
-        doc.select("label:nth-of-type(3)").text() shouldEqual messages.other
+        doc.select("label").get(2).text() shouldEqual messages.other
       }
     }
 

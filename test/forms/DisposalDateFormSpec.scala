@@ -80,8 +80,8 @@ class DisposalDateFormSpec extends UnitSpec with WithFakeApplication {
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.errorInvalidDate}" in {
-        form.error("disposalDateDay").get.message shouldBe messages.errorInvalidDate
+      s"return an error message of '${messages.errorInvalidDay}" in {
+        form.error("disposalDateDay").get.message shouldBe messages.errorInvalidDay
       }
     }
 
@@ -94,8 +94,8 @@ class DisposalDateFormSpec extends UnitSpec with WithFakeApplication {
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.errorInvalidDate}" in {
-        form.error("disposalDateMonth").get.message shouldBe messages.errorInvalidDate
+      s"return an error message of '${messages.errorInvalidMonth}" in {
+        form.error("disposalDateMonth").get.message shouldBe messages.errorInvalidMonth
       }
     }
 
@@ -108,8 +108,8 @@ class DisposalDateFormSpec extends UnitSpec with WithFakeApplication {
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.errorInvalidDate}" in {
-        form.error("disposalDateYear").get.message shouldBe messages.errorInvalidDate
+      s"return an error message of '${messages.errorInvalidYear}" in {
+        form.error("disposalDateYear").get.message shouldBe messages.errorInvalidYear
       }
     }
 

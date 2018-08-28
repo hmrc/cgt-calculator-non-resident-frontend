@@ -15,7 +15,7 @@
  *@
 
 @import models.PreviousLossOrGainModel
-@import uk.gov.hmrc.play.views.html.helpers.form
+@import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
 @import views.html.helpers._
 @import play.api.Application
 
@@ -25,7 +25,7 @@
 
     <a id="back-link" class="back-link" href="@controllers.routes.OtherPropertiesController.otherProperties()">@Messages("calc.base.back")</a>
 
-    @errorSummary(previousLossOrGainForm, "previousLossOrGain")
+    @govHelpers.errorSummary(Messages("calc.error.summary.heading"), previousLossOrGainForm, Seq("error-summary-heading"), dataJourney = Some("previousLossOrGain"), forceDivToAppear = false)
 
     <h1 class="heading-xlarge">@Messages("calc.previousLossOrGain.question")</h1>
 
@@ -35,8 +35,8 @@
         <p>@Messages("calc.previousLossOrGain.hintTwo")</p>
     </div>
 
-    @form(action = controllers.routes.PreviousGainOrLossController.submitPreviousGainOrLoss()) {
-        @formInputRadioGroup(
+    @govHelpers.form(action = controllers.routes.PreviousGainOrLossController.submitPreviousGainOrLoss()) {
+        @govHelpers.inputRadioGroup(
             field = previousLossOrGainForm("previousLossOrGain"),
             Seq(
                     "Loss" -> Messages("calc.previousLossOrGain.loss"),

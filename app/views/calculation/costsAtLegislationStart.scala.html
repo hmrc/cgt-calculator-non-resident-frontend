@@ -15,7 +15,7 @@
  *@
 
 @import models.CostsAtLegislationStartModel
-@import uk.gov.hmrc.play.views.html.helpers.form
+@import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
 @import views.html.helpers._
 @import play.api.Application
 
@@ -25,11 +25,11 @@
 
     <a id="back-link" class="back-link" href="@controllers.routes.WorthBeforeLegislationStartController.worthBeforeLegislationStart().url">@Messages("calc.base.back")</a>
 
-    @errorSummary(data, "costs", "costs")
+    @govHelpers.errorSummary(Messages("calc.error.summary.heading"), data, Seq("error-summary-heading"), dataJourney = Some("costs"), forceDivToAppear = false)
 
     <h1 class="heading-xlarge">@Messages("calc.costsAtLegislationStart.title")</h1>
 
-    @form(action = controllers.routes.CostsAtLegislationStartController.submitCostsAtLegislationStart) {
+    @govHelpers.form(action = controllers.routes.CostsAtLegislationStartController.submitCostsAtLegislationStart) {
 
         @formHiddenYesNoRadio(data,
             "hasCosts",

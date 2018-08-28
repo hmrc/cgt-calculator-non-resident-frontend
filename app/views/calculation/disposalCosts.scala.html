@@ -15,7 +15,7 @@
  *@
 
 @import models.DisposalCostsModel
-@import uk.gov.hmrc.play.views.html.helpers.form
+@import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
 @import views.html.helpers._
 @import play.api.Application
 
@@ -38,13 +38,13 @@
 
     <a id="back-link" class="back-link" href="@backLink">@Messages("calc.base.back")</a>
 
-    @errorSummary(disposalCostsForm, "disposal-costs")
+    @govHelpers.errorSummary(Messages("calc.error.summary.heading"), disposalCostsForm, Seq("error-summary-heading"), dataJourney = Some("disposal-costs"), forceDivToAppear = false)
 
     <h1 class="heading-xlarge">@Messages("calc.disposalCosts.question")</h1>
 
     @additionalContent
 
-    @form(action = controllers.routes.DisposalCostsController.submitDisposalCosts) {
+    @govHelpers.form(action = controllers.routes.DisposalCostsController.submitDisposalCosts) {
 
         <p class="panel-indent panel-indent--wide panel-indent--gutter">@Messages("calc.disposalCosts.jointOwnership")</p>
 
