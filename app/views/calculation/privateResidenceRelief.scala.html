@@ -15,7 +15,7 @@
  *@
 
 @import models.PrivateResidenceReliefModel
-@import uk.gov.hmrc.play.views.html.helpers.{form, input}
+@import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
 @import views.html.helpers._
 @import play.api.Application
 @import java.time.LocalDate
@@ -47,7 +47,7 @@
     @if(showFirstQuestion) {
 
         <div class="form-group">
-        @input(
+        @govHelpers.input(
             privateResidenceReliefForm("daysClaimed"),
             '_label ->{if(showOnlyFlatQuestion){messages("calc.privateResidenceRelief.questionFlat", disposalDateLess18MonthsString)}else{messages("calc.privateResidenceRelief.firstQuestion")}} ,
             '_labelClass -> "bold",
@@ -61,7 +61,7 @@
     @if(daysBetweenShow) {
 
         <div class="form-group">
-        @input(
+        @govHelpers.input(
             privateResidenceReliefForm("daysClaimedAfter"),
             '_label -> messages("calc.privateResidenceRelief.questionBetween", disposalDateLess18MonthsString),
             '_labelClass -> "bold",
@@ -88,9 +88,11 @@
 
     <a id="back-link" class="back-link" href="@controllers.routes.PropertyLivedInController.propertyLivedIn()">@messages("calc.base.back")</a>
 
-    @if(showFirstQuestion) {@errorSummary(privateResidenceReliefForm, "private-residence-relief", "daysClaimed")
+    @if(showFirstQuestion) {
+        @errorSummary(privateResidenceReliefForm, "private-residence-relief", "daysClaimed")
     } else {
-        @if(daysBetweenShow) {@errorSummary(privateResidenceReliefForm, "private-residence-relief", "daysClaimedAfter")
+        @if(daysBetweenShow) {
+            @errorSummary(privateResidenceReliefForm, "private-residence-relief", "daysClaimedAfter")
         } else {
             @errorSummary(privateResidenceReliefForm, "private-residence-relief")
         }
@@ -109,11 +111,11 @@
         </p>
     </div>
 
-    @form(action = controllers.routes.PrivateResidenceReliefController.submitPrivateResidenceRelief) {
+    @govHelpers.form(action = controllers.routes.PrivateResidenceReliefController.submitPrivateResidenceRelief) {
 
         @if(!(showFirstQuestion || daysBetweenShow)) {
             <div class="inline form-group">
-            @formInputRadioGroup(
+            @govHelpers.inputRadioGroup(
                 field = privateResidenceReliefForm("isClaimingPRR"),
                 Seq(
                     "Yes" -> messages("calc.base.yes"),

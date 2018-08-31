@@ -15,7 +15,7 @@
  *@
 
 @import models._
-@import uk.gov.hmrc.play.views.html.helpers.form
+@import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
 @import views.html.helpers._
 @import play.api.Application
 
@@ -26,9 +26,9 @@
 
   <a id="back-link" class="back-link" href="@backLink">@Messages("calc.base.back")</a>
 
-  @errorSummary(calculationElectionForm, "calculation-election")
+    @errorSummary(calculationElectionForm, "calculation-election")
 
-  <h1 class="heading-xlarge">@Messages("calc.calculationElectionNoReliefs.title")</h1>
+    <h1 class="heading-xlarge">@Messages("calc.calculationElectionNoReliefs.title")</h1>
 
   <div id="help-text">
     <p>@Messages("calc.calculationElectionNoReliefs.helpText")</p>
@@ -40,7 +40,7 @@
     </p>
   </div>
 
-  @form(action = controllers.routes.CalculationElectionController.submitCalculationElection) {
+  @govHelpers.form(action = controllers.routes.CalculationElectionController.submitCalculationElection) {
 
     <div class="form-group">
       @calculationElectionHelperForm(

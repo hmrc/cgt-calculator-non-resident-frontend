@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.play.views.html.helpers.form
+@import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
 @import models.HowMuchLossModel
 @import views.html.helpers._
 @import play.api.Application
@@ -29,7 +29,7 @@
 
     <h1 class="heading-xlarge">@Messages("calc.howMuchLoss.question")</h1>
 
-    @form(action = controllers.routes.HowMuchLossController.submitHowMuchLoss) {
+    @govHelpers.form(action = controllers.routes.HowMuchLossController.submitHowMuchLoss) {
 
         @formInputMoney(howMuchLossForm, "loss", Messages("calc.howMuchLoss.question"), hideLabel = true)
 

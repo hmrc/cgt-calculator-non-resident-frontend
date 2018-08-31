@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.play.views.html.helpers.form
+@import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
 @import models.ImprovementsModel
 @import views.html.helpers._
 @import play.api.Application
@@ -55,7 +55,7 @@
         @expandableHelpTextHelper(Messages("calc.improvements.exampleTitle"), exampleContent)
         </div>
 
-        @form(action = controllers.routes.ImprovementsController.submitImprovements) {
+        @govHelpers.form(action = controllers.routes.ImprovementsController.submitImprovements) {
 
             @ImprovementsConstructor.generateImprovements(improvementsForm, improvementsOptions, question)
 

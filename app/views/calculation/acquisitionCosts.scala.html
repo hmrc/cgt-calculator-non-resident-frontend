@@ -15,7 +15,7 @@
  *@
 
 @import models.AcquisitionCostsModel
-@import uk.gov.hmrc.play.views.html.helpers.form
+@import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
 @import views.html.helpers._
 @import play.api.Application
 
@@ -40,7 +40,7 @@
         <p>@Messages("calc.acquisitionCosts.hint")</p>
     </div>
 
-    @form(action = controllers.routes.AcquisitionCostsController.submitAcquisitionCosts) {
+    @govHelpers.form(action = controllers.routes.AcquisitionCostsController.submitAcquisitionCosts) {
 
         @formInputMoney(acquisitionCostsForm, "acquisitionCosts",Messages("calc.acquisitionCosts.question"), hideLabel=true)
 

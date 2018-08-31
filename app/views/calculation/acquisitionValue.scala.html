@@ -15,7 +15,7 @@
  *@
 
 @import models.AcquisitionValueModel
-@import uk.gov.hmrc.play.views.html.helpers.form
+@import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
 @import views.html.helpers._
 @import play.api.Application
 
@@ -31,7 +31,7 @@
 
     <p id="helpText" class="panel-indent panel-indent--wide panel-indent--gutter">@Messages("calc.acquisitionValue.helpText")</p>
 
-    @form(action = controllers.routes.AcquisitionValueController.submitAcquisitionValue) {
+    @govHelpers.form(action = controllers.routes.AcquisitionValueController.submitAcquisitionValue) {
 
         @formInputMoney(acquisitionValueForm, "acquisitionValue", Messages("calc.acquisitionValue.question"), None, None, true)
 

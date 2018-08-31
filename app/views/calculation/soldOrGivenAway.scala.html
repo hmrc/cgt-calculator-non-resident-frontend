@@ -15,7 +15,7 @@
  *@
 
 @import models.SoldOrGivenAwayModel
-@import uk.gov.hmrc.play.views.html.helpers.form
+@import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
 @import views.html.helpers._
 @import play.api.Application
 
@@ -29,15 +29,15 @@
 
     <h1 class="heading-xlarge">@Messages("calc.soldOrGivenAway.question")</h1>
 
-    @form(action = controllers.routes.SoldOrGivenAwayController.submitSoldOrGivenAway) {
+    @govHelpers.form(action = controllers.routes.SoldOrGivenAwayController.submitSoldOrGivenAway) {
 
-        @formInputRadioGroup(
+        @govHelpers.inputRadioGroup(
             field = soldOrGivenAway("soldIt"),
             Seq(
             "Yes" -> Messages("calc.soldOrGivenAway.sold"),
             "No" -> Messages("calc.soldOrGivenAway.gave")),
             '_legend -> Messages("calc.soldOrGivenAway.question"),
-            '_legendID -> "option",
+            '_legendID -> "soldIt",
             '_legendClass -> "visuallyhidden",
             '_labelAfter -> true,
             '_labelClass -> "block-label",

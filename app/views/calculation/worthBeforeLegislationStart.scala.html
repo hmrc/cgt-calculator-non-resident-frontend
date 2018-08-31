@@ -15,7 +15,7 @@
  *@
 
 @import models.WorthBeforeLegislationStartModel
-@import uk.gov.hmrc.play.views.html.helpers.form
+@import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
 @import views.html.helpers._
 @import play.api.Application
 @import views.html.main_template
@@ -43,7 +43,7 @@
         <p>@Messages("calc.worthBeforeLegislationStart.jointOwnership")</p>
     </div>
 
-    @form(action = controllers.routes.WorthBeforeLegislationStartController.submitWorthBeforeLegislationStart) {
+    @govHelpers.form(action = controllers.routes.WorthBeforeLegislationStartController.submitWorthBeforeLegislationStart) {
 
         @formInputMoney(worthBeforeLegislationStart, "worthBeforeLegislationStart", Messages("calc.worthBeforeLegislationStart.question"), hideLabel = true)
 

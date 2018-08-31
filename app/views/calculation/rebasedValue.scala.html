@@ -15,7 +15,7 @@
  *@
 
 @import models.RebasedValueModel
-@import uk.gov.hmrc.play.views.html.helpers.form
+@import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
 @import views.html.helpers._
 @import play.api.Application
 
@@ -43,7 +43,7 @@
 
     @hiddenHelpText("rebasedValue", Messages("calc.nonResident.rebasedValue.helpHidden.title"), hiddenHelpTextContent, "form-hint")
 
-    @form(action = controllers.routes.RebasedValueController.submitRebasedValue) {
+    @govHelpers.form(action = controllers.routes.RebasedValueController.submitRebasedValue) {
 
         @formInputMoney(rebasedValueForm, "rebasedValueAmt", Messages("calc.nonResident.rebasedValue.questionAndDate"), hideLabel = true)
 

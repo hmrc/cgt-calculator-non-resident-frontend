@@ -15,7 +15,7 @@
  *@
 
 @import models.SoldForLessModel
-@import uk.gov.hmrc.play.views.html.helpers.form
+@import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
 @import views.html.helpers._
 @import views.html.main_template
 @import play.api.Application
@@ -32,16 +32,16 @@
 
     <h1 class="heading-xlarge">@Messages("calc.nonResident.soldForLess.question")</h1>
 
-    @form(action = controllers.routes.SoldForLessController.submitSoldForLess) {
+    @govHelpers.form(action = controllers.routes.SoldForLessController.submitSoldForLess) {
 
-        @formInputRadioGroup(
+        @govHelpers.inputRadioGroup(
             field = soldForLessForm("soldForLess"),
             Seq(
                 "Yes"->Messages("calc.base.yes"),
                 "No"->Messages("calc.base.no")
             ),
             '_legend -> Messages("calc.nonResident.soldForLess.question"),
-            '_legendID -> "question",
+            '_legendID -> "soldForLess",
             '_legendClass -> "visuallyhidden",
             '_labelAfter -> true,
             '_labelClass -> "block-label",

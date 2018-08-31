@@ -15,7 +15,7 @@
  *@
 
 @import models.DateModel
-@import uk.gov.hmrc.play.views.html.helpers.form
+@import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
 @import views.html.helpers._
 @import controllers.CgtLanguageController
 @import play.api.Application
@@ -28,7 +28,7 @@
 
     <h1 class="heading-xlarge">@Messages("calc.disposalDate.question")</h1>
 
-    @form(action = controllers.routes.DisposalDateController.submitDisposalDate) {
+    @govHelpers.form(action = controllers.routes.DisposalDateController.submitDisposalDate) {
 
         @formInlineDateInput(disposalDateForm,
         "disposalDate",

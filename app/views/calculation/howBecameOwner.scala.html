@@ -15,7 +15,7 @@
  *@
 
 @import models.HowBecameOwnerModel
-@import uk.gov.hmrc.play.views.html.helpers.form
+@import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
 @import views.html.helpers._
 @import play.api.Application
 
@@ -29,10 +29,10 @@
 
     <h1 class="heading-xlarge">@Messages("calc.howBecameOwner.question")</h1>
 
-    @form(action = controllers.routes.HowBecameOwnerController.submitHowBecameOwner) {
+    @govHelpers.form(action = controllers.routes.HowBecameOwnerController.submitHowBecameOwner) {
 
         <div class="form-group">
-            @formInputRadioGroup(
+            @govHelpers.inputRadioGroup(
                 field = howBecameOwnerForm("gainedBy"),
                 Seq(
                     "Bought" -> Messages("calc.howBecameOwner.bought"),

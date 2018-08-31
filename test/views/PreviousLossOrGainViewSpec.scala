@@ -100,13 +100,13 @@ class PreviousLossOrGainViewSpec extends UnitSpec with WithFakeApplication with 
 
     "has a series of options that" should {
       s"have a label for the Loss option" in {
-        document.select("label:nth-of-type(1)").text() shouldEqual messages.loss
+        document.select("label").get(0).text() shouldEqual messages.loss
       }
       s"have a label for the Gain option" in {
-        document.select("label:nth-of-type(2)").text() shouldEqual messages.gain
+        document.select("label").get(1).text() shouldEqual messages.gain
       }
       s"have a label for the Neither option" in {
-        document.select("label:nth-of-type(3)").text() shouldEqual messages.neither
+        document.select("label").get(2).text() shouldEqual messages.neither
       }
     }
 

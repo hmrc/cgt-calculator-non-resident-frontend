@@ -15,7 +15,7 @@
  *@
 
 @import models.PreviousLossOrGainModel
-@import uk.gov.hmrc.play.views.html.helpers.form
+@import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
 @import views.html.helpers._
 @import play.api.Application
 
@@ -35,8 +35,8 @@
         <p>@Messages("calc.previousLossOrGain.hintTwo")</p>
     </div>
 
-    @form(action = controllers.routes.PreviousGainOrLossController.submitPreviousGainOrLoss()) {
-        @formInputRadioGroup(
+    @govHelpers.form(action = controllers.routes.PreviousGainOrLossController.submitPreviousGainOrLoss()) {
+        @govHelpers.inputRadioGroup(
             field = previousLossOrGainForm("previousLossOrGain"),
             Seq(
                     "Loss" -> Messages("calc.previousLossOrGain.loss"),

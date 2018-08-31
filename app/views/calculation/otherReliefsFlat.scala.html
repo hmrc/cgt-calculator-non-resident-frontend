@@ -15,7 +15,7 @@
  *@
 
 @import models._
-@import uk.gov.hmrc.play.views.html.helpers.form
+@import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
 @import uk.gov.hmrc.play.views.helpers.MoneyPounds
 @import views.html.helpers._
 @import play.api.Application
@@ -30,7 +30,7 @@
 
     <h1 class="heading-xlarge">@Messages("calc.otherReliefs.question")</h1>
 
-    @form(action = controllers.routes.OtherReliefsFlatController.submitOtherReliefsFlat) {
+    @govHelpers.form(action = controllers.routes.OtherReliefsFlatController.submitOtherReliefsFlat) {
 
         <label for="otherReliefs" class="visuallyhidden">@Messages("calc.otherReliefs.question")</label>
 

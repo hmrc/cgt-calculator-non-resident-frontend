@@ -29,15 +29,15 @@ object AcquisitionDateForm {
   val acquisitionDateForm = Form(
     mapping(
       "acquisitionDateDay" -> text
-        .verifying("calc.common.date.error.invalidDate", mandatoryCheck)
+        .verifying("calc.common.date.invalidDayError", mandatoryCheck)
         .verifying("calc.common.date.error.invalidDate", integerCheck)
         .transform[Int](stringToInteger, _.toString),
       "acquisitionDateMonth" -> text
-        .verifying("calc.common.date.error.invalidDate", mandatoryCheck)
+        .verifying("calc.common.date.invalidMonthError", mandatoryCheck)
         .verifying("calc.common.date.error.invalidDate", integerCheck)
         .transform[Int](stringToInteger, _.toString),
       "acquisitionDateYear" -> text
-        .verifying("calc.common.date.error.invalidDate", mandatoryCheck)
+        .verifying("calc.common.date.invalidYearError", mandatoryCheck)
         .verifying("calc.common.date.error.invalidDate", integerCheck)
         .transform[Int](stringToInteger, _.toString)
     )(DateModel.apply)(DateModel.unapply)

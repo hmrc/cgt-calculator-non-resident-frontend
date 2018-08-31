@@ -15,7 +15,7 @@
  *@
 
 @import models.HowMuchGainModel
-@import uk.gov.hmrc.play.views.html.helpers.form
+@import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
 @import views.html.helpers._
 @import play.api.Application
 
@@ -29,7 +29,7 @@
 
     <h1 class="heading-xlarge">@Messages("calc.howMuchGain.question")</h1>
 
-    @form(action = controllers.routes.HowMuchGainController.submitHowMuchGain) {
+    @govHelpers.form(action = controllers.routes.HowMuchGainController.submitHowMuchGain) {
 
         @formInputMoney(howMuchGainForm, "howMuchGain", Messages("calc.howMuchGain.question"), hideLabel = true)
 

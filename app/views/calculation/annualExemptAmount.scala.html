@@ -15,7 +15,7 @@
  *@
 
 @import models.AnnualExemptAmountModel
-@import uk.gov.hmrc.play.views.html.helpers.form
+@import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
 @import views.html.helpers._
 @import uk.gov.hmrc.play.views.helpers._
 @import play.api.Application
@@ -34,7 +34,7 @@
        <p>@Messages("calc.annualExemptAmount.helpOne") £@MoneyPounds(maxAEA, 0).quantity @Messages("calc.annualExemptAmount.helpTwo")</p>
     </div>
 
-    @form(action = controllers.routes.AnnualExemptAmountController.submitAnnualExemptAmount) {
+    @govHelpers.form(action = controllers.routes.AnnualExemptAmountController.submitAnnualExemptAmount) {
 
         @formInputMoney(annualExemptAmountForm, "annualExemptAmount", Messages("calc.annualExemptAmount.question"), hideLabel = true)
 

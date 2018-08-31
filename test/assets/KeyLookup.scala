@@ -39,6 +39,9 @@ object KeyLookup {
   object NonResident extends Common {
 
     val errorInvalidDate = "calc.common.date.error.invalidDate"
+    val errorInvalidDay = "calc.common.date.invalidDayError"
+    val errorInvalidMonth = "calc.common.date.invalidMonthError"
+    val errorInvalidYear = "calc.common.date.invalidYearError"
     val errorRealNumber = "error.real"
 
     object AcquisitionCosts {

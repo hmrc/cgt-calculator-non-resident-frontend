@@ -15,7 +15,7 @@
  *@
 
 @import models.OtherReliefsModel
-@import uk.gov.hmrc.play.views.html.helpers.form
+@import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
 @import uk.gov.hmrc.play.views.helpers.MoneyPounds
 @import views.html.helpers._
 @import play.api.Application
@@ -60,7 +60,7 @@
 
         @helpContent
 
-        @form(action = controllers.routes.OtherReliefsController.submitOtherReliefs) {
+        @govHelpers.form(action = controllers.routes.OtherReliefsController.submitOtherReliefs) {
 
             @formInputMoney(otherReliefsForm,
                 "otherReliefs",

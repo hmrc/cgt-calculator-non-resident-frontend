@@ -58,6 +58,9 @@ object MessageLookup {
 
     val pageHeading = "Calculate your Non-Resident Capital Gains Tax"
     val errorInvalidDate = "Enter a real date"
+    val errorInvalidDay = "Enter a day"
+    val errorInvalidMonth = "Enter a month"
+    val errorInvalidYear = "Enter a year"
     val errorRealNumber = "Enter a number without commas, for example 10000.00"
 
     object AcquisitionCosts {

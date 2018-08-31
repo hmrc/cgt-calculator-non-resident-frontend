@@ -15,7 +15,7 @@
  *@
 
 @import models.BroughtForwardLossesModel
-@import uk.gov.hmrc.play.views.html.helpers.{form, input}
+@import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
 @import views.html.helpers._
 @import play.api.Application
 
@@ -40,7 +40,7 @@
 
     <h1 class="heading-xlarge">@Messages("calc.broughtForwardLosses.question")</h1>
 
-    @form(action = controllers.routes.BroughtForwardLossesController.submitBroughtForwardLosses) {
+    @govHelpers.form(action = controllers.routes.BroughtForwardLossesController.submitBroughtForwardLosses) {
 
         <div class="form-hint">
             <p>@Messages("calc.broughtForwardLosses.helpText")</p>

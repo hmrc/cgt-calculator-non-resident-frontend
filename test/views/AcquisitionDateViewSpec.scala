@@ -120,8 +120,8 @@ class AcquisitionDateViewSpec extends UnitSpec with WithFakeApplication with Moc
           document.select("#error-summary-display").size() shouldBe 1
         }
 
-        s"has the text ${messages.errorInvalidDate}" in {
-          document.select("#acquisitionDateDay-error-summary").text() shouldBe messages.errorInvalidDate
+        s"has the text ${messages.errorInvalidDay}" in {
+          document.select("#acquisitionDateDay-error-summary").text() shouldBe messages.errorInvalidDay
         }
       }
     }
@@ -139,8 +139,8 @@ class AcquisitionDateViewSpec extends UnitSpec with WithFakeApplication with Moc
           document.select("#error-summary-display").size() shouldBe 1
         }
 
-        s"has the text ${messages.errorInvalidDate}" in {
-          document.select("#acquisitionDateMonth-error-summary").text() shouldBe messages.errorInvalidDate
+        s"has the text ${messages.errorInvalidMonth}" in {
+          document.select("#acquisitionDateMonth-error-summary").text() shouldBe messages.errorInvalidMonth
         }
       }
     }
@@ -158,8 +158,8 @@ class AcquisitionDateViewSpec extends UnitSpec with WithFakeApplication with Moc
           document.select("#error-summary-display").size() shouldBe 1
         }
 
-        s"has the text ${messages.errorInvalidDate}" in {
-          document.select("#acquisitionDateYear-error-summary").text() shouldBe messages.errorInvalidDate
+        s"has the text ${messages.errorInvalidYear}" in {
+          document.select("#acquisitionDateYear-error-summary").text() shouldBe messages.errorInvalidYear
         }
       }
     }

@@ -15,7 +15,7 @@
  *@
 
 @import models._
-@import uk.gov.hmrc.play.views.html.helpers.form
+@import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
 @import views.html.helpers._
 @import play.api.Application
 
@@ -35,7 +35,7 @@
 
     <p>@Messages("calc.calculationElection.paragraph.two")</p>
 
-    @form(action = controllers.routes.CalculationElectionController.submitCalculationElection) {
+    @govHelpers.form(action = controllers.routes.CalculationElectionController.submitCalculationElection) {
 
         <div class="form-group">
             @calculationElectionHelperForm(

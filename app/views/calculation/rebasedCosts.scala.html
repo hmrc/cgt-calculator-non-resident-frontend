@@ -15,7 +15,7 @@
  *@
 
 @import models.RebasedCostsModel
-@import uk.gov.hmrc.play.views.html.helpers.form
+@import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
 @import views.html.helpers._
 @import play.api.Application
 
@@ -29,7 +29,7 @@
 
     <h1 class="heading-xlarge">@Messages("calc.rebasedCosts.question")</h1>
 
-    @form(action = controllers.routes.RebasedCostsController.submitRebasedCosts) {
+    @govHelpers.form(action = controllers.routes.RebasedCostsController.submitRebasedCosts) {
 
         @formHiddenYesNoRadio(rebasedCosts,
                                 "hasRebasedCosts",

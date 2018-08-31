@@ -60,14 +60,14 @@ class AcquisitionValueFormSpec extends UnitSpec with WithFakeApplication{
 
   "Creating a form using an invalid map" when {
     "supplied with no data" should {
-      val message = common.mandatoryAmount
+      val message = common.errorRealNumber
       val data = ""
 
       checkMessageAndError(message, data)
     }
 
     "supplied with data of the wrong format (incorrect value for acquisitionValue...)" should {
-      val message = common.mandatoryAmount
+      val message = common.errorRealNumber
       val data = "junk text"
 
       checkMessageAndError(message, data)

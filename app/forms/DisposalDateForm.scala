@@ -27,15 +27,15 @@ object DisposalDateForm {
   val disposalDateForm = Form(
     mapping(
       "disposalDateDay" -> text
-        .verifying("calc.common.date.error.invalidDate", mandatoryCheck)
+        .verifying("calc.common.date.invalidDayError", mandatoryCheck)
         .verifying("calc.common.date.error.invalidDate", integerCheck)
         .transform[Int](stringToInteger, _.toString),
       "disposalDateMonth" -> text
-        .verifying("calc.common.date.error.invalidDate", mandatoryCheck)
+        .verifying("calc.common.date.invalidMonthError", mandatoryCheck)
         .verifying("calc.common.date.error.invalidDate", integerCheck)
         .transform[Int](stringToInteger, _.toString),
       "disposalDateYear" -> text
-        .verifying("calc.common.date.error.invalidDate", mandatoryCheck)
+        .verifying("calc.common.date.invalidYearError", mandatoryCheck)
         .verifying("calc.common.date.error.invalidDate", integerCheck)
         .transform[Int](stringToInteger, _.toString)
     )(DateModel.apply)(DateModel.unapply)

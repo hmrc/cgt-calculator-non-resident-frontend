@@ -29,12 +29,7 @@
         @questionText
     </legend>
 
-    @if(formItem.hasErrors) {
-        @formItem.errors.filter(_.key == "").map { error => <span class="error-notification">@Messages(error.message)</span>}
-        @if(formItem.errors.find(_.key != "").isDefined && formItem.errors.find(_.key != "hasAcquisitionDate").isDefined) {
-            <span class="error-notification">@Messages("calc.common.date.error.invalidDate")</span>
-        }
-    }
+    @formItem.errors.map { error => <span class="error-notification">@Messages(error.message)</span>}
 
     @if(args.toMap.contains('_additionalHint)) {
         <span class ="form-hint">@{args.toMap.get('_additionalHint)}</span>
@@ -42,31 +37,37 @@
     <span class="form-hint">@Messages("calc.common.date.hint")</span>
 
 
-    @simpleNoErrorInput(
+    @govHelpers.input(
         formItem(s"${fieldName}Day"),
         '_label -> Messages("calc.common.date.fields.day"),
         '_labelClass -> "form-group form-group-day",
         '_type -> "number",
         '_inputClass -> s"input--xxsmall input--no-spinner",
-        '_maxlength -> "2"
+        '_maxlength -> "2",
+        '_hideErrors -> " ",
+        '_hideBar -> " "
     )
 
-    @simpleNoErrorInput(
+    @govHelpers.input(
         formItem(s"${fieldName}Month"),
         '_label -> Messages("calc.common.date.fields.month"),
         '_labelClass -> "form-group form-group-month",
         '_type -> "number",
         '_inputClass -> s"input--xxsmall input--no-spinner",
-        '_maxlength -> "2"
+        '_maxlength -> "2",
+        '_hideErrors -> " ",
+        '_hideBar -> " "
     )
 
-    @simpleNoErrorInput(
+    @govHelpers.input(
         formItem(s"${fieldName}Year"),
         '_label -> Messages("calc.common.date.fields.year"),
         '_labelClass -> "form-group form-group-year",
         '_type -> "number",
         '_inputClass -> s"input--small input--no-spinner",
-        '_maxlength -> "4"
+        '_maxlength -> "4",
+        '_hideErrors -> " ",
+        '_hideBar -> " "
     )
 
 </fieldset>
