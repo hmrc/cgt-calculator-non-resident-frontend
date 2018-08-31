@@ -29,7 +29,7 @@
 
     <a id="back-link" class="back-link" href="@controllers.routes.AcquisitionDateController.acquisitionDate">@Messages("calc.base.back")</a>
 
-    @govHelpers.errorSummary(Messages("calc.error.summary.heading"), worthBeforeLegislationStart, Seq("error-summary-heading"), dataJourney = Some("worthBeforeLegislationStart"), forceDivToAppear = false)
+    @errorSummary(worthBeforeLegislationStart, "worthBeforeLegislationStart")
 
     <h1 class="heading-xlarge">@Messages("calc.worthBeforeLegislationStart.question")</h1>
 

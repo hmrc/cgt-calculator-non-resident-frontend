@@ -25,7 +25,7 @@
 
   <a id="back-link" class="back-link" href="@controllers.routes.ImprovementsController.improvements.url">@Messages("calc.base.back")</a>
 
-    @govHelpers.errorSummary(Messages("calc.error.summary.heading"), propertyLivedInForm, Seq("error-summary-heading"), dataJourney = Some("propertyLivedIn"), forceDivToAppear = false)
+    @errorSummary(propertyLivedInForm, "propertyLivedIn")
 
   <h1 class="heading-xlarge">@Messages("calc.propertyLivedIn.title")</h1>
 

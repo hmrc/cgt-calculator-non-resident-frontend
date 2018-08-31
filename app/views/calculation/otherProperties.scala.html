@@ -25,7 +25,7 @@
 
     <a id="back-link" class="back-link" href="@{routes.PersonalAllowanceController.personalAllowance().url}">@Messages("calc.base.back")</a>
 
-    @govHelpers.errorSummary(Messages("calc.error.summary.heading"), otherPropertiesForm, Seq("error-summary-heading"), dataJourney = Some("other-properties"), forceDivToAppear = false)
+    @errorSummary(otherPropertiesForm, "other-properties", "otherPropertiesAmt")
 
     <h1 class="heading-xlarge">@Messages("calc.otherProperties.question")</h1>
 

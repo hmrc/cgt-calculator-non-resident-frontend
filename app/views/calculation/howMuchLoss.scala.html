@@ -25,7 +25,7 @@
 
     <a id="back-link" class="back-link" href="@controllers.routes.PreviousGainOrLossController.previousGainOrLoss">@Messages("calc.base.back")</a>
 
-    @govHelpers.errorSummary(Messages("calc.error.summary.heading"), howMuchLossForm, Seq("error-summary-heading"), dataJourney = Some("loss"), forceDivToAppear = false)
+    @errorSummary(howMuchLossForm, "loss")
 
     <h1 class="heading-xlarge">@Messages("calc.howMuchLoss.question")</h1>
 

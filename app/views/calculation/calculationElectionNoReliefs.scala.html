@@ -26,9 +26,9 @@
 
   <a id="back-link" class="back-link" href="@backLink">@Messages("calc.base.back")</a>
 
-    @govHelpers.errorSummary(Messages("calc.error.summary.heading"), calculationElectionForm, Seq("error-summary-heading"), dataJourney = Some("calculation-election"), forceDivToAppear = false)
+    @errorSummary(calculationElectionForm, "calculation-election")
 
-  <h1 class="heading-xlarge">@Messages("calc.calculationElectionNoReliefs.title")</h1>
+    <h1 class="heading-xlarge">@Messages("calc.calculationElectionNoReliefs.title")</h1>
 
   <div id="help-text">
     <p>@Messages("calc.calculationElectionNoReliefs.helpText")</p>

@@ -25,7 +25,7 @@
 
     <a id="back-link" class="back-link" href="@controllers.routes.SoldForLessController.soldForLess">@Messages("calc.base.back")</a>
 
-    @govHelpers.errorSummary(Messages("calc.error.summary.heading"), disposalValueForm, Seq("error-summary-heading"), dataJourney = Some("disposal-value"), forceDivToAppear = false)
+    @errorSummary(disposalValueForm, "disposal-value")
 
     <h1 class="heading-xlarge">@Messages("calc.disposalValue.question")</h1>
 

@@ -27,9 +27,9 @@
 
     <a id="back-link" class="back-link" href="@controllers.routes.SoldOrGivenAwayController.soldOrGivenAway().url">@Messages("calc.base.back")</a>
 
-    @govHelpers.errorSummary(Messages("calc.error.summary.heading"), whoDidYouGiveItToForm, Seq("error-summary-heading"), dataJourney = Some("whoDidYouGiveItTo"), forceDivToAppear = false)
+    @errorSummary(whoDidYouGiveItToForm, "whoDidYouGiveItTo")
 
-  <h1 class="heading-large">@Messages("calc.whoDidYouGiveThePropertyTo.title")</h1>
+    <h1 class="heading-large">@Messages("calc.whoDidYouGiveThePropertyTo.title")</h1>
 
   @govHelpers.form(action = controllers.routes.WhoDidYouGiveItToController.submitWhoDidYouGiveItTo) {
 

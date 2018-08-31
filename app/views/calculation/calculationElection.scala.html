@@ -25,7 +25,7 @@
 
     <a id="back-link" class="back-link" href="@controllers.routes.ClaimingReliefsController.claimingReliefs().url">@Messages("calc.base.back")</a>
 
-    @govHelpers.errorSummary(Messages("calc.error.summary.heading"), calculationElectionForm, Seq("error-summary-heading"), dataJourney = Some("calculation-election"), forceDivToAppear = false)
+    @errorSummary(calculationElectionForm, "calculation-election")
 
     <div class="grid-row">
         <h1 class="heading-xlarge">@Messages("calc.calculationElection.pageHeading")</h1>

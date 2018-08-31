@@ -25,7 +25,7 @@
 
     <a id="back-link" class="back-link" href="@controllers.routes.BoughtForLessController.boughtForLess">@Messages("calc.base.back")</a>
 
-    @govHelpers.errorSummary(Messages("calc.error.summary.heading"), acquisitionValueForm, Seq("error-summary-heading"), dataJourney = Some("acquisition-value"), forceDivToAppear = false)
+    @errorSummary(acquisitionValueForm, "acquisition-value")
 
     <h1 class="heading-xlarge">@Messages("calc.acquisitionValue.question")</h1>
 

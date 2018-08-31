@@ -28,7 +28,7 @@
 
     <a id="back-link" class="back-link" href="@controllers.routes.SoldOrGivenAwayController.soldOrGivenAway">@Messages("calc.base.back")</a>
 
-    @govHelpers.errorSummary(Messages("calc.error.summary.heading"), soldForLessForm, Seq("error-summary-heading"), dataJourney = Some("soldForLess"), forceDivToAppear = false)
+    @errorSummary(soldForLessForm, "soldForLess")
 
     <h1 class="heading-xlarge">@Messages("calc.nonResident.soldForLess.question")</h1>
 
@@ -41,7 +41,7 @@
                 "No"->Messages("calc.base.no")
             ),
             '_legend -> Messages("calc.nonResident.soldForLess.question"),
-            '_legendID -> "question",
+            '_legendID -> "soldForLess",
             '_legendClass -> "visuallyhidden",
             '_labelAfter -> true,
             '_labelClass -> "block-label",

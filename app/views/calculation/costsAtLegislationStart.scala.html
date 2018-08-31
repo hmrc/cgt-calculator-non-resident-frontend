@@ -25,7 +25,7 @@
 
     <a id="back-link" class="back-link" href="@controllers.routes.WorthBeforeLegislationStartController.worthBeforeLegislationStart().url">@Messages("calc.base.back")</a>
 
-    @govHelpers.errorSummary(Messages("calc.error.summary.heading"), data, Seq("error-summary-heading"), dataJourney = Some("costs"), forceDivToAppear = false)
+    @errorSummary(data, "costs", "costs")
 
     <h1 class="heading-xlarge">@Messages("calc.costsAtLegislationStart.title")</h1>
 

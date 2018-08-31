@@ -26,8 +26,7 @@
 
     <a id="back-link" class="back-link" href="@backUrl">@Messages("calc.base.back")</a>
 
-    @govHelpers.errorSummary(Messages("calc.error.summary.heading"), annualExemptAmountForm, Seq("error-summary-heading"), dataJourney = Some("annual-exempt-amount"), forceDivToAppear = false)
-
+    @errorSummary(annualExemptAmountForm, "annual-exempt-amount")
 
     <h1 class="heading-xlarge">@Messages("calc.annualExemptAmount.question")</h1>
 

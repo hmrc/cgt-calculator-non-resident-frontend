@@ -24,7 +24,7 @@
 
 @main_template(Messages("calc.disposalDate.question")) {
 
-    @govHelpers.errorSummary(Messages("calc.error.summary.heading"), disposalDateForm, Seq("error-summary-heading"), dataJourney = Some("disposal-date"), forceDivToAppear = false)
+    @errorSummary(disposalDateForm, "disposal-date", "disposalDateDay")
 
     <h1 class="heading-xlarge">@Messages("calc.disposalDate.question")</h1>
 

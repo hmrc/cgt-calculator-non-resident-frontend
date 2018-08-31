@@ -25,7 +25,7 @@
 
     <a id="back-link" class="back-link" href="@backLink">@Messages("calc.base.back")</a>
 
-    @govHelpers.errorSummary(Messages("calc.error.summary.heading"), acquisitionCostsForm, Seq("error-summary-heading"), dataJourney = Some("acquisition-costs"), forceDivToAppear = false)
+    @errorSummary(acquisitionCostsForm, "acquisition-costs")
 
     <h1 class="heading-xlarge">@Messages("calc.acquisitionCosts.question")</h1>
 

@@ -182,7 +182,7 @@ class AcquisitionDateViewSpec extends UnitSpec with WithFakeApplication with Moc
         }
 
         s"has the text ${messages.AcquisitionDate.errorFutureDate}" in {
-          document.select("#-error-summary").text() shouldBe messages.AcquisitionDate.errorFutureDate
+          document.select("#acquisitionDateDay-error-summary").text() shouldBe messages.AcquisitionDate.errorFutureDate
         }
       }
     }

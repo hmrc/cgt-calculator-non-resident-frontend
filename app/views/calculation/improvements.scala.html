@@ -38,7 +38,7 @@
 
         <a id="back-link" class="back-link" href="@backUrl">@Messages("calc.base.back")</a>
 
-        @govHelpers.errorSummary(Messages("calc.error.summary.heading"), improvementsForm, Seq("error-summary-heading"), dataJourney = Some("improvements"), forceDivToAppear = false)
+        @errorSummary(improvementsForm, "improvements", "improvementsAmt")
 
         <h1 class="heading-xlarge">@question</h1>
 

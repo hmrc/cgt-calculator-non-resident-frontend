@@ -25,7 +25,7 @@
 
     <a id="back-link" class="back-link" href="@controllers.routes.RebasedValueController.rebasedValue">@Messages("calc.base.back")</a>
 
-    @govHelpers.errorSummary(Messages("calc.error.summary.heading"), rebasedCosts, Seq("error-summary-heading"), dataJourney = Some("rebased-costs"), forceDivToAppear = false)
+    @errorSummary(rebasedCosts, "rebased-costs", "rebasedCosts")
 
     <h1 class="heading-xlarge">@Messages("calc.rebasedCosts.question")</h1>
 
