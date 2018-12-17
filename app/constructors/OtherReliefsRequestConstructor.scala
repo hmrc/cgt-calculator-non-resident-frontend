@@ -21,23 +21,23 @@ import models.{AllOtherReliefsModel, OtherReliefsModel}
 object OtherReliefsRequestConstructor {
 
   def otherReliefsQuery(otherReliefs: Option[AllOtherReliefsModel]): String = otherReliefs match {
-    case (Some(data)) =>
+    case Some(data) =>
       s"${flatReliefsQuery(data.otherReliefsFlat)}${rebasedReliefsQuery(data.otherReliefsRebased)}${timeApportionedReliefsQuery(data.otherReliefsTime)}"
     case _ => ""
   }
 
   def flatReliefsQuery(reliefs: Option[OtherReliefsModel]): String = reliefs match {
-    case (Some(data)) => s"&otherReliefsFlat=${data.otherReliefs}"
+    case Some(data) => s"&otherReliefsFlat=${data.otherReliefs}"
     case _ => ""
   }
 
   def rebasedReliefsQuery(reliefs: Option[OtherReliefsModel]): String = reliefs match {
-    case (Some(data)) => s"&otherReliefsRebased=${data.otherReliefs}"
+    case Some(data) => s"&otherReliefsRebased=${data.otherReliefs}"
     case _ => ""
   }
 
   def timeApportionedReliefsQuery(reliefs: Option[OtherReliefsModel]): String = reliefs match {
-    case (Some(data)) => s"&otherReliefsTimeApportioned=${data.otherReliefs}"
+    case Some(data) => s"&otherReliefsTimeApportioned=${data.otherReliefs}"
     case _ => ""
   }
 }

@@ -31,7 +31,7 @@
 
     @govHelpers.form(action = controllers.routes.SoldOrGivenAwayController.submitSoldOrGivenAway) {
 
-        @govHelpers.inputRadioGroup(
+        @govHelpers.input_radio_group(
             field = soldOrGivenAway("soldIt"),
             Seq(
             "Yes" -> Messages("calc.soldOrGivenAway.sold"),

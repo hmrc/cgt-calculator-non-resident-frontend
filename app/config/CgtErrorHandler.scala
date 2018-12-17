@@ -33,7 +33,7 @@ class CgtErrorHandler extends HttpErrorHandler {
     statusCode match {
       case BAD_REQUEST => onBadRequest(request, message)
       case NOT_FOUND => onHandlerNotFound(request)
-      case _ => onError(request, new CGTClientException(s"Client Error Occurred with Status $statusCode and message $message"))
+      case _ => onError(request, CGTClientException(s"Client Error Occurred with Status $statusCode and message $message"))
     }
   }
 

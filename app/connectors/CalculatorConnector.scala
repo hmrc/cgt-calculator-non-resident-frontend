@@ -16,28 +16,27 @@
 
 package connectors
 
-import common.{TaxDates, YesNoKeys}
 import common.nonresident.CalculationType
-import config.{CalculatorSessionCache, WSHttp}
+import common.{TaxDates, YesNoKeys}
+import config.{CalculatorSessionCache, WSHttp, WiringConfig}
 import constructors._
 import models._
-import play.api.libs.json.{Format, Json}
+import play.api.libs.json.Format
 import uk.gov.hmrc.http.cache.client.{CacheMap, SessionCache}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpGet, HttpPost, HttpResponse}
 import uk.gov.hmrc.play.config.ServicesConfig
+import uk.gov.hmrc.play.http.ws.{WSGet, WSPost}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import uk.gov.hmrc.http.{HeaderCarrier, HttpGet, HttpPost, HttpResponse}
-import uk.gov.hmrc.play.http.ws.{WSGet, WSPost}
 
-object CalculatorConnector extends CalculatorConnector with ServicesConfig with WSHttp {
-  override val sessionCache = CalculatorSessionCache
-  override val http = new WSHttp with WSGet with WSPost
-  override val serviceUrl = baseUrl("capital-gains-calculator")
+object CalculatorConnector extends CalculatorConnector with ServicesConfig with WiringConfig {
+  override val sessionCache: CalculatorSessionCache.type = CalculatorSessionCache
+  override val http: WSHttp with WSGet with WSPost = WSHttp
+  override val serviceUrl: String = baseUrl("capital-gains-calculator")
 }
 
 trait CalculatorConnector {
-
   val sessionCache: SessionCache
   val http: HttpGet with HttpPost
   val serviceUrl: String

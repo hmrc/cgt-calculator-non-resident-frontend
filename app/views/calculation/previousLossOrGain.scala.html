@@ -36,7 +36,7 @@
     </div>
 
     @govHelpers.form(action = controllers.routes.PreviousGainOrLossController.submitPreviousGainOrLoss()) {
-        @govHelpers.inputRadioGroup(
+        @govHelpers.input_radio_group(
             field = previousLossOrGainForm("previousLossOrGain"),
             Seq(
                     "Loss" -> Messages("calc.previousLossOrGain.loss"),

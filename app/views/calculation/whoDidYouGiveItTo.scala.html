@@ -33,7 +33,7 @@
 
   @govHelpers.form(action = controllers.routes.WhoDidYouGiveItToController.submitWhoDidYouGiveItTo) {
 
-    @govHelpers.inputRadioGroup(
+    @govHelpers.input_radio_group(
       field = whoDidYouGiveItToForm("whoDidYouGiveItTo"),
       Seq(
         "Spouse"-> Messages("calc.whoDidYouGiveThePropertyTo.spouse"),

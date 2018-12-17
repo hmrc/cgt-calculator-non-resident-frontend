@@ -16,17 +16,27 @@
 
 package config
 
-import uk.gov.hmrc.http.{HttpDelete, HttpGet, HttpPost, HttpPut}
+import akka.actor.ActorSystem
+import com.typesafe.config.Config
+import play.api.Mode.Mode
+import play.api.{Configuration, Play}
 import uk.gov.hmrc.http.cache.client.SessionCache
 import uk.gov.hmrc.http.hooks.HttpHooks
+import uk.gov.hmrc.http._
 import uk.gov.hmrc.play.audit.http.HttpAuditing
 import uk.gov.hmrc.play.audit.http.connector.{AuditConnector => Auditing}
-import uk.gov.hmrc.play.config.{AppName, RunMode, ServicesConfig}
+import uk.gov.hmrc.play.config.{AppName, ServicesConfig}
 import uk.gov.hmrc.play.frontend.auth.connectors.AuthConnector
-import uk.gov.hmrc.play.http.ws._
 import uk.gov.hmrc.play.frontend.config.LoadAuditingConfig
+import uk.gov.hmrc.play.http.ws._
 
-object FrontendAuditConnector extends Auditing with AppName {
+trait WiringConfig {
+  def appNameConfiguration: Configuration = Play.current.configuration
+  def runModeConfiguration: Configuration = Play.current.configuration
+  def mode: Mode = Play.current.mode
+}
+
+object FrontendAuditConnector extends Auditing with AppName with WiringConfig {
   override lazy val auditingConfig = LoadAuditingConfig(s"auditing")
 }
 
@@ -36,16 +46,20 @@ trait Hooks extends HttpHooks with HttpAuditing {
 }
 
 trait WSHttp extends HttpGet with WSGet with HttpPut with WSPut with HttpPost with WSPost with HttpDelete with WSDelete with Hooks with AppName
-object WSHttp extends WSHttp
-
-object FrontendAuthConnector extends AuthConnector with ServicesConfig with WSHttp {
-  val serviceUrl = baseUrl("auth")
-  lazy val http = new WSHttp with WSGet
+object WSHttp extends WSHttp with WiringConfig {
+  override val configuration: Option[Config] = Some(appNameConfiguration.underlying)
+  override val actorSystem: ActorSystem = Play.current.actorSystem
 }
 
-object CalculatorSessionCache extends SessionCache with ServicesConfig with AppName {
-  override lazy val domain = getConfString("cachable.session-cache.domain", throw new Exception(s"Could not find config 'cachable.session-cache.domain'"))
-  override lazy val baseUri = baseUrl("cachable.session-cache")
-  override lazy val defaultSource = appName
-  override lazy val http = new WSHttp with WSGet
+object FrontendAuthConnector extends AuthConnector with ServicesConfig with WiringConfig {
+  val serviceUrl: String = baseUrl("auth")
+  lazy val http: WSHttp.type = WSHttp
+}
+
+object CalculatorSessionCache extends SessionCache with ServicesConfig with AppName with WiringConfig {
+  override lazy val domain: String = getConfString("cachable.session-cache.domain",
+    throw new Exception(s"Could not find config 'cachable.session-cache.domain'"))
+  override lazy val baseUri: String = baseUrl("cachable.session-cache")
+  override lazy val defaultSource: String = appName
+  override lazy val http: WSHttp.type = WSHttp
 }

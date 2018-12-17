@@ -32,7 +32,7 @@
     @govHelpers.form(action = controllers.routes.HowBecameOwnerController.submitHowBecameOwner) {
 
         <div class="form-group">
-            @govHelpers.inputRadioGroup(
+            @govHelpers.input_radio_group(
                 field = howBecameOwnerForm("gainedBy"),
                 Seq(
                     "Bought" -> Messages("calc.howBecameOwner.bought"),

@@ -21,7 +21,7 @@
 
 @{legendClass match {
     case Some(legendClass) => {
-        govHelpers.inputRadioGroup(
+        govHelpers.input_radio_group(
             field = field,
             Seq(
             "Yes" -> Messages("calc.base.yes"),
@@ -35,7 +35,7 @@
             '_fieldsetAttributes -> "aria-details = help")
     }
     case _ => {
-        govHelpers.inputRadioGroup(
+        govHelpers.input_radio_group(
             field = field,
             Seq(
             "Yes" -> Messages("calc.base.yes"),
