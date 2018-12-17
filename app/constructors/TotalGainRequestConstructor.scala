@@ -85,7 +85,7 @@ object TotalGainRequestConstructor {
                     improvementsModel: ImprovementsModel,
                     acquisitionDateModel: DateModel): String = {
     rebasedValueModel match {
-      case (Some(RebasedValueModel(value)))
+      case Some(RebasedValueModel(value))
         if !TaxDates.dateAfterStart(acquisitionDateModel.get) =>
         s"&rebasedValue=$value${rebasedCosts(rebasedCostsModel.get)}${improvementsAfterTaxStarted(improvementsModel)}"
       case _ => ""

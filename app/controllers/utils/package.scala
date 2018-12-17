@@ -16,6 +16,7 @@
 
 package controllers
 
+import config.WiringConfig
 import play.api.Logger
 import play.api.mvc.Results._
 import play.api.mvc.{Request, Result}
@@ -27,9 +28,8 @@ import scala.concurrent.{CanAwait, ExecutionContext, Future}
 import scala.util.Try
 
 package object utils {
-  implicit class RecoverableFuture(future: Future[Result]) extends Future[Result] with AppName {
-
-    override def onComplete[U](f: (Try[Result]) => U)(implicit executor: ExecutionContext): Unit = future.onComplete(f)
+  implicit class RecoverableFuture(future: Future[Result]) extends Future[Result] with AppName with WiringConfig {
+    override def onComplete[U](f: Try[Result] => U)(implicit executor: ExecutionContext): Unit = future.onComplete(f)
     override def isCompleted: Boolean = future.isCompleted
     override def value: Option[Try[Result]] = future.value
     override def ready(atMost: Duration)(implicit permit: CanAwait): RecoverableFuture.this.type = ready(atMost)

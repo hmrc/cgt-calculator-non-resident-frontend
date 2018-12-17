@@ -32,17 +32,16 @@ trait AppConfig {
   val urBannerLink: String
 }
 
-object ApplicationConfig extends AppConfig with ServicesConfig {
-
+object ApplicationConfig extends AppConfig with ServicesConfig with WiringConfig {
   private def loadConfig(key: String) = configuration.getString(key).getOrElse(throw new Exception(s"Missing configuration key: $key"))
   private def getFeature(key: String) = configuration.getBoolean(key).getOrElse(false)
 
   private val contactFrontendService = baseUrl("contact-frontend")
   private val contactHost = configuration.getString(s"$env.microservice.services.contact-frontend.host").getOrElse("")
 
-  override lazy val assetsPrefix = loadConfig(s"assets.url") + loadConfig(s"assets.version")
-  override lazy val analyticsToken = loadConfig(s"google-analytics.token")
-  override lazy val analyticsHost = loadConfig(s"google-analytics.host")
+  override lazy val assetsPrefix: String = loadConfig(s"assets.url") + loadConfig(s"assets.version")
+  override lazy val analyticsToken: String = loadConfig(s"google-analytics.token")
+  override lazy val analyticsHost: String = loadConfig(s"google-analytics.host")
 
   override val contactFormServiceIdentifier = "CGT"
   override lazy val contactFrontendPartialBaseUrl = s"$contactFrontendService"
