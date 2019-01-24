@@ -21,6 +21,7 @@ import java.time.LocalDate
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.nonresident.TaxableGainCalculation.{checkGainExists, getPropertyLivedInResponse}
 import common.{Dates, TaxDates}
+import config.ApplicationConfig
 import connectors.CalculatorConnector
 import constructors.AnswersConstructor
 import controllers.predicates.ValidActiveSession
@@ -29,23 +30,21 @@ import views.html.calculation
 import models._
 import play.api.data.Form
 import play.api.mvc.{Action, AnyContent, Result}
-import uk.gov.hmrc.play.frontend.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 import controllers.utils.RecoverableFuture
+import javax.inject.Inject
+import play.api.Environment
 
 import scala.concurrent.Future
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
-object PrivateResidenceReliefController extends PrivateResidenceReliefController {
-  val calcConnector = CalculatorConnector
-  val answersConstructor = AnswersConstructor
-}
-
-trait PrivateResidenceReliefController extends FrontendController with ValidActiveSession {
-
-  val calcConnector: CalculatorConnector
-  val answersConstructor: AnswersConstructor
+class PrivateResidenceReliefController @Inject()(environment: Environment,
+                                                 http: DefaultHttpClient,calcConnector: CalculatorConnector,
+                                                 answersConstructor: AnswersConstructor)(implicit val applicationConfig: ApplicationConfig)
+                                                  extends FrontendController with ValidActiveSession {
 
   def getAcquisitionDate(implicit hc: HeaderCarrier): Future[Option[LocalDate]] =
     calcConnector.fetchAndGetFormData[DateModel](KeystoreKeys.acquisitionDate).map {

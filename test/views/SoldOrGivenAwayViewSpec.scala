@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package views
 
 import assets.MessageLookup.NonResident.{SoldOrGivenAway => messages}
 import assets.MessageLookup.{NonResident => commonMessages}
+import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
 import forms.SoldOrGivenAwayForm._
@@ -28,12 +29,12 @@ import play.api.Play.current
 
 class SoldOrGivenAwayViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper{
 
-
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
 
   "The Sold Or Given Away View" when{
 
     "not supplied with a pre-existing model" should {
-      lazy val view = soldOrGivenAway(soldOrGivenAwayForm)
+      lazy val view = soldOrGivenAway(soldOrGivenAwayForm)(fakeRequest, applicationMessages,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have a 'back-link' that" should {
@@ -119,7 +120,7 @@ class SoldOrGivenAwayViewSpec extends UnitSpec with WithFakeApplication with Fak
 
     "provided with errors" should {
       lazy val form = soldOrGivenAwayForm.bind(Map("soldIt" -> "999"))
-      lazy val view = soldOrGivenAway(form)
+      lazy val view = soldOrGivenAway(form)(fakeRequest, applicationMessages,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

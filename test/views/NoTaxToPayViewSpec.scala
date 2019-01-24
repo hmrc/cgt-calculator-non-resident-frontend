@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,12 +22,15 @@ import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 import assets.MessageLookup.{NoTaxToPay => messages}
+import config.ApplicationConfig
 import views.html.{calculation => views}
 
 class NoTaxToPayViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
 
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+
   "No Tax to Pay View when gifted to spouse" should {
-    lazy val view = views.noTaxToPay(forCharity = false)(fakeRequest, applicationMessages, fakeApplication)
+    lazy val view = views.noTaxToPay(forCharity = false)(fakeRequest, applicationMessages, fakeApplication, mockConfig)
     lazy val doc = Jsoup.parse(view.body)
 
     "have a charset of UTF-8" in {
@@ -63,7 +66,7 @@ class NoTaxToPayViewSpec extends UnitSpec with WithFakeApplication with FakeRequ
   }
 
   "No Tax to Pay View when gifted to charity" should {
-    lazy val view = views.noTaxToPay(forCharity = true)(fakeRequest, applicationMessages, fakeApplication)
+    lazy val view = views.noTaxToPay(forCharity = true)(fakeRequest, applicationMessages, fakeApplication, mockConfig)
     lazy val doc = Jsoup.parse(view.body)
 
     "have text explaining why tax is not owed" in {

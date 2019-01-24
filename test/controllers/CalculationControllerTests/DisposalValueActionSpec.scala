@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,29 +16,51 @@
 
 package controllers.CalculationControllerTests
 
+import akka.stream.Materializer
 import assets.MessageLookup.NonResident.{DisposalValue => messages}
+import config.ApplicationConfig
 import connectors.CalculatorConnector
-import controllers.DisposalValueController
+import constructors.AnswersConstructor
+import controllers.{DisposalValueController, WorthWhenInheritedController}
 import controllers.helpers.FakeRequestHelper
 import models.DisposalValueModel
 import org.jsoup._
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
+import play.api.Environment
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 import scala.concurrent.Future
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.logging.SessionId
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
 class DisposalValueActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val hc = new HeaderCarrier()
+
+  implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
+
+  val materializer = mock[Materializer]
+  val mockEnvironment =mock[Environment]
+  val mockHttp =mock[DefaultHttpClient]
+  val mockCalcConnector =mock[CalculatorConnector]
+  val defaultCache = mock[CacheMap]
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+
+  class Setup {
+    val controller = new DisposalValueController(
+      mockEnvironment,
+      mockHttp,
+      mockCalcConnector
+    )(mockConfig)
+  }
+
 
   def setupTarget(getData: Option[DisposalValueModel]): DisposalValueController = {
 
-    val mockCalcConnector = mock[CalculatorConnector]
 
     when(mockCalcConnector.fetchAndGetFormData[DisposalValueModel](ArgumentMatchers.anyString())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
@@ -46,8 +68,8 @@ class DisposalValueActionSpec extends UnitSpec with WithFakeApplication with Moc
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new DisposalValueController {
-      override val calcConnector: CalculatorConnector = mockCalcConnector
+    new DisposalValueController(mockEnvironment,mockHttp,mockCalcConnector)(mockConfig) {
+      val calcConnector: CalculatorConnector = mockCalcConnector
     }
   }
 
@@ -57,7 +79,7 @@ class DisposalValueActionSpec extends UnitSpec with WithFakeApplication with Moc
     "not supplied with a pre-existing stored model" should {
       val target = setupTarget(None)
       lazy val result = target.disposalValue(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       "return a 200" in {
         status(result) shouldBe 200
@@ -71,7 +93,7 @@ class DisposalValueActionSpec extends UnitSpec with WithFakeApplication with Moc
     "supplied with a pre-existing stored model" should {
       val target = setupTarget(Some(DisposalValueModel(1000)))
       lazy val result = target.disposalValue(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       "return a 200" in {
         status(result) shouldBe 200
@@ -116,7 +138,7 @@ class DisposalValueActionSpec extends UnitSpec with WithFakeApplication with Moc
       val target = setupTarget(None)
       lazy val request = fakeRequestToPOSTWithSession(("disposalValue", "-100"))
       lazy val result = target.submitDisposalValue(request)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       "return a 400" in {
         status(result) shouldBe 400

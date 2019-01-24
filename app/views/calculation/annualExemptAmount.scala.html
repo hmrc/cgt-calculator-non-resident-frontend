@@ -20,7 +20,8 @@
 @import uk.gov.hmrc.play.views.helpers._
 @import play.api.Application
 
-@(annualExemptAmountForm: Form[AnnualExemptAmountModel], maxAEA: BigDecimal, backUrl: String)(implicit request: Request[_], messages: Messages, application: Application)
+@import config.ApplicationConfig
+@(annualExemptAmountForm: Form[AnnualExemptAmountModel], maxAEA: BigDecimal, backUrl: String)(implicit request: Request[_], messages: Messages, application: Application, applicationConfig: ApplicationConfig)
 
 @main_template(Messages("calc.annualExemptAmount.question")) {
 

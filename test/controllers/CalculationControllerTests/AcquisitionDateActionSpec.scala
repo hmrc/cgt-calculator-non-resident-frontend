@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,27 +16,49 @@
 
 package controllers.CalculationControllerTests
 
+import akka.stream.Materializer
 import assets.MessageLookup.NonResident.{AcquisitionDate => messages}
+import config.ApplicationConfig
 import connectors.CalculatorConnector
-import controllers.AcquisitionDateController
+import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
+import controllers.{AcquisitionDateController, PersonalAllowanceController}
 import controllers.helpers.FakeRequestHelper
+import controllers.utils.TimeoutController
 import models.DateModel
 import org.jsoup._
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
+import play.api.Environment
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 import scala.concurrent.Future
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.logging.SessionId
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
 class AcquisitionDateActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val hc = new HeaderCarrier()
+  implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
 
-  val mockCalcConnector = mock[CalculatorConnector]
+  val materializer = mock[Materializer]
+  val mockEnvironment =mock[Environment]
+  val mockHttp =mock[DefaultHttpClient]
+  val mockCalcConnector =mock[CalculatorConnector]
+  val defaultCache = mock[CacheMap]
+  val mockDefaultCalcElecConstructor = mock[DefaultCalculationElectionConstructor]
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+
+  class Setup {
+    val controller = new AcquisitionDateController(
+      mockEnvironment,
+      mockHttp,
+      mockCalcConnector,
+      mockDefaultCalcElecConstructor
+    )(mockConfig)
+  }
 
   def setupTarget(getData: Option[DateModel]
                  ): AcquisitionDateController = {
@@ -47,10 +69,13 @@ class AcquisitionDateActionSpec extends UnitSpec with WithFakeApplication with M
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new AcquisitionDateController {
-      override val calcConnector: CalculatorConnector = mockCalcConnector
+    new AcquisitionDateController(mockEnvironment, mockHttp, mockCalcConnector, mockDefaultCalcElecConstructor)(mockConfig) {
+      val calcConnector: CalculatorConnector = mockCalcConnector
     }
   }
+
+  val controller = new TimeoutController()(mockConfig)
+
 
   "Calling the .acquisitionDate action " should {
 
@@ -62,7 +87,7 @@ class AcquisitionDateActionSpec extends UnitSpec with WithFakeApplication with M
         status(result) shouldBe 303
       }
 
-      s"redirect to ${controllers.utils.TimeoutController.timeout()}" in {
+      s"redirect to ${controller.timeout()}" in {
         redirectLocation(result).get should include("/calculate-your-capital-gains/non-resident/session-timeout")
       }
     }
@@ -71,7 +96,7 @@ class AcquisitionDateActionSpec extends UnitSpec with WithFakeApplication with M
 
       val target = setupTarget(None)
       lazy val result = target.acquisitionDate(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       "return a 200" in {
         status(result) shouldBe 200
@@ -87,7 +112,7 @@ class AcquisitionDateActionSpec extends UnitSpec with WithFakeApplication with M
       val testAcquisitionDateModel = new DateModel(10, 12, 2016)
       val target = setupTarget(Some(testAcquisitionDateModel))
       lazy val result = target.acquisitionDate(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       "return a 200" in {
         status(result) shouldBe 200

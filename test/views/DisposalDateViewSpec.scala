@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package views
 
 import assets.MessageLookup.NonResident.{DisposalDate => messages}
 import assets.MessageLookup.{NonResident => commonMessages}
+import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
 import forms.DisposalDateForm._
@@ -28,15 +29,16 @@ import play.api.Play.current
 import play.api.i18n.{Lang, Messages}
 
 class DisposalDateViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
 
   "The Disposal Date View" should {
 
     "return some HTML" which {
 
-      lazy val view = disposalDate(disposalDateForm)(fakeRequest, implicitly[Messages].copy(lang = Lang("en")), Lang("en"), fakeApplication)
+      lazy val view = disposalDate(disposalDateForm)(fakeRequest, implicitly[Messages].copy(lang = Lang("en")), Lang("en"), fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
-      lazy val welshView = disposalDate(disposalDateForm)(fakeRequest, implicitly[Messages].copy(lang = Lang("cy")), Lang("cy"), fakeApplication)
+      lazy val welshView = disposalDate(disposalDateForm)(fakeRequest, implicitly[Messages].copy(lang = Lang("cy")), Lang("cy"), fakeApplication, mockConfig)
       lazy val welshDocument = Jsoup.parse(welshView.body)
 
       "have the title 'When did you sign the contract that made someone else the owner?'" in {
@@ -98,7 +100,7 @@ class DisposalDateViewSpec extends UnitSpec with WithFakeApplication with FakeRe
 
     "supplied with errors" should {
       lazy val form = disposalDateForm.bind(Map("disposalDateDay" -> "a"))
-      lazy val view = disposalDate(form)
+      lazy val view = disposalDate(form)(fakeRequest, implicitly[Messages].copy(lang = Lang("en")), Lang("en"), fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

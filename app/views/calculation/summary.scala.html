@@ -20,7 +20,8 @@
 @import play.api.Application
 @import common.TaxDates
 
-@(calculationResult: TotalTaxOwedModel, taxYearModel: TaxYearModel, calculationType: String, disposalValue: BigDecimal, acquisitionValue: BigDecimal, totalCosts: BigDecimal, backUrl: String, flatGain: Option[BigDecimal] = None, reliefsUsed: BigDecimal = 0, showUserResearchPanel: Boolean)(implicit request: Request[_], messages: Messages, application: Application)
+@import config.ApplicationConfig
+@(calculationResult: TotalTaxOwedModel, taxYearModel: TaxYearModel, calculationType: String, disposalValue: BigDecimal, acquisitionValue: BigDecimal, totalCosts: BigDecimal, backUrl: String, flatGain: Option[BigDecimal] = None, reliefsUsed: BigDecimal = 0, showUserResearchPanel: Boolean)(implicit request: Request[_], messages: Messages, application: Application, applicationConfig: ApplicationConfig)
 
 @main_template(Messages("calc.summary.title"), isUserResearchBannerVisible = showUserResearchPanel){
 

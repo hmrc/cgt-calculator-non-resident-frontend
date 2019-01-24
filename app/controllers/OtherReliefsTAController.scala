@@ -18,6 +18,7 @@ package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.nonresident.TaxableGainCalculation._
+import config.ApplicationConfig
 import connectors.CalculatorConnector
 import constructors.AnswersConstructor
 import controllers.predicates.ValidActiveSession
@@ -25,23 +26,21 @@ import forms.OtherReliefsForm._
 import views.html.calculation
 import models.{CalculationResultsWithTaxOwedModel, OtherReliefsModel, TotalGainResultsModel}
 import play.api.data.Form
-import uk.gov.hmrc.play.frontend.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 import play.api.mvc.{Action, AnyContent}
 import controllers.utils.RecoverableFuture
+import javax.inject.Inject
+import play.api.Environment
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
 import scala.concurrent.Future
 
-object OtherReliefsTAController extends OtherReliefsTAController {
-  val calcConnector = CalculatorConnector
-  val answersConstructor = AnswersConstructor
-}
-
-trait OtherReliefsTAController extends FrontendController with ValidActiveSession {
-
-  val answersConstructor: AnswersConstructor
-  val calcConnector: CalculatorConnector
+class OtherReliefsTAController @Inject()(environment: Environment,
+                                         http: DefaultHttpClient,calcConnector: CalculatorConnector,
+                                         answersConstructor: AnswersConstructor)(implicit val applicationConfig: ApplicationConfig)
+                                          extends FrontendController with ValidActiveSession {
 
   val otherReliefsTA: Action[AnyContent] = ValidateSession.async { implicit request =>
 

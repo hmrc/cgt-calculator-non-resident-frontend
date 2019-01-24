@@ -18,8 +18,9 @@ package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.nonresident.TaxableGainCalculation._
+import config.ApplicationConfig
 import connectors.CalculatorConnector
-import constructors.{AnswersConstructor, CalculationElectionConstructor}
+import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
 import controllers.predicates.ValidActiveSession
 import forms.CalculationElectionForm._
 import models._
@@ -27,24 +28,21 @@ import play.api.Play.current
 import play.api.data.Form
 import play.api.i18n.Messages.Implicits._
 import play.api.mvc.{Action, AnyContent}
-import uk.gov.hmrc.play.frontend.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.calculation
 import controllers.utils.RecoverableFuture
+import javax.inject.Inject
+import play.api.Environment
 
 import scala.concurrent.Future
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
-object CalculationElectionController extends CalculationElectionController {
-  val calcConnector = CalculatorConnector
-  val calcAnswersConstructor = AnswersConstructor
-  val calcElectionConstructor = CalculationElectionConstructor
-}
-
-trait CalculationElectionController extends FrontendController with ValidActiveSession {
-
-  val calcConnector: CalculatorConnector
-  val calcElectionConstructor: CalculationElectionConstructor
-  val calcAnswersConstructor: AnswersConstructor
+class CalculationElectionController @Inject()(environment: Environment,
+                                              http: DefaultHttpClient,calcConnector: CalculatorConnector,
+                                              calcAnswersConstructor: AnswersConstructor,
+                                              calcElectionConstructor: DefaultCalculationElectionConstructor)(implicit val applicationConfig: ApplicationConfig)
+                                                extends FrontendController with ValidActiveSession {
 
   def orderElements(content: Seq[(String, String, String, String, Option[String], Option[BigDecimal])],
                     claimingReliefs: Boolean): Seq[(String, String, String, String, Option[String], Option[BigDecimal])] = {

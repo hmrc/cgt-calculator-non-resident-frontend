@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package views
 import java.time.LocalDate
 
 import assets.MessageLookup.{NonResident => messages}
+import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import forms.AcquisitionDateForm._
 import org.jsoup.Jsoup
@@ -30,11 +31,12 @@ import views.html.calculation.acquisitionDate
 
 class AcquisitionDateViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
 
   "Acquisition date view" when {
 
     "supplied with no errors" should {
-      lazy val view = acquisitionDate(acquisitionDateForm)
+      lazy val view = acquisitionDate(acquisitionDateForm)(fakeRequest,applicationMessages, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${messages.AcquisitionDate.question}'" in {
@@ -111,7 +113,7 @@ class AcquisitionDateViewSpec extends UnitSpec with WithFakeApplication with Moc
       lazy val form = acquisitionDateForm.bind(Map("acquisitionDateDay" -> "",
         "acquisitionDateMonth" -> "1",
         "acquisitionDateYear" -> "2015"))
-      lazy val view = acquisitionDate(form)
+      lazy val view = acquisitionDate(form)(fakeRequest,applicationMessages, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" which {
@@ -130,7 +132,7 @@ class AcquisitionDateViewSpec extends UnitSpec with WithFakeApplication with Moc
       lazy val form = acquisitionDateForm.bind(Map("acquisitionDateDay" -> "1",
         "acquisitionDateMonth" -> "",
         "acquisitionDateYear" -> "2015"))
-      lazy val view = acquisitionDate(form)
+      lazy val view = acquisitionDate(form)(fakeRequest,applicationMessages, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" which {
@@ -149,7 +151,7 @@ class AcquisitionDateViewSpec extends UnitSpec with WithFakeApplication with Moc
       lazy val form = acquisitionDateForm.bind(Map("acquisitionDateDay" -> "1",
         "acquisitionDateMonth" -> "1",
         "acquisitionDateYear" -> ""))
-      lazy val view = acquisitionDate(form)
+      lazy val view = acquisitionDate(form)(fakeRequest,applicationMessages, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" which {
@@ -172,7 +174,7 @@ class AcquisitionDateViewSpec extends UnitSpec with WithFakeApplication with Moc
         "acquisitionDateYear" -> date.getYear.toString)
 
       lazy val form = acquisitionDateForm.bind(map)
-      lazy val view = acquisitionDate(form)
+      lazy val view = acquisitionDate(form)(fakeRequest,applicationMessages, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" which {

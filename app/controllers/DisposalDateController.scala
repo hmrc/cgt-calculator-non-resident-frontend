@@ -20,28 +20,27 @@ import java.util.UUID
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.TaxDates
+import config.ApplicationConfig
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import forms.DisposalDateForm._
+import javax.inject.Inject
 import views.html.calculation
 import models.DateModel
-import play.api.Logger
+import play.api.{Environment, Logger}
 import play.api.data.Form
 import play.api.mvc.Action
-import uk.gov.hmrc.play.frontend.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 
 import scala.concurrent.Future
 import uk.gov.hmrc.http.SessionKeys
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
-object DisposalDateController extends DisposalDateController {
-  val calcConnector = CalculatorConnector
-}
-
-trait DisposalDateController extends FrontendController with ValidActiveSession {
-
-  val calcConnector: CalculatorConnector
+class DisposalDateController @Inject()(environment: Environment,
+                                       http: DefaultHttpClient,calcConnector: CalculatorConnector)(implicit val applicationConfig: ApplicationConfig)
+                                        extends FrontendController with ValidActiveSession {
 
   val disposalDate = Action.async { implicit request =>
     if (request.session.get(SessionKeys.sessionId).isEmpty) {

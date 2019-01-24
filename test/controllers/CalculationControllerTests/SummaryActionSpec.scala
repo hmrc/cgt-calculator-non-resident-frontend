@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,28 +16,53 @@
 
 package controllers.CalculationControllerTests
 
+import akka.stream.Materializer
 import assets.MessageLookup.NonResident.{Summary => messages}
 import common.nonresident.CalculationType
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
-import constructors.AnswersConstructor
-import controllers.SummaryController
+import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
+import controllers.{PrivateResidenceReliefController, SummaryController}
 import controllers.helpers.FakeRequestHelper
 import common.TestModels
+import config.ApplicationConfig
 import models.{TaxYearModel, _}
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatest.mockito.MockitoSugar
+import play.api.Environment
 import play.api.test.Helpers._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.cache.client.CacheMap
+import uk.gov.hmrc.http.logging.SessionId
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
 class SummaryActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val hc = new HeaderCarrier()
+  implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  val materializer = mock[Materializer]
+  val mockEnvironment =mock[Environment]
+  val mockHttp =mock[DefaultHttpClient]
+  val mockCalcConnector =mock[CalculatorConnector]
+  val defaultCache = mock[CacheMap]
+  val mockAnswersConstructor = mock[AnswersConstructor]
+  val mockDefaultCalElecConstructor = mock[DefaultCalculationElectionConstructor]
+
+
+  class Setup {
+    val controller = new SummaryController(
+      mockEnvironment,
+      mockHttp,
+      mockCalcConnector,
+      mockAnswersConstructor
+    )(mockConfig)
+  }
 
   def setupTarget(summary: TotalGainAnswersModel,
                   result: TotalGainResultsModel,
@@ -47,9 +72,6 @@ class SummaryActionSpec extends UnitSpec with WithFakeApplication with MockitoSu
                   finalSummaryModel: TotalPersonalDetailsCalculationModel,
                   taxOwedResult: Option[CalculationResultsWithTaxOwedModel]
                  ): SummaryController = {
-
-    lazy val mockCalcConnector = mock[CalculatorConnector]
-    lazy val mockAnswersConstructor = mock[AnswersConstructor]
 
     when(mockAnswersConstructor.getNRTotalGainAnswers(ArgumentMatchers.any()))
       .thenReturn(Future.successful(summary))
@@ -101,9 +123,9 @@ class SummaryActionSpec extends UnitSpec with WithFakeApplication with MockitoSu
       (ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(PropertyLivedInModel(true))))
 
-    new SummaryController {
-      override val calcConnector: CalculatorConnector = mockCalcConnector
-      override val answersConstructor: AnswersConstructor = mockAnswersConstructor
+    new SummaryController(mockEnvironment, mockHttp, mockCalcConnector, mockAnswersConstructor)(mockConfig) {
+      val calcConnector: CalculatorConnector = mockCalcConnector
+      val answersConstructor: AnswersConstructor = mockAnswersConstructor
     }
   }
 
@@ -149,7 +171,7 @@ class SummaryActionSpec extends UnitSpec with WithFakeApplication with MockitoSu
       )
 
       lazy val result = target.summary()(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       "return a 200" in {
         status(result) shouldBe 200
@@ -175,7 +197,7 @@ class SummaryActionSpec extends UnitSpec with WithFakeApplication with MockitoSu
         Some(TestModels.calculationResultsModelWithRebased)
       )
       lazy val result = target.summary()(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       "return a 200" in {
         status(result) shouldBe 200

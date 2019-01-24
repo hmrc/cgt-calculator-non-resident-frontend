@@ -24,7 +24,8 @@
 @import common.Transformers.{booleanToMessageString, localDateMonthKey, checkIfBooleanAsString, finalDate}
 @import play.api.Application
 
-@(questions: Seq[(QuestionAnswerModel[Any])], backLink: String)(implicit request: Request[_], messages: Messages, lang: Lang, application: Application, messagesApi: Option[MessagesApi] = None)
+@import config.ApplicationConfig
+@(questions: Seq[(QuestionAnswerModel[Any])], backLink: String)(implicit request: Request[_], messages: Messages, lang: Lang, application: Application, messagesApi: Option[MessagesApi] = None, applicationConfig: ApplicationConfig)
 
 @main_template(messages("calc.checkYourAnswers.title"), articleLayout = false){
 

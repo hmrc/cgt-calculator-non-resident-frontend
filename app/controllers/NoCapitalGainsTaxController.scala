@@ -17,22 +17,22 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import config.ApplicationConfig
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import models.DateModel
-import uk.gov.hmrc.play.frontend.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.calculation
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 import controllers.utils.RecoverableFuture
+import javax.inject.Inject
+import play.api.Environment
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
-object NoCapitalGainsTaxController extends NoCapitalGainsTaxController {
-  val calcConnector = CalculatorConnector
-}
-
-trait NoCapitalGainsTaxController extends FrontendController with ValidActiveSession {
-
-  val calcConnector: CalculatorConnector
+class NoCapitalGainsTaxController @Inject()(environment: Environment,
+                                            http: DefaultHttpClient,calcConnector: CalculatorConnector)(implicit val applicationConfig: ApplicationConfig)
+                                              extends FrontendController with ValidActiveSession {
 
   val noCapitalGainsTax = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[DateModel](KeystoreKeys.disposalDate).map {

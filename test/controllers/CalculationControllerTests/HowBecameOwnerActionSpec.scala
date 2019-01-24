@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,35 +16,57 @@
 
 package controllers.CalculationControllerTests
 
+import akka.stream.Materializer
 import assets.MessageLookup.NonResident.{HowBecameOwner => messages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import config.ApplicationConfig
 import connectors.CalculatorConnector
-import controllers.HowBecameOwnerController
+import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
+import controllers.{CalculationElectionController, HowBecameOwnerController}
 import controllers.helpers.FakeRequestHelper
 import models.{DateModel, HowBecameOwnerModel, RebasedValueModel}
 import org.jsoup._
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
+import play.api.Environment
 import play.api.test.Helpers._
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.cache.client.CacheMap
+import uk.gov.hmrc.http.logging.SessionId
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 class HowBecameOwnerActionSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper with MockitoSugar {
 
+  implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
+
+  val materializer = mock[Materializer]
+  val mockEnvironment =mock[Environment]
+  val mockHttp =mock[DefaultHttpClient]
+  val mockCalcConnector =mock[CalculatorConnector]
+  val defaultCache = mock[CacheMap]
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+
+  class Setup {
+    val controller = new HowBecameOwnerController(
+      mockEnvironment,
+      mockHttp,
+      mockCalcConnector
+    )(mockConfig)
+  }
+
   def setupTarget(getData: Option[HowBecameOwnerModel]): HowBecameOwnerController = {
 
-    val mockConnector = mock[CalculatorConnector]
-
-    when(mockConnector.fetchAndGetFormData[HowBecameOwnerModel](ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockCalcConnector.fetchAndGetFormData[HowBecameOwnerModel](ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(getData)
 
-    when(mockConnector.saveFormData[HowBecameOwnerModel](
+    when(mockCalcConnector.saveFormData[HowBecameOwnerModel](
       ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(mock[CacheMap])
 
-    new HowBecameOwnerController {
-      override val calcConnector: CalculatorConnector = mockConnector
+    new HowBecameOwnerController(mockEnvironment, mockHttp, mockCalcConnector)(mockConfig) {
+      val calcConnector: CalculatorConnector = mockCalcConnector
     }
   }
 
@@ -53,7 +75,7 @@ class HowBecameOwnerActionSpec extends UnitSpec with WithFakeApplication with Fa
     "provided with a valid session with no stored data" should {
       lazy val target = setupTarget(None)
       lazy val result = target.howBecameOwner(fakeRequestWithSession)
-      lazy val doc = Jsoup.parse(bodyOf(result))
+      lazy val doc = Jsoup.parse(bodyOf(result)(materializer))
 
       "return a status of 200" in {
         status(result) shouldBe 200
@@ -67,7 +89,7 @@ class HowBecameOwnerActionSpec extends UnitSpec with WithFakeApplication with Fa
     "provided with a valid session with stored data" should {
       lazy val target = setupTarget(Some(HowBecameOwnerModel("Bought")))
       lazy val result = target.howBecameOwner(fakeRequestWithSession)
-      lazy val doc = Jsoup.parse(bodyOf(result))
+      lazy val doc = Jsoup.parse(bodyOf(result)(materializer))
 
       "return a status of 200" in {
         status(result) shouldBe 200
@@ -138,7 +160,7 @@ class HowBecameOwnerActionSpec extends UnitSpec with WithFakeApplication with Fa
   "an invalid form with no answer is submitted" should {
     lazy val target = setupTarget(None)
     lazy val result = target.submitHowBecameOwner(fakeRequestToPOSTWithSession(("gainedBy", "")))
-    lazy val doc = Jsoup.parse(bodyOf(result))
+    lazy val doc = Jsoup.parse(bodyOf(result)(materializer))
 
     "return a status of 400" in {
       status(result) shouldBe 400

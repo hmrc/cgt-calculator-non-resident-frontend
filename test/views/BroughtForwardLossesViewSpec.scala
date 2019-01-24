@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package views
 
 import assets.MessageLookup.{NonResident => messages}
+import config.ApplicationConfig
 import constructors.helpers.AssertHelpers
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
@@ -28,12 +29,12 @@ import play.api.Play.current
 
 class BroughtForwardLossesViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper with AssertHelpers {
 
-
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
 
   "Brought forward losses view" when {
 
     "provided with no errors" should {
-      lazy val view = broughtForwardLosses(broughtForwardLossesForm, "back-link")
+      lazy val view = broughtForwardLosses(broughtForwardLossesForm, "back-link")(fakeRequest,applicationMessages, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of ${messages.BroughtForwardLosses.question}" in {
@@ -136,7 +137,7 @@ class BroughtForwardLossesViewSpec extends UnitSpec with WithFakeApplication wit
 
     "provided with errors" should {
       lazy val form = broughtForwardLossesForm.bind(Map("isClaiming" -> "Yes", "broughtForwardLoss" -> ""))
-      lazy val view = broughtForwardLosses(form, "back-link")
+      lazy val view = broughtForwardLosses(form, "back-link")(fakeRequest,applicationMessages, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

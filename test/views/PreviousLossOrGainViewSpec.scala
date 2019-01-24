@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package views
 
 import assets.MessageLookup.NonResident.{PreviousLossOrGain => messages}
 import assets.MessageLookup.{NonResident => commonMessages}
+import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
 import forms.PreviousLossOrGainForm._
@@ -29,11 +30,11 @@ import play.api.Play.current
 
 class PreviousLossOrGainViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
-
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
 
   "The PreviousLossOrGain view" should {
 
-    lazy val view = previousLossOrGain(previousLossOrGainForm)
+    lazy val view = previousLossOrGain(previousLossOrGainForm)(fakeRequest, applicationMessages,fakeApplication,mockConfig)
     lazy val document = Jsoup.parse(view.body)
 
     "return some HTML" which {
@@ -129,7 +130,7 @@ class PreviousLossOrGainViewSpec extends UnitSpec with WithFakeApplication with 
 
   "PreviousLossOrGainView with form errors" should {
     lazy val form = previousLossOrGainForm.bind(Map("previousLossOrGain" -> ""))
-    lazy val view = previousLossOrGain(form)
+    lazy val view = previousLossOrGain(form)(fakeRequest, applicationMessages,fakeApplication,mockConfig)
     lazy val doc = Jsoup.parse(view.body)
 
     "display an error summary message regarding incorrect value being inputted" in {

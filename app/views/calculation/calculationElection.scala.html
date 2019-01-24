@@ -19,7 +19,8 @@
 @import views.html.helpers._
 @import play.api.Application
 
-@(calculationElectionForm: Form[CalculationElectionModel], content: Seq[(String, String, String, String, Option[String], Option[BigDecimal])])(implicit request: Request[_], messages: Messages, application: Application)
+@import config.ApplicationConfig
+@(calculationElectionForm: Form[CalculationElectionModel], content: Seq[(String, String, String, String, Option[String], Option[BigDecimal])])(implicit request: Request[_], messages: Messages, application: Application, applicationConfig: ApplicationConfig)
 
 @main_template(Messages("calc.calculationElection.pageHeading")) {
 

@@ -29,7 +29,7 @@
   mainClass: Option[String] = None,
   scriptElem: Option[Html] = None,
   isUserResearchBannerVisible: Boolean = false,
-  articleLayout: Boolean = true)(mainContent: Html)(implicit request : Request[_], messages: Messages, application: Application)
+  articleLayout: Boolean = true)(mainContent: Html)(implicit request : Request[_], messages: Messages, application: Application, applicationConfig: ApplicationConfig)
 
 @serviceInfoContent = {}
 
@@ -66,7 +66,7 @@
     @full_width_banner(Some(full_width_banner_content_ur(
                 messages("calc.summary.userResearchLink.title"),
                 messages("calc.summary.userResearchLink.link"),
-                ApplicationConfig.urBannerLink,
+                applicationConfig.urBannerLink,
                 Some(messages("calc.summary.userResearchLink.text"))
                 )
             )
@@ -74,7 +74,7 @@
     }
 }
 
-@govuk_wrapper(appConfig = ApplicationConfig,
+@govuk_wrapper(appConfig = applicationConfig,
                title = title,
                mainClass = mainClass,
                bodyClasses = bodyClasses,

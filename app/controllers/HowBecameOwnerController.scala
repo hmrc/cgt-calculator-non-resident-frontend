@@ -17,26 +17,26 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import config.ApplicationConfig
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import forms.HowBecameOwnerForm._
+import javax.inject.Inject
 import models.HowBecameOwnerModel
+import play.api.Environment
 import play.api.data.Form
 import play.api.mvc.{Action, AnyContent, Result}
-import uk.gov.hmrc.play.frontend.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.{calculation => views}
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
 import scala.concurrent.Future
 
-object HowBecameOwnerController extends HowBecameOwnerController {
-  val calcConnector = CalculatorConnector
-}
-
-trait HowBecameOwnerController extends FrontendController with ValidActiveSession {
-
-  val calcConnector: CalculatorConnector
+class HowBecameOwnerController @Inject()(environment: Environment,
+                                         http: DefaultHttpClient,calcConnector: CalculatorConnector)(implicit val applicationConfig: ApplicationConfig)
+                                          extends FrontendController with ValidActiveSession {
 
   val howBecameOwner: Action[AnyContent] = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[HowBecameOwnerModel](KeystoreKeys.howBecameOwner).map {

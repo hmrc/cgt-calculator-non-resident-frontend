@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,27 +16,36 @@
 
 package controllers.CalculationControllerTests
 
+import akka.stream.Materializer
 import assets.MessageLookup.NonResident.{RebasedValue => messages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import config.ApplicationConfig
 import connectors.CalculatorConnector
+import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
 import controllers.RebasedValueController
 import controllers.helpers.FakeRequestHelper
 import controllers.routes
+import javax.inject.Inject
 import models.{DateModel, RebasedValueModel}
 import org.jsoup._
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
+import play.api.Environment
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 import scala.concurrent.Future
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
-class RebasedValueActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
+class RebasedValueActionSpec @Inject()(rebasedValueController: RebasedValueController)
+  extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
   implicit val hc = new HeaderCarrier()
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  lazy val materializer = mock[Materializer]
 
   def setupTarget(getData: Option[RebasedValueModel],
                   acquisitionDateModel: Option[DateModel] = Some(DateModel(10, 10, 2015))): RebasedValueController = {
@@ -55,8 +64,9 @@ class RebasedValueActionSpec extends UnitSpec with WithFakeApplication with Mock
       ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(mock[CacheMap]))
 
-    new RebasedValueController {
-      override val calcConnector: CalculatorConnector = mockCalcConnector
+    new RebasedValueController(environment = mock[Environment],
+      http = mock[DefaultHttpClient], calcConnector = mock[CalculatorConnector])(mockConfig) {
+      val calcConnector: CalculatorConnector = mockCalcConnector
     }
   }
 
@@ -81,7 +91,7 @@ class RebasedValueActionSpec extends UnitSpec with WithFakeApplication with Mock
 
       val target = setupTarget(None)
       lazy val result = target.rebasedValue(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       "return a 200" in {
         status(result) shouldBe 200
@@ -95,7 +105,7 @@ class RebasedValueActionSpec extends UnitSpec with WithFakeApplication with Mock
     "supplied with a pre-existing stored model" should {
       val target = setupTarget(Some(RebasedValueModel(1000)))
       lazy val result = target.rebasedValue(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       "return a 200" in {
         status(result) shouldBe 200
@@ -129,7 +139,7 @@ class RebasedValueActionSpec extends UnitSpec with WithFakeApplication with Mock
 
       lazy val request = fakeRequestToPOSTWithSession(("rebasedValueAmt", ""))
       lazy val result = target.submitRebasedValue(request)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       "return a 400" in {
         status(result) shouldBe 400
@@ -144,13 +154,13 @@ class RebasedValueActionSpec extends UnitSpec with WithFakeApplication with Mock
   "Calling .backLink in the CalculationController" should {
     s"return the URL ${controllers.routes.AcquisitionCostsController.acquisitionCosts().url}" when {
       "supplied with an acquisitionDate post-legislation start" in {
-        lazy val result = RebasedValueController.backLink(Some(DateModel(10, 10, 2015)))
+        lazy val result = rebasedValueController.backLink(Some(DateModel(10, 10, 2015)))
         result shouldEqual controllers.routes.AcquisitionCostsController.acquisitionCosts().url
       }
 
       s"return the URL ${controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart().url}" when {
         "supplied with an acquisitionDate pre-legislation start" in {
-          lazy val result = RebasedValueController.backLink(Some(DateModel(10, 10, 1970)))
+          lazy val result = rebasedValueController.backLink(Some(DateModel(10, 10, 1970)))
           result shouldEqual controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart().url
         }
       }

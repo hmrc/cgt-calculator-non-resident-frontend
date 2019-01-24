@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package views
 
 import assets.MessageLookup.NonResident.{RebasedValue => messages}
 import assets.MessageLookup.{NonResident => commonMessages}
+import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
 import forms.RebasedValueForm._
@@ -29,11 +30,12 @@ import play.api.Play.current
 
 class RebasedValueViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
 
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   "The rebased value view" when {
 
     "not supplied with a pre-existing stored model" should {
 
-      lazy val view = rebasedValue(rebasedValueForm, "google.com")
+      lazy val view = rebasedValue(rebasedValueForm, "google.com")(fakeRequest, applicationMessages,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       s"Have the title ${messages.question}" in {
@@ -140,7 +142,7 @@ class RebasedValueViewSpec extends UnitSpec with WithFakeApplication with FakeRe
     "supplied with a form with errors" should {
 
       lazy val form = rebasedValueForm.bind(Map("rebasedValueAmt" -> ""))
-      lazy val view = rebasedValue(form, "google.com")
+      lazy val view = rebasedValue(form, "google.com")(fakeRequest, applicationMessages,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

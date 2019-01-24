@@ -17,25 +17,25 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import config.ApplicationConfig
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import forms.HowMuchGainForm._
+import javax.inject.Inject
 import models.HowMuchGainModel
+import play.api.Environment
 import play.api.data.Form
-import uk.gov.hmrc.play.frontend.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.calculation
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
 import scala.concurrent.Future
 
-object HowMuchGainController extends HowMuchGainController {
-  val calcConnector = CalculatorConnector
-}
-
-trait HowMuchGainController extends FrontendController with ValidActiveSession {
-
-  val calcConnector: CalculatorConnector
+class HowMuchGainController @Inject()(environment: Environment,
+                                      http: DefaultHttpClient,calcConnector: CalculatorConnector)(implicit val applicationConfig: ApplicationConfig)
+                                        extends FrontendController with ValidActiveSession {
 
   val howMuchGain = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[HowMuchGainModel](KeystoreKeys.howMuchGain).map {

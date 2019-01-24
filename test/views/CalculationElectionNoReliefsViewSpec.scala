@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import assets.MessageLookup.{NonResident => commonMessages}
 import controllers.helpers.FakeRequestHelper
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import assets.MessageLookup.NonResident.{CalculationElectionNoReliefs => messages}
+import config.ApplicationConfig
 import play.api.i18n.Messages
 import play.api.i18n.Messages.Implicits._
 import forms.CalculationElectionForm._
@@ -28,6 +29,8 @@ import play.api.Play.current
 import views.html.calculation.calculationElectionNoReliefs
 
 class CalculationElectionNoReliefsViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
+
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
 
   "Calculation Election No Reliefs View" when {
 
@@ -40,7 +43,7 @@ class CalculationElectionNoReliefsViewSpec extends UnitSpec with WithFakeApplica
 
     "supplied with no errors and lowest tax owed is rebased method" should {
 
-      lazy val view = calculationElectionNoReliefs(calculationElectionForm, rebasedLowestTaxOwed, "back-link")
+      lazy val view = calculationElectionNoReliefs(calculationElectionForm, rebasedLowestTaxOwed, "back-link")(fakeRequest,applicationMessages, fakeApplication, mockConfig)
       lazy val doc = Jsoup.parse(view.body)
 
       "have a heading" which {
@@ -126,7 +129,7 @@ class CalculationElectionNoReliefsViewSpec extends UnitSpec with WithFakeApplica
           ("time", "2000", "description", Messages("calc.calculationElection.description.time"), None, None)
         )
 
-      lazy val view = calculationElectionNoReliefs(calculationElectionForm, flatLowestTaxOwed, "back-link")
+      lazy val view = calculationElectionNoReliefs(calculationElectionForm, flatLowestTaxOwed, "back-link")(fakeRequest,applicationMessages, fakeApplication, mockConfig)
       lazy val doc = Jsoup.parse(view.body)
 
       "have text in a paragraph" which {
@@ -163,7 +166,7 @@ class CalculationElectionNoReliefsViewSpec extends UnitSpec with WithFakeApplica
 
     "supplied with errors" should {
       lazy val form = calculationElectionForm.bind(Map("calculationElection" -> "a"))
-      lazy val view = calculationElectionNoReliefs(form, rebasedLowestTaxOwed, "back-link")
+      lazy val view = calculationElectionNoReliefs(form, rebasedLowestTaxOwed, "back-link")(fakeRequest,applicationMessages, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

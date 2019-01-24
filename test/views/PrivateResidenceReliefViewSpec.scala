@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package views
 import java.time.LocalDate
 
 import assets.MessageLookup.{NonResident => messages}
+import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
 import forms.PrivateResidenceReliefForm._
@@ -27,9 +28,11 @@ import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.privateResidenceRelief
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
+import play.api.i18n.Lang
 
 class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   private val testDate = LocalDate.of(2018, 2, 19)
   private val testDateString = "19 February 2018"
 
@@ -46,7 +49,7 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
           daysBetweenShow = true,
           showFirstQuestion = true,
           Some(testDate),
-          showOnlyFlatQuestion = false)
+          showOnlyFlatQuestion = false)(fakeRequest, applicationMessages,Lang("en"), fakeApplication, mockConfig)
         lazy val document = Jsoup.parse(view.body)
 
         s"have a title of '${messages.PrivateResidenceRelief.question}'" in {
@@ -176,7 +179,7 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
           daysBetweenShow = false,
           showFirstQuestion = true,
           Some(testDate),
-          showOnlyFlatQuestion = true)
+          showOnlyFlatQuestion = true)(fakeRequest, applicationMessages,Lang("en"), fakeApplication, mockConfig)
         lazy val document = Jsoup.parse(view.body)
 
         s"have a title of '${messages.PrivateResidenceRelief.question}'" in {
@@ -220,7 +223,7 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
           daysBetweenShow = false,
           showFirstQuestion = false,
           Some(testDate),
-          showOnlyFlatQuestion = true)
+          showOnlyFlatQuestion = true)(fakeRequest, applicationMessages,Lang("en"), fakeApplication, mockConfig)
         lazy val document = Jsoup.parse(view.body)
 
         s"have a title of '${messages.PrivateResidenceRelief.question}'" in {
@@ -239,7 +242,8 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
 
     "supplied with errors" should {
       val map = Map("isClaimingPRR" -> "")
-      lazy val view = privateResidenceRelief(privateResidenceReliefForm(false, false).bind(map), false, false, None, false)
+      lazy val view = privateResidenceRelief(privateResidenceReliefForm(false, false).bind(map),
+        false, false, None, false)(fakeRequest, applicationMessages,Lang("en"), fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

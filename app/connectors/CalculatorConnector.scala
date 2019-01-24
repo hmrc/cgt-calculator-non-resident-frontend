@@ -18,37 +18,41 @@ package connectors
 
 import common.nonresident.CalculationType
 import common.{TaxDates, YesNoKeys}
-import config.{CalculatorSessionCache, WSHttp, WiringConfig}
+import config.ApplicationConfig
 import constructors._
+import javax.inject.Inject
 import models._
 import play.api.libs.json.Format
+import play.api.{Configuration, Environment, Mode}
 import uk.gov.hmrc.http.cache.client.{CacheMap, SessionCache}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpGet, HttpPost, HttpResponse}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import uk.gov.hmrc.play.config.ServicesConfig
-import uk.gov.hmrc.play.http.ws.{WSGet, WSPost}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-object CalculatorConnector extends CalculatorConnector with ServicesConfig with WiringConfig {
-  override val sessionCache: CalculatorSessionCache.type = CalculatorSessionCache
-  override val http: WSHttp with WSGet with WSPost = WSHttp
-  override val serviceUrl: String = baseUrl("capital-gains-calculator")
-}
+class CalculatorConnector @Inject()(val http: DefaultHttpClient,
+                                    val appConfig: ApplicationConfig)
+                                    extends ServicesConfig with SessionCache {
 
-trait CalculatorConnector {
-  val sessionCache: SessionCache
-  val http: HttpGet with HttpPost
-  val serviceUrl: String
+  override lazy val domain: String = getConfString("cachable.session-cache.domain", throw new Exception(s"Could not find config 'cachable.session-cache.domain'"))
+  override lazy val baseUri: String = baseUrl("cachable.session-cache")
+  override lazy val defaultSource: String = appConfig.getString("appName")
+
+  override def mode :Mode.Mode = appConfig.mode
+  override def runModeConfiguration: Configuration = appConfig.runModeConfiguration
+
+  val serviceUrl: String = baseUrl("capital-gains-calculator")
 
   implicit val hc: HeaderCarrier = HeaderCarrier().withExtraHeaders("Accept" -> "application/vnd.hmrc.1.0+json")
 
   def saveFormData[T](key: String, data: T)(implicit hc: HeaderCarrier, formats: Format[T]): Future[CacheMap] = {
-    sessionCache.cache(key, data)
+    cache(key, data)
   }
 
   def fetchAndGetFormData[T](key: String)(implicit hc: HeaderCarrier, formats: Format[T]): Future[Option[T]] = {
-    sessionCache.fetchAndGetEntry(key)
+    fetchAndGetEntry(key)
   }
 
   def calculateTotalGain(totalGainAnswersModel: TotalGainAnswersModel)
@@ -137,6 +141,6 @@ trait CalculatorConnector {
   }
 
   def clearKeystore(implicit hc: HeaderCarrier): Future[HttpResponse] = {
-    sessionCache.remove()
+    remove()
   }
 }

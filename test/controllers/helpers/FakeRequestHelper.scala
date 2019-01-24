@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +19,8 @@ package controllers.helpers
 import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import uk.gov.hmrc.http.SessionKeys
-import uk.gov.hmrc.play.frontend.filters.MicroserviceFilterSupport
 
-trait FakeRequestHelper extends MicroserviceFilterSupport {
+trait FakeRequestHelper {
   lazy implicit val fakeRequest = FakeRequest()
   lazy val fakeRequestWithSession = fakeRequest.withSession((SessionKeys.sessionId, ""))
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package views
 
 import assets.MessageLookup.NonResident.{PersonalAllowance => messages}
 import assets.MessageLookup.{NonResident => commonMessages}
+import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
 import forms.PersonalAllowanceForm._
@@ -30,13 +31,13 @@ import play.api.Play.current
 
 class PersonalAllowanceViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
-
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
 
   "The Personal Allowance View" should {
 
     "return some HTML" which {
 
-      lazy val view = personalAllowance(personalAllowanceForm(11000))
+      lazy val view = personalAllowance(personalAllowanceForm(11000))(fakeRequest, applicationMessages,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       s"has the title ${messages.question}" in {
@@ -148,7 +149,7 @@ class PersonalAllowanceViewSpec extends UnitSpec with WithFakeApplication with M
     "when supplied with a form with errors" should {
 
       lazy val form = personalAllowanceForm(11000).bind(Map("personalAllowance" -> "132891"))
-      lazy val view = personalAllowance(form)
+      lazy val view = personalAllowance(form)(fakeRequest, applicationMessages,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

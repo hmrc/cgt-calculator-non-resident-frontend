@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package views
 
 import assets.MessageLookup.NonResident.{AnnualExemptAmount => messages}
 import assets.MessageLookup.{NonResident => commonMessages}
+import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
 import org.scalatest.mock.MockitoSugar
@@ -29,10 +30,11 @@ import play.api.Play.current
 
 class AnnualExemptAmountViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   "Annual exempt amount view" when {
 
     "supplied with no errors" should {
-      lazy val view = annualExemptAmount(annualExemptAmountForm(BigDecimal(10000)), 11100, "back-url")
+      lazy val view = annualExemptAmount(annualExemptAmountForm(BigDecimal(10000)), 11100, "back-url")(fakeRequest,applicationMessages, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${messages.question}'" in {
@@ -106,7 +108,7 @@ class AnnualExemptAmountViewSpec extends UnitSpec with WithFakeApplication with 
 
     "supplied with errors" should {
       lazy val form = annualExemptAmountForm(BigDecimal(10000)).bind(Map("annualExemptAmount" -> "15000"))
-      lazy val view = annualExemptAmount(form, 11100, "back-url")
+      lazy val view = annualExemptAmount(form, 11100, "back-url")(fakeRequest,applicationMessages, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

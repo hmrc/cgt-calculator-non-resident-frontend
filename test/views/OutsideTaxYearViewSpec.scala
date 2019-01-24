@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package views
 
 import assets.MessageLookup.{NonResident => commonMessages, OutsideTaxYears => messages}
+import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import models.TaxYearModel
 import org.jsoup.Jsoup
@@ -26,12 +27,13 @@ import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.{calculation => views}
 
 class OutsideTaxYearViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
 
   "Outside tax years views" when {
 
     "using a disposal date of 2018/19 " should {
       lazy val taxYear = TaxYearModel("2018/19", false, "2017/18")
-      lazy val view = views.outsideTaxYear(taxYear)(fakeRequestWithSession, applicationMessages, fakeApplication)
+      lazy val view = views.outsideTaxYear(taxYear)(fakeRequestWithSession, applicationMessages, fakeApplication, mockConfig)
       lazy val doc = Jsoup.parse(view.body)
 
       "have charset UTF-8" in {

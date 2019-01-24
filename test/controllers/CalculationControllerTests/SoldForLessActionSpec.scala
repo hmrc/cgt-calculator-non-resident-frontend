@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,27 +16,48 @@
 
 package controllers.CalculationControllerTests
 
+import akka.stream.Materializer
 import assets.MessageLookup.NonResident.{SoldForLess => messages}
 import common.KeystoreKeys.{NonResidentKeys => keyStoreKeys}
+import config.ApplicationConfig
 import connectors.CalculatorConnector
-import controllers.SoldForLessController
+import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
+import controllers.{CostsAtLegislationStartController, SoldForLessController}
 import controllers.helpers.FakeRequestHelper
 import models.SoldForLessModel
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
+import play.api.Environment
 import play.api.test.Helpers._
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.cache.client.CacheMap
+import uk.gov.hmrc.http.logging.SessionId
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 import scala.concurrent.Future
 
 class SoldForLessActionSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper with MockitoSugar {
 
-  def setupTarget(getData: Option[SoldForLessModel]): SoldForLessController = {
+  implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  val materializer = mock[Materializer]
+  val mockEnvironment =mock[Environment]
+  val mockHttp =mock[DefaultHttpClient]
+  val mockCalcConnector =mock[CalculatorConnector]
+  val defaultCache = mock[CacheMap]
 
-    val mockCalcConnector = mock[CalculatorConnector]
+  class Setup {
+    val controller = new SoldForLessController(
+      mockEnvironment,
+      mockHttp,
+      mockCalcConnector
+    )(mockConfig)
+  }
+
+  def setupTarget(getData: Option[SoldForLessModel]): SoldForLessController = {
 
     when(mockCalcConnector.fetchAndGetFormData[SoldForLessModel](ArgumentMatchers.eq(keyStoreKeys.soldForLess))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
@@ -44,8 +65,8 @@ class SoldForLessActionSpec extends UnitSpec with WithFakeApplication with FakeR
     when(mockCalcConnector.saveFormData[SoldForLessModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(mock[CacheMap]))
 
-    new SoldForLessController {
-      override val calcConnector: CalculatorConnector = mockCalcConnector
+    new SoldForLessController(mockEnvironment, mockHttp, mockCalcConnector)(mockConfig) {
+      val calcConnector: CalculatorConnector = mockCalcConnector
     }
   }
 
@@ -62,7 +83,7 @@ class SoldForLessActionSpec extends UnitSpec with WithFakeApplication with FakeR
 
       s"return some html with title of ${messages.question}" in {
         contentType(result) shouldBe Some("text/html")
-        Jsoup.parse(bodyOf(result)).title shouldEqual messages.question
+        Jsoup.parse(bodyOf(result)(materializer)).title shouldEqual messages.question
       }
     }
 
@@ -77,7 +98,7 @@ class SoldForLessActionSpec extends UnitSpec with WithFakeApplication with FakeR
 
       s"return some html with title of ${messages.question}" in {
         contentType(result) shouldBe Some("text/html")
-        Jsoup.parse(bodyOf(result)).title shouldEqual messages.question
+        Jsoup.parse(bodyOf(result)(materializer)).title shouldEqual messages.question
       }
     }
 
@@ -134,7 +155,7 @@ class SoldForLessActionSpec extends UnitSpec with WithFakeApplication with FakeR
       lazy val target = setupTarget(None)
       lazy val request = fakeRequestToPOSTWithSession(("soldForLess", ""))
       lazy val result = target.submitSoldForLess(request)
-      lazy val doc = Jsoup.parse(bodyOf(result))
+      lazy val doc = Jsoup.parse(bodyOf(result)(materializer))
 
       "return a status of 400" in {
         status(result) shouldBe 400

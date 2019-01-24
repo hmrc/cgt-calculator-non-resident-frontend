@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,13 +17,13 @@
 package constructors
 
 import assets.MessageLookup.NonResident.{CalculationElection => messages}
+import javax.inject.Inject
 import models._
 import org.scalatest.mock.MockitoSugar
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
-class CalculationElectionConstructorSpec extends UnitSpec with MockitoSugar with WithFakeApplication {
+class CalculationElectionConstructorSpec @Inject()(target: CalculationElectionConstructor) extends UnitSpec with MockitoSugar with WithFakeApplication {
 
-  val target = CalculationElectionConstructor
   val onlyFlat = TotalGainResultsModel(BigDecimal(0), None, None)
   val flatAndRebased = TotalGainResultsModel(BigDecimal(-100), Some(BigDecimal(-50)), None)
   val flatAndTime = TotalGainResultsModel(BigDecimal(-20), None, Some(BigDecimal(-300)))

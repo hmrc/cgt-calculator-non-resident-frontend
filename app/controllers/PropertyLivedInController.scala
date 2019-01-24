@@ -21,22 +21,22 @@ import controllers.predicates.ValidActiveSession
 import forms.PropertyLivedInForm._
 import models.PropertyLivedInModel
 import play.api.mvc.{Action, AnyContent}
-import uk.gov.hmrc.play.frontend.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 import play.api.data.Form
 import common.KeystoreKeys.{NonResidentKeys => keystoreKeys}
+import config.ApplicationConfig
 import controllers.utils.RecoverableFuture
+import javax.inject.Inject
+import play.api.Environment
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
 import scala.concurrent.Future
 
-object PropertyLivedInController extends PropertyLivedInController {
-  val calcConnector = CalculatorConnector
-}
-
-trait PropertyLivedInController extends FrontendController with ValidActiveSession {
-
-  val calcConnector: CalculatorConnector
+class PropertyLivedInController @Inject()(environment: Environment,
+                                          http: DefaultHttpClient,calcConnector: CalculatorConnector)(implicit val applicationConfig: ApplicationConfig)
+                                            extends FrontendController with ValidActiveSession {
 
   val propertyLivedIn: Action[AnyContent] = ValidateSession.async { implicit request =>
 

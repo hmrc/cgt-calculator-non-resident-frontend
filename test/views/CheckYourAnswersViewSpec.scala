@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import java.time.LocalDate
 
 import assets.MessageLookup
 import assets.MessageLookup.NonResident.{CheckYourAnswers => messages}
+import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import models.QuestionAnswerModel
 import org.jsoup.Jsoup
@@ -27,17 +28,21 @@ import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.checkYourAnswers
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
+import play.api.i18n.{Lang, MessagesApi}
+import play.i18n.MessagesApi
 
 class CheckYourAnswersViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
 
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  lazy val lang: Lang = Lang("cy")
 
-
-    "The check your answers view" when {
+  "The check your answers view" when {
 
       "provided with a valid sequence of question answers" should {
 
         val answersSequence = Seq(QuestionAnswerModel("dummyId", 200, "dummyQuestion", Some("google.com")))
-        lazy val view = checkYourAnswers(answersSequence, "some-back-link")
+        lazy val view = checkYourAnswers(answersSequence, "some-back-link")(fakeRequest, applicationMessages,lang,fakeApplication,Some(applicationMessagesApi),mockConfig)
+
         lazy val document = Jsoup.parse(view.body)
 
         s"has the title text ${messages.question}" in {
@@ -84,7 +89,7 @@ class CheckYourAnswersViewSpec extends UnitSpec with WithFakeApplication with Fa
 
     "passing in a String answer" should {
       lazy val model = Seq(QuestionAnswerModel[String]("id", "answer", "question", Some("change-link")))
-      lazy val result = checkYourAnswers(model, "hello")
+      lazy val result = checkYourAnswers(model, "hello")(fakeRequest, applicationMessages,lang,fakeApplication,Some(applicationMessagesApi),mockConfig)
       lazy val doc = Jsoup.parse(result.body)
 
       "have a table row with a table row for the question with ID id-question" which {
@@ -116,7 +121,7 @@ class CheckYourAnswersViewSpec extends UnitSpec with WithFakeApplication with Fa
 
     "passing in a Int answer" should {
       lazy val model = Seq(QuestionAnswerModel[Int]("id", 200, "question", Some("change-link")))
-      lazy val result = checkYourAnswers(model, "hello")
+      lazy val result = checkYourAnswers(model, "hello")(fakeRequest, applicationMessages,lang,fakeApplication,Some(applicationMessagesApi),mockConfig)
       lazy val doc = Jsoup.parse(result.body)
       lazy val dataColumnContents = doc.select("tr > td").get(1).text()
 
@@ -127,7 +132,7 @@ class CheckYourAnswersViewSpec extends UnitSpec with WithFakeApplication with Fa
 
     "passing in a BigDecimal answer" should {
       lazy val model = Seq(QuestionAnswerModel[BigDecimal]("id", BigDecimal(1000.01), "question", Some("change-link")))
-      lazy val result = checkYourAnswers(model, "hello")
+      lazy val result = checkYourAnswers(model, "hello")(fakeRequest, applicationMessages,lang,fakeApplication,Some(applicationMessagesApi),mockConfig)
       lazy val doc = Jsoup.parse(result.body)
       lazy val dataColumnContents = doc.select("tr > td").get(1).text()
 
@@ -138,7 +143,7 @@ class CheckYourAnswersViewSpec extends UnitSpec with WithFakeApplication with Fa
 
     "passing in a Date answer" should {
       lazy val model = Seq(QuestionAnswerModel[LocalDate]("id", LocalDate.parse("2016-05-04"), "question", Some("change-link")))
-      lazy val result = checkYourAnswers(model, "hello")
+      lazy val result = checkYourAnswers(model, "hello")(fakeRequest, applicationMessages,lang,fakeApplication,Some(applicationMessagesApi),mockConfig)
       lazy val doc = Jsoup.parse(result.body)
       lazy val dataColumnContents = doc.select("tr > td").get(1).text()
 
@@ -149,7 +154,7 @@ class CheckYourAnswersViewSpec extends UnitSpec with WithFakeApplication with Fa
 
     "passing in a Boolean answer" should {
       lazy val model = Seq(QuestionAnswerModel[Boolean]("id", true, "question", Some("change-link")))
-      lazy val result = checkYourAnswers(model, "hello")
+      lazy val result = checkYourAnswers(model, "hello")(fakeRequest, applicationMessages,lang,fakeApplication,Some(applicationMessagesApi),mockConfig)
       lazy val doc = Jsoup.parse(result.body)
       lazy val dataColumnContents = doc.select("tr > td").get(1).text()
 
@@ -160,7 +165,7 @@ class CheckYourAnswersViewSpec extends UnitSpec with WithFakeApplication with Fa
 
     "passing in a non-matching type" should {
       lazy val model = Seq(QuestionAnswerModel[Double]("id", 50.2, "question", Some("change-link")))
-      lazy val result = checkYourAnswers(model, "hello")
+      lazy val result = checkYourAnswers(model, "hello")(fakeRequest, applicationMessages,lang,fakeApplication,Some(applicationMessagesApi),mockConfig)
       lazy val doc = Jsoup.parse(result.body)
 
       "generate a data column with a blank answer" in {
@@ -175,7 +180,7 @@ class CheckYourAnswersViewSpec extends UnitSpec with WithFakeApplication with Fa
 
     val model = Seq(QuestionAnswerModel[String]("stringQA", "answer", "question", Some("change-link")),
       QuestionAnswerModel[Boolean]("booleanQA", false, "question", Some("change-link-diff")))
-    lazy val result = checkYourAnswers(model, "hello")
+    lazy val result = checkYourAnswers(model, "hello")(fakeRequest, applicationMessages,lang,fakeApplication,Some(applicationMessagesApi),mockConfig)
     lazy val doc = Jsoup.parse(result.body)
 
     s"have a table row with a table row for the question with ID $idString" which {

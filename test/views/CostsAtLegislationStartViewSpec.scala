@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package views
 
 import assets.MessageLookup.{NonResident => messages}
+import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import forms.CostsAtLegislationStartForm._
 import org.jsoup.Jsoup
@@ -27,10 +28,12 @@ import views.html.calculation.costsAtLegislationStart
 
 class CostsAtLegislationStartViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
 
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+
   "The costs at legislation start date view" when {
 
     "not supplied with a pre-existing stored model" should {
-      lazy val view = costsAtLegislationStart(costsAtLegislationStartForm)
+      lazy val view = costsAtLegislationStart(costsAtLegislationStartForm)(fakeRequest, applicationMessages,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       s"Have the title ${messages.CostsAtLegislationStart.title}" in {
@@ -115,7 +118,7 @@ class CostsAtLegislationStartViewSpec extends UnitSpec with WithFakeApplication 
         "hasCosts" -> "Yes",
         "costs" -> ""
       ))
-      lazy val view = costsAtLegislationStart(form)
+      lazy val view = costsAtLegislationStart(form)(fakeRequest, applicationMessages,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

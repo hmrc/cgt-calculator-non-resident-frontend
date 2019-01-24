@@ -20,28 +20,24 @@ import common.KeystoreKeys.{NonResidentKeys => keystoreKeys}
 import config.ApplicationConfig
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
-import models.WhoDidYouGiveItToModel
-import uk.gov.hmrc.play.frontend.controller.FrontendController
-import views.html.{calculation => views}
-import play.api.data.Form
-import play.api.i18n.Messages
-import forms.WhoDidYouGiveItToForm._
-import play.api.mvc.{Action, AnyContent, Result}
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 import controllers.utils.RecoverableFuture
+import forms.WhoDidYouGiveItToForm._
+import javax.inject.Inject
+import models.WhoDidYouGiveItToModel
+import play.api.Environment
+import play.api.Play.current
+import play.api.i18n.Messages.Implicits._
+import play.api.mvc.{Action, AnyContent, Result}
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import views.html.{calculation => views}
 
 import scala.concurrent.Future
 
 
-object WhoDidYouGiveItToController extends WhoDidYouGiveItToController {
-  val calcConnector = CalculatorConnector
-}
-
-trait WhoDidYouGiveItToController extends FrontendController with ValidActiveSession {
-
-  val calcConnector: CalculatorConnector
-  lazy implicit val appConfig = ApplicationConfig
+class WhoDidYouGiveItToController @Inject()(environment: Environment,
+                                            http: DefaultHttpClient,calcConnector: CalculatorConnector,
+                                            implicit val appConfig: ApplicationConfig) extends FrontendController with ValidActiveSession {
 
   val whoDidYouGiveItTo = ValidateSession.async { implicit request =>
 

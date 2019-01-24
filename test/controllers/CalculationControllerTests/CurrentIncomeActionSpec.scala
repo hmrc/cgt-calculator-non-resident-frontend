@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,29 +16,48 @@
 
 package controllers.CalculationControllerTests
 
+import akka.stream.Materializer
 import assets.MessageLookup.NonResident.{CurrentIncome => messages}
+import config.ApplicationConfig
 import connectors.CalculatorConnector
-import controllers.CurrentIncomeController
+import constructors.DefaultCalculationElectionConstructor
+import controllers.{AcquisitionCostsController, CurrentIncomeController, routes}
 import controllers.helpers.FakeRequestHelper
-import controllers.routes
 import models.{CurrentIncomeModel, PropertyLivedInModel}
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
+import play.api.Environment
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 import scala.concurrent.Future
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.logging.SessionId
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
 class CurrentIncomeActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val hc = new HeaderCarrier()
-  def setupTarget(getData: Option[CurrentIncomeModel], getPropertyLivedIn: Option[PropertyLivedInModel] = None): CurrentIncomeController = {
+  implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
 
-    val mockCalcConnector = mock[CalculatorConnector]
+  val materializer = mock[Materializer]
+  val mockEnvironment =mock[Environment]
+  val mockHttp =mock[DefaultHttpClient]
+  val mockCalcConnector =mock[CalculatorConnector]
+  val defaultCache = mock[CacheMap]
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+
+  class Setup {
+    val controller = new CurrentIncomeController(
+      mockEnvironment,
+      mockHttp,
+      mockCalcConnector
+    )(mockConfig)
+  }
+
+  def setupTarget(getData: Option[CurrentIncomeModel], getPropertyLivedIn: Option[PropertyLivedInModel] = None): CurrentIncomeController = {
 
     when(mockCalcConnector.fetchAndGetFormData[CurrentIncomeModel](ArgumentMatchers.anyString())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
@@ -49,8 +68,8 @@ class CurrentIncomeActionSpec extends UnitSpec with WithFakeApplication with Moc
     when(mockCalcConnector.saveFormData[CurrentIncomeModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(mock[CacheMap])
 
-    new CurrentIncomeController {
-      override val calcConnector: CalculatorConnector = mockCalcConnector
+    new CurrentIncomeController(mockEnvironment, mockHttp, mockCalcConnector)(mockConfig) {
+      val calcConnector: CalculatorConnector = mockCalcConnector
     }
   }
 
@@ -61,7 +80,7 @@ class CurrentIncomeActionSpec extends UnitSpec with WithFakeApplication with Moc
 
       val target = setupTarget(None)
       lazy val result = target.currentIncome(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       "return a 200" in {
         status(result) shouldBe 200
@@ -76,7 +95,7 @@ class CurrentIncomeActionSpec extends UnitSpec with WithFakeApplication with Moc
 
       val target = setupTarget(Some(CurrentIncomeModel(1000)))
       lazy val result = target.currentIncome(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       "return a 200" in {
         status(result) shouldBe 200
@@ -136,7 +155,7 @@ class CurrentIncomeActionSpec extends UnitSpec with WithFakeApplication with Moc
       val target = setupTarget(None)
       lazy val request = fakeRequestToPOSTWithSession(("currentIncome", "-10"))
       lazy val result = target.submitCurrentIncome(request)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       "return a 400" in {
         status(result) shouldBe 400

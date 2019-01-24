@@ -17,27 +17,27 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import config.ApplicationConfig
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import forms.CurrentIncomeForm._
 import views.html.calculation
 import models.{CurrentIncomeModel, PropertyLivedInModel}
-import uk.gov.hmrc.play.frontend.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 import play.api.data.Form
 import controllers.utils.RecoverableFuture
+import javax.inject.Inject
+import play.api.Environment
 
 import scala.concurrent.Future
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
-object CurrentIncomeController extends CurrentIncomeController {
-  val calcConnector = CalculatorConnector
-}
-
-trait CurrentIncomeController extends FrontendController with ValidActiveSession {
-
-  val calcConnector: CalculatorConnector
+class CurrentIncomeController @Inject()(environment: Environment,
+                                        http: DefaultHttpClient,calcConnector: CalculatorConnector)(implicit val applicationConfig: ApplicationConfig)
+                                          extends FrontendController with ValidActiveSession {
 
   def getBackLink(implicit hc: HeaderCarrier): Future[String] = {
     calcConnector.fetchAndGetFormData[PropertyLivedInModel](KeystoreKeys.propertyLivedIn).map {

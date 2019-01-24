@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,25 +16,49 @@
 
 package controllers.CalculationControllerTests
 
+import akka.stream.Materializer
 import controllers.helpers.FakeRequestHelper
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import play.api.test.Helpers._
 import assets.MessageLookup.{OutsideTaxYears => messages}
-import config.AppConfig
+import config.{AppConfig, ApplicationConfig}
 import connectors.CalculatorConnector
-import controllers.OutsideTaxYearController
+import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
+import controllers.{CalculationElectionController, OutsideTaxYearController}
+import javax.inject.Inject
 import models.{DateModel, TaxYearModel}
 import org.jsoup.Jsoup
 import org.scalatest.mockito.MockitoSugar
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
+import play.api.Environment
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.cache.client.CacheMap
+import uk.gov.hmrc.http.logging.SessionId
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
 import scala.concurrent.Future
 
-class OutsideTaxYearActionSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper with MockitoSugar {
+class OutsideTaxYearActionSpec @Inject()(outsideTaxYearController: OutsideTaxYearController)
+  extends UnitSpec with WithFakeApplication with FakeRequestHelper with MockitoSugar {
+
+  implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  val materializer = mock[Materializer]
+  val mockEnvironment =mock[Environment]
+  val mockHttp =mock[DefaultHttpClient]
+  val mockCalcConnector =mock[CalculatorConnector]
+  val defaultCache = mock[CacheMap]
+
+  class Setup {
+    val controller = new OutsideTaxYearController(
+      mockEnvironment,
+      mockHttp,
+      mockCalcConnector
+    )(mockConfig)
+  }
 
   def setupTarget(disposalDateModel: Option[DateModel], taxYearModel: Option[TaxYearModel]): OutsideTaxYearController = {
-    val mockCalcConnector: CalculatorConnector = mock[CalculatorConnector]
 
     when(mockCalcConnector.fetchAndGetFormData[DateModel](ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(disposalDateModel))
@@ -42,8 +66,7 @@ class OutsideTaxYearActionSpec extends UnitSpec with WithFakeApplication with Fa
     when(mockCalcConnector.getTaxYear(ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(Future.successful(taxYearModel))
 
-    new OutsideTaxYearController {
-      override val calcConnector: CalculatorConnector = mockCalcConnector
+    new OutsideTaxYearController(mockEnvironment, mockHttp, mockCalcConnector)(mockConfig) {
     }
   }
 
@@ -62,16 +85,17 @@ class OutsideTaxYearActionSpec extends UnitSpec with WithFakeApplication with Fa
       }
 
       s"return a title of ${messages.title}" in {
-        Jsoup.parse(bodyOf(result)).title shouldBe messages.title
+        Jsoup.parse(bodyOf(result)(materializer)).title shouldBe messages.title
       }
 
       s"have a back link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-        Jsoup.parse(bodyOf(result)).getElementById("back-link").attr("href") shouldBe controllers.routes.DisposalDateController.disposalDate().url
+        Jsoup.parse(bodyOf(result)(materializer)).getElementById("back-link").attr("href") shouldBe controllers.routes.DisposalDateController.disposalDate().url
       }
     }
 
     "there is no valid session" should {
-      lazy val result = OutsideTaxYearController.outsideTaxYear(fakeRequest)
+      lazy val target = setupTarget(Some(DateModel(10, 10, 2018)), Some(TaxYearModel("2018/19", false, "2018/19")))
+      lazy val result = target.outsideTaxYear(fakeRequest)
 
       "return a 303" in {
         status(result) shouldBe 303

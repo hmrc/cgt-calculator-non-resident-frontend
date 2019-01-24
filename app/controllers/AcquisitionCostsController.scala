@@ -18,30 +18,31 @@ package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.TaxDates
+import config.ApplicationConfig
 import connectors.CalculatorConnector
-import constructors.CalculationElectionConstructor
+import constructors.DefaultCalculationElectionConstructor
 import controllers.predicates.ValidActiveSession
 import forms.AcquisitionCostsForm._
-import models.{AcquisitionCostsModel, DateModel, BoughtForLessModel, HowBecameOwnerModel}
+import models.{AcquisitionCostsModel, BoughtForLessModel, DateModel, HowBecameOwnerModel}
 import play.api.data.Form
 import play.api.mvc.{Action, AnyContent, Result}
-import uk.gov.hmrc.play.frontend.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.calculation
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 import controllers.utils.RecoverableFuture
+import javax.inject.Inject
+import play.api.Environment
+import play.mvc.Http
 
 import scala.concurrent.Future
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
-object AcquisitionCostsController extends AcquisitionCostsController{
-  val calcConnector = CalculatorConnector
-}
-
-trait AcquisitionCostsController extends FrontendController with ValidActiveSession {
-
-  val calcConnector: CalculatorConnector
-  val calcElectionConstructor = CalculationElectionConstructor
+class AcquisitionCostsController @Inject()(environment: Environment,
+                                           http: DefaultHttpClient,
+                                           calcConnector: CalculatorConnector,
+                                           calcElectionConstructor: DefaultCalculationElectionConstructor)(implicit val appConfig: ApplicationConfig) extends FrontendController with ValidActiveSession {
 
   private def isOwnerBeforeLegislationStart(implicit hc: HeaderCarrier): Future[Boolean] = {
     calcConnector.fetchAndGetFormData[DateModel](KeystoreKeys.acquisitionDate).map { date =>

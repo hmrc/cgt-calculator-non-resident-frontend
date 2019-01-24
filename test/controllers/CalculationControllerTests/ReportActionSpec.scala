@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,25 +16,50 @@
 
 package controllers.CalculationControllerTests
 
+import akka.stream.Materializer
 import assets.MessageLookup.{SummaryPage => messages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.TestModels
 import common.nonresident.CalculationType
+import config.ApplicationConfig
 import connectors.CalculatorConnector
-import constructors.AnswersConstructor
-import controllers.ReportController
+import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
+import controllers.{ReportController, SoldOrGivenAwayController}
 import controllers.helpers.FakeRequestHelper
 import models.{TaxYearModel, _}
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
+import play.api.Environment
 import play.api.mvc.RequestHeader
 import play.api.test.Helpers._
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.cache.client.CacheMap
+import uk.gov.hmrc.http.logging.SessionId
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 import scala.concurrent.Future
 
 class ReportActionSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper with MockitoSugar {
+
+  implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  val materializer = mock[Materializer]
+  val mockEnvironment =mock[Environment]
+  val mockHttp =mock[DefaultHttpClient]
+  val mockCalcConnector =mock[CalculatorConnector]
+  val mockAnswersConstructor = mock[AnswersConstructor]
+  val defaultCache = mock[CacheMap]
+
+  class Setup {
+    val controller = new ReportController(
+      mockEnvironment,
+      mockHttp,
+      mockCalcConnector,
+      mockAnswersConstructor
+    )(mockConfig)
+  }
 
   def setupTarget
   (
@@ -48,8 +73,6 @@ class ReportActionSpec extends UnitSpec with WithFakeApplication with FakeReques
     taxOwedResult: Option[CalculationResultsWithTaxOwedModel] = None
   ): ReportController = {
 
-    lazy val mockCalculatorConnector = mock[CalculatorConnector]
-    lazy val mockAnswersConstructor = mock[AnswersConstructor]
 
     when(mockAnswersConstructor.getNRTotalGainAnswers(ArgumentMatchers.any()))
       .thenReturn(Future.successful(totalGainAnswersModel))
@@ -57,55 +80,55 @@ class ReportActionSpec extends UnitSpec with WithFakeApplication with FakeReques
     when(mockAnswersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers(ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(finalSummaryModel)))
 
-    when(mockCalculatorConnector.fetchAndGetFormData[CalculationElectionModel](
+    when(mockCalcConnector.fetchAndGetFormData[CalculationElectionModel](
       ArgumentMatchers.eq(KeystoreKeys.calculationElection))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Some(calculationElectionModel))
 
-    when(mockCalculatorConnector.calculateTotalGain(ArgumentMatchers.any())(ArgumentMatchers.any()))
+    when(mockCalcConnector.calculateTotalGain(ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(Future.successful(totalGainResultsModel))
 
-    when(mockCalculatorConnector.getTaxYear(ArgumentMatchers.any())(ArgumentMatchers.any()))
+    when(mockCalcConnector.getTaxYear(ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(Future.successful(taxYearModel))
 
-    when(mockCalculatorConnector.calculateTaxableGainAfterPRR(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any()))
+    when(mockCalcConnector.calculateTaxableGainAfterPRR(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(Future.successful(calculationResultsWithPRRModel))
 
-    when(mockCalculatorConnector.fetchAndGetFormData[PrivateResidenceReliefModel](ArgumentMatchers.eq(KeystoreKeys.privateResidenceRelief))
+    when(mockCalcConnector.fetchAndGetFormData[PrivateResidenceReliefModel](ArgumentMatchers.eq(KeystoreKeys.privateResidenceRelief))
       (ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(prrModel))
 
-    when(mockCalculatorConnector.fetchAndGetFormData[PropertyLivedInModel](ArgumentMatchers.eq(KeystoreKeys.propertyLivedIn))
+    when(mockCalcConnector.fetchAndGetFormData[PropertyLivedInModel](ArgumentMatchers.eq(KeystoreKeys.propertyLivedIn))
     (ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(PropertyLivedInModel(true))))
 
-    when(mockCalculatorConnector.getFullAEA(ArgumentMatchers.any())(ArgumentMatchers.any()))
+    when(mockCalcConnector.getFullAEA(ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(BigDecimal(11000))))
 
-    when(mockCalculatorConnector.calculateNRCGTTotalTax(
+    when(mockCalcConnector.calculateNRCGTTotalTax(
       ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(Future.successful(taxOwedResult))
 
-    when(mockCalculatorConnector.getTaxYear(ArgumentMatchers.any())(ArgumentMatchers.any()))
+    when(mockCalcConnector.getTaxYear(ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(TaxYearModel("2015/16", isValidYear = true, "2015/16"))))
 
-    when(mockCalculatorConnector.fetchAndGetFormData[OtherReliefsModel](
+    when(mockCalcConnector.fetchAndGetFormData[OtherReliefsModel](
       ArgumentMatchers.eq(KeystoreKeys.otherReliefsFlat))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(None))
 
-    when(mockCalculatorConnector.fetchAndGetFormData[OtherReliefsModel](
+    when(mockCalcConnector.fetchAndGetFormData[OtherReliefsModel](
       ArgumentMatchers.eq(KeystoreKeys.otherReliefsRebased))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(None))
 
-    when(mockCalculatorConnector.fetchAndGetFormData[OtherReliefsModel](
+    when(mockCalcConnector.fetchAndGetFormData[OtherReliefsModel](
       ArgumentMatchers.eq(KeystoreKeys.otherReliefsTA))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(None))
 
-    when(mockCalculatorConnector.calculateTotalCosts(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockCalcConnector.calculateTotalCosts(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(BigDecimal(1000.00)))
 
-    new ReportController {
-      override val calcConnector: CalculatorConnector = mockCalculatorConnector
-      override val answersConstructor: AnswersConstructor = mockAnswersConstructor
+    new ReportController(mockEnvironment, mockHttp, mockCalcConnector, mockAnswersConstructor)(mockConfig) {
+      val calcConnector: CalculatorConnector = mockCalcConnector
+      val answersConstructor: AnswersConstructor = mockAnswersConstructor
 
       override def host(implicit request: RequestHeader): String = "http://localhost:9977"
     }
@@ -137,15 +160,18 @@ class ReportActionSpec extends UnitSpec with WithFakeApplication with FakeReques
     BroughtForwardLossesModel(isClaiming = false, None)
   )
 
-  "ReportController" should {
-    "use the correct calculator connector" in {
-      ReportController.calcConnector shouldBe CalculatorConnector
-    }
-
-    "use the correct answers constructor" in {
-      ReportController.answersConstructor shouldBe AnswersConstructor
-    }
-  }
+//  "ReportController" should {
+//
+//
+//
+//    "use the correct calculator connector" in {
+//      target.calcConnector shouldBe CalculatorConnector
+//    }
+//
+//    "use the correct answers constructor" in {
+//      ReportController.answersConstructor shouldBe AnswersConstructor
+//    }
+//  }
 
 
   "Calling .summaryReport from the ReportController" when {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,27 +16,49 @@
 
 package controllers.CalculationControllerTests
 
+import akka.stream.Materializer
 import assets.MessageLookup.NonResident.{WorthWhenBoughtForLess => messages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import config.ApplicationConfig
 import connectors.CalculatorConnector
-import controllers.WorthWhenBoughtForLessController
+import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
+import controllers.{CostsAtLegislationStartController, WorthWhenBoughtForLessController}
 import controllers.helpers.FakeRequestHelper
 import models.AcquisitionValueModel
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
+import play.api.Environment
 import play.api.test.Helpers._
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.cache.client.CacheMap
+import uk.gov.hmrc.http.logging.SessionId
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 import scala.concurrent.Future
 
 class WorthWhenBoughtForLessActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  def setupTarget(getData: Option[AcquisitionValueModel]): WorthWhenBoughtForLessController = {
+  implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
 
-    val mockCalcConnector = mock[CalculatorConnector]
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  val materializer = mock[Materializer]
+  val mockEnvironment =mock[Environment]
+  val mockHttp =mock[DefaultHttpClient]
+  val mockCalcConnector =mock[CalculatorConnector]
+  val defaultCache = mock[CacheMap]
+
+  class Setup {
+    val controller = new WorthWhenBoughtForLessController(
+      mockEnvironment,
+      mockHttp,
+      mockCalcConnector
+    )(mockConfig)
+  }
+
+  def setupTarget(getData: Option[AcquisitionValueModel]): WorthWhenBoughtForLessController = {
 
     when(mockCalcConnector.fetchAndGetFormData[AcquisitionValueModel](
       ArgumentMatchers.eq(KeystoreKeys.acquisitionMarketValue))(ArgumentMatchers.any(), ArgumentMatchers.any()))
@@ -45,8 +67,8 @@ class WorthWhenBoughtForLessActionSpec extends UnitSpec with WithFakeApplication
     when(mockCalcConnector.saveFormData[AcquisitionValueModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(mock[CacheMap]))
 
-    new WorthWhenBoughtForLessController {
-      override val calcConnector: CalculatorConnector = mockCalcConnector
+    new WorthWhenBoughtForLessController(mockEnvironment, mockHttp, mockCalcConnector)(mockConfig) {
+      val calcConnector: CalculatorConnector = mockCalcConnector
     }
   }
 
@@ -63,7 +85,7 @@ class WorthWhenBoughtForLessActionSpec extends UnitSpec with WithFakeApplication
 
       s"return some html with title of ${messages.question}" in {
         contentType(result) shouldBe Some("text/html")
-        Jsoup.parse(bodyOf(result)).title shouldEqual messages.question
+        Jsoup.parse(bodyOf(result)(materializer)).title shouldEqual messages.question
       }
     }
 
@@ -78,7 +100,7 @@ class WorthWhenBoughtForLessActionSpec extends UnitSpec with WithFakeApplication
 
       s"return some html with title of ${messages.question}" in {
         contentType(result) shouldBe Some("text/html")
-        Jsoup.parse(bodyOf(result)).title shouldEqual messages.question
+        Jsoup.parse(bodyOf(result)(materializer)).title shouldEqual messages.question
       }
     }
 
@@ -119,7 +141,7 @@ class WorthWhenBoughtForLessActionSpec extends UnitSpec with WithFakeApplication
       lazy val target = setupTarget(None)
       lazy val request = fakeRequestToPOSTWithSession(("acquisitionMarketValue", "a"))
       lazy val result = target.submitWorthWhenBoughtForLess(request)
-      lazy val doc = Jsoup.parse(bodyOf(result))
+      lazy val doc = Jsoup.parse(bodyOf(result)(materializer))
 
       "return a status of 400" in {
         status(result) shouldBe 400

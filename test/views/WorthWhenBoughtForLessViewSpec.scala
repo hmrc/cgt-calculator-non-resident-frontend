@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package views
 
 import assets.MessageLookup.NonResident.{WorthWhenBoughtForLess, AcquisitionMarketValue => messages}
 import assets.MessageLookup.{NonResident => commonMessages}
+import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import forms.AcquisitionMarketValueForm._
 import org.jsoup.Jsoup
@@ -29,13 +30,13 @@ import views.html.calculation.worthWhenBoughtForLess
 
 class WorthWhenBoughtForLessViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
-
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
 
   "The Worth When Bought For Less view spec" when {
 
     "supplied with no errors" should {
 
-      lazy val view = worthWhenBoughtForLess(acquisitionMarketValueForm)
+      lazy val view = worthWhenBoughtForLess(acquisitionMarketValueForm)(fakeRequest, applicationMessages,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${WorthWhenBoughtForLess.question}'" in {
@@ -126,7 +127,7 @@ class WorthWhenBoughtForLessViewSpec extends UnitSpec with WithFakeApplication w
     "supplied with a form with errors" should {
 
       lazy val form = acquisitionMarketValueForm.bind(Map("acquisitionMarketValue" -> "a"))
-      lazy val view = worthWhenBoughtForLess(form)
+      lazy val view = worthWhenBoughtForLess(form)(fakeRequest, applicationMessages,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

@@ -17,24 +17,24 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import config.ApplicationConfig
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import forms.SoldOrGivenAwayForm._
+import javax.inject.Inject
 import views.html.calculation
 import models.SoldOrGivenAwayModel
-import uk.gov.hmrc.play.frontend.controller.FrontendController
+import play.api.Environment
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
 import scala.concurrent.Future
 
-object SoldOrGivenAwayController extends SoldOrGivenAwayController {
-  val calcConnector = CalculatorConnector
-}
-
-trait SoldOrGivenAwayController extends FrontendController with ValidActiveSession  {
-
-  val calcConnector: CalculatorConnector
+class SoldOrGivenAwayController @Inject()(environment: Environment,
+                                          http: DefaultHttpClient,calcConnector: CalculatorConnector)(implicit val applicationConfig: ApplicationConfig)
+                                            extends FrontendController with ValidActiveSession {
 
   val soldOrGivenAway = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[SoldOrGivenAwayModel](KeystoreKeys.soldOrGivenAway).map {

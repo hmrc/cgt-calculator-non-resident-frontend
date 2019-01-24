@@ -19,30 +19,30 @@ package controllers
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.nonresident.TaxableGainCalculation._
 import common.nonresident.CalculationType
+import config.ApplicationConfig
 import connectors.CalculatorConnector
-import constructors.{AnswersConstructor, CalculationElectionConstructor, YourAnswersConstructor}
+import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor, YourAnswersConstructor}
 import controllers.predicates.ValidActiveSession
 import models._
 import play.api.mvc.{Action, AnyContent, Result}
-import uk.gov.hmrc.play.frontend.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.calculation
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import controllers.utils.RecoverableFuture
+import javax.inject.Inject
+import play.api.Environment
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
 import scala.concurrent.Future
 
-object CheckYourAnswersController extends CheckYourAnswersController {
-  val calcElectionConstructor = CalculationElectionConstructor
-  val answersConstructor = AnswersConstructor
-  val calculatorConnector = CalculatorConnector
-}
-
-trait CheckYourAnswersController extends FrontendController with ValidActiveSession {
-
-  val answersConstructor: AnswersConstructor
-  val calculatorConnector: CalculatorConnector
+class CheckYourAnswersController @Inject()(environment: Environment,
+                                           http: DefaultHttpClient,calculatorConnector: CalculatorConnector,
+                                           answersConstructor: AnswersConstructor,
+                                           calcElectionConstructor: DefaultCalculationElectionConstructor)(implicit val applicationConfig: ApplicationConfig)
+                                              extends FrontendController with ValidActiveSession {
 
   def getBackLink(totalGainResultsModel: TotalGainResultsModel,
                   acquisitionDateController: DateModel,

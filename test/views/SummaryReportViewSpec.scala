@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package views
 
 import assets.MessageLookup.{NonResident => nrMessages}
 import common.TestModels._
+import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import models._
 import org.jsoup.Jsoup
@@ -25,10 +26,11 @@ import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.summaryReport
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
+import play.api.i18n.Lang
 
 class SummaryReportViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
 
-
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
 
   "The report summary view" when {
 
@@ -65,7 +67,7 @@ class SummaryReportViewSpec extends UnitSpec with WithFakeApplication with FakeR
         disposalValue = 1000.00,
         acquisitionValue = 1000.00,
         totalCosts = 1000,
-        flatGain = Some(1000.00))
+        flatGain = Some(1000.00))(fakeRequest,applicationMessages, Lang("en"), fakeApplication, mockConfig)
 
       lazy val document = Jsoup.parse(view.body)
 
@@ -118,7 +120,7 @@ class SummaryReportViewSpec extends UnitSpec with WithFakeApplication with FakeR
         disposalValue = 1000.00,
         acquisitionValue = 1000.00,
         totalCosts = 1000,
-        flatGain = Some(1000.00))
+        flatGain = Some(1000.00))(fakeRequest,applicationMessages, Lang("en"), fakeApplication, mockConfig)
 
       lazy val document = Jsoup.parse(view.body)
 

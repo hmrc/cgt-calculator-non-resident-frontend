@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package views
 
 import assets.MessageLookup.{NonResident => messages}
+import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
 import forms.RebasedCostsForm._
@@ -26,13 +27,13 @@ import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 
 class RebasedCostsViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
-
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
 
 
   "The rebased value view" when {
 
     "not supplied with a pre-existing stored model" should {
-      lazy val view = rebasedCosts(rebasedCostsForm)
+      lazy val view = rebasedCosts(rebasedCostsForm)(fakeRequest, applicationMessages,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       s"Have the title ${messages.RebasedCosts.question}" in {
@@ -125,7 +126,7 @@ class RebasedCostsViewSpec extends UnitSpec with WithFakeApplication with FakeRe
         "hasRebasedCosts" -> "Yes",
         "rebasedCosts" -> ""
       ))
-      lazy val view = rebasedCosts(form)
+      lazy val view = rebasedCosts(form)(fakeRequest, applicationMessages,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

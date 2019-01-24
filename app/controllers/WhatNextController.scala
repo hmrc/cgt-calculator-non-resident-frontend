@@ -18,18 +18,18 @@ package controllers
 
 import config.ApplicationConfig
 import controllers.predicates.ValidActiveSession
-import uk.gov.hmrc.play.frontend.controller.FrontendController
+import javax.inject.Inject
+import play.api.Environment
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
 import scala.concurrent.Future
 
-object WhatNextController extends WhatNextController {
-}
-
-trait WhatNextController extends FrontendController with ValidActiveSession {
-
-  lazy implicit val appConfig = ApplicationConfig
+class WhatNextController @Inject()(environment: Environment,
+                                   http: DefaultHttpClient,
+                                   implicit val appConfig : ApplicationConfig) extends FrontendController with ValidActiveSession {
 
   val whatNext = ValidateSession.async { implicit request =>
     Future.successful(Ok(views.html.whatNext.whatNext()))

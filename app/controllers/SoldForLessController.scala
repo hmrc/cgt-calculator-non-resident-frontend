@@ -17,26 +17,26 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import config.ApplicationConfig
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import forms.SoldForLessForm._
 import models.SoldForLessModel
 import play.api.data.Form
-import uk.gov.hmrc.play.frontend.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.{calculation => views}
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 import controllers.utils.RecoverableFuture
+import javax.inject.Inject
+import play.api.Environment
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
 import scala.concurrent.Future
 
-object SoldForLessController extends SoldForLessController {
-  val calcConnector = CalculatorConnector
-}
-
-trait SoldForLessController extends FrontendController with ValidActiveSession {
-
-  val calcConnector: CalculatorConnector
+class SoldForLessController @Inject()(environment: Environment,
+                                      http: DefaultHttpClient,calcConnector: CalculatorConnector)(implicit val applicationConfig: ApplicationConfig)
+                                        extends FrontendController with ValidActiveSession {
 
   val soldForLess = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[SoldForLessModel](KeystoreKeys.soldForLess).map {

@@ -20,7 +20,8 @@
 @import views.html.calculation._
 @import models.WhoDidYouGiveItToModel
 
-@(whoDidYouGiveItToForm: Form[WhoDidYouGiveItToModel])(implicit request: Request[_], messages: Messages, application: Application)
+@import config.ApplicationConfig
+@(whoDidYouGiveItToForm: Form[WhoDidYouGiveItToModel])(implicit request: Request[_], messages: Messages, application: Application, applicationConfig: ApplicationConfig)
 
 @main_template(
   title = Messages("calc.whoDidYouGiveThePropertyTo.title")) {

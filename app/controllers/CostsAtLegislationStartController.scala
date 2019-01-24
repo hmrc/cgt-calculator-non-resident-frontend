@@ -17,26 +17,27 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import config.ApplicationConfig
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import forms.CostsAtLegislationStartForm._
+import javax.inject.Inject
 import views.html.{calculation => views}
 import models.CostsAtLegislationStartModel
+import play.api.Environment
 import play.api.data.Form
-import uk.gov.hmrc.play.frontend.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 import play.api.mvc.{Action, AnyContent}
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
 import scala.concurrent.Future
 
-object CostsAtLegislationStartController extends CostsAtLegislationStartController {
-  val calcConnector = CalculatorConnector
-}
+class CostsAtLegislationStartController @Inject()(environment: Environment,
+                                                  http: DefaultHttpClient,calcConnector: CalculatorConnector)(implicit val applicationConfig: ApplicationConfig)
+                                                    extends FrontendController with ValidActiveSession {
 
-trait CostsAtLegislationStartController extends FrontendController with ValidActiveSession {
-
-  val calcConnector: CalculatorConnector
 
   val costsAtLegislationStart: Action[AnyContent] = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[CostsAtLegislationStartModel](KeystoreKeys.costAtLegislationStart).map {
