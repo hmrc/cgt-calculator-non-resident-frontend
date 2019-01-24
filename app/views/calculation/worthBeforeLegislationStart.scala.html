@@ -20,7 +20,8 @@
 @import play.api.Application
 @import views.html.main_template
 
-@(worthBeforeLegislationStart : Form[WorthBeforeLegislationStartModel])(implicit request: Request[_], messages: Messages, application: Application)
+@import config.ApplicationConfig
+@(worthBeforeLegislationStart : Form[WorthBeforeLegislationStartModel])(implicit request: Request[_], messages: Messages, application: Application, applicationConfig: ApplicationConfig)
 
 @exampleContent = {
     <p>@Messages("calc.worthBeforeLegislationStart.expandableText")</p>

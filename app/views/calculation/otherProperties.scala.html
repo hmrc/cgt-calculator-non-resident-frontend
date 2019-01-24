@@ -19,7 +19,8 @@
 @import views.html.helpers._
 @import play.api.Application
 
-@(otherPropertiesForm: Form[OtherPropertiesModel])(implicit request: Request[_], messages: Messages, application: Application)
+@import config.ApplicationConfig
+@(otherPropertiesForm: Form[OtherPropertiesModel])(implicit request: Request[_], messages: Messages, application: Application, applicationConfig: ApplicationConfig)
 
 @main_template(Messages("calc.otherProperties.question")) {
 

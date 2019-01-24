@@ -16,28 +16,50 @@
 
 package controllers.CalculationControllerTests
 
+import akka.stream.Materializer
 import assets.MessageLookup.NonResident.{OtherReliefs => messages}
 import common.TestModels
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import config.ApplicationConfig
 import connectors.CalculatorConnector
-import constructors.AnswersConstructor
-import controllers.OtherReliefsFlatController
+import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
+import controllers.{OtherReliefsFlatController, RebasedCostsController}
 import controllers.helpers.FakeRequestHelper
 import models.{TaxYearModel, _}
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
+import play.api.Environment
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 import scala.concurrent.Future
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.logging.SessionId
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
 class OtherReliefsFlatActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val hc = new HeaderCarrier()
+  implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  val materializer = mock[Materializer]
+  val mockEnvironment =mock[Environment]
+  val mockHttp =mock[DefaultHttpClient]
+  val mockCalcConnector =mock[CalculatorConnector]
+  val defaultCache = mock[CacheMap]
+  val mockAnswersConstructor = mock[AnswersConstructor]
+
+
+  class Setup {
+    val controller = new OtherReliefsFlatController(
+      mockEnvironment,
+      mockHttp,
+      mockCalcConnector,
+      mockAnswersConstructor
+    )(mockConfig)
+  }
 
   def setupTarget(
                    getData: Option[OtherReliefsModel],
@@ -47,9 +69,6 @@ class OtherReliefsFlatActionSpec extends UnitSpec with WithFakeApplication with 
                    totalGainResultModel: TotalGainResultsModel = TotalGainResultsModel(200, Some(100), None),
                    calculationResultsWithPRRModel: Option[CalculationResultsWithPRRModel] = None
                  ): OtherReliefsFlatController = {
-
-    val mockCalcConnector = mock[CalculatorConnector]
-    val mockAnswersConstructor = mock[AnswersConstructor]
 
     when(mockCalcConnector.fetchAndGetFormData[OtherReliefsModel](
       ArgumentMatchers.eq(KeystoreKeys.otherReliefsFlat))(ArgumentMatchers.any(), ArgumentMatchers.any()))
@@ -89,9 +108,9 @@ class OtherReliefsFlatActionSpec extends UnitSpec with WithFakeApplication with 
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new OtherReliefsFlatController {
-      override val calcConnector: CalculatorConnector = mockCalcConnector
-      override val answersConstructor: AnswersConstructor = mockAnswersConstructor
+    new OtherReliefsFlatController(mockEnvironment, mockHttp, mockCalcConnector, mockAnswersConstructor)(mockConfig) {
+      val calcConnector: CalculatorConnector = mockCalcConnector
+      val answersConstructor: AnswersConstructor = mockAnswersConstructor
     }
   }
 
@@ -105,7 +124,7 @@ class OtherReliefsFlatActionSpec extends UnitSpec with WithFakeApplication with 
         TestModels.calculationResultsModelWithRebased,
         TestModels.personalDetailsCalculationModel)
       lazy val result = target.otherReliefsFlat(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       "return a 200 with a valid calculation result" in {
         status(result) shouldBe 200
@@ -132,7 +151,7 @@ class OtherReliefsFlatActionSpec extends UnitSpec with WithFakeApplication with 
         TestModels.calculationResultsModelWithRebased,
         TestModels.personalDetailsCalculationModel)
       lazy val result = target.otherReliefsFlat(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       "return a status of 200" in {
         status(result) shouldBe 200
@@ -189,7 +208,7 @@ class OtherReliefsFlatActionSpec extends UnitSpec with WithFakeApplication with 
         TestModels.personalDetailsCalculationModel)
       lazy val request = fakeRequestToPOSTWithSession(("isClaimingOtherReliefs", "Yes"), ("otherReliefs", "-1000"))
       lazy val result = target.submitOtherReliefsFlat(request)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       "return a status of 400" in {
         status(result) shouldBe 400

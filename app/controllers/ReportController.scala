@@ -19,6 +19,7 @@ package controllers
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.nonresident.CalculationType
 import common.nonresident.TaxableGainCalculation._
+import config.ApplicationConfig
 import connectors.CalculatorConnector
 import constructors.{AnswersConstructor, YourAnswersConstructor}
 import controllers.predicates.ValidActiveSession
@@ -28,23 +29,22 @@ import play.api.Play.current
 import play.api.i18n.Messages
 import play.api.i18n.Messages.Implicits._
 import play.api.mvc.{Action, AnyContent, RequestHeader}
-import uk.gov.hmrc.play.frontend.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.calculation
 import controllers.utils.RecoverableFuture
+import javax.inject.Inject
+import play.api.Environment
 
 import scala.concurrent.Future
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
 
-object ReportController extends ReportController {
-  val calcConnector = CalculatorConnector
-  val answersConstructor = AnswersConstructor
-}
+class ReportController @Inject()(environment: Environment,
+                                 http: DefaultHttpClient,calcConnector: CalculatorConnector,
+                                 answersConstructor: AnswersConstructor)(implicit val applicationConfig: ApplicationConfig)
+                                  extends FrontendController with ValidActiveSession {
 
-trait ReportController extends FrontendController with ValidActiveSession {
-
-  val calcConnector: CalculatorConnector
-  val answersConstructor: AnswersConstructor
   val pdfGenerator = new PdfGenerator
 
   def host(implicit request: RequestHeader): String = {

@@ -17,27 +17,29 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import config.ApplicationConfig
 import connectors.CalculatorConnector
+import constructors.DefaultCalculationElectionConstructor
 import controllers.predicates.ValidActiveSession
 import forms.BroughtForwardLossesForm._
 import views.html.calculation
 import models._
 import play.api.data.Form
-import uk.gov.hmrc.play.frontend.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 import controllers.utils.RecoverableFuture
+import javax.inject.Inject
+import play.api.Environment
 
 import scala.concurrent.Future
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
-object BroughtForwardLossesController extends BroughtForwardLossesController {
-  val calcConnector = CalculatorConnector
-}
+class BroughtForwardLossesController @Inject()(environment: Environment,
+                                               http: DefaultHttpClient,calcConnector: CalculatorConnector)(implicit val applicationConfig: ApplicationConfig)
+                                                extends FrontendController with ValidActiveSession {
 
-trait BroughtForwardLossesController extends FrontendController with ValidActiveSession {
-
-  val calcConnector: CalculatorConnector
 
   def generateBackLink(implicit hc: HeaderCarrier): Future[String] = {
     val getOtherProperties = calcConnector.fetchAndGetFormData[OtherPropertiesModel](KeystoreKeys.otherProperties)

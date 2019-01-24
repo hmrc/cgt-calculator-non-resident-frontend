@@ -16,28 +16,51 @@
 
 package controllers.CalculationControllerTests
 
+import akka.stream.Materializer
 import assets.MessageLookup.{NonResident => messages}
+import config.ApplicationConfig
 import connectors.CalculatorConnector
-import controllers.BoughtForLessController
+import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
+import controllers.{AnnualExemptAmountController, BoughtForLessController}
 import controllers.helpers.FakeRequestHelper
 import models.BoughtForLessModel
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
+import play.api.Environment
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 import scala.concurrent.Future
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.logging.SessionId
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
 class BoughtForLessActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
+  implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
 
-  implicit val hc = new HeaderCarrier()
+  val materializer = mock[Materializer]
+  val mockEnvironment =mock[Environment]
+  val mockHttp =mock[DefaultHttpClient]
+  val mockCalcConnector =mock[CalculatorConnector]
+  val defaultCache = mock[CacheMap]
+  val mockAnswersConstructor = mock[AnswersConstructor]
+  val mockDefaultCalElecConstructor = mock[DefaultCalculationElectionConstructor]
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+
+
+  class Setup {
+    val controller = new BoughtForLessController(
+      mockEnvironment,
+      mockHttp,
+      mockCalcConnector,
+      mockDefaultCalElecConstructor
+    )(mockConfig)
+  }
+
   def setupTarget(getData: Option[BoughtForLessModel]): BoughtForLessController = {
-
-    val mockCalcConnector = mock[CalculatorConnector]
 
     when(mockCalcConnector.fetchAndGetFormData[BoughtForLessModel](ArgumentMatchers.anyString())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
@@ -46,8 +69,8 @@ class BoughtForLessActionSpec extends UnitSpec with WithFakeApplication with Moc
       ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(mock[CacheMap]))
 
-    new BoughtForLessController {
-      override val calcConnector: CalculatorConnector = mockCalcConnector
+    new BoughtForLessController(mockEnvironment, mockHttp, mockCalcConnector, mockDefaultCalElecConstructor)(mockConfig) {
+      val calcConnector: CalculatorConnector = mockCalcConnector
     }
   }
 
@@ -56,7 +79,7 @@ class BoughtForLessActionSpec extends UnitSpec with WithFakeApplication with Moc
     "provided with no previous data" should {
       val target = setupTarget(None)
       lazy val result = target.boughtForLess(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       "return a status of 200" in {
         status(result) shouldBe 200
@@ -70,7 +93,7 @@ class BoughtForLessActionSpec extends UnitSpec with WithFakeApplication with Moc
     "provided with some previous data" should {
       val target = setupTarget(Some(BoughtForLessModel(true)))
       lazy val result = target.boughtForLess(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       "return a status of 200" in {
         status(result) shouldBe 200
@@ -129,7 +152,7 @@ class BoughtForLessActionSpec extends UnitSpec with WithFakeApplication with Moc
       lazy val request = fakeRequestToPOSTWithSession(("boughtForLess", ""))
       lazy val target = setupTarget(None)
       lazy val result = target.submitBoughtForLess(request)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       "return a status of 400" in {
         status(result) shouldBe 400

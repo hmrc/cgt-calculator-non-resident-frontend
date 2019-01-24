@@ -19,7 +19,8 @@
 @import views.html.helpers._
 @import play.api.Application
 
-@(soldOrGivenAway: Form[SoldOrGivenAwayModel])(implicit request: Request[_], messages: Messages, application: Application)
+@import config.ApplicationConfig
+@(soldOrGivenAway: Form[SoldOrGivenAwayModel])(implicit request: Request[_], messages: Messages, application: Application, applicationConfig: ApplicationConfig)
 
 @main_template(Messages("calc.soldOrGivenAway.question")){
 

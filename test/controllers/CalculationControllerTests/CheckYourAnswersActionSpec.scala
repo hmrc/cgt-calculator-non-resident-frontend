@@ -16,35 +16,59 @@
 
 package controllers.CalculationControllerTests
 
+import akka.stream.Materializer
 import assets.MessageLookup.{NonResident => messages}
+import config.ApplicationConfig
 import connectors.CalculatorConnector
-import constructors.AnswersConstructor
-import controllers.CheckYourAnswersController
+import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
+import controllers.{CalculationElectionController, CheckYourAnswersController, routes}
 import controllers.helpers.FakeRequestHelper
-import controllers.routes
+import javax.inject.Inject
 import models._
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
+import play.api.Environment
 import play.api.test.Helpers._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 import scala.concurrent.Future
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.cache.client.CacheMap
+import uk.gov.hmrc.http.logging.SessionId
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
-class CheckYourAnswersActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
+class CheckYourAnswersActionSpec @Inject()(checkYourAnswersController: CheckYourAnswersController)
+  extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val hc = new HeaderCarrier()
+  implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
+
+  val materializer = mock[Materializer]
+  val mockEnvironment =mock[Environment]
+  val mockHttp =mock[DefaultHttpClient]
+  val mockCalcConnector =mock[CalculatorConnector]
+  val defaultCache = mock[CacheMap]
+  val mockAnswersConstructor = mock[AnswersConstructor]
+  val mockDefaultCalElecConstructor = mock[DefaultCalculationElectionConstructor]
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+
+
+  class Setup {
+    val controller = new CheckYourAnswersController(
+      mockEnvironment,
+      mockHttp,
+      mockCalcConnector,
+      mockAnswersConstructor,
+      mockDefaultCalElecConstructor
+    )(mockConfig)
+  }
 
   def setupTarget(totalGainAnswersModel: TotalGainAnswersModel,
                   totalGainsModel: Option[TotalGainResultsModel],
                   privateResidenceReliefModel: Option[PrivateResidenceReliefModel] = None,
                   totalPersonalDetailsModel: Option[TotalPersonalDetailsCalculationModel] = None,
                   calculationResultsWithPRRModel: Option[CalculationResultsWithPRRModel] = None): CheckYourAnswersController = {
-
-    val mockAnswersConstructor = mock[AnswersConstructor]
-    val mockCalcConnector = mock[CalculatorConnector]
 
     when(mockAnswersConstructor.getNRTotalGainAnswers(ArgumentMatchers.any())).thenReturn(Future.successful(totalGainAnswersModel))
 
@@ -62,9 +86,9 @@ class CheckYourAnswersActionSpec extends UnitSpec with WithFakeApplication with 
     when(mockCalcConnector.calculateTotalGain(ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(totalGainsModel)
 
-    new CheckYourAnswersController {
-      override val answersConstructor: AnswersConstructor = mockAnswersConstructor
-      override val calculatorConnector: CalculatorConnector = mockCalcConnector
+    new CheckYourAnswersController(mockEnvironment, mockHttp, mockCalcConnector, mockAnswersConstructor, mockDefaultCalElecConstructor)(mockConfig) {
+      val answersConstructor: AnswersConstructor = mockAnswersConstructor
+      val calculatorConnector: CalculatorConnector = mockCalcConnector
     }
   }
 
@@ -110,12 +134,12 @@ class CheckYourAnswersActionSpec extends UnitSpec with WithFakeApplication with 
     None,
     BroughtForwardLossesModel(isClaiming = false, None))
 
-  "Check Your Answers Controller" should {
-
-    "have the correct AnswersConstructor" in {
-      CheckYourAnswersController.answersConstructor shouldBe AnswersConstructor
-    }
-  }
+//  "Check Your Answers Controller" should {
+//
+//    "have the correct AnswersConstructor" in {
+//      checkYourAnswersController.answersConstructor shouldBe AnswersConstructor
+//    }
+//  }
 
   "Calling .checkYourAnswers" when {
 
@@ -123,7 +147,7 @@ class CheckYourAnswersActionSpec extends UnitSpec with WithFakeApplication with 
 
       lazy val target = setupTarget(modelWithOnlyFlat, Some(totalGainResultsModel))
       lazy val result = target.checkYourAnswers(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       "return a status of 200" in {
         status(result) shouldBe 200
@@ -155,7 +179,7 @@ class CheckYourAnswersActionSpec extends UnitSpec with WithFakeApplication with 
     "provided with a valid session when eligible for prr and a total gain value" should {
       lazy val target = setupTarget(modelWithMultipleGains, Some(totalGainWithValueResultsModel))
       lazy val result = target.checkYourAnswers(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       "return a status of 200" in {
         status(result) shouldBe 200
@@ -174,7 +198,7 @@ class CheckYourAnswersActionSpec extends UnitSpec with WithFakeApplication with 
 
       lazy val target = setupTarget(modelWithOnlyFlat, Some(totalGainWithValueResultsModel), None, Some(personalDetailsModel))
       lazy val result = target.checkYourAnswers(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       "return a status of 200" in {
         status(result) shouldBe 200

@@ -19,7 +19,8 @@
 @import views.html.helpers._
 @import play.api.Application
 
-@(rebasedValueForm: Form[RebasedValueModel], backLink: String)(implicit request: Request[_], messages: Messages, application: Application)
+@import config.ApplicationConfig
+@(rebasedValueForm: Form[RebasedValueModel], backLink: String)(implicit request: Request[_], messages: Messages, application: Application, applicationConfig: ApplicationConfig)
 
 @hiddenHelpTextContent = {
     <p>@Messages("calc.nonResident.rebasedValue.helpText")</p>

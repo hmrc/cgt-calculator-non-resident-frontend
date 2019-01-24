@@ -18,6 +18,7 @@ package views
 
 import assets.MessageLookup.NonResident.{WorthBeforeLegislationStart, AcquisitionMarketValue => messages}
 import assets.MessageLookup.{NonResident => commonMessages}
+import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import forms.WorthBeforeLegislationStartForm._
 import org.jsoup.Jsoup
@@ -29,13 +30,13 @@ import views.html.calculation.worthBeforeLegislationStart
 
 class WorthBeforeLegislationStartViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
-
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
 
   "The Worth Before Legislation Start view spec" when {
 
     "supplied with no errors" should {
 
-      lazy val view = worthBeforeLegislationStart(worthBeforeLegislationStartForm)
+      lazy val view = worthBeforeLegislationStart(worthBeforeLegislationStartForm)(fakeRequest, applicationMessages,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${WorthBeforeLegislationStart.question}'" in {
@@ -124,7 +125,7 @@ class WorthBeforeLegislationStartViewSpec extends UnitSpec with WithFakeApplicat
     "supplied with a form with errors" should {
 
       lazy val form = worthBeforeLegislationStartForm.bind(Map("worthBeforeLegislationStart" -> "a"))
-      lazy val view = worthBeforeLegislationStart(form)
+      lazy val view = worthBeforeLegislationStart(form)(fakeRequest, applicationMessages,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

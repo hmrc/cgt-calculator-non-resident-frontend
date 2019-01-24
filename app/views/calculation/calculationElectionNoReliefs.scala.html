@@ -19,8 +19,9 @@
 @import views.html.helpers._
 @import play.api.Application
 
+@import config.ApplicationConfig
 @(calculationElectionForm: Form[CalculationElectionModel], content: Seq[(String, String, String, String, Option[String], Option[BigDecimal])],
-        backLink: String)(implicit request: Request[_], messages: Messages, application: Application)
+        backLink: String)(implicit request: Request[_], messages: Messages, application: Application, applicationConfig: ApplicationConfig)
 
 @main_template(Messages("calc.calculationElectionNoReliefs.title")) {
 

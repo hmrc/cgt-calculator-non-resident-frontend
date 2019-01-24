@@ -17,6 +17,7 @@
 package views
 
 import assets.MessageLookup.{NonResident => messages}
+import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
 import forms.DisposalValueForm._
@@ -28,12 +29,12 @@ import play.api.Play.current
 
 class DisposalValueViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
-
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
 
   "Disposal value view" when {
 
     "supplied with no errors" should {
-      lazy val view = disposalValue(disposalValueForm)
+      lazy val view = disposalValue(disposalValueForm)(fakeRequest, applicationMessages,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${messages.DisposalValue.question}'" in {
@@ -120,7 +121,7 @@ class DisposalValueViewSpec extends UnitSpec with WithFakeApplication with Mocki
 
     "supplied with a form with errors" should {
       lazy val form = disposalValueForm.bind(Map("disposalValue" -> "testData"))
-      lazy val view = disposalValue(form)
+      lazy val view = disposalValue(form)(fakeRequest, applicationMessages,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

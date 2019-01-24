@@ -18,6 +18,7 @@ package views
 
 import assets.MessageLookup.NonResident.{OtherProperties => messages}
 import assets.MessageLookup.{NonResident => commonMessages}
+import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
 import forms.OtherPropertiesForm._
@@ -28,13 +29,13 @@ import play.api.Play.current
 
 class OtherPropertiesViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
 
-
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
 
   "The other properties view" should {
 
     "return some HTML that, when the hidden question is displayed" should {
 
-      lazy val view = otherProperties(otherPropertiesForm)
+      lazy val view = otherProperties(otherPropertiesForm)(fakeRequest, applicationMessages,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       s"have the title '${messages.question}'" in {
@@ -97,7 +98,7 @@ class OtherPropertiesViewSpec extends UnitSpec with WithFakeApplication with Fak
 
     "return some HTML that, when the hidden question is not displayed" should {
 
-      lazy val view = otherProperties(otherPropertiesForm)
+      lazy val view = otherProperties(otherPropertiesForm)(fakeRequest, applicationMessages,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       s"have the title '${messages.question}'" in {
@@ -116,7 +117,7 @@ class OtherPropertiesViewSpec extends UnitSpec with WithFakeApplication with Fak
     "when passed a form with errors" should {
 
       lazy val form = otherPropertiesForm.bind(Map("otherProperties" -> "bad-data"))
-      lazy val view = otherProperties(form)
+      lazy val view = otherProperties(form)(fakeRequest, applicationMessages,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

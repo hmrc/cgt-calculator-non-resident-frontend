@@ -19,6 +19,7 @@ package controllers
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.nonresident.CalculationType
 import common.nonresident.TaxableGainCalculation._
+import config.ApplicationConfig
 import connectors.CalculatorConnector
 import constructors.AnswersConstructor
 import controllers.predicates.ValidActiveSession
@@ -26,25 +27,22 @@ import models._
 import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
 import play.api.mvc.{Action, AnyContent}
-import uk.gov.hmrc.play.frontend.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.calculation
 import controllers.utils.RecoverableFuture
-import play.api.Logger
+import javax.inject.Inject
+import play.api.{Environment, Logger}
 
 import scala.concurrent.Future
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
 import scala.util.Random
 
-object SummaryController extends SummaryController {
-  val calcConnector = CalculatorConnector
-  val answersConstructor = AnswersConstructor
-}
-
-trait SummaryController extends FrontendController with ValidActiveSession {
-
-  val calcConnector: CalculatorConnector
-  val answersConstructor: AnswersConstructor
+class SummaryController @Inject()(environment: Environment,
+                                  http: DefaultHttpClient,calcConnector: CalculatorConnector,
+                                  answersConstructor: AnswersConstructor)(implicit val applicationConfig: ApplicationConfig)
+                                    extends FrontendController with ValidActiveSession {
 
   val summary: Action[AnyContent] = ValidateSession.async { implicit request =>
 

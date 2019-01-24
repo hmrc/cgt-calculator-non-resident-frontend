@@ -16,23 +16,33 @@
 
 package controllers.CalculationControllerTests
 
+import akka.stream.Materializer
 import assets.MessageLookup
+import config.ApplicationConfig
+import connectors.CalculatorConnector
+import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
 import controllers.WhatNextController
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
 import org.scalatest.mockito.MockitoSugar
+import play.api.Environment
 import play.api.test.Helpers._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
 class WhatNextControllerSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
+
   implicit val hc: HeaderCarrier = mock[HeaderCarrier]
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  lazy val materializer = mock[Materializer]
 
   "Calling .whatNext" when {
-    lazy val target = new WhatNextController{}
+    lazy val target = new WhatNextController(environment = mock[Environment],
+      http = mock[DefaultHttpClient], mockConfig){}
     "provided with a valid request" should {
       lazy val result = target.whatNext(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       "return a status of 200" in {
         status(result) shouldBe 200

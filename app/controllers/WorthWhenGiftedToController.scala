@@ -17,25 +17,25 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import config.ApplicationConfig
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import forms.AcquisitionMarketValueForm._
+import javax.inject.Inject
 import views.html.calculation
 import models.AcquisitionValueModel
+import play.api.Environment
 import play.api.data.Form
-import uk.gov.hmrc.play.frontend.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
 import scala.concurrent.Future
 
-object WorthWhenGiftedToController extends WorthWhenGiftedToController {
-  val calcConnector = CalculatorConnector
-}
-
-trait WorthWhenGiftedToController extends FrontendController with ValidActiveSession {
-
-  val calcConnector: CalculatorConnector
+class WorthWhenGiftedToController @Inject()(environment: Environment,
+                                            http: DefaultHttpClient,calcConnector: CalculatorConnector)(implicit val applicationConfig: ApplicationConfig)
+                                              extends FrontendController with ValidActiveSession {
 
   val worthWhenGiftedTo = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[AcquisitionValueModel](KeystoreKeys.acquisitionMarketValue).map {

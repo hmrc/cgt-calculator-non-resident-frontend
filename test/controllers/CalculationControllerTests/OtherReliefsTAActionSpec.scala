@@ -16,6 +16,7 @@
 
 package controllers.CalculationControllerTests
 
+import akka.stream.Materializer
 import assets.MessageLookup.NonResident.{OtherReliefs => messages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
@@ -28,17 +29,36 @@ import org.scalatest.mock.MockitoSugar
 import play.api.test.Helpers._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import common.TestModels
-import constructors.AnswersConstructor
-import controllers.OtherReliefsTAController
+import config.ApplicationConfig
+import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
+import controllers.{OtherReliefsTAController, SoldOrGivenAwayController}
+import play.api.Environment
 import uk.gov.hmrc.http.cache.client.CacheMap
 
 import scala.concurrent.Future
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.logging.SessionId
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
 class OtherReliefsTAActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
+  implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
 
-  implicit val hc = new HeaderCarrier()
+  val materializer = mock[Materializer]
+  val mockEnvironment =mock[Environment]
+  val mockHttp =mock[DefaultHttpClient]
+  val mockCalcConnector =mock[CalculatorConnector]
+  val mockAnswersConstructor = mock[AnswersConstructor]
+  val defaultCache = mock[CacheMap]
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
 
+  class Setup {
+    val controller = new OtherReliefsTAController(
+      mockEnvironment,
+      mockHttp,
+      mockCalcConnector,
+      mockAnswersConstructor
+    )(mockConfig)
+  }
   def setupTarget(
                    getData: Option[OtherReliefsModel],
                    gainAnswers: TotalGainAnswersModel,
@@ -47,9 +67,6 @@ class OtherReliefsTAActionSpec extends UnitSpec with WithFakeApplication with Mo
                    totalGainResultModel: TotalGainResultsModel = TotalGainResultsModel(200, Some(100), Some(200)),
                    calculationResultsWithPRRModel: Option[CalculationResultsWithPRRModel] = None
                  ): OtherReliefsTAController = {
-
-    val mockCalcConnector = mock[CalculatorConnector]
-    val mockAnswersConstructor = mock[AnswersConstructor]
 
     when(mockCalcConnector.fetchAndGetFormData[OtherReliefsModel](
       ArgumentMatchers.eq(KeystoreKeys.otherReliefsTA))(ArgumentMatchers.any(), ArgumentMatchers.any()))
@@ -89,9 +106,9 @@ class OtherReliefsTAActionSpec extends UnitSpec with WithFakeApplication with Mo
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new OtherReliefsTAController {
-      override val calcConnector: CalculatorConnector = mockCalcConnector
-      override val answersConstructor: AnswersConstructor = mockAnswersConstructor
+    new OtherReliefsTAController(mockEnvironment, mockHttp, mockCalcConnector, mockAnswersConstructor)(mockConfig) {
+      val calcConnector: CalculatorConnector = mockCalcConnector
+      val answersConstructor: AnswersConstructor = mockAnswersConstructor
     }
   }
 
@@ -106,7 +123,7 @@ class OtherReliefsTAActionSpec extends UnitSpec with WithFakeApplication with Mo
         TestModels.personalDetailsCalculationModel
       )
       lazy val result = target.otherReliefsTA(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       "return a 200 with a valid calculation result" in {
         status(result) shouldBe 200
@@ -134,7 +151,7 @@ class OtherReliefsTAActionSpec extends UnitSpec with WithFakeApplication with Mo
         TestModels.personalDetailsCalculationModel
       )
       lazy val result = target.otherReliefsTA(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       "return a status of 200" in {
         status(result) shouldBe 200
@@ -194,7 +211,7 @@ class OtherReliefsTAActionSpec extends UnitSpec with WithFakeApplication with Mo
       )
       lazy val request = fakeRequestToPOSTWithSession(("isClaimingOtherReliefs", "Yes"), ("otherReliefs", "-1000"))
       lazy val result = target.submitOtherReliefsTA(request)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       "return a status of 400" in {
         status(result) shouldBe 400

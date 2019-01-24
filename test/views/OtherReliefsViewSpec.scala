@@ -17,6 +17,7 @@
 package views
 
 import assets.MessageLookup.{NonResident => messages}
+import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
 import forms.OtherReliefsForm._
@@ -28,14 +29,14 @@ import play.api.Play.current
 
 class OtherReliefsViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
-
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
 
   "The Other Reliefs Flat view" when {
 
     "not supplied with a pre-existing stored value and a taxable gain" should {
       val totalGain = 1234
       val totalChargeableGain = 4321
-      lazy val view = otherReliefs(otherReliefsForm, totalChargeableGain, totalGain)
+      lazy val view = otherReliefs(otherReliefsForm, totalChargeableGain, totalGain)(fakeRequest, applicationMessages,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of ${messages.OtherReliefs.question}" in {
@@ -126,7 +127,7 @@ class OtherReliefsViewSpec extends UnitSpec with WithFakeApplication with Mockit
       val totalGain = -1234
       val totalChargeableGain = -4321
 
-      lazy val view = otherReliefs(otherReliefsForm, totalChargeableGain, totalGain)
+      lazy val view = otherReliefs(otherReliefsForm, totalChargeableGain, totalGain)(fakeRequest, applicationMessages,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have the correct additional help text" in {
@@ -145,7 +146,7 @@ class OtherReliefsViewSpec extends UnitSpec with WithFakeApplication with Mockit
 
     "supplied with an invalid map" should {
       val map = Map("otherReliefs" -> "-1000")
-      lazy val view = otherReliefs(otherReliefsForm.bind(map), 0, 0)
+      lazy val view = otherReliefs(otherReliefsForm.bind(map), 0, 0)(fakeRequest, applicationMessages,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

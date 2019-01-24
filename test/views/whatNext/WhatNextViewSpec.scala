@@ -26,12 +26,12 @@ import play.api.i18n.Messages.Implicits._
 import play.api.test.FakeRequest
 
 class WhatNextViewSpec extends UnitSpec with WithFakeApplication {
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
 
   "What next view should" when {
     implicit lazy val fakeApp: Application = fakeApplication
 
-    lazy val config = ApplicationConfig
-    lazy val view = whatNext()(FakeRequest("GET", ""), applicationMessages, fakeApp, config)
+    lazy val view = whatNext()(FakeRequest("GET", ""),applicationMessages,fakeApplication, mockConfig)
     lazy val doc = Jsoup.parse(view.body)
 
     s"have a title of ${messages.title}" in {

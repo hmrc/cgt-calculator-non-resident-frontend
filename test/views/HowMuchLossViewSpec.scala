@@ -17,6 +17,7 @@
 package views
 
 import assets.MessageLookup.{NonResident => messages}
+import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
 import forms.HowMuchLossForm._
@@ -26,12 +27,12 @@ import play.api.Play.current
 
 class HowMuchLossViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
 
-
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
 
   "Previous Loss view" when {
 
     "provided with no errors" should {
-      lazy val view = views.html.calculation.howMuchLoss(howMuchLossForm)
+      lazy val view = views.html.calculation.howMuchLoss(howMuchLossForm)(fakeRequest, applicationMessages,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of ${messages.HowMuchLoss.question}" in {
@@ -114,7 +115,7 @@ class HowMuchLossViewSpec extends UnitSpec with WithFakeApplication with FakeReq
 
     "provided with some errors" should {
       lazy val form = howMuchLossForm.bind(Map("loss" -> ""))
-      lazy val view = views.html.calculation.howMuchLoss(form)
+      lazy val view = views.html.calculation.howMuchLoss(form)(fakeRequest, applicationMessages,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

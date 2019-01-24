@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package controllers.resident.properties.DeductionsControllerSpec
+package controllers.CalculationControllerTests
 
+import akka.stream.Materializer
 import config.{AppConfig, ApplicationConfig}
 import connectors.CalculatorConnector
 import controllers.helpers.FakeRequestHelper
-import controllers.PropertyLivedInController
+import controllers.{PropertyLivedInController, ReportController}
 import models.PropertyLivedInModel
 import org.scalatest.mock.MockitoSugar
 import org.mockito.Mockito._
@@ -31,22 +32,42 @@ import org.jsoup.Jsoup
 import play.api.test.Helpers.{contentType, _}
 import uk.gov.hmrc.http.cache.client.CacheMap
 import connectors.CalculatorConnector
+import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
 import controllers.predicates.ValidActiveSession
 import forms.PropertyLivedInForm._
+import play.api.Environment
 import play.api.mvc.{Action, AnyContent}
-import uk.gov.hmrc.play.frontend.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 import play.api.data.Form
-
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.logging.SessionId
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
 import scala.concurrent.Future
 
 class PropertyLivedInActionSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper with MockitoSugar {
 
-  def setupTarget(getData: Option[PropertyLivedInModel]): PropertyLivedInController= {
+  implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
 
-    val mockCalcConnector = mock[CalculatorConnector]
+  val materializer = mock[Materializer]
+  val mockEnvironment =mock[Environment]
+  val mockHttp =mock[DefaultHttpClient]
+  val mockCalcConnector =mock[CalculatorConnector]
+  val defaultCache = mock[CacheMap]
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+
+  class Setup {
+    val controller = new PropertyLivedInController(
+      mockEnvironment,
+      mockHttp,
+      mockCalcConnector
+    )(mockConfig)
+  }
+
+
+  def setupTarget(getData: Option[PropertyLivedInModel]): PropertyLivedInController= {
 
     when(mockCalcConnector.fetchAndGetFormData[PropertyLivedInModel](ArgumentMatchers.eq(keyStoreKeys.propertyLivedIn))
       (ArgumentMatchers.any(), ArgumentMatchers.any()))
@@ -55,8 +76,8 @@ class PropertyLivedInActionSpec extends UnitSpec with WithFakeApplication with F
     when(mockCalcConnector.saveFormData[PropertyLivedInModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(mock[CacheMap]))
 
-    new PropertyLivedInController {
-      override val calcConnector: CalculatorConnector = mockCalcConnector
+    new PropertyLivedInController(mockEnvironment, mockHttp, mockCalcConnector)(mockConfig) {
+      val calcConnector: CalculatorConnector = mockCalcConnector
           }
   }
 
@@ -73,7 +94,7 @@ class PropertyLivedInActionSpec extends UnitSpec with WithFakeApplication with F
 
       s"return some html with title of ${messages.title}" in {
         contentType(result) shouldBe Some("text/html")
-        Jsoup.parse(bodyOf(result)).title shouldEqual messages.title
+        Jsoup.parse(bodyOf(result)(materializer)).title shouldEqual messages.title
       }
     }
 
@@ -88,7 +109,7 @@ class PropertyLivedInActionSpec extends UnitSpec with WithFakeApplication with F
 
       s"return some html with title of ${messages.title}" in {
         contentType(result) shouldBe Some("text/html")
-        Jsoup.parse(bodyOf(result)).title shouldEqual messages.title
+        Jsoup.parse(bodyOf(result)(materializer)).title shouldEqual messages.title
       }
     }
 
@@ -144,7 +165,7 @@ class PropertyLivedInActionSpec extends UnitSpec with WithFakeApplication with F
       lazy val target = setupTarget(None)
       lazy val request = fakeRequestToPOSTWithSession(("propertyLivedIn", ""))
       lazy val result = target.submitPropertyLivedIn(request)
-      lazy val doc = Jsoup.parse(bodyOf(result))
+      lazy val doc = Jsoup.parse(bodyOf(result)(materializer))
 
       "return a status of 400" in {
         status(result) shouldBe 400

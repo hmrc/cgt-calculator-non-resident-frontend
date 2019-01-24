@@ -16,11 +16,14 @@
 
 package controllers.CalculationControllerTests
 
+import akka.stream.Materializer
 import assets.MessageLookup.NonResident.{AnnualExemptAmount => messages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.nonresident.CustomerTypeKeys
+import config.ApplicationConfig
 import connectors.CalculatorConnector
-import controllers.AnnualExemptAmountController
+import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
+import controllers.{AnnualExemptAmountController, OtherReliefsFlatController, routes}
 import controllers.helpers.FakeRequestHelper
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
@@ -30,14 +33,42 @@ import org.jsoup._
 import org.scalatest.mock.MockitoSugar
 
 import scala.concurrent.Future
-import controllers.routes
 import models._
+import org.scalatest.BeforeAndAfterEach
+import play.api.Environment
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.logging.SessionId
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
-class AnnualExemptAmountActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
+class AnnualExemptAmountActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper
+  with BeforeAndAfterEach {
 
-  implicit val hc = new HeaderCarrier()
+  implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
+
+  val materializer = mock[Materializer]
+  val mockEnvironment =mock[Environment]
+  val mockHttp =mock[DefaultHttpClient]
+  val mockCalcConnector =mock[CalculatorConnector]
+  val defaultCache = mock[CacheMap]
+  val mockAnswersConstructor = mock[AnswersConstructor]
+  val mockDefaultCalElecConstructor = mock[DefaultCalculationElectionConstructor]
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+
+
+  class Setup {
+    val controller = new AnnualExemptAmountController(
+      mockEnvironment,
+      mockHttp,
+      mockCalcConnector,
+      mockDefaultCalElecConstructor
+    )(mockConfig)
+  }
+
+  override def beforeEach(): Unit = {
+    reset(Seq(mockEnvironment, mockHttp, mockCalcConnector, mockDefaultCalElecConstructor): _*)
+    super.beforeEach()
+  }
 
   def setupTarget(
                    getData: Option[AnnualExemptAmountModel],
@@ -47,8 +78,6 @@ class AnnualExemptAmountActionSpec extends UnitSpec with WithFakeApplication wit
                    howMuchLoss: Option[HowMuchLossModel] = None,
                    howMuchGain: Option[HowMuchGainModel] = None
                  ): AnnualExemptAmountController = {
-
-    val mockCalcConnector = mock[CalculatorConnector]
 
     when(mockCalcConnector.fetchAndGetFormData[DateModel](
       ArgumentMatchers.eq(KeystoreKeys.disposalDate))(ArgumentMatchers.any(), ArgumentMatchers.any()))
@@ -76,8 +105,8 @@ class AnnualExemptAmountActionSpec extends UnitSpec with WithFakeApplication wit
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new AnnualExemptAmountController {
-      override val calcConnector: CalculatorConnector = mockCalcConnector
+    new AnnualExemptAmountController(mockEnvironment, mockHttp, mockCalcConnector, mockDefaultCalElecConstructor)(mockConfig) {
+      val calcConnector: CalculatorConnector = mockCalcConnector
     }
   }
 
@@ -85,100 +114,114 @@ class AnnualExemptAmountActionSpec extends UnitSpec with WithFakeApplication wit
   "Calling the .annualExemptAmount action" when {
 
     "not supplied with a pre-existing stored model" should {
-      val target = setupTarget(None)
-      lazy val result = target.annualExemptAmount(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
 
       "return a 200" in {
+        val target = setupTarget(None)
+        lazy val result = target.annualExemptAmount(fakeRequestWithSession)
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
         status(result) shouldBe 200
       }
 
       s"have the title '${messages.question}'" in {
+        val target = setupTarget(None)
+        lazy val result = target.annualExemptAmount(fakeRequestWithSession)
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
         document.title shouldEqual messages.question
       }
     }
 
     "supplied with a 2016/17 tax year date" should {
-      val target = setupTarget(None, "Yes", disposalDate = Some(DateModel(12, 12, 2016)))
-      lazy val result = target.annualExemptAmount(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
 
       "return a 200" in {
+        val target = setupTarget(None, "Yes", disposalDate = Some(DateModel(12, 12, 2016)))
+        lazy val result = target.annualExemptAmount(fakeRequestWithSession)
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
         status(result) shouldBe 200
       }
 
       s"have the help text '${messages.hint("11,100")}'" in {
+        val target = setupTarget(None, "Yes", disposalDate = Some(DateModel(12, 12, 2016)))
+        lazy val result = target.annualExemptAmount(fakeRequestWithSession)
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
         document.select("#input-hint").text() shouldBe messages.hint("11,100")
       }
     }
 
     "supplied with a 2015/16 tax year date" should {
-      val target = setupTarget(None, disposalDate = Some(DateModel(12, 12, 2015)))
-      lazy val result = target.annualExemptAmount(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
 
       "return a 200" in {
+        val target = setupTarget(None, disposalDate = Some(DateModel(12, 12, 2015)))
+        lazy val result = target.annualExemptAmount(fakeRequestWithSession)
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
         status(result) shouldBe 200
       }
 
       s"have the help text '${messages.hint("11,100")}'" in {
+        val target = setupTarget(None, disposalDate = Some(DateModel(12, 12, 2015)))
+        lazy val result = target.annualExemptAmount(fakeRequestWithSession)
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
         document.select("#input-hint").text() shouldBe messages.hint("11,100")
       }
     }
 
     "supplied with a date outside 2015/16, 2016/17 tax years" should {
-      val target = setupTarget(None, disposalDate = Some(DateModel(12, 12, 2013)))
-      lazy val result = target.annualExemptAmount(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
 
       "return a 200" in {
+        val target = setupTarget(None, disposalDate = Some(DateModel(12, 12, 2013)))
+        lazy val result = target.annualExemptAmount(fakeRequestWithSession)
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
         status(result) shouldBe 200
       }
 
       s"have the help text '${messages.hint("11,100")}'" in {
+        val target = setupTarget(None, disposalDate = Some(DateModel(12, 12, 2013)))
+        lazy val result = target.annualExemptAmount(fakeRequestWithSession)
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
         document.select("#input-hint").text() shouldBe messages.hint("11,100")
       }
     }
 
     "not supplied with a valid session" should {
-      val target = setupTarget(None, disposalDate = Some(DateModel(12, 12, 2016)))
-      lazy val result = target.annualExemptAmount(fakeRequest)
 
       "return a 303" in {
+        val target = setupTarget(None, disposalDate = Some(DateModel(12, 12, 2016)))
+        lazy val result = target.annualExemptAmount(fakeRequest)
         status(result) shouldBe 303
       }
 
       "redirect to the session timeout page" in {
+        val target = setupTarget(None, disposalDate = Some(DateModel(12, 12, 2016)))
+        lazy val result = target.annualExemptAmount(fakeRequest)
         redirectLocation(result).get should include("/calculate-your-capital-gains/non-resident/session-timeout")
       }
     }
 
     "when there was no previous gain or loss" should {
-      val target = setupTarget(None, previousLossOrGain = Some(PreviousLossOrGainModel("Neither")))
-      lazy val result = target.annualExemptAmount(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
 
       "have a back link to previous-gain-or-loss" in {
+        val target = setupTarget(None, previousLossOrGain = Some(PreviousLossOrGainModel("Neither")))
+        lazy val result = target.annualExemptAmount(fakeRequestWithSession)
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
         document.select("#back-link").attr("href") shouldEqual routes.PreviousGainOrLossController.previousGainOrLoss().url
       }
     }
 
     "when there was a previous loss of 0" should {
-      val target = setupTarget(None, previousLossOrGain = Some(PreviousLossOrGainModel("Loss")), howMuchLoss = Some(HowMuchLossModel(0)))
-      lazy val result = target.annualExemptAmount(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
 
       "have a back link to previous-gain-or-loss" in {
+        val target = setupTarget(None, previousLossOrGain = Some(PreviousLossOrGainModel("Loss")), howMuchLoss = Some(HowMuchLossModel(0)))
+        lazy val result = target.annualExemptAmount(fakeRequestWithSession)
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
         document.select("#back-link").attr("href") shouldEqual routes.HowMuchLossController.howMuchLoss().url
       }
     }
 
     "when there was a previous gain of 0" should {
-      val target = setupTarget(None, previousLossOrGain = Some(PreviousLossOrGainModel("Gain")), howMuchGain = Some(HowMuchGainModel(0)))
-      lazy val result = target.annualExemptAmount(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
 
       "have a back link to previous-gain-or-loss" in {
+        val target = setupTarget(None, previousLossOrGain = Some(PreviousLossOrGainModel("Gain")), howMuchGain = Some(HowMuchGainModel(0)))
+        lazy val result = target.annualExemptAmount(fakeRequestWithSession)
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
         document.select("#back-link").attr("href") shouldEqual routes.HowMuchGainController.howMuchGain().url
       }
     }
@@ -188,30 +231,37 @@ class AnnualExemptAmountActionSpec extends UnitSpec with WithFakeApplication wit
   "Calling the .submitAnnualExemptAmount action" when {
 
     "submitting a valid form for a non-trustee" should {
-      val target = setupTarget(None)
-      lazy val request = fakeRequestToPOSTWithSession(("annualExemptAmount", "1000"))
-      lazy val result = target.submitAnnualExemptAmount(request)
 
       "return a 303" in {
+        val target = setupTarget(None)
+        lazy val request = fakeRequestToPOSTWithSession(("annualExemptAmount", "1000"))
+        lazy val result = target.submitAnnualExemptAmount(request)
         status(result) shouldBe 303
       }
 
       "should redirect to the Brought Forward Losses page" in {
+        val target = setupTarget(None)
+        lazy val request = fakeRequestToPOSTWithSession(("annualExemptAmount", "1000"))
+        lazy val result = target.submitAnnualExemptAmount(request)
         redirectLocation(result) shouldBe Some(controllers.routes.BroughtForwardLossesController.broughtForwardLosses().url)
       }
     }
 
     "submitting an invalid form" should {
-      val target = setupTarget(None, "Yes")
-      lazy val request = fakeRequestToPOSTWithSession(("annualExemptAmount", "1000000"))
-      lazy val result = target.submitAnnualExemptAmount(request)
-      lazy val document = Jsoup.parse(bodyOf(result))
 
       "return a 400" in {
+        val target = setupTarget(None, "Yes")
+        lazy val request = fakeRequestToPOSTWithSession(("annualExemptAmount", "1000000"))
+        lazy val result = target.submitAnnualExemptAmount(request)
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
         status(result) shouldBe 400
       }
 
       "return to the Annual Exempt Amount page" in {
+        val target = setupTarget(None, "Yes")
+        lazy val request = fakeRequestToPOSTWithSession(("annualExemptAmount", "1000000"))
+        lazy val result = target.submitAnnualExemptAmount(request)
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
         document.title shouldBe messages.question
       }
     }

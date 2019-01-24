@@ -16,33 +16,61 @@
 
 package controllers.CalculationControllerTests
 
+import akka.stream.Materializer
 import assets.MessageLookup.NonResident.{AcquisitionCosts => messages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import config.ApplicationConfig
 import connectors.CalculatorConnector
-import controllers.AcquisitionCostsController
+import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
+import controllers.{AcquisitionCostsController, PropertyLivedInController}
 import controllers.helpers.FakeRequestHelper
-import models.{AcquisitionCostsModel, DateModel, BoughtForLessModel, HowBecameOwnerModel}
+import models.{AcquisitionCostsModel, BoughtForLessModel, DateModel, HowBecameOwnerModel}
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
+import org.scalatest.BeforeAndAfterEach
 import org.scalatest.mock.MockitoSugar
+import play.api.Environment
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 import scala.concurrent.Future
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.logging.SessionId
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
-class AcquisitionCostsActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
+class AcquisitionCostsActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper
+  with BeforeAndAfterEach {
 
-  implicit val hc = new HeaderCarrier()
+  implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
+
+  val materializer = mock[Materializer]
+  val mockEnvironment =mock[Environment]
+  val mockHttp =mock[DefaultHttpClient]
+  val mockCalcConnector =mock[CalculatorConnector]
+  val mockDefaultCalcElecConstructor = mock[DefaultCalculationElectionConstructor]
+  val defaultCache = mock[CacheMap]
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+
+  class Setup {
+    val controller = new AcquisitionCostsController(
+      mockEnvironment,
+      mockHttp,
+      mockCalcConnector,
+      mockDefaultCalcElecConstructor
+    )(mockConfig)
+  }
+
+  override def beforeEach(): Unit = {
+    reset(Seq(mockEnvironment, mockHttp, mockCalcConnector, mockDefaultCalcElecConstructor): _*)
+    super.beforeEach()
+  }
 
   def setupTarget(getData: Option[AcquisitionCostsModel],
                   acquisitionDateData: Option[DateModel] = Some(DateModel(10, 5, 2001)),
                   howBecameOwnerData: Option[HowBecameOwnerModel] = None,
                   boughtForLessData: Option[BoughtForLessModel] = None): AcquisitionCostsController = {
-
-    val mockCalcConnector = mock[CalculatorConnector]
 
     when(mockCalcConnector.fetchAndGetFormData[AcquisitionCostsModel](
       ArgumentMatchers.eq(KeystoreKeys.acquisitionCosts))(ArgumentMatchers.any(), ArgumentMatchers.any()))
@@ -63,8 +91,8 @@ class AcquisitionCostsActionSpec extends UnitSpec with WithFakeApplication with 
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new AcquisitionCostsController {
-      override val calcConnector: CalculatorConnector = mockCalcConnector
+    new AcquisitionCostsController(mockEnvironment, mockHttp, mockCalcConnector, mockDefaultCalcElecConstructor)(mockConfig) {
+      val calcConnector: CalculatorConnector = mockCalcConnector
     }
   }
 
@@ -113,47 +141,59 @@ class AcquisitionCostsActionSpec extends UnitSpec with WithFakeApplication with 
   "Calling the .acquisitionCosts action " should {
 
     "not supplied with a pre-existing stored model" should {
-      val target = setupTarget(None, acquisitionDateData = Some(DateModel(1, 1, 2016)), Some(HowBecameOwnerModel("Gifted")))
-      lazy val result = target.acquisitionCosts(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
 
       "return a 200" in {
+        val target = setupTarget(None, acquisitionDateData = Some(DateModel(1, 1, 2016)), Some(HowBecameOwnerModel("Gifted")))
+        lazy val result = target.acquisitionCosts(fakeRequestWithSession)
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
         status(result) shouldBe 200
       }
 
       "load the acquisitionCosts page" in {
+        val target = setupTarget(None, acquisitionDateData = Some(DateModel(1, 1, 2016)), Some(HowBecameOwnerModel("Gifted")))
+        lazy val result = target.acquisitionCosts(fakeRequestWithSession)
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
         document.title shouldBe messages.question
       }
 
       "have a back link to the WorthWhenGiftedTo page" in {
+        val target = setupTarget(None, acquisitionDateData = Some(DateModel(1, 1, 2016)), Some(HowBecameOwnerModel("Gifted")))
+        lazy val result = target.acquisitionCosts(fakeRequestWithSession)
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
         document.select("#back-link").attr("href") shouldBe controllers.routes.WorthWhenGiftedToController.worthWhenGiftedTo().url
       }
     }
 
     "supplied with a pre-existing stored model" should {
-      val testAcquisitionCostsModel = new AcquisitionCostsModel(1000)
-      val target = setupTarget(Some(testAcquisitionCostsModel))
-      lazy val result = target.acquisitionCosts(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
 
       "return a 200" in {
+        val testAcquisitionCostsModel = new AcquisitionCostsModel(1000)
+        val target = setupTarget(Some(testAcquisitionCostsModel))
+        lazy val result = target.acquisitionCosts(fakeRequestWithSession)
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
         status(result) shouldBe 200
       }
 
       "load the acquisitionCosts page" in {
+        val testAcquisitionCostsModel = new AcquisitionCostsModel(1000)
+        val target = setupTarget(Some(testAcquisitionCostsModel))
+        lazy val result = target.acquisitionCosts(fakeRequestWithSession)
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
         document.title shouldBe messages.question
       }
     }
 
     "without a valid session" should {
-      val target = setupTarget(None)
-      lazy val result = target.acquisitionCosts(fakeRequest)
 
       "return a 303" in {
+        val target = setupTarget(None)
+        lazy val result = target.acquisitionCosts(fakeRequest)
         status(result) shouldBe 303
       }
 
       "redirect to the session timeout page" in {
+        val target = setupTarget(None)
+        lazy val result = target.acquisitionCosts(fakeRequest)
         redirectLocation(result).get should include("/calculate-your-capital-gains/non-resident/session-timeout")
       }
     }
@@ -162,48 +202,62 @@ class AcquisitionCostsActionSpec extends UnitSpec with WithFakeApplication with 
   "Calling the .submitAcquisitionCosts action" when {
 
     "supplied with an acquisition date after the tax start" should{
-      val target = setupTarget(None, acquisitionDateData = Some(DateModel(10, 5, 2016)))
-      lazy val request = fakeRequestToPOSTWithSession(("acquisitionCosts", "1000"))
-      lazy val result = target.submitAcquisitionCosts(request)
 
       "return a 303" in {
+        val target = setupTarget(None, acquisitionDateData = Some(DateModel(10, 5, 2016)))
+        lazy val request = fakeRequestToPOSTWithSession(("acquisitionCosts", "1000"))
+        lazy val result = target.submitAcquisitionCosts(request)
         status(result) shouldBe 303
       }
 
       s"redirect to '${controllers.routes.ImprovementsController.improvements().url}'" in {
+        val target = setupTarget(None, acquisitionDateData = Some(DateModel(10, 5, 2016)))
+        lazy val request = fakeRequestToPOSTWithSession(("acquisitionCosts", "1000"))
+        lazy val result = target.submitAcquisitionCosts(request)
         redirectLocation(result).get shouldBe controllers.routes.ImprovementsController.improvements().url
       }
     }
 
     "supplied with an acquisition date before the tax start" should {
-      val target = setupTarget(None, acquisitionDateData = Some(DateModel(10, 5, 2000)))
-      lazy val request = fakeRequestToPOSTWithSession(("acquisitionCosts", "1000"))
-      lazy val result = target.submitAcquisitionCosts(request)
 
       "return a 303" in {
+        val target = setupTarget(None, acquisitionDateData = Some(DateModel(10, 5, 2000)))
+        lazy val request = fakeRequestToPOSTWithSession(("acquisitionCosts", "1000"))
+        lazy val result = target.submitAcquisitionCosts(request)
         status(result) shouldBe 303
       }
 
       s"redirect to '${controllers.routes.RebasedValueController.rebasedValue().url}'" in {
+        val target = setupTarget(None, acquisitionDateData = Some(DateModel(10, 5, 2000)))
+        lazy val request = fakeRequestToPOSTWithSession(("acquisitionCosts", "1000"))
+        lazy val result = target.submitAcquisitionCosts(request)
         redirectLocation(result).get shouldBe controllers.routes.RebasedValueController.rebasedValue().url
       }
     }
 
     "supplied with an invalid form" should {
-      val target = setupTarget(None, acquisitionDateData = Some(DateModel(1, 1, 2016)), Some(HowBecameOwnerModel("Inherited")))
-      lazy val request = fakeRequestToPOSTWithSession(("acquisitionCosts", "a"))
-      lazy val result = target.submitAcquisitionCosts(request)
-      lazy val document = Jsoup.parse(bodyOf(result))
 
       "return a 400" in {
+        val target = setupTarget(None, acquisitionDateData = Some(DateModel(1, 1, 2016)), Some(HowBecameOwnerModel("Inherited")))
+        lazy val request = fakeRequestToPOSTWithSession(("acquisitionCosts", "a"))
+        lazy val result = target.submitAcquisitionCosts(request)
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
         status(result) shouldBe 400
       }
 
       "return to the acquisition costs page" in {
+        val target = setupTarget(None, acquisitionDateData = Some(DateModel(1, 1, 2016)), Some(HowBecameOwnerModel("Inherited")))
+        lazy val request = fakeRequestToPOSTWithSession(("acquisitionCosts", "a"))
+        lazy val result = target.submitAcquisitionCosts(request)
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
         document.title shouldBe messages.question
       }
 
       "have a back link to the WorthWhenInherited page" in {
+        val target = setupTarget(None, acquisitionDateData = Some(DateModel(1, 1, 2016)), Some(HowBecameOwnerModel("Inherited")))
+        lazy val request = fakeRequestToPOSTWithSession(("acquisitionCosts", "a"))
+        lazy val result = target.submitAcquisitionCosts(request)
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
         document.select("#back-link").attr("href") shouldBe controllers.routes.WorthWhenInheritedController.worthWhenInherited().url
       }
     }

@@ -16,6 +16,7 @@
 
 package controllers.CalculationControllerTests
 
+import akka.stream.Materializer
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
 import org.mockito.ArgumentMatchers
@@ -26,28 +27,45 @@ import org.scalatest.mock.MockitoSugar
 import play.api.test.Helpers._
 import assets.MessageLookup.NonResident.{Improvements => messages}
 import assets.MessageLookup.{NonResident => commonMessages}
-import constructors.AnswersConstructor
-import controllers.ImprovementsController
+import config.ApplicationConfig
+import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
+import controllers.{CalculationElectionController, ImprovementsController, routes}
 import controllers.helpers.FakeRequestHelper
 
 import scala.concurrent.Future
-import controllers.routes
 import models._
+import play.api.Environment
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.logging.SessionId
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
 class ImprovementsActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val hc = new HeaderCarrier()
+  implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
+
+  val materializer = mock[Materializer]
+  val mockEnvironment =mock[Environment]
+  val mockHttp =mock[DefaultHttpClient]
+  val mockCalcConnector =mock[CalculatorConnector]
+  val defaultCache = mock[CacheMap]
+  val mockAnswersConstructor = mock[AnswersConstructor]
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+
+  class Setup {
+    val controller = new ImprovementsController(
+      mockEnvironment,
+      mockHttp,
+      mockCalcConnector,
+      mockAnswersConstructor
+    )(mockConfig)
+  }
 
   def setupTarget(getData: Option[ImprovementsModel],
                   acquisitionDateData: Option[DateModel],
                   rebasedValueData: Option[RebasedValueModel] = None,
                   totalGainResultsModel: Option[TotalGainResultsModel] = None
                  ): ImprovementsController = {
-
-    val mockCalcConnector = mock[CalculatorConnector]
-    val mockAnswersConstructor = mock[AnswersConstructor]
 
     when(mockCalcConnector.fetchAndGetFormData[ImprovementsModel](ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
@@ -69,9 +87,9 @@ class ImprovementsActionSpec extends UnitSpec with WithFakeApplication with Mock
     when(mockCalcConnector.saveFormData[ImprovementsModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(mock[CacheMap]))
 
-    new ImprovementsController {
-      override val calcConnector: CalculatorConnector = mockCalcConnector
-      override val answersConstructor: AnswersConstructor = mockAnswersConstructor
+    new ImprovementsController(mockEnvironment, mockHttp, mockCalcConnector, mockAnswersConstructor)(mockConfig) {
+      val calcConnector: CalculatorConnector = mockCalcConnector
+      val answersConstructor: AnswersConstructor = mockAnswersConstructor
     }
   }
 
@@ -83,7 +101,7 @@ class ImprovementsActionSpec extends UnitSpec with WithFakeApplication with Mock
 
         lazy val target = setupTarget(None, Some(DateModel(1, 1, 2017)), Some(RebasedValueModel(1000)))
         lazy val result = target.improvements(fakeRequestWithSession)
-        lazy val document = Jsoup.parse(bodyOf(result))
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
         "return a 200" in {
           status(result) shouldBe 200
@@ -109,7 +127,7 @@ class ImprovementsActionSpec extends UnitSpec with WithFakeApplication with Mock
           Some(RebasedValueModel(500))
         )
         lazy val result = target.improvements(fakeRequestWithSession)
-        lazy val document = Jsoup.parse(bodyOf(result))
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
         s"have a back link that contains ${commonMessages.back}" in {
           document.body.getElementById("back-link").text shouldEqual commonMessages.back
@@ -177,7 +195,7 @@ class ImprovementsActionSpec extends UnitSpec with WithFakeApplication with Mock
       val target = setupTarget(None, Some(DateModel(1, 1, 2014)))
       lazy val request = fakeRequestToPOSTWithSession("isClaimingImprovements" -> "testData123", "improvementsAmt" -> "fhu39awd8")
       lazy val result = target.submitImprovements(request)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       "return a 400" in {
         status(result) shouldBe 400

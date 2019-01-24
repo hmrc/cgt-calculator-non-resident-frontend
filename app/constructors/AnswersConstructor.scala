@@ -19,6 +19,7 @@ package constructors
 import common.{TaxDates, YesNoKeys}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
+import javax.inject.Inject
 import models._
 import play.api.Logger
 
@@ -26,12 +27,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import uk.gov.hmrc.http.HeaderCarrier
 
-object AnswersConstructor extends AnswersConstructor {
-  val calculatorConnector = CalculatorConnector
-}
-
-trait AnswersConstructor {
-  val calculatorConnector: CalculatorConnector
+class AnswersConstructor @Inject()(calculatorConnector: CalculatorConnector) {
 
   def getNRTotalGainAnswers(implicit hc: HeaderCarrier): Future[TotalGainAnswersModel] = {
     val disposalDate = calculatorConnector.fetchAndGetFormData[DateModel](KeystoreKeys.disposalDate).map(data => {

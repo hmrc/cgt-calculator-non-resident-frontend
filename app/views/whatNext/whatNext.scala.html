@@ -17,7 +17,8 @@
 @import config.AppConfig
 @import views.html.helpers.expandableHelpTextHelper
 @import play.api.Application
-@()(implicit request: Request[_], messages: Messages, application: Application, config: AppConfig)
+@import config.ApplicationConfig
+@()(implicit request: Request[_], messages: Messages, application: Application, applicationConfig: ApplicationConfig)
 
 @hiddenContent = {
     <p>@Messages("calc.whatNext.saText")</p>
@@ -44,10 +45,10 @@
         @expandableHelpTextHelper(Messages("calc.whatNext.saHeader"), hiddenContent)
 
         <div class="form-group">
-            <a class="button" href="@config.nrIFormLink">@Messages("calc.whatNext.report")</a>
+            <a class="button" href="@applicationConfig.nrIFormLink">@Messages("calc.whatNext.report")</a>
         </div>
         <div class="form-group">
-            <a href="@config.govUkLink">@Messages("calc.whatNext.finish")</a>
+            <a href="@applicationConfig.govUkLink">@Messages("calc.whatNext.finish")</a>
         </div>
     </div>
 }

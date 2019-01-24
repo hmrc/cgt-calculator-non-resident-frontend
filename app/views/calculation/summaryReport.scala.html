@@ -26,9 +26,10 @@
 @import views.html.helpers._
 @import play.api.Application
 
+@import config.ApplicationConfig
 @(questions: Seq[QuestionAnswerModel[Any]],
 calculationResult: TotalTaxOwedModel, taxYearModel: TaxYearModel, calculationType: String,
-disposalValue: BigDecimal, acquisitionValue: BigDecimal, totalCosts: BigDecimal, flatGain: Option[BigDecimal] = None, reliefsUsed: BigDecimal = 0)(implicit request: Request[_], messages: Messages, lang: Lang, application: Application)
+disposalValue: BigDecimal, acquisitionValue: BigDecimal, totalCosts: BigDecimal, flatGain: Option[BigDecimal] = None, reliefsUsed: BigDecimal = 0)(implicit request: Request[_], messages: Messages, lang: Lang, application: Application, applicationConfig: ApplicationConfig)
 
 <!DOCTYPE html>
 <html>

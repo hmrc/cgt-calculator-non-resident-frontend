@@ -18,6 +18,7 @@ package views
 
 import assets.MessageLookup.NonResident.Summary
 import assets.MessageLookup.{NonResident => messages}
+import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import models.{QuestionAnswerModel, TaxYearModel, TotalTaxOwedModel}
 import org.jsoup.Jsoup
@@ -28,12 +29,13 @@ import play.api.Play.current
 
 class SummaryViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
 
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
 
   "Summary view" when {
     "supplied with a disposal date within the valid tax years" should {
       val totalTaxOwedModel = TotalTaxOwedModel(100000, 500, 20, None, None, 500, 500, None, None, None, None, 0, None, None, None, None, None, None, None)
       val taxYearModel: TaxYearModel = TaxYearModel("2016/17", isValidYear = true, "2016/17")
-      lazy val view = summary(totalTaxOwedModel, taxYearModel, "flat", 1000.0, 100, 100, "back-link", showUserResearchPanel = false)
+      lazy val view = summary(totalTaxOwedModel, taxYearModel, "flat", 1000.0, 100, 100, "back-link", showUserResearchPanel = false)(fakeRequest, applicationMessages,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${messages.Summary.title}'" in {
@@ -108,7 +110,7 @@ class SummaryViewSpec extends UnitSpec with WithFakeApplication with FakeRequest
     "supplied with a disposal date not within the valid tax years" should {
       val totalTaxOwedModel = TotalTaxOwedModel(500, 500, 20, None, None, 500, 500, None, None, None, None, 0, None, None, None, None, None, None, None)
       val taxYearModel: TaxYearModel = TaxYearModel("2018/19", isValidYear = false, "2017/18")
-      lazy val view = summary(totalTaxOwedModel, taxYearModel, "flat", 1000.0, 100, 100, "back-url", showUserResearchPanel = true)
+      lazy val view = summary(totalTaxOwedModel, taxYearModel, "flat", 1000.0, 100, 100, "back-url", showUserResearchPanel = true)(fakeRequest, applicationMessages,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "display a tax year warning" in {

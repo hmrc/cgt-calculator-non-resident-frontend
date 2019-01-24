@@ -17,23 +17,23 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => keystoreKeys}
+import config.ApplicationConfig
 import views.html.{calculation => views}
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import models.DateModel
 import play.api.mvc.{Action, AnyContent}
-import uk.gov.hmrc.play.frontend.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 import controllers.utils.RecoverableFuture
+import javax.inject.Inject
+import play.api.Environment
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
-object OutsideTaxYearController extends OutsideTaxYearController {
-  val calcConnector = CalculatorConnector
-}
-
-trait OutsideTaxYearController extends FrontendController with ValidActiveSession {
-
-  val calcConnector: CalculatorConnector
+class OutsideTaxYearController @Inject()(environment: Environment,
+                                         http: DefaultHttpClient,calcConnector: CalculatorConnector)(implicit val applicationConfig: ApplicationConfig)
+  extends FrontendController with ValidActiveSession {
 
   val outsideTaxYear: Action[AnyContent] = ValidateSession.async { implicit request =>
     (for {

@@ -16,30 +16,49 @@
 
 package controllers.CalculationControllerTests
 
+import akka.stream.Materializer
 import assets.MessageLookup.NonResident.{SoldOrGivenAway => messages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import config.ApplicationConfig
 import connectors.CalculatorConnector
-import controllers.SoldOrGivenAwayController
+import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
+import controllers.{OtherReliefsController, SoldOrGivenAwayController}
 import controllers.helpers.FakeRequestHelper
 import models.SoldOrGivenAwayModel
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
+import play.api.Environment
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 import scala.concurrent.Future
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.logging.SessionId
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
 class SoldOrGivenAwayActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val hc = new HeaderCarrier()
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
+  val materializer = mock[Materializer]
+  val mockEnvironment =mock[Environment]
+  val mockHttp =mock[DefaultHttpClient]
+  val mockCalcConnector =mock[CalculatorConnector]
+  val mockAnswersConstructor = mock[AnswersConstructor]
+  val defaultCache = mock[CacheMap]
+
+  class Setup {
+    val controller = new SoldOrGivenAwayController(
+      mockEnvironment,
+      mockHttp,
+      mockCalcConnector
+    )(mockConfig)
+  }
 
   def setUpTarget(getData: Option[SoldOrGivenAwayModel]): SoldOrGivenAwayController = {
-
-    val mockCalcConnector = mock[CalculatorConnector]
 
     when(mockCalcConnector.fetchAndGetFormData[SoldOrGivenAwayModel](
       ArgumentMatchers.eq(KeystoreKeys.soldOrGivenAway))(ArgumentMatchers.any(), ArgumentMatchers.any()))
@@ -48,8 +67,8 @@ class SoldOrGivenAwayActionSpec extends UnitSpec with WithFakeApplication with M
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new SoldOrGivenAwayController  {
-      override val calcConnector: CalculatorConnector = mockCalcConnector
+    new SoldOrGivenAwayController(mockEnvironment, mockHttp, mockCalcConnector)(mockConfig)  {
+      val calcConnector: CalculatorConnector = mockCalcConnector
     }
   }
 
@@ -59,7 +78,7 @@ class SoldOrGivenAwayActionSpec extends UnitSpec with WithFakeApplication with M
     "not supplied with a pre-existing model" should {
       val target = setUpTarget(None)
       lazy val result = target.soldOrGivenAway(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       "return a 200 response" in {
         status(result) shouldBe 200
@@ -73,7 +92,7 @@ class SoldOrGivenAwayActionSpec extends UnitSpec with WithFakeApplication with M
     "supplied with a pre-existing model" should {
       val target = setUpTarget(Some(SoldOrGivenAwayModel(true)))
       lazy val result = target.soldOrGivenAway(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       "return a 200 response" in {
         status(result) shouldBe 200
@@ -133,7 +152,7 @@ class SoldOrGivenAwayActionSpec extends UnitSpec with WithFakeApplication with M
       val target = setUpTarget(None)
       lazy val request = fakeRequestToPOSTWithSession("soldIt" -> "")
       lazy val result = target.submitSoldOrGivenAway(request)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       "return a 400 response" in {
         status(result) shouldBe 400

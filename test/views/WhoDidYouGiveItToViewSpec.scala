@@ -22,15 +22,18 @@ import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.whoDidYouGiveItTo
 import assets.MessageLookup.{WhoDidYouGiveItTo => messages}
 import assets.MessageLookup.{NonResident => commonMessages}
+import config.ApplicationConfig
 import forms.WhoDidYouGiveItToForm._
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 
 
 class WhoDidYouGiveItToViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+
   "Property Recipient view" should {
 
-    lazy val view = whoDidYouGiveItTo(whoDidYouGiveItToForm)(fakeRequest, applicationMessages, fakeApplication)
+    lazy val view = whoDidYouGiveItTo(whoDidYouGiveItToForm)(fakeRequest, applicationMessages, fakeApplication, mockConfig)
     lazy val doc = Jsoup.parse(view.body)
 
     "have a charset of UTF-8" in {
@@ -114,7 +117,7 @@ class WhoDidYouGiveItToViewSpec extends UnitSpec with WithFakeApplication with F
 
   "WhoDidYouGiveItToView with form with errors" should {
     lazy val form = whoDidYouGiveItToForm.bind(Map("whoDidYouGiveItTo" -> ""))
-    lazy val view = whoDidYouGiveItTo(form)(fakeRequest, applicationMessages, fakeApplication)
+    lazy val view = whoDidYouGiveItTo(form)(fakeRequest, applicationMessages, fakeApplication, mockConfig)
     lazy val doc = Jsoup.parse(view.body)
 
     "display an error summary message regarding incorrect value being inputted" in {

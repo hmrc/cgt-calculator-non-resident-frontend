@@ -17,24 +17,26 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import config.ApplicationConfig
 import connectors.CalculatorConnector
+import constructors.DefaultCalculationElectionConstructor
 import controllers.predicates.ValidActiveSession
 import forms.AcquisitionValueForm._
+import javax.inject.Inject
 import views.html.calculation
 import models.AcquisitionValueModel
-import uk.gov.hmrc.play.frontend.controller.FrontendController
+import play.api.Environment
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
 import scala.concurrent.Future
 
-object AcquisitionValueController extends AcquisitionValueController {
-  val calcConnector = CalculatorConnector
-}
+class AcquisitionValueController @Inject()(environment: Environment,
+                                           http: DefaultHttpClient,calcConnector: CalculatorConnector)(implicit val applicationConfig: ApplicationConfig)
+                                            extends FrontendController with ValidActiveSession {
 
-trait AcquisitionValueController extends FrontendController with ValidActiveSession {
-
-  val calcConnector: CalculatorConnector
 
   val acquisitionValue = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[AcquisitionValueModel](KeystoreKeys.acquisitionValue).map {

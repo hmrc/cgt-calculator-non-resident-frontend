@@ -18,6 +18,7 @@ package views
 
 import assets.MessageLookup.NonResident.{AcquisitionValue => messages}
 import assets.MessageLookup.{NonResident => commonMessages}
+import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
 import forms.AcquisitionValueForm._
@@ -29,11 +30,11 @@ import play.api.Play.current
 
 class AcquisitionValueViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper{
 
-
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
 
   "the Acquisition Value View" should {
 
-    lazy val view = views.acquisitionValue(acquisitionValueForm)
+    lazy val view = views.acquisitionValue(acquisitionValueForm)(fakeRequest,applicationMessages, fakeApplication, mockConfig)
     lazy val document = Jsoup.parse(view.body)
 
     "have a h1 tag that" should {
@@ -111,7 +112,7 @@ class AcquisitionValueViewSpec extends UnitSpec with WithFakeApplication with Fa
 
     "supplied with errors" should {
       lazy val form = acquisitionValueForm.bind(Map("acquisitionValue" -> "a"))
-      lazy val view = views.acquisitionValue(form)
+      lazy val view = views.acquisitionValue(form)(fakeRequest,applicationMessages, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

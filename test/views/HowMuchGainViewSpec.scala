@@ -17,6 +17,8 @@
 package views
 
 import assets.MessageLookup.{NonResident => messages}
+import com.codahale.metrics.SharedMetricRegistries
+import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
 import forms.HowMuchGainForm._
@@ -28,12 +30,12 @@ import play.api.Play.current
 
 class HowMuchGainViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
+  lazy val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
 
+  "How Much Gain view" should {
 
-  "How Much Gain view" when {
-
-    "supplied with no errors" should {
-      lazy val view = howMuchGain(howMuchGainForm)
+    "supplied with no errors" when {
+      lazy val view = howMuchGain(howMuchGainForm)(fakeRequest, applicationMessages,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${messages.HowMuchGain.question}'" in {
@@ -120,7 +122,7 @@ class HowMuchGainViewSpec extends UnitSpec with WithFakeApplication with Mockito
 
     "supplied with a form with errors" should {
       lazy val form = howMuchGainForm.bind(Map("howMuchGain" -> "testData"))
-      lazy val view = howMuchGain(form)
+      lazy val view = howMuchGain(form)(fakeRequest, applicationMessages,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

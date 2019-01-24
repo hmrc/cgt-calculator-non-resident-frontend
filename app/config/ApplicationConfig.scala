@@ -16,6 +16,8 @@
 
 package config
 
+import javax.inject.Inject
+import play.api.{Configuration, Environment, Mode, Play}
 import play.api.Play.{configuration, current}
 import uk.gov.hmrc.play.config.ServicesConfig
 
@@ -32,12 +34,16 @@ trait AppConfig {
   val urBannerLink: String
 }
 
-object ApplicationConfig extends AppConfig with ServicesConfig with WiringConfig {
-  private def loadConfig(key: String) = configuration.getString(key).getOrElse(throw new Exception(s"Missing configuration key: $key"))
-  private def getFeature(key: String) = configuration.getBoolean(key).getOrElse(false)
+class ApplicationConfig @Inject()(override val runModeConfiguration: Configuration,
+                                  val environment: Environment) extends AppConfig with ServicesConfig {
 
-  private val contactFrontendService = baseUrl("contact-frontend")
-  private val contactHost = configuration.getString(s"$env.microservice.services.contact-frontend.host").getOrElse("")
+  override def mode :Mode.Mode = environment.mode
+
+  private def loadConfig(key: String) = runModeConfiguration.getString(key).getOrElse(throw new Exception(s"Missing configuration key: $key"))
+  private def getFeature(key: String) = runModeConfiguration.getBoolean(key).getOrElse(false)
+
+  private lazy val contactFrontendService = baseUrl("contact-frontend")
+  private lazy val contactHost = runModeConfiguration.getString(s"$env.microservice.services.contact-frontend.host").getOrElse("")
 
   override lazy val assetsPrefix: String = loadConfig(s"assets.url") + loadConfig(s"assets.version")
   override lazy val analyticsToken: String = loadConfig(s"google-analytics.token")
@@ -48,7 +54,7 @@ object ApplicationConfig extends AppConfig with ServicesConfig with WiringConfig
   override lazy val reportAProblemPartialUrl = s"$contactHost/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
   override lazy val reportAProblemNonJSUrl = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
 
-  override val nrIFormLink: String = loadConfig("links.non-resident-iForm")
-  override val govUkLink: String = loadConfig("links.gov-uk")
+  override lazy val nrIFormLink: String = loadConfig("links.non-resident-iForm")
+  override lazy val govUkLink: String = loadConfig("links.gov-uk")
   override val urBannerLink = "https://signup.take-part-in-research.service.gov.uk/?utm_campaign=CGT_non_resident_summary&utm_source=Survey_Banner&utm_medium=other&t=HMRC&id=116"
 }

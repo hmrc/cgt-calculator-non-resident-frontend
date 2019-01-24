@@ -18,6 +18,7 @@ package views
 
 import assets.MessageLookup.{NonResident => commonMessages}
 import assets.MessageLookup.NonResident.{ClaimingReliefs => messages}
+import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import forms.ClaimingReliefsForm
 import org.jsoup.Jsoup
@@ -29,11 +30,13 @@ import play.api.Play.current
 
 class ClaimingReliefsViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+
   "ClaimingReliefs view" when {
 
     "supplied with no errors" should {
       lazy val form = ClaimingReliefsForm.claimingReliefsForm
-      lazy val view = claimingReliefs(form)
+      lazy val view = claimingReliefs(form)(fakeRequest, applicationMessages,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       s"have the title ${messages.title}" in {
@@ -97,7 +100,7 @@ class ClaimingReliefsViewSpec extends UnitSpec with WithFakeApplication with Moc
 
     "supplied with form errors" should {
       lazy val form = ClaimingReliefsForm.claimingReliefsForm.bind(Map("isClaimingReliefs" -> "abc"))
-      lazy val view = claimingReliefs(form)
+      lazy val view = claimingReliefs(form)(fakeRequest, applicationMessages,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

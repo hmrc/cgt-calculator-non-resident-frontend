@@ -18,28 +18,50 @@ package controllers.CalculationControllerTests
 
 import java.time.LocalDate
 
+import akka.stream.Materializer
 import assets.MessageLookup.NonResident.{PrivateResidenceRelief => messages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import config.ApplicationConfig
 import connectors.CalculatorConnector
-import constructors.AnswersConstructor
-import controllers.PrivateResidenceReliefController
+import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
+import controllers.{DisposalCostsController, PrivateResidenceReliefController}
 import controllers.helpers.FakeRequestHelper
+import javax.inject.Inject
 import models._
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
+import play.api.Environment
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 import scala.concurrent.Future
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.logging.SessionId
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
-class PrivateResidenceReliefActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
+class PrivateResidenceReliefActionSpec @Inject()(privateResidenceReliefController: PrivateResidenceReliefController)
+  extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val hc = new HeaderCarrier()
+  implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  val materializer = mock[Materializer]
+  val mockEnvironment =mock[Environment]
+  val mockHttp =mock[DefaultHttpClient]
+  val mockCalcConnector =mock[CalculatorConnector]
+  val defaultCache = mock[CacheMap]
+  val mockAnswersConstructor = mock[AnswersConstructor]
 
+  class Setup {
+    val controller = new PrivateResidenceReliefController(
+      mockEnvironment,
+      mockHttp,
+      mockCalcConnector,
+      mockAnswersConstructor
+    )(mockConfig)
+  }
   def setupTarget
   (
     getData: Option[PrivateResidenceReliefModel],
@@ -48,9 +70,6 @@ class PrivateResidenceReliefActionSpec extends UnitSpec with WithFakeApplication
     rebasedValueData: Option[RebasedValueModel] = None,
     calculationResultsWithPRRModel: Option[CalculationResultsWithPRRModel] = None
   ): PrivateResidenceReliefController = {
-
-    val mockCalcConnector = mock[CalculatorConnector]
-    val mockAnswersConstructor = mock[AnswersConstructor]
 
     val totalGainResultsModel = TotalGainResultsModel(1, Some(0), Some(0))
 
@@ -88,9 +107,9 @@ class PrivateResidenceReliefActionSpec extends UnitSpec with WithFakeApplication
       .thenReturn(Future.successful(Some(totalGainResultsModel)))
 
 
-    new PrivateResidenceReliefController {
-      override val calcConnector: CalculatorConnector = mockCalcConnector
-      override val answersConstructor: AnswersConstructor = mockAnswersConstructor
+    new PrivateResidenceReliefController(mockEnvironment, mockHttp, mockCalcConnector, mockAnswersConstructor)(mockConfig) {
+      val calcConnector: CalculatorConnector = mockCalcConnector
+      val answersConstructor: AnswersConstructor = mockAnswersConstructor
     }
   }
 
@@ -134,7 +153,7 @@ class PrivateResidenceReliefActionSpec extends UnitSpec with WithFakeApplication
       "disposal date is after tax start date + 18 months" in {
       val acquisitionDate = LocalDate.parse("2015-04-05")
       val disposalDate = LocalDate.parse("2016-10-07")
-      val result = PrivateResidenceReliefController.displayAfterQuestion(Some(disposalDate), Some(acquisitionDate))
+      val result = privateResidenceReliefController.displayAfterQuestion(Some(disposalDate), Some(acquisitionDate))
 
       result shouldBe true
     }
@@ -143,7 +162,7 @@ class PrivateResidenceReliefActionSpec extends UnitSpec with WithFakeApplication
       "disposal date is after tax start date + 18 months" in {
       val acquisitionDate = LocalDate.parse("2015-04-06")
       val disposalDate = LocalDate.parse("2016-10-07")
-      val result = PrivateResidenceReliefController.displayAfterQuestion(Some(disposalDate), Some(acquisitionDate))
+      val result = privateResidenceReliefController.displayAfterQuestion(Some(disposalDate), Some(acquisitionDate))
 
       result shouldBe false
     }
@@ -151,7 +170,7 @@ class PrivateResidenceReliefActionSpec extends UnitSpec with WithFakeApplication
     "return false if disposal date is equal to tax start date + 18 months" in {
       val acquisitionDate = LocalDate.parse("2015-05-04")
       val disposalDate = LocalDate.parse("2016-10-06")
-      val result = PrivateResidenceReliefController.displayAfterQuestion(Some(disposalDate), Some(acquisitionDate))
+      val result = privateResidenceReliefController.displayAfterQuestion(Some(disposalDate), Some(acquisitionDate))
 
       result shouldBe false
     }
@@ -159,7 +178,7 @@ class PrivateResidenceReliefActionSpec extends UnitSpec with WithFakeApplication
     "the disposal date is not given" should {
 
       "return a false" in {
-        val result = PrivateResidenceReliefController.displayAfterQuestion(None, None)
+        val result = privateResidenceReliefController.displayAfterQuestion(None, None)
 
         result shouldBe false
       }
@@ -171,7 +190,7 @@ class PrivateResidenceReliefActionSpec extends UnitSpec with WithFakeApplication
     "return false if disposal date is equal to tax start date + 18 months" in {
       val acquisitionDate = LocalDate.parse("2010-04-05")
       val disposalDate = LocalDate.parse("2016-10-06")
-      val result = PrivateResidenceReliefController.displayFirstQuestion(Some(disposalDate), Some(acquisitionDate))
+      val result = privateResidenceReliefController.displayFirstQuestion(Some(disposalDate), Some(acquisitionDate))
 
       result shouldBe false
     }
@@ -179,7 +198,7 @@ class PrivateResidenceReliefActionSpec extends UnitSpec with WithFakeApplication
     "return false if disposal date within 18 months of the acquisition date" in {
       val acquisitionDate = LocalDate.parse("2015-04-05")
       val disposalDate = LocalDate.parse("2016-10-05")
-      val result = PrivateResidenceReliefController.displayFirstQuestion(Some(disposalDate), Some(acquisitionDate))
+      val result = privateResidenceReliefController.displayFirstQuestion(Some(disposalDate), Some(acquisitionDate))
 
       result shouldBe false
     }
@@ -188,7 +207,7 @@ class PrivateResidenceReliefActionSpec extends UnitSpec with WithFakeApplication
       "disposal date is after acquisition date + 18 months" in {
       val acquisitionDate = LocalDate.parse("2015-04-06")
       val disposalDate = LocalDate.parse("2016-10-07")
-      val result = PrivateResidenceReliefController.displayFirstQuestion(Some(disposalDate), Some(acquisitionDate))
+      val result = privateResidenceReliefController.displayFirstQuestion(Some(disposalDate), Some(acquisitionDate))
 
       result shouldBe true
     }
@@ -197,7 +216,7 @@ class PrivateResidenceReliefActionSpec extends UnitSpec with WithFakeApplication
       "disposal date is after tax start date + 18 months" in {
       val acquisitionDate = LocalDate.parse("2015-04-05")
       val disposalDate = LocalDate.parse("2016-10-07")
-      val result = PrivateResidenceReliefController.displayFirstQuestion(Some(disposalDate), Some(acquisitionDate))
+      val result = privateResidenceReliefController.displayFirstQuestion(Some(disposalDate), Some(acquisitionDate))
 
       result shouldBe true
     }
@@ -213,7 +232,7 @@ class PrivateResidenceReliefActionSpec extends UnitSpec with WithFakeApplication
         acquisitionDateData = Some(DateModel(1, 1, 2016)),
         rebasedValueData = Some(RebasedValueModel(1000)))
       lazy val result = target.privateResidenceRelief(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       "return a status of 200" in {
         status(result) shouldBe 200
@@ -231,7 +250,7 @@ class PrivateResidenceReliefActionSpec extends UnitSpec with WithFakeApplication
         acquisitionDateData = Some(DateModel(1, 1, 2016)),
         rebasedValueData = Some(RebasedValueModel(1000)))
       lazy val result = target.privateResidenceRelief(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       "return a status of 200" in {
         status(result) shouldBe 200
@@ -311,7 +330,7 @@ class PrivateResidenceReliefActionSpec extends UnitSpec with WithFakeApplication
         rebasedValueData = Some(RebasedValueModel(1000)))
       lazy val request = fakeRequestToPOSTWithSession(("isClaimingPRR", ""))
       lazy val result = target.submitPrivateResidenceRelief(request)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       "return a status of 400" in {
         status(result) shouldBe 400

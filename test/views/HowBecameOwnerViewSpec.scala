@@ -18,6 +18,7 @@ package views
 
 import assets.MessageLookup.NonResident.{HowBecameOwner => messages}
 import assets.MessageLookup.{NonResident => commonMessages}
+import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
 import forms.HowBecameOwnerForm._
@@ -29,13 +30,13 @@ import play.api.Play.current
 
 class HowBecameOwnerViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
-
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
 
   "The Sold for Less view spec"  when {
 
     "supplied with no errors" should {
 
-      lazy val view = howBecameOwner(howBecameOwnerForm)
+      lazy val view = howBecameOwner(howBecameOwnerForm)(fakeRequest, applicationMessages,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${messages.question}'" in {
@@ -124,7 +125,7 @@ class HowBecameOwnerViewSpec extends UnitSpec with WithFakeApplication with Mock
     "supplied with a form with errors" should {
 
       lazy val form = howBecameOwnerForm.bind(Map("gainedBy" -> "a"))
-      lazy val view = howBecameOwner(form)
+      lazy val view = howBecameOwner(form)(fakeRequest, applicationMessages,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

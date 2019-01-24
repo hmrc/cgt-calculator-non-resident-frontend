@@ -16,6 +16,7 @@
 
 package controllers.CalculationControllerTests
 
+import akka.stream.Materializer
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
 import controllers.helpers.FakeRequestHelper
@@ -26,24 +27,43 @@ import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import assets.MessageLookup.{NonResident => messages}
-import controllers.BroughtForwardLossesController
+import config.ApplicationConfig
+import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
+import controllers.{BroughtForwardLossesController, WorthWhenInheritedController}
+import play.api.Environment
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap
 
 import scala.concurrent.Future
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.logging.SessionId
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
 class BroughtForwardLossesActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
+  implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
 
-  implicit val hc: HeaderCarrier = mock[HeaderCarrier]
+  val materializer = mock[Materializer]
+  val mockEnvironment =mock[Environment]
+  val mockHttp =mock[DefaultHttpClient]
+  val mockCalcConnector =mock[CalculatorConnector]
+  val mockAnswerConstuctor = mock[AnswersConstructor]
+  val defaultCache = mock[CacheMap]
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+
+  class Setup {
+    val controller = new BroughtForwardLossesController(
+      mockEnvironment,
+      mockHttp,
+      mockCalcConnector
+    )(mockConfig)
+  }
+
 
   def setupTarget(getData: Option[BroughtForwardLossesModel],
                   otherPropertiesModel: Option[OtherPropertiesModel] = None,
                   previousLossOrGainModel: Option[PreviousLossOrGainModel] = None,
                   howMuchGainModel: Option[HowMuchGainModel] = None,
                   howMuchLossModel: Option[HowMuchLossModel] = None): BroughtForwardLossesController = {
-
-    val mockCalcConnector = mock[CalculatorConnector]
 
     when(mockCalcConnector.fetchAndGetFormData[BroughtForwardLossesModel](
       ArgumentMatchers.eq(KeystoreKeys.broughtForwardLosses))(ArgumentMatchers.any(), ArgumentMatchers.any()))
@@ -66,8 +86,8 @@ class BroughtForwardLossesActionSpec extends UnitSpec with WithFakeApplication w
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new BroughtForwardLossesController {
-      override val calcConnector: CalculatorConnector = mockCalcConnector
+    new BroughtForwardLossesController(mockEnvironment, mockHttp, mockCalcConnector)(mockConfig) {
+      val calcConnector: CalculatorConnector = mockCalcConnector
     }
   }
 
@@ -76,7 +96,7 @@ class BroughtForwardLossesActionSpec extends UnitSpec with WithFakeApplication w
     "provided with no previous data" should {
       val target = setupTarget(None)
       lazy val result = target.broughtForwardLosses(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       "return a status of 200" in {
         status(result) shouldBe 200
@@ -94,7 +114,7 @@ class BroughtForwardLossesActionSpec extends UnitSpec with WithFakeApplication w
     "provided with previous data" should {
       val target = setupTarget(Some(BroughtForwardLossesModel(isClaiming = false, None)))
       lazy val result = target.broughtForwardLosses(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       "return a status of 200" in {
         status(result) shouldBe 200
@@ -139,7 +159,7 @@ class BroughtForwardLossesActionSpec extends UnitSpec with WithFakeApplication w
       val target = setupTarget(None)
       lazy val request = fakeRequestToPOSTWithSession(("isClaiming", "Yes"), ("broughtForwardLoss", ""))
       lazy val result = target.submitBroughtForwardLosses(request)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       "return a status of 400" in {
         status(result) shouldBe 400
@@ -169,7 +189,7 @@ class BroughtForwardLossesActionSpec extends UnitSpec with WithFakeApplication w
     "return a back link to the OtherProperties page when there is an answer of no to Other Properties" in {
       val target = setupTarget(None, Some(OtherPropertiesModel("No")))
       lazy val result = target.broughtForwardLosses(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       document.select("#back-link").attr("href") shouldBe controllers.routes.OtherPropertiesController.otherProperties().url
     }
@@ -177,7 +197,7 @@ class BroughtForwardLossesActionSpec extends UnitSpec with WithFakeApplication w
     "return a back link to the HowMuchGain page when there is a previous positive gain" in {
       val target = setupTarget(None, Some(OtherPropertiesModel("Yes")), Some(PreviousLossOrGainModel("Gain")), Some(HowMuchGainModel(1)))
       lazy val result = target.broughtForwardLosses(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       document.select("#back-link").attr("href") shouldBe controllers.routes.HowMuchGainController.howMuchGain().url
     }
@@ -185,7 +205,7 @@ class BroughtForwardLossesActionSpec extends UnitSpec with WithFakeApplication w
     "return a back link to the AnnualExemptAmount page when there is a previous gain of 0" in {
       val target = setupTarget(None, Some(OtherPropertiesModel("Yes")), Some(PreviousLossOrGainModel("Gain")), Some(HowMuchGainModel(0)))
       lazy val result = target.broughtForwardLosses(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       document.select("#back-link").attr("href") shouldBe controllers.routes.AnnualExemptAmountController.annualExemptAmount().url
     }
@@ -193,7 +213,7 @@ class BroughtForwardLossesActionSpec extends UnitSpec with WithFakeApplication w
     "return a back link to the HowMuchLoss page when there is a previous positive loss" in {
       val target = setupTarget(None, Some(OtherPropertiesModel("Yes")), Some(PreviousLossOrGainModel("Loss")), howMuchLossModel = Some(HowMuchLossModel(1)))
       lazy val result = target.broughtForwardLosses(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       document.select("#back-link").attr("href") shouldBe controllers.routes.HowMuchLossController.howMuchLoss().url
     }
@@ -201,7 +221,7 @@ class BroughtForwardLossesActionSpec extends UnitSpec with WithFakeApplication w
     "return a back link to the AnnualExemptAmount page when there is a previous loss of 0" in {
       val target = setupTarget(None, Some(OtherPropertiesModel("Yes")), Some(PreviousLossOrGainModel("Loss")), howMuchLossModel = Some(HowMuchLossModel(0)))
       lazy val result = target.broughtForwardLosses(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       document.select("#back-link").attr("href") shouldBe controllers.routes.AnnualExemptAmountController.annualExemptAmount().url
     }
@@ -209,7 +229,7 @@ class BroughtForwardLossesActionSpec extends UnitSpec with WithFakeApplication w
     "return a back link to the AnnualExemptAmount page when there is a previous disposal that breaks even" in {
       val target = setupTarget(None, Some(OtherPropertiesModel("Yes")), Some(PreviousLossOrGainModel("Neither")))
       lazy val result = target.broughtForwardLosses(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       document.select("#back-link").attr("href") shouldBe controllers.routes.AnnualExemptAmountController.annualExemptAmount().url
     }

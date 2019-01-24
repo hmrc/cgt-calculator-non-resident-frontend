@@ -16,29 +16,57 @@
 
 package controllers.CalculationControllerTests
 
+import akka.stream.Materializer
 import assets.MessageLookup.NonResident.{CalculationElection => messages}
 import assets.MessageLookup.NonResident.{CalculationElectionNoReliefs => nRMessages}
 import common.TestModels
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import config.ApplicationConfig
 import connectors.CalculatorConnector
-import constructors.{AnswersConstructor, CalculationElectionConstructor}
-import controllers.CalculationElectionController
+import constructors.{AnswersConstructor, CalculationElectionConstructor, DefaultCalculationElectionConstructor}
+import controllers.{AnnualExemptAmountController, CalculationElectionController, routes}
 import controllers.helpers.FakeRequestHelper
-import controllers.routes
+import javax.inject.Inject
 import models.{TaxYearModel, _}
 import org.jsoup._
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
+import play.api.Environment
 import play.api.test.Helpers._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 import scala.concurrent.Future
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.cache.client.CacheMap
+import uk.gov.hmrc.http.logging.SessionId
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
-class CalculationElectionActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
+class CalculationElectionActionSpec @Inject()(calculationElectionController: CalculationElectionController, calcConnector: CalculatorConnector)
+  extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val hc = new HeaderCarrier()
+  implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
+
+  val materializer = mock[Materializer]
+  val mockEnvironment =mock[Environment]
+  val mockHttp =mock[DefaultHttpClient]
+  val mockCalcConnector =mock[CalculatorConnector]
+  val defaultCache = mock[CacheMap]
+  val mockAnswersConstructor = mock[AnswersConstructor]
+  val mockDefaultCalElecConstructor = mock[DefaultCalculationElectionConstructor]
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+
+
+  class Setup {
+    val controller = new CalculationElectionController(
+      mockEnvironment,
+      mockHttp,
+      mockCalcConnector,
+      mockAnswersConstructor,
+      mockDefaultCalElecConstructor
+    )(mockConfig)
+  }
+
 
   def setupTarget(getData: Option[CalculationElectionModel],
                   postData: Option[CalculationElectionModel],
@@ -49,10 +77,6 @@ class CalculationElectionActionSpec extends UnitSpec with WithFakeApplication wi
                   claimingReliefs: Boolean = true
                  ): CalculationElectionController = {
 
-    val mockCalcConnector = mock[CalculatorConnector]
-    val mockCalcElectionConstructor = mock[CalculationElectionConstructor]
-    val mockCalcAnswersConstructor = mock[AnswersConstructor]
-
     when(mockCalcConnector.fetchAndGetFormData[OtherReliefsModel](ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(OtherReliefsModel(1000))))
 
@@ -60,16 +84,16 @@ class CalculationElectionActionSpec extends UnitSpec with WithFakeApplication wi
       ArgumentMatchers.eq(KeystoreKeys.calculationElection))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    when(mockCalcAnswersConstructor.getNRTotalGainAnswers(ArgumentMatchers.any()))
+    when(mockAnswersConstructor.getNRTotalGainAnswers(ArgumentMatchers.any()))
       .thenReturn(Future.successful(TestModels.businessScenarioFiveModel))
 
     when(mockCalcConnector.calculateTotalGain(ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(totalGainResultsModel)
 
-    when(mockCalcElectionConstructor.generateElection(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockDefaultCalElecConstructor.generateElection(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(contentElements))
 
-    when(mockCalcAnswersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers(ArgumentMatchers.any()))
+    when(mockAnswersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers(ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(finalSummaryModel)))
 
     when(mockCalcConnector.getFullAEA(ArgumentMatchers.any())(ArgumentMatchers.any()))
@@ -98,10 +122,10 @@ class CalculationElectionActionSpec extends UnitSpec with WithFakeApplication wi
       (ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(PropertyLivedInModel(true))))
 
-    new CalculationElectionController {
-      override val calcConnector: CalculatorConnector = mockCalcConnector
-      override val calcElectionConstructor: CalculationElectionConstructor = mockCalcElectionConstructor
-      override val calcAnswersConstructor: AnswersConstructor = mockCalcAnswersConstructor
+    new CalculationElectionController(mockEnvironment, mockHttp, mockCalcConnector, mockAnswersConstructor, mockDefaultCalElecConstructor)(mockConfig) {
+      val calcConnector: CalculatorConnector = mockCalcConnector
+      val calcElectionConstructor: CalculationElectionConstructor = mockDefaultCalElecConstructor
+      val calcAnswersConstructor: AnswersConstructor = mockAnswersConstructor
     }
   }
 
@@ -151,7 +175,7 @@ class CalculationElectionActionSpec extends UnitSpec with WithFakeApplication wi
         finalAnswersModel
       )
       lazy val result = target.calculationElection(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       "return a 200" in {
         status(result) shouldBe 200
@@ -171,7 +195,7 @@ class CalculationElectionActionSpec extends UnitSpec with WithFakeApplication wi
         finalAnswersModel
       )
       lazy val result = target.calculationElection(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       "return a 200" in {
         status(result) shouldBe 200
@@ -195,7 +219,7 @@ class CalculationElectionActionSpec extends UnitSpec with WithFakeApplication wi
         finalAnswersModel
       )
       lazy val result = target.calculationElection(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       "return a 200" in {
         status(result) shouldBe 200
@@ -220,7 +244,7 @@ class CalculationElectionActionSpec extends UnitSpec with WithFakeApplication wi
         claimingReliefs = false
       )
       lazy val result = target.calculationElection(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       "return a 200" in {
         status(result) shouldBe 200
@@ -332,7 +356,7 @@ class CalculationElectionActionSpec extends UnitSpec with WithFakeApplication wi
         finalAnswersModel
       )
       lazy val result = target.submitCalculationElection(request)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       "return a 400" in {
         status(result) shouldBe 400
@@ -344,11 +368,11 @@ class CalculationElectionActionSpec extends UnitSpec with WithFakeApplication wi
     }
   }
 
-  "CalculationElectionController" should {
-    "use the correct keystore connector" in {
-      CalculationElectionController.calcConnector shouldBe CalculatorConnector
-    }
-  }
+//  "CalculationElectionController" should {
+//    "use the correct keystore connector" in {
+//      calculationElectionController.calcConnector shouldBe CalculatorConnector
+//    }
+//  }
 
   "Calling .orderElements" should {
     val sequence: Seq[(String, String, String, String, Option[String], Option[BigDecimal])] = Seq(
@@ -368,11 +392,11 @@ class CalculationElectionActionSpec extends UnitSpec with WithFakeApplication wi
     )
 
     "return the original sequence if not claiming reliefs" in {
-      CalculationElectionController.orderElements(sequence, false) shouldBe sequenceNoReliefs
+      calculationElectionController.orderElements(sequence, false) shouldBe sequenceNoReliefs
     }
 
     "return the ordered sequence if claiming reliefs" in {
-      CalculationElectionController.orderElements(sequence, true) shouldBe orderedSequence
+      calculationElectionController.orderElements(sequence, true) shouldBe orderedSequence
     }
   }
 }

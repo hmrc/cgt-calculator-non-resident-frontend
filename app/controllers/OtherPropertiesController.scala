@@ -17,26 +17,26 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import config.ApplicationConfig
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import forms.OtherPropertiesForm._
+import javax.inject.Inject
 import models.OtherPropertiesModel
+import play.api.Environment
 import play.api.Play.current
 import play.api.data.Form
 import play.api.i18n.Messages.Implicits._
 import play.api.mvc.Result
-import uk.gov.hmrc.play.frontend.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation
 
 import scala.concurrent.Future
 
-object OtherPropertiesController extends OtherPropertiesController {
-  val calcConnector = CalculatorConnector
-}
-
-trait OtherPropertiesController extends FrontendController with ValidActiveSession {
-
-  val calcConnector: CalculatorConnector
+class OtherPropertiesController @Inject()(environment: Environment,
+                                          http: DefaultHttpClient,calcConnector: CalculatorConnector)(implicit val applicationConfig: ApplicationConfig)
+                                            extends FrontendController with ValidActiveSession {
 
   val otherProperties = ValidateSession.async { implicit request =>
 

@@ -16,27 +16,48 @@
 
 package controllers.CalculationControllerTests
 
+import akka.stream.Materializer
 import common.KeystoreKeys.NonResidentKeys
 import assets.MessageLookup.NonResident.{ClaimingReliefs => messages}
+import config.ApplicationConfig
 import connectors.CalculatorConnector
-import controllers.ClaimingReliefsController
+import controllers.{ClaimingReliefsController, CostsAtLegislationStartController}
 import controllers.helpers.FakeRequestHelper
 import models._
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito.when
 import org.scalatest.mockito.MockitoSugar
+import play.api.Environment
 import play.api.test.Helpers._
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.cache.client.CacheMap
+import uk.gov.hmrc.http.logging.SessionId
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 import scala.concurrent.Future
 
 class ClaimingReliefsActionSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper with MockitoSugar {
 
-  def setupTarget(model: Option[ClaimingReliefsModel]): ClaimingReliefsController = {
+  implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
 
-    val mockCalcConnector = mock[CalculatorConnector]
+  val materializer = mock[Materializer]
+  val mockEnvironment =mock[Environment]
+  val mockHttp =mock[DefaultHttpClient]
+  val mockCalcConnector =mock[CalculatorConnector]
+  val defaultCache = mock[CacheMap]
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+
+
+  class Setup {
+    val controller = new ClaimingReliefsController(
+      mockEnvironment,
+      mockHttp,
+      mockCalcConnector
+    )(mockConfig)
+  }
+  def setupTarget(model: Option[ClaimingReliefsModel]): ClaimingReliefsController = {
 
     when(mockCalcConnector.fetchAndGetFormData[ClaimingReliefsModel](ArgumentMatchers.eq(NonResidentKeys.claimingReliefs))
       (ArgumentMatchers.any(), ArgumentMatchers.any()))
@@ -48,8 +69,8 @@ class ClaimingReliefsActionSpec extends UnitSpec with WithFakeApplication with F
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new ClaimingReliefsController {
-      override val calcConnector: CalculatorConnector = mockCalcConnector
+    new ClaimingReliefsController(mockEnvironment, mockHttp, mockCalcConnector)(mockConfig) {
+      val calcConnector: CalculatorConnector = mockCalcConnector
     }
   }
 
@@ -64,7 +85,7 @@ class ClaimingReliefsActionSpec extends UnitSpec with WithFakeApplication with F
       }
 
       "return the claiming-reliefs view" in {
-        Jsoup.parse(bodyOf(result)).title shouldBe messages.title
+        Jsoup.parse(bodyOf(result)(materializer)).title shouldBe messages.title
       }
     }
 
@@ -77,7 +98,7 @@ class ClaimingReliefsActionSpec extends UnitSpec with WithFakeApplication with F
       }
 
       "return the claiming-reliefs view" in {
-        Jsoup.parse(bodyOf(result)).title shouldBe messages.title
+        Jsoup.parse(bodyOf(result)(materializer)).title shouldBe messages.title
       }
     }
 
@@ -135,7 +156,7 @@ class ClaimingReliefsActionSpec extends UnitSpec with WithFakeApplication with F
       }
 
       "return to the claiming-reliefs page" in {
-        Jsoup.parse(bodyOf(result)).title shouldBe messages.title
+        Jsoup.parse(bodyOf(result)(materializer)).title shouldBe messages.title
       }
     }
   }

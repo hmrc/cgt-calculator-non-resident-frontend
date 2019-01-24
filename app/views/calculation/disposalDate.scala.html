@@ -20,7 +20,8 @@
 @import controllers.CgtLanguageController
 @import play.api.Application
 
-@(disposalDateForm: Form[DateModel])(implicit request: Request[_], messages: Messages, lang: Lang, application: Application)
+@import config.ApplicationConfig
+@(disposalDateForm: Form[DateModel])(implicit request: Request[_], messages: Messages, lang: Lang, application: Application, applicationConfig: ApplicationConfig)
 
 @main_template(Messages("calc.disposalDate.question")) {
 

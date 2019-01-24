@@ -17,6 +17,7 @@
 package views
 
 import assets.MessageLookup.{NonResident => messages}
+import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
 import org.scalatest.mock.MockitoSugar
@@ -28,11 +29,12 @@ import play.api.Play.current
 
 class CurrentIncomeViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
 
   "Current Income view" when {
 
     "supplied with no errors" should {
-      lazy val view = currentIncome(currentIncomeForm, "google.com")
+      lazy val view = currentIncome(currentIncomeForm, "google.com")(fakeRequest, applicationMessages,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       s"have the correct title" in {
@@ -94,7 +96,7 @@ class CurrentIncomeViewSpec extends UnitSpec with WithFakeApplication with Mocki
 
     "supplied with errors" should {
       lazy val form = currentIncomeForm.bind(Map("currentIncome" -> "a"))
-      lazy val view = currentIncome(form, "")
+      lazy val view = currentIncome(form, "")(fakeRequest, applicationMessages,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

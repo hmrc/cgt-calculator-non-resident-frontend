@@ -18,6 +18,7 @@ package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.TaxDates
+import config.ApplicationConfig
 import connectors.CalculatorConnector
 import constructors.AnswersConstructor
 import controllers.predicates.ValidActiveSession
@@ -26,23 +27,21 @@ import views.html.calculation
 import models._
 import play.api.data.Form
 import play.api.mvc.{Action, AnyContent, Result}
-import uk.gov.hmrc.play.frontend.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 import controllers.utils.RecoverableFuture
+import javax.inject.Inject
+import play.api.Environment
 
 import scala.concurrent.Future
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
-object ImprovementsController extends ImprovementsController {
-  val calcConnector = CalculatorConnector
-  val answersConstructor = AnswersConstructor
-}
-
-trait ImprovementsController extends FrontendController with ValidActiveSession {
-
-  val calcConnector: CalculatorConnector
-  val answersConstructor: AnswersConstructor
+class ImprovementsController @Inject()(environment: Environment,
+                                       http: DefaultHttpClient,calcConnector: CalculatorConnector,
+                                       answersConstructor: AnswersConstructor)(implicit val applicationConfig: ApplicationConfig)
+                                        extends FrontendController with ValidActiveSession {
 
   private def improvementsBackUrl(acquisitionDate: Option[DateModel]): Future[String] = {
     acquisitionDate match {

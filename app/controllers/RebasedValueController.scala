@@ -20,6 +20,7 @@ import java.time.LocalDate
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.TaxDates
+import config.ApplicationConfig
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import forms.RebasedValueForm._
@@ -27,20 +28,19 @@ import views.html.calculation
 import models.{DateModel, RebasedValueModel}
 import play.api.data.Form
 import play.api.mvc.{Action, AnyContent}
-import uk.gov.hmrc.play.frontend.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 import controllers.utils.RecoverableFuture
+import javax.inject.Inject
+import play.api.Environment
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
 import scala.concurrent.Future
 
-object RebasedValueController extends RebasedValueController {
-  val calcConnector = CalculatorConnector
-}
-
-trait RebasedValueController extends FrontendController with ValidActiveSession {
-
-  val calcConnector: CalculatorConnector
+class RebasedValueController @Inject()(environment: Environment,
+                                       http: DefaultHttpClient,calcConnector: CalculatorConnector)(implicit val applicationConfig: ApplicationConfig)
+                                        extends FrontendController with ValidActiveSession {
 
   def backLink(acquisitionDate: Option[DateModel]): String = {
 

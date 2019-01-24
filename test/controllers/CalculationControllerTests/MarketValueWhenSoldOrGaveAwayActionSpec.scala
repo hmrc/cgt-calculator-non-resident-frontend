@@ -16,29 +16,48 @@
 
 package controllers.CalculationControllerTests
 
+import akka.stream.Materializer
 import assets.MessageLookup.NonResident.{MarketValue => marketValueMessages}
+import config.ApplicationConfig
 import connectors.CalculatorConnector
-import controllers.MarketValueWhenSoldOrGaveAwayController
+import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
+import controllers.{CalculationElectionController, MarketValueWhenSoldOrGaveAwayController}
 import controllers.helpers.FakeRequestHelper
+import javax.inject.Inject
 import models.DisposalValueModel
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
+import play.api.Environment
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 import scala.concurrent.Future
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.logging.SessionId
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
 class MarketValueWhenSoldOrGaveAwayActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val hc = new HeaderCarrier()
+  implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  val materializer = mock[Materializer]
+  val mockEnvironment =mock[Environment]
+  val mockHttp =mock[DefaultHttpClient]
+  val mockCalcConnector =mock[CalculatorConnector]
+  val defaultCache = mock[CacheMap]
+
+  class Setup {
+    val controller = new MarketValueWhenSoldOrGaveAwayController(
+      mockEnvironment,
+      mockHttp,
+      mockCalcConnector
+    )(mockConfig)
+  }
 
   def setupTarget(getData: Option[DisposalValueModel]): MarketValueWhenSoldOrGaveAwayController = {
-
-    val mockCalcConnector = mock[CalculatorConnector]
 
     when(mockCalcConnector.fetchAndGetFormData[DisposalValueModel](ArgumentMatchers.anyString())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
@@ -46,8 +65,8 @@ class MarketValueWhenSoldOrGaveAwayActionSpec extends UnitSpec with WithFakeAppl
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new MarketValueWhenSoldOrGaveAwayController {
-      override val calcConnector: CalculatorConnector = mockCalcConnector
+    new MarketValueWhenSoldOrGaveAwayController(mockEnvironment, mockHttp, mockCalcConnector)(mockConfig) {
+      val calcConnector: CalculatorConnector = mockCalcConnector
     }
   }
 
@@ -55,7 +74,7 @@ class MarketValueWhenSoldOrGaveAwayActionSpec extends UnitSpec with WithFakeAppl
     "not supplied with a pre-existing stored model" should {
       val target = setupTarget(None)
       lazy val result = target.marketValueWhenGaveAway(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       "return a 200" in {
         status(result) shouldBe 200
@@ -69,7 +88,7 @@ class MarketValueWhenSoldOrGaveAwayActionSpec extends UnitSpec with WithFakeAppl
     "supplied with a pre-existing stored model" should {
       val target = setupTarget(Some(DisposalValueModel(1000)))
       lazy val result = target.marketValueWhenGaveAway(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       "return a 200" in {
         status(result) shouldBe 200
@@ -98,7 +117,7 @@ class MarketValueWhenSoldOrGaveAwayActionSpec extends UnitSpec with WithFakeAppl
     "not supplied with a pre-existing stored model" should {
       val target = setupTarget(None)
       lazy val result = target.marketValueWhenSold(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       "return a 200" in {
         status(result) shouldBe 200
@@ -112,7 +131,7 @@ class MarketValueWhenSoldOrGaveAwayActionSpec extends UnitSpec with WithFakeAppl
     "supplied with a pre-existing stored model" should {
       val target = setupTarget(Some(DisposalValueModel(1000)))
       lazy val result = target.marketValueWhenSold(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       "return a 200" in {
         status(result) shouldBe 200
@@ -140,7 +159,7 @@ class MarketValueWhenSoldOrGaveAwayActionSpec extends UnitSpec with WithFakeAppl
       lazy val target = setupTarget(None)
       lazy val request = fakeRequestToPOSTWithSession(("disposalValue", "invalid text"))
       lazy val result = target.submitMarketValueWhenSold(request)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       "generate a 400 error" in {
         status(result) shouldEqual 400
@@ -188,7 +207,7 @@ class MarketValueWhenSoldOrGaveAwayActionSpec extends UnitSpec with WithFakeAppl
       lazy val target = setupTarget(None)
       lazy val request = fakeRequestToPOSTWithSession(("disposalValue", "invalid text"))
       lazy val result = target.submitMarketValueWhenGaveAway(request)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       "generate a 400 error" in {
         status(result) shouldEqual 400

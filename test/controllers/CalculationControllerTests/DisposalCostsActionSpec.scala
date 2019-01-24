@@ -16,33 +16,61 @@
 
 package controllers.CalculationControllerTests
 
+import akka.stream.Materializer
 import assets.MessageLookup.NonResident.{DisposalCosts => messages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import config.ApplicationConfig
 import models._
 import connectors.CalculatorConnector
-import controllers.DisposalCostsController
+import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
+import controllers.{CalculationElectionController, DisposalCostsController, routes}
 import controllers.helpers.FakeRequestHelper
-import controllers.routes
 import org.jsoup._
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
+import org.scalatest.{BeforeAndAfter, BeforeAndAfterEach}
 import org.scalatest.mock.MockitoSugar
+import play.api.{Application, Environment}
+import play.api.i18n.Messages
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 import scala.concurrent.Future
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.logging.SessionId
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import views.html.calculation.disposalCosts
 
-class DisposalCostsActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
+class DisposalCostsActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper with BeforeAndAfterEach {
+  implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
 
-  implicit val hc = new HeaderCarrier()
+  val materializer = mock[Materializer]
+  val mockEnvironment =mock[Environment]
+  val mockHttp =mock[DefaultHttpClient]
+  val mockCalcConnector =mock[CalculatorConnector]
+  val defaultCache = mock[CacheMap]
+  val mockMessage = mock[Messages]
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+
+
+  class Setup {
+    val controller = new DisposalCostsController(
+      mockEnvironment,
+      mockHttp,
+      mockCalcConnector
+    )(mockConfig)
+  }
+
+  override def beforeEach(): Unit = {
+    reset(Seq(mockEnvironment, mockHttp, mockCalcConnector): _*)
+    super.beforeEach()
+  }
+
 
   def setupTarget(getData: Option[DisposalCostsModel],
                   soldOrGivenModel: Option[SoldOrGivenAwayModel],
                   soldForLessModel: Option[SoldForLessModel]): DisposalCostsController = {
-
-    val mockCalcConnector = mock[CalculatorConnector]
 
     when(mockCalcConnector.fetchAndGetFormData[DisposalCostsModel](ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
@@ -57,8 +85,8 @@ class DisposalCostsActionSpec extends UnitSpec with WithFakeApplication with Moc
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new DisposalCostsController {
-      override val calcConnector: CalculatorConnector = mockCalcConnector
+    new DisposalCostsController(mockEnvironment, mockHttp, mockCalcConnector)(mockConfig) {
+      val calcConnector: CalculatorConnector = mockCalcConnector
     }
   }
 
@@ -67,101 +95,129 @@ class DisposalCostsActionSpec extends UnitSpec with WithFakeApplication with Moc
 
     "not supplied with a pre-existing stored model" should {
 
-      val target = setupTarget(None, None, None)
-      lazy val result = target.disposalCosts(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
-
-      "return a 200" in {
+      "return a 200" in new Setup {
+        val target = setupTarget(None, None, None)
+        lazy val result = target.disposalCosts(fakeRequestWithSession)
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
         status(result) shouldBe 200
       }
 
-      s"have the title ${messages.question}" in {
+      s"have the title ${messages.question}" in new Setup {
+        val target = setupTarget(None, None, None)
+        lazy val result = target.disposalCosts(fakeRequestWithSession)
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
         document.getElementsByTag("title").text shouldBe messages.question
       }
 
-      "have a back link ot the missing data route" in {
+      "have a back link ot the missing data route" in new Setup {
+        val target = setupTarget(None, None, None)
+        lazy val result = target.disposalCosts(fakeRequestWithSession)
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
         document.select("#back-link").attr("href") shouldEqual common.DefaultRoutes.missingDataRoute
       }
     }
 
     "supplied with a pre-existing stored model" should {
 
-      val target = setupTarget(Some(DisposalCostsModel(1000)), None, None)
-      lazy val result = target.disposalCosts(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
-
       "return a 200" in {
+        val target = setupTarget(None, None, None)
+        lazy val result = target.disposalCosts(fakeRequestWithSession)
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
         status(result) shouldBe 200
       }
 
       s"have the title ${messages.question}" in {
+        val target = setupTarget(None, None, None)
+        lazy val result = target.disposalCosts(fakeRequestWithSession)
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+
         document.getElementsByTag("title").text shouldBe messages.question
       }
     }
 
     "supplied with an invalid session" should {
-      val target = setupTarget(Some(DisposalCostsModel(1000)), None, None)
-      lazy val result = target.disposalCosts(fakeRequest)
 
-      "return a 303" in {
+      "return a 303" in new Setup {
+        val target = setupTarget(Some(DisposalCostsModel(1000)), None, None)
+        lazy val result = target.disposalCosts(fakeRequest)
         status(result) shouldBe 303
       }
 
-      "redirect to the session timeout page" in {
+      "redirect to the session timeout page" in new Setup {
+        val target = setupTarget(Some(DisposalCostsModel(1000)), None, None)
+        lazy val result = target.disposalCosts(fakeRequest)
         redirectLocation(result).get should include("/calculate-your-capital-gains/non-resident/session-timeout")
       }
     }
 
     "when the property was given away" should {
-      val target = setupTarget(None, Some(SoldOrGivenAwayModel(false)), Some(SoldForLessModel(true)))
-      lazy val result = target.disposalCosts(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
 
-      "return a 200" in {
+      "return a 200" in new Setup {
+        val target = setupTarget(None, Some(SoldOrGivenAwayModel(false)), Some(SoldForLessModel(true)))
+        lazy val result = target.disposalCosts(fakeRequestWithSession)
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
         status(result) shouldBe 200
       }
 
-      s"have the title ${messages.question}" in {
+      s"have the title ${messages.question}" in new Setup {
+        val target = setupTarget(None, Some(SoldOrGivenAwayModel(false)), Some(SoldForLessModel(true)))
+        lazy val result = target.disposalCosts(fakeRequestWithSession)
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
         document.getElementsByTag("title").text shouldBe messages.question
       }
 
-      "have a back link to the market value controller" in {
+      "have a back link to the market value controller gave away" in new Setup {
+        val target = setupTarget(None, Some(SoldOrGivenAwayModel(false)), Some(SoldForLessModel(true)))
+        lazy val result = target.disposalCosts(fakeRequestWithSession)
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
         document.select("#back-link").attr("href") shouldEqual routes.MarketValueWhenSoldOrGaveAwayController.marketValueWhenGaveAway().url
       }
     }
 
     "when the property was sold and sold for less" should {
-      val target = setupTarget(None, Some(SoldOrGivenAwayModel(true)), Some(SoldForLessModel(true)))
-      lazy val result = target.disposalCosts(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
 
       "return a 200" in {
+        val target = setupTarget(None, Some(SoldOrGivenAwayModel(true)), Some(SoldForLessModel(true)))
+        lazy val result = target.disposalCosts(fakeRequestWithSession)
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
         status(result) shouldBe 200
       }
 
       s"have the title ${messages.question}" in {
+        val target = setupTarget(None, Some(SoldOrGivenAwayModel(true)), Some(SoldForLessModel(true)))
+        lazy val result = target.disposalCosts(fakeRequestWithSession)
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
         document.getElementsByTag("title").text shouldBe messages.question
       }
 
-      "have a back link to the market value controller" in {
+      "have a back link to the market value controller when sold" in {
+        val target = setupTarget(None, Some(SoldOrGivenAwayModel(true)), Some(SoldForLessModel(true)))
+        lazy val result = target.disposalCosts(fakeRequestWithSession)
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
         document.select("#back-link").attr("href") shouldEqual routes.MarketValueWhenSoldOrGaveAwayController.marketValueWhenSold().url
       }
     }
 
     "when the property was sold and not sold for less" should {
-      val target = setupTarget(None, Some(SoldOrGivenAwayModel(true)), Some(SoldForLessModel(false)))
-      lazy val result = target.disposalCosts(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
 
       "return a 200" in {
+        val target = setupTarget(None, Some(SoldOrGivenAwayModel(true)), Some(SoldForLessModel(false)))
+        lazy val result = target.disposalCosts(fakeRequestWithSession)
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
         status(result) shouldBe 200
       }
 
       s"have the title ${messages.question}" in {
+        val target = setupTarget(None, Some(SoldOrGivenAwayModel(true)), Some(SoldForLessModel(false)))
+        lazy val result = target.disposalCosts(fakeRequestWithSession)
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
         document.getElementsByTag("title").text shouldBe messages.question
       }
 
-      "have a back link to the market value controller" in {
+      "have a back link to the market value controller disposal value" in {
+        val target = setupTarget(None, Some(SoldOrGivenAwayModel(true)), Some(SoldForLessModel(false)))
+        lazy val result = target.disposalCosts(fakeRequestWithSession)
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
         document.select("#back-link").attr("href") shouldEqual routes.DisposalValueController.disposalValue().url
       }
     }
@@ -171,30 +227,37 @@ class DisposalCostsActionSpec extends UnitSpec with WithFakeApplication with Moc
   "In CalculationController calling the .submitDisposalCosts action" when {
 
     "submitting a valid form with 1000" should {
-      val target = setupTarget(None, None, None)
-      lazy val request = fakeRequestToPOSTWithSession(("disposalCosts", "1000"))
-      lazy val result = target.submitDisposalCosts(request)
 
       "return a 303" in {
+        val target = setupTarget(None, None, None)
+        lazy val request = fakeRequestToPOSTWithSession(("disposalCosts", "1000"))
+        lazy val result = target.submitDisposalCosts(request)
         status(result) shouldBe 303
       }
 
       s"redirect to ${routes.AcquisitionDateController.acquisitionDate()}" in {
+        val target = setupTarget(None, None, None)
+        lazy val request = fakeRequestToPOSTWithSession(("disposalCosts", "1000"))
+        lazy val result = target.submitDisposalCosts(request)
         redirectLocation(result) shouldBe Some(s"${routes.AcquisitionDateController.acquisitionDate()}")
       }
     }
 
     "submitting an invalid form with no value" should {
-      val target = setupTarget(None, None, None)
-      lazy val request = fakeRequestToPOSTWithSession(("disposalCosts", ""))
-      lazy val result = target.submitDisposalCosts(request)
-      lazy val document = Jsoup.parse(bodyOf(result))
 
       "return a 400" in {
+        val target = setupTarget(None, None, None)
+        lazy val request = fakeRequestToPOSTWithSession(("disposalCosts", ""))
+        lazy val result = target.submitDisposalCosts(request)
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
         status(result) shouldBe 400
       }
 
       "return to the disposal costs page" in {
+        val target = setupTarget(None, None, None)
+        lazy val request = fakeRequestToPOSTWithSession(("disposalCosts", ""))
+        lazy val result = target.submitDisposalCosts(request)
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
         document.title shouldEqual messages.question
       }
     }

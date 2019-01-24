@@ -19,8 +19,9 @@ package controllers
 import common.DefaultRoutes._
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.TaxDates
+import config.ApplicationConfig
 import connectors.CalculatorConnector
-import constructors.CalculationElectionConstructor
+import constructors.DefaultCalculationElectionConstructor
 import controllers.predicates.ValidActiveSession
 import forms.AnnualExemptAmountForm._
 import models._
@@ -28,21 +29,21 @@ import play.api.Play.current
 import play.api.data.Form
 import play.api.i18n.Messages.Implicits._
 import play.api.mvc.{Action, AnyContent, Result}
-import uk.gov.hmrc.play.frontend.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.calculation
 import controllers.utils.RecoverableFuture
+import javax.inject.Inject
+import play.api.Environment
 
 import scala.concurrent.Future
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
-object AnnualExemptAmountController extends AnnualExemptAmountController {
-  val calcConnector = CalculatorConnector
-}
+class AnnualExemptAmountController @Inject()(environment: Environment,
+                                             http: DefaultHttpClient,calcConnector: CalculatorConnector,
+                                             calcElectionConstructor: DefaultCalculationElectionConstructor)(implicit val applicationConfig: ApplicationConfig)
+                                              extends FrontendController with ValidActiveSession {
 
-trait AnnualExemptAmountController extends FrontendController with ValidActiveSession {
-
-  val calcConnector: CalculatorConnector
-  val calcElectionConstructor = CalculationElectionConstructor
 
   private def fetchAEA(taxYear: Int)(implicit hc: HeaderCarrier): Future[Option[BigDecimal]] = {
     calcConnector.getFullAEA(taxYear)

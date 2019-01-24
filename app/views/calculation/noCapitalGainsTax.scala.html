@@ -20,7 +20,8 @@
 @import play.api.Application
 @import common.Dates.TemplateImplicits._
 
-@(data: DateModel)(implicit request: Request[_], messages: Messages, lang: Lang, application: Application)
+@import config.ApplicationConfig
+@(data: DateModel)(implicit request: Request[_], messages: Messages, lang: Lang, application: Application, applicationConfig: ApplicationConfig)
 
 @main_template(Messages("nocgt.invaliddate.title")) {
 

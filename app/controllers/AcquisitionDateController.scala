@@ -18,28 +18,29 @@ package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.TaxDates
+import config.ApplicationConfig
 import connectors.CalculatorConnector
-import constructors.CalculationElectionConstructor
+import constructors.{CalculationElectionConstructor, DefaultCalculationElectionConstructor}
 import controllers.predicates.ValidActiveSession
 import forms.AcquisitionDateForm._
+import javax.inject.Inject
 import models.DateModel
+import play.api.Environment
 import play.api.data.Form
-import uk.gov.hmrc.play.frontend.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.calculation
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 import play.api.mvc.{Action, AnyContent}
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
 import scala.concurrent.Future
 
-object AcquisitionDateController extends AcquisitionDateController {
-  val calcConnector = CalculatorConnector
-}
+class  AcquisitionDateController @Inject()(environment: Environment,
+                                           http: DefaultHttpClient,calcConnector: CalculatorConnector,
+                                           calcElectionConstructor: DefaultCalculationElectionConstructor)(implicit val applicationConfig: ApplicationConfig)
+                                              extends FrontendController with ValidActiveSession {
 
-trait AcquisitionDateController extends FrontendController with ValidActiveSession {
-
-  val calcConnector: CalculatorConnector
-  val calcElectionConstructor = CalculationElectionConstructor
 
   val acquisitionDate: Action[AnyContent] = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[DateModel](KeystoreKeys.acquisitionDate).map {

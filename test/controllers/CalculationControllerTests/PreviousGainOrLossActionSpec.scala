@@ -16,11 +16,12 @@
 
 package controllers.CalculationControllerTests
 
+import akka.stream.Materializer
 import connectors.CalculatorConnector
 import models.PreviousLossOrGainModel
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap
-import config.AppConfig
+import config.{AppConfig, ApplicationConfig}
 import controllers.helpers.FakeRequestHelper
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import org.mockito.Mockito._
@@ -28,15 +29,36 @@ import org.mockito.ArgumentMatchers
 import org.scalatest.mock.MockitoSugar
 import common.KeystoreKeys.{NonResidentKeys => keystoreKeys}
 import assets.MessageLookup.NonResident.{PreviousLossOrGain => messages}
-import controllers.PreviousGainOrLossController
+import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
+import controllers.{DisposalCostsController, PreviousGainOrLossController}
 import org.jsoup.Jsoup
+import play.api.Environment
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.logging.SessionId
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
 import scala.concurrent.Future
 
 class PreviousGainOrLossActionSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper with MockitoSugar {
-  def setupTarget(getData: Option[PreviousLossOrGainModel]): PreviousGainOrLossController = {
-    val mockCalcConnector = mock[CalculatorConnector]
 
+  implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  val materializer = mock[Materializer]
+  val mockEnvironment =mock[Environment]
+  val mockHttp =mock[DefaultHttpClient]
+  val mockCalcConnector =mock[CalculatorConnector]
+  val defaultCache = mock[CacheMap]
+
+
+  class Setup {
+    val controller = new PreviousGainOrLossController(
+      mockEnvironment,
+      mockHttp,
+      mockCalcConnector
+    )(mockConfig)
+  }
+
+  def setupTarget(getData: Option[PreviousLossOrGainModel]): PreviousGainOrLossController = {
     when(mockCalcConnector.fetchAndGetFormData[PreviousLossOrGainModel](
       ArgumentMatchers.eq(keystoreKeys.previousLossOrGain))(ArgumentMatchers.any(), ArgumentMatchers.any())).
       thenReturn(Future.successful(getData))
@@ -45,7 +67,7 @@ class PreviousGainOrLossActionSpec extends UnitSpec with WithFakeApplication wit
       ArgumentMatchers.eq(keystoreKeys.previousLossOrGain), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any())).
       thenReturn(mock[CacheMap])
 
-    new PreviousGainOrLossController {
+    new PreviousGainOrLossController(mockEnvironment, mockHttp, mockCalcConnector)(mockConfig) {
       val calcConnector: CalculatorConnector = mockCalcConnector
       val config: AppConfig = mock[AppConfig]
     }
@@ -61,7 +83,7 @@ class PreviousGainOrLossActionSpec extends UnitSpec with WithFakeApplication wit
       }
 
       s"return some HTML with title of ${messages.question}" in {
-        Jsoup.parse(bodyOf(result)).select("h1").text shouldEqual messages.question
+        Jsoup.parse(bodyOf(result)(materializer)).select("h1").text shouldEqual messages.question
       }
     }
 
@@ -74,7 +96,7 @@ class PreviousGainOrLossActionSpec extends UnitSpec with WithFakeApplication wit
       }
 
       s"return some html with title of ${messages.question}" in {
-        Jsoup.parse(bodyOf(result)).select("h1").text shouldEqual messages.question
+        Jsoup.parse(bodyOf(result)(materializer)).select("h1").text shouldEqual messages.question
       }
     }
 
@@ -135,7 +157,7 @@ class PreviousGainOrLossActionSpec extends UnitSpec with WithFakeApplication wit
     "an invalid form is submitted" should {
       lazy val target = setupTarget(None)
       lazy val result = target.submitPreviousGainOrLoss(fakeRequestToPOSTWithSession(("previousLossOrGain", "invalid text")))
-      lazy val doc = Jsoup.parse(bodyOf(result))
+      lazy val doc = Jsoup.parse(bodyOf(result)(materializer))
 
       "return a status of 400" in {
         status(result) shouldBe 400

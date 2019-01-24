@@ -16,6 +16,8 @@
 
 package controllers.CalculationControllerTests
 
+import akka.stream.Materializer
+import akka.util.Timeout
 import assets.MessageLookup
 import connectors.CalculatorConnector
 import controllers.helpers.FakeRequestHelper
@@ -24,21 +26,42 @@ import org.mockito.ArgumentMatchers
 import org.scalatest.mock.MockitoSugar
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import common.KeystoreKeys.{NonResidentKeys => keystoreKeys}
-import config.AppConfig
-import controllers.WhoDidYouGiveItToController
+import config.{AppConfig, ApplicationConfig}
+import controllers.{PrivateResidenceReliefController, WhoDidYouGiveItToController}
 import org.jsoup.Jsoup
 import org.mockito.Mockito._
 import play.api.test.Helpers._
 import assets.MessageLookup.{NoTaxToPay => messages}
+import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
+import play.api.Environment
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.cache.client.CacheMap
+import uk.gov.hmrc.http.logging.SessionId
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
 import scala.concurrent.Future
 
 
 class WhoDidYouGiveItToControllerSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper with MockitoSugar {
 
+  implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  val materializer = mock[Materializer]
+  val mockEnvironment =mock[Environment]
+  val mockHttp =mock[DefaultHttpClient]
+  val mockCalcConnector =mock[CalculatorConnector]
+  val defaultCache = mock[CacheMap]
+
+  class Setup {
+    val controller = new WhoDidYouGiveItToController(
+      mockEnvironment,
+      mockHttp,
+      mockCalcConnector,
+      mockConfig
+    )
+  }
+
   def setupTarget(getData: Option[WhoDidYouGiveItToModel]): WhoDidYouGiveItToController = {
-    val mockCalcConnector = mock[CalculatorConnector]
 
     when(mockCalcConnector.fetchAndGetFormData[WhoDidYouGiveItToModel](ArgumentMatchers.eq(keystoreKeys.whoDidYouGiveItTo))
     (ArgumentMatchers.any(), ArgumentMatchers.any())).thenReturn(Future.successful(getData))
@@ -46,8 +69,8 @@ class WhoDidYouGiveItToControllerSpec extends UnitSpec with WithFakeApplication 
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new WhoDidYouGiveItToController {
-      override val calcConnector: CalculatorConnector = mockCalcConnector
+    new WhoDidYouGiveItToController(mockEnvironment, mockHttp, mockCalcConnector, mockConfig) {
+      val calcConnector: CalculatorConnector = mockCalcConnector
       val config: AppConfig = mock[AppConfig]
     }
   }
@@ -63,7 +86,7 @@ class WhoDidYouGiveItToControllerSpec extends UnitSpec with WithFakeApplication 
       }
 
       s"return some html with title of ${MessageLookup.WhoDidYouGiveItTo.title}" in {
-        Jsoup.parse(bodyOf(result)).select("h1").text shouldEqual MessageLookup.WhoDidYouGiveItTo.title
+        Jsoup.parse(bodyOf(result)(materializer)).select("h1").text shouldEqual MessageLookup.WhoDidYouGiveItTo.title
       }
     }
 
@@ -76,7 +99,7 @@ class WhoDidYouGiveItToControllerSpec extends UnitSpec with WithFakeApplication 
       }
 
       s"return some html with title of ${MessageLookup.WhoDidYouGiveItTo.title}" in {
-        Jsoup.parse(bodyOf(result)).select("h1").text shouldEqual MessageLookup.WhoDidYouGiveItTo.title
+        Jsoup.parse(bodyOf(result)(materializer)).select("h1").text shouldEqual MessageLookup.WhoDidYouGiveItTo.title
       }
     }
   }
@@ -133,7 +156,7 @@ class WhoDidYouGiveItToControllerSpec extends UnitSpec with WithFakeApplication 
     "A valid session is provided when gifted to charity" should {
       lazy val target = setupTarget(Some(WhoDidYouGiveItToModel("Charity")))
       lazy val result = target.noTaxToPay(fakeRequestWithSession)
-      lazy val doc = Jsoup.parse(bodyOf(result))
+      lazy val doc = Jsoup.parse(bodyOf(result)(materializer))
 
       "return a status of 200" in {
         status(result) shouldBe 200
@@ -150,7 +173,7 @@ class WhoDidYouGiveItToControllerSpec extends UnitSpec with WithFakeApplication 
       "A valid session is provided when gifted to a spouse" should {
         lazy val target = setupTarget(Some(WhoDidYouGiveItToModel("Spouse")))
         lazy val result = target.noTaxToPay(fakeRequestWithSession)
-        lazy val doc = Jsoup.parse(bodyOf(result))
+        lazy val doc = Jsoup.parse(bodyOf(result)(materializer))
 
         "return a status of 200" in {
           status(result) shouldBe 200
@@ -168,14 +191,14 @@ class WhoDidYouGiveItToControllerSpec extends UnitSpec with WithFakeApplication 
       "An invalid session is provided" should {
         lazy val target = setupTarget(Some(WhoDidYouGiveItToModel("Other")))
         lazy val result = target.noTaxToPay(fakeRequest)
-        lazy val doc = Jsoup.parse(bodyOf(result))
+        lazy val doc = Jsoup.parse(bodyOf(result)(materializer))
 
         "return a status of 303" in {
           status(result) shouldBe 303
         }
 
         "return you to the session timeout page" in {
-          redirectLocation(result).get should include ("/calculate-your-capital-gains/non-resident/session-timeout")
+          redirectLocation(result)(timeout = mock[Timeout]).get should include ("/calculate-your-capital-gains/non-resident/session-timeout")
         }
       }
     }

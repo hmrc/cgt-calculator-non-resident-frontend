@@ -19,7 +19,8 @@
 @import views.html.helpers._
 @import play.api.Application
 
-@(broughtForwardLossesForm: Form[BroughtForwardLossesModel], backLink: String)(implicit request: Request[_], messages: Messages, application: Application)
+@import config.ApplicationConfig
+@(broughtForwardLossesForm: Form[BroughtForwardLossesModel], backLink: String)(implicit request: Request[_], messages: Messages, application: Application, applicationConfig: ApplicationConfig)
 
 @hiddenContent = {
     <div class="form-group">

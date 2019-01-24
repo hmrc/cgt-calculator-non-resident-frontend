@@ -18,6 +18,7 @@ package views
 
 import assets.MessageLookup.NonResident.{WorthWhenGiftedTo, AcquisitionMarketValue => messages}
 import assets.MessageLookup.{NonResident => commonMessages}
+import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
 import forms.AcquisitionMarketValueForm._
@@ -29,13 +30,13 @@ import play.api.Play.current
 
 class WorthWhenGiftedToViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
-
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
 
   "The Worth When Gifted To view spec" when {
 
     "supplied with no errors" should {
 
-      lazy val view = worthWhenGiftedTo(acquisitionMarketValueForm)
+      lazy val view = worthWhenGiftedTo(acquisitionMarketValueForm)(fakeRequest, applicationMessages,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${WorthWhenGiftedTo.question}'" in {
@@ -119,7 +120,7 @@ class WorthWhenGiftedToViewSpec extends UnitSpec with WithFakeApplication with M
     "supplied with a form with errors" should {
 
       lazy val form = acquisitionMarketValueForm.bind(Map("acquisitionMarketValue" -> "a"))
-      lazy val view = worthWhenGiftedTo(form)
+      lazy val view = worthWhenGiftedTo(form)(fakeRequest, applicationMessages,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

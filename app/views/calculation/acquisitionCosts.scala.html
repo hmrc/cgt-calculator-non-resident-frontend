@@ -19,7 +19,8 @@
 @import views.html.helpers._
 @import play.api.Application
 
-@(acquisitionCostsForm: Form[AcquisitionCostsModel], backLink: String, ownerBeforeLegislation: Boolean)(implicit request: Request[_], messages: Messages, application: Application)
+@import config.ApplicationConfig
+@(acquisitionCostsForm: Form[AcquisitionCostsModel], backLink: String, ownerBeforeLegislation: Boolean)(implicit request: Request[_], messages: Messages, application: Application, applicationConfig: ApplicationConfig)
 
 @main_template(Messages("calc.acquisitionCosts.question")) {
 

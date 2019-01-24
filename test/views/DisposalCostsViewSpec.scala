@@ -18,6 +18,7 @@ package views
 
 import assets.MessageLookup.NonResident.{DisposalCosts => messages}
 import assets.MessageLookup.{NonResident => commonMessages}
+import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
 import forms.DisposalCostsForm._
@@ -28,12 +29,12 @@ import play.api.Play.current
 
 class DisposalCostsViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
 
-
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
 
   "Disposal Costs view" when {
 
     "supplied with no errors" should {
-      lazy val view = disposalCosts(disposalCostsForm, "back-link")
+      lazy val view = disposalCosts(disposalCostsForm, "back-link")(fakeRequest, applicationMessages,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${messages.question}'" in {
@@ -147,7 +148,7 @@ class DisposalCostsViewSpec extends UnitSpec with WithFakeApplication with FakeR
 
     "supplied with errors" should {
       lazy val form = disposalCostsForm.bind(Map("disposalCosts" -> "a"))
-      lazy val view = disposalCosts(form, "back-link")
+      lazy val view = disposalCosts(form, "back-link")(fakeRequest, applicationMessages,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

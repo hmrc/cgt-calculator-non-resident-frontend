@@ -16,30 +16,49 @@
 
 package controllers.CalculationControllerTests
 
+import akka.stream.Materializer
 import assets.MessageLookup.NonResident.{RebasedCosts => messages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import config.ApplicationConfig
 import connectors.CalculatorConnector
-import controllers.RebasedCostsController
+import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
+import controllers.{CostsAtLegislationStartController, RebasedCostsController}
 import controllers.helpers.FakeRequestHelper
 import models.RebasedCostsModel
 import org.jsoup._
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
+import play.api.Environment
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 import scala.concurrent.Future
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.logging.SessionId
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
 class RebasedCostsActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val hc = new HeaderCarrier()
+  implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
+
+  val materializer = mock[Materializer]
+  val mockEnvironment =mock[Environment]
+  val mockHttp =mock[DefaultHttpClient]
+  val mockCalcConnector =mock[CalculatorConnector]
+  val defaultCache = mock[CacheMap]
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+
+  class Setup {
+    val controller = new RebasedCostsController(
+      mockEnvironment,
+      mockHttp,
+      mockCalcConnector
+    )(mockConfig)
+  }
 
   def setupTarget(getData: Option[RebasedCostsModel]): RebasedCostsController = {
-
-    val mockCalcConnector = mock[CalculatorConnector]
 
     when(mockCalcConnector.fetchAndGetFormData[RebasedCostsModel](
       ArgumentMatchers.eq(KeystoreKeys.rebasedCosts))(ArgumentMatchers.any(), ArgumentMatchers.any()))
@@ -48,8 +67,8 @@ class RebasedCostsActionSpec extends UnitSpec with WithFakeApplication with Mock
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new RebasedCostsController {
-      override val calcConnector: CalculatorConnector = mockCalcConnector
+    new RebasedCostsController(mockEnvironment, mockHttp, mockCalcConnector)(mockConfig) {
+      val calcConnector: CalculatorConnector = mockCalcConnector
     }
   }
 
@@ -59,7 +78,7 @@ class RebasedCostsActionSpec extends UnitSpec with WithFakeApplication with Mock
     "not supplied with a pre-existing stored model" should {
       val target = setupTarget(None)
       lazy val result = target.rebasedCosts(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       "return a 200" in {
         status(result) shouldBe 200
@@ -72,7 +91,7 @@ class RebasedCostsActionSpec extends UnitSpec with WithFakeApplication with Mock
       "a previous value is supplied with a pre-existing stored model" should {
         val target = setupTarget(Some(RebasedCostsModel("Yes", Some(1500))))
         lazy val result = target.rebasedCosts(fakeRequestWithSession)
-        lazy val document = Jsoup.parse(bodyOf(result))
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
         "return a 200" in {
           status(result) shouldBe 200
@@ -119,7 +138,7 @@ class RebasedCostsActionSpec extends UnitSpec with WithFakeApplication with Mock
       val target = setupTarget(None)
       lazy val request = fakeRequestToPOSTWithSession("hasRebasedCosts" -> "Yes", "rebasedCosts" -> "")
       lazy val result = target.submitRebasedCosts(request)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
 
       "return a 400" in {
         status(result) shouldBe 400

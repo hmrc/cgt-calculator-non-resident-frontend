@@ -16,11 +16,13 @@
 
 package controllers.CalculationControllerTests
 
+import akka.stream.Materializer
 import assets.MessageLookup.NonResident.{OtherReliefs => messages}
 import common.TestModels
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import config.ApplicationConfig
 import connectors.CalculatorConnector
-import constructors.AnswersConstructor
+import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
 import controllers.OtherReliefsRebasedController
 import controllers.helpers.FakeRequestHelper
 import models.{TaxYearModel, _}
@@ -28,16 +30,47 @@ import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
+import play.api.Environment
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import org.mockito.ArgumentMatchers.any
+import org.mockito.stubbing.OngoingStubbing
+import org.scalatest.BeforeAndAfterEach
+import play.api.libs.json.Json
+import play.api.mvc.Result
 
 import scala.concurrent.Future
-import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
+import uk.gov.hmrc.http.logging.SessionId
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
-class OtherReliefsRebasedActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
+class OtherReliefsRebasedActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper with BeforeAndAfterEach {
 
-  implicit val hc = new HeaderCarrier()
+  implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
+
+  val materializer = mock[Materializer]
+  val mockEnvironment =mock[Environment]
+  val mockHttp =mock[DefaultHttpClient]
+  val mockCalcConnector =mock[CalculatorConnector]
+  val mockAnswerConstuctor = mock[AnswersConstructor]
+  val defaultCache = mock[CacheMap]
+  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+
+  class Setup {
+    val controller = new OtherReliefsRebasedController(
+      mockEnvironment,
+      mockHttp,
+      mockCalcConnector,
+      mockAnswerConstuctor
+    )(mockConfig)
+  }
+
+  override def beforeEach(): Unit = {
+    reset(Seq(mockEnvironment, mockHttp, mockCalcConnector, mockAnswerConstuctor): _*)
+    super.beforeEach()
+  }
+
 
   def setupTarget(getData: Option[OtherReliefsModel],
                   gainAnswers: TotalGainAnswersModel,
@@ -45,12 +78,7 @@ class OtherReliefsRebasedActionSpec extends UnitSpec with WithFakeApplication wi
                   personalDetailsModel: TotalPersonalDetailsCalculationModel,
                   totalGainResultModel: TotalGainResultsModel = TotalGainResultsModel(200, Some(500), None),
                   calculationResultsWithPRRModel: Option[CalculationResultsWithPRRModel] = None
-                 ): OtherReliefsRebasedController = {
-
-    val mockCalcConnector = mock[CalculatorConnector]
-    val mockAnswersConstructor = mock[AnswersConstructor]
-
-
+                 ): OngoingStubbing[Future[CacheMap]] = {
     when(mockCalcConnector.fetchAndGetFormData[OtherReliefsModel](ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
@@ -58,13 +86,13 @@ class OtherReliefsRebasedActionSpec extends UnitSpec with WithFakeApplication wi
       ArgumentMatchers.eq(KeystoreKeys.privateResidenceRelief))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(PrivateResidenceReliefModel("No", None))))
 
-    when(mockAnswersConstructor.getNRTotalGainAnswers(ArgumentMatchers.any()))
+    when(mockAnswerConstuctor.getNRTotalGainAnswers(ArgumentMatchers.any()))
       .thenReturn(Future.successful(gainAnswers))
 
     when(mockCalcConnector.calculateTotalGain(ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(totalGainResultModel)))
 
-    when(mockAnswersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers(ArgumentMatchers.any()))
+    when(mockAnswerConstuctor.getPersonalDetailsAndPreviousCapitalGainsAnswers(ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(personalDetailsModel)))
 
     when(mockCalcConnector.calculateTaxableGainAfterPRR(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any()))
@@ -87,77 +115,87 @@ class OtherReliefsRebasedActionSpec extends UnitSpec with WithFakeApplication wi
 
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
-
-    new OtherReliefsRebasedController {
-      override val calcConnector: CalculatorConnector = mockCalcConnector
-      override val answersConstructor: AnswersConstructor = mockAnswersConstructor
-    }
   }
+
+  def document(result : Future[Result]) = Jsoup.parse(bodyOf(result)(materializer))
 
   "Calling the .otherReliefsRebased action " when {
 
     "not supplied with a pre-existing stored model and a chargeable gain of £500 and total gain of £500" should {
 
-      val target = setupTarget(
+      val gainAnswers = TestModels.totalGainAnswersModelWithRebasedTA
+      def setupMocks() = setupTarget(
         None,
-        TestModels.totalGainAnswersModelWithRebasedTA,
+        gainAnswers,
         TestModels.calculationResultsModelWithRebased,
         TestModels.personalDetailsCalculationModel
       )
-      lazy val result = target.otherReliefsRebased(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
 
-      "return a 200 with a valid calculation result" in {
+      "return a 200 with a valid calculation result" in new Setup {
+        setupMocks()
+        lazy val result = controller.otherReliefsRebased(fakeRequestWithSession)
         status(result) shouldBe 200
       }
 
-      "load the otherReliefs rebased page" in {
-        document.title() shouldBe messages.question
+      "load the otherReliefs rebased page" in new Setup {
+        setupMocks()
+        lazy val result = controller.otherReliefsRebased(fakeRequestWithSession)
+        document(result).title() shouldBe messages.question
       }
 
-      s"have a total gain message with text '${messages.totalGain}' £500" in {
-        document.getElementById("totalGain").text() shouldBe s"${messages.totalGain} £500"
+      s"have a total gain message with text '${messages.totalGain}' £500" in new Setup {
+        setupMocks()
+        lazy val result = controller.otherReliefsRebased(fakeRequestWithSession)
+        document(result).getElementById("totalGain").text() shouldBe s"${messages.totalGain} £500"
       }
 
-      s"have a taxable gain message with text '${messages.taxableGain}' £500" in {
-        document.getElementById("taxableGain").text() shouldBe s"${messages.taxableGain} £500"
+      s"have a taxable gain message with text '${messages.taxableGain}' £500" in new Setup {
+        setupMocks()
+        lazy val result = controller.otherReliefsRebased(fakeRequestWithSession)
+        document(result).getElementById("taxableGain").text() shouldBe s"${messages.taxableGain} £500"
       }
     }
 
     "supplied with a pre-existing stored model" should {
       val testOtherReliefsModel = OtherReliefsModel(5000)
-      val target = setupTarget(
+      def setupStubs() = setupTarget(
         Some(testOtherReliefsModel),
         TestModels.totalGainAnswersModelWithRebasedTA,
         TestModels.calculationResultsModelWithRebased,
         TestModels.personalDetailsCalculationModel
       )
-      lazy val result = target.otherReliefsRebased(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
 
-      "return a status of 200" in {
+      "return a status of 200" in new Setup() {
+        setupStubs()
+        lazy val result = controller.otherReliefsRebased(fakeRequestWithSession)
         status(result) shouldBe 200
       }
 
-      "load the otherReliefs rebased page" in {
-        document.title() shouldBe messages.question
+      "load the otherReliefs rebased page" in new Setup() {
+        setupStubs()
+        lazy val result = controller.otherReliefsRebased(fakeRequestWithSession)
+        val doc = document(result)
+        doc.title() shouldBe messages.question
       }
     }
 
     "supplied with an invalid session" should {
-      val target = setupTarget(
+      def setupStubs = setupTarget(
         None,
         TestModels.totalGainAnswersModelWithRebasedTA,
         TestModels.calculationResultsModelWithRebased,
         TestModels.personalDetailsCalculationModel
       )
-      lazy val result = target.otherReliefsRebased(fakeRequest)
 
-      "return a status of 303" in {
+      "return a status of 303" in new Setup() {
+        setupStubs
+        val result = controller.otherReliefsRebased(fakeRequest)
         status(result) shouldBe 303
       }
 
-      "redirect to the session timeout page" in {
+      "redirect to the session timeout page" in new Setup() {
+        setupStubs
+        val result = controller.otherReliefsRebased(fakeRequest)
         redirectLocation(result).get should include("/calculate-your-capital-gains/non-resident/session-timeout")
       }
     }
@@ -165,42 +203,50 @@ class OtherReliefsRebasedActionSpec extends UnitSpec with WithFakeApplication wi
 
   "In CalculationController calling the .submitOtherReliefsRebased action" when {
 
-    "submitting a valid form" should {
-      val target = setupTarget(
+    "submitting a valid form" should  {
+      def setupStubs = setupTarget(
         None,
         TestModels.totalGainAnswersModelWithRebasedTA,
         TestModels.calculationResultsModelWithRebased,
         TestModels.personalDetailsCalculationModel
       )
-      lazy val request = fakeRequestToPOSTWithSession(("isClaimingOtherReliefs", "Yes"), ("otherReliefs", "1000"))
-      lazy val result = target.submitOtherReliefsRebased(request)
 
-      "return a status of 303" in {
+
+      "return a status of 303" in new Setup {
+        setupStubs
+        lazy val request = fakeRequestToPOSTWithSession(("isClaimingOtherReliefs", "Yes"), ("otherReliefs", "1000"))
+        lazy val result = controller.submitOtherReliefsRebased(request)
         status(result) shouldBe 303
       }
 
-      "redirect to the calculation election page" in {
+      "redirect to the calculation election page" in new Setup {
+        setupStubs
+        lazy val request = fakeRequestToPOSTWithSession(("isClaimingOtherReliefs", "Yes"), ("otherReliefs", "1000"))
+        lazy val result = controller.submitOtherReliefsRebased(request)
         redirectLocation(result) shouldBe Some(controllers.routes.CalculationElectionController.calculationElection().url)
       }
     }
 
     "submitting an invalid form" should {
-      val target = setupTarget(
+      def setupStubs = setupTarget(
         None,
         TestModels.totalGainAnswersModelWithRebasedTA,
         TestModels.calculationResultsModelWithRebased,
         TestModels.personalDetailsCalculationModel
       )
-      lazy val request = fakeRequestToPOSTWithSession(("isClaimingOtherReliefs", "Yes"), ("otherReliefs", "-1000"))
-      lazy val result = target.submitOtherReliefsRebased(request)
-      lazy val document = Jsoup.parse(bodyOf(result))
 
-      "return a status of 400" in {
+      "return a status of 400" in new Setup {
+        setupStubs
+        lazy val request = fakeRequestToPOSTWithSession(("isClaimingOtherReliefs", "Yes"), ("otherReliefs", "-1000"))
+        lazy val result = controller.submitOtherReliefsRebased(request)
         status(result) shouldBe 400
       }
 
-      "return to the other reliefs rebased page" in {
-        document.title() shouldBe messages.question
+      "return to the other reliefs rebased page" in new Setup{
+        setupStubs
+        lazy val request = fakeRequestToPOSTWithSession(("isClaimingOtherReliefs", "Yes"), ("otherReliefs", "-1000"))
+        lazy val result = controller.submitOtherReliefsRebased(request)
+        document(result).title() shouldBe messages.question
       }
     }
   }
