@@ -30,6 +30,7 @@ import config.ApplicationConfig
 import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
 import controllers.{OtherReliefsFlatController, WorthBeforeLegislationStartController}
 import play.api.Environment
+import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
@@ -47,12 +48,14 @@ class WorthBeforeLegislationStartActionSpec extends UnitSpec with WithFakeApplic
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
   val defaultCache = mock[CacheMap]
+  val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
+
 
   class Setup {
     val controller = new WorthBeforeLegislationStartController(
-      mockEnvironment,
       mockHttp,
-      mockCalcConnector
+      mockCalcConnector,
+      mockMessagesControllerComponents
     )(mockConfig)
   }
 
@@ -65,7 +68,7 @@ class WorthBeforeLegislationStartActionSpec extends UnitSpec with WithFakeApplic
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new WorthBeforeLegislationStartController(mockEnvironment, mockHttp, mockCalcConnector)(mockConfig) {
+    new WorthBeforeLegislationStartController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig) {
       val calcConnector: CalculatorConnector = mockCalcConnector
     }
   }

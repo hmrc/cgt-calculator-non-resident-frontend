@@ -32,6 +32,7 @@ import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
 import play.api.Environment
+import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
@@ -46,6 +47,7 @@ class RebasedValueActionSpec @Inject()(rebasedValueController: RebasedValueContr
   implicit val hc = new HeaderCarrier()
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   lazy val materializer = mock[Materializer]
+  val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
 
   def setupTarget(getData: Option[RebasedValueModel],
                   acquisitionDateModel: Option[DateModel] = Some(DateModel(10, 10, 2015))): RebasedValueController = {
@@ -64,8 +66,8 @@ class RebasedValueActionSpec @Inject()(rebasedValueController: RebasedValueContr
       ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(mock[CacheMap]))
 
-    new RebasedValueController(environment = mock[Environment],
-      http = mock[DefaultHttpClient], calcConnector = mock[CalculatorConnector])(mockConfig) {
+    new RebasedValueController(http = mock[DefaultHttpClient],
+      calcConnector = mock[CalculatorConnector], mockMessagesControllerComponents)(mockConfig) {
       val calcConnector: CalculatorConnector = mockCalcConnector
     }
   }

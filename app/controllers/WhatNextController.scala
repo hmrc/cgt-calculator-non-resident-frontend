@@ -23,13 +23,15 @@ import play.api.Environment
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
+import play.api.i18n.I18nSupport
+import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
 import scala.concurrent.Future
 
-class WhatNextController @Inject()(environment: Environment,
-                                   http: DefaultHttpClient,
-                                   implicit val appConfig : ApplicationConfig) extends FrontendController with ValidActiveSession {
+class WhatNextController @Inject()(http: DefaultHttpClient,
+                                   implicit val appConfig : ApplicationConfig,
+                                   mcc: MessagesControllerComponents) extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   val whatNext = ValidateSession.async { implicit request =>
     Future.successful(Ok(views.html.whatNext.whatNext()))

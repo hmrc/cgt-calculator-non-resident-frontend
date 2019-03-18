@@ -20,24 +20,24 @@ import assets.MessageLookup.NonResident.{PersonalAllowance => messages}
 import assets.MessageLookup.{NonResident => commonMessages}
 import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
-import org.jsoup.Jsoup
-import forms.PersonalAllowanceForm._
 import controllers.routes
-import org.scalatest.mock.MockitoSugar
+import forms.PersonalAllowanceForm._
+import org.jsoup.Jsoup
+import org.scalatest.mockito.MockitoSugar
+import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.personalAllowance
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 
 class PersonalAllowanceViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
 
   "The Personal Allowance View" should {
 
     "return some HTML" which {
 
-      lazy val view = personalAllowance(personalAllowanceForm(11000))(fakeRequest, applicationMessages,fakeApplication,mockConfig)
+      lazy val view = personalAllowance(personalAllowanceForm(11000))(fakeRequest, mockMessage,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       s"has the title ${messages.question}" in {
@@ -149,7 +149,7 @@ class PersonalAllowanceViewSpec extends UnitSpec with WithFakeApplication with M
     "when supplied with a form with errors" should {
 
       lazy val form = personalAllowanceForm(11000).bind(Map("personalAllowance" -> "132891"))
-      lazy val view = personalAllowance(form)(fakeRequest, applicationMessages,fakeApplication,mockConfig)
+      lazy val view = personalAllowance(form)(fakeRequest, mockMessage,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

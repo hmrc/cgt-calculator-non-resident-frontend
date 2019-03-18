@@ -26,6 +26,7 @@ import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
 import org.scalatest.mockito.MockitoSugar
 import play.api.Environment
+import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -36,10 +37,10 @@ class WhatNextControllerSpec extends UnitSpec with WithFakeApplication with Mock
   implicit val hc: HeaderCarrier = mock[HeaderCarrier]
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   lazy val materializer = mock[Materializer]
+  val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
 
   "Calling .whatNext" when {
-    lazy val target = new WhatNextController(environment = mock[Environment],
-      http = mock[DefaultHttpClient], mockConfig){}
+    lazy val target = new WhatNextController(http = mock[DefaultHttpClient], mockConfig, mockMessagesControllerComponents){}
     "provided with a valid request" should {
       lazy val result = target.whatNext(fakeRequestWithSession)
       lazy val document = Jsoup.parse(bodyOf(result)(materializer))

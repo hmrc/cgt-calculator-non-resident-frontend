@@ -19,11 +19,21 @@ package constructors
 import helpers.AssertHelpers
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import assets.MessageLookup.{NonResident => messages}
+import controllers.helpers.FakeRequestHelper
 import models.{CalculationResultsWithTaxOwedModel, QuestionAnswerModel, TotalTaxOwedModel}
+import org.scalatest.mockito.MockitoSugar
+import play.api.i18n.MessagesProvider
+import play.api.mvc.MessagesControllerComponents
 
-class CalculationDetailsWithAllAnswersConstructorSpec extends UnitSpec with WithFakeApplication with AssertHelpers {
+class CalculationDetailsWithAllAnswersConstructorSpec extends UnitSpec with WithFakeApplication with AssertHelpers with MockitoSugar with FakeRequestHelper {
 
+  implicit val mockMessagesProvider = mock[MessagesProvider]
   private def assertExpectedResult[T](option: Option[T])(test: T => Unit) = assertOption("expected option is None")(option)(test)
+  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+
+  val calcDetails = new CalculationDetailsConstructor
+  val calcDetailWithPRR =  new CalculationDetailsWithPRRConstructor
+  val calcDetailsWithAllAnswers = new CalculationDetailsWithAllAnswersConstructor(calcDetails, calcDetailWithPRR)
 
   "Calling buildSection" should {
     val model = CalculationResultsWithTaxOwedModel(
@@ -50,45 +60,45 @@ class CalculationDetailsWithAllAnswersConstructorSpec extends UnitSpec with With
       ), None, None
     )
 
-    lazy val result = CalculationDetailsWithAllAnswersConstructor.buildSection(model, "flat", "2016/17")
+    lazy val result = calcDetailsWithAllAnswers.buildSection(model, "flat", "2016/17")
 
     "return a sequence with the election details row" in {
-      result.contains(CalculationDetailsConstructor.calculationElection("flat").get)
+      result.contains(calcDetails.calculationElection("flat").get)
     }
 
     "return a sequence containing the total gain row" in {
-      result.contains(CalculationDetailsConstructor.totalGain(12000).get)
+      result.contains(calcDetails.totalGain(12000).get)
     }
 
     "return a sequence containing the prr used row" in {
-      result.contains(CalculationDetailsWithPRRConstructor.prrUsedDetails(100).get)
+      result.contains(calcDetailWithPRR.prrUsedDetails(100).get)
     }
 
     "return a sequence containing the allowable losses used row" in {
-      result.contains(CalculationDetailsWithAllAnswersConstructor.allowableLossesUsedRow(Some(50), "2016/17").get)
+      result.contains(calcDetailsWithAllAnswers.allowableLossesUsedRow(Some(50), "2016/17").get)
     }
 
     "return a sequence containing the aea used row" in {
-      result.contains(CalculationDetailsWithAllAnswersConstructor.aeaUsedRow(Some(25)).get)
+      result.contains(calcDetailsWithAllAnswers.aeaUsedRow(Some(25)).get)
     }
 
     "return a sequence containing the aea remaining row" in {
-      result.contains(CalculationDetailsWithAllAnswersConstructor.aeaRemainingRow(5000).get)
+      result.contains(calcDetailsWithAllAnswers.aeaRemainingRow(5000).get)
     }
 
     "return a sequence containing the brought forward losses row" in {
-      result.contains(CalculationDetailsWithAllAnswersConstructor.broughtForwardLossesUsedRow(Some(12), "2016/17").get)
+      result.contains(calcDetailsWithAllAnswers.broughtForwardLossesUsedRow(Some(12), "2016/17").get)
     }
 
     "return a sequence containing the tax rates row" in {
-      result.contains(CalculationDetailsWithAllAnswersConstructor.taxRatesRow(10000, 10, None, None).get)
+      result.contains(calcDetailsWithAllAnswers.taxRatesRow(10000, 10, None, None).get)
     }
   }
 
   "Calling allowableLossesUsed" when {
 
     "an allowable loss has been used" should {
-      lazy val result = CalculationDetailsWithAllAnswersConstructor.allowableLossesUsedRow(Some(1000), "2016/17")
+      lazy val result = calcDetailsWithAllAnswers.allowableLossesUsedRow(Some(1000), "2016/17")
 
       "have a question answer model" in {
         result.isDefined shouldBe true
@@ -112,7 +122,7 @@ class CalculationDetailsWithAllAnswersConstructorSpec extends UnitSpec with With
     }
 
     "an allowable loss of 0 has been used" should {
-      lazy val result = CalculationDetailsWithAllAnswersConstructor.allowableLossesUsedRow(Some(0), "2016/17")
+      lazy val result = calcDetailsWithAllAnswers.allowableLossesUsedRow(Some(0), "2016/17")
 
       "return a None" in {
         result.isDefined shouldBe false
@@ -120,7 +130,7 @@ class CalculationDetailsWithAllAnswersConstructorSpec extends UnitSpec with With
     }
 
     "a None is returned for allowable losses used" should {
-      lazy val result = CalculationDetailsWithAllAnswersConstructor.allowableLossesUsedRow(None, "2016/17")
+      lazy val result = calcDetailsWithAllAnswers.allowableLossesUsedRow(None, "2016/17")
 
       "return a None" in {
         result.isDefined shouldBe false
@@ -131,7 +141,7 @@ class CalculationDetailsWithAllAnswersConstructorSpec extends UnitSpec with With
   "Calling aeaUsedRow" when {
 
     "an aea has been used" should {
-      lazy val result = CalculationDetailsWithAllAnswersConstructor.aeaUsedRow(Some(1000))
+      lazy val result = calcDetailsWithAllAnswers.aeaUsedRow(Some(1000))
 
       "have a question answer model" in {
         result.isDefined shouldBe true
@@ -155,7 +165,7 @@ class CalculationDetailsWithAllAnswersConstructorSpec extends UnitSpec with With
     }
 
     "an aea of 0 has been used" should {
-      lazy val result = CalculationDetailsWithAllAnswersConstructor.aeaUsedRow(Some(0))
+      lazy val result = calcDetailsWithAllAnswers.aeaUsedRow(Some(0))
 
       "return a None" in {
         result.isDefined shouldBe false
@@ -163,7 +173,7 @@ class CalculationDetailsWithAllAnswersConstructorSpec extends UnitSpec with With
     }
 
     "a None is returned for aea used" should {
-      lazy val result = CalculationDetailsWithAllAnswersConstructor.aeaUsedRow(None)
+      lazy val result = calcDetailsWithAllAnswers.aeaUsedRow(None)
 
       "return a None" in {
         result.isDefined shouldBe false
@@ -174,7 +184,7 @@ class CalculationDetailsWithAllAnswersConstructorSpec extends UnitSpec with With
   "Calling aeaRemainingRow" when {
 
     "an aea amount is left over" should {
-      lazy val result = CalculationDetailsWithAllAnswersConstructor.aeaRemainingRow(1000)
+      lazy val result = calcDetailsWithAllAnswers.aeaRemainingRow(1000)
 
       "have a question answer model" in {
         result.isDefined shouldBe true
@@ -201,7 +211,7 @@ class CalculationDetailsWithAllAnswersConstructorSpec extends UnitSpec with With
   "Calling broughtForwardLossesRemainingRow" when {
 
     "a brought forward loss has been used" should {
-      lazy val result = CalculationDetailsWithAllAnswersConstructor.broughtForwardLossesUsedRow(Some(1000), "2016/17")
+      lazy val result = calcDetailsWithAllAnswers.broughtForwardLossesUsedRow(Some(1000), "2016/17")
 
       "have a question answer model" in {
         result.isDefined shouldBe true
@@ -225,7 +235,7 @@ class CalculationDetailsWithAllAnswersConstructorSpec extends UnitSpec with With
     }
 
     "a brought forward loss of 0 has been used" should {
-      lazy val result = CalculationDetailsWithAllAnswersConstructor.broughtForwardLossesUsedRow(Some(0), "2016/17")
+      lazy val result = calcDetailsWithAllAnswers.broughtForwardLossesUsedRow(Some(0), "2016/17")
 
       "return a None" in {
         result.isDefined shouldBe false
@@ -233,7 +243,7 @@ class CalculationDetailsWithAllAnswersConstructorSpec extends UnitSpec with With
     }
 
     "a None is returned for brought forward losses used" should {
-      lazy val result = CalculationDetailsWithAllAnswersConstructor.broughtForwardLossesUsedRow(None, "2016/17")
+      lazy val result = calcDetailsWithAllAnswers.broughtForwardLossesUsedRow(None, "2016/17")
 
       "return a None" in {
         result.isDefined shouldBe false
@@ -244,7 +254,7 @@ class CalculationDetailsWithAllAnswersConstructorSpec extends UnitSpec with With
   "Calling lossesRemainingRow" when {
 
     "a loss is remaining" should {
-      lazy val result = CalculationDetailsWithAllAnswersConstructor.lossesRemainingRow(-1000)
+      lazy val result = calcDetailsWithAllAnswers.lossesRemainingRow(-1000)
 
       "have a question answer model" in {
         result.isDefined shouldBe true
@@ -268,7 +278,7 @@ class CalculationDetailsWithAllAnswersConstructorSpec extends UnitSpec with With
     }
 
     "a zero taxable gain is returned" should {
-      lazy val result = CalculationDetailsWithAllAnswersConstructor.lossesRemainingRow(0)
+      lazy val result = calcDetailsWithAllAnswers.lossesRemainingRow(0)
 
       "return a None" in {
         result.isDefined shouldBe false
@@ -276,7 +286,7 @@ class CalculationDetailsWithAllAnswersConstructorSpec extends UnitSpec with With
     }
 
     "a positive taxable gain is returned" should {
-      lazy val result = CalculationDetailsWithAllAnswersConstructor.lossesRemainingRow(1000)
+      lazy val result = calcDetailsWithAllAnswers.lossesRemainingRow(1000)
 
       "return a None" in {
         result.isDefined shouldBe false
@@ -287,7 +297,7 @@ class CalculationDetailsWithAllAnswersConstructorSpec extends UnitSpec with With
   "Calling taxRatesRow" when {
 
     "there is no positive taxable gain" should {
-      lazy val result = CalculationDetailsWithAllAnswersConstructor.taxRatesRow(0, 10, None, None)
+      lazy val result = calcDetailsWithAllAnswers.taxRatesRow(0, 10, None, None)
 
       "return a None" in {
         result.isDefined shouldBe false
@@ -295,7 +305,7 @@ class CalculationDetailsWithAllAnswersConstructorSpec extends UnitSpec with With
     }
 
     "there is no additional rate" should {
-      lazy val result = CalculationDetailsWithAllAnswersConstructor.taxRatesRow(1000, 10, None, None)
+      lazy val result = calcDetailsWithAllAnswers.taxRatesRow(1000, 10, None, None)
 
       "have a question answer model" in {
         result.isDefined shouldBe true
@@ -319,7 +329,7 @@ class CalculationDetailsWithAllAnswersConstructorSpec extends UnitSpec with With
     }
 
     "there is an additional rate" should {
-      lazy val result = CalculationDetailsWithAllAnswersConstructor.taxRatesRow(1000, 10, Some(2000), Some(20))
+      lazy val result = calcDetailsWithAllAnswers.taxRatesRow(1000, 10, Some(2000), Some(20))
 
       "have a question answer model" in {
         result.isDefined shouldBe true
@@ -343,7 +353,7 @@ class CalculationDetailsWithAllAnswersConstructorSpec extends UnitSpec with With
     }
 
     "there is only an additional rate" should {
-      lazy val result = CalculationDetailsWithAllAnswersConstructor.taxRatesRow(0, 0, Some(2000), Some(20))
+      lazy val result = calcDetailsWithAllAnswers.taxRatesRow(0, 0, Some(2000), Some(20))
 
       "have a question answer model" in {
         result.isDefined shouldBe true
@@ -370,7 +380,7 @@ class CalculationDetailsWithAllAnswersConstructorSpec extends UnitSpec with With
   "Calling otherReliefsUsedRow" should {
 
     "other reliefs have been used" should {
-      lazy val result = CalculationDetailsWithAllAnswersConstructor.otherReliefsUsedRow(Some(1000))
+      lazy val result = calcDetailsWithAllAnswers.otherReliefsUsedRow(Some(1000))
 
       "have a question answer model" in {
         result.isDefined shouldBe true
@@ -394,7 +404,7 @@ class CalculationDetailsWithAllAnswersConstructorSpec extends UnitSpec with With
     }
 
     "an aea of 0 has been used" should {
-      lazy val result = CalculationDetailsWithAllAnswersConstructor.otherReliefsUsedRow(Some(0))
+      lazy val result = calcDetailsWithAllAnswers.otherReliefsUsedRow(Some(0))
 
       "return a None" in {
         result.isDefined shouldBe false
@@ -402,7 +412,7 @@ class CalculationDetailsWithAllAnswersConstructorSpec extends UnitSpec with With
     }
 
     "a None is returned for aea used" should {
-      lazy val result = CalculationDetailsWithAllAnswersConstructor.otherReliefsUsedRow(None)
+      lazy val result = calcDetailsWithAllAnswers.otherReliefsUsedRow(None)
 
       "return a None" in {
         result.isDefined shouldBe false

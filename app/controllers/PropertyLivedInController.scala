@@ -20,7 +20,7 @@ import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import forms.PropertyLivedInForm._
 import models.PropertyLivedInModel
-import play.api.mvc.{Action, AnyContent}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
@@ -30,13 +30,15 @@ import config.ApplicationConfig
 import controllers.utils.RecoverableFuture
 import javax.inject.Inject
 import play.api.Environment
+import play.api.i18n.I18nSupport
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class PropertyLivedInController @Inject()(environment: Environment,
-                                          http: DefaultHttpClient,calcConnector: CalculatorConnector)(implicit val applicationConfig: ApplicationConfig)
-                                            extends FrontendController with ValidActiveSession {
+class PropertyLivedInController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
+                                          mcc: MessagesControllerComponents)(implicit val applicationConfig: ApplicationConfig)
+                                            extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   val propertyLivedIn: Action[AnyContent] = ValidateSession.async { implicit request =>
 

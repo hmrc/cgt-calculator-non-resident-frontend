@@ -23,27 +23,24 @@ import constructors._
 import javax.inject.Inject
 import models._
 import play.api.libs.json.Format
-import play.api.{Configuration, Environment, Mode}
 import uk.gov.hmrc.http.cache.client.{CacheMap, SessionCache}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-import uk.gov.hmrc.play.config.ServicesConfig
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class CalculatorConnector @Inject()(val http: DefaultHttpClient,
-                                    val appConfig: ApplicationConfig)
-                                    extends ServicesConfig with SessionCache {
+                                    val appConfig: ApplicationConfig,
+                                    val servicesConfig: ServicesConfig)
+                                    extends SessionCache {
 
-  override lazy val domain: String = getConfString("cachable.session-cache.domain", throw new Exception(s"Could not find config 'cachable.session-cache.domain'"))
-  override lazy val baseUri: String = baseUrl("cachable.session-cache")
-  override lazy val defaultSource: String = appConfig.getString("appName")
+  override lazy val domain: String = servicesConfig.getConfString("cachable.session-cache.domain", throw new Exception(s"Could not find config 'cachable.session-cache.domain'"))
+  override lazy val baseUri: String = servicesConfig.baseUrl("cachable.session-cache")
+  override lazy val defaultSource: String = "cgt-calculator-non-resident-frontend"
 
-  override def mode :Mode.Mode = appConfig.mode
-  override def runModeConfiguration: Configuration = appConfig.runModeConfiguration
-
-  val serviceUrl: String = baseUrl("capital-gains-calculator")
+  val serviceUrl: String = servicesConfig.baseUrl("capital-gains-calculator")
 
   implicit val hc: HeaderCarrier = HeaderCarrier().withExtraHeaders("Accept" -> "application/vnd.hmrc.1.0+json")
 

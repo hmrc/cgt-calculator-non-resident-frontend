@@ -19,22 +19,22 @@ package views
 import assets.MessageLookup.{NonResident => messages}
 import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
-import org.jsoup.Jsoup
 import forms.DisposalValueForm._
-import org.scalatest.mock.MockitoSugar
+import org.jsoup.Jsoup
+import org.scalatest.mockito.MockitoSugar
+import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.disposalValue
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 
 class DisposalValueViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
 
   "Disposal value view" when {
 
     "supplied with no errors" should {
-      lazy val view = disposalValue(disposalValueForm)(fakeRequest, applicationMessages,fakeApplication,mockConfig)
+      lazy val view = disposalValue(disposalValueForm)(fakeRequest, mockMessage,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${messages.DisposalValue.question}'" in {
@@ -121,7 +121,7 @@ class DisposalValueViewSpec extends UnitSpec with WithFakeApplication with Mocki
 
     "supplied with a form with errors" should {
       lazy val form = disposalValueForm.bind(Map("disposalValue" -> "testData"))
-      lazy val view = disposalValue(form)(fakeRequest, applicationMessages,fakeApplication,mockConfig)
+      lazy val view = disposalValue(form)(fakeRequest, mockMessage,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

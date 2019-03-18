@@ -21,8 +21,8 @@ import assets.MessageLookup.NonResident.{AcquisitionCosts => messages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import config.ApplicationConfig
 import connectors.CalculatorConnector
-import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
-import controllers.{AcquisitionCostsController, PropertyLivedInController}
+import constructors.DefaultCalculationElectionConstructor
+import controllers.AcquisitionCostsController
 import controllers.helpers.FakeRequestHelper
 import models.{AcquisitionCostsModel, BoughtForLessModel, DateModel, HowBecameOwnerModel}
 import org.jsoup.Jsoup
@@ -30,15 +30,15 @@ import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.mock.MockitoSugar
-import play.api.Environment
+import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.cache.client.CacheMap
+import uk.gov.hmrc.http.logging.SessionId
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 import scala.concurrent.Future
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.http.logging.SessionId
-import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
 class AcquisitionCostsActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper
   with BeforeAndAfterEach {
@@ -46,25 +46,20 @@ class AcquisitionCostsActionSpec extends UnitSpec with WithFakeApplication with 
   implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
 
   val materializer = mock[Materializer]
-  val mockEnvironment =mock[Environment]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
-  val mockDefaultCalcElecConstructor = mock[DefaultCalculationElectionConstructor]
   val defaultCache = mock[CacheMap]
+  val mockDefaultCalcElecConstructor = mock[DefaultCalculationElectionConstructor]
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
 
   class Setup {
     val controller = new AcquisitionCostsController(
-      mockEnvironment,
       mockHttp,
       mockCalcConnector,
-      mockDefaultCalcElecConstructor
+      mockDefaultCalcElecConstructor,
+      mockMessagesControllerComponents
     )(mockConfig)
-  }
-
-  override def beforeEach(): Unit = {
-    reset(Seq(mockEnvironment, mockHttp, mockCalcConnector, mockDefaultCalcElecConstructor): _*)
-    super.beforeEach()
   }
 
   def setupTarget(getData: Option[AcquisitionCostsModel],
@@ -91,7 +86,7 @@ class AcquisitionCostsActionSpec extends UnitSpec with WithFakeApplication with 
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new AcquisitionCostsController(mockEnvironment, mockHttp, mockCalcConnector, mockDefaultCalcElecConstructor)(mockConfig) {
+    new AcquisitionCostsController(mockHttp, mockCalcConnector, mockDefaultCalcElecConstructor, mockMessagesControllerComponents)(mockConfig) {
       val calcConnector: CalculatorConnector = mockCalcConnector
     }
   }

@@ -22,21 +22,24 @@ import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import forms.ClaimingReliefsForm
 import org.jsoup.Jsoup
-import org.scalatest.mock.MockitoSugar
+import org.scalatest.mockito.MockitoSugar
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.claimingReliefs
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
+import play.api.i18n.Messages
+import play.api.mvc.MessagesControllerComponents
 
 class ClaimingReliefsViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
 
   "ClaimingReliefs view" when {
 
     "supplied with no errors" should {
       lazy val form = ClaimingReliefsForm.claimingReliefsForm
-      lazy val view = claimingReliefs(form)(fakeRequest, applicationMessages,fakeApplication,mockConfig)
+      lazy val view = claimingReliefs(form)(fakeRequest, mockMessage,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       s"have the title ${messages.title}" in {
@@ -100,7 +103,7 @@ class ClaimingReliefsViewSpec extends UnitSpec with WithFakeApplication with Moc
 
     "supplied with form errors" should {
       lazy val form = ClaimingReliefsForm.claimingReliefsForm.bind(Map("isClaimingReliefs" -> "abc"))
-      lazy val view = claimingReliefs(form)(fakeRequest, applicationMessages,fakeApplication,mockConfig)
+      lazy val view = claimingReliefs(form)(fakeRequest, mockMessage,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

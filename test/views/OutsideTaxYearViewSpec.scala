@@ -21,19 +21,20 @@ import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import models.TaxYearModel
 import org.jsoup.Jsoup
-import play.api.Play.current
-import play.api.i18n.Messages.Implicits._
+import org.scalatest.mockito.MockitoSugar
+import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.{calculation => views}
 
-class OutsideTaxYearViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
+class OutsideTaxYearViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper with MockitoSugar{
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
 
   "Outside tax years views" when {
 
     "using a disposal date of 2018/19 " should {
       lazy val taxYear = TaxYearModel("2018/19", false, "2017/18")
-      lazy val view = views.outsideTaxYear(taxYear)(fakeRequestWithSession, applicationMessages, fakeApplication, mockConfig)
+      lazy val view = views.outsideTaxYear(taxYear)(fakeRequestWithSession, mockMessage, fakeApplication, mockConfig)
       lazy val doc = Jsoup.parse(view.body)
 
       "have charset UTF-8" in {

@@ -23,27 +23,27 @@ import config.ApplicationConfig
 import connectors.CalculatorConnector
 import constructors.{AnswersConstructor, YourAnswersConstructor}
 import controllers.predicates.ValidActiveSession
-import it.innove.play.pdf.PdfGenerator
-import models.{TaxYearModel, _}
-import play.api.Play.current
-import play.api.i18n.Messages
-import play.api.i18n.Messages.Implicits._
-import play.api.mvc.{Action, AnyContent, RequestHeader}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-import views.html.calculation
 import controllers.utils.RecoverableFuture
+import it.innove.play.pdf.PdfGenerator
 import javax.inject.Inject
+import models._
 import play.api.Environment
-
-import scala.concurrent.Future
+import play.api.Play.current
+import play.api.i18n.{I18nSupport, Lang, Messages}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, RequestHeader}
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import views.html.calculation
+
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 
-class ReportController @Inject()(environment: Environment,
-                                 http: DefaultHttpClient,calcConnector: CalculatorConnector,
-                                 answersConstructor: AnswersConstructor)(implicit val applicationConfig: ApplicationConfig)
-                                  extends FrontendController with ValidActiveSession {
+class ReportController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
+                                 answersConstructor: AnswersConstructor,
+                                 mcc: MessagesControllerComponents)(implicit val applicationConfig: ApplicationConfig)
+                                  extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   val pdfGenerator = new PdfGenerator
 
@@ -127,6 +127,7 @@ class ReportController @Inject()(environment: Environment,
     } yield {
       lazy val view = calculationType.get.calculationType match {
         case CalculationType.flat =>
+          implicit val lang: Lang = mcc.messagesApi.preferred(request).lang
           calculation.summaryReport(questionAnswerRows, calculationResult, taxYearModel.get, calculationType.get.calculationType,
             answers.disposalValueModel.disposalValue,
             answers.acquisitionValueModel.acquisitionValueAmt,
@@ -134,6 +135,7 @@ class ReportController @Inject()(environment: Environment,
             reliefsUsed = calculationResult.prrUsed.getOrElse(BigDecimal(0)) + calculationResult.otherReliefsUsed.getOrElse(BigDecimal(0)))
 
         case CalculationType.timeApportioned =>
+          implicit val lang: Lang = mcc.messagesApi.preferred(request).lang
           calculation.summaryReport(questionAnswerRows, calculationResult, taxYearModel.get, calculationType.get.calculationType,
             answers.disposalValueModel.disposalValue,
             answers.acquisitionValueModel.acquisitionValueAmt,
@@ -142,6 +144,7 @@ class ReportController @Inject()(environment: Environment,
             reliefsUsed = calculationResult.prrUsed.getOrElse(BigDecimal(0)) + calculationResult.otherReliefsUsed.getOrElse(BigDecimal(0)))
 
         case CalculationType.rebased =>
+          implicit val lang: Lang = mcc.messagesApi.preferred(request).lang
           calculation.summaryReport(questionAnswerRows, calculationResult, taxYearModel.get, calculationType.get.calculationType,
             answers.disposalValueModel.disposalValue,
             answers.rebasedValueModel.get.rebasedValueAmt,

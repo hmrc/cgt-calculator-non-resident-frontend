@@ -16,12 +16,9 @@
 
 package models
 
-import constructors.CalculationDetailsConstructor
 import play.api.libs.json.Json
 
 case class TotalGainResultsModel(flatGain: BigDecimal, rebasedGain: Option[BigDecimal], timeApportionedGain: Option[BigDecimal]) {
-
-  def calculationDetailsRows(calculationType: String): Seq[QuestionAnswerModel[Any]] = CalculationDetailsConstructor.buildSection(this, calculationType)
 }
 
 object TotalGainResultsModel {

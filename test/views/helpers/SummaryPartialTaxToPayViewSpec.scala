@@ -18,16 +18,17 @@ package views.helpers
 
 import assets.MessageLookup.{SummaryPartialMessages => messages}
 import controllers.helpers.FakeRequestHelper
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
-import views.html.helpers
 import org.jsoup.Jsoup
+import org.scalatest.mockito.MockitoSugar
+import play.api.i18n.{Lang, Messages}
+import play.api.mvc.MessagesControllerComponents
+import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import views.html.helpers
 
 
-class SummaryPartialTaxToPayViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
-
-
+class SummaryPartialTaxToPayViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper with MockitoSugar {
+  implicit val mockLang = mock[Lang]
+  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   "The workingOutSummary partial" when {
 
     "supplied with a flat calculation with a taxable gain and both tax rates" should {
@@ -40,7 +41,7 @@ class SummaryPartialTaxToPayViewSpec extends UnitSpec with WithFakeApplication w
         taxAtBandTwo = 50,
         taxRateOne = 18,
         taxRateTwo = 28
-      )(fakeRequestWithSession, applicationMessages)
+      )(fakeRequestWithSession, mockMessage)
       lazy val doc = Jsoup.parse(view.body)
 
       s"have the text ${messages.yourTaxRate}" in {
@@ -94,7 +95,7 @@ class SummaryPartialTaxToPayViewSpec extends UnitSpec with WithFakeApplication w
         taxAtBandTwo = 0,
         taxRateOne = 10,
         taxRateTwo = 0
-      )(fakeRequestWithSession, applicationMessages)
+      )(fakeRequestWithSession, mockMessage)
       lazy val doc = Jsoup.parse(view.body)
 
       s"have the text ${messages.yourTaxRate}" in {
@@ -116,7 +117,7 @@ class SummaryPartialTaxToPayViewSpec extends UnitSpec with WithFakeApplication w
         taxAtBandTwo = 200,
         taxRateOne = 0,
         taxRateTwo = 20
-      )(fakeRequestWithSession, applicationMessages)
+      )(fakeRequestWithSession, mockMessage)
       lazy val doc = Jsoup.parse(view.body)
 
       s"have the text ${messages.yourTaxRate}" in {
@@ -138,7 +139,7 @@ class SummaryPartialTaxToPayViewSpec extends UnitSpec with WithFakeApplication w
         taxAtBandTwo = 10,
         taxRateOne = 10,
         taxRateTwo = 10
-      )(fakeRequestWithSession, applicationMessages)
+      )(fakeRequestWithSession, mockMessage)
       lazy val doc = Jsoup.parse(view.body)
 
       s"does not have the text ${messages.yourTaxRate}" in {

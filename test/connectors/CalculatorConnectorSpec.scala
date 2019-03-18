@@ -30,6 +30,7 @@ import play.api.libs.json.Json
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.cache.client.{CacheMap, SessionCache}
 import uk.gov.hmrc.http.logging.SessionId
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
@@ -39,14 +40,14 @@ class CalculatorConnectorSpec extends UnitSpec with WithFakeApplication with Moc
 
   val mockHttp         = mock[DefaultHttpClient]
   val mockSessionCache = mock[SessionCache]
-  val mockEnv          = mock[Environment]
+  val mockServiceConf  = mock[ServicesConfig]
   val mockConfig       = fakeApplication.injector.instanceOf[ApplicationConfig]
   val sessionId        = UUID.randomUUID.toString
 
   implicit val hc: HeaderCarrier = HeaderCarrier(sessionId = Some(SessionId(sessionId.toString)))
 
   class Setup {
-    val connector = new CalculatorConnector(mockHttp, mockConfig)
+    val connector = new CalculatorConnector(mockHttp, mockConfig, mockServiceConf)
   }
 
   "Calculator Connector" should {

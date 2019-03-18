@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,23 +12,22 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package controllers.utils
+@import uk.gov.hmrc.urls.Link
 
-import config.ApplicationConfig
-import javax.inject.Inject
-import play.api.Play.current
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-import views.html.warnings._
+@(langMap: Map[String, Lang], langToCall: String => Call, customClass: Option[String] = None, appName: Option[String] = None)(implicit messages: Messages)
 
-import scala.concurrent.Future
+<p class="@if(customClass.isDefined) {@customClass.get}">
 
-class TimeoutController@Inject()(mcc: MessagesControllerComponents)(implicit val applicationConfig: ApplicationConfig)
-  extends FrontendController(mcc) {
-
-  def timeout(): Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok(sessionTimeout()))
-  }
+@langMap.map { case (key: String, value: Lang) =>
+    @if(messages.lang.code != value.code) {
+        @Html(s"""<a id="$key-switch" href="${langToCall(key)}" target="_self" data-sso="false">${key.capitalize}</a>""")
+    } else {
+        @key.capitalize
+    }
+    @if(key != langMap.last._1) {
+        @Html(" | ")
+    }
 }
+</p>

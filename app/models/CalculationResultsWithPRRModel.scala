@@ -16,15 +16,11 @@
 
 package models
 
-import constructors.CalculationDetailsWithPRRConstructor
 import play.api.libs.json.Json
 
 case class CalculationResultsWithPRRModel(flatResult: GainsAfterPRRModel,
                                   rebasedResult: Option[GainsAfterPRRModel],
-                                  timeApportionedResult: Option[GainsAfterPRRModel]){
-
-  def calculationDetailsRows(calculationType: String): Seq[QuestionAnswerModel[Any]] = CalculationDetailsWithPRRConstructor.buildSection(this, calculationType)
-}
+                                  timeApportionedResult: Option[GainsAfterPRRModel])
 
 object CalculationResultsWithPRRModel {
   implicit val formats = Json.format[CalculationResultsWithPRRModel]

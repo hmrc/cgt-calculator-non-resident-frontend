@@ -16,14 +16,13 @@
 
 package constructors
 
-import models.{OtherReliefsModel, QuestionAnswerModel}
-import common.nonresident.CalculationType
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import play.api.i18n.Messages
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
+import common.nonresident.CalculationType
+import javax.inject.Inject
+import models.{OtherReliefsModel, QuestionAnswerModel}
+import play.api.i18n.{Messages, MessagesProvider}
 
-object OtherReliefsDetailsConstructor {
+class OtherReliefsDetailsConstructor @Inject()(implicit messagesProvider: MessagesProvider) {
 
   def getOtherReliefsSection(otherReliefs: Option[OtherReliefsModel],
                              calculationElection: String): Seq[QuestionAnswerModel[Any]] = {

@@ -16,18 +16,17 @@
 
 package controllers
 
-import play.api.{Configuration, Logger, Play}
+import play.api.Logger
 import play.api.mvc.Results._
 import play.api.mvc.{Request, Result}
 import uk.gov.hmrc.play.bootstrap.http.ApplicationException
-import uk.gov.hmrc.play.config.AppName
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{CanAwait, ExecutionContext, Future}
 import scala.util.Try
 
 package object utils {
-  implicit class RecoverableFuture(future: Future[Result]) extends Future[Result] with AppName {
+  implicit class RecoverableFuture(future: Future[Result]) extends Future[Result] {
     override def onComplete[U](f: Try[Result] => U)(implicit executor: ExecutionContext): Unit = future.onComplete(f)
     override def isCompleted: Boolean = future.isCompleted
     override def value: Option[Try[Result]] = future.value
@@ -39,12 +38,9 @@ package object utils {
         case e: NoSuchElementException =>
           Logger.warn(s"${request.uri} resulted in None.get, user redirected to start")
           throw ApplicationException(
-            appName,
             Redirect(controllers.utils.routes.TimeoutController.timeout()),
             e.getMessage
           )
       }
-
-    override protected def appNameConfiguration: Configuration = Play.current.configuration
   }
 }

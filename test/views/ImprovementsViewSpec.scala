@@ -19,25 +19,27 @@ package views
 import assets.MessageLookup.{NonResident => messages}
 import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
-import org.jsoup.Jsoup
+import controllers.routes
 import forms.ImprovementsForm._
+import org.jsoup.Jsoup
+import org.scalatest.mockito.MockitoSugar
+import play.api.i18n.MessagesApi
+import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.improvements
-import controllers.routes
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
-import play.api.i18n.Lang
 
-class ImprovementsViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
+class ImprovementsViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper with MockitoSugar {
 
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  val mockMessagesApi = mock[MessagesApi]
 
   "Improvements view" should {
 
     "supplied with no errors, improvementsOptions = true and is owner after legislation start" should {
 
       lazy val view = improvements(improvementsForm(true), improvementsOptions = false,
-        "back-link", ownerBeforeLegislationStart = false)(fakeRequest,applicationMessages,fakeApplication,applicationMessagesApi,mockConfig)
+        "back-link", ownerBeforeLegislationStart = false)(fakeRequest,mockMessage,fakeApplication,mockMessagesApi,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "return some HTML that" should {
@@ -184,7 +186,7 @@ class ImprovementsViewSpec extends UnitSpec with WithFakeApplication with FakeRe
 
     "supplied with no errors and improvementsOptions = false" should {
 
-      lazy val view = improvements(improvementsForm(true), improvementsOptions = true, "back-link", ownerBeforeLegislationStart = false)(fakeRequest,applicationMessages,fakeApplication,applicationMessagesApi,mockConfig)
+      lazy val view = improvements(improvementsForm(true), improvementsOptions = true, "back-link", ownerBeforeLegislationStart = false)(fakeRequest,mockMessage,fakeApplication,mockMessagesApi,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "return some HTML that" should {
@@ -215,7 +217,7 @@ class ImprovementsViewSpec extends UnitSpec with WithFakeApplication with FakeRe
 
     "supplied with no errors and is owner before legislation start" should {
 
-      lazy val view = improvements(improvementsForm(true), improvementsOptions = true, "back-link", ownerBeforeLegislationStart = true)(fakeRequest,applicationMessages,fakeApplication,applicationMessagesApi,mockConfig)
+      lazy val view = improvements(improvementsForm(true), improvementsOptions = true, "back-link", ownerBeforeLegislationStart = true)(fakeRequest,mockMessage,fakeApplication,mockMessagesApi,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "return some HTML that" should {
@@ -244,7 +246,7 @@ class ImprovementsViewSpec extends UnitSpec with WithFakeApplication with FakeRe
 
     "supplied with errors" should {
       lazy val form = improvementsForm(true).bind(Map("improvements" -> "testData"))
-      lazy val view = improvements(form, improvementsOptions = true, "back-link", ownerBeforeLegislationStart = false)(fakeRequest,applicationMessages,fakeApplication,applicationMessagesApi,mockConfig)
+      lazy val view = improvements(form, improvementsOptions = true, "back-link", ownerBeforeLegislationStart = false)(fakeRequest,mockMessage,fakeApplication,mockMessagesApi,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

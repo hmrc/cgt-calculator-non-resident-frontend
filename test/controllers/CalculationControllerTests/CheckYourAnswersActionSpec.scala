@@ -30,6 +30,7 @@ import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
 import play.api.Environment
+import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
@@ -45,22 +46,22 @@ class CheckYourAnswersActionSpec @Inject()(checkYourAnswersController: CheckYour
   implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
 
   val materializer = mock[Materializer]
-  val mockEnvironment =mock[Environment]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
   val defaultCache = mock[CacheMap]
   val mockAnswersConstructor = mock[AnswersConstructor]
   val mockDefaultCalElecConstructor = mock[DefaultCalculationElectionConstructor]
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
 
 
   class Setup {
     val controller = new CheckYourAnswersController(
-      mockEnvironment,
       mockHttp,
       mockCalcConnector,
       mockAnswersConstructor,
-      mockDefaultCalElecConstructor
+      mockDefaultCalElecConstructor,
+      mockMessagesControllerComponents
     )(mockConfig)
   }
 
@@ -86,7 +87,7 @@ class CheckYourAnswersActionSpec @Inject()(checkYourAnswersController: CheckYour
     when(mockCalcConnector.calculateTotalGain(ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(totalGainsModel)
 
-    new CheckYourAnswersController(mockEnvironment, mockHttp, mockCalcConnector, mockAnswersConstructor, mockDefaultCalElecConstructor)(mockConfig) {
+    new CheckYourAnswersController(mockHttp, mockCalcConnector, mockAnswersConstructor, mockDefaultCalElecConstructor, mockMessagesControllerComponents)(mockConfig) {
       val answersConstructor: AnswersConstructor = mockAnswersConstructor
       val calculatorConnector: CalculatorConnector = mockCalcConnector
     }
@@ -134,12 +135,6 @@ class CheckYourAnswersActionSpec @Inject()(checkYourAnswersController: CheckYour
     None,
     BroughtForwardLossesModel(isClaiming = false, None))
 
-//  "Check Your Answers Controller" should {
-//
-//    "have the correct AnswersConstructor" in {
-//      checkYourAnswersController.answersConstructor shouldBe AnswersConstructor
-//    }
-//  }
 
   "Calling .checkYourAnswers" when {
 

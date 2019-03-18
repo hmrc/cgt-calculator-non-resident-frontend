@@ -23,19 +23,23 @@ import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
 import forms.RebasedValueForm._
 import controllers.routes
+import org.scalatest.mockito.MockitoSugar
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.rebasedValue
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
+import play.api.i18n.Messages
+import play.api.mvc.MessagesControllerComponents
 
-class RebasedValueViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
+class RebasedValueViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper with MockitoSugar {
 
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   "The rebased value view" when {
 
     "not supplied with a pre-existing stored model" should {
 
-      lazy val view = rebasedValue(rebasedValueForm, "google.com")(fakeRequest, applicationMessages,fakeApplication,mockConfig)
+      lazy val view = rebasedValue(rebasedValueForm, "google.com")(fakeRequest, mockMessage,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       s"Have the title ${messages.question}" in {
@@ -142,7 +146,7 @@ class RebasedValueViewSpec extends UnitSpec with WithFakeApplication with FakeRe
     "supplied with a form with errors" should {
 
       lazy val form = rebasedValueForm.bind(Map("rebasedValueAmt" -> ""))
-      lazy val view = rebasedValue(form, "google.com")(fakeRequest, applicationMessages,fakeApplication,mockConfig)
+      lazy val view = rebasedValue(form, "google.com")(fakeRequest, mockMessage,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

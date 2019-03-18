@@ -20,22 +20,22 @@ import assets.MessageLookup.{NonResident => messages}
 import config.ApplicationConfig
 import constructors.helpers.AssertHelpers
 import controllers.helpers.FakeRequestHelper
-import org.jsoup.Jsoup
 import forms.BoughtForLessForm._
-import org.scalatest.mock.MockitoSugar
+import org.jsoup.Jsoup
+import org.scalatest.mockito.MockitoSugar
+import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.boughtForLess
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 
 class BoughtForLessViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper with AssertHelpers {
 
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
 
   "Bought for less view" when {
 
     "supplied with no errors" should {
-      lazy val view = boughtForLess(boughtForLessForm)(fakeRequest,applicationMessages, fakeApplication, mockConfig)
+      lazy val view = boughtForLess(boughtForLessForm)(fakeRequest,mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of ${messages.BoughtForLess.question}" in {
@@ -125,7 +125,7 @@ class BoughtForLessViewSpec extends UnitSpec with WithFakeApplication with Mocki
 
     "supplied with errors" should {
       lazy val form = boughtForLessForm.bind(Map("boughtForLess" -> "invalid text"))
-      lazy val view = boughtForLess(form)(fakeRequest,applicationMessages, fakeApplication, mockConfig)
+      lazy val view = boughtForLess(form)(fakeRequest,mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

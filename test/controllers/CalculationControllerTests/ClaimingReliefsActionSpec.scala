@@ -29,6 +29,7 @@ import org.mockito.ArgumentMatchers
 import org.mockito.Mockito.when
 import org.scalatest.mockito.MockitoSugar
 import play.api.Environment
+import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.cache.client.CacheMap
@@ -43,18 +44,18 @@ class ClaimingReliefsActionSpec extends UnitSpec with WithFakeApplication with F
   implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
 
   val materializer = mock[Materializer]
-  val mockEnvironment =mock[Environment]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
   val defaultCache = mock[CacheMap]
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
 
 
   class Setup {
     val controller = new ClaimingReliefsController(
-      mockEnvironment,
       mockHttp,
-      mockCalcConnector
+      mockCalcConnector,
+      mockMessagesControllerComponents
     )(mockConfig)
   }
   def setupTarget(model: Option[ClaimingReliefsModel]): ClaimingReliefsController = {
@@ -69,8 +70,7 @@ class ClaimingReliefsActionSpec extends UnitSpec with WithFakeApplication with F
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new ClaimingReliefsController(mockEnvironment, mockHttp, mockCalcConnector)(mockConfig) {
-      val calcConnector: CalculatorConnector = mockCalcConnector
+    new ClaimingReliefsController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig) {
     }
   }
 

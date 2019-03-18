@@ -17,32 +17,32 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import common.nonresident.TaxableGainCalculation._
 import common.nonresident.CalculationType
+import common.nonresident.TaxableGainCalculation._
 import config.ApplicationConfig
 import connectors.CalculatorConnector
 import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor, YourAnswersConstructor}
 import controllers.predicates.ValidActiveSession
-import models._
-import play.api.mvc.{Action, AnyContent, Result}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-import views.html.calculation
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
-
-import scala.concurrent.ExecutionContext.Implicits.global
 import controllers.utils.RecoverableFuture
 import javax.inject.Inject
+import models._
 import play.api.Environment
+import play.api.Play.current
+import play.api.i18n.I18nSupport
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import views.html.calculation
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class CheckYourAnswersController @Inject()(environment: Environment,
-                                           http: DefaultHttpClient,calculatorConnector: CalculatorConnector,
+class CheckYourAnswersController @Inject()(http: DefaultHttpClient,calculatorConnector: CalculatorConnector,
                                            answersConstructor: AnswersConstructor,
-                                           calcElectionConstructor: DefaultCalculationElectionConstructor)(implicit val applicationConfig: ApplicationConfig)
-                                              extends FrontendController with ValidActiveSession {
+                                           calcElectionConstructor: DefaultCalculationElectionConstructor,
+                                           mcc: MessagesControllerComponents)
+                                          (implicit val applicationConfig: ApplicationConfig)
+                                              extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   def getBackLink(totalGainResultsModel: TotalGainResultsModel,
                   acquisitionDateController: DateModel,
@@ -69,6 +69,7 @@ class CheckYourAnswersController @Inject()(environment: Environment,
   }
 
   val checkYourAnswers: Action[AnyContent] = ValidateSession.async { implicit request =>
+    implicit val lang = mcc.messagesApi.preferred(request).lang
 
     (for {
       model <- answersConstructor.getNRTotalGainAnswers

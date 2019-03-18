@@ -19,12 +19,11 @@ package constructors
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.nonresident.CalculationType
 import controllers.routes
+import javax.inject.Inject
 import models.{CalculationResultsWithPRRModel, QuestionAnswerModel}
-import play.api.i18n.Messages
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
+import play.api.i18n.{Messages, MessagesProvider}
 
-object CalculationDetailsWithPRRConstructor {
+class CalculationDetailsWithPRRConstructor @Inject()(implicit messagesProvider: MessagesProvider) {
 
   def buildSection(calculation: CalculationResultsWithPRRModel, calculationType: String): Seq[QuestionAnswerModel[Any]] = {
     val electionDetails = calculationElection(calculationType)

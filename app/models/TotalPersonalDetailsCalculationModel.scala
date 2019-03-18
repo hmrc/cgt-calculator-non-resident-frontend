@@ -16,8 +16,6 @@
 
 package models
 
-import constructors.PersonalDetailsConstructor
-
 case class TotalPersonalDetailsCalculationModel(currentIncomeModel: CurrentIncomeModel,
                                                 personalAllowanceModel: Option[PersonalAllowanceModel],
                                                 otherPropertiesModel: OtherPropertiesModel,
@@ -26,7 +24,4 @@ case class TotalPersonalDetailsCalculationModel(currentIncomeModel: CurrentIncom
                                                 howMuchGainModel: Option[HowMuchGainModel],
                                                 annualExemptAmountModel: Option[AnnualExemptAmountModel],
                                                 broughtForwardLossesModel: BroughtForwardLossesModel
-                                               ) {
-
-  lazy val personalDetailsRows: Seq[QuestionAnswerModel[Any]] = PersonalDetailsConstructor.getPersonalDetailsSection(Some(this))
-}
+                                               )

@@ -21,13 +21,7 @@ import play.api.libs.json.Json
 
 case class CalculationResultsWithTaxOwedModel (flatResult: TotalTaxOwedModel,
                                                rebasedResult: Option[TotalTaxOwedModel],
-                                               timeApportionedResult: Option[TotalTaxOwedModel]) {
-
-  def calculationDetailsRows(calculationType: String,
-                             taxYear: String): Seq[QuestionAnswerModel[Any]] = {
-    CalculationDetailsWithAllAnswersConstructor.buildSection(this, calculationType, taxYear)
-  }
-}
+                                               timeApportionedResult: Option[TotalTaxOwedModel])
 
 object CalculationResultsWithTaxOwedModel {
   implicit val formats = Json.format[CalculationResultsWithTaxOwedModel]

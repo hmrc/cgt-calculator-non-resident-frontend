@@ -23,26 +23,29 @@ import config.ApplicationConfig
 import connectors.CalculatorConnector
 import constructors.DefaultCalculationElectionConstructor
 import controllers.predicates.ValidActiveSession
+import controllers.utils.RecoverableFuture
 import forms.AnnualExemptAmountForm._
+import javax.inject.Inject
 import models._
+import play.api.Environment
 import play.api.Play.current
 import play.api.data.Form
-import play.api.i18n.Messages.Implicits._
-import play.api.mvc.{Action, AnyContent, Result}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-import views.html.calculation
-import controllers.utils.RecoverableFuture
-import javax.inject.Inject
-import play.api.Environment
-
-import scala.concurrent.Future
+import play.api.i18n.I18nSupport
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import views.html.calculation
 
-class AnnualExemptAmountController @Inject()(environment: Environment,
-                                             http: DefaultHttpClient,calcConnector: CalculatorConnector,
-                                             calcElectionConstructor: DefaultCalculationElectionConstructor)(implicit val applicationConfig: ApplicationConfig)
-                                              extends FrontendController with ValidActiveSession {
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
+
+
+class AnnualExemptAmountController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
+                                             calcElectionConstructor: DefaultCalculationElectionConstructor,
+                                             mcc: MessagesControllerComponents)
+                                            (implicit val applicationConfig: ApplicationConfig)
+                                              extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
 
   private def fetchAEA(taxYear: Int)(implicit hc: HeaderCarrier): Future[Option[BigDecimal]] = {

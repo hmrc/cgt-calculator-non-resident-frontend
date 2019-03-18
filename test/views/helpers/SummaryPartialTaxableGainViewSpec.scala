@@ -18,13 +18,16 @@ package views.helpers
 
 import assets.MessageLookup.{SummaryPartialMessages => messages}
 import controllers.helpers.FakeRequestHelper
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
-import views.html.helpers
 import org.jsoup.Jsoup
+import org.scalatest.mockito.MockitoSugar
+import play.api.i18n.Lang
+import play.api.mvc.MessagesControllerComponents
+import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import views.html.helpers
 
-class SummaryPartialTaxableGainViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
+class SummaryPartialTaxableGainViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper with MockitoSugar {
+  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  implicit val mockLang = mock[Lang]
 
   "The workingOutSummary partial" when {
 
@@ -34,7 +37,7 @@ class SummaryPartialTaxableGainViewSpec extends UnitSpec with WithFakeApplicatio
         gain = 3000,
         totalDeductions = 2000,
         taxableGain = 1000
-      )(fakeRequestWithSession, applicationMessages)
+      )(fakeRequestWithSession, mockMessage)
       lazy val doc = Jsoup.parse(view.body)
 
       s"have the text ${messages.yourTaxableGain}" in {

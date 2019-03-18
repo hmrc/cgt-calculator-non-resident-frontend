@@ -33,6 +33,7 @@ import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
 import controllers.{DisposalCostsController, PreviousGainOrLossController}
 import org.jsoup.Jsoup
 import play.api.Environment
+import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.logging.SessionId
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
@@ -44,17 +45,16 @@ class PreviousGainOrLossActionSpec extends UnitSpec with WithFakeApplication wit
   implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val materializer = mock[Materializer]
-  val mockEnvironment =mock[Environment]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
   val defaultCache = mock[CacheMap]
-
+  val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
 
   class Setup {
     val controller = new PreviousGainOrLossController(
-      mockEnvironment,
       mockHttp,
-      mockCalcConnector
+      mockCalcConnector,
+      mockMessagesControllerComponents
     )(mockConfig)
   }
 
@@ -67,7 +67,7 @@ class PreviousGainOrLossActionSpec extends UnitSpec with WithFakeApplication wit
       ArgumentMatchers.eq(keystoreKeys.previousLossOrGain), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any())).
       thenReturn(mock[CacheMap])
 
-    new PreviousGainOrLossController(mockEnvironment, mockHttp, mockCalcConnector)(mockConfig) {
+    new PreviousGainOrLossController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig) {
       val calcConnector: CalculatorConnector = mockCalcConnector
       val config: AppConfig = mock[AppConfig]
     }
