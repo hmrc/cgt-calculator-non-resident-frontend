@@ -20,21 +20,22 @@ import assets.MessageLookup.NonResident.{AcquisitionValue => messages}
 import assets.MessageLookup.{NonResident => commonMessages}
 import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
-import org.jsoup.Jsoup
+import controllers.routes
 import forms.AcquisitionValueForm._
+import org.jsoup.Jsoup
+import org.scalatest.mockito.MockitoSugar
+import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.{calculation => views}
-import controllers.routes
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 
-class AcquisitionValueViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper{
+class AcquisitionValueViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper with MockitoSugar {
 
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
 
   "the Acquisition Value View" should {
 
-    lazy val view = views.acquisitionValue(acquisitionValueForm)(fakeRequest,applicationMessages, fakeApplication, mockConfig)
+    lazy val view = views.acquisitionValue(acquisitionValueForm)(fakeRequest,mockMessage, fakeApplication, mockConfig)
     lazy val document = Jsoup.parse(view.body)
 
     "have a h1 tag that" should {
@@ -112,7 +113,7 @@ class AcquisitionValueViewSpec extends UnitSpec with WithFakeApplication with Fa
 
     "supplied with errors" should {
       lazy val form = acquisitionValueForm.bind(Map("acquisitionValue" -> "a"))
-      lazy val view = views.acquisitionValue(form)(fakeRequest,applicationMessages, fakeApplication, mockConfig)
+      lazy val view = views.acquisitionValue(form)(fakeRequest,mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

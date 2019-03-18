@@ -23,7 +23,7 @@ import controllers.predicates.ValidActiveSession
 import forms.PreviousLossOrGainForm._
 import models.PreviousLossOrGainModel
 import play.api.data.Form
-import play.api.mvc.Result
+import play.api.mvc.{MessagesControllerComponents, Result}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.{calculation => views}
 import play.api.i18n.Messages.Implicits._
@@ -31,12 +31,15 @@ import play.api.Play.current
 import controllers.utils.RecoverableFuture
 import javax.inject.Inject
 import play.api.Environment
+import play.api.i18n.I18nSupport
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import scala.concurrent.ExecutionContext.Implicits.global
 
 import scala.concurrent.Future
-class PreviousGainOrLossController @Inject()(environment: Environment,
-                                             http: DefaultHttpClient,calcConnector: CalculatorConnector)(implicit val applicationConfig: ApplicationConfig)
-                                              extends FrontendController with ValidActiveSession {
+
+class PreviousGainOrLossController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
+                                             mcc: MessagesControllerComponents)(implicit val applicationConfig: ApplicationConfig)
+                                              extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   val previousGainOrLoss = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[PreviousLossOrGainModel](KeystoreKeys.previousLossOrGain) map {

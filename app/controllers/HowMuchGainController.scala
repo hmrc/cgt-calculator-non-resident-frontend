@@ -23,19 +23,20 @@ import controllers.predicates.ValidActiveSession
 import forms.HowMuchGainForm._
 import javax.inject.Inject
 import models.HowMuchGainModel
-import play.api.Environment
-import play.api.data.Form
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-import views.html.calculation
-import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
+import play.api.data.Form
+import play.api.i18n.I18nSupport
+import play.api.mvc.MessagesControllerComponents
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import views.html.calculation
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class HowMuchGainController @Inject()(environment: Environment,
-                                      http: DefaultHttpClient,calcConnector: CalculatorConnector)(implicit val applicationConfig: ApplicationConfig)
-                                        extends FrontendController with ValidActiveSession {
+class HowMuchGainController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
+                                      mcc: MessagesControllerComponents)(implicit val applicationConfig: ApplicationConfig)
+                                        extends FrontendController(mcc) with ValidActiveSession with I18nSupport{
 
   val howMuchGain = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[HowMuchGainModel](KeystoreKeys.howMuchGain).map {

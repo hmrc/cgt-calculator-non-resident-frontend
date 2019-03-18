@@ -36,7 +36,7 @@ import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
 import controllers.predicates.ValidActiveSession
 import forms.PropertyLivedInForm._
 import play.api.Environment
-import play.api.mvc.{Action, AnyContent}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
@@ -52,17 +52,18 @@ class PropertyLivedInActionSpec extends UnitSpec with WithFakeApplication with F
   implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
 
   val materializer = mock[Materializer]
-  val mockEnvironment =mock[Environment]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
   val defaultCache = mock[CacheMap]
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
+
 
   class Setup {
     val controller = new PropertyLivedInController(
-      mockEnvironment,
       mockHttp,
-      mockCalcConnector
+      mockCalcConnector,
+      mockMessagesControllerComponents
     )(mockConfig)
   }
 
@@ -76,7 +77,7 @@ class PropertyLivedInActionSpec extends UnitSpec with WithFakeApplication with F
     when(mockCalcConnector.saveFormData[PropertyLivedInModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(mock[CacheMap]))
 
-    new PropertyLivedInController(mockEnvironment, mockHttp, mockCalcConnector)(mockConfig) {
+    new PropertyLivedInController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig) {
       val calcConnector: CalculatorConnector = mockCalcConnector
           }
   }

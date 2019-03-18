@@ -20,24 +20,25 @@ import assets.MessageLookup.NonResident.{CalculationElection => messages}
 import assets.MessageLookup.{NonResident => commonMessages}
 import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
-import org.jsoup.Jsoup
-import play.api.i18n.Messages
 import forms.CalculationElectionForm._
+import org.jsoup.Jsoup
+import org.scalatest.mockito.MockitoSugar
+import play.api.i18n.Messages
+import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.{calculation => views}
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 
-class CalculationElectionViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
+class CalculationElectionViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper with MockitoSugar {
 
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
 
   "The Calculation Election View" should {
 
     lazy val form = calculationElectionForm
     lazy val seq: Seq[(String, String, String, String, Option[String], Option[BigDecimal])] =
       Seq(("flat", "2000", Messages("calc.calculationElection.message.flat"), Messages("calc.calculationElection.description.flat"), None, None))
-    lazy val view = views.calculationElection(form, seq)(fakeRequest,applicationMessages, fakeApplication, mockConfig)
+    lazy val view = views.calculationElection(form, seq)(fakeRequest,mockMessage, fakeApplication, mockConfig)
     lazy val doc = Jsoup.parse(view.body)
 
     s"have a title of '${messages.heading}" in {
@@ -108,7 +109,7 @@ class CalculationElectionViewSpec extends UnitSpec with WithFakeApplication with
 
     "supplied with errors" should {
       lazy val form = calculationElectionForm.bind(Map("calculationElection" -> "a"))
-      lazy val view = views.calculationElection(form, seq)(fakeRequest,applicationMessages, fakeApplication, mockConfig)
+      lazy val view = views.calculationElection(form, seq)(fakeRequest,mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

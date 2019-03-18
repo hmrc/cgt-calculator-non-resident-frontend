@@ -22,27 +22,28 @@ import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import controllers.utils.TimeoutController
 import org.jsoup.Jsoup
-import org.scalatest.mock.MockitoSugar
-import play.api.i18n.Messages
-import play.api.mvc.{Action, AnyContent}
+import org.scalatest.mockito.MockitoSugar
+import play.api.i18n.{Messages, MessagesProvider}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import play.api.test.FakeRequest
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 
 class TimeoutControllerSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper with MockitoSugar {
-
+  implicit val mockMessagesProvider = mock[MessagesProvider]
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  val mockMessagesComponent = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   lazy val materializer = mock[Materializer]
   lazy val timeout = mock[Timeout]
+  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
 
-  class fakeRequestTo(url : String, controllerAction : Action[AnyContent]) {
+
+    class fakeRequestTo(url : String, controllerAction : Action[AnyContent]) {
     val fakeRequest = FakeRequest("GET", "/calculate-your-capital-gains/" + url)
     val result = controllerAction(fakeRequest)
     val jsoupDoc = Jsoup.parse(bodyOf(result)(materializer))
   }
 
-  val controller = new TimeoutController()(mockConfig)
+  val controller = new TimeoutController(mockMessagesComponent)(mockConfig)
 
   "TimeoutController.timeout" should {
 

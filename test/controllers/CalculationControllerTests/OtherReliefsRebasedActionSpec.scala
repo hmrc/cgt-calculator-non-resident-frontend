@@ -38,7 +38,7 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.stubbing.OngoingStubbing
 import org.scalatest.BeforeAndAfterEach
 import play.api.libs.json.Json
-import play.api.mvc.Result
+import play.api.mvc.{MessagesControllerComponents, Result}
 
 import scala.concurrent.Future
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
@@ -50,27 +50,22 @@ class OtherReliefsRebasedActionSpec extends UnitSpec with WithFakeApplication wi
   implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
 
   val materializer = mock[Materializer]
-  val mockEnvironment =mock[Environment]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
   val mockAnswerConstuctor = mock[AnswersConstructor]
   val defaultCache = mock[CacheMap]
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
+
 
   class Setup {
     val controller = new OtherReliefsRebasedController(
-      mockEnvironment,
       mockHttp,
       mockCalcConnector,
-      mockAnswerConstuctor
+      mockAnswerConstuctor,
+      mockMessagesControllerComponents
     )(mockConfig)
   }
-
-  override def beforeEach(): Unit = {
-    reset(Seq(mockEnvironment, mockHttp, mockCalcConnector, mockAnswerConstuctor): _*)
-    super.beforeEach()
-  }
-
 
   def setupTarget(getData: Option[OtherReliefsModel],
                   gainAnswers: TotalGainAnswersModel,

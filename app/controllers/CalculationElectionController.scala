@@ -22,27 +22,30 @@ import config.ApplicationConfig
 import connectors.CalculatorConnector
 import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
 import controllers.predicates.ValidActiveSession
+import controllers.utils.RecoverableFuture
 import forms.CalculationElectionForm._
+import javax.inject.Inject
 import models._
+import play.api.Environment
 import play.api.Play.current
 import play.api.data.Form
-import play.api.i18n.Messages.Implicits._
-import play.api.mvc.{Action, AnyContent}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-import views.html.calculation
-import controllers.utils.RecoverableFuture
-import javax.inject.Inject
-import play.api.Environment
-
-import scala.concurrent.Future
+import play.api.i18n.I18nSupport
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import views.html.calculation
 
-class CalculationElectionController @Inject()(environment: Environment,
-                                              http: DefaultHttpClient,calcConnector: CalculatorConnector,
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
+
+
+class CalculationElectionController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
                                               calcAnswersConstructor: AnswersConstructor,
-                                              calcElectionConstructor: DefaultCalculationElectionConstructor)(implicit val applicationConfig: ApplicationConfig)
-                                                extends FrontendController with ValidActiveSession {
+                                              calcElectionConstructor: DefaultCalculationElectionConstructor,
+                                              mcc: MessagesControllerComponents)
+                                             (implicit val applicationConfig: ApplicationConfig)
+                                                extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   def orderElements(content: Seq[(String, String, String, String, Option[String], Option[BigDecimal])],
                     claimingReliefs: Boolean): Seq[(String, String, String, String, Option[String], Option[BigDecimal])] = {

@@ -32,6 +32,7 @@ import org.scalatest.mockito.MockitoSugar
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import play.api.Environment
+import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.http.logging.SessionId
@@ -45,16 +46,16 @@ class OutsideTaxYearActionSpec @Inject()(outsideTaxYearController: OutsideTaxYea
   implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val materializer = mock[Materializer]
-  val mockEnvironment =mock[Environment]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
   val defaultCache = mock[CacheMap]
+  val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
 
   class Setup {
     val controller = new OutsideTaxYearController(
-      mockEnvironment,
       mockHttp,
-      mockCalcConnector
+      mockCalcConnector,
+      mockMessagesControllerComponents
     )(mockConfig)
   }
 
@@ -66,7 +67,7 @@ class OutsideTaxYearActionSpec @Inject()(outsideTaxYearController: OutsideTaxYea
     when(mockCalcConnector.getTaxYear(ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(Future.successful(taxYearModel))
 
-    new OutsideTaxYearController(mockEnvironment, mockHttp, mockCalcConnector)(mockConfig) {
+    new OutsideTaxYearController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig) {
     }
   }
 

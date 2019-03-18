@@ -20,21 +20,25 @@ import assets.MessageLookup.NonResident.{AnnualExemptAmount => messages}
 import assets.MessageLookup.{NonResident => commonMessages}
 import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
-import org.jsoup.Jsoup
-import org.scalatest.mock.MockitoSugar
 import forms.AnnualExemptAmountForm._
+import org.jsoup.Jsoup
+import org.scalatest.mockito.MockitoSugar
+import play.api.i18n.{Lang, MessagesApi}
+import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.annualExemptAmount
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 
 class AnnualExemptAmountViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  implicit val mockLang = mock[Lang]
+  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  val mockMessagesApi = mock[MessagesApi]
+
   "Annual exempt amount view" when {
 
     "supplied with no errors" should {
-      lazy val view = annualExemptAmount(annualExemptAmountForm(BigDecimal(10000)), 11100, "back-url")(fakeRequest,applicationMessages, fakeApplication, mockConfig)
+      lazy val view = annualExemptAmount(annualExemptAmountForm(BigDecimal(10000)), 11100, "back-url")(fakeRequest,mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${messages.question}'" in {
@@ -108,7 +112,7 @@ class AnnualExemptAmountViewSpec extends UnitSpec with WithFakeApplication with 
 
     "supplied with errors" should {
       lazy val form = annualExemptAmountForm(BigDecimal(10000)).bind(Map("annualExemptAmount" -> "15000"))
-      lazy val view = annualExemptAmount(form, 11100, "back-url")(fakeRequest,applicationMessages, fakeApplication, mockConfig)
+      lazy val view = annualExemptAmount(form, 11100, "back-url")(fakeRequest,mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

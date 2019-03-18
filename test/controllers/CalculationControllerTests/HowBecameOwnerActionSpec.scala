@@ -30,6 +30,7 @@ import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
 import play.api.Environment
+import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.cache.client.CacheMap
@@ -42,17 +43,18 @@ class HowBecameOwnerActionSpec extends UnitSpec with WithFakeApplication with Fa
   implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
 
   val materializer = mock[Materializer]
-  val mockEnvironment =mock[Environment]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
   val defaultCache = mock[CacheMap]
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
+
 
   class Setup {
     val controller = new HowBecameOwnerController(
-      mockEnvironment,
       mockHttp,
-      mockCalcConnector
+      mockCalcConnector,
+      mockMessagesControllerComponents
     )(mockConfig)
   }
 
@@ -65,7 +67,7 @@ class HowBecameOwnerActionSpec extends UnitSpec with WithFakeApplication with Fa
       ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(mock[CacheMap])
 
-    new HowBecameOwnerController(mockEnvironment, mockHttp, mockCalcConnector)(mockConfig) {
+    new HowBecameOwnerController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig) {
       val calcConnector: CalculatorConnector = mockCalcConnector
     }
   }

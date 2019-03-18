@@ -20,21 +20,22 @@ import assets.MessageLookup.NonResident.{SoldOrGivenAway => messages}
 import assets.MessageLookup.{NonResident => commonMessages}
 import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
-import org.jsoup.Jsoup
 import forms.SoldOrGivenAwayForm._
+import org.jsoup.Jsoup
+import org.scalatest.mockito.MockitoSugar
+import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.soldOrGivenAway
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 
-class SoldOrGivenAwayViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper{
+class SoldOrGivenAwayViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper with MockitoSugar {
 
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
 
   "The Sold Or Given Away View" when{
 
     "not supplied with a pre-existing model" should {
-      lazy val view = soldOrGivenAway(soldOrGivenAwayForm)(fakeRequest, applicationMessages,fakeApplication,mockConfig)
+      lazy val view = soldOrGivenAway(soldOrGivenAwayForm)(fakeRequest, mockMessage,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have a 'back-link' that" should {
@@ -120,7 +121,7 @@ class SoldOrGivenAwayViewSpec extends UnitSpec with WithFakeApplication with Fak
 
     "provided with errors" should {
       lazy val form = soldOrGivenAwayForm.bind(Map("soldIt" -> "999"))
-      lazy val view = soldOrGivenAway(form)(fakeRequest, applicationMessages,fakeApplication,mockConfig)
+      lazy val view = soldOrGivenAway(form)(fakeRequest, mockMessage,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

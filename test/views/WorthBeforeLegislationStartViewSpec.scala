@@ -16,27 +16,27 @@
 
 package views
 
-import assets.MessageLookup.NonResident.{WorthBeforeLegislationStart, AcquisitionMarketValue => messages}
+import assets.MessageLookup.NonResident.WorthBeforeLegislationStart
 import assets.MessageLookup.{NonResident => commonMessages}
 import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import forms.WorthBeforeLegislationStartForm._
 import org.jsoup.Jsoup
-import org.scalatest.mock.MockitoSugar
-import play.api.Play.current
-import play.api.i18n.Messages.Implicits._
+import org.scalatest.mockito.MockitoSugar
+import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.worthBeforeLegislationStart
 
 class WorthBeforeLegislationStartViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
 
   "The Worth Before Legislation Start view spec" when {
 
     "supplied with no errors" should {
 
-      lazy val view = worthBeforeLegislationStart(worthBeforeLegislationStartForm)(fakeRequest, applicationMessages,fakeApplication,mockConfig)
+      lazy val view = worthBeforeLegislationStart(worthBeforeLegislationStartForm)(fakeRequest, mockMessage,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${WorthBeforeLegislationStart.question}'" in {
@@ -125,7 +125,7 @@ class WorthBeforeLegislationStartViewSpec extends UnitSpec with WithFakeApplicat
     "supplied with a form with errors" should {
 
       lazy val form = worthBeforeLegislationStartForm.bind(Map("worthBeforeLegislationStart" -> "a"))
-      lazy val view = worthBeforeLegislationStart(form)(fakeRequest, applicationMessages,fakeApplication,mockConfig)
+      lazy val view = worthBeforeLegislationStart(form)(fakeRequest, mockMessage,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

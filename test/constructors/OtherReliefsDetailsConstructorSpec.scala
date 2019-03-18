@@ -22,15 +22,23 @@ import common.nonresident.CalculationType
 import helpers.AssertHelpers
 import assets.MessageLookup.{NonResident => messages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import controllers.helpers.FakeRequestHelper
+import org.scalatest.mockito.MockitoSugar
+import play.api.i18n.MessagesProvider
+import play.api.mvc.MessagesControllerComponents
 
-class OtherReliefsDetailsConstructorSpec extends UnitSpec with AssertHelpers with WithFakeApplication {
+class OtherReliefsDetailsConstructorSpec extends UnitSpec with AssertHelpers with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
   private def assertExpectedResult[T](option: Option[T])(test: T => Unit) = assertOption("expected option is None")(option)(test)
+  implicit val mockMessagesProvider = mock[MessagesProvider]
+  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+
+  val target = new OtherReliefsDetailsConstructor
 
   "Calling .getOtherReliefsRebasedRow" when {
 
     "provided with no model" should {
-      val result = OtherReliefsDetailsConstructor.getOtherReliefsRebasedRow(None, CalculationType.rebased)
+      val result = target.getOtherReliefsRebasedRow(None, CalculationType.rebased)
 
       "return a None" in {
         result shouldBe None
@@ -38,7 +46,7 @@ class OtherReliefsDetailsConstructorSpec extends UnitSpec with AssertHelpers wit
     }
 
     "provided with no value for other reliefs" should {
-      val result = OtherReliefsDetailsConstructor.getOtherReliefsRebasedRow(Some(OtherReliefsModel(0)), CalculationType.rebased)
+      val result = target.getOtherReliefsRebasedRow(Some(OtherReliefsModel(0)), CalculationType.rebased)
 
       "should return a None" in {
         result shouldBe None
@@ -46,7 +54,7 @@ class OtherReliefsDetailsConstructorSpec extends UnitSpec with AssertHelpers wit
     }
 
     "provided with a calculation type which is not rebased" should {
-      val result = OtherReliefsDetailsConstructor.getOtherReliefsRebasedRow(Some(OtherReliefsModel(10)), CalculationType.flat)
+      val result = target.getOtherReliefsRebasedRow(Some(OtherReliefsModel(10)), CalculationType.flat)
 
       "return a None" in {
         result shouldBe None
@@ -54,7 +62,7 @@ class OtherReliefsDetailsConstructorSpec extends UnitSpec with AssertHelpers wit
     }
 
     "provided with a rebased calculation and other reliefs value" should {
-      lazy val result = OtherReliefsDetailsConstructor.getOtherReliefsRebasedRow(Some(OtherReliefsModel(10)), CalculationType.rebased)
+      lazy val result = target.getOtherReliefsRebasedRow(Some(OtherReliefsModel(10)), CalculationType.rebased)
 
       "return a QuestionAnswerModel" in {
         result.isDefined shouldBe true
@@ -81,7 +89,7 @@ class OtherReliefsDetailsConstructorSpec extends UnitSpec with AssertHelpers wit
   "Calling .getOtherReliefsTimeApportionedRow" when {
 
     "provided with no model" should {
-      val result = OtherReliefsDetailsConstructor.getOtherReliefsTimeApportionedRow(None, CalculationType.timeApportioned)
+      val result = target.getOtherReliefsTimeApportionedRow(None, CalculationType.timeApportioned)
 
       "return a None" in {
         result shouldBe None
@@ -89,7 +97,7 @@ class OtherReliefsDetailsConstructorSpec extends UnitSpec with AssertHelpers wit
     }
 
     "provided with no value for other reliefs" should {
-      val result = OtherReliefsDetailsConstructor.getOtherReliefsTimeApportionedRow(Some(OtherReliefsModel(0)),
+      val result = target.getOtherReliefsTimeApportionedRow(Some(OtherReliefsModel(0)),
         CalculationType.timeApportioned)
 
       "should return a None" in {
@@ -98,7 +106,7 @@ class OtherReliefsDetailsConstructorSpec extends UnitSpec with AssertHelpers wit
     }
 
     "provided with a calculation type which is not time apportioned" should {
-      val result = OtherReliefsDetailsConstructor.getOtherReliefsTimeApportionedRow(Some(OtherReliefsModel(10)), CalculationType.flat)
+      val result = target.getOtherReliefsTimeApportionedRow(Some(OtherReliefsModel(10)), CalculationType.flat)
 
       "return a None" in {
         result shouldBe None
@@ -106,7 +114,7 @@ class OtherReliefsDetailsConstructorSpec extends UnitSpec with AssertHelpers wit
     }
 
     "provided with a time apportioned calculation and other reliefs value" should {
-      lazy val result = OtherReliefsDetailsConstructor.getOtherReliefsTimeApportionedRow(Some(OtherReliefsModel(10)),
+      lazy val result = target.getOtherReliefsTimeApportionedRow(Some(OtherReliefsModel(10)),
         CalculationType.timeApportioned)
 
       "return a QuestionAnswerModel" in {
@@ -134,7 +142,7 @@ class OtherReliefsDetailsConstructorSpec extends UnitSpec with AssertHelpers wit
   "Calling .getOtherReliefsFlatRow" when {
 
     "provided with no model" should {
-      val result = OtherReliefsDetailsConstructor.getOtherReliefsFlatRow(None, CalculationType.flat)
+      val result = target.getOtherReliefsFlatRow(None, CalculationType.flat)
 
       "return a None" in {
         result shouldBe None
@@ -142,7 +150,7 @@ class OtherReliefsDetailsConstructorSpec extends UnitSpec with AssertHelpers wit
     }
 
     "provided with no value for other reliefs" should {
-      val result = OtherReliefsDetailsConstructor.getOtherReliefsFlatRow(Some(OtherReliefsModel(0)),
+      val result = target.getOtherReliefsFlatRow(Some(OtherReliefsModel(0)),
         CalculationType.flat)
 
       "should return a None" in {
@@ -151,7 +159,7 @@ class OtherReliefsDetailsConstructorSpec extends UnitSpec with AssertHelpers wit
     }
 
     "provided with a calculation type which is not flat" should {
-      val result = OtherReliefsDetailsConstructor.getOtherReliefsFlatRow(Some(OtherReliefsModel(10)), CalculationType.rebased)
+      val result = target.getOtherReliefsFlatRow(Some(OtherReliefsModel(10)), CalculationType.rebased)
 
       "return a None" in {
         result shouldBe None
@@ -159,7 +167,7 @@ class OtherReliefsDetailsConstructorSpec extends UnitSpec with AssertHelpers wit
     }
 
     "provided with a flat calculation and other reliefs value" should {
-      lazy val result = OtherReliefsDetailsConstructor.getOtherReliefsFlatRow(Some(OtherReliefsModel(10)),
+      lazy val result = target.getOtherReliefsFlatRow(Some(OtherReliefsModel(10)),
         CalculationType.flat)
 
       "return a QuestionAnswerModel" in {

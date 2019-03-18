@@ -16,27 +16,27 @@
 
 package views
 
-import assets.MessageLookup.NonResident.{WorthWhenBoughtForLess, AcquisitionMarketValue => messages}
+import assets.MessageLookup.NonResident.WorthWhenBoughtForLess
 import assets.MessageLookup.{NonResident => commonMessages}
 import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import forms.AcquisitionMarketValueForm._
 import org.jsoup.Jsoup
-import org.scalatest.mock.MockitoSugar
-import play.api.Play.current
-import play.api.i18n.Messages.Implicits._
+import org.scalatest.mockito.MockitoSugar
+import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.worthWhenBoughtForLess
 
 class WorthWhenBoughtForLessViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
 
   "The Worth When Bought For Less view spec" when {
 
     "supplied with no errors" should {
 
-      lazy val view = worthWhenBoughtForLess(acquisitionMarketValueForm)(fakeRequest, applicationMessages,fakeApplication,mockConfig)
+      lazy val view = worthWhenBoughtForLess(acquisitionMarketValueForm)(fakeRequest, mockMessage,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${WorthWhenBoughtForLess.question}'" in {
@@ -127,7 +127,7 @@ class WorthWhenBoughtForLessViewSpec extends UnitSpec with WithFakeApplication w
     "supplied with a form with errors" should {
 
       lazy val form = acquisitionMarketValueForm.bind(Map("acquisitionMarketValue" -> "a"))
-      lazy val view = worthWhenBoughtForLess(form)(fakeRequest, applicationMessages,fakeApplication,mockConfig)
+      lazy val view = worthWhenBoughtForLess(form)(fakeRequest, mockMessage,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

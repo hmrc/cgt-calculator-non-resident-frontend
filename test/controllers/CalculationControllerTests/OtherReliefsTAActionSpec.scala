@@ -33,6 +33,7 @@ import config.ApplicationConfig
 import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
 import controllers.{OtherReliefsTAController, SoldOrGivenAwayController}
 import play.api.Environment
+import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.http.cache.client.CacheMap
 
 import scala.concurrent.Future
@@ -44,19 +45,19 @@ class OtherReliefsTAActionSpec extends UnitSpec with WithFakeApplication with Mo
   implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
 
   val materializer = mock[Materializer]
-  val mockEnvironment =mock[Environment]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
   val mockAnswersConstructor = mock[AnswersConstructor]
   val defaultCache = mock[CacheMap]
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
 
   class Setup {
     val controller = new OtherReliefsTAController(
-      mockEnvironment,
       mockHttp,
       mockCalcConnector,
-      mockAnswersConstructor
+      mockAnswersConstructor,
+      mockMessagesControllerComponents
     )(mockConfig)
   }
   def setupTarget(
@@ -106,7 +107,7 @@ class OtherReliefsTAActionSpec extends UnitSpec with WithFakeApplication with Mo
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new OtherReliefsTAController(mockEnvironment, mockHttp, mockCalcConnector, mockAnswersConstructor)(mockConfig) {
+    new OtherReliefsTAController(mockHttp, mockCalcConnector, mockAnswersConstructor, mockMessagesControllerComponents)(mockConfig) {
       val calcConnector: CalculatorConnector = mockCalcConnector
       val answersConstructor: AnswersConstructor = mockAnswersConstructor
     }

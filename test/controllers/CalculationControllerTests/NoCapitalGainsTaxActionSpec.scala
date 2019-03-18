@@ -30,6 +30,7 @@ import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
 import play.api.Environment
+import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
@@ -45,16 +46,16 @@ class NoCapitalGainsTaxActionSpec extends UnitSpec with WithFakeApplication with
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
 
   val materializer = mock[Materializer]
-  val mockEnvironment =mock[Environment]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
   val defaultCache = mock[CacheMap]
+  val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
 
   class Setup {
     val controller = new NoCapitalGainsTaxController(
-      mockEnvironment,
       mockHttp,
-      mockCalcConnector
+      mockCalcConnector,
+      mockMessagesControllerComponents
     )(mockConfig)
   }
 
@@ -64,7 +65,7 @@ class NoCapitalGainsTaxActionSpec extends UnitSpec with WithFakeApplication with
       ArgumentMatchers.eq(KeystoreKeys.disposalDate))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    new NoCapitalGainsTaxController(mockEnvironment, mockHttp, mockCalcConnector)(mockConfig) {
+    new NoCapitalGainsTaxController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig) {
       val calcConnector: CalculatorConnector = mockCalcConnector
     }
   }

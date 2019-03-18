@@ -21,19 +21,20 @@ import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import forms.CostsAtLegislationStartForm._
 import org.jsoup.Jsoup
-import play.api.Play.current
-import play.api.i18n.Messages.Implicits._
+import org.scalatest.mockito.MockitoSugar
+import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.costsAtLegislationStart
 
-class CostsAtLegislationStartViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
+class CostsAtLegislationStartViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper with MockitoSugar {
 
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
 
   "The costs at legislation start date view" when {
 
     "not supplied with a pre-existing stored model" should {
-      lazy val view = costsAtLegislationStart(costsAtLegislationStartForm)(fakeRequest, applicationMessages,fakeApplication,mockConfig)
+      lazy val view = costsAtLegislationStart(costsAtLegislationStartForm)(fakeRequest, mockMessage,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       s"Have the title ${messages.CostsAtLegislationStart.title}" in {
@@ -118,7 +119,7 @@ class CostsAtLegislationStartViewSpec extends UnitSpec with WithFakeApplication 
         "hasCosts" -> "Yes",
         "costs" -> ""
       ))
-      lazy val view = costsAtLegislationStart(form)(fakeRequest, applicationMessages,fakeApplication,mockConfig)
+      lazy val view = costsAtLegislationStart(form)(fakeRequest, mockMessage,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

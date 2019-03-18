@@ -17,30 +17,29 @@
 package controllers.CalculationControllerTests
 
 import akka.stream.Materializer
-import assets.MessageLookup.NonResident.{CalculationElection => messages}
-import assets.MessageLookup.NonResident.{CalculationElectionNoReliefs => nRMessages}
-import common.TestModels
+import assets.MessageLookup.NonResident.{CalculationElection => messages, CalculationElectionNoReliefs => nRMessages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import common.TestModels
 import config.ApplicationConfig
 import connectors.CalculatorConnector
 import constructors.{AnswersConstructor, CalculationElectionConstructor, DefaultCalculationElectionConstructor}
-import controllers.{AnnualExemptAmountController, CalculationElectionController, routes}
 import controllers.helpers.FakeRequestHelper
+import controllers.{CalculationElectionController, routes}
 import javax.inject.Inject
 import models.{TaxYearModel, _}
 import org.jsoup._
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
-import play.api.Environment
+import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
-
-import scala.concurrent.Future
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.http.logging.SessionId
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+
+import scala.concurrent.Future
 
 class CalculationElectionActionSpec @Inject()(calculationElectionController: CalculationElectionController, calcConnector: CalculatorConnector)
   extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
@@ -48,22 +47,23 @@ class CalculationElectionActionSpec @Inject()(calculationElectionController: Cal
   implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
 
   val materializer = mock[Materializer]
-  val mockEnvironment =mock[Environment]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
   val defaultCache = mock[CacheMap]
   val mockAnswersConstructor = mock[AnswersConstructor]
   val mockDefaultCalElecConstructor = mock[DefaultCalculationElectionConstructor]
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
+
 
 
   class Setup {
     val controller = new CalculationElectionController(
-      mockEnvironment,
       mockHttp,
       mockCalcConnector,
       mockAnswersConstructor,
-      mockDefaultCalElecConstructor
+      mockDefaultCalElecConstructor,
+      mockMessagesControllerComponents
     )(mockConfig)
   }
 
@@ -122,7 +122,7 @@ class CalculationElectionActionSpec @Inject()(calculationElectionController: Cal
       (ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(PropertyLivedInModel(true))))
 
-    new CalculationElectionController(mockEnvironment, mockHttp, mockCalcConnector, mockAnswersConstructor, mockDefaultCalElecConstructor)(mockConfig) {
+    new CalculationElectionController(mockHttp, mockCalcConnector, mockAnswersConstructor, mockDefaultCalElecConstructor, mockMessagesControllerComponents)(mockConfig) {
       val calcConnector: CalculatorConnector = mockCalcConnector
       val calcElectionConstructor: CalculationElectionConstructor = mockDefaultCalElecConstructor
       val calcAnswersConstructor: AnswersConstructor = mockAnswersConstructor
@@ -368,11 +368,7 @@ class CalculationElectionActionSpec @Inject()(calculationElectionController: Cal
     }
   }
 
-//  "CalculationElectionController" should {
-//    "use the correct keystore connector" in {
-//      calculationElectionController.calcConnector shouldBe CalculatorConnector
-//    }
-//  }
+
 
   "Calling .orderElements" should {
     val sequence: Seq[(String, String, String, String, Option[String], Option[BigDecimal])] = Seq(

@@ -22,26 +22,27 @@ import config.ApplicationConfig
 import connectors.CalculatorConnector
 import constructors.AnswersConstructor
 import controllers.predicates.ValidActiveSession
-import forms.ImprovementsForm._
-import views.html.calculation
-import models._
-import play.api.data.Form
-import play.api.mvc.{Action, AnyContent, Result}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 import controllers.utils.RecoverableFuture
+import forms.ImprovementsForm._
 import javax.inject.Inject
+import models._
 import play.api.Environment
-
-import scala.concurrent.Future
+import play.api.Play.current
+import play.api.data.Form
+import play.api.i18n.I18nSupport
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import views.html.calculation
 
-class ImprovementsController @Inject()(environment: Environment,
-                                       http: DefaultHttpClient,calcConnector: CalculatorConnector,
-                                       answersConstructor: AnswersConstructor)(implicit val applicationConfig: ApplicationConfig)
-                                        extends FrontendController with ValidActiveSession {
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
+
+class ImprovementsController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
+                                       answersConstructor: AnswersConstructor,
+                                       mcc: MessagesControllerComponents)(implicit val applicationConfig: ApplicationConfig)
+                                        extends FrontendController(mcc) with ValidActiveSession with I18nSupport{
 
   private def improvementsBackUrl(acquisitionDate: Option[DateModel]): Future[String] = {
     acquisitionDate match {

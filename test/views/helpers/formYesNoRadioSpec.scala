@@ -16,15 +16,17 @@
 
 package views.helpers
 
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
-import org.jsoup.Jsoup
-import views.html.helpers._
 import assets.MessageLookup.{NonResident => messages}
+import controllers.helpers.FakeRequestHelper
 import forms.BoughtForLessForm._
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
+import org.jsoup.Jsoup
+import org.scalatest.mockito.MockitoSugar
+import play.api.mvc.MessagesControllerComponents
+import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import views.html.helpers._
 
-class formYesNoRadioSpec extends UnitSpec with WithFakeApplication {
+class formYesNoRadioSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
+  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
 
   "formYesNoRadio" when {
 

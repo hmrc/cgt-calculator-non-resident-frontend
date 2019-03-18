@@ -30,6 +30,7 @@ import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
 import play.api.Environment
+import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
@@ -44,19 +45,20 @@ class AcquisitionDateActionSpec extends UnitSpec with WithFakeApplication with M
   implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
 
   val materializer = mock[Materializer]
-  val mockEnvironment =mock[Environment]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
   val defaultCache = mock[CacheMap]
   val mockDefaultCalcElecConstructor = mock[DefaultCalculationElectionConstructor]
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
+
 
   class Setup {
     val controller = new AcquisitionDateController(
-      mockEnvironment,
       mockHttp,
       mockCalcConnector,
-      mockDefaultCalcElecConstructor
+      mockDefaultCalcElecConstructor,
+      mockMessagesControllerComponents
     )(mockConfig)
   }
 
@@ -69,12 +71,12 @@ class AcquisitionDateActionSpec extends UnitSpec with WithFakeApplication with M
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new AcquisitionDateController(mockEnvironment, mockHttp, mockCalcConnector, mockDefaultCalcElecConstructor)(mockConfig) {
+    new AcquisitionDateController(mockHttp, mockCalcConnector, mockDefaultCalcElecConstructor, mockMessagesControllerComponents)(mockConfig) {
       val calcConnector: CalculatorConnector = mockCalcConnector
     }
   }
 
-  val controller = new TimeoutController()(mockConfig)
+  val controller = new TimeoutController(mockMessagesControllerComponents)(mockConfig)
 
 
   "Calling the .acquisitionDate action " should {

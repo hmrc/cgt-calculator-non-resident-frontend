@@ -25,21 +25,24 @@ import forms.DisposalCostsForm._
 import views.html.calculation
 import models.{DisposalCostsModel, SoldForLessModel, SoldOrGivenAwayModel}
 import play.api.data.Form
-import play.api.mvc.Result
+import play.api.mvc.{MessagesControllerComponents, Result}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 import controllers.utils.RecoverableFuture
 import javax.inject.Inject
 import play.api.Environment
+import play.api.i18n.I18nSupport
 
 import scala.concurrent.Future
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import scala.concurrent.ExecutionContext.Implicits.global
 
-class DisposalCostsController @Inject()(environment: Environment,
-                                         http: DefaultHttpClient,calcConnector: CalculatorConnector)(implicit val applicationConfig: ApplicationConfig)
-                                          extends FrontendController with ValidActiveSession {
+class DisposalCostsController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
+                                        mcc: MessagesControllerComponents)
+                                       (implicit val applicationConfig: ApplicationConfig)
+                                          extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   private def backUrl(soldOrGivenAwayModel: Option[SoldOrGivenAwayModel], soldForLessModel: Option[SoldForLessModel]): Future[String] =
     (soldOrGivenAwayModel, soldForLessModel) match {

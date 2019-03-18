@@ -23,19 +23,22 @@ import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
 import forms.MarketValueGaveAwayForm._
-import org.scalatest.mock.MockitoSugar
+import org.scalatest.mockito.MockitoSugar
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.marketValueGaveAway
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
+import play.api.i18n.Messages
+import play.api.mvc.MessagesControllerComponents
 
 class MarketValueGaveAwayViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper{
 
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
 
   "The market value when gave away page" should {
 
-    lazy val view = marketValueGaveAway(marketValueForm)(fakeRequest, applicationMessages,fakeApplication,mockConfig)
+    lazy val view = marketValueGaveAway(marketValueForm)(fakeRequest, mockMessage,fakeApplication,mockConfig)
     lazy val document = Jsoup.parse(view.body)
 
     "supplied with no errors" should {
@@ -124,7 +127,7 @@ class MarketValueGaveAwayViewSpec extends UnitSpec with WithFakeApplication with
 
     "supplied with a form with errors" should {
       lazy val form = marketValueForm.bind(Map("disposalValue" -> "testData"))
-      lazy val view = marketValueGaveAway(form)(fakeRequest, applicationMessages,fakeApplication,mockConfig)
+      lazy val view = marketValueGaveAway(form)(fakeRequest, mockMessage,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

@@ -20,24 +20,24 @@ import assets.MessageLookup.{NonResident => commonMessages, PropertyLivedIn => m
 import config.ApplicationConfig
 import constructors.helpers.AssertHelpers
 import controllers.helpers.FakeRequestHelper
-import org.jsoup.Jsoup
-import forms.PropertyLivedInForm._
 import forms.PropertyLivedInForm
+import forms.PropertyLivedInForm._
 import models.PropertyLivedInModel
-import org.scalatest.mock.MockitoSugar
+import org.jsoup.Jsoup
+import org.scalatest.mockito.MockitoSugar
+import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.propertyLivedIn
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 
 class PropertyLivedInViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper with AssertHelpers {
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
 
   "PropertyLivedIn view" when {
 
     "supplied with no errors" should {
       lazy val form = PropertyLivedInForm.propertyLivedInForm
-      lazy val view = propertyLivedIn(form)(fakeRequest, applicationMessages,fakeApplication,mockConfig)
+      lazy val view = propertyLivedIn(form)(fakeRequest, mockMessage,fakeApplication,mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of ${messages.title}" in {
@@ -197,7 +197,7 @@ class PropertyLivedInViewSpec extends UnitSpec with WithFakeApplication with Moc
     }
 
     "supplied with a filled form of 'Yes'" which {
-      lazy val view = propertyLivedIn(propertyLivedInForm.fill(PropertyLivedInModel(true)))(fakeRequest, applicationMessages, fakeApplication, mockConfig)
+      lazy val view = propertyLivedIn(propertyLivedInForm.fill(PropertyLivedInModel(true)))(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "for the option 'Yes'" should {
@@ -213,7 +213,7 @@ class PropertyLivedInViewSpec extends UnitSpec with WithFakeApplication with Moc
     "Property Lived In view with form errors" should {
 
       lazy val form = propertyLivedInForm.bind(Map("propertyLivedIn" -> ""))
-      lazy val view = propertyLivedIn(form)(fakeRequest, applicationMessages, fakeApplication, mockConfig)
+      lazy val view = propertyLivedIn(form)(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" which {

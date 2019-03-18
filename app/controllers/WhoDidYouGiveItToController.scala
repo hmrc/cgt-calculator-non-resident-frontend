@@ -26,18 +26,21 @@ import javax.inject.Inject
 import models.WhoDidYouGiveItToModel
 import play.api.Environment
 import play.api.Play.current
+import play.api.i18n.I18nSupport
 import play.api.i18n.Messages.Implicits._
-import play.api.mvc.{Action, AnyContent, Result}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.{calculation => views}
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 
-class WhoDidYouGiveItToController @Inject()(environment: Environment,
-                                            http: DefaultHttpClient,calcConnector: CalculatorConnector,
-                                            implicit val appConfig: ApplicationConfig) extends FrontendController with ValidActiveSession {
+class WhoDidYouGiveItToController @Inject()(http: DefaultHttpClient,
+                                            calcConnector: CalculatorConnector,
+                                            mcc: MessagesControllerComponents,
+                                            implicit val appConfig: ApplicationConfig) extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   val whoDidYouGiveItTo = ValidateSession.async { implicit request =>
 

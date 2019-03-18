@@ -21,18 +21,19 @@ import java.time.LocalDate
 import assets.MessageLookup.{NonResident => messages}
 import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
-import org.jsoup.Jsoup
 import forms.PrivateResidenceReliefForm._
-import org.scalatest.mock.MockitoSugar
+import org.jsoup.Jsoup
+import org.scalatest.mockito.MockitoSugar
+import play.api.i18n.Lang
+import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.privateResidenceRelief
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
-import play.api.i18n.Lang
 
 class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+
   private val testDate = LocalDate.of(2018, 2, 19)
   private val testDateString = "19 February 2018"
 
@@ -49,7 +50,7 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
           daysBetweenShow = true,
           showFirstQuestion = true,
           Some(testDate),
-          showOnlyFlatQuestion = false)(fakeRequest, applicationMessages,Lang("en"), fakeApplication, mockConfig)
+          showOnlyFlatQuestion = false)(fakeRequest, mockMessage,Lang("en"), fakeApplication, mockConfig)
         lazy val document = Jsoup.parse(view.body)
 
         s"have a title of '${messages.PrivateResidenceRelief.question}'" in {
@@ -179,7 +180,7 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
           daysBetweenShow = false,
           showFirstQuestion = true,
           Some(testDate),
-          showOnlyFlatQuestion = true)(fakeRequest, applicationMessages,Lang("en"), fakeApplication, mockConfig)
+          showOnlyFlatQuestion = true)(fakeRequest, mockMessage,Lang("en"), fakeApplication, mockConfig)
         lazy val document = Jsoup.parse(view.body)
 
         s"have a title of '${messages.PrivateResidenceRelief.question}'" in {
@@ -223,7 +224,7 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
           daysBetweenShow = false,
           showFirstQuestion = false,
           Some(testDate),
-          showOnlyFlatQuestion = true)(fakeRequest, applicationMessages,Lang("en"), fakeApplication, mockConfig)
+          showOnlyFlatQuestion = true)(fakeRequest, mockMessage,Lang("en"), fakeApplication, mockConfig)
         lazy val document = Jsoup.parse(view.body)
 
         s"have a title of '${messages.PrivateResidenceRelief.question}'" in {
@@ -243,7 +244,7 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
     "supplied with errors" should {
       val map = Map("isClaimingPRR" -> "")
       lazy val view = privateResidenceRelief(privateResidenceReliefForm(false, false).bind(map),
-        false, false, None, false)(fakeRequest, applicationMessages,Lang("en"), fakeApplication, mockConfig)
+        false, false, None, false)(fakeRequest, mockMessage,Lang("en"), fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

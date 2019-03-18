@@ -32,6 +32,7 @@ import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatest.mockito.MockitoSugar
 import play.api.Environment
+import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
@@ -47,20 +48,19 @@ class SummaryActionSpec extends UnitSpec with WithFakeApplication with MockitoSu
   implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val materializer = mock[Materializer]
-  val mockEnvironment =mock[Environment]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
   val defaultCache = mock[CacheMap]
   val mockAnswersConstructor = mock[AnswersConstructor]
   val mockDefaultCalElecConstructor = mock[DefaultCalculationElectionConstructor]
-
+  val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
 
   class Setup {
     val controller = new SummaryController(
-      mockEnvironment,
       mockHttp,
       mockCalcConnector,
-      mockAnswersConstructor
+      mockAnswersConstructor,
+      mockMessagesControllerComponents
     )(mockConfig)
   }
 
@@ -123,7 +123,7 @@ class SummaryActionSpec extends UnitSpec with WithFakeApplication with MockitoSu
       (ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(PropertyLivedInModel(true))))
 
-    new SummaryController(mockEnvironment, mockHttp, mockCalcConnector, mockAnswersConstructor)(mockConfig) {
+    new SummaryController(mockHttp, mockCalcConnector, mockAnswersConstructor, mockMessagesControllerComponents)(mockConfig) {
       val calcConnector: CalculatorConnector = mockCalcConnector
       val answersConstructor: AnswersConstructor = mockAnswersConstructor
     }

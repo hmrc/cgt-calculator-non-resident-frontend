@@ -25,24 +25,28 @@ import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import forms.DisposalDateForm._
 import javax.inject.Inject
-import views.html.calculation
 import models.DateModel
-import play.api.{Environment, Logger}
-import play.api.data.Form
-import play.api.mvc.Action
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
-
-import scala.concurrent.Future
+import play.api.data.Form
+import play.api.i18n.{I18nSupport, Lang}
+import play.api.mvc.MessagesControllerComponents
+import play.api.{Environment, Logger}
 import uk.gov.hmrc.http.SessionKeys
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import views.html.calculation
 
-class DisposalDateController @Inject()(environment: Environment,
-                                       http: DefaultHttpClient,calcConnector: CalculatorConnector)(implicit val applicationConfig: ApplicationConfig)
-                                        extends FrontendController with ValidActiveSession {
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
+
+
+class DisposalDateController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
+                                       mcc: MessagesControllerComponents)
+                                      (implicit val applicationConfig: ApplicationConfig)
+                                        extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   val disposalDate = Action.async { implicit request =>
+    implicit val lang = mcc.messagesApi.preferred(request).lang
     if (request.session.get(SessionKeys.sessionId).isEmpty) {
       val sessionId = UUID.randomUUID.toString
       Future.successful(Ok(views.html.calculation.
@@ -58,6 +62,7 @@ class DisposalDateController @Inject()(environment: Environment,
   }
 
   val submitDisposalDate = ValidateSession.async { implicit request =>
+    implicit val lang = mcc.messagesApi.preferred(request).lang
 
     def errorAction(form: Form[DateModel]) = Future.successful(BadRequest(calculation.disposalDate(form)))
 

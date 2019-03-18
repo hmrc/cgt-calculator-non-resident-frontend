@@ -29,13 +29,16 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.{calculation => views}
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
+import play.api.i18n.I18nSupport
+import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class WorthWhenInheritedController @Inject()(environment: Environment,
-                                             http: DefaultHttpClient,calcConnector: CalculatorConnector)(implicit val applicationConfig: ApplicationConfig)
-  extends FrontendController with ValidActiveSession {
+class WorthWhenInheritedController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
+                                             mcc: MessagesControllerComponents)(implicit val applicationConfig: ApplicationConfig)
+  extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   val worthWhenInherited = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[AcquisitionValueModel](KeystoreKeys.acquisitionMarketValue).map {

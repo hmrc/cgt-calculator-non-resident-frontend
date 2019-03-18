@@ -20,25 +20,33 @@ import assets.MessageLookup.NonResident.{DisposalDate => messages}
 import assets.MessageLookup.{NonResident => commonMessages}
 import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
-import org.jsoup.Jsoup
 import forms.DisposalDateForm._
+import org.jsoup.Jsoup
+import org.scalatest.mockito.MockitoSugar
+import play.api.i18n.{Lang, MessagesApi}
+import play.api.mvc.MessagesControllerComponents
+import uk.gov.hmrc.play.language.LanguageUtils
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.disposalDate
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
-import play.api.i18n.{Lang, Messages}
 
-class DisposalDateViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
+class DisposalDateViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper with MockitoSugar {
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  private val api: MessagesApi = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi
+  implicit lazy val mockMessage = api.preferred(fakeRequest)
+
+  lazy val welshLanguage: Lang = Lang("cy")
+  lazy val cyMockMessage = api.preferred(Seq(
+    welshLanguage
+  ))
 
   "The Disposal Date View" should {
 
     "return some HTML" which {
 
-      lazy val view = disposalDate(disposalDateForm)(fakeRequest, implicitly[Messages].copy(lang = Lang("en")), Lang("en"), fakeApplication, mockConfig)
+      lazy val view = disposalDate(disposalDateForm)(fakeRequest, mockMessage, Lang("en"), fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
-      lazy val welshView = disposalDate(disposalDateForm)(fakeRequest, implicitly[Messages].copy(lang = Lang("cy")), Lang("cy"), fakeApplication, mockConfig)
+      lazy val welshView = disposalDate(disposalDateForm)(fakeRequest, cyMockMessage, welshLanguage, fakeApplication, mockConfig)
       lazy val welshDocument = Jsoup.parse(welshView.body)
 
       "have the title 'When did you sign the contract that made someone else the owner?'" in {
@@ -100,7 +108,7 @@ class DisposalDateViewSpec extends UnitSpec with WithFakeApplication with FakeRe
 
     "supplied with errors" should {
       lazy val form = disposalDateForm.bind(Map("disposalDateDay" -> "a"))
-      lazy val view = disposalDate(form)(fakeRequest, implicitly[Messages].copy(lang = Lang("en")), Lang("en"), fakeApplication, mockConfig)
+      lazy val view = disposalDate(form)(fakeRequest, mockMessage, Lang("en"), fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

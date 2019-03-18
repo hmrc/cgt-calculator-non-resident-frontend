@@ -16,22 +16,26 @@
 
 package views.whatNext
 
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import assets.MessageLookup.{WhatNext => messages}
 import config.ApplicationConfig
+import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
+import org.scalatest.mockito.MockitoSugar
 import play.api.Application
-import views.html.whatNext.whatNext
-import play.api.i18n.Messages.Implicits._
+import play.api.i18n.Messages
+import play.api.mvc.MessagesControllerComponents
 import play.api.test.FakeRequest
+import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import views.html.whatNext.whatNext
 
-class WhatNextViewSpec extends UnitSpec with WithFakeApplication {
+class WhatNextViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
 
   "What next view should" when {
     implicit lazy val fakeApp: Application = fakeApplication
 
-    lazy val view = whatNext()(FakeRequest("GET", ""),applicationMessages,fakeApplication, mockConfig)
+    lazy val view = whatNext()(FakeRequest("GET", ""),mockMessage,fakeApplication, mockConfig)
     lazy val doc = Jsoup.parse(view.body)
 
     s"have a title of ${messages.title}" in {

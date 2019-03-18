@@ -20,21 +20,26 @@ import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import config.ApplicationConfig
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
-import models.DateModel
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-import views.html.calculation
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 import controllers.utils.RecoverableFuture
 import javax.inject.Inject
-import play.api.Environment
+import models.DateModel
+import play.api.Play.current
+import play.api.i18n.{I18nSupport, Lang}
+import play.api.mvc.MessagesControllerComponents
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import views.html.calculation
 
-class NoCapitalGainsTaxController @Inject()(environment: Environment,
-                                            http: DefaultHttpClient,calcConnector: CalculatorConnector)(implicit val applicationConfig: ApplicationConfig)
-                                              extends FrontendController with ValidActiveSession {
+import scala.concurrent.ExecutionContext.Implicits.global
+
+class NoCapitalGainsTaxController @Inject()(http: DefaultHttpClient,
+                                            calcConnector: CalculatorConnector,
+                                            mcc: MessagesControllerComponents)
+                                           (implicit val applicationConfig: ApplicationConfig)
+  extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   val noCapitalGainsTax = ValidateSession.async { implicit request =>
+    implicit val lang: Lang = mcc.messagesApi.preferred(request).lang
     calcConnector.fetchAndGetFormData[DateModel](KeystoreKeys.disposalDate).map {
       result => Ok(calculation.noCapitalGainsTax(result.get))
     }.recoverToStart

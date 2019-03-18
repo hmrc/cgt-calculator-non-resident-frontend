@@ -26,23 +26,25 @@ import controllers.predicates.ValidActiveSession
 import models._
 import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
-import play.api.mvc.{Action, AnyContent}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.calculation
 import controllers.utils.RecoverableFuture
 import javax.inject.Inject
+import play.api.i18n.I18nSupport
 import play.api.{Environment, Logger}
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
 import scala.util.Random
 
-class SummaryController @Inject()(environment: Environment,
-                                  http: DefaultHttpClient,calcConnector: CalculatorConnector,
-                                  answersConstructor: AnswersConstructor)(implicit val applicationConfig: ApplicationConfig)
-                                    extends FrontendController with ValidActiveSession {
+class SummaryController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
+                                  answersConstructor: AnswersConstructor,
+                                  mcc: MessagesControllerComponents)(implicit val applicationConfig: ApplicationConfig)
+                                    extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   val summary: Action[AnyContent] = ValidateSession.async { implicit request =>
 

@@ -29,14 +29,16 @@ import play.api.data.Form
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
-import play.api.mvc.{Action, AnyContent}
+import play.api.i18n.I18nSupport
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class RebasedCostsController @Inject()(environment: Environment,
-                                       http: DefaultHttpClient,calcConnector: CalculatorConnector)(implicit val applicationConfig: ApplicationConfig)
-                                         extends FrontendController with ValidActiveSession {
+class RebasedCostsController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
+                                       mcc: MessagesControllerComponents)(implicit val applicationConfig: ApplicationConfig)
+                                         extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   val rebasedCosts: Action[AnyContent] = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[RebasedCostsModel](KeystoreKeys.rebasedCosts).map {

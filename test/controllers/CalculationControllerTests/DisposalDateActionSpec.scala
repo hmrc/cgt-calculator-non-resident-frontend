@@ -29,6 +29,7 @@ import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
 import play.api.Environment
+import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
@@ -43,17 +44,17 @@ class DisposalDateActionSpec extends UnitSpec with WithFakeApplication with Mock
   implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
 
   val materializer = mock[Materializer]
-  val mockEnvironment =mock[Environment]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
   val defaultCache = mock[CacheMap]
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
 
   class Setup {
     val controller = new DisposalDateController(
-      mockEnvironment,
       mockHttp,
-      mockCalcConnector
+      mockCalcConnector,
+      mockMessagesControllerComponents
     )(mockConfig)
   }
 
@@ -68,7 +69,7 @@ class DisposalDateActionSpec extends UnitSpec with WithFakeApplication with Mock
     when(mockCalcConnector.getTaxYear(ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(Future.successful(taxYearModel))
 
-    new DisposalDateController(mockEnvironment, mockHttp, mockCalcConnector)(mockConfig) {
+    new DisposalDateController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig) {
       val calcConnector: CalculatorConnector = mockCalcConnector
     }
   }

@@ -20,13 +20,20 @@ import assets.MessageLookup.{NonResident => messages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.TestModels._
 import common.nonresident.PreviousGainOrLossKeys
+import controllers.helpers.FakeRequestHelper
 import controllers.routes
 import models._
+import org.scalatest.mockito.MockitoSugar
+import play.api.i18n.MessagesProvider
+import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
-class PersonalDetailsConstructorSpec extends UnitSpec with WithFakeApplication {
+class PersonalDetailsConstructorSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
+  implicit val mockMessagesProvider = mock[MessagesProvider]
+  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
 
-  val target = PersonalDetailsConstructor
+
+  val target = new PersonalDetailsConstructor
 
   "calling .getCurrentIncomeAnswer" when {
 
@@ -188,9 +195,10 @@ class PersonalDetailsConstructorSpec extends UnitSpec with WithFakeApplication {
 
   "calling .getOtherPropertiesAnswer" when {
 
+
     "a otherPropertiesAnswer of yes is given" should {
 
-      lazy val result = PersonalDetailsConstructor.getOtherPropertiesAnswer(OtherPropertiesModel("Yes"))
+      lazy val result = target.getOtherPropertiesAnswer(OtherPropertiesModel("Yes"))
 
       "return some details for the OtherProperties" in {
         result should not be None
@@ -225,7 +233,7 @@ class PersonalDetailsConstructorSpec extends UnitSpec with WithFakeApplication {
 
     "a otherPropertiesAnswer of no is given" should {
 
-      lazy val result = PersonalDetailsConstructor.getOtherPropertiesAnswer(OtherPropertiesModel("No"))
+      lazy val result = target.getOtherPropertiesAnswer(OtherPropertiesModel("No"))
 
       "return some details for the OtherProperties" in {
         result should not be None
@@ -262,7 +270,7 @@ class PersonalDetailsConstructorSpec extends UnitSpec with WithFakeApplication {
   "Calling previousGainOrLossAnswer" when {
 
     "other properties have been disposed of" should {
-      lazy val result = PersonalDetailsConstructor.previousGainOrLossAnswer(OtherPropertiesModel("Yes"),
+      lazy val result = target.previousGainOrLossAnswer(OtherPropertiesModel("Yes"),
         Some(PreviousLossOrGainModel(PreviousGainOrLossKeys.gain)))
 
       "return a Some" in {
@@ -295,7 +303,7 @@ class PersonalDetailsConstructorSpec extends UnitSpec with WithFakeApplication {
     }
 
     "no other properties have been disposed" should {
-      lazy val result = PersonalDetailsConstructor.previousGainOrLossAnswer(OtherPropertiesModel("No"), None)
+      lazy val result = target.previousGainOrLossAnswer(OtherPropertiesModel("No"), None)
 
       "return a None" in {
         result shouldBe None
@@ -306,7 +314,7 @@ class PersonalDetailsConstructorSpec extends UnitSpec with WithFakeApplication {
   "Calling howMuchGainAnswer" when {
 
     "no other properties have been disposed" should {
-      lazy val result = PersonalDetailsConstructor.howMuchGainAnswer(OtherPropertiesModel("No"), None, None)
+      lazy val result = target.howMuchGainAnswer(OtherPropertiesModel("No"), None, None)
 
       "return a None" in {
         result shouldBe None
@@ -314,7 +322,7 @@ class PersonalDetailsConstructorSpec extends UnitSpec with WithFakeApplication {
     }
 
     "other properties have not made a gain" should {
-      lazy val result = PersonalDetailsConstructor.howMuchGainAnswer(OtherPropertiesModel("Yes"),
+      lazy val result = target.howMuchGainAnswer(OtherPropertiesModel("Yes"),
         Some(PreviousLossOrGainModel(PreviousGainOrLossKeys.loss)), None)
 
       "return a None" in {
@@ -323,7 +331,7 @@ class PersonalDetailsConstructorSpec extends UnitSpec with WithFakeApplication {
     }
 
     "other properties have made a gain" should {
-      lazy val result = PersonalDetailsConstructor.howMuchGainAnswer(OtherPropertiesModel("Yes"),
+      lazy val result = target.howMuchGainAnswer(OtherPropertiesModel("Yes"),
         Some(PreviousLossOrGainModel(PreviousGainOrLossKeys.gain)), Some(HowMuchGainModel(1000)))
 
       "return a Some" in {
@@ -359,7 +367,7 @@ class PersonalDetailsConstructorSpec extends UnitSpec with WithFakeApplication {
   "Calling howMuchLossAnswer" when {
 
     "no other properties have been disposed" should {
-      lazy val result = PersonalDetailsConstructor.howMuchLossAnswer(OtherPropertiesModel("No"), None, None)
+      lazy val result = target.howMuchLossAnswer(OtherPropertiesModel("No"), None, None)
 
       "return a None" in {
         result shouldBe None
@@ -367,7 +375,7 @@ class PersonalDetailsConstructorSpec extends UnitSpec with WithFakeApplication {
     }
 
     "other properties have not made a loss" should {
-      lazy val result = PersonalDetailsConstructor.howMuchLossAnswer(OtherPropertiesModel("Yes"),
+      lazy val result = target.howMuchLossAnswer(OtherPropertiesModel("Yes"),
         Some(PreviousLossOrGainModel(PreviousGainOrLossKeys.gain)), None)
 
       "return a None" in {
@@ -376,7 +384,7 @@ class PersonalDetailsConstructorSpec extends UnitSpec with WithFakeApplication {
     }
 
     "other properties have made a loss" should {
-      lazy val result = PersonalDetailsConstructor.howMuchLossAnswer(OtherPropertiesModel("Yes"),
+      lazy val result = target.howMuchLossAnswer(OtherPropertiesModel("Yes"),
         Some(PreviousLossOrGainModel(PreviousGainOrLossKeys.loss)), Some(HowMuchLossModel(1000)))
 
       "return a Some" in {
@@ -412,7 +420,7 @@ class PersonalDetailsConstructorSpec extends UnitSpec with WithFakeApplication {
   "Calling getAnnualExemptAmountAnswer" when {
 
     "properties disposed broke even" should {
-      lazy val result = PersonalDetailsConstructor.getAnnualExemptAmountAnswer(OtherPropertiesModel("Yes"),
+      lazy val result = target.getAnnualExemptAmountAnswer(OtherPropertiesModel("Yes"),
         Some(PreviousLossOrGainModel(PreviousGainOrLossKeys.neither)), Some(AnnualExemptAmountModel(11000)),
         None, None)
 
@@ -446,7 +454,7 @@ class PersonalDetailsConstructorSpec extends UnitSpec with WithFakeApplication {
     }
 
     "properties disposed had a gain of 0" should {
-      lazy val result = PersonalDetailsConstructor.getAnnualExemptAmountAnswer(OtherPropertiesModel("Yes"),
+      lazy val result = target.getAnnualExemptAmountAnswer(OtherPropertiesModel("Yes"),
         Some(PreviousLossOrGainModel(PreviousGainOrLossKeys.gain)), Some(AnnualExemptAmountModel(11000)),
         Some(HowMuchGainModel(0)), None)
 
@@ -480,7 +488,7 @@ class PersonalDetailsConstructorSpec extends UnitSpec with WithFakeApplication {
     }
 
     "properties disposed had a loss of 0" should {
-      lazy val result = PersonalDetailsConstructor.getAnnualExemptAmountAnswer(OtherPropertiesModel("Yes"),
+      lazy val result = target.getAnnualExemptAmountAnswer(OtherPropertiesModel("Yes"),
         Some(PreviousLossOrGainModel(PreviousGainOrLossKeys.loss)), Some(AnnualExemptAmountModel(11000)),
         None, Some(HowMuchLossModel(0)))
 
@@ -514,7 +522,7 @@ class PersonalDetailsConstructorSpec extends UnitSpec with WithFakeApplication {
     }
 
     "has no previous disposals" should {
-      lazy val result = PersonalDetailsConstructor.getAnnualExemptAmountAnswer(OtherPropertiesModel("Yes"), None, None, None, None)
+      lazy val result = target.getAnnualExemptAmountAnswer(OtherPropertiesModel("Yes"), None, None, None, None)
 
       "return a None" in {
         result shouldBe None
@@ -523,7 +531,7 @@ class PersonalDetailsConstructorSpec extends UnitSpec with WithFakeApplication {
   }
 
   "Calling .broughtForwardLossesQuestion" should {
-    lazy val result = PersonalDetailsConstructor.getBroughtForwardLossesQuestion(BroughtForwardLossesModel(false, None))
+    lazy val result = target.getBroughtForwardLossesQuestion(BroughtForwardLossesModel(false, None))
 
     "return a Some" in {
       result.isDefined shouldBe true
@@ -557,7 +565,7 @@ class PersonalDetailsConstructorSpec extends UnitSpec with WithFakeApplication {
   "Calling .broughtForwardLossesAnswer" when {
 
     "an answer of no is given" should {
-      lazy val result = PersonalDetailsConstructor.getBroughtForwardLossesAnswer(BroughtForwardLossesModel(false, None))
+      lazy val result = target.getBroughtForwardLossesAnswer(BroughtForwardLossesModel(false, None))
 
       "return a None" in {
         result shouldBe None
@@ -565,7 +573,7 @@ class PersonalDetailsConstructorSpec extends UnitSpec with WithFakeApplication {
     }
 
     "an answer of yes is given" should {
-      lazy val result = PersonalDetailsConstructor.getBroughtForwardLossesAnswer(BroughtForwardLossesModel(true, Some(1000)))
+      lazy val result = target.getBroughtForwardLossesAnswer(BroughtForwardLossesModel(true, Some(1000)))
 
       "return a Some" in {
         result.isDefined shouldBe true

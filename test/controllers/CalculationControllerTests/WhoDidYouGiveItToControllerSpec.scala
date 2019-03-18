@@ -34,6 +34,7 @@ import play.api.test.Helpers._
 import assets.MessageLookup.{NoTaxToPay => messages}
 import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
 import play.api.Environment
+import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.http.logging.SessionId
@@ -47,18 +48,17 @@ class WhoDidYouGiveItToControllerSpec extends UnitSpec with WithFakeApplication 
   implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val materializer = mock[Materializer]
-  val mockEnvironment =mock[Environment]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
   val defaultCache = mock[CacheMap]
+  val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
 
   class Setup {
     val controller = new WhoDidYouGiveItToController(
-      mockEnvironment,
       mockHttp,
       mockCalcConnector,
-      mockConfig
-    )
+      mockMessagesControllerComponents,
+      mockConfig)
   }
 
   def setupTarget(getData: Option[WhoDidYouGiveItToModel]): WhoDidYouGiveItToController = {
@@ -69,7 +69,7 @@ class WhoDidYouGiveItToControllerSpec extends UnitSpec with WithFakeApplication 
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new WhoDidYouGiveItToController(mockEnvironment, mockHttp, mockCalcConnector, mockConfig) {
+    new WhoDidYouGiveItToController(mockHttp, mockCalcConnector, mockMessagesControllerComponents, mockConfig) {
       val calcConnector: CalculatorConnector = mockCalcConnector
       val config: AppConfig = mock[AppConfig]
     }

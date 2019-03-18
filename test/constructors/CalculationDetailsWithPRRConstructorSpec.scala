@@ -19,14 +19,20 @@ package constructors
 import assets.MessageLookup.NonResident.{Summary => messages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.nonresident.CalculationType
+import controllers.helpers.FakeRequestHelper
 import controllers.routes
 import helpers.AssertHelpers
 import models.{CalculationResultsWithPRRModel, GainsAfterPRRModel}
+import org.scalatest.mockito.MockitoSugar
+import play.api.i18n.MessagesProvider
+import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
-class CalculationDetailsWithPRRConstructorSpec extends UnitSpec with WithFakeApplication with AssertHelpers {
+class CalculationDetailsWithPRRConstructorSpec extends UnitSpec with WithFakeApplication with AssertHelpers with MockitoSugar with FakeRequestHelper{
+  implicit val mockMessagesProvider = mock[MessagesProvider]
+  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
 
-  val target = CalculationDetailsWithPRRConstructor
+  val target = new CalculationDetailsWithPRRConstructor
 
   private def assertExpectedResult[T](option: Option[T])(test: T => Unit) = assertOption("expected option is None")(option)(test)
 

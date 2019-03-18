@@ -25,26 +25,27 @@ import config.ApplicationConfig
 import connectors.CalculatorConnector
 import constructors.AnswersConstructor
 import controllers.predicates.ValidActiveSession
-import forms.PrivateResidenceReliefForm._
-import views.html.calculation
-import models._
-import play.api.data.Form
-import play.api.mvc.{Action, AnyContent, Result}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 import controllers.utils.RecoverableFuture
+import forms.PrivateResidenceReliefForm._
 import javax.inject.Inject
+import models._
 import play.api.Environment
-
-import scala.concurrent.Future
+import play.api.Play.current
+import play.api.data.Form
+import play.api.i18n.{I18nSupport, Lang}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import views.html.calculation
 
-class PrivateResidenceReliefController @Inject()(environment: Environment,
-                                                 http: DefaultHttpClient,calcConnector: CalculatorConnector,
-                                                 answersConstructor: AnswersConstructor)(implicit val applicationConfig: ApplicationConfig)
-                                                  extends FrontendController with ValidActiveSession {
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
+
+class PrivateResidenceReliefController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
+                                                 answersConstructor: AnswersConstructor,
+                                                 mcc: MessagesControllerComponents)(implicit val applicationConfig: ApplicationConfig)
+                                                  extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   def getAcquisitionDate(implicit hc: HeaderCarrier): Future[Option[LocalDate]] =
     calcConnector.fetchAndGetFormData[DateModel](KeystoreKeys.acquisitionDate).map {
@@ -78,6 +79,7 @@ class PrivateResidenceReliefController @Inject()(environment: Environment,
     }
 
   val privateResidenceRelief: Action[AnyContent] = ValidateSession.async { implicit request =>
+    implicit val lang: Lang  = mcc.messagesApi.preferred(request).lang
 
     def action(disposalDate: Option[LocalDate], acquisitionDate: Option[LocalDate]) = {
 
@@ -123,6 +125,7 @@ class PrivateResidenceReliefController @Inject()(environment: Environment,
       }
 
       def errorAction(form: Form[PrivateResidenceReliefModel]) = {
+        implicit val lang: Lang = mcc.messagesApi.preferred(request).lang
         Future.successful(BadRequest(calculation.privateResidenceRelief(form, showBetweenQuestion,
           showFirstQuestion, disposalDateLess18Months, showOnlyFlatQuestion)))
       }

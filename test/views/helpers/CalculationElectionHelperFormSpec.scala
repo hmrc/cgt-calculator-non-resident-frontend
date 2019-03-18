@@ -17,14 +17,15 @@
 package views.helpers
 
 import assets.MessageLookup
+import controllers.helpers.FakeRequestHelper
 import forms.CalculationElectionForm
 import org.jsoup.Jsoup
+import org.scalatest.mockito.MockitoSugar
+import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 
-class CalculationElectionHelperFormSpec extends UnitSpec with WithFakeApplication {
-
+class CalculationElectionHelperFormSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
+  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   "Creating a calculationElectionHelperForm" should {
 
     "when passing in a single element with other reliefs to render" should {

@@ -16,21 +16,22 @@
 
 package views
 
-import controllers.helpers.FakeRequestHelper
-import org.jsoup.Jsoup
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 import assets.MessageLookup.{NoTaxToPay => messages}
 import config.ApplicationConfig
+import controllers.helpers.FakeRequestHelper
+import org.jsoup.Jsoup
+import org.scalatest.mockito.MockitoSugar
+import play.api.mvc.MessagesControllerComponents
+import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.{calculation => views}
 
-class NoTaxToPayViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
+class NoTaxToPayViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper with MockitoSugar {
 
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
 
   "No Tax to Pay View when gifted to spouse" should {
-    lazy val view = views.noTaxToPay(forCharity = false)(fakeRequest, applicationMessages, fakeApplication, mockConfig)
+    lazy val view = views.noTaxToPay(forCharity = false)(fakeRequest, mockMessage, fakeApplication, mockConfig)
     lazy val doc = Jsoup.parse(view.body)
 
     "have a charset of UTF-8" in {
@@ -66,7 +67,7 @@ class NoTaxToPayViewSpec extends UnitSpec with WithFakeApplication with FakeRequ
   }
 
   "No Tax to Pay View when gifted to charity" should {
-    lazy val view = views.noTaxToPay(forCharity = true)(fakeRequest, applicationMessages, fakeApplication, mockConfig)
+    lazy val view = views.noTaxToPay(forCharity = true)(fakeRequest, mockMessage, fakeApplication, mockConfig)
     lazy val doc = Jsoup.parse(view.body)
 
     "have text explaining why tax is not owed" in {

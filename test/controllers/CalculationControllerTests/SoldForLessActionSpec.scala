@@ -30,6 +30,7 @@ import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
 import play.api.Environment
+import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.cache.client.CacheMap
@@ -44,17 +45,16 @@ class SoldForLessActionSpec extends UnitSpec with WithFakeApplication with FakeR
   implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val materializer = mock[Materializer]
-  val mockEnvironment =mock[Environment]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
   val defaultCache = mock[CacheMap]
+  val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
 
   class Setup {
     val controller = new SoldForLessController(
-      mockEnvironment,
       mockHttp,
-      mockCalcConnector
-    )(mockConfig)
+      mockCalcConnector,
+      mockMessagesControllerComponents)(mockConfig)
   }
 
   def setupTarget(getData: Option[SoldForLessModel]): SoldForLessController = {
@@ -65,7 +65,7 @@ class SoldForLessActionSpec extends UnitSpec with WithFakeApplication with FakeR
     when(mockCalcConnector.saveFormData[SoldForLessModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(mock[CacheMap]))
 
-    new SoldForLessController(mockEnvironment, mockHttp, mockCalcConnector)(mockConfig) {
+    new SoldForLessController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig) {
       val calcConnector: CalculatorConnector = mockCalcConnector
     }
   }

@@ -20,22 +20,22 @@ import assets.MessageLookup
 import assets.MessageLookup.{NonResident => messages}
 import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
-import org.jsoup.Jsoup
-import org.scalatest.mock.MockitoSugar
 import forms.AcquisitionCostsForm._
+import org.jsoup.Jsoup
+import org.scalatest.mockito.MockitoSugar
+import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.acquisitionCosts
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 
 class AcquisitionCostsViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
 
   "Acquisition costs view" when {
 
     "supplied with no errors and is owner before legislation start" should {
-      lazy val view = acquisitionCosts(acquisitionCostsForm, "back-link", ownerBeforeLegislation = true)(fakeRequest,applicationMessages, fakeApplication, mockConfig)
+      lazy val view = acquisitionCosts(acquisitionCostsForm, "back-link", ownerBeforeLegislation = true)(fakeRequest,mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${messages.AcquisitionCosts.question}'" in {
@@ -141,7 +141,7 @@ class AcquisitionCostsViewSpec extends UnitSpec with WithFakeApplication with Mo
     }
 
     "is owner after legislation start" should {
-      lazy val view = acquisitionCosts(acquisitionCostsForm, "back-link", ownerBeforeLegislation = false)(fakeRequest,applicationMessages, fakeApplication, mockConfig)
+      lazy val view = acquisitionCosts(acquisitionCostsForm, "back-link", ownerBeforeLegislation = false)(fakeRequest,mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have a list" which {
@@ -156,7 +156,7 @@ class AcquisitionCostsViewSpec extends UnitSpec with WithFakeApplication with Mo
 
   "supplied with errors" should {
     lazy val form = acquisitionCostsForm.bind(Map("acquisitionCosts" -> "a"))
-    lazy val view = acquisitionCosts(form, "back-link", ownerBeforeLegislation = true)(fakeRequest,applicationMessages, fakeApplication, mockConfig)
+    lazy val view = acquisitionCosts(form, "back-link", ownerBeforeLegislation = true)(fakeRequest,mockMessage, fakeApplication, mockConfig)
     lazy val document = Jsoup.parse(view.body)
 
     "have an error summary" in {

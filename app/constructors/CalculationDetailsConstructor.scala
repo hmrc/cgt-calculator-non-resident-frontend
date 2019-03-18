@@ -19,12 +19,14 @@ package constructors
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import controllers.routes
 import models.{QuestionAnswerModel, TotalGainResultsModel}
-import play.api.i18n.Messages
+import play.api.i18n.{Messages, MessagesProvider}
 import common.nonresident.CalculationType
+import javax.inject.Inject
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
+import play.api.mvc.MessagesActionBuilder
 
-object CalculationDetailsConstructor {
+class CalculationDetailsConstructor @Inject()(implicit messagesProvider: MessagesProvider) {
 
   def buildSection(calculation: TotalGainResultsModel, calculationType: String): Seq[QuestionAnswerModel[Any]] = {
     val electionDetails = calculationElection(calculationType)

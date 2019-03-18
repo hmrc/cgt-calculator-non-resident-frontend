@@ -18,14 +18,18 @@ package views.helpers
 
 import java.time.LocalDate
 
+import controllers.helpers.FakeRequestHelper
 import models.QuestionAnswerModel
 import org.jsoup.Jsoup
-import play.api.Play.current
-import play.api.i18n.Messages.Implicits._
+import org.scalatest.mockito.MockitoSugar
+import play.api.i18n.Lang
+import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.helpers.questionAnswerRow
 
-class QuestionAnswersRowViewSpec extends UnitSpec with WithFakeApplication {
+class QuestionAnswersRowViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
+  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  implicit lazy val lang = mockMessage.lang
 
   "Creating questionAnswerRow" when {
 

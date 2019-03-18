@@ -17,26 +17,30 @@
 package constructors
 
 import common.nonresident.CalculationType
+import javax.inject.Inject
 import models.{CalculationResultsWithTaxOwedModel, QuestionAnswerModel}
-import play.api.Play.current
-import play.api.i18n.Messages
-import play.api.i18n.Messages.Implicits._
+import play.api.i18n.{Messages, MessagesProvider}
 import uk.gov.hmrc.play.views.helpers.MoneyPounds
 
-object CalculationDetailsWithAllAnswersConstructor {
+
+
+
+class CalculationDetailsWithAllAnswersConstructor @Inject()(val calculationDetailsConstructor: CalculationDetailsConstructor,
+                                                            val calculationDetailsWithPRRConstructor: CalculationDetailsWithPRRConstructor)
+                                                           (implicit messagesProvider: MessagesProvider) {
 
   def buildSection(calculation: CalculationResultsWithTaxOwedModel, calculationType: String, taxYear: String): Seq[QuestionAnswerModel[Any]] = {
-    val electionDetails = CalculationDetailsConstructor.calculationElection(calculationType)
+    val electionDetails = calculationDetailsConstructor.calculationElection(calculationType)
     val correctModel = calculationType match {
       case CalculationType.flat => calculation.flatResult
       case CalculationType.rebased => calculation.rebasedResult.get
       case CalculationType.timeApportioned => calculation.timeApportionedResult.get
     }
-    val taxableGainDetails = CalculationDetailsWithPRRConstructor.taxableGain(correctModel.taxableGain)
-    val totalGainDetails = CalculationDetailsConstructor.totalGain(correctModel.totalGain)
-    val totalLossDetails = CalculationDetailsConstructor.totalLoss(correctModel.totalGain)
+    val taxableGainDetails = calculationDetailsWithPRRConstructor.taxableGain(correctModel.taxableGain)
+    val totalGainDetails = calculationDetailsConstructor.totalGain(correctModel.totalGain)
+    val totalLossDetails = calculationDetailsConstructor.totalLoss(correctModel.totalGain)
     val prrDetails = correctModel.prrUsed match {
-      case Some(value) => CalculationDetailsWithPRRConstructor.prrUsedDetails(value)
+      case Some(value) => calculationDetailsWithPRRConstructor.prrUsedDetails(value)
       case _ => None
     }
     val otherReliefsUsed = otherReliefsUsedRow(correctModel.otherReliefsUsed)

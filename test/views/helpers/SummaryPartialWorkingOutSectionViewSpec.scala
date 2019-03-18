@@ -20,12 +20,15 @@ import assets.MessageLookup.{SummaryPartialMessages => messages}
 import common.nonresident.CalculationType
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
+import org.scalatest.mockito.MockitoSugar
+import play.api.i18n.Lang
+import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 import views.html.helpers
 
-class SummaryPartialWorkingOutSectionViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
+class SummaryPartialWorkingOutSectionViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper with MockitoSugar {
+  implicit val mockLang = mock[Lang]
+  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
 
   "The workingOutSummary partial" when {
 
@@ -37,7 +40,7 @@ class SummaryPartialWorkingOutSectionViewSpec extends UnitSpec with WithFakeAppl
         acquisitionValue = 20000,
         totalCosts = 4000,
         totalGain = 50000
-      )(fakeRequestWithSession, applicationMessages)
+      )(fakeRequestWithSession, mockMessage)
       lazy val doc = Jsoup.parse(view.body)
 
       s"have the h2 heading ${messages.workingOutSectionHeading}" in {
@@ -109,7 +112,7 @@ class SummaryPartialWorkingOutSectionViewSpec extends UnitSpec with WithFakeAppl
         acquisitionValue = 120000,
         totalCosts = 4000,
         totalGain = -20000
-      )(fakeRequestWithSession, applicationMessages)
+      )(fakeRequestWithSession, mockMessage)
       lazy val doc = Jsoup.parse(view.body)
 
       s"have the h2 heading ${messages.workingOutSectionHeading}" in {
@@ -181,7 +184,7 @@ class SummaryPartialWorkingOutSectionViewSpec extends UnitSpec with WithFakeAppl
         acquisitionValue = 20000,
         totalCosts = 4000,
         percentageOfGain = 50
-      )(fakeRequestWithSession, applicationMessages)
+      )(fakeRequestWithSession, mockMessage)
       lazy val doc = Jsoup.parse(view.body)
 
       s"have the h2 heading ${messages.workingOutSectionHeading}" in {
@@ -266,7 +269,7 @@ class SummaryPartialWorkingOutSectionViewSpec extends UnitSpec with WithFakeAppl
         totalCosts = 4000,
         totalGain = -20000,
         percentageOfGain = 50
-      )(fakeRequestWithSession, applicationMessages)
+      )(fakeRequestWithSession, mockMessage)
       lazy val doc = Jsoup.parse(view.body)
 
       "has a row for the loss made on the property" which {

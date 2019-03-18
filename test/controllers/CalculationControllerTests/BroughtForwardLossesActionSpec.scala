@@ -31,6 +31,7 @@ import config.ApplicationConfig
 import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
 import controllers.{BroughtForwardLossesController, WorthWhenInheritedController}
 import play.api.Environment
+import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap
 
@@ -43,18 +44,18 @@ class BroughtForwardLossesActionSpec extends UnitSpec with WithFakeApplication w
   implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
 
   val materializer = mock[Materializer]
-  val mockEnvironment =mock[Environment]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
   val mockAnswerConstuctor = mock[AnswersConstructor]
   val defaultCache = mock[CacheMap]
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
 
   class Setup {
     val controller = new BroughtForwardLossesController(
-      mockEnvironment,
       mockHttp,
-      mockCalcConnector
+      mockCalcConnector,
+      mockMessagesControllerComponents
     )(mockConfig)
   }
 
@@ -86,7 +87,7 @@ class BroughtForwardLossesActionSpec extends UnitSpec with WithFakeApplication w
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new BroughtForwardLossesController(mockEnvironment, mockHttp, mockCalcConnector)(mockConfig) {
+    new BroughtForwardLossesController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig) {
       val calcConnector: CalculatorConnector = mockCalcConnector
     }
   }

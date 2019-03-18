@@ -31,14 +31,18 @@ import play.api.Play.current
 import controllers.utils.RecoverableFuture
 import javax.inject.Inject
 import play.api.Environment
+import play.api.i18n.I18nSupport
+import play.api.mvc.MessagesControllerComponents
 
 import scala.concurrent.Future
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import scala.concurrent.ExecutionContext.Implicits.global
 
-class BroughtForwardLossesController @Inject()(environment: Environment,
-                                               http: DefaultHttpClient,calcConnector: CalculatorConnector)(implicit val applicationConfig: ApplicationConfig)
-                                                extends FrontendController with ValidActiveSession {
+class BroughtForwardLossesController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
+                                               mcc: MessagesControllerComponents)
+                                              (implicit val applicationConfig: ApplicationConfig)
+                                                extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
 
   def generateBackLink(implicit hc: HeaderCarrier): Future[String] = {

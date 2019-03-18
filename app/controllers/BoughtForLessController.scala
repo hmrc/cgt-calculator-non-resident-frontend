@@ -19,26 +19,29 @@ package controllers
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import config.ApplicationConfig
 import connectors.CalculatorConnector
-import constructors.{CalculationElectionConstructor, DefaultCalculationElectionConstructor}
+import constructors.DefaultCalculationElectionConstructor
 import controllers.predicates.ValidActiveSession
-import forms.BoughtForLessForm._
-import models.BoughtForLessModel
-import play.api.data.Form
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-import views.html.calculation
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 import controllers.utils.RecoverableFuture
+import forms.BoughtForLessForm._
 import javax.inject.Inject
+import models.BoughtForLessModel
 import play.api.Environment
+import play.api.Play.current
+import play.api.data.Form
+import play.api.i18n.I18nSupport
+import play.api.mvc.MessagesControllerComponents
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import views.html.calculation
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class BoughtForLessController @Inject()(environment: Environment,
-                                        http: DefaultHttpClient,calcConnector: CalculatorConnector,
-                                        calcElectionConstructor: DefaultCalculationElectionConstructor)(implicit val applicationConfig: ApplicationConfig)
-                                          extends FrontendController with ValidActiveSession {
+class BoughtForLessController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
+                                        calcElectionConstructor: DefaultCalculationElectionConstructor,
+                                        mcc: MessagesControllerComponents)
+                                       (implicit val applicationConfig: ApplicationConfig)
+                                          extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
 
   val boughtForLess = ValidateSession.async { implicit request =>

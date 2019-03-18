@@ -20,21 +20,22 @@ import assets.MessageLookup.{NonResident => messages}
 import config.ApplicationConfig
 import constructors.helpers.AssertHelpers
 import controllers.helpers.FakeRequestHelper
-import org.jsoup.Jsoup
 import forms.BroughtForwardLossesForm._
+import org.jsoup.Jsoup
+import org.scalatest.mockito.MockitoSugar
+import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.broughtForwardLosses
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 
-class BroughtForwardLossesViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper with AssertHelpers {
+class BroughtForwardLossesViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper with AssertHelpers with MockitoSugar{
 
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+ implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
 
   "Brought forward losses view" when {
 
     "provided with no errors" should {
-      lazy val view = broughtForwardLosses(broughtForwardLossesForm, "back-link")(fakeRequest,applicationMessages, fakeApplication, mockConfig)
+      lazy val view = broughtForwardLosses(broughtForwardLossesForm, "back-link")(fakeRequest,mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of ${messages.BroughtForwardLosses.question}" in {
@@ -137,7 +138,7 @@ class BroughtForwardLossesViewSpec extends UnitSpec with WithFakeApplication wit
 
     "provided with errors" should {
       lazy val form = broughtForwardLossesForm.bind(Map("isClaiming" -> "Yes", "broughtForwardLoss" -> ""))
-      lazy val view = broughtForwardLosses(form, "back-link")(fakeRequest,applicationMessages, fakeApplication, mockConfig)
+      lazy val view = broughtForwardLosses(form, "back-link")(fakeRequest,mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

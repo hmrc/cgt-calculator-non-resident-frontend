@@ -20,12 +20,15 @@ import assets.MessageLookup.{SummaryPartialMessages => messages}
 import controllers.helpers.FakeRequestHelper
 import models.{TaxYearModel, TotalTaxOwedModel}
 import org.jsoup.Jsoup
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
+import org.scalatest.mockito.MockitoSugar
+import play.api.i18n.Lang
+import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.helpers
 
-class SummaryPartialViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper {
+class SummaryPartialViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper with MockitoSugar {
+  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  implicit val mockLang = mock[Lang]
 
   "the summaryPartial" should {
 
@@ -61,7 +64,7 @@ class SummaryPartialViewSpec extends UnitSpec with WithFakeApplication with Fake
         100.00,
         100.00,
         0
-      )(fakeRequestWithSession, applicationMessages)
+      )(fakeRequestWithSession, mockMessage)
       lazy val doc = Jsoup.parse(view.body)
 
       "the header" should {
@@ -160,7 +163,7 @@ class SummaryPartialViewSpec extends UnitSpec with WithFakeApplication with Fake
         100.00,
         100.00,
         0
-      )(fakeRequestWithSession, applicationMessages)
+      )(fakeRequestWithSession, mockMessage)
       lazy val doc = Jsoup.parse(view.body)
 
       "the header" should {

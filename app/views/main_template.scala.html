@@ -15,12 +15,9 @@
  *@
 
 @import config.ApplicationConfig
-@import helpers.full_width_banner
-@import helpers.full_width_banner_content_ur
 @import controllers.CgtLanguageController
-@import uk.gov.hmrc.play.views.html.layouts
+@import helpers.{full_width_banner, full_width_banner_content_ur}
 @import play.api.Application
-@import views.html.helpers._
 
 @(title: String,
   sidebarLinks: Option[Html] = None,
@@ -41,7 +38,7 @@
         @sidebarLinks.get
     </div>
 }
-
+@import uk.gov.hmrc.play.views.html.layouts
 @sidebar = {
     @if(sidebarLinks.isDefined) {
         @layouts.sidebar(sidebarContent, Some("sidebar"))
@@ -57,7 +54,7 @@
 }
 
 @contentHeader = {
-    <div class="float--right">@language_selection(lc.languageMap, lc.langToCall, None)</div>
+    <div class="float--right">@helpers.language_selection(lc.languageMap, lc.langToCall, None)(messages)</div>
 }
 
 @afterHeader = {
