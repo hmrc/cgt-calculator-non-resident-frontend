@@ -25,7 +25,6 @@ trait AppConfig {
   val analyticsToken: String
   val analyticsHost: String
   val contactFormServiceIdentifier: String
-  val contactFrontendPartialBaseUrl: String
   val reportAProblemPartialUrl: String
   val reportAProblemNonJSUrl: String
   val nrIFormLink: String
@@ -38,14 +37,13 @@ class ApplicationConfig @Inject()(val servicesConfig: ServicesConfig,
   private def loadConfig(key: String): String = servicesConfig.getString(key)
   private def getFeature(key: String) = servicesConfig.getBoolean(key)
 
-  lazy val contactFrontendService = servicesConfig.baseUrl("contact-frontend")
+  lazy val contactFrontendService = servicesConfig.getConfString("contact-frontend.www", "")
 
   lazy val assetsPrefix: String = loadConfig("assets.url") + loadConfig("assets.version")
   lazy val analyticsToken: String = loadConfig("google-analytics.token")
   lazy val analyticsHost: String = loadConfig("google-analytics.host")
 
   lazy val contactFormServiceIdentifier = "CGT"
-  lazy val contactFrontendPartialBaseUrl = s"$contactFrontendService"
   lazy val reportAProblemPartialUrl = s"$contactFrontendService/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
   lazy val reportAProblemNonJSUrl = s"$contactFrontendService/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
 
