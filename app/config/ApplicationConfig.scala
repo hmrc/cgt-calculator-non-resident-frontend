@@ -17,6 +17,7 @@
 package config
 
 import javax.inject.Inject
+import play.api.Environment
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 trait AppConfig {
@@ -32,13 +33,12 @@ trait AppConfig {
   val urBannerLink: String
 }
 
-class ApplicationConfig @Inject()(val servicesConfig: ServicesConfig) extends AppConfig {
-
+class ApplicationConfig @Inject()(val servicesConfig: ServicesConfig,
+                                  val environment: Environment) extends AppConfig {
   private def loadConfig(key: String): String = servicesConfig.getString(key)
   private def getFeature(key: String) = servicesConfig.getBoolean(key)
 
-  lazy val contactFrontendService = "contact-frontend"
-  private lazy val contactHost = servicesConfig.getString("microservice.services.contact-frontend.host")
+  lazy val contactFrontendService = servicesConfig.baseUrl("contact-frontend")
 
   lazy val assetsPrefix: String = loadConfig("assets.url") + loadConfig("assets.version")
   lazy val analyticsToken: String = loadConfig("google-analytics.token")
@@ -46,8 +46,8 @@ class ApplicationConfig @Inject()(val servicesConfig: ServicesConfig) extends Ap
 
   lazy val contactFormServiceIdentifier = "CGT"
   lazy val contactFrontendPartialBaseUrl = s"$contactFrontendService"
-  lazy val reportAProblemPartialUrl = s"$contactHost/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
-  lazy val reportAProblemNonJSUrl = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
+  lazy val reportAProblemPartialUrl = s"$contactFrontendService/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
+  lazy val reportAProblemNonJSUrl = s"$contactFrontendService/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
 
   lazy val nrIFormLink: String = loadConfig("links.non-resident-iForm")
   lazy val govUkLink: String = loadConfig("links.gov-uk")
