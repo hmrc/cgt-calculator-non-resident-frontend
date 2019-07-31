@@ -320,15 +320,17 @@ object MessageLookup {
 
     object PrivateResidenceRelief {
       val question = "Are you claiming Private Residence Relief?"
-      val intro = "You may be entitled to Private Residence Relief if you ever lived in the property as your main home."
-      val findOut = "Find out more about"
-      val findOutAboutPRRLink = "Private Residence Relief"
+      val intro1 = "You could get full tax relief of 365 days for any tax years when you or your spouse or civil partner spent at least 90 days in your UK home."
+      val intro2 = "You could get full tax relief of 365 days for any tax years after 6 April 2015 when you or your spouse or civil partner spent at least 90 days in your UK home."
+      val qualify = "To qualify, you must nominate the home you are selling as your only or main home to HMRC."
+      val findOut = "See more details about"
+      val findOutAboutPRRLink = "Private Residence Relief for non-UK residents"
       val formHelp = "To work out your Private Residence Relief, we need some information about when you lived in the property."
-      val questionBefore = "For how many days before 6 April 2015 did you live in this property as your main home?"
+      val questionBefore = "How many days before 6 April 2015 did you live in this property as your main home?"
       val questionBetween = "For how many days between 6 April 2015 and"
-      val questionBetweenEnd = "did you live in this property as your main home?"
+      val questionBetweenEnd = "did this property qualify for relief?"
       def questionAcquisitionDateAfterStartDate(message: String): String =
-        s"For how many days before $message were you living in this property as your main home?"
+        s"For how many days before $message did this property qualify for relief?"
       val questionBetweenWhyThisDate: String = "is the date you transferred the property minus 18 months (you automatically" +
         " get Private Residence Relief for the last 18 months that you owned the property)"
       val questionBeforeWhyThisDate = "6 April 2015 is when the Capital Gains Tax rules for non-UK residents came into effect"
