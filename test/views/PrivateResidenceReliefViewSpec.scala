@@ -187,7 +187,7 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
           document.title() shouldBe messages.PrivateResidenceRelief.question
         }
 
-        s"has the a paragraph with the text '${messages.PrivateResidenceRelief.intro1}' " in {
+        s"have a paragraph with the text '${messages.PrivateResidenceRelief.intro1}' " in {
           document.select("p#intro").text() shouldBe (messages.PrivateResidenceRelief.intro1 + " " + messages.PrivateResidenceRelief.qualify)
         }
 
@@ -195,7 +195,7 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
 
           lazy val hiddenContent = document.body().select("#hidden")
 
-          "which has a two divs with a class of form-group for one question" in {
+          "has a two divs with a class of form-group for one question" in {
             hiddenContent.select("div.form-group").size() shouldBe 1
           }
 
@@ -233,6 +233,10 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
 
         s"have a title of '${messages.PrivateResidenceRelief.question}'" in {
           document.title() shouldBe messages.PrivateResidenceRelief.question
+        }
+
+        s"have a paragraph with the text '${messages.PrivateResidenceRelief.intro1}' " in {
+          document.select("p#intro").text() shouldBe (messages.PrivateResidenceRelief.intro1 + " " + messages.PrivateResidenceRelief.qualify)
         }
 
         "display the yes/no buttons" in {

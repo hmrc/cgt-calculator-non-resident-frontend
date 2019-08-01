@@ -103,10 +103,10 @@
     <h1 class="heading-xlarge">@messages("calc.privateResidenceRelief.question")</h1>
 
     <p id="intro">
-        @if(showOnlyFlatQuestion) {
-            @messages("calc.privateResidenceRelief.intro1")
-        } else {
+        @if(daysBetweenShow) {
             @messages("calc.privateResidenceRelief.intro2")
+        } else {
+            @messages("calc.privateResidenceRelief.intro1")
         }
         @messages("calc.privateResidenceRelief.qualify")
     </p>
