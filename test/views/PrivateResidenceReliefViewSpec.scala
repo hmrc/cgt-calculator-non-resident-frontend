@@ -73,8 +73,8 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
           document.body().select("h1").text shouldBe messages.PrivateResidenceRelief.question
         }
 
-        s"has the a paragraph with the text '${messages.PrivateResidenceRelief.intro}' " in {
-          document.select("p#intro").text() shouldBe messages.PrivateResidenceRelief.intro
+        s"has the a paragraph with the text '${messages.PrivateResidenceRelief.intro2}' " in {
+          document.select("p#intro").text() shouldBe (messages.PrivateResidenceRelief.intro2 + " " + messages.PrivateResidenceRelief.qualify)
         }
 
         "has a section with a help link" which {
@@ -187,11 +187,15 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
           document.title() shouldBe messages.PrivateResidenceRelief.question
         }
 
+        s"have a paragraph with the text '${messages.PrivateResidenceRelief.intro1}' " in {
+          document.select("p#intro").text() shouldBe (messages.PrivateResidenceRelief.intro1 + " " + messages.PrivateResidenceRelief.qualify)
+        }
+
         "have some hidden content" which {
 
           lazy val hiddenContent = document.body().select("#hidden")
 
-          "which has a two divs with a class of form-group for one question" in {
+          "has a two divs with a class of form-group for one question" in {
             hiddenContent.select("div.form-group").size() shouldBe 1
           }
 
@@ -229,6 +233,10 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
 
         s"have a title of '${messages.PrivateResidenceRelief.question}'" in {
           document.title() shouldBe messages.PrivateResidenceRelief.question
+        }
+
+        s"have a paragraph with the text '${messages.PrivateResidenceRelief.intro1}' " in {
+          document.select("p#intro").text() shouldBe (messages.PrivateResidenceRelief.intro1 + " " + messages.PrivateResidenceRelief.qualify)
         }
 
         "display the yes/no buttons" in {
