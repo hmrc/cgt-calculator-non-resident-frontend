@@ -21,7 +21,7 @@ import uk.gov.hmrc.versioning.SbtGitVersioning
 
 object FrontendBuild extends Build with MicroService {
 
-  val appName = "cgt-calculator-non-resident-frontend"
+  val appName = "cgt-calculator-non-resident-frontnend"
 
   override lazy val plugins: Seq[Plugins] = Seq(
     SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin
@@ -41,6 +41,7 @@ private object AppDependencies {
     "uk.gov.hmrc" %% "play-partials" % "6.5.0",
     "uk.gov.hmrc" %% "http-caching-client" % "8.1.0",
     "uk.gov.hmrc" %% "mongo-caching" % "6.1.0-play-26",
+    "uk.gov.hmrc" %% "simple-reactivemongo" % "7.20.0-play-25",
     "uk.gov.hmrc" %% "play-language" % "3.4.0",
     "it.innove"   % "play2-pdf" % "1.5.1",
     "uk.gov.hmrc" %% "govuk-template" % "5.30.0-play-26",
