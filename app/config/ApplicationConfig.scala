@@ -30,6 +30,7 @@ trait AppConfig {
   val nrIFormLink: String
   val govUkLink: String
   val urBannerLink: String
+  val googleTagManagerId: String
 }
 
 class ApplicationConfig @Inject()(val servicesConfig: ServicesConfig,
@@ -50,4 +51,5 @@ class ApplicationConfig @Inject()(val servicesConfig: ServicesConfig,
   lazy val nrIFormLink: String = loadConfig("links.non-resident-iForm")
   lazy val govUkLink: String = loadConfig("links.gov-uk")
   lazy val urBannerLink = "https://signup.take-part-in-research.service.gov.uk/?utm_campaign=CGT_non_resident_summary&utm_source=Survey_Banner&utm_medium=other&t=HMRC&id=116"
+  lazy val googleTagManagerId: String = loadConfig(s"google-tag-manager.id")
 }
