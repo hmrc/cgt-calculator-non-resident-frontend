@@ -24,7 +24,7 @@ import models._
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito.{when, _}
 import org.mockito.stubbing.OngoingStubbing
-import org.scalatest.mock.MockitoSugar
+import org.scalatest.mockito.MockitoSugar
 import play.api.Environment
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.HeaderCarrier

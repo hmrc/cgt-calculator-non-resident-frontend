@@ -174,4 +174,44 @@ class FinalTaxAnswersRequestConstructorSpec extends UnitSpec {
       FinalTaxAnswersRequestConstructor.broughtForwardLosses(None) shouldBe ""
     }
   }
+
+  "Calling .additionalParametersQuery" should {
+    "Return a String only containing the annualExemptAmount" when {
+      "No TotalPersonalDetailsCalculationModel is passed" in {
+        FinalTaxAnswersRequestConstructor.additionalParametersQuery(None, BigDecimal(100)) shouldBe "&annualExemptAmount=100"
+      }
+    }
+
+    "Return a String containing currentIncome & annualExemptAmount" when {
+      "A  minimum TotalPersonalDetailsCalculationModel is passed" in {
+        val model = TotalPersonalDetailsCalculationModel(currentIncomeModel = CurrentIncomeModel(BigDecimal(100)),
+          personalAllowanceModel = None,
+          otherPropertiesModel = OtherPropertiesModel(""),
+          previousGainOrLoss = None,
+          howMuchLossModel = None,
+          howMuchGainModel = None,
+          annualExemptAmountModel = None,
+          broughtForwardLossesModel = BroughtForwardLossesModel(false, None))
+
+        FinalTaxAnswersRequestConstructor.additionalParametersQuery(Some(model), BigDecimal(100)) shouldBe "&currentIncome=100&annualExemptAmount=100"
+      }
+    }
+
+    "Return a String containing all data" when {
+      "A TotalPersonalDetailsCalculationModel is passed" in {
+        val model = TotalPersonalDetailsCalculationModel(currentIncomeModel = CurrentIncomeModel(BigDecimal(100)),
+          personalAllowanceModel = Some(PersonalAllowanceModel(BigDecimal(200))),
+          otherPropertiesModel = OtherPropertiesModel(""),
+          previousGainOrLoss = Some(PreviousLossOrGainModel("loss")),
+          howMuchLossModel = Some(HowMuchLossModel(BigDecimal(300))),
+          howMuchGainModel = Some(HowMuchGainModel(BigDecimal(400))),
+          annualExemptAmountModel = Some(AnnualExemptAmountModel(BigDecimal(500))),
+          broughtForwardLossesModel = BroughtForwardLossesModel(false, None))
+
+        FinalTaxAnswersRequestConstructor.additionalParametersQuery(Some(model), model.annualExemptAmountModel.get.annualExemptAmount) shouldBe "&currentIncome=100&personalAllowanceAmt=200&annualExemptAmount=500"
+      }
+    }
+
+  }
+
 }

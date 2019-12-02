@@ -23,7 +23,7 @@ import controllers.helpers.FakeRequestHelper
 import models._
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
-import org.scalatest.mock.MockitoSugar
+import org.scalatest.mockito.MockitoSugar
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 import scala.concurrent.Future
@@ -219,6 +219,17 @@ class TaxableGainCalculationSpec extends UnitSpec with WithFakeApplication with 
       val result = TaxableGainCalculation.getChargeableGain(totalGainAnswersModel, Some(prrModel), Some(propertyLivedIn), None, 11000, mockCalcConnector)
 
       "return a None" in {
+        await(result) shouldBe None
+      }
+    }
+  }
+
+  "Calling .getPropertyLivedInResponse" when {
+
+    "when no gain exists" should {
+      val result = TaxableGainCalculation.getPropertyLivedInResponse(false, mockCalcConnector)
+
+      "return None" in {
         await(result) shouldBe None
       }
     }

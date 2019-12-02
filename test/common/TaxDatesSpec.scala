@@ -44,4 +44,28 @@ class TaxDatesSpec extends UnitSpec {
       TaxDates.taxYearStringToInteger("2016/17") shouldBe 2017
     }
   }
+
+  "Calling dateAfter18Months" should {
+    "return true after 18 months from 5/4/2015" in {
+      TaxDates.dateAfter18Months(7,10,2016) shouldBe true
+      TaxDates.dateAfter18Months(8,10,2016) shouldBe true
+    }
+
+    "return true before 18 months from 5/4/2015" in {
+      TaxDates.dateAfter18Months(5,10,2016) shouldBe false
+      TaxDates.dateAfter18Months(6,10,2016) shouldBe false
+    }
+  }
+
+  "Calling dateInsideTaxYear" should {
+    "return true in between 6/4/2016 and 5/4/2017" in {
+      TaxDates.dateInsideTaxYear(6, 4, 2016) shouldBe true
+      TaxDates.dateInsideTaxYear(5, 4, 2017) shouldBe true
+    }
+
+    "return false before 6/4/2016 and after 5/4/2017" in {
+      TaxDates.dateInsideTaxYear(5, 4, 2016) shouldBe false
+      TaxDates.dateInsideTaxYear(6, 4, 2017) shouldBe false
+    }
+  }
 }

@@ -27,17 +27,14 @@ import views.html.calculation
 import models.{CalculationResultsWithTaxOwedModel, OtherReliefsModel, TotalGainResultsModel}
 import play.api.data.Form
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import controllers.utils.RecoverableFuture
 import javax.inject.Inject
-import play.api.Environment
 import play.api.i18n.I18nSupport
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 
 class OtherReliefsTAController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
                                          answersConstructor: AnswersConstructor,

@@ -94,6 +94,23 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
     None
   )
 
+  val totalGainForLessNoHowBecameOwnerModel = TotalGainAnswersModel(
+    DateModel(10, 10, 2016),
+    SoldOrGivenAwayModel(true),
+    Some(SoldForLessModel(true)),
+    DisposalValueModel(10000),
+    DisposalCostsModel(100),
+    None,
+    Some(BoughtForLessModel(true)),
+    AcquisitionValueModel(5000),
+    AcquisitionCostsModel(200),
+    DateModel(1, 4, 2013),
+    Some(RebasedValueModel(7500)),
+    Some(RebasedCostsModel("Yes", Some(150))),
+    ImprovementsModel("Yes", Some(50), Some(25)),
+    None
+  )
+
   def costsBeforeLegislationStart(hasCosts: Boolean): TotalGainAnswersModel = {
       val model = if(hasCosts) CostsAtLegislationStartModel("Yes", Some(1000)) else CostsAtLegislationStartModel("No", None)
 
@@ -265,6 +282,7 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
       }
     }
 
+
     "the property was bought" should {
       lazy val result = PurchaseDetailsConstructor.howBecameOwnerRow(totalGainSold).get
 
@@ -278,6 +296,12 @@ class PurchaseDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
 
       "have the value of Inherited" in {
         result.data shouldBe "calc.howBecameOwner.inherited"
+      }
+    }
+
+    "there is no HowBecameOwnerModel" should {
+      "return None" in {
+        PurchaseDetailsConstructor.howBecameOwnerRow(totalGainForLessNoHowBecameOwnerModel) shouldBe None
       }
     }
   }

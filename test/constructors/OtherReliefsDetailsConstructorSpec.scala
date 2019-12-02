@@ -191,4 +191,39 @@ class OtherReliefsDetailsConstructorSpec extends UnitSpec with AssertHelpers wit
       }
     }
   }
+
+  "Calling . getOtherReliefsSection" when {
+    "No otherReliefs are given" should {
+      "return an empty list" in {
+        val result = target.getOtherReliefsSection(None, CalculationType.flat)
+
+        result shouldBe Seq.empty
+      }
+    }
+
+    "otherReliefs are given" should {
+      "return a list with otherReliefsFlat" in {
+        val model = OtherReliefsModel(BigDecimal(100))
+        val result = target.getOtherReliefsSection(Some(model), CalculationType.flat)
+
+        result shouldBe List(QuestionAnswerModel("nr:otherReliefsFlat",100,"How much extra tax relief are you claiming?",None,None))
+      }
+
+
+      "return a list with otherReliefsRebased" in {
+        val model = OtherReliefsModel(BigDecimal(100))
+        val result = target.getOtherReliefsSection(Some(model), CalculationType.rebased)
+
+        result shouldBe List(QuestionAnswerModel("nr:otherReliefsRebased",100,"How much extra tax relief are you claiming?",None,None))
+      }
+
+      "return a list with otherReliefsTA" in {
+        val model = OtherReliefsModel(BigDecimal(100))
+        val result = target.getOtherReliefsSection(Some(model), CalculationType.timeApportioned)
+
+        result shouldBe List(QuestionAnswerModel("nr:otherReliefsTA",100,"How much extra tax relief are you claiming?",None,None))
+      }
+
+    }
+  }
 }
