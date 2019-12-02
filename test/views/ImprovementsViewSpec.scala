@@ -39,7 +39,7 @@ class ImprovementsViewSpec extends UnitSpec with WithFakeApplication with FakeRe
     "supplied with no errors, improvementsOptions = true and is owner after legislation start" should {
 
       lazy val view = improvements(improvementsForm(true), improvementsOptions = false,
-        "back-link", ownerBeforeLegislationStart = false)(fakeRequest,mockMessage,fakeApplication,mockMessagesApi,mockConfig)
+        "back-link", ownerBeforeLegislationStart = false)(fakeRequest, mockMessage, fakeApplication, mockMessagesApi, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "return some HTML that" should {
@@ -131,7 +131,7 @@ class ImprovementsViewSpec extends UnitSpec with WithFakeApplication with FakeRe
         }
 
         s"has the correct id for the radio options 'isClaimingImprovements'" in {
-          document.body.select("input").attr("id") should include ("isClaimingImprovements")
+          document.body.select("input").attr("id") should include("isClaimingImprovements")
         }
 
         "have a form" which {
@@ -182,18 +182,24 @@ class ImprovementsViewSpec extends UnitSpec with WithFakeApplication with FakeRe
           }
         }
       }
+
+      "should produce the same output when render and f are called" in {
+        improvements.f(improvementsForm(true), false,
+          "back-link",  false)(fakeRequest, mockMessage, fakeApplication, mockMessagesApi, mockConfig) shouldBe improvements.render(improvementsForm(true), false,
+          "back-link", false, fakeRequest, mockMessage, fakeApplication, mockMessagesApi, mockConfig)
+      }
     }
 
     "supplied with no errors and improvementsOptions = false" should {
 
-      lazy val view = improvements(improvementsForm(true), improvementsOptions = true, "back-link", ownerBeforeLegislationStart = false)(fakeRequest,mockMessage,fakeApplication,mockMessagesApi,mockConfig)
+      lazy val view = improvements(improvementsForm(true), improvementsOptions = true, "back-link", ownerBeforeLegislationStart = false)(fakeRequest, mockMessage, fakeApplication, mockMessagesApi, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "return some HTML that" should {
 
         "have that content" which {
           s"display the correct wording for radio option 'isClaimingImprovements'" in {
-            document.body.select("input").attr("id") should include ("isClaimingImprovements")
+            document.body.select("input").attr("id") should include("isClaimingImprovements")
           }
         }
 
@@ -217,7 +223,7 @@ class ImprovementsViewSpec extends UnitSpec with WithFakeApplication with FakeRe
 
     "supplied with no errors and is owner before legislation start" should {
 
-      lazy val view = improvements(improvementsForm(true), improvementsOptions = true, "back-link", ownerBeforeLegislationStart = true)(fakeRequest,mockMessage,fakeApplication,mockMessagesApi,mockConfig)
+      lazy val view = improvements(improvementsForm(true), improvementsOptions = true, "back-link", ownerBeforeLegislationStart = true)(fakeRequest, mockMessage, fakeApplication, mockMessagesApi, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "return some HTML that" should {
@@ -246,7 +252,7 @@ class ImprovementsViewSpec extends UnitSpec with WithFakeApplication with FakeRe
 
     "supplied with errors" should {
       lazy val form = improvementsForm(true).bind(Map("improvements" -> "testData"))
-      lazy val view = improvements(form, improvementsOptions = true, "back-link", ownerBeforeLegislationStart = false)(fakeRequest,mockMessage,fakeApplication,mockMessagesApi,mockConfig)
+      lazy val view = improvements(form, improvementsOptions = true, "back-link", ownerBeforeLegislationStart = false)(fakeRequest, mockMessage, fakeApplication, mockMessagesApi, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

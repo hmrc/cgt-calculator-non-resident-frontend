@@ -138,6 +138,11 @@ class AcquisitionCostsViewSpec extends UnitSpec with WithFakeApplication with Mo
           button.attr("id") shouldBe "continue-button"
         }
       }
+
+      "produce the same output when render and f are called" in {
+        acquisitionCosts.render(acquisitionCostsForm, "back-link", ownerBeforeLegislation = true, fakeRequest,mockMessage, fakeApplication, mockConfig) shouldBe
+          acquisitionCosts.f(acquisitionCostsForm, "back-link", true)(fakeRequest,mockMessage, fakeApplication, mockConfig)
+      }
     }
 
     "is owner after legislation start" should {

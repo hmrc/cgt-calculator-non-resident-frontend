@@ -19,7 +19,7 @@ package constructors
 import assets.MessageLookup.NonResident.{CalculationElection => messages}
 import javax.inject.Inject
 import models._
-import org.scalatest.mock.MockitoSugar
+import org.scalatest.mockito.MockitoSugar
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 class CalculationElectionConstructorSpec @Inject()(target: CalculationElectionConstructor) extends UnitSpec with MockitoSugar with WithFakeApplication {

@@ -34,7 +34,7 @@ class CostsAtLegislationStartViewSpec extends UnitSpec with WithFakeApplication 
   "The costs at legislation start date view" when {
 
     "not supplied with a pre-existing stored model" should {
-      lazy val view = costsAtLegislationStart(costsAtLegislationStartForm)(fakeRequest, mockMessage,fakeApplication,mockConfig)
+      lazy val view = costsAtLegislationStart(costsAtLegislationStartForm)(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       s"Have the title ${messages.CostsAtLegislationStart.title}" in {
@@ -112,6 +112,11 @@ class CostsAtLegislationStartViewSpec extends UnitSpec with WithFakeApplication 
           button.attr("id") shouldBe "continue-button"
         }
       }
+
+      "should produce the same output when render and f are called" in {
+        costsAtLegislationStart.f(costsAtLegislationStartForm)(fakeRequest, mockMessage, fakeApplication, mockConfig) shouldBe
+          costsAtLegislationStart.render(costsAtLegislationStartForm, fakeRequest, mockMessage, fakeApplication, mockConfig)
+      }
     }
 
     "supplied with errors" should {
@@ -119,7 +124,7 @@ class CostsAtLegislationStartViewSpec extends UnitSpec with WithFakeApplication 
         "hasCosts" -> "Yes",
         "costs" -> ""
       ))
-      lazy val view = costsAtLegislationStart(form)(fakeRequest, mockMessage,fakeApplication,mockConfig)
+      lazy val view = costsAtLegislationStart(form)(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

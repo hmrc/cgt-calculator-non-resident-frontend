@@ -35,7 +35,7 @@ class WhatNextViewSpec extends UnitSpec with WithFakeApplication with MockitoSug
   "What next view should" when {
     implicit lazy val fakeApp: Application = fakeApplication
 
-    lazy val view = whatNext()(FakeRequest("GET", ""),mockMessage,fakeApplication, mockConfig)
+    lazy val view = whatNext()(FakeRequest("GET", ""), mockMessage, fakeApplication, mockConfig)
     lazy val doc = Jsoup.parse(view.body)
 
     s"have a title of ${messages.title}" in {
@@ -104,6 +104,10 @@ class WhatNextViewSpec extends UnitSpec with WithFakeApplication with MockitoSug
       "has an href linking to gov uk" in {
         link.attr("href") shouldBe "http://www.gov.uk"
       }
+    }
+
+    "should produce the same output when render and f are called" in {
+      whatNext.f()(FakeRequest("GET", ""), mockMessage, fakeApplication, mockConfig) shouldBe whatNext.render(FakeRequest("GET", ""), mockMessage, fakeApplication, mockConfig)
     }
   }
 }

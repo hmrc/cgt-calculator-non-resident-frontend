@@ -23,7 +23,7 @@ import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import forms.MarketValueWhenSoldForm._
 import org.jsoup.Jsoup
-import org.scalatest.mock.MockitoSugar
+import org.scalatest.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.marketValueSold
@@ -35,7 +35,7 @@ class MarketValueWhenSoldViewSpec extends UnitSpec with WithFakeApplication with
 
   "The market value when gave away page" should {
 
-    lazy val view = marketValueSold(marketValueForm)(fakeRequest, mockMessage,fakeApplication,mockConfig)
+    lazy val view = marketValueSold(marketValueForm)(fakeRequest, mockMessage, fakeApplication, mockConfig)
     lazy val document = Jsoup.parse(view.body)
 
     "supplied with no errors" should {
@@ -120,11 +120,15 @@ class MarketValueWhenSoldViewSpec extends UnitSpec with WithFakeApplication with
           button.attr("id") shouldBe "continue-button"
         }
       }
+
+      "should produce the same output when render and f are called" in {
+        marketValueSold.f(marketValueForm)(fakeRequest, mockMessage, fakeApplication, mockConfig) shouldBe marketValueSold.render(marketValueForm, fakeRequest, mockMessage, fakeApplication, mockConfig)
+      }
     }
 
     "supplied with a form with errors" should {
       lazy val form = marketValueForm.bind(Map("disposalValue" -> "testData"))
-      lazy val view = marketValueSold(form)(fakeRequest, mockMessage,fakeApplication,mockConfig)
+      lazy val view = marketValueSold(form)(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

@@ -34,7 +34,7 @@ class OtherReliefsRebasedViewSpec extends UnitSpec with WithFakeApplication with
   "The Other Reliefs Rebased view" when {
 
     "not supplied with a pre-existing stored value and a taxable gain" should {
-      lazy val view = otherReliefsRebased(otherReliefsForm, hasExistingReliefAmount = false, BigDecimal(2000), BigDecimal(2500))(fakeRequest, mockMessage,fakeApplication,mockConfig)
+      lazy val view = otherReliefsRebased(otherReliefsForm, hasExistingReliefAmount = false, BigDecimal(2000), BigDecimal(2500))(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have a back link" which {
@@ -131,11 +131,15 @@ class OtherReliefsRebasedViewSpec extends UnitSpec with WithFakeApplication with
           button.text() shouldBe messages.OtherReliefs.addRelief
         }
       }
+
+      "should produce the same output when render and f are called" in {
+        otherReliefsRebased.f(otherReliefsForm, false, BigDecimal(2000), BigDecimal(2500))(fakeRequest, mockMessage, fakeApplication, mockConfig) shouldBe otherReliefsRebased.render(otherReliefsForm,  false, BigDecimal(2000), BigDecimal(2500), fakeRequest, mockMessage, fakeApplication, mockConfig)
+      }
     }
 
     "supplied with a pre-existing stored value and a negative taxable gain" should {
       val map = Map("otherReliefs" -> "1000")
-      lazy val view = otherReliefsRebased(otherReliefsForm.bind(map), hasExistingReliefAmount = true, BigDecimal(-1000), BigDecimal(2000))(fakeRequest, mockMessage,fakeApplication,mockConfig)
+      lazy val view = otherReliefsRebased(otherReliefsForm.bind(map), hasExistingReliefAmount = true, BigDecimal(-1000), BigDecimal(2000))(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "has a list entry with the loss carried forward message and value" in {
@@ -161,7 +165,7 @@ class OtherReliefsRebasedViewSpec extends UnitSpec with WithFakeApplication with
 
     "supplied with an invalid map" should {
       val map = Map("otherReliefs" -> "-1000")
-      lazy val view = otherReliefsRebased(otherReliefsForm.bind(map), hasExistingReliefAmount = true, BigDecimal(2000), BigDecimal(2000))(fakeRequest, mockMessage,fakeApplication,mockConfig)
+      lazy val view = otherReliefsRebased(otherReliefsForm.bind(map), hasExistingReliefAmount = true, BigDecimal(2000), BigDecimal(2000))(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

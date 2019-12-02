@@ -35,7 +35,7 @@ class DisposalCostsViewSpec extends UnitSpec with WithFakeApplication with FakeR
   "Disposal Costs view" when {
 
     "supplied with no errors" should {
-      lazy val view = disposalCosts(disposalCostsForm, "back-link")(fakeRequest, mockMessage,fakeApplication,mockConfig)
+      lazy val view = disposalCosts(disposalCostsForm, "back-link")(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${messages.question}'" in {
@@ -145,11 +145,15 @@ class DisposalCostsViewSpec extends UnitSpec with WithFakeApplication with FakeR
           button.attr("id") shouldBe "continue-button"
         }
       }
+
+      "should produce the same output when render and f are called" in {
+        disposalCosts.f(disposalCostsForm, "back-link")(fakeRequest, mockMessage, fakeApplication, mockConfig) shouldBe disposalCosts.render(disposalCostsForm, "back-link", fakeRequest, mockMessage, fakeApplication, mockConfig)
+      }
     }
 
     "supplied with errors" should {
       lazy val form = disposalCostsForm.bind(Map("disposalCosts" -> "a"))
-      lazy val view = disposalCosts(form, "back-link")(fakeRequest, mockMessage,fakeApplication,mockConfig)
+      lazy val view = disposalCosts(form, "back-link")(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

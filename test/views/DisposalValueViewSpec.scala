@@ -34,7 +34,7 @@ class DisposalValueViewSpec extends UnitSpec with WithFakeApplication with Mocki
   "Disposal value view" when {
 
     "supplied with no errors" should {
-      lazy val view = disposalValue(disposalValueForm)(fakeRequest, mockMessage,fakeApplication,mockConfig)
+      lazy val view = disposalValue(disposalValueForm)(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${messages.DisposalValue.question}'" in {
@@ -117,11 +117,15 @@ class DisposalValueViewSpec extends UnitSpec with WithFakeApplication with Mocki
           button.attr("id") shouldBe "continue-button"
         }
       }
+
+      "should produce the same output when render and f are called" in {
+        disposalValue.f(disposalValueForm)(fakeRequest, mockMessage, fakeApplication, mockConfig) shouldBe disposalValue.render(disposalValueForm, fakeRequest, mockMessage, fakeApplication, mockConfig)
+      }
     }
 
     "supplied with a form with errors" should {
       lazy val form = disposalValueForm.bind(Map("disposalValue" -> "testData"))
-      lazy val view = disposalValue(form)(fakeRequest, mockMessage,fakeApplication,mockConfig)
+      lazy val view = disposalValue(form)(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

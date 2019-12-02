@@ -120,5 +120,10 @@ class AcquisitionValueViewSpec extends UnitSpec with WithFakeApplication with Fa
         document.select("#error-summary-display").size() shouldBe 1
       }
     }
+
+    "produce the same output when render and f are called " in {
+      views.acquisitionValue.render(acquisitionValueForm, fakeRequest,mockMessage, fakeApplication, mockConfig) shouldBe
+        views.acquisitionValue.f(acquisitionValueForm)(fakeRequest,mockMessage, fakeApplication, mockConfig)
+    }
   }
 }

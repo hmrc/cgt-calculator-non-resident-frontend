@@ -29,12 +29,12 @@ import views.html.calculation.otherReliefsTA
 class OtherReliefsTAViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
- implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
 
   "The Other Reliefs TA view" when {
 
     "not supplied with a pre-existing stored value and a taxable gain" should {
-      lazy val view = otherReliefsTA(otherReliefsForm,hasExistingReliefAmount = false, 1000, 100)(fakeRequest, mockMessage,fakeApplication,mockConfig)
+      lazy val view = otherReliefsTA(otherReliefsForm, hasExistingReliefAmount = false, 1000, 100)(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have a back link" which {
@@ -131,11 +131,15 @@ class OtherReliefsTAViewSpec extends UnitSpec with WithFakeApplication with Mock
           button.text() shouldBe messages.OtherReliefs.addRelief
         }
       }
+
+      "should produce the same output when render and f are called" in {
+        otherReliefsTA.f(otherReliefsForm, false, 1000, 100)(fakeRequest, mockMessage, fakeApplication, mockConfig) shouldBe otherReliefsTA.render(otherReliefsForm, false, 1000, 100, fakeRequest, mockMessage, fakeApplication, mockConfig)
+      }
     }
 
     "supplied with a pre-existing stored value and a negative taxable gain" should {
       val map = Map("otherReliefs" -> "1000")
-      lazy val view = otherReliefsTA(otherReliefsForm.bind(map),hasExistingReliefAmount = true, -1000, 100)(fakeRequest, mockMessage,fakeApplication,mockConfig)
+      lazy val view = otherReliefsTA(otherReliefsForm.bind(map), hasExistingReliefAmount = true, -1000, 100)(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "has a list entry with the loss carried forward message and value" in {
@@ -161,7 +165,7 @@ class OtherReliefsTAViewSpec extends UnitSpec with WithFakeApplication with Mock
 
     "supplied with an invalid map" should {
       val map = Map("otherReliefs" -> "-1000")
-      lazy val view = otherReliefsTA(otherReliefsForm.bind(map), hasExistingReliefAmount = true, 1000, 100)(fakeRequest, mockMessage,fakeApplication,mockConfig)
+      lazy val view = otherReliefsTA(otherReliefsForm.bind(map), hasExistingReliefAmount = true, 1000, 100)(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

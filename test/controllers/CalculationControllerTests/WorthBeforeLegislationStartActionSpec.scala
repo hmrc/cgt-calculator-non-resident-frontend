@@ -23,7 +23,7 @@ import models.WorthBeforeLegislationStartModel
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
-import org.scalatest.mock.MockitoSugar
+import org.scalatest.mockito.MockitoSugar
 import play.api.test.Helpers._
 import assets.MessageLookup.NonResident.{WorthBeforeLegislationStart => messages}
 import config.ApplicationConfig

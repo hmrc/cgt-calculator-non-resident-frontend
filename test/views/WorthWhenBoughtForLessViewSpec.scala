@@ -36,7 +36,7 @@ class WorthWhenBoughtForLessViewSpec extends UnitSpec with WithFakeApplication w
 
     "supplied with no errors" should {
 
-      lazy val view = worthWhenBoughtForLess(acquisitionMarketValueForm)(fakeRequest, mockMessage,fakeApplication,mockConfig)
+      lazy val view = worthWhenBoughtForLess(acquisitionMarketValueForm)(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${WorthWhenBoughtForLess.question}'" in {
@@ -122,12 +122,16 @@ class WorthWhenBoughtForLessViewSpec extends UnitSpec with WithFakeApplication w
           button.attr("id") shouldBe "continue-button"
         }
       }
+
+      "should produce the same output when render and f are called" in {
+        worthWhenBoughtForLess.f(acquisitionMarketValueForm)(fakeRequest, mockMessage, fakeApplication, mockConfig) shouldBe worthWhenBoughtForLess.render(acquisitionMarketValueForm, fakeRequest, mockMessage, fakeApplication, mockConfig)
+      }
     }
 
     "supplied with a form with errors" should {
 
       lazy val form = acquisitionMarketValueForm.bind(Map("acquisitionMarketValue" -> "a"))
-      lazy val view = worthWhenBoughtForLess(form)(fakeRequest, mockMessage,fakeApplication,mockConfig)
+      lazy val view = worthWhenBoughtForLess(form)(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

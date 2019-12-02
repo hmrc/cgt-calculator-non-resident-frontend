@@ -39,7 +39,7 @@ class ClaimingReliefsViewSpec extends UnitSpec with WithFakeApplication with Moc
 
     "supplied with no errors" should {
       lazy val form = ClaimingReliefsForm.claimingReliefsForm
-      lazy val view = claimingReliefs(form)(fakeRequest, mockMessage,fakeApplication,mockConfig)
+      lazy val view = claimingReliefs(form)(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       s"have the title ${messages.title}" in {
@@ -99,11 +99,15 @@ class ClaimingReliefsViewSpec extends UnitSpec with WithFakeApplication with Moc
           button.text shouldEqual s"${commonMessages.continue}"
         }
       }
+
+      "should produce the same output when render and f are called" in {
+        claimingReliefs.f(form)(fakeRequest, mockMessage, fakeApplication, mockConfig) shouldBe claimingReliefs.render(form, fakeRequest, mockMessage, fakeApplication, mockConfig)
+      }
     }
 
     "supplied with form errors" should {
       lazy val form = ClaimingReliefsForm.claimingReliefsForm.bind(Map("isClaimingReliefs" -> "abc"))
-      lazy val view = claimingReliefs(form)(fakeRequest, mockMessage,fakeApplication,mockConfig)
+      lazy val view = claimingReliefs(form)(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

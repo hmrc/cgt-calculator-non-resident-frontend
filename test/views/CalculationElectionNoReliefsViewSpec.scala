@@ -28,7 +28,7 @@ import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.calculationElectionNoReliefs
 
-class CalculationElectionNoReliefsViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper with MockitoSugar{
+class CalculationElectionNoReliefsViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper with MockitoSugar {
 
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
@@ -44,7 +44,7 @@ class CalculationElectionNoReliefsViewSpec extends UnitSpec with WithFakeApplica
 
     "supplied with no errors and lowest tax owed is rebased method" should {
 
-      lazy val view = calculationElectionNoReliefs(calculationElectionForm, rebasedLowestTaxOwed, "back-link")(fakeRequest,mockMessage, fakeApplication, mockConfig)
+      lazy val view = calculationElectionNoReliefs(calculationElectionForm, rebasedLowestTaxOwed, "back-link")(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val doc = Jsoup.parse(view.body)
 
       "have a heading" which {
@@ -130,7 +130,7 @@ class CalculationElectionNoReliefsViewSpec extends UnitSpec with WithFakeApplica
           ("time", "2000", "description", Messages("calc.calculationElection.description.time"), None, None)
         )
 
-      lazy val view = calculationElectionNoReliefs(calculationElectionForm, flatLowestTaxOwed, "back-link")(fakeRequest,mockMessage, fakeApplication, mockConfig)
+      lazy val view = calculationElectionNoReliefs(calculationElectionForm, flatLowestTaxOwed, "back-link")(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val doc = Jsoup.parse(view.body)
 
       "have text in a paragraph" which {
@@ -167,12 +167,24 @@ class CalculationElectionNoReliefsViewSpec extends UnitSpec with WithFakeApplica
 
     "supplied with errors" should {
       lazy val form = calculationElectionForm.bind(Map("calculationElection" -> "a"))
-      lazy val view = calculationElectionNoReliefs(form, rebasedLowestTaxOwed, "back-link")(fakeRequest,mockMessage, fakeApplication, mockConfig)
+      lazy val view = calculationElectionNoReliefs(form, rebasedLowestTaxOwed, "back-link")(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {
         document.select("#error-summary-display").size() shouldBe 1
       }
+    }
+
+    "should produce the same output when render and f are called" in {
+
+      lazy val flatLowestTaxOwed: Seq[(String, String, String, String, Option[String], Option[BigDecimal])] =
+        Seq(
+          ("flat", "0", "description", Messages("calc.calculationElection.description.flat"), None, None),
+          ("rebased", "1000", "description", Messages("calc.calculationElection.description.rebased"), None, None),
+          ("time", "2000", "description", Messages("calc.calculationElection.description.time"), None, None)
+        )
+
+      calculationElectionNoReliefs.f(calculationElectionForm, flatLowestTaxOwed, "back-link")(fakeRequest, mockMessage, fakeApplication, mockConfig) shouldBe calculationElectionNoReliefs.render(calculationElectionForm, flatLowestTaxOwed, "back-link", fakeRequest, mockMessage, fakeApplication, mockConfig)
     }
   }
 }

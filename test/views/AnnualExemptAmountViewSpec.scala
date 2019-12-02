@@ -119,5 +119,9 @@ class AnnualExemptAmountViewSpec extends UnitSpec with WithFakeApplication with 
         document.select("#error-summary-display").size() shouldBe 1
       }
     }
+
+    "should produce the same output when render and f are called" in {
+      annualExemptAmount.f(annualExemptAmountForm(BigDecimal(10000)), 11100, "back-url")(fakeRequest,mockMessage, fakeApplication, mockConfig) shouldBe annualExemptAmount.render(annualExemptAmountForm(BigDecimal(10000)), 11100, "back-url", fakeRequest,mockMessage, fakeApplication, mockConfig)
+    }
   }
 }

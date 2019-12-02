@@ -110,6 +110,11 @@ class AcquisitionDateViewSpec extends UnitSpec with WithFakeApplication with Moc
           button.attr("id") shouldBe "continue-button"
         }
       }
+
+      "produce the same output when render and f are called" in {
+        acquisitionDate.render(acquisitionDateForm, fakeRequest,mockMessage, fakeApplication, mockConfig) shouldBe
+          acquisitionDate.f(acquisitionDateForm)(fakeRequest,mockMessage, fakeApplication, mockConfig)
+      }
     }
 
     "supplied with an invalid date error day" should {

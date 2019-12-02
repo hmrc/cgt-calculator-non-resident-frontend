@@ -31,14 +31,14 @@ import play.api.Play.current
 import play.api.i18n.Messages
 import play.api.mvc.MessagesControllerComponents
 
-class MarketValueGaveAwayViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper{
+class MarketValueGaveAwayViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
 
   "The market value when gave away page" should {
 
-    lazy val view = marketValueGaveAway(marketValueForm)(fakeRequest, mockMessage,fakeApplication,mockConfig)
+    lazy val view = marketValueGaveAway(marketValueForm)(fakeRequest, mockMessage, fakeApplication, mockConfig)
     lazy val document = Jsoup.parse(view.body)
 
     "supplied with no errors" should {
@@ -123,16 +123,20 @@ class MarketValueGaveAwayViewSpec extends UnitSpec with WithFakeApplication with
           button.attr("id") shouldBe "continue-button"
         }
       }
+
+      "should produce the same output when render and f are called" in {
+        marketValueGaveAway.f(marketValueForm)(fakeRequest, mockMessage, fakeApplication, mockConfig) shouldBe marketValueGaveAway.render(marketValueForm, fakeRequest, mockMessage, fakeApplication, mockConfig)
+      }
     }
 
     "supplied with a form with errors" should {
       lazy val form = marketValueForm.bind(Map("disposalValue" -> "testData"))
-      lazy val view = marketValueGaveAway(form)(fakeRequest, mockMessage,fakeApplication,mockConfig)
+      lazy val view = marketValueGaveAway(form)(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {
-      document.select("#error-summary-display").size() shouldBe 1
+        document.select("#error-summary-display").size() shouldBe 1
       }
-      }
+    }
   }
 }

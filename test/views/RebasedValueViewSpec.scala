@@ -39,7 +39,7 @@ class RebasedValueViewSpec extends UnitSpec with WithFakeApplication with FakeRe
 
     "not supplied with a pre-existing stored model" should {
 
-      lazy val view = rebasedValue(rebasedValueForm, "google.com")(fakeRequest, mockMessage,fakeApplication,mockConfig)
+      lazy val view = rebasedValue(rebasedValueForm, "google.com")(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       s"Have the title ${messages.question}" in {
@@ -141,12 +141,16 @@ class RebasedValueViewSpec extends UnitSpec with WithFakeApplication with FakeRe
           button.text shouldEqual commonMessages.continue
         }
       }
+
+      "should produce the same output when render and f are called" in {
+        rebasedValue.f(rebasedValueForm, "google.com")(fakeRequest, mockMessage, fakeApplication, mockConfig) shouldBe rebasedValue.render(rebasedValueForm, "google.com", fakeRequest, mockMessage, fakeApplication, mockConfig)
+      }
     }
 
     "supplied with a form with errors" should {
 
       lazy val form = rebasedValueForm.bind(Map("rebasedValueAmt" -> ""))
-      lazy val view = rebasedValue(form, "google.com")(fakeRequest, mockMessage,fakeApplication,mockConfig)
+      lazy val view = rebasedValue(form, "google.com")(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

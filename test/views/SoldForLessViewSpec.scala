@@ -33,11 +33,11 @@ class SoldForLessViewSpec extends UnitSpec with WithFakeApplication with Mockito
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
 
 
-  "The Sold for Less view spec"  when {
+  "The Sold for Less view spec" when {
 
     "supplied with no errors" should {
 
-      lazy val view = soldForLess(soldForLessForm)(fakeRequest, mockMessage,fakeApplication,mockConfig)
+      lazy val view = soldForLess(soldForLessForm)(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${messages.question}'" in {
@@ -121,12 +121,16 @@ class SoldForLessViewSpec extends UnitSpec with WithFakeApplication with Mockito
           button.attr("id") shouldBe "continue-button"
         }
       }
+
+      "should produce the same output when render and f are called" in {
+        soldForLess.f(soldForLessForm)(fakeRequest, mockMessage, fakeApplication, mockConfig) shouldBe soldForLess.render(soldForLessForm, fakeRequest, mockMessage, fakeApplication, mockConfig)
+      }
     }
 
     "supplied with a form with errors" should {
 
       lazy val form = soldForLessForm.bind(Map("soldForLess" -> "a"))
-      lazy val view = soldForLess(form)(fakeRequest, mockMessage,fakeApplication,mockConfig)
+      lazy val view = soldForLess(form)(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

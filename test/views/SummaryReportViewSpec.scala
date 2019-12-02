@@ -68,7 +68,7 @@ class SummaryReportViewSpec extends UnitSpec with WithFakeApplication with FakeR
         disposalValue = 1000.00,
         acquisitionValue = 1000.00,
         totalCosts = 1000,
-        flatGain = Some(1000.00))(fakeRequest,mockMessage, Lang("en"), fakeApplication, mockConfig)
+        flatGain = Some(1000.00))(fakeRequest, mockMessage, Lang("en"), fakeApplication, mockConfig)
 
       lazy val document = Jsoup.parse(view.body)
 
@@ -86,6 +86,12 @@ class SummaryReportViewSpec extends UnitSpec with WithFakeApplication with FakeR
 
       "have a 'You've told us' section that" in {
         document.select("div.check-your-answers-report h2").text should include(nrMessages.Summary.yourAnswers)
+      }
+
+      "should produce the same output when render and f are called" in {
+        summaryReport.f(seqQuestionAnswers, totalTaxOwedModel, taxYear, sumModelFlat.calculationElectionModel.calculationType, 1000.00, 1000.00, 1000, Some(1000.00), BigDecimal(100.0))(fakeRequest, mockMessage, Lang("en"), fakeApplication, mockConfig) shouldBe
+          summaryReport.render(seqQuestionAnswers, totalTaxOwedModel, taxYear, sumModelFlat.calculationElectionModel.calculationType, 1000.00, 1000.00, 1000, Some(1000.00), BigDecimal(100.0), fakeRequest, mockMessage, Lang("en"), fakeApplication, mockConfig)
+
       }
     }
 
@@ -121,7 +127,7 @@ class SummaryReportViewSpec extends UnitSpec with WithFakeApplication with FakeR
         disposalValue = 1000.00,
         acquisitionValue = 1000.00,
         totalCosts = 1000,
-        flatGain = Some(1000.00))(fakeRequest,mockMessage, Lang("en"), fakeApplication, mockConfig)
+        flatGain = Some(1000.00))(fakeRequest, mockMessage, Lang("en"), fakeApplication, mockConfig)
 
       lazy val document = Jsoup.parse(view.body)
 

@@ -78,7 +78,7 @@ class DisposalDateViewSpec extends UnitSpec with WithFakeApplication with FakeRe
       }
 
       "have inputs using the id acquisitionDate" in {
-        document.body().select("input[type=number]").attr("id") should include ("disposalDate")
+        document.body().select("input[type=number]").attr("id") should include("disposalDate")
       }
 
       s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
@@ -103,6 +103,10 @@ class DisposalDateViewSpec extends UnitSpec with WithFakeApplication with FakeRe
         "has the text 'Continue'" in {
           button.text shouldEqual commonMessages.continue
         }
+      }
+
+      "should produce the same output when render and f are called" in {
+        disposalDate.f(disposalDateForm)(fakeRequest, mockMessage, Lang("en"), fakeApplication, mockConfig) shouldBe disposalDate.render(disposalDateForm, fakeRequest, mockMessage, Lang("en"), fakeApplication, mockConfig)
       }
     }
 

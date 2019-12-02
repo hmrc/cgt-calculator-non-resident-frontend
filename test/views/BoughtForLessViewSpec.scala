@@ -132,5 +132,12 @@ class BoughtForLessViewSpec extends UnitSpec with WithFakeApplication with Mocki
         document.select("#error-summary-display").size() shouldBe 1
       }
     }
+
+
+    "should produce the same output when render and f are called" in {
+      boughtForLess.f(boughtForLessForm)(fakeRequest,mockMessage, fakeApplication, mockConfig) shouldBe
+        boughtForLess.render(boughtForLessForm, fakeRequest,mockMessage, fakeApplication, mockConfig)
+
+    }
   }
 }

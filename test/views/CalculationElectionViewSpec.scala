@@ -27,6 +27,7 @@ import play.api.i18n.Messages
 import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.{calculation => views}
+import _root_.views.html.calculation.calculationElection
 
 class CalculationElectionViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper with MockitoSugar {
 
@@ -115,6 +116,18 @@ class CalculationElectionViewSpec extends UnitSpec with WithFakeApplication with
       "have an error summary" in {
         document.select("#error-summary-display").size() shouldBe 1
       }
+    }
+
+    "should produce the same output when render and f are called" in {
+
+      lazy val flatLowestTaxOwed: Seq[(String, String, String, String, Option[String], Option[BigDecimal])] =
+        Seq(
+          ("flat", "0", "description", Messages("calc.calculationElection.description.flat"), None, None),
+          ("rebased", "1000", "description", Messages("calc.calculationElection.description.rebased"), None, None),
+          ("time", "2000", "description", Messages("calc.calculationElection.description.time"), None, None)
+        )
+
+      calculationElection.f(calculationElectionForm, flatLowestTaxOwed)(fakeRequest, mockMessage, fakeApplication, mockConfig) shouldBe calculationElection.render(calculationElectionForm, flatLowestTaxOwed, fakeRequest, mockMessage, fakeApplication, mockConfig)
     }
   }
 

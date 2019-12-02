@@ -113,6 +113,10 @@ class WhoDidYouGiveItToViewSpec extends UnitSpec with WithFakeApplication with F
         continueButton.hasClass("button") shouldBe true
       }
     }
+
+    "should produce the same output when render and f are called" in {
+      whoDidYouGiveItTo.f(whoDidYouGiveItToForm)(fakeRequest, mockMessage, fakeApplication, mockConfig) shouldBe whoDidYouGiveItTo.render(whoDidYouGiveItToForm, fakeRequest, mockMessage, fakeApplication, mockConfig)
+    }
   }
 
   "WhoDidYouGiveItToView with form with errors" should {

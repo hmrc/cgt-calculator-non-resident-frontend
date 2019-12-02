@@ -37,7 +37,7 @@ class PersonalAllowanceViewSpec extends UnitSpec with WithFakeApplication with M
 
     "return some HTML" which {
 
-      lazy val view = personalAllowance(personalAllowanceForm(11000))(fakeRequest, mockMessage,fakeApplication,mockConfig)
+      lazy val view = personalAllowance(personalAllowanceForm(11000))(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       s"has the title ${messages.question}" in {
@@ -144,12 +144,16 @@ class PersonalAllowanceViewSpec extends UnitSpec with WithFakeApplication with M
           }
         }
       }
+
+      "should produce the same output when render and f are called" in {
+        personalAllowance.f(personalAllowanceForm(11000))(fakeRequest, mockMessage, fakeApplication, mockConfig) shouldBe personalAllowance.render(personalAllowanceForm(11000), fakeRequest, mockMessage, fakeApplication, mockConfig)
+      }
     }
 
     "when supplied with a form with errors" should {
 
       lazy val form = personalAllowanceForm(11000).bind(Map("personalAllowance" -> "132891"))
-      lazy val view = personalAllowance(form)(fakeRequest, mockMessage,fakeApplication,mockConfig)
+      lazy val view = personalAllowance(form)(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {
