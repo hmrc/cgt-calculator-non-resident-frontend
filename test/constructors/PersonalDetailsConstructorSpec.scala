@@ -631,4 +631,25 @@ class PersonalDetailsConstructorSpec extends UnitSpec with WithFakeApplication w
       }
     }
   }
+
+  "Calling personal details section should invoke correct handlers" when {
+
+    val model = Some(TotalPersonalDetailsCalculationModel(
+      CurrentIncomeModel(20000),
+      Some(PersonalAllowanceModel(0)),
+      OtherPropertiesModel("Yes"),
+      Some(PreviousLossOrGainModel("Neither")),
+      None,
+      None,
+      Some(AnnualExemptAmountModel(0)),
+      BroughtForwardLossesModel(isClaiming = false, None))
+    )
+
+    lazy val flattenedResult = new PersonalDetailsConstructor().getPersonalDetailsSection(model)
+
+    "return get Personal Allowance Answer" in {
+      val linksFound = flattenedResult.map(_.link.get)
+      linksFound.isEmpty shouldBe false
+    }
+  }
 }
