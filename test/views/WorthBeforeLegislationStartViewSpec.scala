@@ -120,7 +120,11 @@ class WorthBeforeLegislationStartViewSpec extends UnitSpec with WithFakeApplicat
           button.attr("id") shouldBe "continue-button"
         }
       }
-    }
+      "should produce the same output when render and f are called" in {
+        worthBeforeLegislationStart.f(worthBeforeLegislationStartForm)(fakeRequest, mockMessage,fakeApplication,mockConfig) shouldBe worthBeforeLegislationStart.render(worthBeforeLegislationStartForm, fakeRequest, mockMessage,fakeApplication,mockConfig)
+      }
+
+      }
 
     "supplied with a form with errors" should {
 

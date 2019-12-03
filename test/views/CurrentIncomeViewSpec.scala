@@ -34,7 +34,7 @@ class CurrentIncomeViewSpec extends UnitSpec with WithFakeApplication with Mocki
   "Current Income view" when {
 
     "supplied with no errors" should {
-      lazy val view = currentIncome(currentIncomeForm, "google.com")(fakeRequest, mockMessage,fakeApplication,mockConfig)
+      lazy val view = currentIncome(currentIncomeForm, "google.com")(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       s"have the correct title" in {
@@ -92,11 +92,15 @@ class CurrentIncomeViewSpec extends UnitSpec with WithFakeApplication with Mocki
           button.attr("id") shouldBe "continue-button"
         }
       }
+
+      "should produce the same output when render and f are called" in {
+        currentIncome.f(currentIncomeForm, "google.com")(fakeRequest, mockMessage, fakeApplication, mockConfig) shouldBe currentIncome.render(currentIncomeForm, "google.com", fakeRequest, mockMessage, fakeApplication, mockConfig)
+      }
     }
 
     "supplied with errors" should {
       lazy val form = currentIncomeForm.bind(Map("currentIncome" -> "a"))
-      lazy val view = currentIncome(form, "")(fakeRequest, mockMessage,fakeApplication,mockConfig)
+      lazy val view = currentIncome(form, "")(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

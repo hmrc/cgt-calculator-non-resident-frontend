@@ -37,7 +37,7 @@ class PropertyLivedInViewSpec extends UnitSpec with WithFakeApplication with Moc
 
     "supplied with no errors" should {
       lazy val form = PropertyLivedInForm.propertyLivedInForm
-      lazy val view = propertyLivedIn(form)(fakeRequest, mockMessage,fakeApplication,mockConfig)
+      lazy val view = propertyLivedIn(form)(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of ${messages.title}" in {
@@ -193,6 +193,10 @@ class PropertyLivedInViewSpec extends UnitSpec with WithFakeApplication with Moc
         s"has the text ${commonMessages.continue}" in {
           button.text shouldEqual s"${commonMessages.continue}"
         }
+      }
+
+      "should produce the same output when render and f are called" in {
+        propertyLivedIn.f(form)(fakeRequest, mockMessage, fakeApplication, mockConfig) shouldBe propertyLivedIn.render(form, fakeRequest, mockMessage, fakeApplication, mockConfig)
       }
     }
 

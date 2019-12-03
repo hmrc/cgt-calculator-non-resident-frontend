@@ -43,9 +43,9 @@ private object AppDependencies {
     "uk.gov.hmrc" %% "mongo-caching" % "6.6.0-play-26",
     "uk.gov.hmrc" %% "play-language" % "3.4.0",
     "it.innove"   % "play2-pdf" % "1.5.2",
-    "uk.gov.hmrc" %% "govuk-template" % "5.37.0-play-26",
-    "uk.gov.hmrc" %% "play-ui" % "7.40.0-play-26",
-    "com.typesafe.play" %% "play-java" % "2.6.12",
+    "uk.gov.hmrc" %% "govuk-template" % "5.44.0-play-26",
+    "uk.gov.hmrc" %% "play-ui" % "8.3.0-play-26",
+    "com.typesafe.play" %% "play-java" % "2.6.24",
     nettyServer
   )
 

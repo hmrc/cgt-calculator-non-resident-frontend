@@ -34,7 +34,7 @@ class OtherReliefsFlatViewSpec extends UnitSpec with WithFakeApplication with Mo
 
   "The Other Reliefs Flat view" when {
     "not supplied with a pre-existing stored value and a taxable gain" should {
-      lazy val view = otherReliefsFlat(otherReliefsForm, hasExistingReliefAmount = false, BigDecimal(2000), BigDecimal(2500))(fakeRequest, mockMessage,fakeApplication,mockConfig)
+      lazy val view = otherReliefsFlat(otherReliefsForm, hasExistingReliefAmount = false, BigDecimal(2000), BigDecimal(2500))(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have a back link" which {
@@ -127,11 +127,15 @@ class OtherReliefsFlatViewSpec extends UnitSpec with WithFakeApplication with Mo
           button.text() shouldBe messages.OtherReliefs.addRelief
         }
       }
+
+      "should produce the same output when render and f are called" in {
+        otherReliefsFlat.f(otherReliefsForm, false, BigDecimal(2000), BigDecimal(2500))(fakeRequest, mockMessage, fakeApplication, mockConfig) shouldBe otherReliefsFlat.render(otherReliefsForm, false, BigDecimal(2000), BigDecimal(2500), fakeRequest, mockMessage, fakeApplication, mockConfig)
+      }
     }
 
     "supplied with a pre-existing stored value and a negative taxable gain" should {
       val map = Map("otherReliefs" -> "1000")
-      lazy val view = otherReliefsFlat(otherReliefsForm.bind(map), hasExistingReliefAmount = true, BigDecimal(-1000), BigDecimal(2000))(fakeRequest, mockMessage,fakeApplication,mockConfig)
+      lazy val view = otherReliefsFlat(otherReliefsForm.bind(map), hasExistingReliefAmount = true, BigDecimal(-1000), BigDecimal(2000))(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "has a list entry with the loss carried forward message and value" in {
@@ -158,7 +162,7 @@ class OtherReliefsFlatViewSpec extends UnitSpec with WithFakeApplication with Mo
     "supplied with an invalid map" should {
       val model = CalculationResultModel(100, 1000, -100, 18, 0, None, None, None)
       val map = Map("otherReliefs" -> "-1000")
-      lazy val view = otherReliefsFlat(otherReliefsForm.bind(map), hasExistingReliefAmount = true, BigDecimal(2000), BigDecimal(2000))(fakeRequest, mockMessage,fakeApplication,mockConfig)
+      lazy val view = otherReliefsFlat(otherReliefsForm.bind(map), hasExistingReliefAmount = true, BigDecimal(2000), BigDecimal(2000))(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

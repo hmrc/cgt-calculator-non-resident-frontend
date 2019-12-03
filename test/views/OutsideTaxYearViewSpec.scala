@@ -25,8 +25,9 @@ import org.scalatest.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.{calculation => views}
+import _root_.views.html.calculation.outsideTaxYear
 
-class OutsideTaxYearViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper with MockitoSugar{
+class OutsideTaxYearViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper with MockitoSugar {
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
 
@@ -80,6 +81,10 @@ class OutsideTaxYearViewSpec extends UnitSpec with WithFakeApplication with Fake
         s" have a link to ${controllers.routes.SoldOrGivenAwayController.soldOrGivenAway().url}" in {
           continue.attr("href") shouldBe controllers.routes.SoldOrGivenAwayController.soldOrGivenAway().url
         }
+      }
+
+      "should produce the same output when render and f are called" in {
+        outsideTaxYear.f(taxYear)(fakeRequestWithSession, mockMessage, fakeApplication, mockConfig) shouldBe outsideTaxYear.render(taxYear, fakeRequestWithSession, mockMessage, fakeApplication, mockConfig)
       }
     }
   }

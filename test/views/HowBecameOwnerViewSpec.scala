@@ -32,11 +32,11 @@ class HowBecameOwnerViewSpec extends UnitSpec with WithFakeApplication with Mock
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
 
-  "The Sold for Less view spec"  when {
+  "The Sold for Less view spec" when {
 
     "supplied with no errors" should {
 
-      lazy val view = howBecameOwner(howBecameOwnerForm)(fakeRequest, mockMessage,fakeApplication,mockConfig)
+      lazy val view = howBecameOwner(howBecameOwnerForm)(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${messages.question}'" in {
@@ -120,12 +120,16 @@ class HowBecameOwnerViewSpec extends UnitSpec with WithFakeApplication with Mock
           button.attr("id") shouldBe "continue-button"
         }
       }
+
+      "should produce the same output when render and f are called" in {
+        howBecameOwner.f(howBecameOwnerForm)(fakeRequest, mockMessage, fakeApplication, mockConfig) shouldBe howBecameOwner.render(howBecameOwnerForm, fakeRequest, mockMessage, fakeApplication, mockConfig)
+      }
     }
 
     "supplied with a form with errors" should {
 
       lazy val form = howBecameOwnerForm.bind(Map("gainedBy" -> "a"))
-      lazy val view = howBecameOwner(form)(fakeRequest, mockMessage,fakeApplication,mockConfig)
+      lazy val view = howBecameOwner(form)(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

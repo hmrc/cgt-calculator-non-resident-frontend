@@ -24,6 +24,7 @@ import org.scalatest.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.{calculation => views}
+import _root_.views.html.calculation.noTaxToPay
 
 class NoTaxToPayViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper with MockitoSugar {
 
@@ -63,6 +64,10 @@ class NoTaxToPayViewSpec extends UnitSpec with WithFakeApplication with FakeRequ
       s"has the text ${messages.returnToGov}" in {
         doc.body().select("a#exit-calculator").text shouldBe messages.returnToGov
       }
+    }
+
+    "should produce the same output when render and f are called" in {
+      noTaxToPay.f(false)(fakeRequest, mockMessage, fakeApplication, mockConfig) shouldBe noTaxToPay.render(false, fakeRequest, mockMessage, fakeApplication, mockConfig)
     }
   }
 

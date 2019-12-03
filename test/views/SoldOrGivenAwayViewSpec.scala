@@ -32,10 +32,10 @@ class SoldOrGivenAwayViewSpec extends UnitSpec with WithFakeApplication with Fak
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
 
-  "The Sold Or Given Away View" when{
+  "The Sold Or Given Away View" when {
 
     "not supplied with a pre-existing model" should {
-      lazy val view = soldOrGivenAway(soldOrGivenAwayForm)(fakeRequest, mockMessage,fakeApplication,mockConfig)
+      lazy val view = soldOrGivenAway(soldOrGivenAwayForm)(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have a 'back-link' that" should {
@@ -83,7 +83,7 @@ class SoldOrGivenAwayViewSpec extends UnitSpec with WithFakeApplication with Fak
       }
 
       "have an options input with id 'soldIt" in {
-        document.body().select("input[type=radio]").attr("id") should include ("soldIt")
+        document.body().select("input[type=radio]").attr("id") should include("soldIt")
       }
 
       "have a legend that" should {
@@ -117,11 +117,15 @@ class SoldOrGivenAwayViewSpec extends UnitSpec with WithFakeApplication with Fak
           button.attr("id") shouldBe "continue-button"
         }
       }
+
+      "should produce the same output when render and f are called" in {
+        soldOrGivenAway.f(soldOrGivenAwayForm)(fakeRequest, mockMessage, fakeApplication, mockConfig) shouldBe soldOrGivenAway.render(soldOrGivenAwayForm, fakeRequest, mockMessage, fakeApplication, mockConfig)
+      }
     }
 
     "provided with errors" should {
       lazy val form = soldOrGivenAwayForm.bind(Map("soldIt" -> "999"))
-      lazy val view = soldOrGivenAway(form)(fakeRequest, mockMessage,fakeApplication,mockConfig)
+      lazy val view = soldOrGivenAway(form)(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

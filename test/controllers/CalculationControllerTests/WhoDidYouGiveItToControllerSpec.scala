@@ -23,7 +23,7 @@ import connectors.CalculatorConnector
 import controllers.helpers.FakeRequestHelper
 import models.WhoDidYouGiveItToModel
 import org.mockito.ArgumentMatchers
-import org.scalatest.mock.MockitoSugar
+import org.scalatest.mockito.MockitoSugar
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import common.KeystoreKeys.{NonResidentKeys => keystoreKeys}
 import config.{AppConfig, ApplicationConfig}

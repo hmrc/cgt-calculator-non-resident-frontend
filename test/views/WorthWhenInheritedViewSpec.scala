@@ -39,7 +39,7 @@ class WorthWhenInheritedViewSpec extends UnitSpec with WithFakeApplication with 
 
     "supplied with no errors" should {
 
-      lazy val view = worthWhenInherited(acquisitionMarketValueForm)(fakeRequest, mockMessage,fakeApplication,mockConfig)
+      lazy val view = worthWhenInherited(acquisitionMarketValueForm)(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${WorthWhenInherited.question}'" in {
@@ -125,12 +125,16 @@ class WorthWhenInheritedViewSpec extends UnitSpec with WithFakeApplication with 
           button.attr("id") shouldBe "continue-button"
         }
       }
+
+      "should produce the same output when render and f are called" in {
+        worthWhenInherited.f(acquisitionMarketValueForm)(fakeRequest, mockMessage, fakeApplication, mockConfig) shouldBe worthWhenInherited.render(acquisitionMarketValueForm, fakeRequest, mockMessage, fakeApplication, mockConfig)
+      }
     }
 
     "supplied with a form with errors" should {
 
       lazy val form = acquisitionMarketValueForm.bind(Map("acquisitionMarketValue" -> "a"))
-      lazy val view = worthWhenInherited(form)(fakeRequest, mockMessage,fakeApplication,mockConfig)
+      lazy val view = worthWhenInherited(form)(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

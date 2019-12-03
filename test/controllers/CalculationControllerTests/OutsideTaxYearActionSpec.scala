@@ -40,7 +40,7 @@ import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
 import scala.concurrent.Future
 
-class OutsideTaxYearActionSpec @Inject()(outsideTaxYearController: OutsideTaxYearController)
+class OutsideTaxYearActionSpec()
   extends UnitSpec with WithFakeApplication with FakeRequestHelper with MockitoSugar {
 
   implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
@@ -50,14 +50,6 @@ class OutsideTaxYearActionSpec @Inject()(outsideTaxYearController: OutsideTaxYea
   val mockCalcConnector =mock[CalculatorConnector]
   val defaultCache = mock[CacheMap]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
-
-  class Setup {
-    val controller = new OutsideTaxYearController(
-      mockHttp,
-      mockCalcConnector,
-      mockMessagesControllerComponents
-    )(mockConfig)
-  }
 
   def setupTarget(disposalDateModel: Option[DateModel], taxYearModel: Option[TaxYearModel]): OutsideTaxYearController = {
 

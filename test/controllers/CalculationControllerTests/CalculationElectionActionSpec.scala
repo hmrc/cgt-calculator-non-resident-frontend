@@ -30,7 +30,7 @@ import models.{TaxYearModel, _}
 import org.jsoup._
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
-import org.scalatest.mock.MockitoSugar
+import org.scalatest.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HeaderCarrier
@@ -41,7 +41,7 @@ import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 import scala.concurrent.Future
 
-class CalculationElectionActionSpec @Inject()(calculationElectionController: CalculationElectionController, calcConnector: CalculatorConnector)
+class CalculationElectionActionSpec ()
   extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
   implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
@@ -54,8 +54,6 @@ class CalculationElectionActionSpec @Inject()(calculationElectionController: Cal
   val mockDefaultCalElecConstructor = mock[DefaultCalculationElectionConstructor]
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
-
-
 
   class Setup {
     val controller = new CalculationElectionController(
@@ -388,11 +386,26 @@ class CalculationElectionActionSpec @Inject()(calculationElectionController: Cal
     )
 
     "return the original sequence if not claiming reliefs" in {
-      calculationElectionController.orderElements(sequence, false) shouldBe sequenceNoReliefs
+
+      lazy val target = setupTarget(
+        None,
+        None,
+        Some(TotalGainResultsModel(0, Some(0), Some(0))),
+        Seq.empty,
+        finalAnswersModel
+      )
+      target.orderElements(sequence, false) shouldBe sequenceNoReliefs
     }
 
     "return the ordered sequence if claiming reliefs" in {
-      calculationElectionController.orderElements(sequence, true) shouldBe orderedSequence
+      lazy val target = setupTarget(
+        None,
+        None,
+        Some(TotalGainResultsModel(0, Some(0), Some(0))),
+        Seq.empty,
+        finalAnswersModel
+      )
+      target.orderElements(sequence, true) shouldBe orderedSequence
     }
   }
 }

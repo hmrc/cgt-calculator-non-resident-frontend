@@ -28,7 +28,7 @@ import models._
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
-import org.scalatest.mock.MockitoSugar
+import org.scalatest.mockito.MockitoSugar
 import play.api.Environment
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
@@ -40,7 +40,7 @@ import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.http.logging.SessionId
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
-class CheckYourAnswersActionSpec @Inject()(checkYourAnswersController: CheckYourAnswersController)
+class CheckYourAnswersActionSpec()
   extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
   implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))

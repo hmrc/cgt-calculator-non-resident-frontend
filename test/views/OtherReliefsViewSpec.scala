@@ -35,7 +35,7 @@ class OtherReliefsViewSpec extends UnitSpec with WithFakeApplication with Mockit
     "not supplied with a pre-existing stored value and a taxable gain" should {
       val totalGain = 1234
       val totalChargeableGain = 4321
-      lazy val view = otherReliefs(otherReliefsForm, totalChargeableGain, totalGain)(fakeRequest, mockMessage,fakeApplication,mockConfig)
+      lazy val view = otherReliefs(otherReliefsForm, totalChargeableGain, totalGain)(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of ${messages.OtherReliefs.question}" in {
@@ -120,13 +120,16 @@ class OtherReliefsViewSpec extends UnitSpec with WithFakeApplication with Mockit
           button.text() shouldBe messages.continue
         }
       }
+      "should produce the same output when render and f are called" in {
+        otherReliefs.f(otherReliefsForm, totalChargeableGain, totalGain)(fakeRequest, mockMessage, fakeApplication, mockConfig) shouldBe otherReliefs.render(otherReliefsForm, totalChargeableGain, totalGain, fakeRequest, mockMessage, fakeApplication, mockConfig)
+      }
     }
 
     "the gain and chargeable gain are negative" should {
       val totalGain = -1234
       val totalChargeableGain = -4321
 
-      lazy val view = otherReliefs(otherReliefsForm, totalChargeableGain, totalGain)(fakeRequest, mockMessage,fakeApplication,mockConfig)
+      lazy val view = otherReliefs(otherReliefsForm, totalChargeableGain, totalGain)(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have the correct additional help text" in {
@@ -145,7 +148,7 @@ class OtherReliefsViewSpec extends UnitSpec with WithFakeApplication with Mockit
 
     "supplied with an invalid map" should {
       val map = Map("otherReliefs" -> "-1000")
-      lazy val view = otherReliefs(otherReliefsForm.bind(map), 0, 0)(fakeRequest, mockMessage,fakeApplication,mockConfig)
+      lazy val view = otherReliefs(otherReliefsForm.bind(map), 0, 0)(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

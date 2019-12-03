@@ -40,7 +40,7 @@ object TaxDates {
   def dateAfterOctober(date: LocalDate): Boolean = date.isAfter(taxStartDatePlus18Months)
 
   def dateInsideTaxYear(day: Int, month: Int, year: Int): Boolean =
-    constructDate(day, month, year).isAfter(taxYearStartDate) && constructDate(day, month, year).isBefore(taxYearEndDate)
+    constructDate(day, month, year).isAfter(taxYearStartDate) && constructDate(day, month, year).isBefore(taxYearEndDate.plusDays(1))
 
   def taxYearStringToInteger(taxYear: String): Int = (taxYear.take(2) + taxYear.takeRight(2)).toInt
 

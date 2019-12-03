@@ -760,6 +760,13 @@ class PersonalAndPreviousDetailsConstructorSpec extends UnitSpec with WithFakeAp
       "return some details for the AnnualExemptAmount" in {
         result shouldEqual None
       }
+
+      "return correct customer key types" in {
+        import CustomerTypeKeys._
+        individual shouldBe "individual"
+        trustee shouldBe "trustee"
+        personalRep shouldBe "personalRep"
+      }
     }
   }
 }

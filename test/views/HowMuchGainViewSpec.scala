@@ -35,7 +35,7 @@ class HowMuchGainViewSpec extends UnitSpec with WithFakeApplication with Mockito
   "How Much Gain view" should {
 
     "supplied with no errors" when {
-      lazy val view = howMuchGain(howMuchGainForm)(fakeRequest, mockMessage,fakeApplication,mockConfig)
+      lazy val view = howMuchGain(howMuchGainForm)(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${messages.HowMuchGain.question}'" in {
@@ -118,11 +118,15 @@ class HowMuchGainViewSpec extends UnitSpec with WithFakeApplication with Mockito
           button.attr("id") shouldBe "continue-button"
         }
       }
+
+      "should produce the same output when render and f are called" in {
+        howMuchGain.f(howMuchGainForm)(fakeRequest, mockMessage, fakeApplication, mockConfig) shouldBe howMuchGain.render(howMuchGainForm, fakeRequest, mockMessage, fakeApplication, mockConfig)
+      }
     }
 
     "supplied with a form with errors" should {
       lazy val form = howMuchGainForm.bind(Map("howMuchGain" -> "testData"))
-      lazy val view = howMuchGain(form)(fakeRequest, mockMessage,fakeApplication,mockConfig)
+      lazy val view = howMuchGain(form)(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

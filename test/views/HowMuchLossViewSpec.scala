@@ -24,6 +24,7 @@ import org.jsoup.Jsoup
 import org.scalatest.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import views.html.calculation.howMuchLoss
 
 class HowMuchLossViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper with MockitoSugar {
 
@@ -33,7 +34,7 @@ class HowMuchLossViewSpec extends UnitSpec with WithFakeApplication with FakeReq
   "Previous Loss view" when {
 
     "provided with no errors" should {
-      lazy val view = views.html.calculation.howMuchLoss(howMuchLossForm)(fakeRequest, mockMessage,fakeApplication,mockConfig)
+      lazy val view = views.html.calculation.howMuchLoss(howMuchLossForm)(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of ${messages.HowMuchLoss.question}" in {
@@ -112,11 +113,15 @@ class HowMuchLossViewSpec extends UnitSpec with WithFakeApplication with FakeReq
           button.attr("id") shouldBe "continue-button"
         }
       }
+
+      "should produce the same output when render and f are called" in {
+        howMuchLoss.f(howMuchLossForm)(fakeRequest, mockMessage, fakeApplication, mockConfig) shouldBe howMuchLoss.render(howMuchLossForm, fakeRequest, mockMessage, fakeApplication, mockConfig)
+      }
     }
 
     "provided with some errors" should {
       lazy val form = howMuchLossForm.bind(Map("loss" -> ""))
-      lazy val view = views.html.calculation.howMuchLoss(form)(fakeRequest, mockMessage,fakeApplication,mockConfig)
+      lazy val view = views.html.calculation.howMuchLoss(form)(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

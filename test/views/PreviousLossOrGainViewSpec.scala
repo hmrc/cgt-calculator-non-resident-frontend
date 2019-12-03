@@ -34,7 +34,7 @@ class PreviousLossOrGainViewSpec extends UnitSpec with WithFakeApplication with 
 
   "The PreviousLossOrGain view" should {
 
-    lazy val view = previousLossOrGain(previousLossOrGainForm)(fakeRequest, mockMessage,fakeApplication,mockConfig)
+    lazy val view = previousLossOrGain(previousLossOrGainForm)(fakeRequest, mockMessage, fakeApplication, mockConfig)
     lazy val document = Jsoup.parse(view.body)
 
     "return some HTML" which {
@@ -126,11 +126,15 @@ class PreviousLossOrGainViewSpec extends UnitSpec with WithFakeApplication with 
         continueButton.hasClass("button") shouldBe true
       }
     }
+
+    "should produce the same output when render and f are called" in {
+      previousLossOrGain.f(previousLossOrGainForm)(fakeRequest, mockMessage, fakeApplication, mockConfig) shouldBe previousLossOrGain.render(previousLossOrGainForm, fakeRequest, mockMessage, fakeApplication, mockConfig)
+    }
   }
 
   "PreviousLossOrGainView with form errors" should {
     lazy val form = previousLossOrGainForm.bind(Map("previousLossOrGain" -> ""))
-    lazy val view = previousLossOrGain(form)(fakeRequest, mockMessage,fakeApplication,mockConfig)
+    lazy val view = previousLossOrGain(form)(fakeRequest, mockMessage, fakeApplication, mockConfig)
     lazy val doc = Jsoup.parse(view.body)
 
     "display an error summary message regarding incorrect value being inputted" in {

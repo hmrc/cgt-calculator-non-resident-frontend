@@ -145,5 +145,10 @@ class BroughtForwardLossesViewSpec extends UnitSpec with WithFakeApplication wit
         document.select("#error-summary-display").size() shouldBe 1
       }
     }
+
+    "should produce the same output when render and f are called" in {
+      broughtForwardLosses.f(broughtForwardLossesForm, "back-link")(fakeRequest,mockMessage, fakeApplication, mockConfig) shouldBe
+        broughtForwardLosses.render(broughtForwardLossesForm, "back-link", fakeRequest,mockMessage, fakeApplication, mockConfig)
+    }
   }
 }

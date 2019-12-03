@@ -36,7 +36,7 @@ class WorthWhenGiftedToViewSpec extends UnitSpec with WithFakeApplication with M
 
     "supplied with no errors" should {
 
-      lazy val view = worthWhenGiftedTo(acquisitionMarketValueForm)(fakeRequest, mockMessage,fakeApplication,mockConfig)
+      lazy val view = worthWhenGiftedTo(acquisitionMarketValueForm)(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${WorthWhenGiftedTo.question}'" in {
@@ -115,12 +115,16 @@ class WorthWhenGiftedToViewSpec extends UnitSpec with WithFakeApplication with M
           button.attr("id") shouldBe "continue-button"
         }
       }
+
+      "should produce the same output when render and f are called" in {
+        worthWhenGiftedTo.f(acquisitionMarketValueForm)(fakeRequest, mockMessage, fakeApplication, mockConfig) shouldBe worthWhenGiftedTo.render(acquisitionMarketValueForm, fakeRequest, mockMessage, fakeApplication, mockConfig)
+      }
     }
 
     "supplied with a form with errors" should {
 
       lazy val form = acquisitionMarketValueForm.bind(Map("acquisitionMarketValue" -> "a"))
-      lazy val view = worthWhenGiftedTo(form)(fakeRequest, mockMessage,fakeApplication,mockConfig)
+      lazy val view = worthWhenGiftedTo(form)(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

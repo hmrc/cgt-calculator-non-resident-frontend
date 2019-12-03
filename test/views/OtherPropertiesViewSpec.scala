@@ -36,7 +36,7 @@ class OtherPropertiesViewSpec extends UnitSpec with WithFakeApplication with Fak
 
     "return some HTML that, when the hidden question is displayed" should {
 
-      lazy val view = otherProperties(otherPropertiesForm)(fakeRequest, mockMessage,fakeApplication,mockConfig)
+      lazy val view = otherProperties(otherPropertiesForm)(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       s"have the title '${messages.question}'" in {
@@ -95,11 +95,15 @@ class OtherPropertiesViewSpec extends UnitSpec with WithFakeApplication with Fak
           button.text shouldEqual commonMessages.continue
         }
       }
+
+      "should produce the same output when render and f are called" in {
+        otherProperties.f(otherPropertiesForm)(fakeRequest, mockMessage, fakeApplication, mockConfig) shouldBe otherProperties.render(otherPropertiesForm, fakeRequest, mockMessage, fakeApplication, mockConfig)
+      }
     }
 
     "return some HTML that, when the hidden question is not displayed" should {
 
-      lazy val view = otherProperties(otherPropertiesForm)(fakeRequest, mockMessage,fakeApplication,mockConfig)
+      lazy val view = otherProperties(otherPropertiesForm)(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       s"have the title '${messages.question}'" in {
@@ -118,7 +122,7 @@ class OtherPropertiesViewSpec extends UnitSpec with WithFakeApplication with Fak
     "when passed a form with errors" should {
 
       lazy val form = otherPropertiesForm.bind(Map("otherProperties" -> "bad-data"))
-      lazy val view = otherProperties(form)(fakeRequest, mockMessage,fakeApplication,mockConfig)
+      lazy val view = otherProperties(form)(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

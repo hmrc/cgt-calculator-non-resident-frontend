@@ -26,7 +26,7 @@ import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.rebasedCosts
 
-class RebasedCostsViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper with MockitoSugar{
+class RebasedCostsViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper with MockitoSugar {
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
 
@@ -34,7 +34,7 @@ class RebasedCostsViewSpec extends UnitSpec with WithFakeApplication with FakeRe
   "The rebased value view" when {
 
     "not supplied with a pre-existing stored model" should {
-      lazy val view = rebasedCosts(rebasedCostsForm)(fakeRequest, mockMessage,fakeApplication,mockConfig)
+      lazy val view = rebasedCosts(rebasedCostsForm)(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       s"Have the title ${messages.RebasedCosts.question}" in {
@@ -90,7 +90,7 @@ class RebasedCostsViewSpec extends UnitSpec with WithFakeApplication with FakeRe
       }
 
       "have option inputs with id 'hasRebasedCosts'" in {
-        document.body().select("input[type=radio]").attr("id") should include ("hasRebasedCosts")
+        document.body().select("input[type=radio]").attr("id") should include("hasRebasedCosts")
       }
 
       s"have the input question '${messages.RebasedCosts.inputQuestion}'" in {
@@ -102,7 +102,7 @@ class RebasedCostsViewSpec extends UnitSpec with WithFakeApplication with FakeRe
       }
 
       "have a value input with the id 'rebasedCosts'" in {
-        document.body().select("input[type=number]").attr("id") should include ("rebasedCosts")
+        document.body().select("input[type=number]").attr("id") should include("rebasedCosts")
       }
 
       "have a button" which {
@@ -120,6 +120,10 @@ class RebasedCostsViewSpec extends UnitSpec with WithFakeApplication with FakeRe
           button.attr("id") shouldBe "continue-button"
         }
       }
+
+      "should produce the same output when render and f are called" in {
+        rebasedCosts.f(rebasedCostsForm)(fakeRequest, mockMessage, fakeApplication, mockConfig) shouldBe rebasedCosts.render(rebasedCostsForm, fakeRequest, mockMessage, fakeApplication, mockConfig)
+      }
     }
 
     "supplied with errors" should {
@@ -127,7 +131,7 @@ class RebasedCostsViewSpec extends UnitSpec with WithFakeApplication with FakeRe
         "hasRebasedCosts" -> "Yes",
         "rebasedCosts" -> ""
       ))
-      lazy val view = rebasedCosts(form)(fakeRequest, mockMessage,fakeApplication,mockConfig)
+      lazy val view = rebasedCosts(form)(fakeRequest, mockMessage, fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {
