@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -66,7 +66,9 @@ class CalculatorConnectorSpec extends UnitSpec with WithFakeApplication with Moc
       val testModel = DisposalValueModel(1000)
       val returnedCacheMap = CacheMap(KeystoreKeys.disposalValue, Map("data" -> Json.toJson(testModel)))
 
-      when(mockHttp.PUT[DisposalValueModel, CacheMap](ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any()))
+      when(mockHttp.PUT[DisposalValueModel, CacheMap](
+        ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any())
+        (ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any()))
         .thenReturn(Future.successful(returnedCacheMap))
 
       lazy val result = connector.saveFormData(KeystoreKeys.disposalValue, testModel)
@@ -131,7 +133,7 @@ class CalculatorConnectorSpec extends UnitSpec with WithFakeApplication with Moc
 
 
     "return a valid response" in new Setup {
-      when(mockHttp.GET[Option[CalculationResultsWithPRRModel]](ArgumentMatchers.anyString())(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any()))
+      when(mockHttp.GET[Option[CalculationResultsWithPRRModel]](ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any()))
         .thenReturn(Future.successful(Option(validResponse)))
 
       val result = connector.calculateTaxableGainAfterPRR(model, PrivateResidenceReliefModel("No", None, None),
