@@ -18,6 +18,7 @@ package config
 
 import org.scalatest.MustMatchers._
 import org.scalatestplus.play.OneServerPerSuite
+import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.Application
 import play.api.http.Writeable
 import play.api.inject.guice.GuiceApplicationBuilder
@@ -33,7 +34,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 
-class CgtErrorHandlerSpec extends UnitSpec with OneServerPerSuite {
+class CgtErrorHandlerSpec extends UnitSpec with GuiceOneServerPerSuite {
 
   def routeWithError[A](app: Application, request: Request[A])
                        (implicit writeable: Writeable[A]): Option[Future[Result]] = {

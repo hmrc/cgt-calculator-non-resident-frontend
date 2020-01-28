@@ -8,7 +8,7 @@ addSbtPlugin("uk.gov.hmrc" % "sbt-distributables" % "2.0.0")
 
 addSbtPlugin("uk.gov.hmrc" % "sbt-artifactory" % "1.0.0")
 
-resolvers += "Typesafe Releases" at "http://repo.typesafe.com/typesafe/releases/"
+resolvers += "Typesafe Releases" at "https://repo.typesafe.com/typesafe/releases/"
 
 addSbtPlugin("com.typesafe.play" %% "sbt-plugin" % "2.6.25")
 
@@ -16,7 +16,7 @@ resolvers += Resolver.url("scoverage-bintray", url("https://dl.bintray.com/sksam
 
 addSbtPlugin("org.scoverage" % "sbt-scoverage" % "1.6.1")
 
-addSbtPlugin("net.virtual-void" % "sbt-dependency-graph" % "0.9.2")
+addSbtPlugin("net.virtual-void" % "sbt-dependency-graph" % "0.10.0-RC1")
 
 addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "1.0.0")
 
