@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,8 @@ import connectors.CalculatorConnector
 import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
 import controllers.{ReportController, SoldOrGivenAwayController}
 import controllers.helpers.FakeRequestHelper
+import it.innove.play.pdf.PdfGenerator
+import javax.inject.Inject
 import models.{TaxYearModel, _}
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
@@ -41,7 +43,7 @@ import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 import scala.concurrent.Future
 
-class ReportActionSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper with MockitoSugar {
+class ReportActionSpec @Inject()(pdfGenerator: PdfGenerator) extends UnitSpec with WithFakeApplication with FakeRequestHelper with MockitoSugar {
 
   implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
@@ -57,7 +59,8 @@ class ReportActionSpec extends UnitSpec with WithFakeApplication with FakeReques
       mockHttp,
       mockCalcConnector,
       mockAnswersConstructor,
-      mockMessagesControllerComponents
+      mockMessagesControllerComponents,
+      pdfGenerator
     )(mockConfig)
   }
 
@@ -126,7 +129,7 @@ class ReportActionSpec extends UnitSpec with WithFakeApplication with FakeReques
     when(mockCalcConnector.calculateTotalCosts(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(BigDecimal(1000.00)))
 
-    new ReportController(mockHttp, mockCalcConnector, mockAnswersConstructor, mockMessagesControllerComponents)(mockConfig) {
+    new ReportController(mockHttp, mockCalcConnector, mockAnswersConstructor, mockMessagesControllerComponents, pdfGenerator)(mockConfig) {
       val calcConnector: CalculatorConnector = mockCalcConnector
       val answersConstructor: AnswersConstructor = mockAnswersConstructor
 
