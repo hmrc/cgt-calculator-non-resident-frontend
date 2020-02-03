@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,10 +42,9 @@ import scala.concurrent.Future
 
 class ReportController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
                                  answersConstructor: AnswersConstructor,
-                                 mcc: MessagesControllerComponents)(implicit val applicationConfig: ApplicationConfig)
+                                 mcc: MessagesControllerComponents,
+                                 pdfGenerator: PdfGenerator)(implicit val applicationConfig: ApplicationConfig)
                                   extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
-
-  val pdfGenerator = new PdfGenerator
 
   def host(implicit request: RequestHeader): String = {
     s"http://${request.host}/"

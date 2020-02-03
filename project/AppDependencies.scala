@@ -15,37 +15,21 @@
  */
 
 import sbt._
-import uk.gov.hmrc.SbtAutoBuildPlugin
-import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin
-import uk.gov.hmrc.versioning.SbtGitVersioning
+import play.sbt.PlayImport._
+import play.core.PlayVersion
 
-object FrontendBuild extends Build with MicroService {
-
-  val appName = "cgt-calculator-non-resident-frontend"
-
-  override lazy val plugins: Seq[Plugins] = Seq(
-    SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin
-  )
-
-  override lazy val appDependencies: Seq[ModuleID] = AppDependencies()
-}
-
-private object AppDependencies {
-
-  import play.sbt.PlayImport._
-  import play.core.PlayVersion
+object AppDependencies {
 
   val compile = Seq(
     ws,
-    "uk.gov.hmrc" %% "bootstrap-play-26" % "0.44.0",
+    "uk.gov.hmrc" %% "bootstrap-play-26" % "1.3.0",
     "uk.gov.hmrc" %% "play-partials" % "6.9.0-play-26",
-    "uk.gov.hmrc" %% "http-caching-client" % "8.5.0-play-26",
-    "uk.gov.hmrc" %% "mongo-caching" % "6.6.0-play-26",
-    "uk.gov.hmrc" %% "play-language" % "3.4.0",
-    "it.innove"   % "play2-pdf" % "1.5.2",
-    "uk.gov.hmrc" %% "govuk-template" % "5.44.0-play-26",
-    "uk.gov.hmrc" %% "play-ui" % "8.3.0-play-26",
-    "com.typesafe.play" %% "play-java" % "2.6.24",
+    "uk.gov.hmrc" %% "http-caching-client" % "9.0.0-play-26",
+    "uk.gov.hmrc" %% "mongo-caching" % "6.8.0-play-26",
+    "uk.gov.hmrc" %% "play-language" % "4.2.0-play-26",
+    "it.innove"   % "play2-pdf" % "1.9.1" exclude("com.typesafe.play","*"),
+    "uk.gov.hmrc" %% "govuk-template" % "5.48.0-play-26",
+    "uk.gov.hmrc" %% "play-ui" % "8.7.0-play-26",
     nettyServer
   )
 
@@ -58,8 +42,8 @@ private object AppDependencies {
     def apply(): Seq[ModuleID] = new TestDependencies {
       override lazy val test = Seq(
         "uk.gov.hmrc" %% "hmrctest" % "3.9.0-play-26" % scope,
-        "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % scope,
-        "org.mockito" % "mockito-core" % "3.1.0" % scope,
+        "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.3" % scope,
+        "org.mockito" % "mockito-core" % "3.2.4" % scope,
         "org.pegdown" % "pegdown" % "1.6.0" % scope,
         "org.jsoup" % "jsoup" % "1.12.1" % scope,
         "com.typesafe.play" %% "play-test" % PlayVersion.current % scope
