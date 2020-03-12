@@ -17,12 +17,12 @@
 package config
 
 import org.scalatest.MustMatchers._
-import org.scalatestplus.play.OneServerPerSuite
+import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.Application
 import play.api.http.Writeable
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc.Results._
-import play.api.mvc.{Action, Request, Result, Results}
+import play.api.mvc.{Action, DefaultActionBuilder, Request, Result, Results}
 import play.api.routing.Router
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -33,7 +33,9 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 
-class CgtErrorHandlerSpec extends UnitSpec with OneServerPerSuite {
+class CgtErrorHandlerSpec extends UnitSpec with GuiceOneServerPerSuite {
+
+  lazy val actionBuilder = app.injector.instanceOf[DefaultActionBuilder]
 
   def routeWithError[A](app: Application, request: Request[A])
                        (implicit writeable: Writeable[A]): Option[Future[Result]] = {
@@ -49,13 +51,13 @@ class CgtErrorHandlerSpec extends UnitSpec with OneServerPerSuite {
     import play.api.routing.sird._
 
     Router.from {
-      case GET(p"/ok") => Action.async { request =>
+      case GET(p"/ok") => actionBuilder.async { request =>
         Results.Ok("OK")
       }
-      case GET(p"/application-exception") => Action.async { request =>
+      case GET(p"/application-exception") => actionBuilder.async { request =>
         throw new ApplicationException(Redirect(controllers.utils.routes.TimeoutController.timeout()), "Test exception thrown")
       }
-      case GET(p"/other-error") => Action.async { request =>
+      case GET(p"/other-error") => actionBuilder.async { request =>
         throw new IllegalArgumentException("Other exception thrown")
       }
     }

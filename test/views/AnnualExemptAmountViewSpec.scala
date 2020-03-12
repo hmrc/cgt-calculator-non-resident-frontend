@@ -22,7 +22,7 @@ import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import forms.AnnualExemptAmountForm._
 import org.jsoup.Jsoup
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.i18n.{Lang, MessagesApi}
 import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}

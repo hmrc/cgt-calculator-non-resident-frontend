@@ -29,7 +29,7 @@ import models.{DateModel, RebasedValueModel}
 import org.jsoup._
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap
@@ -65,7 +65,7 @@ class RebasedValueActionSpec @Inject()(rebasedValueController: RebasedValueContr
       .thenReturn(Future.successful(mock[CacheMap]))
 
     new RebasedValueController(http = mock[DefaultHttpClient],
-      calcConnector = mock[CalculatorConnector], mockMessagesControllerComponents)(mockConfig) {
+      calcConnector = mock[CalculatorConnector], mockMessagesControllerComponents)(mockConfig, fakeApplication) {
       val calcConnector: CalculatorConnector = mockCalcConnector
     }
   }

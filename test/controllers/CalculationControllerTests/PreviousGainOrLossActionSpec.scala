@@ -26,7 +26,7 @@ import controllers.helpers.FakeRequestHelper
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import org.mockito.Mockito._
 import org.mockito.ArgumentMatchers
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import common.KeystoreKeys.{NonResidentKeys => keystoreKeys}
 import assets.MessageLookup.NonResident.{PreviousLossOrGain => messages}
 import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
@@ -55,7 +55,7 @@ class PreviousGainOrLossActionSpec extends UnitSpec with WithFakeApplication wit
       mockHttp,
       mockCalcConnector,
       mockMessagesControllerComponents
-    )(mockConfig)
+    )(mockConfig, fakeApplication)
   }
 
   def setupTarget(getData: Option[PreviousLossOrGainModel]): PreviousGainOrLossController = {
@@ -67,7 +67,7 @@ class PreviousGainOrLossActionSpec extends UnitSpec with WithFakeApplication wit
       ArgumentMatchers.eq(keystoreKeys.previousLossOrGain), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any())).
       thenReturn(mock[CacheMap])
 
-    new PreviousGainOrLossController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig) {
+    new PreviousGainOrLossController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig, fakeApplication) {
       val calcConnector: CalculatorConnector = mockCalcConnector
       val config: AppConfig = mock[AppConfig]
     }

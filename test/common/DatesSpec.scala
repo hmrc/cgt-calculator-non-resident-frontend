@@ -20,15 +20,17 @@ import java.time.LocalDate
 
 import common.Dates.{TemplateImplicits, formatter}
 import controllers.helpers.FakeRequestHelper
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.i18n.{Lang, Messages}
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.language.LanguageUtils
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
+import scala.concurrent.ExecutionContext
+
 class DatesSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  implicit val ec = fakeApplication.injector.instanceOf[ExecutionContext]
   lazy val cyMockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(Seq(
     Lang("cy")
   ))

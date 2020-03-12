@@ -21,7 +21,7 @@ import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import assets.MessageLookup.{NonResident => messages}
 import controllers.helpers.FakeRequestHelper
 import models.{CalculationResultsWithTaxOwedModel, QuestionAnswerModel, TotalTaxOwedModel}
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.i18n.MessagesProvider
 import play.api.mvc.MessagesControllerComponents
 

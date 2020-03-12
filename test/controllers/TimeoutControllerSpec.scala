@@ -22,7 +22,7 @@ import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import controllers.utils.TimeoutController
 import org.jsoup.Jsoup
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.i18n.{Messages, MessagesProvider}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import play.api.test.FakeRequest
@@ -43,7 +43,7 @@ class TimeoutControllerSpec extends UnitSpec with WithFakeApplication with FakeR
     val jsoupDoc = Jsoup.parse(bodyOf(result)(materializer))
   }
 
-  val controller = new TimeoutController(mockMessagesComponent)(mockConfig)
+  val controller = new TimeoutController(mockMessagesComponent)(mockConfig, fakeApplication)
 
   "TimeoutController.timeout" should {
 

@@ -23,7 +23,7 @@ import connectors.CalculatorConnector
 import controllers.helpers.FakeRequestHelper
 import models.WhoDidYouGiveItToModel
 import org.mockito.ArgumentMatchers
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import common.KeystoreKeys.{NonResidentKeys => keystoreKeys}
 import config.{AppConfig, ApplicationConfig}
@@ -58,7 +58,7 @@ class WhoDidYouGiveItToControllerSpec extends UnitSpec with WithFakeApplication 
       mockHttp,
       mockCalcConnector,
       mockMessagesControllerComponents,
-      mockConfig)
+      mockConfig, fakeApplication)
   }
 
   def setupTarget(getData: Option[WhoDidYouGiveItToModel]): WhoDidYouGiveItToController = {
@@ -69,7 +69,7 @@ class WhoDidYouGiveItToControllerSpec extends UnitSpec with WithFakeApplication 
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new WhoDidYouGiveItToController(mockHttp, mockCalcConnector, mockMessagesControllerComponents, mockConfig) {
+    new WhoDidYouGiveItToController(mockHttp, mockCalcConnector, mockMessagesControllerComponents, mockConfig, fakeApplication) {
       val calcConnector: CalculatorConnector = mockCalcConnector
       val config: AppConfig = mock[AppConfig]
     }

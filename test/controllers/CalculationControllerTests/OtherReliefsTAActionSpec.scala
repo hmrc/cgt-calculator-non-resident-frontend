@@ -25,7 +25,7 @@ import models.{TaxYearModel, _}
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.test.Helpers._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import common.TestModels
@@ -58,7 +58,7 @@ class OtherReliefsTAActionSpec extends UnitSpec with WithFakeApplication with Mo
       mockCalcConnector,
       mockAnswersConstructor,
       mockMessagesControllerComponents
-    )(mockConfig)
+    )(mockConfig, fakeApplication)
   }
   def setupTarget(
                    getData: Option[OtherReliefsModel],
@@ -107,7 +107,7 @@ class OtherReliefsTAActionSpec extends UnitSpec with WithFakeApplication with Mo
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new OtherReliefsTAController(mockHttp, mockCalcConnector, mockAnswersConstructor, mockMessagesControllerComponents)(mockConfig) {
+    new OtherReliefsTAController(mockHttp, mockCalcConnector, mockAnswersConstructor, mockMessagesControllerComponents)(mockConfig, fakeApplication) {
       val calcConnector: CalculatorConnector = mockCalcConnector
       val answersConstructor: AnswersConstructor = mockAnswersConstructor
     }

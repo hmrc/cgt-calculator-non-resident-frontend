@@ -30,7 +30,7 @@ import models.{TaxYearModel, _}
 import org.jsoup._
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HeaderCarrier
@@ -62,7 +62,7 @@ class CalculationElectionActionSpec ()
       mockAnswersConstructor,
       mockDefaultCalElecConstructor,
       mockMessagesControllerComponents
-    )(mockConfig)
+    )(mockConfig, fakeApplication)
   }
 
 
@@ -120,7 +120,7 @@ class CalculationElectionActionSpec ()
       (ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(PropertyLivedInModel(true))))
 
-    new CalculationElectionController(mockHttp, mockCalcConnector, mockAnswersConstructor, mockDefaultCalElecConstructor, mockMessagesControllerComponents)(mockConfig) {
+    new CalculationElectionController(mockHttp, mockCalcConnector, mockAnswersConstructor, mockDefaultCalElecConstructor, mockMessagesControllerComponents)(mockConfig, fakeApplication) {
       val calcConnector: CalculatorConnector = mockCalcConnector
       val calcElectionConstructor: CalculationElectionConstructor = mockDefaultCalElecConstructor
       val calcAnswersConstructor: AnswersConstructor = mockAnswersConstructor

@@ -29,7 +29,7 @@ import models._
 import org.jsoup._
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HeaderCarrier
@@ -59,7 +59,7 @@ class ImprovementsActionSpec extends UnitSpec with WithFakeApplication with Mock
       mockCalcConnector,
       mockAnswersConstructor,
       mockMessagesControllerComponents
-    )(mockConfig)
+    )(mockConfig, fakeApplication)
   }
 
   def setupTarget(getData: Option[ImprovementsModel],
@@ -88,7 +88,7 @@ class ImprovementsActionSpec extends UnitSpec with WithFakeApplication with Mock
     when(mockCalcConnector.saveFormData[ImprovementsModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(mock[CacheMap]))
 
-    new ImprovementsController(mockHttp, mockCalcConnector, mockAnswersConstructor, mockMessagesControllerComponents)(mockConfig) {
+    new ImprovementsController(mockHttp, mockCalcConnector, mockAnswersConstructor, mockMessagesControllerComponents)(mockConfig, fakeApplication) {
       val calcConnector: CalculatorConnector = mockCalcConnector
       val answersConstructor: AnswersConstructor = mockAnswersConstructor
     }

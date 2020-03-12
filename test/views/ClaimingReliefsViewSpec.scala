@@ -22,7 +22,7 @@ import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import forms.ClaimingReliefsForm
 import org.jsoup.Jsoup
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.claimingReliefs
 import play.api.i18n.Messages.Implicits._

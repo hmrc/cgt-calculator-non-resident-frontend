@@ -28,7 +28,7 @@ import controllers.{CalculationElectionController, OutsideTaxYearController}
 import javax.inject.Inject
 import models.{DateModel, TaxYearModel}
 import org.jsoup.Jsoup
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import play.api.Environment
@@ -59,7 +59,7 @@ class OutsideTaxYearActionSpec()
     when(mockCalcConnector.getTaxYear(ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(Future.successful(taxYearModel))
 
-    new OutsideTaxYearController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig) {
+    new OutsideTaxYearController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig, fakeApplication) {
     }
   }
 

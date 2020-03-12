@@ -28,7 +28,7 @@ import models.AcquisitionValueModel
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.Environment
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
@@ -56,7 +56,7 @@ class WorthWhenGiftedToActionSpec extends UnitSpec with WithFakeApplication with
       mockHttp,
       mockCalcConnector,
       mockMessagesControllerComponents
-    )(mockConfig)
+    )(mockConfig, fakeApplication)
   }
 
   def setupTarget(getData: Option[AcquisitionValueModel]): WorthWhenGiftedToController = {
@@ -68,7 +68,7 @@ class WorthWhenGiftedToActionSpec extends UnitSpec with WithFakeApplication with
     when(mockCalcConnector.saveFormData[AcquisitionValueModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(mock[CacheMap]))
 
-    new WorthWhenGiftedToController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig) {
+    new WorthWhenGiftedToController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig, fakeApplication) {
       val calcConnector: CalculatorConnector = mockCalcConnector
     }
   }

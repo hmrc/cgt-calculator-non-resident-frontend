@@ -16,7 +16,7 @@
 
 package models
 
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.json.Json
 import uk.gov.hmrc.play.test.UnitSpec
 

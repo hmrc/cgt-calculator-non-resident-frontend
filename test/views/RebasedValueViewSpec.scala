@@ -23,7 +23,7 @@ import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
 import forms.RebasedValueForm._
 import controllers.routes
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.rebasedValue
 import play.api.i18n.Messages.Implicits._

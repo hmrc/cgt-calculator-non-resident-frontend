@@ -23,7 +23,7 @@ import models.WorthBeforeLegislationStartModel
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.test.Helpers._
 import assets.MessageLookup.NonResident.{WorthBeforeLegislationStart => messages}
 import config.ApplicationConfig
@@ -56,7 +56,7 @@ class WorthBeforeLegislationStartActionSpec extends UnitSpec with WithFakeApplic
       mockHttp,
       mockCalcConnector,
       mockMessagesControllerComponents
-    )(mockConfig)
+    )(mockConfig, fakeApplication)
   }
 
 
@@ -68,7 +68,7 @@ class WorthBeforeLegislationStartActionSpec extends UnitSpec with WithFakeApplic
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new WorthBeforeLegislationStartController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig) {
+    new WorthBeforeLegislationStartController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig, fakeApplication) {
       val calcConnector: CalculatorConnector = mockCalcConnector
     }
   }

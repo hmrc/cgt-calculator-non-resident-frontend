@@ -18,7 +18,7 @@ package views
 
 import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.Application
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.FakeRequest
@@ -33,7 +33,7 @@ class ErrorTemplateViewSpec extends UnitSpec with WithFakeApplication with Mocki
 
   "Error Template" should {
     "produce the same output when render and f are called" in {
-      error_template.f("title", "heading", "message")(FakeRequest("GET", ""), mockMessage, fakeApplication, mockConfig) shouldBe error_template.render("title", "heading", "message", FakeRequest("GET", ""), mockMessage, fakeApplication, mockConfig)
+      error_template.f("title", "heading", "message")(FakeRequest("GET", ""), mockMessage, mockConfig) shouldBe error_template.render("title", "heading", "message", FakeRequest("GET", ""), mockMessage, mockConfig)
     }
   }
 }

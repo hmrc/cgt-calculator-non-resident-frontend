@@ -28,7 +28,7 @@ import models.CostsAtLegislationStartModel
 import org.jsoup._
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.Environment
 import play.api.libs.json.Json
 import play.api.mvc.MessagesControllerComponents
@@ -57,7 +57,7 @@ class CostsAtLegislationStartActionSpec extends UnitSpec with WithFakeApplicatio
       mockHttp,
       mockCalcConnector,
       mockMessagesControllerComponents
-    )(mockConfig)
+    )(mockConfig, fakeApplication)
   }
 
   def setupTarget(getData: Option[CostsAtLegislationStartModel]): CostsAtLegislationStartController = {
@@ -71,7 +71,7 @@ class CostsAtLegislationStartActionSpec extends UnitSpec with WithFakeApplicatio
       ArgumentMatchers.eq(KeystoreKeys.costAtLegislationStart), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(successfulSave)
 
-    new CostsAtLegislationStartController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig) {
+    new CostsAtLegislationStartController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig, fakeApplication) {
       val calcConnector: CalculatorConnector = mockCalcConnector
     }
   }

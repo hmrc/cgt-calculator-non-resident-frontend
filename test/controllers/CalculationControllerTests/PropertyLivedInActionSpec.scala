@@ -22,7 +22,7 @@ import connectors.CalculatorConnector
 import controllers.helpers.FakeRequestHelper
 import controllers.{PropertyLivedInController, ReportController}
 import models.PropertyLivedInModel
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import org.mockito.Mockito._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import common.KeystoreKeys.{NonResidentKeys => keyStoreKeys}
@@ -64,7 +64,7 @@ class PropertyLivedInActionSpec extends UnitSpec with WithFakeApplication with F
       mockHttp,
       mockCalcConnector,
       mockMessagesControllerComponents
-    )(mockConfig)
+    )(mockConfig, fakeApplication)
   }
 
 
@@ -77,7 +77,7 @@ class PropertyLivedInActionSpec extends UnitSpec with WithFakeApplication with F
     when(mockCalcConnector.saveFormData[PropertyLivedInModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(mock[CacheMap]))
 
-    new PropertyLivedInController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig) {
+    new PropertyLivedInController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig, fakeApplication) {
       val calcConnector: CalculatorConnector = mockCalcConnector
           }
   }

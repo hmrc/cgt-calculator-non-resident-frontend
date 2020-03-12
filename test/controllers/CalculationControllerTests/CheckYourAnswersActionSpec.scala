@@ -28,7 +28,7 @@ import models._
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.Environment
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
@@ -62,7 +62,7 @@ class CheckYourAnswersActionSpec()
       mockAnswersConstructor,
       mockDefaultCalElecConstructor,
       mockMessagesControllerComponents
-    )(mockConfig)
+    )(mockConfig, fakeApplication)
   }
 
   def setupTarget(totalGainAnswersModel: TotalGainAnswersModel,
@@ -87,7 +87,7 @@ class CheckYourAnswersActionSpec()
     when(mockCalcConnector.calculateTotalGain(ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(totalGainsModel)
 
-    new CheckYourAnswersController(mockHttp, mockCalcConnector, mockAnswersConstructor, mockDefaultCalElecConstructor, mockMessagesControllerComponents)(mockConfig) {
+    new CheckYourAnswersController(mockHttp, mockCalcConnector, mockAnswersConstructor, mockDefaultCalElecConstructor, mockMessagesControllerComponents)(mockConfig, fakeApplication) {
       val answersConstructor: AnswersConstructor = mockAnswersConstructor
       val calculatorConnector: CalculatorConnector = mockCalcConnector
     }

@@ -18,7 +18,7 @@ package views.warnings
 
 import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.Application
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.FakeRequest

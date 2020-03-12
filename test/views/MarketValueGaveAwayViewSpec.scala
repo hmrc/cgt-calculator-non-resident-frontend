@@ -23,7 +23,7 @@ import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
 import forms.MarketValueGaveAwayForm._
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.marketValueGaveAway
 import play.api.i18n.Messages.Implicits._
