@@ -26,8 +26,7 @@ import controllers.utils.RecoverableFuture
 import forms.CalculationElectionForm._
 import javax.inject.Inject
 import models._
-import play.api.Environment
-import play.api.Play.current
+import play.api.{Application, Environment}
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -44,7 +43,8 @@ class CalculationElectionController @Inject()(http: DefaultHttpClient,calcConnec
                                               calcAnswersConstructor: AnswersConstructor,
                                               calcElectionConstructor: DefaultCalculationElectionConstructor,
                                               mcc: MessagesControllerComponents)
-                                             (implicit val applicationConfig: ApplicationConfig)
+                                             (implicit val applicationConfig: ApplicationConfig,
+                                              implicit val application: Application)
                                                 extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   def orderElements(content: Seq[(String, String, String, String, Option[String], Option[BigDecimal])],

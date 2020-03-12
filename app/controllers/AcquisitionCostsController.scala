@@ -26,7 +26,7 @@ import controllers.utils.RecoverableFuture
 import forms.AcquisitionCostsForm._
 import javax.inject.Inject
 import models.{AcquisitionCostsModel, BoughtForLessModel, DateModel, HowBecameOwnerModel}
-import play.api.Play.current
+import play.api.Application
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
@@ -43,7 +43,8 @@ class AcquisitionCostsController @Inject()(http: DefaultHttpClient,
                                            calcElectionConstructor: DefaultCalculationElectionConstructor,
                                            mcc: MessagesControllerComponents
                                            )
-                                          (implicit val appConfig: ApplicationConfig)
+                                          (implicit val appConfig: ApplicationConfig,
+                                           implicit val application: Application)
   extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   private def isOwnerBeforeLegislationStart(implicit hc: HeaderCarrier): Future[Boolean] = {

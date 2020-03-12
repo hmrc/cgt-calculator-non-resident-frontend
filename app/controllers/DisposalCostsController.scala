@@ -28,20 +28,21 @@ import play.api.data.Form
 import play.api.mvc.{MessagesControllerComponents, Result}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 import controllers.utils.RecoverableFuture
 import javax.inject.Inject
-import play.api.Environment
+import play.api.{Application, Environment}
 import play.api.i18n.I18nSupport
 
 import scala.concurrent.Future
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class DisposalCostsController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
                                         mcc: MessagesControllerComponents)
-                                       (implicit val applicationConfig: ApplicationConfig)
+                                       (implicit val applicationConfig: ApplicationConfig,
+                                        implicit val application: Application)
                                           extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   private def backUrl(soldOrGivenAwayModel: Option[SoldOrGivenAwayModel], soldForLessModel: Option[SoldForLessModel]): Future[String] =

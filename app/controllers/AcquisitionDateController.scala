@@ -25,24 +25,23 @@ import controllers.predicates.ValidActiveSession
 import forms.AcquisitionDateForm._
 import javax.inject.Inject
 import models.DateModel
-import play.api.Environment
-import play.api.Play.current
+import play.api.{Application, Environment}
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation
+
 import scala.concurrent.ExecutionContext.Implicits.global
-
-
 import scala.concurrent.Future
 
 class  AcquisitionDateController @Inject()(http: DefaultHttpClient,
                                            calcConnector: CalculatorConnector,
                                            calcElectionConstructor: DefaultCalculationElectionConstructor,
                                            mcc: MessagesControllerComponents)
-                                          (implicit val applicationConfig: ApplicationConfig)
+                                          (implicit val applicationConfig: ApplicationConfig,
+                                           implicit val application: Application)
                                               extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
 

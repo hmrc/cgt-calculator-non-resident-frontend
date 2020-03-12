@@ -23,7 +23,7 @@ import controllers.predicates.ValidActiveSession
 import forms.HowMuchGainForm._
 import javax.inject.Inject
 import models.HowMuchGainModel
-import play.api.Play.current
+import play.api.Application
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.MessagesControllerComponents
@@ -35,7 +35,8 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class HowMuchGainController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
-                                      mcc: MessagesControllerComponents)(implicit val applicationConfig: ApplicationConfig)
+                                      mcc: MessagesControllerComponents)(implicit val applicationConfig: ApplicationConfig,
+                                                                         implicit val application: Application)
                                         extends FrontendController(mcc) with ValidActiveSession with I18nSupport{
 
   val howMuchGain = ValidateSession.async { implicit request =>
