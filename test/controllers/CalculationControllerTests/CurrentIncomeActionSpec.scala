@@ -27,7 +27,7 @@ import models.{CurrentIncomeModel, PropertyLivedInModel}
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.Environment
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
@@ -55,7 +55,7 @@ class CurrentIncomeActionSpec extends UnitSpec with WithFakeApplication with Moc
       mockHttp,
       mockCalcConnector,
       mockMessagesControllerComponents
-    )(mockConfig)
+    )(mockConfig, fakeApplication)
   }
 
   def setupTarget(getData: Option[CurrentIncomeModel], getPropertyLivedIn: Option[PropertyLivedInModel] = None): CurrentIncomeController = {
@@ -69,7 +69,7 @@ class CurrentIncomeActionSpec extends UnitSpec with WithFakeApplication with Moc
     when(mockCalcConnector.saveFormData[CurrentIncomeModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(mock[CacheMap])
 
-    new CurrentIncomeController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig) {
+    new CurrentIncomeController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig, fakeApplication) {
       val calcConnector: CalculatorConnector = mockCalcConnector
     }
   }

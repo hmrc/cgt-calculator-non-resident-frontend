@@ -29,7 +29,7 @@ import org.jsoup._
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterEach}
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.{Application, Environment}
 import play.api.i18n.Messages
 import play.api.mvc.MessagesControllerComponents
@@ -60,7 +60,7 @@ class DisposalCostsActionSpec extends UnitSpec with WithFakeApplication with Moc
       mockHttp,
       mockCalcConnector,
       mockMessagesControllerComponents
-    )(mockConfig)
+    )(mockConfig, fakeApplication)
   }
 
   def setupTarget(getData: Option[DisposalCostsModel],
@@ -80,7 +80,7 @@ class DisposalCostsActionSpec extends UnitSpec with WithFakeApplication with Moc
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new DisposalCostsController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig) {
+    new DisposalCostsController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig, fakeApplication) {
       val calcConnector: CalculatorConnector = mockCalcConnector
     }
   }

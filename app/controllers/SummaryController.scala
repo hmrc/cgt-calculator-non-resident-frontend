@@ -24,7 +24,6 @@ import connectors.CalculatorConnector
 import constructors.AnswersConstructor
 import controllers.predicates.ValidActiveSession
 import models._
-import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
@@ -32,7 +31,7 @@ import views.html.calculation
 import controllers.utils.RecoverableFuture
 import javax.inject.Inject
 import play.api.i18n.I18nSupport
-import play.api.{Environment, Logger}
+import play.api.{Application, Environment, Logger}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -43,7 +42,8 @@ import scala.util.Random
 
 class SummaryController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
                                   answersConstructor: AnswersConstructor,
-                                  mcc: MessagesControllerComponents)(implicit val applicationConfig: ApplicationConfig)
+                                  mcc: MessagesControllerComponents)(implicit val applicationConfig: ApplicationConfig,
+                                                                     implicit val application: Application)
                                     extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   val summary: Action[AnyContent] = ValidateSession.async { implicit request =>
@@ -54,6 +54,7 @@ class SummaryController @Inject()(http: DefaultHttpClient,calcConnector: Calcula
         case (Some(model), CalculationType.flat) => Future.successful(model.flatResult)
         case (Some(model), CalculationType.rebased) => Future.successful(model.rebasedResult.get)
         case (Some(model), CalculationType.timeApportioned) => Future.successful(model.timeApportionedResult.get)
+        case _ => throw new MatchError("Unexpected values for: (calculationResultsWithTaxOwedModel, calculationElection)")
       }
     }
 

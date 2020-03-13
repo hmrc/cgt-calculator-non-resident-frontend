@@ -19,7 +19,6 @@ package config
 import javax.inject.Inject
 import models.CGTClientException
 import play.api.Logger
-import play.api.Play.current
 import play.api.http.HeaderNames.CACHE_CONTROL
 import play.api.http.Status._
 import play.api.i18n.MessagesApi

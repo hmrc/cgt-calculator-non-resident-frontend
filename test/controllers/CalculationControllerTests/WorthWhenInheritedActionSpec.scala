@@ -28,7 +28,7 @@ import models.AcquisitionValueModel
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.Environment
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
@@ -58,7 +58,7 @@ class WorthWhenInheritedActionSpec extends UnitSpec with WithFakeApplication wit
       mockHttp,
       mockCalcConnector,
       mockMessagesControllerComponents
-    )(mockConfig)
+    )(mockConfig, fakeApplication)
   }
 
   def setupTarget(getData: Option[AcquisitionValueModel]): WorthWhenInheritedController = {
@@ -71,7 +71,7 @@ class WorthWhenInheritedActionSpec extends UnitSpec with WithFakeApplication wit
     when(mockCalcConnector.saveFormData[AcquisitionValueModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(mock[CacheMap]))
 
-    new WorthWhenInheritedController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig)
+    new WorthWhenInheritedController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig, fakeApplication)
   }
 
   "Calling .worthWhenInherited" when {

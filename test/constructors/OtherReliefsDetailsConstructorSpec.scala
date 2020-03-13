@@ -23,7 +23,7 @@ import helpers.AssertHelpers
 import assets.MessageLookup.{NonResident => messages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import controllers.helpers.FakeRequestHelper
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.i18n.MessagesProvider
 import play.api.mvc.MessagesControllerComponents
 

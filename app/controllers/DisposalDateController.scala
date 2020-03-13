@@ -26,11 +26,10 @@ import controllers.predicates.ValidActiveSession
 import forms.DisposalDateForm._
 import javax.inject.Inject
 import models.DateModel
-import play.api.Play.current
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, Lang}
 import play.api.mvc.MessagesControllerComponents
-import play.api.{Environment, Logger}
+import play.api.{Application, Environment, Logger}
 import uk.gov.hmrc.http.SessionKeys
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
@@ -42,7 +41,8 @@ import scala.concurrent.Future
 
 class DisposalDateController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
                                        mcc: MessagesControllerComponents)
-                                      (implicit val applicationConfig: ApplicationConfig)
+                                      (implicit val applicationConfig: ApplicationConfig,
+                                       implicit val application: Application)
                                         extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   val disposalDate = Action.async { implicit request =>

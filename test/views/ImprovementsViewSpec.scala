@@ -22,7 +22,7 @@ import controllers.helpers.FakeRequestHelper
 import controllers.routes
 import forms.ImprovementsForm._
 import org.jsoup.Jsoup
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.i18n.MessagesApi
 import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}

@@ -25,8 +25,7 @@ import controllers.utils.RecoverableFuture
 import forms.BoughtForLessForm._
 import javax.inject.Inject
 import models.BoughtForLessModel
-import play.api.Environment
-import play.api.Play.current
+import play.api.{Application, Environment}
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.MessagesControllerComponents
@@ -40,7 +39,8 @@ import scala.concurrent.Future
 class BoughtForLessController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
                                         calcElectionConstructor: DefaultCalculationElectionConstructor,
                                         mcc: MessagesControllerComponents)
-                                       (implicit val applicationConfig: ApplicationConfig)
+                                       (implicit val applicationConfig: ApplicationConfig,
+                                        implicit val application: Application)
                                           extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
 

@@ -27,7 +27,7 @@ import models.HowMuchGainModel
 import org.jsoup._
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.Environment
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
@@ -54,7 +54,7 @@ class HowMuchGainActionSpec extends UnitSpec with WithFakeApplication with Mocki
       mockHttp,
       mockCalcConnector,
       mockMessagesControllerComponents
-    )(mockConfig)
+    )(mockConfig, fakeApplication)
   }
 
   def setupTarget(getData: Option[HowMuchGainModel]): HowMuchGainController = {
@@ -65,7 +65,7 @@ class HowMuchGainActionSpec extends UnitSpec with WithFakeApplication with Mocki
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new HowMuchGainController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig) {
+    new HowMuchGainController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig, fakeApplication) {
       val calcConnector: CalculatorConnector = mockCalcConnector
     }
   }

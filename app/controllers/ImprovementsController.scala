@@ -26,8 +26,7 @@ import controllers.utils.RecoverableFuture
 import forms.ImprovementsForm._
 import javax.inject.Inject
 import models._
-import play.api.Environment
-import play.api.Play.current
+import play.api.{Application, Environment}
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
@@ -41,7 +40,8 @@ import scala.concurrent.Future
 
 class ImprovementsController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
                                        answersConstructor: AnswersConstructor,
-                                       mcc: MessagesControllerComponents)(implicit val applicationConfig: ApplicationConfig)
+                                       mcc: MessagesControllerComponents)(implicit val applicationConfig: ApplicationConfig,
+                                                                          implicit val application: Application)
                                         extends FrontendController(mcc) with ValidActiveSession with I18nSupport{
 
   private def improvementsBackUrl(acquisitionDate: Option[DateModel]): Future[String] = {

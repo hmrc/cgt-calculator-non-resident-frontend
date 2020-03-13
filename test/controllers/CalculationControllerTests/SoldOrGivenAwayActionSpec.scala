@@ -28,7 +28,7 @@ import models.SoldOrGivenAwayModel
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.Environment
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
@@ -56,7 +56,7 @@ class SoldOrGivenAwayActionSpec extends UnitSpec with WithFakeApplication with M
       mockHttp,
       mockCalcConnector,
       mockMessagesControllerComponents
-    )(mockConfig)
+    )(mockConfig, fakeApplication)
   }
 
   def setUpTarget(getData: Option[SoldOrGivenAwayModel]): SoldOrGivenAwayController = {
@@ -68,7 +68,7 @@ class SoldOrGivenAwayActionSpec extends UnitSpec with WithFakeApplication with M
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new SoldOrGivenAwayController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig)  {
+    new SoldOrGivenAwayController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig, fakeApplication)  {
       val calcConnector: CalculatorConnector = mockCalcConnector
     }
   }

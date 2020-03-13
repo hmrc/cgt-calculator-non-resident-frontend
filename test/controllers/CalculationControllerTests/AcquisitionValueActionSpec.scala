@@ -24,7 +24,7 @@ import org.mockito.Mockito._
 import play.api.test.Helpers._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import org.jsoup._
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import assets.MessageLookup.NonResident.{AcquisitionValue => messages}
 import config.ApplicationConfig
 import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
@@ -57,7 +57,7 @@ class AcquisitionValueActionSpec extends UnitSpec with WithFakeApplication with 
       mockHttp,
       mockCalcConnector,
       mockMessagesControllerComponents
-    )(mockConfig)
+    )(mockConfig, fakeApplication)
   }
   def setupTarget(getData: Option[AcquisitionValueModel]): AcquisitionValueController = {
 
@@ -68,7 +68,7 @@ class AcquisitionValueActionSpec extends UnitSpec with WithFakeApplication with 
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new AcquisitionValueController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig) {
+    new AcquisitionValueController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig, fakeApplication) {
       val calcConnector: CalculatorConnector = mockCalcConnector
     }
   }

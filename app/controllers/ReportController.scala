@@ -27,8 +27,7 @@ import controllers.utils.RecoverableFuture
 import it.innove.play.pdf.PdfGenerator
 import javax.inject.Inject
 import models._
-import play.api.Environment
-import play.api.Play.current
+import play.api.{Application, Environment}
 import play.api.i18n.{I18nSupport, Lang, Messages}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, RequestHeader}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -43,7 +42,8 @@ import scala.concurrent.Future
 class ReportController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
                                  answersConstructor: AnswersConstructor,
                                  mcc: MessagesControllerComponents,
-                                 pdfGenerator: PdfGenerator)(implicit val applicationConfig: ApplicationConfig)
+                                 pdfGenerator: PdfGenerator)(implicit val applicationConfig: ApplicationConfig,
+                                                             implicit val application: Application)
                                   extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   def host(implicit request: RequestHeader): String = {
@@ -58,6 +58,7 @@ class ReportController @Inject()(http: DefaultHttpClient,calcConnector: Calculat
         case (Some(model), CalculationType.flat) => Future.successful(model.flatResult)
         case (Some(model), CalculationType.rebased) => Future.successful(model.rebasedResult.get)
         case (Some(model), CalculationType.timeApportioned) => Future.successful(model.timeApportionedResult.get)
+        case _ => throw new MatchError("Unexpected values for: (calculationResultsWithTaxOwedModel, calculationElection)")
       }
     }
 

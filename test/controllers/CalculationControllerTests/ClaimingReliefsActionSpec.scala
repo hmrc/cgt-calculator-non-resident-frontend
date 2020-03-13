@@ -27,7 +27,7 @@ import models._
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito.when
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.Environment
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
@@ -56,7 +56,7 @@ class ClaimingReliefsActionSpec extends UnitSpec with WithFakeApplication with F
       mockHttp,
       mockCalcConnector,
       mockMessagesControllerComponents
-    )(mockConfig)
+    )(mockConfig, fakeApplication)
   }
   def setupTarget(model: Option[ClaimingReliefsModel]): ClaimingReliefsController = {
 
@@ -70,7 +70,7 @@ class ClaimingReliefsActionSpec extends UnitSpec with WithFakeApplication with F
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new ClaimingReliefsController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig) {
+    new ClaimingReliefsController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig, fakeApplication) {
     }
   }
 

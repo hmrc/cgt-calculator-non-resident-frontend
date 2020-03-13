@@ -29,7 +29,7 @@ import models.OtherPropertiesModel
 import org.jsoup._
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.Environment
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
@@ -57,7 +57,7 @@ class OtherPropertiesActionSpec extends UnitSpec with WithFakeApplication with M
       mockHttp,
       mockCalcConnector,
       mockMessagesControllerComponents
-    )(mockConfig)
+    )(mockConfig, fakeApplication)
   }
 
   def setupTarget(getData: Option[OtherPropertiesModel]): OtherPropertiesController = {
@@ -69,12 +69,12 @@ class OtherPropertiesActionSpec extends UnitSpec with WithFakeApplication with M
     when(mockCalcConnector.saveFormData[OtherPropertiesModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(mock[CacheMap])
 
-    new OtherPropertiesController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig) {
+    new OtherPropertiesController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig, fakeApplication) {
       val calcConnector: CalculatorConnector = mockCalcConnector
     }
   }
 
-  val controller = new TimeoutController(mockMessagesControllerComponents)(mockConfig)
+  val controller = new TimeoutController(mockMessagesControllerComponents)(mockConfig, fakeApplication)
 
   // GET Tests
   "Calling the CalculationController.otherProperties" when {

@@ -24,7 +24,7 @@ import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
 import controllers.WhatNextController
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.Environment
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
@@ -40,7 +40,7 @@ class WhatNextControllerSpec extends UnitSpec with WithFakeApplication with Mock
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
 
   "Calling .whatNext" when {
-    lazy val target = new WhatNextController(http = mock[DefaultHttpClient], mockConfig, mockMessagesControllerComponents){}
+    lazy val target = new WhatNextController(http = mock[DefaultHttpClient], mockConfig, fakeApplication, mockMessagesControllerComponents){}
     "provided with a valid request" should {
       lazy val result = target.whatNext(fakeRequestWithSession)
       lazy val document = Jsoup.parse(bodyOf(result)(materializer))

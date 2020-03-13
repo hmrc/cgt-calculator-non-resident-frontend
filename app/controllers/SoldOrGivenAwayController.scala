@@ -24,10 +24,9 @@ import forms.SoldOrGivenAwayForm._
 import javax.inject.Inject
 import views.html.calculation
 import models.SoldOrGivenAwayModel
-import play.api.Environment
+import play.api.{Application, Environment}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 import play.api.i18n.I18nSupport
 import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
@@ -36,7 +35,8 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class SoldOrGivenAwayController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
-                                          mcc: MessagesControllerComponents)(implicit val applicationConfig: ApplicationConfig)
+                                          mcc: MessagesControllerComponents)(implicit val applicationConfig: ApplicationConfig,
+                                                                             implicit val application: Application)
                                             extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   val soldOrGivenAway = ValidateSession.async { implicit request =>

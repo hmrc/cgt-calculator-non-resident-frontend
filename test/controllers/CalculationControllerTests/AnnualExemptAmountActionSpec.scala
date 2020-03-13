@@ -30,7 +30,7 @@ import org.mockito.Mockito._
 import play.api.test.Helpers._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import org.jsoup._
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 
 import scala.concurrent.Future
 import models._
@@ -62,7 +62,7 @@ class AnnualExemptAmountActionSpec extends UnitSpec with WithFakeApplication wit
       mockCalcConnector,
       mockDefaultCalElecConstructor,
       mockMessagesControllerComponents
-    )(mockConfig)
+    )(mockConfig, fakeApplication)
   }
 
   def setupTarget(
@@ -100,7 +100,7 @@ class AnnualExemptAmountActionSpec extends UnitSpec with WithFakeApplication wit
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new AnnualExemptAmountController(mockHttp, mockCalcConnector, mockDefaultCalElecConstructor, mockMessagesControllerComponents)(mockConfig) {
+    new AnnualExemptAmountController(mockHttp, mockCalcConnector, mockDefaultCalElecConstructor, mockMessagesControllerComponents)(mockConfig, fakeApplication) {
       val calcConnector: CalculatorConnector = mockCalcConnector
     }
   }

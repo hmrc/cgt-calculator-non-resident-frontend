@@ -28,7 +28,7 @@ import models.RebasedCostsModel
 import org.jsoup._
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.Environment
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
@@ -56,7 +56,7 @@ class RebasedCostsActionSpec extends UnitSpec with WithFakeApplication with Mock
       mockHttp,
       mockCalcConnector,
       mockMessagesControllerComponents
-    )(mockConfig)
+    )(mockConfig, fakeApplication)
   }
 
   def setupTarget(getData: Option[RebasedCostsModel]): RebasedCostsController = {
@@ -68,7 +68,7 @@ class RebasedCostsActionSpec extends UnitSpec with WithFakeApplication with Mock
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new RebasedCostsController(mockHttp, mockCalcConnector,mockMessagesControllerComponents)(mockConfig) {
+    new RebasedCostsController(mockHttp, mockCalcConnector,mockMessagesControllerComponents)(mockConfig, fakeApplication) {
       val calcConnector: CalculatorConnector = mockCalcConnector
     }
   }

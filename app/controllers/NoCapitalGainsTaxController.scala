@@ -23,7 +23,7 @@ import controllers.predicates.ValidActiveSession
 import controllers.utils.RecoverableFuture
 import javax.inject.Inject
 import models.DateModel
-import play.api.Play.current
+import play.api.Application
 import play.api.i18n.{I18nSupport, Lang}
 import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
@@ -35,7 +35,8 @@ import scala.concurrent.ExecutionContext.Implicits.global
 class NoCapitalGainsTaxController @Inject()(http: DefaultHttpClient,
                                             calcConnector: CalculatorConnector,
                                             mcc: MessagesControllerComponents)
-                                           (implicit val applicationConfig: ApplicationConfig)
+                                           (implicit val applicationConfig: ApplicationConfig,
+                                            implicit val application: Application)
   extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   val noCapitalGainsTax = ValidateSession.async { implicit request =>

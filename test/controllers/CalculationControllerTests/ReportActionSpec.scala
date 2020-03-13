@@ -31,7 +31,7 @@ import javax.inject.Inject
 import models.{TaxYearModel, _}
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.Environment
 import play.api.mvc.{MessagesControllerComponents, RequestHeader}
 import play.api.test.Helpers._
@@ -61,7 +61,7 @@ class ReportActionSpec @Inject()(pdfGenerator: PdfGenerator) extends UnitSpec wi
       mockAnswersConstructor,
       mockMessagesControllerComponents,
       pdfGenerator
-    )(mockConfig)
+    )(mockConfig, fakeApplication)
   }
 
   def setupTarget
@@ -129,7 +129,7 @@ class ReportActionSpec @Inject()(pdfGenerator: PdfGenerator) extends UnitSpec wi
     when(mockCalcConnector.calculateTotalCosts(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(BigDecimal(1000.00)))
 
-    new ReportController(mockHttp, mockCalcConnector, mockAnswersConstructor, mockMessagesControllerComponents, pdfGenerator)(mockConfig) {
+    new ReportController(mockHttp, mockCalcConnector, mockAnswersConstructor, mockMessagesControllerComponents, pdfGenerator)(mockConfig, fakeApplication) {
       val calcConnector: CalculatorConnector = mockCalcConnector
       val answersConstructor: AnswersConstructor = mockAnswersConstructor
 

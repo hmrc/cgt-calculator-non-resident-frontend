@@ -24,8 +24,7 @@ import controllers.utils.RecoverableFuture
 import forms.WhoDidYouGiveItToForm._
 import javax.inject.Inject
 import models.WhoDidYouGiveItToModel
-import play.api.Environment
-import play.api.Play.current
+import play.api.{Application, Environment}
 import play.api.i18n.I18nSupport
 import play.api.i18n.Messages.Implicits._
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
@@ -40,7 +39,8 @@ import scala.concurrent.Future
 class WhoDidYouGiveItToController @Inject()(http: DefaultHttpClient,
                                             calcConnector: CalculatorConnector,
                                             mcc: MessagesControllerComponents,
-                                            implicit val appConfig: ApplicationConfig) extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
+                                            implicit val appConfig: ApplicationConfig,
+                                            implicit val application: Application) extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   val whoDidYouGiveItTo = ValidateSession.async { implicit request =>
 

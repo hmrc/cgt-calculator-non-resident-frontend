@@ -24,11 +24,10 @@ import forms.AcquisitionMarketValueForm._
 import javax.inject.Inject
 import views.html.calculation
 import models.AcquisitionValueModel
-import play.api.Environment
+import play.api.{Application, Environment}
 import play.api.data.Form
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 import play.api.i18n.I18nSupport
 import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
@@ -37,7 +36,8 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class WorthWhenGiftedToController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
-                                            mcc: MessagesControllerComponents)(implicit val applicationConfig: ApplicationConfig)
+                                            mcc: MessagesControllerComponents)(implicit val applicationConfig: ApplicationConfig,
+                                                                               implicit val application: Application)
                                               extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   val worthWhenGiftedTo = ValidateSession.async { implicit request =>

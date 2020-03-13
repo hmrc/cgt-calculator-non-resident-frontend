@@ -28,7 +28,7 @@ import models.DateModel
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.Environment
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
@@ -56,7 +56,7 @@ class NoCapitalGainsTaxActionSpec extends UnitSpec with WithFakeApplication with
       mockHttp,
       mockCalcConnector,
       mockMessagesControllerComponents
-    )(mockConfig)
+    )(mockConfig, fakeApplication)
   }
 
   def setupTarget(getData: Option[DateModel]): NoCapitalGainsTaxController = {
@@ -65,7 +65,7 @@ class NoCapitalGainsTaxActionSpec extends UnitSpec with WithFakeApplication with
       ArgumentMatchers.eq(KeystoreKeys.disposalDate))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    new NoCapitalGainsTaxController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig) {
+    new NoCapitalGainsTaxController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig, fakeApplication) {
       val calcConnector: CalculatorConnector = mockCalcConnector
     }
   }

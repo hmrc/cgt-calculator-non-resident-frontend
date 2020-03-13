@@ -28,7 +28,7 @@ import models.SoldForLessModel
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.Environment
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
@@ -54,7 +54,7 @@ class SoldForLessActionSpec extends UnitSpec with WithFakeApplication with FakeR
     val controller = new SoldForLessController(
       mockHttp,
       mockCalcConnector,
-      mockMessagesControllerComponents)(mockConfig)
+      mockMessagesControllerComponents)(mockConfig, fakeApplication)
   }
 
   def setupTarget(getData: Option[SoldForLessModel]): SoldForLessController = {
@@ -65,7 +65,7 @@ class SoldForLessActionSpec extends UnitSpec with WithFakeApplication with FakeR
     when(mockCalcConnector.saveFormData[SoldForLessModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(mock[CacheMap]))
 
-    new SoldForLessController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig) {
+    new SoldForLessController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig, fakeApplication) {
       val calcConnector: CalculatorConnector = mockCalcConnector
     }
   }
