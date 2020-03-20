@@ -25,7 +25,7 @@ object AppDependencies {
     "uk.gov.hmrc" %% "bootstrap-play-26" % "1.5.0",
     "uk.gov.hmrc" %% "play-partials" % "6.9.0-play-26",
     "uk.gov.hmrc" %% "http-caching-client" % "9.0.0-play-26",
-    "uk.gov.hmrc" %% "mongo-caching" % "6.10.0-play-26",
+    "uk.gov.hmrc" %% "mongo-caching" % "6.8.0-play-26",
     "uk.gov.hmrc" %% "play-language" % "4.2.0-play-26",
     "it.innove"   % "play2-pdf" % "1.8.2" exclude("com.typesafe.play","*"),
     "uk.gov.hmrc" %% "govuk-template" % "5.52.0-play-26",
