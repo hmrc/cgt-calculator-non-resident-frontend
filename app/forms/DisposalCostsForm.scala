@@ -22,7 +22,6 @@ import common.Validation._
 import models.DisposalCostsModel
 import play.api.data.Forms._
 import play.api.data._
-import uk.gov.hmrc.play.views.helpers.MoneyPounds
 
 object DisposalCostsForm {
   val disposalCostsForm = Form(

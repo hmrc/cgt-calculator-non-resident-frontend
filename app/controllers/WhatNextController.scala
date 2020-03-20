@@ -19,11 +19,10 @@ package controllers
 import config.ApplicationConfig
 import controllers.predicates.ValidActiveSession
 import javax.inject.Inject
-import play.api.{Application, Environment}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-import play.api.i18n.Messages.Implicits._
+import play.api.Application
 import play.api.i18n.I18nSupport
 import play.api.mvc.MessagesControllerComponents
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
 import scala.concurrent.Future

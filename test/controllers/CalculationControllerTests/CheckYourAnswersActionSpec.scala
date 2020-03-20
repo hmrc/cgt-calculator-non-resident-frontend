@@ -21,24 +21,22 @@ import assets.MessageLookup.{NonResident => messages}
 import config.ApplicationConfig
 import connectors.CalculatorConnector
 import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
-import controllers.{CalculationElectionController, CheckYourAnswersController, routes}
 import controllers.helpers.FakeRequestHelper
-import javax.inject.Inject
+import controllers.{CheckYourAnswersController, routes}
 import models._
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.Environment
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
-
-import scala.concurrent.Future
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.http.logging.SessionId
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+
+import scala.concurrent.Future
 
 class CheckYourAnswersActionSpec()
   extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
@@ -87,10 +85,7 @@ class CheckYourAnswersActionSpec()
     when(mockCalcConnector.calculateTotalGain(ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(totalGainsModel)
 
-    new CheckYourAnswersController(mockHttp, mockCalcConnector, mockAnswersConstructor, mockDefaultCalElecConstructor, mockMessagesControllerComponents)(mockConfig, fakeApplication) {
-      val answersConstructor: AnswersConstructor = mockAnswersConstructor
-      val calculatorConnector: CalculatorConnector = mockCalcConnector
-    }
+    new CheckYourAnswersController(mockHttp, mockCalcConnector, mockAnswersConstructor, mockDefaultCalElecConstructor, mockMessagesControllerComponents)(mockConfig, fakeApplication)
   }
 
   val modelWithMultipleGains = TotalGainAnswersModel(DateModel(5, 10, 2016),

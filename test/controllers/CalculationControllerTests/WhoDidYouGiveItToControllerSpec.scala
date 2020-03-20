@@ -19,26 +19,24 @@ package controllers.CalculationControllerTests
 import akka.stream.Materializer
 import akka.util.Timeout
 import assets.MessageLookup
+import assets.MessageLookup.{NoTaxToPay => messages}
+import common.KeystoreKeys.{NonResidentKeys => keystoreKeys}
+import config.ApplicationConfig
 import connectors.CalculatorConnector
+import controllers.WhoDidYouGiveItToController
 import controllers.helpers.FakeRequestHelper
 import models.WhoDidYouGiveItToModel
-import org.mockito.ArgumentMatchers
-import org.scalatestplus.mockito.MockitoSugar
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
-import common.KeystoreKeys.{NonResidentKeys => keystoreKeys}
-import config.{AppConfig, ApplicationConfig}
-import controllers.{PrivateResidenceReliefController, WhoDidYouGiveItToController}
 import org.jsoup.Jsoup
+import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
-import play.api.test.Helpers._
-import assets.MessageLookup.{NoTaxToPay => messages}
-import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
-import play.api.Environment
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
+import play.api.test.Helpers._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.http.logging.SessionId
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 import scala.concurrent.Future
 
@@ -69,10 +67,7 @@ class WhoDidYouGiveItToControllerSpec extends UnitSpec with WithFakeApplication 
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new WhoDidYouGiveItToController(mockHttp, mockCalcConnector, mockMessagesControllerComponents, mockConfig, fakeApplication) {
-      val calcConnector: CalculatorConnector = mockCalcConnector
-      val config: AppConfig = mock[AppConfig]
-    }
+    new WhoDidYouGiveItToController(mockHttp, mockCalcConnector, mockMessagesControllerComponents, mockConfig, fakeApplication)
   }
 
 
@@ -191,7 +186,6 @@ class WhoDidYouGiveItToControllerSpec extends UnitSpec with WithFakeApplication 
       "An invalid session is provided" should {
         lazy val target = setupTarget(Some(WhoDidYouGiveItToModel("Other")))
         lazy val result = target.noTaxToPay(fakeRequest)
-        lazy val doc = Jsoup.parse(bodyOf(result)(materializer))
 
         "return a status of 303" in {
           status(result) shouldBe 303

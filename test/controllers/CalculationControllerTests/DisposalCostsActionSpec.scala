@@ -20,28 +20,25 @@ import akka.stream.Materializer
 import assets.MessageLookup.NonResident.{DisposalCosts => messages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import config.ApplicationConfig
-import models._
 import connectors.CalculatorConnector
-import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
-import controllers.{CalculationElectionController, DisposalCostsController, routes}
 import controllers.helpers.FakeRequestHelper
+import controllers.{DisposalCostsController, routes}
+import models._
 import org.jsoup._
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
-import org.scalatest.{BeforeAndAfter, BeforeAndAfterEach}
+import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.{Application, Environment}
 import play.api.i18n.Messages
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.cache.client.CacheMap
+import uk.gov.hmrc.http.logging.SessionId
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 import scala.concurrent.Future
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.http.logging.SessionId
-import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-import views.html.calculation.disposalCosts
 
 class DisposalCostsActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper with BeforeAndAfterEach {
   implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
@@ -80,9 +77,7 @@ class DisposalCostsActionSpec extends UnitSpec with WithFakeApplication with Moc
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new DisposalCostsController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig, fakeApplication) {
-      val calcConnector: CalculatorConnector = mockCalcConnector
-    }
+    new DisposalCostsController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig, fakeApplication)
   }
 
   //GET Tests
@@ -93,7 +88,6 @@ class DisposalCostsActionSpec extends UnitSpec with WithFakeApplication with Moc
       "return a 200" in new Setup {
         val target = setupTarget(None, None, None)
         lazy val result = target.disposalCosts(fakeRequestWithSession)
-        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
         status(result) shouldBe 200
       }
 
@@ -117,7 +111,6 @@ class DisposalCostsActionSpec extends UnitSpec with WithFakeApplication with Moc
       "return a 200" in {
         val target = setupTarget(None, None, None)
         lazy val result = target.disposalCosts(fakeRequestWithSession)
-        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
         status(result) shouldBe 200
       }
 
@@ -150,7 +143,6 @@ class DisposalCostsActionSpec extends UnitSpec with WithFakeApplication with Moc
       "return a 200" in new Setup {
         val target = setupTarget(None, Some(SoldOrGivenAwayModel(false)), Some(SoldForLessModel(true)))
         lazy val result = target.disposalCosts(fakeRequestWithSession)
-        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
         status(result) shouldBe 200
       }
 
@@ -174,7 +166,6 @@ class DisposalCostsActionSpec extends UnitSpec with WithFakeApplication with Moc
       "return a 200" in {
         val target = setupTarget(None, Some(SoldOrGivenAwayModel(true)), Some(SoldForLessModel(true)))
         lazy val result = target.disposalCosts(fakeRequestWithSession)
-        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
         status(result) shouldBe 200
       }
 
@@ -198,7 +189,6 @@ class DisposalCostsActionSpec extends UnitSpec with WithFakeApplication with Moc
       "return a 200" in {
         val target = setupTarget(None, Some(SoldOrGivenAwayModel(true)), Some(SoldForLessModel(false)))
         lazy val result = target.disposalCosts(fakeRequestWithSession)
-        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
         status(result) shouldBe 200
       }
 
@@ -244,7 +234,6 @@ class DisposalCostsActionSpec extends UnitSpec with WithFakeApplication with Moc
         val target = setupTarget(None, None, None)
         lazy val request = fakeRequestToPOSTWithSession(("disposalCosts", ""))
         lazy val result = target.submitDisposalCosts(request)
-        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
         status(result) shouldBe 400
       }
 

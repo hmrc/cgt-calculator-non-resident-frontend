@@ -23,8 +23,8 @@ import common.TestModels
 import common.nonresident.CalculationType
 import config.ApplicationConfig
 import connectors.CalculatorConnector
-import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
-import controllers.{ReportController, SoldOrGivenAwayController}
+import constructors.AnswersConstructor
+import controllers.ReportController
 import controllers.helpers.FakeRequestHelper
 import it.innove.play.pdf.PdfGenerator
 import javax.inject.Inject
@@ -32,8 +32,7 @@ import models.{TaxYearModel, _}
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.Environment
-import play.api.mvc.{MessagesControllerComponents, RequestHeader}
+import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.cache.client.CacheMap
@@ -129,12 +128,7 @@ class ReportActionSpec @Inject()(pdfGenerator: PdfGenerator) extends UnitSpec wi
     when(mockCalcConnector.calculateTotalCosts(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(BigDecimal(1000.00)))
 
-    new ReportController(mockHttp, mockCalcConnector, mockAnswersConstructor, mockMessagesControllerComponents, pdfGenerator)(mockConfig, fakeApplication) {
-      val calcConnector: CalculatorConnector = mockCalcConnector
-      val answersConstructor: AnswersConstructor = mockAnswersConstructor
-
-      override def host(implicit request: RequestHeader): String = "http://localhost:9977"
-    }
+    new ReportController(mockHttp, mockCalcConnector, mockAnswersConstructor, mockMessagesControllerComponents, pdfGenerator)(mockConfig, fakeApplication)
   }
 
   val model = TotalGainAnswersModel(DateModel(5, 10, 2016),

@@ -19,10 +19,8 @@ package constructors
 import models.ImprovementsModel
 import play.api.data.Form
 import play.api.i18n.{Messages, MessagesApi}
-import play.twirl.api.{Html, HtmlFormat}
+import play.twirl.api.HtmlFormat
 import views.html.helpers._
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 
 object ImprovementsConstructor {
   def generateImprovements(improvementsForm: Form[ImprovementsModel], improvementsOptions: Boolean,

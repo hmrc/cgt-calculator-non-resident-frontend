@@ -22,7 +22,6 @@ import common.Validation._
 import models.HowMuchLossModel
 import play.api.data.Form
 import play.api.data.Forms._
-import uk.gov.hmrc.play.views.helpers.MoneyPounds
 
 object HowMuchLossForm {
 

@@ -17,26 +17,23 @@
 package controllers.CalculationControllerTests
 
 import akka.stream.Materializer
-import controllers.helpers.FakeRequestHelper
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
-import play.api.test.Helpers._
 import assets.MessageLookup.{OutsideTaxYears => messages}
-import config.{AppConfig, ApplicationConfig}
+import config.ApplicationConfig
 import connectors.CalculatorConnector
-import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
-import controllers.{CalculationElectionController, OutsideTaxYearController}
-import javax.inject.Inject
+import controllers.OutsideTaxYearController
+import controllers.helpers.FakeRequestHelper
 import models.{DateModel, TaxYearModel}
 import org.jsoup.Jsoup
-import org.scalatestplus.mockito.MockitoSugar
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
-import play.api.Environment
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
+import play.api.test.Helpers._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.http.logging.SessionId
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 import scala.concurrent.Future
 

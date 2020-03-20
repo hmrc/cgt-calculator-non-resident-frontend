@@ -22,10 +22,9 @@ import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.TestModels
 import config.ApplicationConfig
 import connectors.CalculatorConnector
-import constructors.{AnswersConstructor, CalculationElectionConstructor, DefaultCalculationElectionConstructor}
+import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
 import controllers.helpers.FakeRequestHelper
 import controllers.{CalculationElectionController, routes}
-import javax.inject.Inject
 import models.{TaxYearModel, _}
 import org.jsoup._
 import org.mockito.ArgumentMatchers
@@ -120,11 +119,7 @@ class CalculationElectionActionSpec ()
       (ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(PropertyLivedInModel(true))))
 
-    new CalculationElectionController(mockHttp, mockCalcConnector, mockAnswersConstructor, mockDefaultCalElecConstructor, mockMessagesControllerComponents)(mockConfig, fakeApplication) {
-      val calcConnector: CalculatorConnector = mockCalcConnector
-      val calcElectionConstructor: CalculationElectionConstructor = mockDefaultCalElecConstructor
-      val calcAnswersConstructor: AnswersConstructor = mockAnswersConstructor
-    }
+    new CalculationElectionController(mockHttp, mockCalcConnector, mockAnswersConstructor, mockDefaultCalElecConstructor, mockMessagesControllerComponents)(mockConfig, fakeApplication)
   }
 
   val finalAnswersModel = TotalPersonalDetailsCalculationModel(

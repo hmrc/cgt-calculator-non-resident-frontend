@@ -21,7 +21,6 @@ import common.Validation._
 import models.PersonalAllowanceModel
 import play.api.data.Forms._
 import play.api.data._
-import uk.gov.hmrc.play.views.helpers.MoneyPounds
 
 object PersonalAllowanceForm {
 

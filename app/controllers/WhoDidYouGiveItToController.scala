@@ -24,9 +24,8 @@ import controllers.utils.RecoverableFuture
 import forms.WhoDidYouGiveItToForm._
 import javax.inject.Inject
 import models.WhoDidYouGiveItToModel
-import play.api.{Application, Environment}
+import play.api.Application
 import play.api.i18n.I18nSupport
-import play.api.i18n.Messages.Implicits._
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
@@ -58,7 +57,7 @@ class WhoDidYouGiveItToController @Inject()(http: DefaultHttpClient,
         success match {
           case WhoDidYouGiveItToModel("Spouse") => Redirect(routes.WhoDidYouGiveItToController.noTaxToPay())
           case WhoDidYouGiveItToModel("Charity") => Redirect(routes.WhoDidYouGiveItToController.noTaxToPay())
-          case WhoDidYouGiveItToModel("Other") => Redirect(routes.MarketValueWhenSoldOrGaveAwayController.marketValueWhenGaveAway())
+          case _ => Redirect(routes.MarketValueWhenSoldOrGaveAwayController.marketValueWhenGaveAway())
         })
       })
   }

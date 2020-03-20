@@ -19,18 +19,15 @@ package controllers.CalculationControllerTests
 import akka.stream.Materializer
 import assets.MessageLookup
 import config.ApplicationConfig
-import connectors.CalculatorConnector
-import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
 import controllers.WhatNextController
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.Environment
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 class WhatNextControllerSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 

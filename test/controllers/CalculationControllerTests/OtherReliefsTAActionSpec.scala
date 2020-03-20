@@ -19,27 +19,26 @@ package controllers.CalculationControllerTests
 import akka.stream.Materializer
 import assets.MessageLookup.NonResident.{OtherReliefs => messages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import common.TestModels
+import config.ApplicationConfig
 import connectors.CalculatorConnector
+import constructors.AnswersConstructor
+import controllers.OtherReliefsTAController
 import controllers.helpers.FakeRequestHelper
 import models.{TaxYearModel, _}
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.test.Helpers._
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
-import common.TestModels
-import config.ApplicationConfig
-import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
-import controllers.{OtherReliefsTAController, SoldOrGivenAwayController}
-import play.api.Environment
 import play.api.mvc.MessagesControllerComponents
-import uk.gov.hmrc.http.cache.client.CacheMap
-
-import scala.concurrent.Future
+import play.api.test.Helpers._
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.http.logging.SessionId
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+
+import scala.concurrent.Future
 
 class OtherReliefsTAActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
   implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
@@ -107,10 +106,7 @@ class OtherReliefsTAActionSpec extends UnitSpec with WithFakeApplication with Mo
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new OtherReliefsTAController(mockHttp, mockCalcConnector, mockAnswersConstructor, mockMessagesControllerComponents)(mockConfig, fakeApplication) {
-      val calcConnector: CalculatorConnector = mockCalcConnector
-      val answersConstructor: AnswersConstructor = mockAnswersConstructor
-    }
+    new OtherReliefsTAController(mockHttp, mockCalcConnector, mockAnswersConstructor, mockMessagesControllerComponents)(mockConfig, fakeApplication)
   }
 
   "Calling the .otherReliefsTA action " when {

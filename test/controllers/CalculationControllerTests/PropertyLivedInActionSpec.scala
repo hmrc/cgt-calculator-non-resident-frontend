@@ -17,33 +17,24 @@
 package controllers.CalculationControllerTests
 
 import akka.stream.Materializer
-import config.{AppConfig, ApplicationConfig}
-import connectors.CalculatorConnector
-import controllers.helpers.FakeRequestHelper
-import controllers.{PropertyLivedInController, ReportController}
-import models.PropertyLivedInModel
-import org.scalatestplus.mockito.MockitoSugar
-import org.mockito.Mockito._
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
-import common.KeystoreKeys.{NonResidentKeys => keyStoreKeys}
-import org.mockito.ArgumentMatchers
 import assets.MessageLookup.{PropertyLivedIn => messages}
-import org.jsoup.Jsoup
-import play.api.test.Helpers.{contentType, _}
-import uk.gov.hmrc.http.cache.client.CacheMap
+import common.KeystoreKeys.{NonResidentKeys => keyStoreKeys}
+import config.ApplicationConfig
 import connectors.CalculatorConnector
-import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
-import controllers.predicates.ValidActiveSession
-import forms.PropertyLivedInForm._
-import play.api.Environment
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
-import play.api.data.Form
+import controllers.PropertyLivedInController
+import controllers.helpers.FakeRequestHelper
+import models.PropertyLivedInModel
+import org.jsoup.Jsoup
+import org.mockito.ArgumentMatchers
+import org.mockito.Mockito._
+import org.scalatestplus.mockito.MockitoSugar
+import play.api.mvc.MessagesControllerComponents
+import play.api.test.Helpers.{contentType, _}
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.http.logging.SessionId
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 import scala.concurrent.Future
 
@@ -77,9 +68,7 @@ class PropertyLivedInActionSpec extends UnitSpec with WithFakeApplication with F
     when(mockCalcConnector.saveFormData[PropertyLivedInModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(mock[CacheMap]))
 
-    new PropertyLivedInController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig, fakeApplication) {
-      val calcConnector: CalculatorConnector = mockCalcConnector
-          }
+    new PropertyLivedInController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig, fakeApplication)
   }
 
   "Calling .propertyLivedIn from the resident PropertyLivedInController" when {

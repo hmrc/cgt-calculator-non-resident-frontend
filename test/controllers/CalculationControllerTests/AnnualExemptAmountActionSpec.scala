@@ -19,28 +19,26 @@ package controllers.CalculationControllerTests
 import akka.stream.Materializer
 import assets.MessageLookup.NonResident.{AnnualExemptAmount => messages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import common.nonresident.CustomerTypeKeys
 import config.ApplicationConfig
 import connectors.CalculatorConnector
 import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
-import controllers.{AnnualExemptAmountController, OtherReliefsFlatController, routes}
 import controllers.helpers.FakeRequestHelper
+import controllers.{AnnualExemptAmountController, routes}
+import models._
+import org.jsoup._
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
-import play.api.test.Helpers._
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
-import org.jsoup._
-import org.scalatestplus.mockito.MockitoSugar
-
-import scala.concurrent.Future
-import models._
 import org.scalatest.BeforeAndAfterEach
-import play.api.Environment
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
-import uk.gov.hmrc.http.cache.client.CacheMap
+import play.api.test.Helpers._
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.http.logging.SessionId
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+
+import scala.concurrent.Future
 
 class AnnualExemptAmountActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper
   with BeforeAndAfterEach {
@@ -101,7 +99,6 @@ class AnnualExemptAmountActionSpec extends UnitSpec with WithFakeApplication wit
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
     new AnnualExemptAmountController(mockHttp, mockCalcConnector, mockDefaultCalElecConstructor, mockMessagesControllerComponents)(mockConfig, fakeApplication) {
-      val calcConnector: CalculatorConnector = mockCalcConnector
     }
   }
 
@@ -113,7 +110,6 @@ class AnnualExemptAmountActionSpec extends UnitSpec with WithFakeApplication wit
       "return a 200" in {
         val target = setupTarget(None)
         lazy val result = target.annualExemptAmount(fakeRequestWithSession)
-        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
         status(result) shouldBe 200
       }
 
@@ -130,7 +126,6 @@ class AnnualExemptAmountActionSpec extends UnitSpec with WithFakeApplication wit
       "return a 200" in {
         val target = setupTarget(None, "Yes", disposalDate = Some(DateModel(12, 12, 2016)))
         lazy val result = target.annualExemptAmount(fakeRequestWithSession)
-        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
         status(result) shouldBe 200
       }
 
@@ -147,7 +142,6 @@ class AnnualExemptAmountActionSpec extends UnitSpec with WithFakeApplication wit
       "return a 200" in {
         val target = setupTarget(None, disposalDate = Some(DateModel(12, 12, 2015)))
         lazy val result = target.annualExemptAmount(fakeRequestWithSession)
-        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
         status(result) shouldBe 200
       }
 
@@ -164,7 +158,6 @@ class AnnualExemptAmountActionSpec extends UnitSpec with WithFakeApplication wit
       "return a 200" in {
         val target = setupTarget(None, disposalDate = Some(DateModel(12, 12, 2013)))
         lazy val result = target.annualExemptAmount(fakeRequestWithSession)
-        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
         status(result) shouldBe 200
       }
 
@@ -248,7 +241,6 @@ class AnnualExemptAmountActionSpec extends UnitSpec with WithFakeApplication wit
         val target = setupTarget(None, "Yes")
         lazy val request = fakeRequestToPOSTWithSession(("annualExemptAmount", "1000000"))
         lazy val result = target.submitAnnualExemptAmount(request)
-        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
         status(result) shouldBe 400
       }
 

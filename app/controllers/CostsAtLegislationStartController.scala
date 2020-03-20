@@ -23,7 +23,7 @@ import controllers.predicates.ValidActiveSession
 import forms.CostsAtLegislationStartForm._
 import javax.inject.Inject
 import models.CostsAtLegislationStartModel
-import play.api.{Application, Environment}
+import play.api.Application
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}

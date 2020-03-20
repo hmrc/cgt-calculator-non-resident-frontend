@@ -23,7 +23,7 @@ import controllers.predicates.ValidActiveSession
 import forms.ClaimingReliefsForm.claimingReliefsForm
 import javax.inject.Inject
 import models.ClaimingReliefsModel
-import play.api.{Application, Environment}
+import play.api.Application
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}

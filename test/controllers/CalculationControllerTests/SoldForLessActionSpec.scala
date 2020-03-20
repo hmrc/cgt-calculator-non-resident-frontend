@@ -21,15 +21,13 @@ import assets.MessageLookup.NonResident.{SoldForLess => messages}
 import common.KeystoreKeys.{NonResidentKeys => keyStoreKeys}
 import config.ApplicationConfig
 import connectors.CalculatorConnector
-import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
-import controllers.{CostsAtLegislationStartController, SoldForLessController}
+import controllers.SoldForLessController
 import controllers.helpers.FakeRequestHelper
 import models.SoldForLessModel
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.Environment
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HeaderCarrier
@@ -65,9 +63,7 @@ class SoldForLessActionSpec extends UnitSpec with WithFakeApplication with FakeR
     when(mockCalcConnector.saveFormData[SoldForLessModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(mock[CacheMap]))
 
-    new SoldForLessController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig, fakeApplication) {
-      val calcConnector: CalculatorConnector = mockCalcConnector
-    }
+    new SoldForLessController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig, fakeApplication)
   }
 
   "Calling .soldForLess from the nonresident SoldForLess" when {

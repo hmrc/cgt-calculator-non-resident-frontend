@@ -16,10 +16,8 @@
 
 package models
 
-import common.TaxDates
+import constructors.TotalGainRequestConstructor.{afterLegislation, includeLegislationCosts}
 import play.api.libs.json._
-import constructors.TotalGainRequestConstructor.includeLegislationCosts
-import constructors.TotalGainRequestConstructor.afterLegislation
 
 case class AcquisitionCostsModel (acquisitionCostsAmt: BigDecimal)
 

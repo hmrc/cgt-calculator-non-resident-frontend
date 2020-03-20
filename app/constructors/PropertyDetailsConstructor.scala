@@ -16,12 +16,9 @@
 
 package constructors
 
-import models.{QuestionAnswerModel, TotalGainAnswersModel}
-import common.TaxDates
 import common.KeystoreKeys.{NonResidentKeys => keys}
-import play.api.i18n.Messages
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
+import common.TaxDates
+import models.{QuestionAnswerModel, TotalGainAnswersModel}
 
 object PropertyDetailsConstructor {
 

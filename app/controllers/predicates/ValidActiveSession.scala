@@ -25,7 +25,6 @@ import uk.gov.hmrc.http.SessionKeys
 
 trait ValidActiveSession extends FrontendController {
 
-  private type PlayRequest = Request[AnyContent] => Result
   private type AsyncRequest = Request[AnyContent] => Future[Result]
 
   class ValidateSession {

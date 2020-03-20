@@ -17,28 +17,26 @@
 package controllers.CalculationControllerTests
 
 import akka.stream.Materializer
+import assets.MessageLookup.NonResident.{AcquisitionValue => messages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import config.ApplicationConfig
 import connectors.CalculatorConnector
+import controllers.helpers.FakeRequestHelper
+import controllers.{AcquisitionValueController, routes}
+import models.AcquisitionValueModel
+import org.jsoup._
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
-import play.api.test.Helpers._
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
-import org.jsoup._
 import org.scalatestplus.mockito.MockitoSugar
-import assets.MessageLookup.NonResident.{AcquisitionValue => messages}
-import config.ApplicationConfig
-import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
-import controllers.{AcquisitionValueController, CostsAtLegislationStartController, routes}
-import controllers.helpers.FakeRequestHelper
-
-import scala.concurrent.Future
-import models.AcquisitionValueModel
-import play.api.Environment
 import play.api.mvc.MessagesControllerComponents
-import uk.gov.hmrc.http.cache.client.{CacheMap, SessionCache}
+import play.api.test.Helpers._
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.http.logging.SessionId
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+
+import scala.concurrent.Future
 
 class AcquisitionValueActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
@@ -69,7 +67,6 @@ class AcquisitionValueActionSpec extends UnitSpec with WithFakeApplication with 
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
     new AcquisitionValueController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig, fakeApplication) {
-      val calcConnector: CalculatorConnector = mockCalcConnector
     }
   }
 

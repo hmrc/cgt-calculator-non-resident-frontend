@@ -16,7 +16,7 @@
 
 package models
 
-import play.api.libs.json.{JsNumber, JsValue}
+import play.api.libs.json.JsNumber
 import uk.gov.hmrc.play.test.UnitSpec
 
 

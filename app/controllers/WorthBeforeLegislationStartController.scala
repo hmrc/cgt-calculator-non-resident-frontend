@@ -23,14 +23,13 @@ import controllers.predicates.ValidActiveSession
 import forms.WorthBeforeLegislationStartForm._
 import javax.inject.Inject
 import models.WorthBeforeLegislationStartModel
-import play.api.{Application, Environment}
+import play.api.Application
 import play.api.data.Form
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-import views.html.{calculation => views}
-import play.api.i18n.Messages.Implicits._
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import views.html.{calculation => views}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

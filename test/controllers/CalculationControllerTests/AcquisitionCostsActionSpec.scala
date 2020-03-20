@@ -86,9 +86,7 @@ class AcquisitionCostsActionSpec extends UnitSpec with WithFakeApplication with 
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new AcquisitionCostsController(mockHttp, mockCalcConnector, mockDefaultCalcElecConstructor, mockMessagesControllerComponents)(mockConfig, fakeApplication) {
-      val calcConnector: CalculatorConnector = mockCalcConnector
-    }
+    new AcquisitionCostsController(mockHttp, mockCalcConnector, mockDefaultCalcElecConstructor, mockMessagesControllerComponents)(mockConfig, fakeApplication)
   }
 
   "Calling the .backLink method" should {
@@ -140,7 +138,6 @@ class AcquisitionCostsActionSpec extends UnitSpec with WithFakeApplication with 
       "return a 200" in {
         val target = setupTarget(None, acquisitionDateData = Some(DateModel(1, 1, 2016)), Some(HowBecameOwnerModel("Gifted")))
         lazy val result = target.acquisitionCosts(fakeRequestWithSession)
-        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
         status(result) shouldBe 200
       }
 
@@ -165,7 +162,6 @@ class AcquisitionCostsActionSpec extends UnitSpec with WithFakeApplication with 
         val testAcquisitionCostsModel = new AcquisitionCostsModel(1000)
         val target = setupTarget(Some(testAcquisitionCostsModel))
         lazy val result = target.acquisitionCosts(fakeRequestWithSession)
-        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
         status(result) shouldBe 200
       }
 
@@ -236,7 +232,6 @@ class AcquisitionCostsActionSpec extends UnitSpec with WithFakeApplication with 
         val target = setupTarget(None, acquisitionDateData = Some(DateModel(1, 1, 2016)), Some(HowBecameOwnerModel("Inherited")))
         lazy val request = fakeRequestToPOSTWithSession(("acquisitionCosts", "a"))
         lazy val result = target.submitAcquisitionCosts(request)
-        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
         status(result) shouldBe 400
       }
 

@@ -16,13 +16,12 @@
 
 package constructors
 
-import assets.MessageLookup.{NonResident => messages}
-import common.YesNoKeys
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import common.YesNoKeys
 import common.nonresident.{CustomerTypeKeys, PreviousGainOrLossKeys}
+import controllers.routes
 import models._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
-import controllers.routes
 
 class PersonalAndPreviousDetailsConstructorSpec extends UnitSpec with WithFakeApplication {
 

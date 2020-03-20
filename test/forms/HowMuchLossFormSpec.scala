@@ -17,9 +17,8 @@
 package forms
 
 import assets.KeyLookup.{NonResident => messages}
-import assets.KeyLookup.{NonResident => commonMessages}
-import models.HowMuchLossModel
 import forms.HowMuchLossForm._
+import models.HowMuchLossModel
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 class HowMuchLossFormSpec extends UnitSpec with WithFakeApplication {

@@ -21,15 +21,12 @@ import assets.MessageLookup.NonResident.{MarketValue => MarketValueMessages}
 import assets.MessageLookup.{NonResident => commonMessages}
 import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
-import org.jsoup.Jsoup
 import forms.MarketValueGaveAwayForm._
+import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.marketValueGaveAway
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
-import play.api.i18n.Messages
-import play.api.mvc.MessagesControllerComponents
 
 class MarketValueGaveAwayViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 

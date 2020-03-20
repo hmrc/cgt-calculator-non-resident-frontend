@@ -16,19 +16,16 @@
 
 package views
 
-import assets.MessageLookup.{NonResident => commonMessages}
 import assets.MessageLookup.NonResident.{ClaimingReliefs => messages}
+import assets.MessageLookup.{NonResident => commonMessages}
 import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import forms.ClaimingReliefsForm
 import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.claimingReliefs
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
-import play.api.i18n.Messages
-import play.api.mvc.MessagesControllerComponents
 
 class ClaimingReliefsViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 

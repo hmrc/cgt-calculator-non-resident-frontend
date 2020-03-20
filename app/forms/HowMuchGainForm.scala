@@ -22,7 +22,6 @@ import common.Validation._
 import models.HowMuchGainModel
 import play.api.data.Forms._
 import play.api.data._
-import uk.gov.hmrc.play.views.helpers.MoneyPounds
 
 object HowMuchGainForm {
 

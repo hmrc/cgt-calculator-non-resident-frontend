@@ -22,15 +22,14 @@ import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import forms.HowMuchLossForm._
 import javax.inject.Inject
-import views.html.calculation
 import models.HowMuchLossModel
-import play.api.{Application, Environment}
+import play.api.Application
 import play.api.data.Form
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-import play.api.i18n.Messages.Implicits._
 import play.api.i18n.I18nSupport
 import play.api.mvc.MessagesControllerComponents
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import views.html.calculation
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

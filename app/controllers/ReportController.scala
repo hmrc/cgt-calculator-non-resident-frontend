@@ -27,7 +27,7 @@ import controllers.utils.RecoverableFuture
 import it.innove.play.pdf.PdfGenerator
 import javax.inject.Inject
 import models._
-import play.api.{Application, Environment}
+import play.api.Application
 import play.api.i18n.{I18nSupport, Lang, Messages}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, RequestHeader}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -53,7 +53,7 @@ class ReportController @Inject()(http: DefaultHttpClient,calcConnector: Calculat
   val summaryReport: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     def getCalculationResult(calculationResultsWithTaxOwedModel: Option[CalculationResultsWithTaxOwedModel],
-                             calculationElection: String)(implicit hc: HeaderCarrier): Future[TotalTaxOwedModel] = {
+                             calculationElection: String): Future[TotalTaxOwedModel] = {
       (calculationResultsWithTaxOwedModel, calculationElection) match {
         case (Some(model), CalculationType.flat) => Future.successful(model.flatResult)
         case (Some(model), CalculationType.rebased) => Future.successful(model.rebasedResult.get)
@@ -95,9 +95,9 @@ class ReportController @Inject()(http: DefaultHttpClient,calcConnector: Calculat
 
     def questionAnswerRows(totalGainAnswersModel: TotalGainAnswersModel,
                            totalGainResultsModel: TotalGainResultsModel,
-                           privateResidenceReliefModel: Option[PrivateResidenceReliefModel] = None,
-                           personalAndPreviousDetailsModel: Option[TotalPersonalDetailsCalculationModel] = None,
-                           propertyLivedInModel: Option[PropertyLivedInModel] = None)(implicit hc: HeaderCarrier): Future[Seq[QuestionAnswerModel[Any]]] = {
+                           privateResidenceReliefModel: Option[PrivateResidenceReliefModel],
+                           personalAndPreviousDetailsModel: Option[TotalPersonalDetailsCalculationModel],
+                           propertyLivedInModel: Option[PropertyLivedInModel]): Future[Seq[QuestionAnswerModel[Any]]] = {
 
       val optionSeq = Seq(totalGainResultsModel.rebasedGain, totalGainResultsModel.timeApportionedGain).flatten
       val finalSeq = Seq(totalGainResultsModel.flatGain) ++ optionSeq
