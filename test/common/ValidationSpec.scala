@@ -19,8 +19,6 @@ package connectors
 import common.Validation._
 import uk.gov.hmrc.play.test.UnitSpec
 
-import scala.concurrent.Future
-
 class ValidationSpec extends UnitSpec {
 
   //############# Tests for isValidDate function ##########################################

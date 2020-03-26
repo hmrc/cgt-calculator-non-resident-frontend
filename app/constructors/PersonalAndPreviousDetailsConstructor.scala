@@ -20,9 +20,6 @@ import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.nonresident.PreviousGainOrLossKeys
 import common.{Transformers, YesNoKeys}
 import models._
-import play.api.Play.current
-import play.api.i18n.Messages
-import play.api.i18n.Messages.Implicits._
 
 object PersonalAndPreviousDetailsConstructor {
 

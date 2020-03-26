@@ -23,10 +23,9 @@ import controllers.predicates.ValidActiveSession
 import forms.OtherPropertiesForm._
 import javax.inject.Inject
 import models.OtherPropertiesModel
-import play.api.{Application, Environment}
+import play.api.Application
 import play.api.data.Form
 import play.api.i18n.I18nSupport
-import play.api.i18n.Messages.Implicits._
 import play.api.mvc.{MessagesControllerComponents, Result}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient

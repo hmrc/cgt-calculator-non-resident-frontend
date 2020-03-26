@@ -16,14 +16,10 @@
 
 package forms
 
-import assets.KeyLookup
 import assets.KeyLookup.{NonResident => messages}
-import common.Constants
-import common.Validation._
-import models.AnnualExemptAmountModel
 import forms.AnnualExemptAmountForm._
+import models.AnnualExemptAmountModel
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
-import uk.gov.hmrc.play.views.helpers.MoneyPounds
 
 class AnnualExemptAmountFormSpec extends UnitSpec with WithFakeApplication {
 

@@ -26,7 +26,7 @@ import controllers.predicates.ValidActiveSession
 import controllers.utils.RecoverableFuture
 import javax.inject.Inject
 import models._
-import play.api.{Application, Environment}
+import play.api.Application
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController

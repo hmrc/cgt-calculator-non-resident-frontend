@@ -20,10 +20,8 @@ import akka.stream.Materializer
 import assets.MessageLookup.NonResident.{MarketValue => marketValueMessages}
 import config.ApplicationConfig
 import connectors.CalculatorConnector
-import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
-import controllers.{CalculationElectionController, MarketValueWhenSoldOrGaveAwayController}
+import controllers.MarketValueWhenSoldOrGaveAwayController
 import controllers.helpers.FakeRequestHelper
-import javax.inject.Inject
 import models.DisposalValueModel
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
@@ -32,13 +30,13 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.Environment
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.cache.client.CacheMap
+import uk.gov.hmrc.http.logging.SessionId
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 import scala.concurrent.Future
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.http.logging.SessionId
-import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
 class MarketValueWhenSoldOrGaveAwayActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
@@ -68,9 +66,7 @@ class MarketValueWhenSoldOrGaveAwayActionSpec extends UnitSpec with WithFakeAppl
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new MarketValueWhenSoldOrGaveAwayController(mockEnvironment, mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig, fakeApplication) {
-      val calcConnector: CalculatorConnector = mockCalcConnector
-    }
+    new MarketValueWhenSoldOrGaveAwayController(mockEnvironment, mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig, fakeApplication)
   }
 
   "The marketValueWhenGaveAway action" when {

@@ -21,15 +21,14 @@ import assets.MessageLookup.NonResident.{WorthWhenInherited => messages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import config.ApplicationConfig
 import connectors.CalculatorConnector
-import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
-import controllers.{OtherReliefsRebasedController, WorthWhenInheritedController}
+import constructors.AnswersConstructor
+import controllers.WorthWhenInheritedController
 import controllers.helpers.FakeRequestHelper
 import models.AcquisitionValueModel
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.Environment
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HeaderCarrier

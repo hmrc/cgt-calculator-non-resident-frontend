@@ -20,16 +20,12 @@ import assets.MessageLookup.NonResident.{RebasedValue => messages}
 import assets.MessageLookup.{NonResident => commonMessages}
 import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
-import org.jsoup.Jsoup
 import forms.RebasedValueForm._
-import controllers.routes
+import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.rebasedValue
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
-import play.api.i18n.Messages
-import play.api.mvc.MessagesControllerComponents
 
 class RebasedValueViewSpec extends UnitSpec with WithFakeApplication with FakeRequestHelper with MockitoSugar {
 

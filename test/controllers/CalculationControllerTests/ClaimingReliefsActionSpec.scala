@@ -17,18 +17,17 @@
 package controllers.CalculationControllerTests
 
 import akka.stream.Materializer
-import common.KeystoreKeys.NonResidentKeys
 import assets.MessageLookup.NonResident.{ClaimingReliefs => messages}
+import common.KeystoreKeys.NonResidentKeys
 import config.ApplicationConfig
 import connectors.CalculatorConnector
-import controllers.{ClaimingReliefsController, CostsAtLegislationStartController}
+import controllers.ClaimingReliefsController
 import controllers.helpers.FakeRequestHelper
 import models._
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.Environment
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HeaderCarrier

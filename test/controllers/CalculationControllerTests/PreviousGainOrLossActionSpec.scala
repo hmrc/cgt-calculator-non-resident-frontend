@@ -17,26 +17,24 @@
 package controllers.CalculationControllerTests
 
 import akka.stream.Materializer
-import connectors.CalculatorConnector
-import models.PreviousLossOrGainModel
-import play.api.test.Helpers._
-import uk.gov.hmrc.http.cache.client.CacheMap
-import config.{AppConfig, ApplicationConfig}
-import controllers.helpers.FakeRequestHelper
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
-import org.mockito.Mockito._
-import org.mockito.ArgumentMatchers
-import org.scalatestplus.mockito.MockitoSugar
-import common.KeystoreKeys.{NonResidentKeys => keystoreKeys}
 import assets.MessageLookup.NonResident.{PreviousLossOrGain => messages}
-import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
-import controllers.{DisposalCostsController, PreviousGainOrLossController}
+import common.KeystoreKeys.{NonResidentKeys => keystoreKeys}
+import config.ApplicationConfig
+import connectors.CalculatorConnector
+import controllers.PreviousGainOrLossController
+import controllers.helpers.FakeRequestHelper
+import models.PreviousLossOrGainModel
 import org.jsoup.Jsoup
-import play.api.Environment
+import org.mockito.ArgumentMatchers
+import org.mockito.Mockito._
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
+import play.api.test.Helpers._
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.http.logging.SessionId
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 import scala.concurrent.Future
 
@@ -67,10 +65,7 @@ class PreviousGainOrLossActionSpec extends UnitSpec with WithFakeApplication wit
       ArgumentMatchers.eq(keystoreKeys.previousLossOrGain), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any())).
       thenReturn(mock[CacheMap])
 
-    new PreviousGainOrLossController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig, fakeApplication) {
-      val calcConnector: CalculatorConnector = mockCalcConnector
-      val config: AppConfig = mock[AppConfig]
-    }
+    new PreviousGainOrLossController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig, fakeApplication)
   }
 
   "Calling .previousGainOrLoss from the PreviousGainOrLossController" when {

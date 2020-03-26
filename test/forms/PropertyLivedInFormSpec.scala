@@ -16,13 +16,10 @@
 
 package forms
 
-import assets.KeyLookup
-import assets.KeyLookup.PropertyLivedIn
-import models.PropertyLivedInModel
-import views.html.calculation.propertyLivedIn
-import forms.PropertyLivedInForm._
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import assets.KeyLookup.{PropertyLivedIn => messages}
+import forms.PropertyLivedInForm._
+import models.PropertyLivedInModel
+import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 class PropertyLivedInFormSpec extends UnitSpec with WithFakeApplication {
 

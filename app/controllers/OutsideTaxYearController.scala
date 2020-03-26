@@ -18,18 +18,17 @@ package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => keystoreKeys}
 import config.ApplicationConfig
-import views.html.{calculation => views}
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
-import models.DateModel
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-import play.api.i18n.Messages.Implicits._
 import controllers.utils.RecoverableFuture
 import javax.inject.Inject
-import play.api.{Application, Environment}
+import models.DateModel
+import play.api.Application
 import play.api.i18n.I18nSupport
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import views.html.{calculation => views}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 

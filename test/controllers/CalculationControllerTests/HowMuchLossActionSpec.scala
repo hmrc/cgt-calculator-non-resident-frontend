@@ -17,27 +17,26 @@
 package controllers.CalculationControllerTests
 
 import akka.stream.Materializer
+import assets.MessageLookup.{NonResident => messages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import config.ApplicationConfig
 import connectors.CalculatorConnector
+import controllers.HowMuchLossController
 import controllers.helpers.FakeRequestHelper
 import models.HowMuchLossModel
 import org.jsoup.Jsoup
-import org.scalatestplus.mockito.MockitoSugar
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
-import assets.MessageLookup.{NonResident => messages}
-import config.ApplicationConfig
-import controllers.{CostsAtLegislationStartController, HowMuchLossController}
-import play.api.Environment
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
-import uk.gov.hmrc.http.cache.client.CacheMap
-
-import scala.concurrent.Future
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.http.logging.SessionId
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+
+import scala.concurrent.Future
 
 class HowMuchLossActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
@@ -66,9 +65,7 @@ class HowMuchLossActionSpec extends UnitSpec with WithFakeApplication with Mocki
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new HowMuchLossController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig, fakeApplication) {
-      val calcConnector: CalculatorConnector = mockCalcConnector
-    }
+    new HowMuchLossController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig, fakeApplication)
   }
 
   "Calling the .howMuchLoss method" when {

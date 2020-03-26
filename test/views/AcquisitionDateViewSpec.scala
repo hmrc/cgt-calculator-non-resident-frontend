@@ -24,9 +24,6 @@ import controllers.helpers.FakeRequestHelper
 import forms.AcquisitionDateForm._
 import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.Play.current
-import play.api.i18n.Messages
-import play.api.i18n.Messages.Implicits._
 import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.calculation.acquisitionDate

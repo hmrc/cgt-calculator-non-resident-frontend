@@ -18,11 +18,9 @@ package constructors
 
 import java.time.LocalDate
 
-import assets.MessageLookup
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
-import assets.MessageLookup.{NonResident => messages}
-import helpers.AssertHelpers
+import constructors.helpers.AssertHelpers
 import models._
+import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 class SalesDetailsConstructorSpec extends UnitSpec with WithFakeApplication with AssertHelpers {
 

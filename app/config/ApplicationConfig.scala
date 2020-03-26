@@ -36,7 +36,6 @@ trait AppConfig {
 class ApplicationConfig @Inject()(val servicesConfig: ServicesConfig,
                                   val environment: Environment) extends AppConfig {
   private def loadConfig(key: String): String = servicesConfig.getString(key)
-  private def getFeature(key: String) = servicesConfig.getBoolean(key)
 
   lazy val contactFrontendService = servicesConfig.getConfString("contact-frontend.www", "")
 

@@ -21,24 +21,22 @@ import assets.MessageLookup.NonResident.{RebasedCosts => messages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import config.ApplicationConfig
 import connectors.CalculatorConnector
-import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
-import controllers.{CostsAtLegislationStartController, RebasedCostsController}
+import controllers.RebasedCostsController
 import controllers.helpers.FakeRequestHelper
 import models.RebasedCostsModel
 import org.jsoup._
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.Environment
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.cache.client.CacheMap
+import uk.gov.hmrc.http.logging.SessionId
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 import scala.concurrent.Future
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.http.logging.SessionId
-import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
 class RebasedCostsActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
@@ -68,9 +66,7 @@ class RebasedCostsActionSpec extends UnitSpec with WithFakeApplication with Mock
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new RebasedCostsController(mockHttp, mockCalcConnector,mockMessagesControllerComponents)(mockConfig, fakeApplication) {
-      val calcConnector: CalculatorConnector = mockCalcConnector
-    }
+    new RebasedCostsController(mockHttp, mockCalcConnector,mockMessagesControllerComponents)(mockConfig, fakeApplication)
   }
 
   // GET Tests

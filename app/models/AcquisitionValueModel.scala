@@ -16,8 +16,6 @@
 
 package models
 
-import java.time.LocalDate
-
 import play.api.libs.json._
 
 case class AcquisitionValueModel (acquisitionValueAmt: BigDecimal)

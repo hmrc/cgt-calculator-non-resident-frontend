@@ -18,28 +18,27 @@ package controllers.CalculationControllerTests
 
 import akka.stream.Materializer
 import assets.MessageLookup.NonResident.{OtherReliefs => messages}
-import common.TestModels
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import common.TestModels
 import config.ApplicationConfig
 import connectors.CalculatorConnector
-import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
-import controllers.{BroughtForwardLossesController, OtherReliefsController}
+import constructors.AnswersConstructor
+import controllers.OtherReliefsController
 import controllers.helpers.FakeRequestHelper
 import models.{TaxYearModel, _}
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.Environment
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.cache.client.CacheMap
+import uk.gov.hmrc.http.logging.SessionId
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 import scala.concurrent.Future
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.http.logging.SessionId
-import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
 class OtherReliefsActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
@@ -106,10 +105,7 @@ class OtherReliefsActionSpec extends UnitSpec with WithFakeApplication with Mock
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new OtherReliefsController(mockHttp, mockCalcConnector, mockAnswersConstructor, mockMessagesControllerComponents)(mockConfig, fakeApplication) {
-      val calcConnector: CalculatorConnector = mockCalcConnector
-      val answersConstructor: AnswersConstructor = mockAnswersConstructor
-    }
+    new OtherReliefsController(mockHttp, mockCalcConnector, mockAnswersConstructor, mockMessagesControllerComponents)(mockConfig, fakeApplication)
   }
 
   val personalDetailsModel = TotalPersonalDetailsCalculationModel(

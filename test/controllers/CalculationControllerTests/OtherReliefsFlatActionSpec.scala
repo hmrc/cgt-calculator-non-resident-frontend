@@ -108,10 +108,7 @@ class OtherReliefsFlatActionSpec extends UnitSpec with WithFakeApplication with 
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new OtherReliefsFlatController(mockHttp, mockCalcConnector, mockAnswersConstructor, mockMessagesControllerComponents)(mockConfig, fakeApplication) {
-      val calcConnector: CalculatorConnector = mockCalcConnector
-      val answersConstructor: AnswersConstructor = mockAnswersConstructor
-    }
+    new OtherReliefsFlatController(mockHttp, mockCalcConnector, mockAnswersConstructor, mockMessagesControllerComponents)(mockConfig, fakeApplication)
   }
 
   "Calling the .otherReliefsFlat action " when {

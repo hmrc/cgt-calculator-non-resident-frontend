@@ -17,12 +17,11 @@
 package forms
 
 import common.Constants
-import models.WorthBeforeLegislationStartModel
 import common.Transformers._
 import common.Validation._
+import models.WorthBeforeLegislationStartModel
 import play.api.data.Form
 import play.api.data.Forms._
-import uk.gov.hmrc.play.views.helpers.MoneyPounds
 
 object WorthBeforeLegislationStartForm {
 

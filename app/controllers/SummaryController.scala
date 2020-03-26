@@ -23,21 +23,19 @@ import config.ApplicationConfig
 import connectors.CalculatorConnector
 import constructors.AnswersConstructor
 import controllers.predicates.ValidActiveSession
-import models._
-import play.api.i18n.Messages.Implicits._
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-import views.html.calculation
 import controllers.utils.RecoverableFuture
 import javax.inject.Inject
+import models._
+import play.api.Application
 import play.api.i18n.I18nSupport
-import play.api.{Application, Environment, Logger}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import views.html.calculation
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-
 import scala.util.Random
 
 class SummaryController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
@@ -58,7 +56,7 @@ class SummaryController @Inject()(http: DefaultHttpClient,calcConnector: Calcula
       }
     }
 
-    def summaryBackUrl(model: Option[TotalGainResultsModel])(implicit hc: HeaderCarrier): Future[String] = model match {
+    def summaryBackUrl(model: Option[TotalGainResultsModel]): Future[String] = model match {
       case (Some(data)) if data.rebasedGain.isDefined || data.timeApportionedGain.isDefined =>
         Future.successful(routes.CalculationElectionController.calculationElection().url)
       case (Some(_)) =>

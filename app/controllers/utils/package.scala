@@ -42,5 +42,9 @@ package object utils {
             e.getMessage
           )
       }
+
+    override def transform[S](f: Try[Result] => Try[S])(implicit executor: ExecutionContext): Future[S] = future.transform(f)
+
+    override def transformWith[S](f: Try[Result] => Future[S])(implicit executor: ExecutionContext): Future[S] = future.transformWith(f)
   }
 }

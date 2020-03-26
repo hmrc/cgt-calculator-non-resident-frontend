@@ -17,12 +17,11 @@
 package forms
 
 import common.Constants
+import common.Transformers._
 import common.Validation._
 import models.AcquisitionValueModel
 import play.api.data.Forms._
 import play.api.data._
-import uk.gov.hmrc.play.views.helpers.MoneyPounds
-import common.Transformers._
 
 object AcquisitionValueForm {
 

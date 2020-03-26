@@ -16,11 +16,9 @@
 
 package forms
 
-import java.time.LocalDate
-
 import assets.KeyLookup.{NonResident => messages}
-import models.DateModel
 import forms.DisposalDateForm._
+import models.DateModel
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 class DisposalDateFormSpec extends UnitSpec with WithFakeApplication {
@@ -29,7 +27,6 @@ class DisposalDateFormSpec extends UnitSpec with WithFakeApplication {
 
     "passing in a valid model" should {
 
-      lazy val acquisitionDate = LocalDate.of(2010, 3, 1)
       lazy val model = DateModel(1, 4, 2016)
       lazy val form = disposalDateForm.fill(model)
 
@@ -44,7 +41,6 @@ class DisposalDateFormSpec extends UnitSpec with WithFakeApplication {
 
     "passing in a valid map" should {
 
-      lazy val acquisitionDate = LocalDate.of(2010, 3, 1)
       lazy val map = Map("disposalDateDay" -> "29", "disposalDateMonth" -> "2", "disposalDateYear" -> "2016")
       lazy val form = disposalDateForm.bind(map)
 

@@ -21,15 +21,13 @@ import assets.MessageLookup.NonResident.{WorthWhenGiftedTo => messages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import config.ApplicationConfig
 import connectors.CalculatorConnector
-import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
-import controllers.{CostsAtLegislationStartController, WorthWhenGiftedToController}
+import controllers.WorthWhenGiftedToController
 import controllers.helpers.FakeRequestHelper
 import models.AcquisitionValueModel
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.Environment
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HeaderCarrier
@@ -68,9 +66,7 @@ class WorthWhenGiftedToActionSpec extends UnitSpec with WithFakeApplication with
     when(mockCalcConnector.saveFormData[AcquisitionValueModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(mock[CacheMap]))
 
-    new WorthWhenGiftedToController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig, fakeApplication) {
-      val calcConnector: CalculatorConnector = mockCalcConnector
-    }
+    new WorthWhenGiftedToController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig, fakeApplication)
   }
 
   "Calling .worthWhenGiftedTo" when {

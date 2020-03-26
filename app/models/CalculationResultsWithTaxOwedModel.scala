@@ -16,7 +16,6 @@
 
 package models
 
-import constructors.CalculationDetailsWithAllAnswersConstructor
 import play.api.libs.json.Json
 
 case class CalculationResultsWithTaxOwedModel (flatResult: TotalTaxOwedModel,

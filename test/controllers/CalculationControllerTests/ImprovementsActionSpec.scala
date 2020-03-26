@@ -88,10 +88,7 @@ class ImprovementsActionSpec extends UnitSpec with WithFakeApplication with Mock
     when(mockCalcConnector.saveFormData[ImprovementsModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(mock[CacheMap]))
 
-    new ImprovementsController(mockHttp, mockCalcConnector, mockAnswersConstructor, mockMessagesControllerComponents)(mockConfig, fakeApplication) {
-      val calcConnector: CalculatorConnector = mockCalcConnector
-      val answersConstructor: AnswersConstructor = mockAnswersConstructor
-    }
+    new ImprovementsController(mockHttp, mockCalcConnector, mockAnswersConstructor, mockMessagesControllerComponents)(mockConfig, fakeApplication)
   }
 
   "In CalculationController calling the .improvements action " when {

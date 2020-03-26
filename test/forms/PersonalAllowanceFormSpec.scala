@@ -17,10 +17,9 @@
 package forms
 
 import assets.KeyLookup.{NonResident => messages}
-import models.PersonalAllowanceModel
 import forms.PersonalAllowanceForm._
+import models.PersonalAllowanceModel
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
-import uk.gov.hmrc.play.views.helpers.MoneyPounds
 
 class PersonalAllowanceFormSpec extends UnitSpec with WithFakeApplication {
 

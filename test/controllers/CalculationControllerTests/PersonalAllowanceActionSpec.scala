@@ -21,24 +21,22 @@ import assets.MessageLookup.NonResident.{PersonalAllowance => messages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import config.ApplicationConfig
 import connectors.CalculatorConnector
-import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
-import controllers.{CurrentIncomeController, PersonalAllowanceController, routes}
 import controllers.helpers.FakeRequestHelper
+import controllers.{PersonalAllowanceController, routes}
+import models.{DateModel, PersonalAllowanceModel, TaxYearModel}
+import org.jsoup._
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
-import play.api.test.Helpers._
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
-import org.jsoup._
 import org.scalatestplus.mockito.MockitoSugar
-
-import scala.concurrent.Future
-import models.{DateModel, PersonalAllowanceModel, TaxYearModel}
-import play.api.Environment
 import play.api.mvc.MessagesControllerComponents
-import uk.gov.hmrc.http.cache.client.CacheMap
+import play.api.test.Helpers._
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.http.logging.SessionId
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+
+import scala.concurrent.Future
 
 class PersonalAllowanceActionSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
 
@@ -79,9 +77,7 @@ class PersonalAllowanceActionSpec extends UnitSpec with WithFakeApplication with
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new PersonalAllowanceController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig, fakeApplication) {
-      val calcConnector: CalculatorConnector = mockCalcConnector
-    }
+    new PersonalAllowanceController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig, fakeApplication)
   }
 
   // GET Tests

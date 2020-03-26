@@ -16,9 +16,8 @@
 
 package models
 
-import play.api.libs.json.{JsNumber, Json}
+import play.api.libs.json.Json
 import uk.gov.hmrc.play.test.UnitSpec
-import views.html.calculation.rebasedCosts
 
 class RebasedCostsModelSpec extends UnitSpec {
 

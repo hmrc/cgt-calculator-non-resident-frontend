@@ -19,11 +19,9 @@ package forms
 import assets.KeyLookup.NonResident.{AcquisitionValue => messages}
 import common.Constants
 import assets.KeyLookup.{NonResident => common}
-import assets.KeyLookup.{NonResident => commonMessages}
-import models.AcquisitionValueModel
 import forms.AcquisitionValueForm._
+import models.AcquisitionValueModel
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
-import uk.gov.hmrc.play.views.helpers.MoneyPounds
 
 class AcquisitionValueFormSpec extends UnitSpec with WithFakeApplication{
 

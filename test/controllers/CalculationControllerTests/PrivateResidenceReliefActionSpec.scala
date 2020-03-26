@@ -107,10 +107,7 @@ class PrivateResidenceReliefActionSpec
       .thenReturn(Future.successful(Some(totalGainResultsModel)))
 
 
-    new PrivateResidenceReliefController(mockHttp, mockCalcConnector, mockAnswersConstructor, mockMessagesControllerComponents)(mockConfig, fakeApplication) {
-      val calcConnector: CalculatorConnector = mockCalcConnector
-      val answersConstructor: AnswersConstructor = mockAnswersConstructor
-    }
+    new PrivateResidenceReliefController(mockHttp, mockCalcConnector, mockAnswersConstructor, mockMessagesControllerComponents)(mockConfig, fakeApplication)
   }
 
   "Calling the .getAcquisitionDate method" should {

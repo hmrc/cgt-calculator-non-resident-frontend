@@ -22,9 +22,7 @@ import models.{QuestionAnswerModel, TotalGainResultsModel}
 import play.api.i18n.{Messages, MessagesProvider}
 import common.nonresident.CalculationType
 import javax.inject.Inject
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
-import play.api.mvc.MessagesActionBuilder
+
 
 class CalculationDetailsConstructor @Inject()(implicit messagesProvider: MessagesProvider) {
 

@@ -21,9 +21,8 @@ import assets.MessageLookup.NonResident.{RebasedValue => messages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import config.ApplicationConfig
 import connectors.CalculatorConnector
-import controllers.RebasedValueController
 import controllers.helpers.FakeRequestHelper
-import controllers.routes
+import controllers.{RebasedValueController, routes}
 import javax.inject.Inject
 import models.{DateModel, RebasedValueModel}
 import org.jsoup._
@@ -32,12 +31,12 @@ import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.cache.client.CacheMap
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 import scala.concurrent.Future
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
 class RebasedValueActionSpec @Inject()(rebasedValueController: RebasedValueController)
   extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
@@ -65,9 +64,7 @@ class RebasedValueActionSpec @Inject()(rebasedValueController: RebasedValueContr
       .thenReturn(Future.successful(mock[CacheMap]))
 
     new RebasedValueController(http = mock[DefaultHttpClient],
-      calcConnector = mock[CalculatorConnector], mockMessagesControllerComponents)(mockConfig, fakeApplication) {
-      val calcConnector: CalculatorConnector = mockCalcConnector
-    }
+      calcConnector = mock[CalculatorConnector], mockMessagesControllerComponents)(mockConfig, fakeApplication)
   }
 
   //GET tests

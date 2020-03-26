@@ -18,9 +18,7 @@ package constructors
 
 import java.time.LocalDate
 
-import assets.MessageLookup.{NonResident => messages}
-import common.Dates
-import helpers.AssertHelpers
+import constructors.helpers.AssertHelpers
 import models._
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 

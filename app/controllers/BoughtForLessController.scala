@@ -25,7 +25,7 @@ import controllers.utils.RecoverableFuture
 import forms.BoughtForLessForm._
 import javax.inject.Inject
 import models.BoughtForLessModel
-import play.api.{Application, Environment}
+import play.api.Application
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.MessagesControllerComponents

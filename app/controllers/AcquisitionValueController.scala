@@ -23,7 +23,7 @@ import controllers.predicates.ValidActiveSession
 import forms.AcquisitionValueForm._
 import javax.inject.Inject
 import models.AcquisitionValueModel
-import play.api.{Application, Environment}
+import play.api.Application
 import play.api.i18n.I18nSupport
 import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
