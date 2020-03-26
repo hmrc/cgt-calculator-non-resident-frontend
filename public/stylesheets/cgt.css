@@ -416,6 +416,10 @@ span.election-text > .block {
     }
 }
 
+.transaction-banner--complete {
+  background-color: #006435;
+}
+
 .transaction-banner--complete h2 {
     color: #ffffff;
 }
