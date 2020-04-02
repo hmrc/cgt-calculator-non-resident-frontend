@@ -26,6 +26,7 @@ object TaxDates {
   val taxStartDatePlus18Months: LocalDate = LocalDate.parse("6/10/2016", formatter)
   val taxYearStartDate: LocalDate = LocalDate.parse("5/4/2016", formatter)
   val taxYearEndDate: LocalDate = LocalDate.parse("5/4/2017", formatter)
+  private val pppReliefDeductionApplicableDate: LocalDate = LocalDate.parse("5/4/2020", formatter)
 
   def dateAfterStart(day: Int, month: Int, year: Int): Boolean = constructDate(day, month, year).isAfter(taxStartDate)
 
@@ -43,5 +44,27 @@ object TaxDates {
     constructDate(day, month, year).isAfter(taxYearStartDate) && constructDate(day, month, year).isBefore(taxYearEndDate.plusDays(1))
 
   def taxYearStringToInteger(taxYear: String): Int = (taxYear.take(2) + taxYear.takeRight(2)).toInt
+
+  case class PrivateResidenceReliefDateDetails(shortedPeriod: Boolean, months: Int, dateDeducted: Option[LocalDate])
+
+  /**
+   * Should Private Residence Relief be 9 months or 18
+   * @param date
+   * @return
+   */
+  def privateResidenceReliefMonthDeductionApplicable(date: Option[LocalDate]): PrivateResidenceReliefDateDetails = {
+
+    if(date.isDefined) {
+      val dateAfter = date.get.isAfter(pppReliefDeductionApplicableDate)
+      val monthsToDeduct = dateAfter match {
+        case true => 9
+        case false => 18
+      }
+      val dateWithDeduction = Dates.dateMinusMonths(date, monthsToDeduct)
+      PrivateResidenceReliefDateDetails(dateAfter, monthsToDeduct, dateWithDeduction)
+    }else{
+      PrivateResidenceReliefDateDetails(false, 18, None)
+    }
+  }
 
 }

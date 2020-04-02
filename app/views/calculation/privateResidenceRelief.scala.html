@@ -23,7 +23,7 @@
 @import common.Dates.TemplateImplicits._
 
 @import config.ApplicationConfig
-@(privateResidenceReliefForm: Form[PrivateResidenceReliefModel], daysBetweenShow: Boolean, showFirstQuestion: Boolean, disposalDateLess18Months: Option[LocalDate], showOnlyFlatQuestion: Boolean)(implicit request: Request[_], messages: Messages, lang: Lang, application: Application, applicationConfig: ApplicationConfig)
+@(privateResidenceReliefForm: Form[PrivateResidenceReliefModel], daysBetweenShow: Boolean, showFirstQuestion: Boolean, disposalDateLess18Months: Option[LocalDate], pRRMonths: Int, showOnlyFlatQuestion: Boolean)(implicit request: Request[_], messages: Messages, lang: Lang, application: Application, applicationConfig: ApplicationConfig)
 
 
 @disposalDateLess18MonthsString = {@disposalDateLess18Months.map(_.localFormat("d MMMM YYYY")).getOrElse("")}
@@ -34,7 +34,7 @@
 
         <ul class="list-bullet">
                 <li>@messages("calc.privateResidenceRelief.daysBeforeHelpText")</li>
-                <li>@messages("calc.privateResidenceRelief.daysBetweenHelpText", disposalDateLess18MonthsString)</li>
+                <li>@messages("calc.privateResidenceRelief.daysBetweenHelpText", disposalDateLess18MonthsString, pRRMonths)</li>
         </ul>
     }else{
         <p id="helpTextBetween">@messages("calc.privateResidenceRelief.daysBetweenHelpText", disposalDateLess18MonthsString)</p>

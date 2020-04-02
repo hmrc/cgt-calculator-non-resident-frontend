@@ -50,6 +50,7 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
           daysBetweenShow = true,
           showFirstQuestion = true,
           Some(testDate),
+          pRRMonths = 18,
           showOnlyFlatQuestion = false)(fakeRequest, mockMessage, Lang("en"), fakeApplication, mockConfig)
         lazy val document = Jsoup.parse(view.body)
 
@@ -173,7 +174,7 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
         }
 
         "should produce the same output when render and f are called" in {
-          privateResidenceRelief.f(privateResidenceReliefForm(true, true), true, true, Some(testDate), false)(fakeRequest, mockMessage, Lang("en"), fakeApplication, mockConfig) shouldBe privateResidenceRelief.render(privateResidenceReliefForm(true, true), true, true, Some(testDate), false, fakeRequest, mockMessage, Lang("en"), fakeApplication, mockConfig)
+          privateResidenceRelief.f(privateResidenceReliefForm(true, true), true, true, Some(testDate), 9, false)(fakeRequest, mockMessage, Lang("en"), fakeApplication, mockConfig) shouldBe privateResidenceRelief.render(privateResidenceReliefForm(true, true), true, true, Some(testDate), 9, false, fakeRequest, mockMessage, Lang("en"), fakeApplication, mockConfig)
         }
       }
 
@@ -186,6 +187,7 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
           daysBetweenShow = false,
           showFirstQuestion = true,
           Some(testDate),
+          pRRMonths = 9,
           showOnlyFlatQuestion = true)(fakeRequest, mockMessage, Lang("en"), fakeApplication, mockConfig)
         lazy val document = Jsoup.parse(view.body)
 
@@ -219,7 +221,7 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
             }
 
             s"has form help text ${s"$testDateString " + messages.PrivateResidenceRelief.questionBetweenWhyThisDate}" in {
-              hiddenContent.select("p#helpTextBetween").text() shouldBe s"$testDateString " + messages.PrivateResidenceRelief.questionBetweenWhyThisDate
+              hiddenContent.select("p#helpTextBetween").text() shouldBe s"$testDateString " + messages.PrivateResidenceRelief.questionBetweenWhyThisDateWithPlaceHolders
             }
           }
         }
@@ -234,6 +236,7 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
           daysBetweenShow = false,
           showFirstQuestion = false,
           Some(testDate),
+          pRRMonths = 9,
           showOnlyFlatQuestion = true)(fakeRequest, mockMessage, Lang("en"), fakeApplication, mockConfig)
         lazy val document = Jsoup.parse(view.body)
 
@@ -258,7 +261,7 @@ class PrivateResidenceReliefViewSpec extends UnitSpec with WithFakeApplication w
     "supplied with errors" should {
       val map = Map("isClaimingPRR" -> "")
       lazy val view = privateResidenceRelief(privateResidenceReliefForm(false, false).bind(map),
-        false, false, None, false)(fakeRequest, mockMessage, Lang("en"), fakeApplication, mockConfig)
+        false, false, None, 9, false)(fakeRequest, mockMessage, Lang("en"), fakeApplication, mockConfig)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {
