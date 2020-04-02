@@ -225,7 +225,7 @@ calc.privateResidenceRelief.formHintExplanation = To work out your Private Resid
 calc.privateResidenceRelief.helpTextBeforeAfter = Why these specific dates?
 calc.privateResidenceRelief.helpTextJustBefore = Why this date?
 calc.privateResidenceRelief.helpTextSubTitle = These dates are important because:
-calc.privateResidenceRelief.daysBetweenHelpText = {0} is the date you transferred the property minus 18 months (you automatically get Private Residence Relief for the last 18 months that you owned the property)
+calc.privateResidenceRelief.daysBetweenHelpText = {0} is the date you transferred the property minus {1} months (you automatically get Private Residence Relief for the last {1} months that you owned the property)
 calc.privateResidenceRelief.daysBeforeHelpText = 6 April 2015 is when the Capital Gains Tax rules for non-UK residents came into effect
 
 ## Previous Loss Or Gain ##

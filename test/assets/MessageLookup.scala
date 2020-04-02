@@ -333,6 +333,8 @@ object MessageLookup {
         s"For how many days before $message did this property qualify for relief?"
       val questionBetweenWhyThisDate: String = "is the date you transferred the property minus 18 months (you automatically" +
         " get Private Residence Relief for the last 18 months that you owned the property)"
+      val questionBetweenWhyThisDateWithPlaceHolders: String = "is the date you transferred the property minus {1} months (you automatically" +
+        " get Private Residence Relief for the last {1} months that you owned the property)"
       val questionBeforeWhyThisDate = "6 April 2015 is when the Capital Gains Tax rules for non-UK residents came into effect"
       val helpTextSubtitle = "These dates are important because:"
       val helpTextBeforeAfter = "Why these specific dates?"

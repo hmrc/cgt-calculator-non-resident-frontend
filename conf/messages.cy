@@ -239,7 +239,7 @@ calc.previousLossOrGain.neither = Dim un (''dim enillion'')
 calc.previousLossOrGain.question = A wnaeth y gwarediadau hyn arwain at golledion neu enillion Treth Enillion Cyfalaf yn gyffredinol?
 
 calc.privateResidenceRelief.daysBeforeHelpText = 6 Ebrill 2015 yw pan ddaeth y rheolau Treth Enillion Cyfalaf ar gyfer rhai nad ydynt yn breswyl yn y DU i rym
-calc.privateResidenceRelief.daysBetweenHelpText = {0} yw''r dyddiad y gwnaethoch drosglwyddo''r eiddo, llai 18 mis (byddwch yn cael Lwfans Preswylfan Preifat yn awtomatig am y 18 mis diwethaf yr oeddech yn berchen ar yr eiddo)
+calc.privateResidenceRelief.daysBetweenHelpText = {0} yw''r dyddiad y gwnaethoch drosglwyddo''r eiddo, llai {1} mis (byddwch yn cael Lwfans Preswylfan Preifat yn awtomatig am y {1} mis diwethaf yr oeddech yn berchen ar yr eiddo)
 calc.privateResidenceRelief.error.errorDecimalPlaces = Mae gormod o rifau ar ôl y pwynt degol yn nifer y diwrnodau rydych yn gwneud cais ar eu cyfer
 calc.privateResidenceRelief.error.errorNegative = Nodwch rif positif ar gyfer sawl diwrnod rydych yn gwneud cais ar eu cyfer
 calc.privateResidenceRelief.error.maxNumericExceeded = Nodwch rif ar gyfer sawl diwrnod rydych yn gwneud cais ar eu cyfer sy''n {0} neu lai
