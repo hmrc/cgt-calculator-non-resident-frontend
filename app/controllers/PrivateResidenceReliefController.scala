@@ -19,7 +19,6 @@ package controllers
 import java.time.LocalDate
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import common.TaxDates.PrivateResidenceReliefDateDetails
 import common.nonresident.TaxableGainCalculation.{checkGainExists, getPropertyLivedInResponse}
 import common.{Dates, TaxDates}
 import config.ApplicationConfig
