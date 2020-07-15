@@ -22,14 +22,14 @@ object AppDependencies {
 
   val compile = Seq(
     ws,
-    "uk.gov.hmrc" %% "bootstrap-play-26" % "1.8.0",
+    "uk.gov.hmrc" %% "bootstrap-play-26" % "1.13.0",
     "uk.gov.hmrc" %% "play-partials" % "6.11.0-play-26",
-    "uk.gov.hmrc" %% "http-caching-client" % "9.0.0-play-26",
-    "uk.gov.hmrc" %% "mongo-caching" % "6.12.0-play-26",
-    "uk.gov.hmrc" %% "play-language" % "4.2.0-play-26",
+    "uk.gov.hmrc" %% "http-caching-client" % "9.1.0-play-26",
+    "uk.gov.hmrc" %% "mongo-caching" % "6.15.0-play-26",
+    "uk.gov.hmrc" %% "play-language" % "4.3.0-play-26",
     "it.innove"   % "play2-pdf" % "1.8.2" exclude("com.typesafe.play","*"),
     "uk.gov.hmrc" %% "govuk-template" % "5.55.0-play-26",
-    "uk.gov.hmrc" %% "play-ui" % "8.10.0-play-26",
+    "uk.gov.hmrc" %% "play-ui" % "8.11.0-play-26",
     nettyServer
   )
 
