@@ -23,7 +23,14 @@ import play.api.libs.json.{JsValue, Json, Writes}
 
 import scala.util.{Success, Try}
 
-case class DateModel(day: Int, month: Int, year: Int)
+case class DateModel(day: Int, month: Int, year: Int) {
+
+  def isDateAfter(referenceDate: DateModel): Boolean = {
+    (year > referenceDate.year) ||
+    (year == referenceDate.year && month > referenceDate.month) ||
+    (year == referenceDate.year && month == referenceDate.month && day > referenceDate.day)
+  }
+}
 
 object DateModel {
   implicit val format = Json.format[DateModel]

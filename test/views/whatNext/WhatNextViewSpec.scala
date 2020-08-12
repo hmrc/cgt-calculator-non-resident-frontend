@@ -35,7 +35,7 @@ class WhatNextViewSpec extends UnitSpec with WithFakeApplication with MockitoSug
   "What next view should" when {
     implicit lazy val fakeApp: Application = fakeApplication
 
-    lazy val view = whatNext()(FakeRequest("GET", ""), mockMessage, fakeApplication, mockConfig)
+    lazy val view = whatNext(isDateAfter = false)(FakeRequest("GET", ""), mockMessage, fakeApplication, mockConfig)
     lazy val doc = Jsoup.parse(view.body)
 
     s"have a title of ${messages.title}" in {
@@ -107,7 +107,30 @@ class WhatNextViewSpec extends UnitSpec with WithFakeApplication with MockitoSug
     }
 
     "should produce the same output when render and f are called" in {
-      whatNext.f()(FakeRequest("GET", ""), mockMessage, fakeApplication, mockConfig) shouldBe whatNext.render(FakeRequest("GET", ""), mockMessage, fakeApplication, mockConfig)
+      whatNext.f(false)(FakeRequest("GET", ""), mockMessage, fakeApplication, mockConfig) shouldBe whatNext.render(false, FakeRequest("GET", ""), mockMessage, fakeApplication, mockConfig)
     }
   }
+
+  "Disposal date is after 6 April 2020" which {
+    lazy val view2 = whatNext(isDateAfter = true)(FakeRequest("GET", ""), mockMessage, fakeApplication, mockConfig)
+    lazy val doc2 = Jsoup.parse(view2.body)
+
+    "doesn't have information for sa users" in {
+      doc2.select("article p").size shouldBe 2
+    }
+
+    "has a button for reporting" which {
+      lazy val button = doc2.select("a.button")
+
+      s"has the text ${messages.report}" in {
+        button.text() shouldBe messages.report
+      }
+
+      "has an href linking to the nr report service" in {
+        button.attr("href") shouldBe "/capital-gains-tax-uk-property/start/report-pay-capital-gains-tax-uk-property"
+      }
+    }
+  }
+
+
 }
