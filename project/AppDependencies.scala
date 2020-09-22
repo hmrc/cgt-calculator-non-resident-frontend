@@ -29,7 +29,7 @@ object AppDependencies {
     "uk.gov.hmrc"     %% "play-language"          % "4.3.0-play-26",
     "it.innove"       % "play2-pdf"               % "1.8.2" exclude("com.typesafe.play","*"),
     "uk.gov.hmrc"     %% "govuk-template"         % "5.55.0-play-26",
-    "uk.gov.hmrc"     %% "play-ui"                % "8.11.0-play-26",
+    "uk.gov.hmrc"     %% "play-ui"                % "8.12.0-play-26",
     nettyServer
   )
 
