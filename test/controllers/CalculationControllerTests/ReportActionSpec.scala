@@ -55,6 +55,7 @@ class ReportActionSpec @Inject()(pdfGenerator: PdfGenerator) extends UnitSpec wi
 
   class Setup {
     val controller = new ReportController(
+      fakeApplication.configuration,
       mockHttp,
       mockCalcConnector,
       mockAnswersConstructor,
@@ -128,7 +129,7 @@ class ReportActionSpec @Inject()(pdfGenerator: PdfGenerator) extends UnitSpec wi
     when(mockCalcConnector.calculateTotalCosts(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(BigDecimal(1000.00)))
 
-    new ReportController(mockHttp, mockCalcConnector, mockAnswersConstructor, mockMessagesControllerComponents, pdfGenerator)(mockConfig, fakeApplication)
+    new ReportController(fakeApplication.configuration, mockHttp, mockCalcConnector, mockAnswersConstructor, mockMessagesControllerComponents, pdfGenerator)(mockConfig, fakeApplication)
   }
 
   val model = TotalGainAnswersModel(DateModel(5, 10, 2016),

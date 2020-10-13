@@ -27,7 +27,7 @@ import controllers.utils.RecoverableFuture
 import it.innove.play.pdf.PdfGenerator
 import javax.inject.Inject
 import models._
-import play.api.Application
+import play.api.{Application, Configuration}
 import play.api.i18n.{I18nSupport, Lang, Messages}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, RequestHeader}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -39,16 +39,19 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 
-class ReportController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
+class ReportController @Inject()(config: Configuration,
+                                 http: DefaultHttpClient,
+                                 calcConnector: CalculatorConnector,
                                  answersConstructor: AnswersConstructor,
                                  mcc: MessagesControllerComponents,
                                  pdfGenerator: PdfGenerator)(implicit val applicationConfig: ApplicationConfig,
                                                              implicit val application: Application)
                                   extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
-  def host(implicit request: RequestHeader): String = {
-    s"http://${request.host}/"
-  }
+  lazy val platformHost: Option[String] = config.getOptional[String]("platform.frontend.host")
+
+  def host(implicit request: RequestHeader): String =
+    if (platformHost.isDefined) s"https://${request.host}" else s"http://${request.host}"
 
   val summaryReport: Action[AnyContent] = ValidateSession.async { implicit request =>
 
