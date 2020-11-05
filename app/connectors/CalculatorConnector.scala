@@ -43,8 +43,6 @@ class CalculatorConnector @Inject()(val http: DefaultHttpClient,
 
   val serviceUrl: String = servicesConfig.baseUrl("capital-gains-calculator")
 
-  implicit val hc: HeaderCarrier = HeaderCarrier().withExtraHeaders("Accept" -> "application/vnd.hmrc.1.0+json")
-
   def saveFormData[T](key: String, data: T)(implicit hc: HeaderCarrier, formats: Format[T]): Future[CacheMap] = {
     cache(key, data)
   }
@@ -112,7 +110,7 @@ class CalculatorConnector @Inject()(val http: DefaultHttpClient,
     }
   }
 
-  def calculateTotalCosts(answers: TotalGainAnswersModel, calculationType: Option[CalculationElectionModel]): Future[BigDecimal] = calculationType match {
+  def calculateTotalCosts(answers: TotalGainAnswersModel, calculationType: Option[CalculationElectionModel])(implicit hc: HeaderCarrier): Future[BigDecimal] = calculationType match {
     case Some(calculationElection) =>
       if(calculationElection.calculationType == CalculationType.rebased) {
         http.GET[BigDecimal](s"$serviceUrl/capital-gains-calculator/non-resident/calculate-total-costs?" +

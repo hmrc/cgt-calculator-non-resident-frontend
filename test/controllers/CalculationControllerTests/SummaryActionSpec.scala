@@ -84,7 +84,7 @@ class SummaryActionSpec extends UnitSpec with WithFakeApplication with MockitoSu
     when(mockCalcConnector.calculateTotalGain(ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(result)))
 
-    when(mockCalcConnector.calculateTotalCosts(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockCalcConnector.calculateTotalCosts(ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(Future.successful(BigDecimal(100)))
 
     when(mockCalcConnector.calculateTaxableGainAfterPRR(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any()))
