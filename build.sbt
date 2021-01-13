@@ -5,7 +5,7 @@ lazy val appName = "cgt-calculator-non-resident-frontend"
 lazy val appDependencies : Seq[ModuleID] = Seq.empty
 lazy val plugins : Seq[Plugins] = Seq(play.sbt.PlayScala)
 lazy val playSettings : Seq[Setting[_]] = Seq.empty
-val silencerVersion = "1.7.0"
+val silencerVersion = "1.7.1"
 
 lazy val scoverageSettings = {
   import scoverage.ScoverageKeys
@@ -30,7 +30,7 @@ lazy val microservice = Project(appName, file("."))
   .settings(defaultSettings(): _*)
   .settings(
     targetJvm := "jvm-1.8",
-    scalaVersion := "2.12.11",
+    scalaVersion := "2.12.12",
     libraryDependencies ++= AppDependencies(),
     retrieveManaged := true,
     evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
