@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,11 +18,11 @@ package constructors
 
 import java.time.LocalDate
 
+import common.{CommonPlaySpec, WithCommonFakeApplication}
 import constructors.helpers.AssertHelpers
 import models._
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
-class DeductionDetailsConstructorSpec extends UnitSpec with WithFakeApplication with AssertHelpers {
+class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeApplication with AssertHelpers {
 
   val noneOtherReliefs = TotalGainAnswersModel(
     DateModel(10, 10, 2010),

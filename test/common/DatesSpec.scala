@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,13 +21,13 @@ import java.time.LocalDate
 import common.Dates.{TemplateImplicits, formatter}
 import controllers.helpers.FakeRequestHelper
 import org.scalatestplus.mockito.MockitoSugar
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.i18n.Lang
 import play.api.mvc.MessagesControllerComponents
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 import scala.concurrent.ExecutionContext
 
-class DatesSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
+class DatesSpec extends CommonPlaySpec with GuiceOneAppPerSuite with MockitoSugar with FakeRequestHelper {
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   implicit val ec = fakeApplication.injector.instanceOf[ExecutionContext]
   lazy val cyMockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(Seq(

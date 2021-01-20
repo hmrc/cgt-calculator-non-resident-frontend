@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package controllers.CalculationControllerTests
 
 import akka.stream.Materializer
 import assets.MessageLookup
+import common.{CommonPlaySpec, WithCommonFakeApplication}
 import config.ApplicationConfig
 import constructors.AnswersConstructor
 import controllers.WhatNextController
@@ -30,11 +31,11 @@ import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import org.mockito.Mockito._
+
 import scala.concurrent.Future
 
-class WhatNextControllerSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
+class WhatNextControllerSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
   implicit val hc: HeaderCarrier = mock[HeaderCarrier]
   val mockHttp = mock[DefaultHttpClient]

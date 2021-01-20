@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package constructors
 
 import assets.MessageLookup.NonResident.{Summary => messages}
+import common.{CommonPlaySpec, WithCommonFakeApplication}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.nonresident.CalculationType
 import controllers.helpers.FakeRequestHelper
@@ -26,9 +27,8 @@ import models.{CalculationResultsWithPRRModel, GainsAfterPRRModel}
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.i18n.MessagesProvider
 import play.api.mvc.MessagesControllerComponents
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
-class CalculationDetailsWithPRRConstructorSpec extends UnitSpec with WithFakeApplication with AssertHelpers with MockitoSugar with FakeRequestHelper{
+class CalculationDetailsWithPRRConstructorSpec extends CommonPlaySpec with WithCommonFakeApplication with AssertHelpers with MockitoSugar with FakeRequestHelper{
   implicit val mockMessagesProvider = mock[MessagesProvider]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
 

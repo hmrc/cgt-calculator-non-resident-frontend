@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,9 +29,9 @@ import models.DateModel
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.MessagesControllerComponents
-import play.api.{Application, Logger}
+import play.api.{Application, Logging}
 import uk.gov.hmrc.http.SessionKeys
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation
 
@@ -43,7 +43,7 @@ class DisposalDateController @Inject()(http: DefaultHttpClient,calcConnector: Ca
                                        mcc: MessagesControllerComponents)
                                       (implicit val applicationConfig: ApplicationConfig,
                                        implicit val application: Application)
-                                        extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
+                                        extends FrontendController(mcc) with ValidActiveSession with I18nSupport with Logging{
 
   val disposalDate = Action.async { implicit request =>
     implicit val lang = mcc.messagesApi.preferred(request).lang
@@ -67,7 +67,7 @@ class DisposalDateController @Inject()(http: DefaultHttpClient,calcConnector: Ca
     def errorAction(form: Form[DateModel]) = Future.successful(BadRequest(calculation.disposalDate(form)))
 
     def successAction(model: DateModel) = {
-      Logger.info("Saving disposalDate as : " + model)
+      logger.info("Saving disposalDate as : " + model)
       for {
         _ <- calcConnector.saveFormData(KeystoreKeys.disposalDate, model)
         taxYear <- calcConnector.getTaxYear(s"${model.year}-${model.month}-${model.day}")

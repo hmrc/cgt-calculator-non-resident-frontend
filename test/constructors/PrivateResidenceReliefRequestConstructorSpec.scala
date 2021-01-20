@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,10 @@
 
 package constructors
 
+import common.CommonPlaySpec
 import models._
-import uk.gov.hmrc.play.test.UnitSpec
 
-class PrivateResidenceReliefRequestConstructorSpec extends UnitSpec{
+class PrivateResidenceReliefRequestConstructorSpec extends CommonPlaySpec{
 
   val modelDatesWithin18Months = TotalGainAnswersModel(
     DateModel(7, 7, 2016),

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +19,9 @@ package forms
 import forms.WhoDidYouGiveItToForm._
 import models.WhoDidYouGiveItToModel
 import assets.KeyLookup.WhoDidYouGiveItTo
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import common.{CommonPlaySpec, WithCommonFakeApplication}
 
-class WhoDidYouGiveItToFormSpec extends UnitSpec with WithFakeApplication {
+class WhoDidYouGiveItToFormSpec extends CommonPlaySpec with WithCommonFakeApplication {
   "Creating the form from an empty model" should {
 
     "create an empty form when the model is empty" in {
