@@ -16,8 +16,6 @@
 
 package common
 
-import uk.gov.hmrc.play.test.UnitSpec
-
 class TaxDatesSpec extends CommonPlaySpec {
 
   "Calling dateAfterStart method" should {
