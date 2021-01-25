@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package constructors
 
 import akka.stream.Materializer
+import common.CommonPlaySpec
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
 import models._
@@ -25,11 +26,10 @@ import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.logging.SessionId
-import uk.gov.hmrc.play.test.UnitSpec
 
 import scala.concurrent.Future
 
-class AnswersConstructorSpec extends UnitSpec with MockitoSugar {
+class AnswersConstructorSpec extends CommonPlaySpec with MockitoSugar {
 
   implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,13 +17,13 @@
 package forms
 
 import assets.KeyLookup.NonResident.{AcquisitionValue => messages}
-import common.Constants
+import common.{Constants, CommonPlaySpec, WithCommonFakeApplication}
 import assets.KeyLookup.{NonResident => common}
 import forms.AcquisitionValueForm._
 import models.AcquisitionValueModel
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
-class AcquisitionValueFormSpec extends UnitSpec with WithFakeApplication{
+class AcquisitionValueFormSpec extends CommonPlaySpec with WithCommonFakeApplication{
 
   def checkMessageAndError(messageLookup: String, mapping: String): Unit ={
     lazy val form = acquisitionValueForm.bind(Map("acquisitionValue" -> mapping))

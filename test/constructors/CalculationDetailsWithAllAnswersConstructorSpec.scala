@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,15 +17,15 @@
 package constructors
 
 import helpers.AssertHelpers
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import assets.MessageLookup.{NonResident => messages}
+import common.{CommonPlaySpec, WithCommonFakeApplication}
 import controllers.helpers.FakeRequestHelper
 import models.{CalculationResultsWithTaxOwedModel, QuestionAnswerModel, TotalTaxOwedModel}
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.i18n.MessagesProvider
 import play.api.mvc.MessagesControllerComponents
 
-class CalculationDetailsWithAllAnswersConstructorSpec extends UnitSpec with WithFakeApplication with AssertHelpers with MockitoSugar with FakeRequestHelper {
+class CalculationDetailsWithAllAnswersConstructorSpec extends CommonPlaySpec with WithCommonFakeApplication with AssertHelpers with MockitoSugar with FakeRequestHelper {
 
   implicit val mockMessagesProvider = mock[MessagesProvider]
   private def assertExpectedResult[T](option: Option[T])(test: T => Unit) = assertOption("expected option is None")(option)(test)

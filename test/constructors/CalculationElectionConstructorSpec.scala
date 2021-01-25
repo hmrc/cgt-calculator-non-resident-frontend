@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,12 @@
 
 package constructors
 
+import common.{CommonPlaySpec, WithCommonFakeApplication}
 import models._
 import org.scalatestplus.mockito.MockitoSugar
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 class CalculationElectionConstructorSpec()
-  extends UnitSpec with MockitoSugar with WithFakeApplication {
+  extends CommonPlaySpec with MockitoSugar with WithCommonFakeApplication {
 
   val onlyFlat = TotalGainResultsModel(BigDecimal(0), None, None)
   val flatAndRebased = TotalGainResultsModel(BigDecimal(-100), Some(BigDecimal(-50)), None)

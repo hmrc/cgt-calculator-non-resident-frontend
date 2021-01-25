@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package views
 
+import common.{CommonPlaySpec, WithCommonFakeApplication}
 import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import org.scalatestplus.mockito.MockitoSugar
@@ -23,10 +24,9 @@ import play.api.Application
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.FakeRequest
 import play.twirl.api.Html
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import views.html.main_template
 
-class MainTemplateViewSpec extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
+class MainTemplateViewSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   implicit lazy val fakeApp: Application = fakeApplication

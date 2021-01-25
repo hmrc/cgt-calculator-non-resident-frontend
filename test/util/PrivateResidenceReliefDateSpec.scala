@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,10 +18,9 @@ package util
 
 import java.time.LocalDate
 
-import common.TaxDates
-import uk.gov.hmrc.play.test.UnitSpec
+import common.{CommonPlaySpec, TaxDates}
 
-class PrivateResidenceReliefDateSpec extends UnitSpec {
+class PrivateResidenceReliefDateSpec extends CommonPlaySpec {
 
   "Private Residence Relief" should {
     "needs to have correct value for extended period" in {

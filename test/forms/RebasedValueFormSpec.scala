@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,11 +18,11 @@ package forms
 
 import assets.KeyLookup.NonResident.{RebasedValue => messages}
 import assets.KeyLookup.{NonResident => commonMessages}
+import common.{CommonPlaySpec, WithCommonFakeApplication}
 import models.RebasedValueModel
 import forms.RebasedValueForm._
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
-class RebasedValueFormSpec extends UnitSpec with WithFakeApplication {
+class RebasedValueFormSpec extends CommonPlaySpec with WithCommonFakeApplication {
 
   "Rebased Value form" when {
 

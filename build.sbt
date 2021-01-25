@@ -33,7 +33,7 @@ lazy val microservice = Project(appName, file("."))
     scalaVersion := "2.12.11",
     libraryDependencies ++= AppDependencies(),
     retrieveManaged := true,
-    evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
+    //evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
     pipelineStages in Assets := Seq(digest),
     scalacOptions += "-P:silencer:pathFilters=views;routes",
     libraryDependencies ++= Seq(

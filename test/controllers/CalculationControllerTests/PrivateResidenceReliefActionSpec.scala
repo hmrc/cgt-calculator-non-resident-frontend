@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import java.time.LocalDate
 import akka.stream.Materializer
 import assets.MessageLookup.NonResident.{PrivateResidenceRelief => messages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import common.{CommonPlaySpec, WithCommonFakeApplication}
 import config.ApplicationConfig
 import connectors.CalculatorConnector
 import constructors.AnswersConstructor
@@ -37,12 +38,11 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.http.logging.SessionId
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 import scala.concurrent.Future
 
 class PrivateResidenceReliefActionSpec
-  extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
+  extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
   implicit val implicitHeaderCarrier = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]

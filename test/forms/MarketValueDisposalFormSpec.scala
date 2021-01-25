@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +18,12 @@ package forms
 
 import assets.KeyLookup.NonResident.{MarketValue => marketValueMessages}
 import assets.KeyLookup.{NonResident => messages}
+import common.{CommonPlaySpec, WithCommonFakeApplication}
 import forms.MarketValueGaveAwayForm._
 import forms.MarketValueWhenSoldForm._
 import models.DisposalValueModel
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
-class MarketValueDisposalFormSpec extends UnitSpec with WithFakeApplication {
+class MarketValueDisposalFormSpec extends CommonPlaySpec with WithCommonFakeApplication {
 
   "Creating a form using an empty model" should {
     lazy val form = marketValueWhenGaveAwayForm

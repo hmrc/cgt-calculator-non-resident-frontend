@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package controllers.CalculationControllerTests
 import akka.stream.Materializer
 import assets.MessageLookup.NonResident.{RebasedValue => messages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import common.{CommonPlaySpec, WithCommonFakeApplication}
 import config.ApplicationConfig
 import connectors.CalculatorConnector
 import controllers.helpers.FakeRequestHelper
@@ -34,12 +35,11 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 import scala.concurrent.Future
 
 class RebasedValueActionSpec @Inject()(rebasedValueController: RebasedValueController)
-  extends UnitSpec with WithFakeApplication with MockitoSugar with FakeRequestHelper {
+  extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
   implicit val hc = new HeaderCarrier()
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]

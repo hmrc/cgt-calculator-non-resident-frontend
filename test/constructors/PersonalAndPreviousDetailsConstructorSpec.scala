@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,13 +17,12 @@
 package constructors
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import common.YesNoKeys
+import common.{CommonPlaySpec, WithCommonFakeApplication, YesNoKeys}
 import common.nonresident.{CustomerTypeKeys, PreviousGainOrLossKeys}
 import controllers.routes
 import models._
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
-class PersonalAndPreviousDetailsConstructorSpec extends UnitSpec with WithFakeApplication {
+class PersonalAndPreviousDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeApplication {
 
   val modelIndividual = TotalPersonalDetailsCalculationModel(
     CurrentIncomeModel(25000),

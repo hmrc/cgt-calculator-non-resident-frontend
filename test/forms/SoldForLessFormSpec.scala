@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,10 +17,10 @@
 package forms
 
 import assets.KeyLookup.{NonResident => commonMessages}
+import common.{CommonPlaySpec, WithCommonFakeApplication}
 import forms.SoldForLessForm._
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
-class SoldForLessFormSpec extends UnitSpec with WithFakeApplication {
+class SoldForLessFormSpec extends CommonPlaySpec with WithCommonFakeApplication {
 
   "Creating the form" should {
     "with an empty model" should {
