@@ -21,7 +21,6 @@ import common.{Constants, CommonPlaySpec, WithCommonFakeApplication}
 import assets.KeyLookup.{NonResident => common}
 import forms.AcquisitionValueForm._
 import models.AcquisitionValueModel
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 class AcquisitionValueFormSpec extends CommonPlaySpec with WithCommonFakeApplication{
 

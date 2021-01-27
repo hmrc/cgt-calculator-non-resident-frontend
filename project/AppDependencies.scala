@@ -20,16 +20,25 @@ import play.core.PlayVersion
 
 object AppDependencies {
 
+  val bootstrapVersion         = "3.0.0"
+  val govUKTemplateVersion     = "5.61.0-play-27"
+  val playUiVersion            = "8.20.0-play-27"
+  val playPartialsVersion      = "7.1.0-play-27"
+  val httpCachingClientVersion = "9.2.0-play-27"
+  val play2PdfVersion          = "1.10.0"
+  val mongoCachingVersion      = "6.16.0-play-27"
+  val playLanguageVersion      = "4.7.0-play-27"
+
   val compile = Seq(
     ws,
-    "uk.gov.hmrc"     %% "bootstrap-frontend-play-27"      % "3.0.0",
-    "uk.gov.hmrc"     %% "play-partials"          % "7.1.0-play-27",
-    "uk.gov.hmrc"     %% "http-caching-client"    % "9.2.0-play-27",
-    "uk.gov.hmrc"     %% "mongo-caching"          % "6.16.0-play-27",
-    "uk.gov.hmrc"     %% "play-language"          % "4.7.0-play-27",
-    "it.innove"       % "play2-pdf"               % "1.10.0" exclude("com.typesafe.play","*"),
-    "uk.gov.hmrc"     %% "govuk-template"         % "5.61.0-play-27",
-    "uk.gov.hmrc"     %% "play-ui"                % "8.20.0-play-27",
+    "uk.gov.hmrc"     %% "bootstrap-frontend-play-27"   % bootstrapVersion,
+    "uk.gov.hmrc"     %% "play-partials"                % playPartialsVersion,
+    "uk.gov.hmrc"     %% "http-caching-client"          % httpCachingClientVersion,
+    "uk.gov.hmrc"     %% "mongo-caching"                % mongoCachingVersion,
+    "uk.gov.hmrc"     %% "play-language"                % playLanguageVersion,
+    "it.innove"       % "play2-pdf"                     % play2PdfVersion exclude("com.typesafe.play","*"),
+    "uk.gov.hmrc"     %% "govuk-template"               % govUKTemplateVersion,
+    "uk.gov.hmrc"     %% "play-ui"                      % playUiVersion,
     nettyServer
   )
 
@@ -41,7 +50,6 @@ object AppDependencies {
   object Test {
     def apply(): Seq[ModuleID] = new TestDependencies {
       override lazy val test = Seq(
-        "uk.gov.hmrc"             %% "hmrctest"             % "3.9.0-play-26"     % scope,
         "org.scalatestplus.play"  %% "scalatestplus-play"   % "4.0.3"             % scope,
         "org.mockito"             % "mockito-core"          % "3.3.3"             % scope,
         "org.pegdown"             % "pegdown"               % "1.6.0"             % scope,

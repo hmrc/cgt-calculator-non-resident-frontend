@@ -18,7 +18,6 @@ package constructors
 
 import common.CommonPlaySpec
 import models._
-import uk.gov.hmrc.play.test.UnitSpec
 
 class FinalTaxAnswersRequestConstructorSpec extends CommonPlaySpec {
 
