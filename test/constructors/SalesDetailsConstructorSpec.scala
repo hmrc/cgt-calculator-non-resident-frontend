@@ -21,7 +21,6 @@ import java.time.LocalDate
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import constructors.helpers.AssertHelpers
 import models._
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 class SalesDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeApplication with AssertHelpers {
 

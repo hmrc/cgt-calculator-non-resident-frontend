@@ -18,7 +18,6 @@ package constructors
 
 import common.CommonPlaySpec
 import models.{AllOtherReliefsModel, OtherReliefsModel}
-import uk.gov.hmrc.play.test.UnitSpec
 
 class OtherReliefsRequestConstructorSpec extends CommonPlaySpec {
 
