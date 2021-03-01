@@ -18,7 +18,6 @@ package config
 
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import org.scalatest.MustMatchers._
-import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.Application
 import play.api.http.Writeable
 import play.api.inject.guice.GuiceApplicationBuilder
