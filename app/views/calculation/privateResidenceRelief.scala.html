@@ -26,7 +26,7 @@
 @(privateResidenceReliefForm: Form[PrivateResidenceReliefModel], daysBetweenShow: Boolean, showFirstQuestion: Boolean, disposalDateLess18Months: Option[LocalDate], pRRMonths: Int, showOnlyFlatQuestion: Boolean)(implicit request: Request[_], messages: Messages, lang: Lang, application: Application, applicationConfig: ApplicationConfig)
 
 
-@disposalDateLess18MonthsString = {@disposalDateLess18Months.map(_.localFormat("d MMMM YYYY")).getOrElse("")}
+@disposalDateLess18MonthsString = {@disposalDateLess18Months.map(_.localFormat("d MMMM yyyy")).getOrElse("")}
 
 @whyThisDate(showBoth: Boolean) = {
     @if(showBoth){
