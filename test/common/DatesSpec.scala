@@ -108,17 +108,17 @@ class DatesSpec extends CommonPlaySpec with GuiceOneAppPerSuite with MockitoSuga
     "format an English date" in {
       implicit val lang: Lang = Lang("en")
       val date = LocalDate.of(2018, 3, 19)
-      date.localFormat("d MMMM YYYY") shouldBe "19 March 2018"
+      date.localFormat("d MMMM yyyy") shouldBe "19 March 2018"
     }
     "format a Welsh date" in {
       val date = LocalDate.of(2014, 11, 22)
       implicit val lang: Lang = Lang("cy")
-      date.localFormat("d MMMM YYYY")(lang, cyMockMessage) shouldBe "22 Tachwedd 2014"
+      date.localFormat("d MMMM yyyy")(lang, cyMockMessage) shouldBe "22 Tachwedd 2014"
     }
     "format a Spanish date" in {
       val date = LocalDate.of(1999, 1, 12)
       implicit val lang: Lang = Lang("es")
-      date.localFormat("d MMMM YYYY") shouldBe "12 enero 1999"
+      date.localFormat("d MMMM yyyy") shouldBe "12 enero 1999"
     }
   }
 }

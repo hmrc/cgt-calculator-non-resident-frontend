@@ -44,14 +44,14 @@
                 @questions.map { question =>
                     <tr data-question="@question.question">
                         <td>
-                            @messages(question.question, question.oDate.map(_.localFormat("d MMMM YYYY")).getOrElse(""))
+                            @messages(question.question, question.oDate.map(_.localFormat("d MMMM yyyy")).getOrElse(""))
                         </td>
                         <td id="@{s"${question.id}-answer"}">
                         @{question.data match {
                             case string: String => messages(checkIfBooleanAsString(string))
                             case int: Int => int.toString
                             case bigDecimal: BigDecimal => s"£${MoneyPounds(bigDecimal, 2).quantity}"
-                            case date: LocalDate => date.localFormat("d MMMM YYYY")
+                            case date: LocalDate => date.localFormat("d MMMM yyyy")
                             case boolean: Boolean => messages(booleanToMessageString(boolean))
                             case _ => ""
                             }}
