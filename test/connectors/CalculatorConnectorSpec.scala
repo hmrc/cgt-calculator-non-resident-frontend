@@ -18,7 +18,6 @@ package connectors
 
 import java.util.UUID
 
-import common.CommonPlaySpec
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import config.ApplicationConfig
 import models._
@@ -26,12 +25,11 @@ import org.mockito.ArgumentMatchers
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.json.Json
-import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.http.cache.client.{CacheMap, SessionCache}
-import uk.gov.hmrc.http.logging.SessionId
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-import common.{CommonPlaySpec,WithCommonFakeApplication}
+import common.{CommonPlaySpec, WithCommonFakeApplication}
 
 import scala.concurrent.Future
 
@@ -54,7 +52,7 @@ class CalculatorConnectorSpec extends CommonPlaySpec with WithCommonFakeApplicat
     "fetch and get from keystore" in new Setup {
       val validCacheMap = CacheMap("id", Map(KeystoreKeys.disposalValue -> Json.toJson(DisposalValueModel(1000))))
 
-      when(mockHttp.GET[CacheMap](ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any()))
+      when(mockHttp.GET[CacheMap](ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any()))
         .thenReturn(Future.successful(validCacheMap))
 
       val result = connector.fetchAndGetFormData[DisposalValueModel](KeystoreKeys.disposalValue)
@@ -132,7 +130,7 @@ class CalculatorConnectorSpec extends CommonPlaySpec with WithCommonFakeApplicat
 
 
     "return a valid response" in new Setup {
-      when(mockHttp.GET[Option[CalculationResultsWithPRRModel]](ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any()))
+      when(mockHttp.GET[Option[CalculationResultsWithPRRModel]](ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any()))
         .thenReturn(Future.successful(Option(validResponse)))
 
       val result = connector.calculateTaxableGainAfterPRR(model, PrivateResidenceReliefModel("No", None, None),
