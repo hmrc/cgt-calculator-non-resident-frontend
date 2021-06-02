@@ -29,11 +29,12 @@ class ErrorTemplateViewSpec extends CommonPlaySpec with WithCommonFakeApplicatio
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   implicit lazy val fakeApp: Application = fakeApplication
-
+  lazy val errorTemplateView = fakeApplication.injector.instanceOf[error_template]
 
   "Error Template" should {
     "produce the same output when render and f are called" in {
-      error_template.f("title", "heading", "message")(FakeRequest("GET", ""), mockMessage, mockConfig) shouldBe error_template.render("title", "heading", "message", FakeRequest("GET", ""), mockMessage, mockConfig)
+      errorTemplateView.f("title", "heading", "message")(FakeRequest("GET", ""), mockMessage) shouldBe
+        errorTemplateView.render("title", "heading", "message", FakeRequest("GET", ""), mockMessage)
     }
   }
 }

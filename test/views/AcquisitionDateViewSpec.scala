@@ -31,12 +31,13 @@ import views.html.calculation.acquisitionDate
 class AcquisitionDateViewSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  lazy val acquisitionCostsView = fakeApplication.injector.instanceOf[acquisitionDate]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
 
   "Acquisition date view" when {
 
     "supplied with no errors" should {
-      lazy val view = acquisitionDate(acquisitionDateForm)(fakeRequest,mockMessage, fakeApplication, mockConfig)
+      lazy val view = acquisitionCostsView(acquisitionDateForm)(fakeRequest,mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${messages.AcquisitionDate.question}'" in {
@@ -109,8 +110,8 @@ class AcquisitionDateViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
       }
 
       "produce the same output when render and f are called" in {
-        acquisitionDate.render(acquisitionDateForm, fakeRequest,mockMessage, fakeApplication, mockConfig) shouldBe
-          acquisitionDate.f(acquisitionDateForm)(fakeRequest,mockMessage, fakeApplication, mockConfig)
+        acquisitionCostsView.render(acquisitionDateForm, fakeRequest,mockMessage) shouldBe
+          acquisitionCostsView.f(acquisitionDateForm)(fakeRequest,mockMessage)
       }
     }
 
@@ -118,7 +119,7 @@ class AcquisitionDateViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
       lazy val form = acquisitionDateForm.bind(Map("acquisitionDateDay" -> "",
         "acquisitionDateMonth" -> "1",
         "acquisitionDateYear" -> "2015"))
-      lazy val view = acquisitionDate(form)(fakeRequest,mockMessage, fakeApplication, mockConfig)
+      lazy val view = acquisitionCostsView(form)(fakeRequest,mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" which {
@@ -137,7 +138,7 @@ class AcquisitionDateViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
       lazy val form = acquisitionDateForm.bind(Map("acquisitionDateDay" -> "1",
         "acquisitionDateMonth" -> "",
         "acquisitionDateYear" -> "2015"))
-      lazy val view = acquisitionDate(form)(fakeRequest,mockMessage, fakeApplication, mockConfig)
+      lazy val view = acquisitionCostsView(form)(fakeRequest,mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" which {
@@ -156,7 +157,7 @@ class AcquisitionDateViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
       lazy val form = acquisitionDateForm.bind(Map("acquisitionDateDay" -> "1",
         "acquisitionDateMonth" -> "1",
         "acquisitionDateYear" -> ""))
-      lazy val view = acquisitionDate(form)(fakeRequest,mockMessage, fakeApplication, mockConfig)
+      lazy val view = acquisitionCostsView(form)(fakeRequest,mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" which {
@@ -179,7 +180,7 @@ class AcquisitionDateViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
         "acquisitionDateYear" -> date.getYear.toString)
 
       lazy val form = acquisitionDateForm.bind(map)
-      lazy val view = acquisitionDate(form)(fakeRequest,mockMessage, fakeApplication, mockConfig)
+      lazy val view = acquisitionCostsView(form)(fakeRequest,mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" which {

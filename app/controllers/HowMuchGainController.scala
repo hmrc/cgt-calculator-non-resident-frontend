@@ -17,38 +17,35 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import config.ApplicationConfig
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import forms.HowMuchGainForm._
 import javax.inject.Inject
 import models.HowMuchGainModel
-import play.api.Application
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-import views.html.calculation
+import views.html.calculation.howMuchGain
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class HowMuchGainController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
-                                      mcc: MessagesControllerComponents)(implicit val applicationConfig: ApplicationConfig,
-                                                                         implicit val application: Application)
+                                      mcc: MessagesControllerComponents,
+                                      howMuchGainView: howMuchGain)(implicit ec: ExecutionContext)
                                         extends FrontendController(mcc) with ValidActiveSession with I18nSupport{
 
   val howMuchGain = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[HowMuchGainModel](KeystoreKeys.howMuchGain).map {
-      case Some(data) => Ok(calculation.howMuchGain(howMuchGainForm.fill(data)))
-      case None => Ok(calculation.howMuchGain(howMuchGainForm))
+      case Some(data) => Ok(howMuchGainView(howMuchGainForm.fill(data)))
+      case None => Ok(howMuchGainView(howMuchGainForm))
     }
   }
 
   val submitHowMuchGain = ValidateSession.async { implicit request =>
 
-    def errorAction(form: Form[HowMuchGainModel]) = Future.successful(BadRequest(calculation.howMuchGain(form)))
+    def errorAction(form: Form[HowMuchGainModel]) = Future.successful(BadRequest(howMuchGainView(form)))
 
     def successAction(model: HowMuchGainModel) = {
       calcConnector.saveFormData(KeystoreKeys.howMuchGain, model).map(_ =>

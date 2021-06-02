@@ -17,38 +17,36 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import config.ApplicationConfig
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import forms.WorthBeforeLegislationStartForm._
 import javax.inject.Inject
 import models.WorthBeforeLegislationStartModel
-import play.api.Application
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-import views.html.{calculation => views}
+import views.html.calculation.worthBeforeLegislationStart
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class WorthBeforeLegislationStartController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
-                                                      mcc: MessagesControllerComponents)(implicit val applicationConfig: ApplicationConfig,
-                                                                                         implicit val application: Application)
+                                                      mcc: MessagesControllerComponents,
+                                                      worthBeforeLegislationStartView: worthBeforeLegislationStart)
+                                                     (implicit ec: ExecutionContext)
                                                         extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   val worthBeforeLegislationStart: Action[AnyContent] = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[WorthBeforeLegislationStartModel](KeystoreKeys.worthBeforeLegislationStart).map {
-      case Some(data) => Ok(views.worthBeforeLegislationStart(worthBeforeLegislationStartForm.fill(data)))
-      case None => Ok(views.worthBeforeLegislationStart(worthBeforeLegislationStartForm))
+      case Some(data) => Ok(worthBeforeLegislationStartView(worthBeforeLegislationStartForm.fill(data)))
+      case None => Ok(worthBeforeLegislationStartView(worthBeforeLegislationStartForm))
     }
   }
 
   val submitWorthBeforeLegislationStart: Action[AnyContent] = ValidateSession.async { implicit request =>
 
-    def errorAction(form: Form[WorthBeforeLegislationStartModel]) = Future.successful(BadRequest(views.worthBeforeLegislationStart(form)))
+    def errorAction(form: Form[WorthBeforeLegislationStartModel]) = Future.successful(BadRequest(worthBeforeLegislationStartView(form)))
 
     def successAction(model: WorthBeforeLegislationStartModel) = {
       calcConnector.saveFormData(KeystoreKeys.worthBeforeLegislationStart, model).map(_ =>

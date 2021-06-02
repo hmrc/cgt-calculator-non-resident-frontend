@@ -27,11 +27,12 @@ import views.html.helpers._
 
 class formYesNoRadioSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  lazy val formYesNoRadioView = fakeApplication.injector.instanceOf[formYesNoRadio]
 
   "formYesNoRadio" when {
 
     "not supplied with legend class" should {
-      lazy val helper = formYesNoRadio(boughtForLessForm.apply("boughtForLess"), "legend")
+      lazy val helper = formYesNoRadioView(boughtForLessForm.apply("boughtForLess"), "legend")
       lazy val document = Jsoup.parse(helper.body)
 
       "contain inputs with the id boughtForLess" in {
@@ -80,7 +81,7 @@ class formYesNoRadioSpec extends CommonPlaySpec with WithCommonFakeApplication w
     }
 
     "supplied with no legend" should {
-      lazy val helper = formYesNoRadio(boughtForLessForm.apply("boughtForLess"), "legend")
+      lazy val helper = formYesNoRadioView(boughtForLessForm.apply("boughtForLess"), "legend")
       lazy val document = Jsoup.parse(helper.body)
 
       "have a legend with no class set" in {
@@ -89,7 +90,7 @@ class formYesNoRadioSpec extends CommonPlaySpec with WithCommonFakeApplication w
     }
 
     "supplied with a legend" should {
-      lazy val helper = formYesNoRadio(boughtForLessForm.apply("boughtForLess"), "legend", legendClass = Some("class"))
+      lazy val helper = formYesNoRadioView(boughtForLessForm.apply("boughtForLess"), "legend", legendClass = Some("class"))
       lazy val document = Jsoup.parse(helper.body)
 
       "have a legend with a class of class" in {

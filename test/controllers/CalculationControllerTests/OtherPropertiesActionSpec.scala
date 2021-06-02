@@ -35,26 +35,32 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import views.html.calculation.otherProperties
+import views.html.warnings.sessionTimeout
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class OtherPropertiesActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
   implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
 
   val materializer = mock[Materializer]
+  val ec = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
   val defaultCache = mock[CacheMap]
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
+  val otherPropertiesView = fakeApplication.injector.instanceOf[otherProperties]
+  val sessionTimeoutView = fakeApplication.injector.instanceOf[sessionTimeout]
 
   class Setup {
     val controller = new OtherPropertiesController(
       mockHttp,
       mockCalcConnector,
-      mockMessagesControllerComponents
-    )(mockConfig, fakeApplication)
+      mockMessagesControllerComponents,
+      otherPropertiesView
+    )(ec)
   }
 
   def setupTarget(getData: Option[OtherPropertiesModel]): OtherPropertiesController = {
@@ -66,10 +72,10 @@ class OtherPropertiesActionSpec extends CommonPlaySpec with WithCommonFakeApplic
     when(mockCalcConnector.saveFormData[OtherPropertiesModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(mock[CacheMap])
 
-    new OtherPropertiesController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig, fakeApplication)
+    new OtherPropertiesController(mockHttp, mockCalcConnector, mockMessagesControllerComponents, otherPropertiesView)(ec)
   }
 
-  val controller = new TimeoutController(mockMessagesControllerComponents)(mockConfig, fakeApplication)
+  val controller = new TimeoutController(mockMessagesControllerComponents, sessionTimeoutView)
 
   // GET Tests
   "Calling the CalculationController.otherProperties" when {
@@ -93,7 +99,7 @@ class OtherPropertiesActionSpec extends CommonPlaySpec with WithCommonFakeApplic
 
         val target = setupTarget(None)
         lazy val result = target.otherProperties(fakeRequestWithSession)
-        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
         "return a 200" in {
           status(result) shouldBe 200
@@ -151,7 +157,7 @@ class OtherPropertiesActionSpec extends CommonPlaySpec with WithCommonFakeApplic
       }
 
       "return to the other properties page" in {
-        Jsoup.parse(bodyOf(result)(materializer)).select("title").text shouldEqual messages.question
+        Jsoup.parse(bodyOf(result)(materializer, ec)).select("title").text shouldEqual messages.question
       }
     }
   }

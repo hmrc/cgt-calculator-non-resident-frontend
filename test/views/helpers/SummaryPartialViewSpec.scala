@@ -25,10 +25,12 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.i18n.Lang
 import play.api.mvc.MessagesControllerComponents
 import views.html.helpers
+import views.html.helpers.summaryPartial
 
 class SummaryPartialViewSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with MockitoSugar {
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   implicit val mockLang = mock[Lang]
+  lazy val summaryPartialView = fakeApplication.injector.instanceOf[summaryPartial]
 
   "the summaryPartial" should {
 
@@ -57,7 +59,7 @@ class SummaryPartialViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
       )
 
 
-      lazy val view = helpers.summaryPartial(
+      lazy val view = summaryPartialView(
         totalTaxOwedModel,
         TaxYearModel("2016/17", isValidYear = true, "2016/17"),
         "flat",
@@ -156,7 +158,7 @@ class SummaryPartialViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
         taxOwedAtUpperRate = None
       )
 
-      lazy val view = helpers.summaryPartial(
+      lazy val view = summaryPartialView(
         totalTaxOwedModel,
         TaxYearModel("2018/19", isValidYear = false, "2016/17"),
         "flat",

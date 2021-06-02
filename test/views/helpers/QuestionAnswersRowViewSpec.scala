@@ -29,12 +29,13 @@ import views.html.helpers.questionAnswerRow
 class QuestionAnswersRowViewSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   implicit lazy val lang = mockMessage.lang
+  lazy val questionAnswerRowView = fakeApplication.injector.instanceOf[questionAnswerRow]
 
   "Creating questionAnswerRow" when {
 
     "passing in a String answer" should {
       val model = QuestionAnswerModel[String]("id", "answer", "question", Some("change-link"))
-      lazy val result = questionAnswerRow(model, 2)
+      lazy val result = questionAnswerRowView(model, 2)
       lazy val doc = Jsoup.parse(result.body)
 
       "have a div for the question with an id of 'id-question' which" which {
@@ -74,7 +75,7 @@ class QuestionAnswersRowViewSpec extends CommonPlaySpec with WithCommonFakeAppli
 
     "passing in an Int answer" should {
       val model = QuestionAnswerModel[Int]("id-two", 1, "question-two", Some("other-change-link"))
-      lazy val result = questionAnswerRow(model, 2)
+      lazy val result = questionAnswerRowView(model, 2)
       lazy val doc = Jsoup.parse(result.body)
 
       "have the question with the text 'question-two'" in {
@@ -92,7 +93,7 @@ class QuestionAnswersRowViewSpec extends CommonPlaySpec with WithCommonFakeAppli
 
     "passing in a BigDecimal answer" should {
       val model = QuestionAnswerModel[BigDecimal]("id", BigDecimal(1000.53), "question", Some("change-link"))
-      lazy val result = questionAnswerRow(model, 2)
+      lazy val result = questionAnswerRowView(model, 2)
       lazy val doc = Jsoup.parse(result.body)
 
       "have the answer '£1,000'" in {
@@ -102,7 +103,7 @@ class QuestionAnswersRowViewSpec extends CommonPlaySpec with WithCommonFakeAppli
 
     "passing in a Date answer" should {
       val model = QuestionAnswerModel[LocalDate]("id", LocalDate.parse("2016-05-04"), "question", Some("change-link"))
-      lazy val result = questionAnswerRow(model, 2)
+      lazy val result = questionAnswerRowView(model, 2)
       lazy val doc = Jsoup.parse(result.body)
 
       "have the answer '04 May 2016'" in {
@@ -112,7 +113,7 @@ class QuestionAnswersRowViewSpec extends CommonPlaySpec with WithCommonFakeAppli
 
     "passing in a non-matching type" should {
       val model = QuestionAnswerModel[Double]("id", 52.3, "question", Some("change-link"))
-      lazy val result = questionAnswerRow(model, 2)
+      lazy val result = questionAnswerRowView(model, 2)
       lazy val doc = Jsoup.parse(result.body)
 
       "have a blank answer'" in {

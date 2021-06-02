@@ -37,29 +37,32 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import views.html.calculation.otherReliefsRebased
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class OtherReliefsRebasedActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper with BeforeAndAfterEach {
 
   implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
 
   val materializer = mock[Materializer]
+  val ec = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
   val mockAnswerConstuctor = mock[AnswersConstructor]
   val defaultCache = mock[CacheMap]
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
-
+  val otherReliefsRebasedView = fakeApplication.injector.instanceOf[otherReliefsRebased]
 
   class Setup {
     val controller = new OtherReliefsRebasedController(
       mockHttp,
       mockCalcConnector,
       mockAnswerConstuctor,
-      mockMessagesControllerComponents
-    )(mockConfig, fakeApplication)
+      mockMessagesControllerComponents,
+      otherReliefsRebasedView
+    )(ec)
   }
 
   def setupTarget(getData: Option[OtherReliefsModel],
@@ -107,7 +110,7 @@ class OtherReliefsRebasedActionSpec extends CommonPlaySpec with WithCommonFakeAp
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
   }
 
-  def document(result : Future[Result]) = Jsoup.parse(bodyOf(result)(materializer))
+  def document(result : Future[Result]) = Jsoup.parse(bodyOf(result)(materializer, ec))
 
   "Calling the .otherReliefsRebased action " when {
 

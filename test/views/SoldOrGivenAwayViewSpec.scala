@@ -31,11 +31,12 @@ class SoldOrGivenAwayViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
 
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  lazy val soldOrGivenAwayView = fakeApplication.injector.instanceOf[soldOrGivenAway]
 
   "The Sold Or Given Away View" when {
 
     "not supplied with a pre-existing model" should {
-      lazy val view = soldOrGivenAway(soldOrGivenAwayForm)(fakeRequest, mockMessage, fakeApplication, mockConfig)
+      lazy val view = soldOrGivenAwayView(soldOrGivenAwayForm)(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have a 'back-link' that" should {
@@ -119,13 +120,13 @@ class SoldOrGivenAwayViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
       }
 
       "should produce the same output when render and f are called" in {
-        soldOrGivenAway.f(soldOrGivenAwayForm)(fakeRequest, mockMessage, fakeApplication, mockConfig) shouldBe soldOrGivenAway.render(soldOrGivenAwayForm, fakeRequest, mockMessage, fakeApplication, mockConfig)
+        soldOrGivenAwayView.f(soldOrGivenAwayForm)(fakeRequest, mockMessage) shouldBe soldOrGivenAwayView.render(soldOrGivenAwayForm, fakeRequest, mockMessage)
       }
     }
 
     "provided with errors" should {
       lazy val form = soldOrGivenAwayForm.bind(Map("soldIt" -> "999"))
-      lazy val view = soldOrGivenAway(form)(fakeRequest, mockMessage, fakeApplication, mockConfig)
+      lazy val view = soldOrGivenAwayView(form)(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

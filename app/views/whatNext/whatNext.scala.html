@@ -14,17 +14,22 @@
  * limitations under the License.
  *@
 
-@import config.AppConfig
 @import views.html.helpers.expandableHelpTextHelper
-@import play.api.Application
 @import config.ApplicationConfig
-@(isDateAfter: Boolean)(implicit request: Request[_], messages: Messages, application: Application, applicationConfig: ApplicationConfig)
+
+@this(
+    mainTemplate: main_template,
+    expandableHelpTextHelper: helpers.expandableHelpTextHelper,
+    applicationConfig: ApplicationConfig
+)
+
+@(isDateAfter: Boolean)(implicit request: Request[_], messages: Messages)
 
 @hiddenContent = {
     <p>@Messages("calc.whatNext.saText")</p>
 }
 
-@main_template(Messages("calc.whatNext.title")) {
+@mainTemplate(Messages("calc.whatNext.title")) {
 
     <a class="back-link" href="@controllers.routes.SummaryController.summary().url">Back</a>
 

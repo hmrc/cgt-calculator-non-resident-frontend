@@ -34,25 +34,29 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import views.html.calculation.previousLossOrGain
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class PreviousGainOrLossActionSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with MockitoSugar {
 
   implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val materializer = mock[Materializer]
+  val ec = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
   val defaultCache = mock[CacheMap]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
+  val previousLossOrGainView = fakeApplication.injector.instanceOf[previousLossOrGain]
 
   class Setup {
     val controller = new PreviousGainOrLossController(
       mockHttp,
       mockCalcConnector,
-      mockMessagesControllerComponents
-    )(mockConfig, fakeApplication)
+      mockMessagesControllerComponents,
+      previousLossOrGainView
+    )(ec)
   }
 
   def setupTarget(getData: Option[PreviousLossOrGainModel]): PreviousGainOrLossController = {
@@ -64,7 +68,7 @@ class PreviousGainOrLossActionSpec extends CommonPlaySpec with WithCommonFakeApp
       ArgumentMatchers.eq(keystoreKeys.previousLossOrGain), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any())).
       thenReturn(mock[CacheMap])
 
-    new PreviousGainOrLossController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig, fakeApplication)
+    new PreviousGainOrLossController(mockHttp, mockCalcConnector, mockMessagesControllerComponents, previousLossOrGainView)(ec)
   }
 
   "Calling .previousGainOrLoss from the PreviousGainOrLossController" when {
@@ -77,7 +81,7 @@ class PreviousGainOrLossActionSpec extends CommonPlaySpec with WithCommonFakeApp
       }
 
       s"return some HTML with title of ${messages.question}" in {
-        Jsoup.parse(bodyOf(result)(materializer)).select("h1").text shouldEqual messages.question
+        Jsoup.parse(bodyOf(result)(materializer, ec)).select("h1").text shouldEqual messages.question
       }
     }
 
@@ -90,7 +94,7 @@ class PreviousGainOrLossActionSpec extends CommonPlaySpec with WithCommonFakeApp
       }
 
       s"return some html with title of ${messages.question}" in {
-        Jsoup.parse(bodyOf(result)(materializer)).select("h1").text shouldEqual messages.question
+        Jsoup.parse(bodyOf(result)(materializer, ec)).select("h1").text shouldEqual messages.question
       }
     }
 
@@ -151,7 +155,7 @@ class PreviousGainOrLossActionSpec extends CommonPlaySpec with WithCommonFakeApp
     "an invalid form is submitted" should {
       lazy val target = setupTarget(None)
       lazy val result = target.submitPreviousGainOrLoss(fakeRequestToPOSTWithSession(("previousLossOrGain", "invalid text")))
-      lazy val doc = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val doc = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       "return a status of 400" in {
         status(result) shouldBe 400

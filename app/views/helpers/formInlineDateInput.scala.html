@@ -14,11 +14,14 @@
  * limitations under the License.
  *@
 
+@this(
+    uiInput: Input
+)
+
 @(formItem:Form[_], fieldName: String, questionText: String, args: (Symbol,Any)*)(implicit messages: Messages)
 
 @import uk.gov.hmrc.play.mappers.DateFields._
 @import play.api.i18n._
-@import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
 @import java.text.SimpleDateFormat
 
 @fieldsetClasses = @{if(formItem.hasErrors && (formItem.errors.find(_.key == "").isDefined || formItem.errors.find(_.key != "hasAcquisitionDate").isDefined)) "form-field--error" else "" }
@@ -37,7 +40,7 @@
     <span class="form-hint">@Messages("calc.common.date.hint")</span>
 
 
-    @govHelpers.input(
+    @uiInput(
         formItem(s"${fieldName}Day"),
         '_label -> Messages("calc.common.date.fields.day"),
         '_labelClass -> "form-group form-group-day",
@@ -48,7 +51,7 @@
         '_hideBar -> " "
     )
 
-    @govHelpers.input(
+    @uiInput(
         formItem(s"${fieldName}Month"),
         '_label -> Messages("calc.common.date.fields.month"),
         '_labelClass -> "form-group form-group-month",
@@ -59,7 +62,7 @@
         '_hideBar -> " "
     )
 
-    @govHelpers.input(
+    @uiInput(
         formItem(s"${fieldName}Year"),
         '_label -> Messages("calc.common.date.fields.year"),
         '_labelClass -> "form-group form-group-year",

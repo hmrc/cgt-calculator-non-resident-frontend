@@ -23,7 +23,8 @@ import akka.util.ByteString
 import org.scalatest.{Matchers, OptionValues, WordSpecLike}
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import scala.concurrent.ExecutionContext.Implicits.global
+
+import scala.concurrent.ExecutionContext
 import scala.language.implicitConversions
 
 trait CommonPlaySpec extends WordSpecLike with Matchers with OptionValues {
@@ -48,7 +49,7 @@ trait CommonPlaySpec extends WordSpecLike with Matchers with OptionValues {
     Json.parse(bodyOf(result))
   }
 
-  def jsonBodyOf(resultF: Future[Result])(implicit mat: Materializer): Future[JsValue] = {
+  def jsonBodyOf(resultF: Future[Result])(implicit mat: Materializer, ec: ExecutionContext): Future[JsValue] = {
     resultF.map(jsonBodyOf)
   }
 
@@ -62,7 +63,7 @@ trait CommonPlaySpec extends WordSpecLike with Matchers with OptionValues {
     bodyBytes.decodeString(Charset.defaultCharset().name)
   }
 
-  def bodyOf(resultF: Future[Result])(implicit mat: Materializer): Future[String] = {
+  def bodyOf(resultF: Future[Result])(implicit mat: Materializer, ec: ExecutionContext): Future[String] = {
     resultF.map(bodyOf)
   }
 }

@@ -30,11 +30,12 @@ class DisposalValueViewSpec extends CommonPlaySpec with WithCommonFakeApplicatio
 
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  lazy val disposalValueView = fakeApplication.injector.instanceOf[disposalValue]
 
   "Disposal value view" when {
 
     "supplied with no errors" should {
-      lazy val view = disposalValue(disposalValueForm)(fakeRequest, mockMessage, fakeApplication, mockConfig)
+      lazy val view = disposalValueView(disposalValueForm)(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${messages.DisposalValue.question}'" in {
@@ -119,13 +120,13 @@ class DisposalValueViewSpec extends CommonPlaySpec with WithCommonFakeApplicatio
       }
 
       "should produce the same output when render and f are called" in {
-        disposalValue.f(disposalValueForm)(fakeRequest, mockMessage, fakeApplication, mockConfig) shouldBe disposalValue.render(disposalValueForm, fakeRequest, mockMessage, fakeApplication, mockConfig)
+        disposalValueView.f(disposalValueForm)(fakeRequest, mockMessage) shouldBe disposalValueView.render(disposalValueForm, fakeRequest, mockMessage)
       }
     }
 
     "supplied with a form with errors" should {
       lazy val form = disposalValueForm.bind(Map("disposalValue" -> "testData"))
-      lazy val view = disposalValue(form)(fakeRequest, mockMessage, fakeApplication, mockConfig)
+      lazy val view = disposalValueView(form)(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

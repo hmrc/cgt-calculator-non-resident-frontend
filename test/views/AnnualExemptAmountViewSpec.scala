@@ -34,11 +34,12 @@ class AnnualExemptAmountViewSpec extends CommonPlaySpec with WithCommonFakeAppli
   implicit val mockLang = mock[Lang]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   val mockMessagesApi = mock[MessagesApi]
+  lazy val annualExemptAmountView = fakeApplication.injector.instanceOf[annualExemptAmount]
 
   "Annual exempt amount view" when {
 
     "supplied with no errors" should {
-      lazy val view = annualExemptAmount(annualExemptAmountForm(BigDecimal(10000)), 11100, "back-url")(fakeRequest,mockMessage, fakeApplication, mockConfig)
+      lazy val view = annualExemptAmountView(annualExemptAmountForm(BigDecimal(10000)), 11100, "back-url")(fakeRequest,mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${messages.question}'" in {
@@ -112,7 +113,7 @@ class AnnualExemptAmountViewSpec extends CommonPlaySpec with WithCommonFakeAppli
 
     "supplied with errors" should {
       lazy val form = annualExemptAmountForm(BigDecimal(10000)).bind(Map("annualExemptAmount" -> "15000"))
-      lazy val view = annualExemptAmount(form, 11100, "back-url")(fakeRequest,mockMessage, fakeApplication, mockConfig)
+      lazy val view = annualExemptAmountView(form, 11100, "back-url")(fakeRequest,mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {
@@ -121,7 +122,7 @@ class AnnualExemptAmountViewSpec extends CommonPlaySpec with WithCommonFakeAppli
     }
 
     "should produce the same output when render and f are called" in {
-      annualExemptAmount.f(annualExemptAmountForm(BigDecimal(10000)), 11100, "back-url")(fakeRequest,mockMessage, fakeApplication, mockConfig) shouldBe annualExemptAmount.render(annualExemptAmountForm(BigDecimal(10000)), 11100, "back-url", fakeRequest,mockMessage, fakeApplication, mockConfig)
+      annualExemptAmountView.f(annualExemptAmountForm(BigDecimal(10000)), 11100, "back-url")(fakeRequest,mockMessage) shouldBe annualExemptAmountView.render(annualExemptAmountForm(BigDecimal(10000)), 11100, "back-url", fakeRequest,mockMessage)
     }
   }
 }

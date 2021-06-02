@@ -20,26 +20,25 @@ import java.time.LocalDate
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.TaxDates
-import config.ApplicationConfig
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import controllers.utils.RecoverableFuture
 import forms.RebasedValueForm._
 import javax.inject.Inject
 import models.{DateModel, RebasedValueModel}
-import play.api.Application
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-import views.html.calculation
+import views.html.calculation.rebasedValue
 
-import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.ExecutionContext
 
 class RebasedValueController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
-                                       mcc: MessagesControllerComponents)(implicit val applicationConfig: ApplicationConfig,
-                                                                          implicit val application: Application)
+                                       mcc: MessagesControllerComponents,
+                                       rebasedValueView: rebasedValue
+                                      )(implicit ec: ExecutionContext)
                                         extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   def backLink(acquisitionDate: Option[DateModel]): String = {
@@ -60,8 +59,8 @@ class RebasedValueController @Inject()(http: DefaultHttpClient,calcConnector: Ca
       rebasedValueModel <- calcConnector.fetchAndGetFormData[RebasedValueModel](KeystoreKeys.rebasedValue)
       acquisitionDate <- calcConnector.fetchAndGetFormData[DateModel](KeystoreKeys.acquisitionDate)
     } yield rebasedValueModel match {
-      case Some(data) => Ok(calculation.rebasedValue(rebasedValueForm.fill(data), backLink(acquisitionDate)))
-      case None => Ok(calculation.rebasedValue(rebasedValueForm, backLink(acquisitionDate)))
+      case Some(data) => Ok(rebasedValueView(rebasedValueForm.fill(data), backLink(acquisitionDate)))
+      case None => Ok(rebasedValueView(rebasedValueForm, backLink(acquisitionDate)))
     }).recoverToStart
   }
 
@@ -69,7 +68,7 @@ class RebasedValueController @Inject()(http: DefaultHttpClient,calcConnector: Ca
 
     def errorAction(errors: Form[RebasedValueModel]) = {
       calcConnector.fetchAndGetFormData[DateModel](KeystoreKeys.acquisitionDate).map{
-        x => BadRequest(calculation.rebasedValue(errors, backLink(x)))
+        x => BadRequest(rebasedValueView(errors, backLink(x)))
       }
     }
 

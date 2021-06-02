@@ -30,9 +30,10 @@ class NoTaxToPayViewSpec extends CommonPlaySpec with WithCommonFakeApplication w
 
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  lazy val noTaxToPayView = fakeApplication.injector.instanceOf[noTaxToPay]
 
   "No Tax to Pay View when gifted to spouse" should {
-    lazy val view = views.noTaxToPay(forCharity = false)(fakeRequest, mockMessage, fakeApplication, mockConfig)
+    lazy val view = noTaxToPayView(forCharity = false)(fakeRequest, mockMessage)
     lazy val doc = Jsoup.parse(view.body)
 
     "have a charset of UTF-8" in {
@@ -67,12 +68,12 @@ class NoTaxToPayViewSpec extends CommonPlaySpec with WithCommonFakeApplication w
     }
 
     "should produce the same output when render and f are called" in {
-      noTaxToPay.f(false)(fakeRequest, mockMessage, fakeApplication, mockConfig) shouldBe noTaxToPay.render(false, fakeRequest, mockMessage, fakeApplication, mockConfig)
+      noTaxToPayView.f(false)(fakeRequest, mockMessage) shouldBe noTaxToPayView.render(false, fakeRequest, mockMessage)
     }
   }
 
   "No Tax to Pay View when gifted to charity" should {
-    lazy val view = views.noTaxToPay(forCharity = true)(fakeRequest, mockMessage, fakeApplication, mockConfig)
+    lazy val view = noTaxToPayView(forCharity = true)(fakeRequest, mockMessage)
     lazy val doc = Jsoup.parse(view.body)
 
     "have text explaining why tax is not owed" in {

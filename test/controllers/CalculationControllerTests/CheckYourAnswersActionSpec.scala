@@ -34,8 +34,9 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import views.html.calculation.checkYourAnswers
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class CheckYourAnswersActionSpec()
   extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
@@ -43,6 +44,7 @@ class CheckYourAnswersActionSpec()
   implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
 
   val materializer = mock[Materializer]
+  val ec = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
   val defaultCache = mock[CacheMap]
@@ -50,6 +52,7 @@ class CheckYourAnswersActionSpec()
   val mockDefaultCalElecConstructor = mock[DefaultCalculationElectionConstructor]
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
+  val checkYourAnswersView = fakeApplication.injector.instanceOf[checkYourAnswers]
 
 
   class Setup {
@@ -58,8 +61,9 @@ class CheckYourAnswersActionSpec()
       mockCalcConnector,
       mockAnswersConstructor,
       mockDefaultCalElecConstructor,
-      mockMessagesControllerComponents
-    )(mockConfig, fakeApplication)
+      mockMessagesControllerComponents,
+      checkYourAnswersView
+    )(ec)
   }
 
   def setupTarget(totalGainAnswersModel: TotalGainAnswersModel,
@@ -84,7 +88,7 @@ class CheckYourAnswersActionSpec()
     when(mockCalcConnector.calculateTotalGain(ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(totalGainsModel)
 
-    new CheckYourAnswersController(mockHttp, mockCalcConnector, mockAnswersConstructor, mockDefaultCalElecConstructor, mockMessagesControllerComponents)(mockConfig, fakeApplication)
+    new CheckYourAnswersController(mockHttp, mockCalcConnector, mockAnswersConstructor, mockDefaultCalElecConstructor, mockMessagesControllerComponents, checkYourAnswersView)(ec)
   }
 
   val modelWithMultipleGains = TotalGainAnswersModel(DateModel(5, 10, 2016),
@@ -136,7 +140,7 @@ class CheckYourAnswersActionSpec()
 
       lazy val target = setupTarget(modelWithOnlyFlat, Some(totalGainResultsModel))
       lazy val result = target.checkYourAnswers(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       "return a status of 200" in {
         status(result) shouldBe 200
@@ -168,7 +172,7 @@ class CheckYourAnswersActionSpec()
     "provided with a valid session when eligible for prr and a total gain value" should {
       lazy val target = setupTarget(modelWithMultipleGains, Some(totalGainWithValueResultsModel))
       lazy val result = target.checkYourAnswers(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       "return a status of 200" in {
         status(result) shouldBe 200
@@ -187,7 +191,7 @@ class CheckYourAnswersActionSpec()
 
       lazy val target = setupTarget(modelWithOnlyFlat, Some(totalGainWithValueResultsModel), None, Some(personalDetailsModel))
       lazy val result = target.checkYourAnswers(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       "return a status of 200" in {
         status(result) shouldBe 200

@@ -34,26 +34,30 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import views.html.calculation.personalAllowance
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class PersonalAllowanceActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
   implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
 
   val materializer = mock[Materializer]
+  val ec = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
   val defaultCache = mock[CacheMap]
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
+  val personalAllowanceView = fakeApplication.injector.instanceOf[personalAllowance]
 
   class Setup {
     val controller = new PersonalAllowanceController(
       mockHttp,
       mockCalcConnector,
-      mockMessagesControllerComponents
-    )(mockConfig, fakeApplication)
+      mockMessagesControllerComponents,
+      personalAllowanceView
+    )(ec)
   }
 
 
@@ -76,7 +80,7 @@ class PersonalAllowanceActionSpec extends CommonPlaySpec with WithCommonFakeAppl
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new PersonalAllowanceController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig, fakeApplication)
+    new PersonalAllowanceController(mockHttp, mockCalcConnector, mockMessagesControllerComponents, personalAllowanceView)(ec)
   }
 
   // GET Tests
@@ -99,7 +103,7 @@ class PersonalAllowanceActionSpec extends CommonPlaySpec with WithCommonFakeAppl
 
       lazy val target = setupTarget(None)
       lazy val result = target.personalAllowance(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       "return a 200" in {
         status(result) shouldBe 200
@@ -114,7 +118,7 @@ class PersonalAllowanceActionSpec extends CommonPlaySpec with WithCommonFakeAppl
 
       lazy val target = setupTarget(Some(PersonalAllowanceModel(10000)))
       lazy val result = target.personalAllowance(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       "return a 200" in {
         status(result) shouldBe 200
@@ -150,7 +154,7 @@ class PersonalAllowanceActionSpec extends CommonPlaySpec with WithCommonFakeAppl
       lazy val target = setupTarget(None)
       lazy val request = fakeRequestToPOSTWithSession(("personalAllowance", "-12139"))
       lazy val result = target.submitPersonalAllowance(request)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       "return a 400" in {
         status(result) shouldBe 400

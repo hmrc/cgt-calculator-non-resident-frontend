@@ -30,12 +30,14 @@ import common.{CommonPlaySpec, WithCommonFakeApplication}
 class OutsideTaxYearViewSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with MockitoSugar {
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  lazy val outsideTaxYearView = fakeApplication.injector.instanceOf[outsideTaxYear]
+
 
   "Outside tax years views" when {
 
     "using a disposal date of 2018/19 " should {
       lazy val taxYear = TaxYearModel("2018/19", false, "2017/18")
-      lazy val view = views.outsideTaxYear(taxYear)(fakeRequestWithSession, mockMessage, fakeApplication, mockConfig)
+      lazy val view = outsideTaxYearView(taxYear)(fakeRequestWithSession, mockMessage)
       lazy val doc = Jsoup.parse(view.body)
 
       "have charset UTF-8" in {
@@ -84,7 +86,7 @@ class OutsideTaxYearViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
       }
 
       "should produce the same output when render and f are called" in {
-        outsideTaxYear.f(taxYear)(fakeRequestWithSession, mockMessage, fakeApplication, mockConfig) shouldBe outsideTaxYear.render(taxYear, fakeRequestWithSession, mockMessage, fakeApplication, mockConfig)
+        outsideTaxYearView.f(taxYear)(fakeRequestWithSession, mockMessage) shouldBe outsideTaxYearView.render(taxYear, fakeRequestWithSession, mockMessage)
       }
     }
   }

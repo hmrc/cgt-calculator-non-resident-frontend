@@ -15,14 +15,17 @@
  *@
 
 @import models.DisposalValueModel
-@import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
-@import views.html.helpers._
-@import play.api.Application
 
-@import config.ApplicationConfig
-@(disposalValueForm: Form[DisposalValueModel])(implicit request: Request[_], messages: Messages, application: Application, applicationConfig: ApplicationConfig)
+@this(
+    mainTemplate: main_template,
+    errorSummary: helpers.errorSummary,
+    form: FormWithCSRF,
+    formInputMoney: helpers.formInputMoney
+)
 
-@main_template(Messages("calc.disposalValue.question")) {
+@(disposalValueForm: Form[DisposalValueModel])(implicit request: Request[_], messages: Messages)
+
+@mainTemplate(Messages("calc.disposalValue.question")) {
 
     <a id="back-link" class="back-link" href="@controllers.routes.SoldForLessController.soldForLess">@Messages("calc.base.back")</a>
 
@@ -30,7 +33,7 @@
 
     <h1 class="heading-xlarge">@Messages("calc.disposalValue.question")</h1>
 
-    @govHelpers.form(action = controllers.routes.DisposalValueController.submitDisposalValue) {
+    @form(action = controllers.routes.DisposalValueController.submitDisposalValue) {
 
         <p class="panel-indent panel-indent--wide panel-indent--gutter">@Messages("calc.disposalValue.jointOwnership")</p>
 

@@ -14,12 +14,11 @@
  * limitations under the License.
  *@
 
-@import play.api.Application
+@this(mainTemplate: main_template)
 
-@import config.ApplicationConfig
-@()(implicit request: Request[_], messages: Messages, application: Application, applicationConfig: ApplicationConfig)
+@()(implicit request: Request[_], messages: Messages)
 
-@main_template(Messages("session.timeout.message")) {
+@mainTemplate(Messages("session.timeout.message")) {
 
     <h1 class="heading-large">@Messages("session.timeout.message")</h1>
 

@@ -34,26 +34,29 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import views.html.calculation.worthWhenGiftedTo
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class WorthWhenGiftedToActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
   implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val materializer = mock[Materializer]
+  val ec = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
   val defaultCache = mock[CacheMap]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
-
+  val worthWhenGiftedToView = fakeApplication.injector.instanceOf[worthWhenGiftedTo]
 
   class Setup {
     val controller = new WorthWhenGiftedToController(
       mockHttp,
       mockCalcConnector,
-      mockMessagesControllerComponents
-    )(mockConfig, fakeApplication)
+      mockMessagesControllerComponents,
+      worthWhenGiftedToView
+    )(ec)
   }
 
   def setupTarget(getData: Option[AcquisitionValueModel]): WorthWhenGiftedToController = {
@@ -65,7 +68,7 @@ class WorthWhenGiftedToActionSpec extends CommonPlaySpec with WithCommonFakeAppl
     when(mockCalcConnector.saveFormData[AcquisitionValueModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(mock[CacheMap]))
 
-    new WorthWhenGiftedToController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig, fakeApplication)
+    new WorthWhenGiftedToController(mockHttp, mockCalcConnector, mockMessagesControllerComponents, worthWhenGiftedToView)(ec)
   }
 
   "Calling .worthWhenGiftedTo" when {
@@ -81,7 +84,7 @@ class WorthWhenGiftedToActionSpec extends CommonPlaySpec with WithCommonFakeAppl
 
       s"return some html with title of ${messages.question}" in {
         contentType(result) shouldBe Some("text/html")
-        Jsoup.parse(bodyOf(result)(materializer)).title shouldEqual messages.question
+        Jsoup.parse(bodyOf(result)(materializer, ec)).title shouldEqual messages.question
       }
     }
 
@@ -96,7 +99,7 @@ class WorthWhenGiftedToActionSpec extends CommonPlaySpec with WithCommonFakeAppl
 
       s"return some html with title of ${messages.question}" in {
         contentType(result) shouldBe Some("text/html")
-        Jsoup.parse(bodyOf(result)(materializer)).title shouldEqual messages.question
+        Jsoup.parse(bodyOf(result)(materializer, ec)).title shouldEqual messages.question
       }
     }
 
@@ -137,7 +140,7 @@ class WorthWhenGiftedToActionSpec extends CommonPlaySpec with WithCommonFakeAppl
       lazy val target = setupTarget(None)
       lazy val request = fakeRequestToPOSTWithSession(("acquisitionMarketValue", "a"))
       lazy val result = target.submitWorthWhenGiftedTo(request)
-      lazy val doc = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val doc = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       "return a status of 400" in {
         status(result) shouldBe 400

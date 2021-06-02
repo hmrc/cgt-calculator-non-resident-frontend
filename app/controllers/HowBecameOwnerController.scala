@@ -17,38 +17,35 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import config.ApplicationConfig
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import forms.HowBecameOwnerForm._
 import javax.inject.Inject
 import models.HowBecameOwnerModel
-import play.api.Application
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-import views.html.{calculation => views}
+import views.html.calculation.howBecameOwner
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class HowBecameOwnerController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
-                                         mcc: MessagesControllerComponents)(implicit val applicationConfig: ApplicationConfig,
-                                                                            implicit val application: Application)
+                                         mcc: MessagesControllerComponents,
+                                         howBecameOwnerView: howBecameOwner)(implicit ec: ExecutionContext)
                                           extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   val howBecameOwner: Action[AnyContent] = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[HowBecameOwnerModel](KeystoreKeys.howBecameOwner).map {
-      case Some(data) => Ok(views.howBecameOwner(howBecameOwnerForm.fill(data)))
-      case None => Ok(views.howBecameOwner(howBecameOwnerForm))
+      case Some(data) => Ok(howBecameOwnerView(howBecameOwnerForm.fill(data)))
+      case None => Ok(howBecameOwnerView(howBecameOwnerForm))
     }
   }
 
   val submitHowBecameOwner: Action[AnyContent] = ValidateSession.async { implicit request =>
 
-    def errorAction(form: Form[HowBecameOwnerModel]) = Future.successful(BadRequest(views.howBecameOwner(form)))
+    def errorAction(form: Form[HowBecameOwnerModel]) = Future.successful(BadRequest(howBecameOwnerView(form)))
 
     def successAction(model: HowBecameOwnerModel) = {
       for {

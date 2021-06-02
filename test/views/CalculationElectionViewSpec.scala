@@ -25,21 +25,22 @@ import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.i18n.Messages
 import play.api.mvc.MessagesControllerComponents
-import views.html.{calculation => views}
-import _root_.views.html.calculation.calculationElection
+import views.html.calculation.calculationElection
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 
 class CalculationElectionViewSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with MockitoSugar {
 
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  lazy val calculationElectionView = fakeApplication.injector.instanceOf[calculationElection]
+
 
   "The Calculation Election View" should {
 
     lazy val form = calculationElectionForm
     lazy val seq: Seq[(String, String, String, String, Option[String], Option[BigDecimal])] =
       Seq(("flat", "2000", Messages("calc.calculationElection.message.flat"), Messages("calc.calculationElection.description.flat"), None, None))
-    lazy val view = views.calculationElection(form, seq)(fakeRequest,mockMessage, fakeApplication, mockConfig)
+    lazy val view = calculationElectionView(form, seq)(fakeRequest,mockMessage)
     lazy val doc = Jsoup.parse(view.body)
 
     s"have a title of '${messages.heading}" in {
@@ -110,7 +111,7 @@ class CalculationElectionViewSpec extends CommonPlaySpec with WithCommonFakeAppl
 
     "supplied with errors" should {
       lazy val form = calculationElectionForm.bind(Map("calculationElection" -> "a"))
-      lazy val view = views.calculationElection(form, seq)(fakeRequest,mockMessage, fakeApplication, mockConfig)
+      lazy val view = calculationElectionView(form, seq)(fakeRequest,mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {
@@ -127,7 +128,7 @@ class CalculationElectionViewSpec extends CommonPlaySpec with WithCommonFakeAppl
           ("time", "2000", "description", Messages("calc.calculationElection.description.time"), None, None)
         )
 
-      calculationElection.f(calculationElectionForm, flatLowestTaxOwed)(fakeRequest, mockMessage, fakeApplication, mockConfig) shouldBe calculationElection.render(calculationElectionForm, flatLowestTaxOwed, fakeRequest, mockMessage, fakeApplication, mockConfig)
+      calculationElectionView.f(calculationElectionForm, flatLowestTaxOwed)(fakeRequest, mockMessage) shouldBe calculationElectionView.render(calculationElectionForm, flatLowestTaxOwed, fakeRequest, mockMessage)
     }
   }
 

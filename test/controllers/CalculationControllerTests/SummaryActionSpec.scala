@@ -36,28 +36,32 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import views.html.calculation.summary
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class SummaryActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
   implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val materializer = mock[Materializer]
+  val ec = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
   val defaultCache = mock[CacheMap]
   val mockAnswersConstructor = mock[AnswersConstructor]
   val mockDefaultCalElecConstructor = mock[DefaultCalculationElectionConstructor]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
+  val summaryView = fakeApplication.injector.instanceOf[summary]
 
   class Setup {
     val controller = new SummaryController(
       mockHttp,
       mockCalcConnector,
       mockAnswersConstructor,
-      mockMessagesControllerComponents
-    )(mockConfig, fakeApplication)
+      mockMessagesControllerComponents,
+      summaryView
+    )(ec)
   }
 
   def setupTarget(summary: TotalGainAnswersModel,
@@ -119,7 +123,7 @@ class SummaryActionSpec extends CommonPlaySpec with WithCommonFakeApplication wi
       (ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(PropertyLivedInModel(true))))
 
-    new SummaryController(mockHttp, mockCalcConnector, mockAnswersConstructor, mockMessagesControllerComponents)(mockConfig, fakeApplication)
+    new SummaryController(mockHttp, mockCalcConnector, mockAnswersConstructor, mockMessagesControllerComponents, summaryView)(ec)
   }
 
   lazy val answerModel = TotalGainAnswersModel(
@@ -164,7 +168,7 @@ class SummaryActionSpec extends CommonPlaySpec with WithCommonFakeApplication wi
       )
 
       lazy val result = target.summary()(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       "return a 200" in {
         status(result) shouldBe 200
@@ -190,7 +194,7 @@ class SummaryActionSpec extends CommonPlaySpec with WithCommonFakeApplication wi
         Some(TestModels.calculationResultsModelWithRebased)
       )
       lazy val result = target.summary()(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       "return a 200" in {
         status(result) shouldBe 200

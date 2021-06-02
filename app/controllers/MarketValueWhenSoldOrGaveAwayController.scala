@@ -17,47 +17,47 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import config.ApplicationConfig
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import forms.MarketValueGaveAwayForm._
 import forms.MarketValueWhenSoldForm._
 import javax.inject.Inject
 import models.DisposalValueModel
+import play.api.Environment
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.MessagesControllerComponents
-import play.api.{Application, Environment}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-import views.html.calculation
+import views.html.calculation.{marketValueGaveAway, marketValueSold}
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class MarketValueWhenSoldOrGaveAwayController @Inject()(environment: Environment,
                                                         http: DefaultHttpClient,calcConnector: CalculatorConnector,
-                                                        mcc: MessagesControllerComponents)(implicit val applicationConfig: ApplicationConfig,
-                                                                                           implicit val application: Application)
+                                                        mcc: MessagesControllerComponents,
+                                                        marketValueSoldView: marketValueSold,
+                                                        marketValueGaveAwayView: marketValueGaveAway)
+                                                       (implicit ec: ExecutionContext)
                                                           extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   val marketValueWhenSold = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[DisposalValueModel](KeystoreKeys.disposalMarketValue).map {
-      case Some(data) => Ok(calculation.marketValueSold(marketValueWhenSoldForm.fill(data)))
-      case None => Ok(calculation.marketValueSold(marketValueWhenSoldForm))
+      case Some(data) => Ok(marketValueSoldView(marketValueWhenSoldForm.fill(data)))
+      case None => Ok(marketValueSoldView(marketValueWhenSoldForm))
     }
   }
 
   val marketValueWhenGaveAway = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[DisposalValueModel](KeystoreKeys.disposalMarketValue).map {
-      case Some(data) => Ok(calculation.marketValueGaveAway(marketValueWhenGaveAwayForm.fill(data)))
-      case None => Ok(calculation.marketValueGaveAway(marketValueWhenGaveAwayForm))
+      case Some(data) => Ok(marketValueGaveAwayView(marketValueWhenGaveAwayForm.fill(data)))
+      case None => Ok(marketValueGaveAwayView(marketValueWhenGaveAwayForm))
     }
   }
 
   val submitMarketValueWhenSold = ValidateSession.async { implicit request =>
 
-    def errorAction(form: Form[DisposalValueModel]) = Future.successful(BadRequest(calculation.marketValueSold(form)))
+    def errorAction(form: Form[DisposalValueModel]) = Future.successful(BadRequest(marketValueSoldView(form)))
 
     def successAction(model: DisposalValueModel) = {
       calcConnector.saveFormData(KeystoreKeys.disposalMarketValue, model)
@@ -69,7 +69,7 @@ class MarketValueWhenSoldOrGaveAwayController @Inject()(environment: Environment
 
   val submitMarketValueWhenGaveAway = ValidateSession.async { implicit request =>
 
-    def errorAction(form: Form[DisposalValueModel]) = Future.successful(BadRequest(calculation.marketValueGaveAway(form)))
+    def errorAction(form: Form[DisposalValueModel]) = Future.successful(BadRequest(marketValueGaveAwayView(form)))
 
     def successAction(model: DisposalValueModel) = {
       calcConnector.saveFormData(KeystoreKeys.disposalMarketValue, model).map(_ =>

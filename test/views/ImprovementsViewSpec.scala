@@ -33,13 +33,15 @@ class ImprovementsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   val mockMessagesApi = mock[MessagesApi]
+  lazy val improvementsView = fakeApplication.injector.instanceOf[improvements]
+
 
   "Improvements view" should {
 
     "supplied with no errors, improvementsOptions = true and is owner after legislation start" should {
 
-      lazy val view = improvements(improvementsForm(true), improvementsOptions = false,
-        "back-link", ownerBeforeLegislationStart = false)(fakeRequest, mockMessage, fakeApplication, mockMessagesApi, mockConfig)
+      lazy val view = improvementsView(improvementsForm(true), improvementsOptions = false,
+        "back-link", ownerBeforeLegislationStart = false)(fakeRequest, mockMessage, mockMessagesApi)
       lazy val document = Jsoup.parse(view.body)
 
       "return some HTML that" should {
@@ -184,15 +186,15 @@ class ImprovementsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
       }
 
       "should produce the same output when render and f are called" in {
-        improvements.f(improvementsForm(true), false,
-          "back-link",  false)(fakeRequest, mockMessage, fakeApplication, mockMessagesApi, mockConfig) shouldBe improvements.render(improvementsForm(true), false,
-          "back-link", false, fakeRequest, mockMessage, fakeApplication, mockMessagesApi, mockConfig)
+        improvementsView.f(improvementsForm(true), false,
+          "back-link",  false)(fakeRequest, mockMessage, mockMessagesApi) shouldBe improvementsView.render(improvementsForm(true), false,
+          "back-link", false, fakeRequest, mockMessage, mockMessagesApi)
       }
     }
 
     "supplied with no errors and improvementsOptions = false" should {
 
-      lazy val view = improvements(improvementsForm(true), improvementsOptions = true, "back-link", ownerBeforeLegislationStart = false)(fakeRequest, mockMessage, fakeApplication, mockMessagesApi, mockConfig)
+      lazy val view = improvementsView(improvementsForm(true), improvementsOptions = true, "back-link", ownerBeforeLegislationStart = false)(fakeRequest, mockMessage, mockMessagesApi)
       lazy val document = Jsoup.parse(view.body)
 
       "return some HTML that" should {
@@ -223,7 +225,7 @@ class ImprovementsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
 
     "supplied with no errors and is owner before legislation start" should {
 
-      lazy val view = improvements(improvementsForm(true), improvementsOptions = true, "back-link", ownerBeforeLegislationStart = true)(fakeRequest, mockMessage, fakeApplication, mockMessagesApi, mockConfig)
+      lazy val view = improvementsView(improvementsForm(true), improvementsOptions = true, "back-link", ownerBeforeLegislationStart = true)(fakeRequest, mockMessage, mockMessagesApi)
       lazy val document = Jsoup.parse(view.body)
 
       "return some HTML that" should {
@@ -252,7 +254,7 @@ class ImprovementsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
 
     "supplied with errors" should {
       lazy val form = improvementsForm(true).bind(Map("improvements" -> "testData"))
-      lazy val view = improvements(form, improvementsOptions = true, "back-link", ownerBeforeLegislationStart = false)(fakeRequest, mockMessage, fakeApplication, mockMessagesApi, mockConfig)
+      lazy val view = improvementsView(form, improvementsOptions = true, "back-link", ownerBeforeLegislationStart = false)(fakeRequest, mockMessage, mockMessagesApi)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

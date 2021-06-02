@@ -18,33 +18,31 @@ package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.TaxDates
-import config.ApplicationConfig
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import controllers.utils.RecoverableFuture
 import forms.PersonalAllowanceForm._
 import javax.inject.Inject
 import models.{DateModel, PersonalAllowanceModel, TaxYearModel}
-import play.api.Application
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-import views.html.calculation
+import views.html.calculation.personalAllowance
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class PersonalAllowanceController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
-                                            mcc: MessagesControllerComponents)(implicit val applicationConfig: ApplicationConfig,
-                                                                               implicit val application: Application)
+                                            mcc: MessagesControllerComponents,
+                                            personalAllowanceView: personalAllowance)
+                                           (implicit ec: ExecutionContext)
                                               extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   val personalAllowance: Action[AnyContent] = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[PersonalAllowanceModel](KeystoreKeys.personalAllowance).map {
-      case Some(data) => Ok(calculation.personalAllowance(personalAllowanceForm().fill(data)))
-      case None => Ok(calculation.personalAllowance(personalAllowanceForm()))
+      case Some(data) => Ok(personalAllowanceView(personalAllowanceForm().fill(data)))
+      case None => Ok(personalAllowanceView(personalAllowanceForm()))
     }
   }
 
@@ -71,7 +69,7 @@ class PersonalAllowanceController @Inject()(http: DefaultHttpClient,calcConnecto
     }
 
     def errorAction(form: Form[PersonalAllowanceModel]) = {
-      Future.successful(BadRequest(calculation.personalAllowance(form)))
+      Future.successful(BadRequest(personalAllowanceView(form)))
     }
 
     def successAction(model: PersonalAllowanceModel) = {

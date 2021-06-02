@@ -26,15 +26,15 @@ import play.api.mvc.Results.{BadRequest, NotFound}
 import play.api.mvc.{Request, RequestHeader, Result}
 import play.twirl.api.Html
 import uk.gov.hmrc.play.bootstrap.frontend.http.{ApplicationException, FrontendErrorHandler}
-
+import views.html.error_template
 import scala.concurrent.Future
 
 class CgtErrorHandler @Inject()(val messagesApi: MessagesApi,
-                                implicit val appConfig: ApplicationConfig) extends FrontendErrorHandler with Logging{
+                                errorTemplateView: error_template) extends FrontendErrorHandler with Logging{
 
 
   override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit request: Request[_]): Html = {
-    views.html.error_template(pageTitle, heading, message)
+    errorTemplateView(pageTitle, heading, message)
   }
 
    def onClientError(request: RequestHeader, statusCode: Int, message: String)(implicit req: Request[_]) : Future[Result] = {

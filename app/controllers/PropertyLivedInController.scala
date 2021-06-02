@@ -17,39 +17,38 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => keystoreKeys}
-import config.ApplicationConfig
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import controllers.utils.RecoverableFuture
 import forms.PropertyLivedInForm._
 import javax.inject.Inject
 import models.PropertyLivedInModel
-import play.api.Application
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import views.html.calculation.propertyLivedIn
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class PropertyLivedInController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
-                                          mcc: MessagesControllerComponents)(implicit val applicationConfig: ApplicationConfig,
-                                                                             implicit val application: Application)
+                                          mcc: MessagesControllerComponents,
+                                          propertyLivedInView: propertyLivedIn)
+                                         (implicit ec: ExecutionContext)
                                             extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   val propertyLivedIn: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     calcConnector.fetchAndGetFormData[PropertyLivedInModel](keystoreKeys.propertyLivedIn).map {
-      case Some(data) => Ok(views.html.calculation.propertyLivedIn(propertyLivedInForm.fill(data)))
-      case _ => Ok(views.html.calculation.propertyLivedIn(propertyLivedInForm))
+      case Some(data) => Ok(propertyLivedInView(propertyLivedInForm.fill(data)))
+      case _ => Ok(propertyLivedInView(propertyLivedInForm))
     }
   }
 
   val submitPropertyLivedIn: Action[AnyContent] = ValidateSession.async { implicit request =>
 
-    def errorAction(errors: Form[PropertyLivedInModel]) = Future.successful(BadRequest(views.html.calculation.propertyLivedIn(
+    def errorAction(errors: Form[PropertyLivedInModel]) = Future.successful(BadRequest(propertyLivedInView(
       errors
     )))
 

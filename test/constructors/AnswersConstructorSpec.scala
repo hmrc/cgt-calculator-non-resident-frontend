@@ -17,7 +17,7 @@
 package constructors
 
 import akka.stream.Materializer
-import common.CommonPlaySpec
+import common.{CommonPlaySpec, WithCommonFakeApplication}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
 import models._
@@ -26,12 +26,12 @@ import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
-class AnswersConstructorSpec extends CommonPlaySpec with MockitoSugar {
+class AnswersConstructorSpec extends CommonPlaySpec with MockitoSugar with WithCommonFakeApplication {
 
   implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
-
+  implicit val ec = fakeApplication.injector.instanceOf[ExecutionContext]
   val materializer = mock[Materializer]
   val mockCalcConnector =mock[CalculatorConnector]
 

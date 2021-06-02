@@ -30,11 +30,12 @@ class OtherReliefsTAViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
 
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  lazy val otherReliefsTAView = fakeApplication.injector.instanceOf[otherReliefsTA]
 
   "The Other Reliefs TA view" when {
 
     "not supplied with a pre-existing stored value and a taxable gain" should {
-      lazy val view = otherReliefsTA(otherReliefsForm, hasExistingReliefAmount = false, 1000, 100)(fakeRequest, mockMessage, fakeApplication, mockConfig)
+      lazy val view = otherReliefsTAView(otherReliefsForm, hasExistingReliefAmount = false, 1000, 100)(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have a back link" which {
@@ -133,13 +134,13 @@ class OtherReliefsTAViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
       }
 
       "should produce the same output when render and f are called" in {
-        otherReliefsTA.f(otherReliefsForm, false, 1000, 100)(fakeRequest, mockMessage, fakeApplication, mockConfig) shouldBe otherReliefsTA.render(otherReliefsForm, false, 1000, 100, fakeRequest, mockMessage, fakeApplication, mockConfig)
+        otherReliefsTAView.f(otherReliefsForm, false, 1000, 100)(fakeRequest, mockMessage) shouldBe otherReliefsTAView.render(otherReliefsForm, false, 1000, 100, fakeRequest, mockMessage)
       }
     }
 
     "supplied with a pre-existing stored value and a negative taxable gain" should {
       val map = Map("otherReliefs" -> "1000")
-      lazy val view = otherReliefsTA(otherReliefsForm.bind(map), hasExistingReliefAmount = true, -1000, 100)(fakeRequest, mockMessage, fakeApplication, mockConfig)
+      lazy val view = otherReliefsTAView(otherReliefsForm.bind(map), hasExistingReliefAmount = true, -1000, 100)(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "has a list entry with the loss carried forward message and value" in {
@@ -165,7 +166,7 @@ class OtherReliefsTAViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
 
     "supplied with an invalid map" should {
       val map = Map("otherReliefs" -> "-1000")
-      lazy val view = otherReliefsTA(otherReliefsForm.bind(map), hasExistingReliefAmount = true, 1000, 100)(fakeRequest, mockMessage, fakeApplication, mockConfig)
+      lazy val view = otherReliefsTAView(otherReliefsForm.bind(map), hasExistingReliefAmount = true, 1000, 100)(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

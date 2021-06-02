@@ -18,29 +18,26 @@ package controllers
 
 import common.DefaultRoutes._
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import config.ApplicationConfig
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import controllers.utils.RecoverableFuture
 import forms.DisposalCostsForm._
 import javax.inject.Inject
 import models.{DisposalCostsModel, SoldForLessModel, SoldOrGivenAwayModel}
-import play.api.Application
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{MessagesControllerComponents, Result}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-import views.html.calculation
+import views.html.calculation.disposalCosts
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class DisposalCostsController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
-                                        mcc: MessagesControllerComponents)
-                                       (implicit val applicationConfig: ApplicationConfig,
-                                        implicit val application: Application)
+                                        mcc: MessagesControllerComponents,
+                                        disposalCostsView: disposalCosts)
+                                       (implicit ec: ExecutionContext)
                                           extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   private def backUrl(soldOrGivenAwayModel: Option[SoldOrGivenAwayModel], soldForLessModel: Option[SoldForLessModel]): Future[String] =
@@ -65,8 +62,8 @@ class DisposalCostsController @Inject()(http: DefaultHttpClient,calcConnector: C
 
     def routeRequest(backLink: String): Future[Result] = {
       calcConnector.fetchAndGetFormData[DisposalCostsModel](KeystoreKeys.disposalCosts).map {
-        case Some(data) => Ok(calculation.disposalCosts(disposalCostsForm.fill(data), backLink))
-        case None => Ok(calculation.disposalCosts(disposalCostsForm, backLink))
+        case Some(data) => Ok(disposalCostsView(disposalCostsForm.fill(data), backLink))
+        case None => Ok(disposalCostsView(disposalCostsForm, backLink))
       }
     }
 
@@ -81,7 +78,7 @@ class DisposalCostsController @Inject()(http: DefaultHttpClient,calcConnector: C
   val submitDisposalCosts = ValidateSession.async { implicit request =>
 
     def errorAction(errors: Form[DisposalCostsModel], backLink: String) = {
-      Future.successful(BadRequest(calculation.disposalCosts(errors, backLink)))
+      Future.successful(BadRequest(disposalCostsView(errors, backLink)))
     }
 
     def successAction(model: DisposalCostsModel) = {

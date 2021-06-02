@@ -34,27 +34,30 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import views.html.calculation.worthBeforeLegislationStart
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class WorthBeforeLegislationStartActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper{
 
   implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val materializer = mock[Materializer]
+  val ec = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockEnvironment =mock[Environment]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
   val defaultCache = mock[CacheMap]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
-
+  val worthBeforeLegislationStartView = fakeApplication.injector.instanceOf[worthBeforeLegislationStart]
 
   class Setup {
     val controller = new WorthBeforeLegislationStartController(
       mockHttp,
       mockCalcConnector,
-      mockMessagesControllerComponents
-    )(mockConfig, fakeApplication)
+      mockMessagesControllerComponents,
+      worthBeforeLegislationStartView
+    )(ec)
   }
 
 
@@ -66,7 +69,7 @@ class WorthBeforeLegislationStartActionSpec extends CommonPlaySpec with WithComm
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new WorthBeforeLegislationStartController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig, fakeApplication)
+    new WorthBeforeLegislationStartController(mockHttp, mockCalcConnector, mockMessagesControllerComponents, worthBeforeLegislationStartView)(ec)
   }
 
   "WorthBeforeLegislationStartController" when{
@@ -85,7 +88,7 @@ class WorthBeforeLegislationStartActionSpec extends CommonPlaySpec with WithComm
 
         s"return some html with title of ${messages.question}" in {
           contentType(result) shouldBe Some("text/html")
-          Jsoup.parse(bodyOf(result)(materializer)).title shouldEqual messages.question
+          Jsoup.parse(bodyOf(result)(materializer, ec)).title shouldEqual messages.question
         }
       }
 
@@ -100,7 +103,7 @@ class WorthBeforeLegislationStartActionSpec extends CommonPlaySpec with WithComm
 
         s"return some html with title of ${messages.question}" in {
           contentType(result) shouldBe Some("text/html")
-          Jsoup.parse(bodyOf(result)(materializer)).title shouldEqual messages.question
+          Jsoup.parse(bodyOf(result)(materializer, ec)).title shouldEqual messages.question
         }
       }
 
@@ -141,7 +144,7 @@ class WorthBeforeLegislationStartActionSpec extends CommonPlaySpec with WithComm
         lazy val target = setUpTarget(None)
         lazy val request = fakeRequestToPOSTWithSession(("worthBeforeLegislationStart", "a"))
         lazy val result = target.submitWorthBeforeLegislationStart(request)
-        lazy val doc = Jsoup.parse(bodyOf(result)(materializer))
+        lazy val doc = Jsoup.parse(bodyOf(result)(materializer, ec))
 
         "return a status of 400" in {
           status(result) shouldBe 400

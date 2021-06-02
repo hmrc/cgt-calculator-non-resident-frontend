@@ -15,15 +15,17 @@
  *@
 
 @import models.SoldForLessModel
-@import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
-@import views.html.helpers._
-@import views.html.main_template
-@import play.api.Application
 
-@import config.ApplicationConfig
-@(soldForLessForm : Form[SoldForLessModel])(implicit request: Request[_], messages: Messages, application: Application, applicationConfig: ApplicationConfig)
+@this(
+    form: FormWithCSRF,
+    mainTemplate: main_template,
+    inputRadioGroup: InputRadioGroup,
+    errorSummary: helpers.errorSummary
+)
 
-@main_template(
+@(soldForLessForm : Form[SoldForLessModel])(implicit request: Request[_], messages: Messages)
+
+@mainTemplate(
     title = Messages("calc.nonResident.soldForLess.question")
     ) {
 
@@ -33,9 +35,9 @@
 
     <h1 class="heading-xlarge">@Messages("calc.nonResident.soldForLess.question")</h1>
 
-    @govHelpers.form(action = controllers.routes.SoldForLessController.submitSoldForLess) {
+    @form(action = controllers.routes.SoldForLessController.submitSoldForLess) {
 
-        @govHelpers.input_radio_group(
+        @inputRadioGroup(
             field = soldForLessForm("soldForLess"),
             Seq(
                 "Yes"->Messages("calc.base.yes"),

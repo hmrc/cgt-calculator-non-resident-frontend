@@ -30,10 +30,12 @@ class GovUkWrapperViewSpec extends CommonPlaySpec with WithCommonFakeApplication
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   implicit lazy val fakeApp: Application = fakeApplication
+  lazy val govUkWrapperView = fakeApplication.injector.instanceOf[govuk_wrapper]
 
   "GovUK Wrapper" should {
     "produce the same output when render and f are called" in {
-      govuk_wrapper.f(mockConfig, "Title", None, None, None, Html(""), None, Html(""), Html(""), None, Html(""))(FakeRequest("GET", ""), mockMessage) shouldBe govuk_wrapper.render(mockConfig, "Title", None, None, None, Html(""), None, Html(""), Html(""), None, Html(""), FakeRequest("GET", ""), mockMessage)
+      govUkWrapperView.f("Title", None, None, None, Html(""), None, Html(""), Html(""), None, Html(""))(FakeRequest("GET", ""), mockMessage) shouldBe
+        govUkWrapperView.render("Title", None, None, None, Html(""), None, Html(""), Html(""), None, Html(""), FakeRequest("GET", ""), mockMessage)
     }
   }
 

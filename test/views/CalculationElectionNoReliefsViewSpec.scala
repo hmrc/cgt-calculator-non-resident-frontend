@@ -32,6 +32,7 @@ class CalculationElectionNoReliefsViewSpec extends CommonPlaySpec with WithCommo
 
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  lazy val calculationElectionNoReliefsView = fakeApplication.injector.instanceOf[calculationElectionNoReliefs]
 
   "Calculation Election No Reliefs View" when {
 
@@ -44,7 +45,7 @@ class CalculationElectionNoReliefsViewSpec extends CommonPlaySpec with WithCommo
 
     "supplied with no errors and lowest tax owed is rebased method" should {
 
-      lazy val view = calculationElectionNoReliefs(calculationElectionForm, rebasedLowestTaxOwed, "back-link")(fakeRequest, mockMessage, fakeApplication, mockConfig)
+      lazy val view = calculationElectionNoReliefsView(calculationElectionForm, rebasedLowestTaxOwed, "back-link")(fakeRequest, mockMessage)
       lazy val doc = Jsoup.parse(view.body)
 
       "have a heading" which {
@@ -130,7 +131,7 @@ class CalculationElectionNoReliefsViewSpec extends CommonPlaySpec with WithCommo
           ("time", "2000", "description", Messages("calc.calculationElection.description.time"), None, None)
         )
 
-      lazy val view = calculationElectionNoReliefs(calculationElectionForm, flatLowestTaxOwed, "back-link")(fakeRequest, mockMessage, fakeApplication, mockConfig)
+      lazy val view = calculationElectionNoReliefsView(calculationElectionForm, flatLowestTaxOwed, "back-link")(fakeRequest, mockMessage)
       lazy val doc = Jsoup.parse(view.body)
 
       "have text in a paragraph" which {
@@ -167,7 +168,7 @@ class CalculationElectionNoReliefsViewSpec extends CommonPlaySpec with WithCommo
 
     "supplied with errors" should {
       lazy val form = calculationElectionForm.bind(Map("calculationElection" -> "a"))
-      lazy val view = calculationElectionNoReliefs(form, rebasedLowestTaxOwed, "back-link")(fakeRequest, mockMessage, fakeApplication, mockConfig)
+      lazy val view = calculationElectionNoReliefsView(form, rebasedLowestTaxOwed, "back-link")(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {
@@ -184,7 +185,7 @@ class CalculationElectionNoReliefsViewSpec extends CommonPlaySpec with WithCommo
           ("time", "2000", "description", Messages("calc.calculationElection.description.time"), None, None)
         )
 
-      calculationElectionNoReliefs.f(calculationElectionForm, flatLowestTaxOwed, "back-link")(fakeRequest, mockMessage, fakeApplication, mockConfig) shouldBe calculationElectionNoReliefs.render(calculationElectionForm, flatLowestTaxOwed, "back-link", fakeRequest, mockMessage, fakeApplication, mockConfig)
+      calculationElectionNoReliefsView.f(calculationElectionForm, flatLowestTaxOwed, "back-link")(fakeRequest, mockMessage) shouldBe calculationElectionNoReliefsView.render(calculationElectionForm, flatLowestTaxOwed, "back-link", fakeRequest, mockMessage)
     }
   }
 }

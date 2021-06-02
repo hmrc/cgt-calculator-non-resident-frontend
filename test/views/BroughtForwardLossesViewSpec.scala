@@ -30,12 +30,13 @@ import views.html.calculation.broughtForwardLosses
 class BroughtForwardLossesViewSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with AssertHelpers with MockitoSugar{
 
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
- implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  lazy val broughtForwardLossesView = fakeApplication.injector.instanceOf[broughtForwardLosses]
 
   "Brought forward losses view" when {
 
     "provided with no errors" should {
-      lazy val view = broughtForwardLosses(broughtForwardLossesForm, "back-link")(fakeRequest,mockMessage, fakeApplication, mockConfig)
+      lazy val view = broughtForwardLossesView(broughtForwardLossesForm, "back-link")(fakeRequest,mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of ${messages.BroughtForwardLosses.question}" in {
@@ -138,7 +139,7 @@ class BroughtForwardLossesViewSpec extends CommonPlaySpec with WithCommonFakeApp
 
     "provided with errors" should {
       lazy val form = broughtForwardLossesForm.bind(Map("isClaiming" -> "Yes", "broughtForwardLoss" -> ""))
-      lazy val view = broughtForwardLosses(form, "back-link")(fakeRequest,mockMessage, fakeApplication, mockConfig)
+      lazy val view = broughtForwardLossesView(form, "back-link")(fakeRequest,mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {
@@ -147,8 +148,8 @@ class BroughtForwardLossesViewSpec extends CommonPlaySpec with WithCommonFakeApp
     }
 
     "should produce the same output when render and f are called" in {
-      broughtForwardLosses.f(broughtForwardLossesForm, "back-link")(fakeRequest,mockMessage, fakeApplication, mockConfig) shouldBe
-        broughtForwardLosses.render(broughtForwardLossesForm, "back-link", fakeRequest,mockMessage, fakeApplication, mockConfig)
+      broughtForwardLossesView.f(broughtForwardLossesForm, "back-link")(fakeRequest,mockMessage) shouldBe
+        broughtForwardLossesView.render(broughtForwardLossesForm, "back-link", fakeRequest,mockMessage)
     }
   }
 }

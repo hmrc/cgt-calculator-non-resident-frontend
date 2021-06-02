@@ -18,7 +18,6 @@ package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.TaxDates
-import config.ApplicationConfig
 import connectors.CalculatorConnector
 import constructors.DefaultCalculationElectionConstructor
 import controllers.predicates.ValidActiveSession
@@ -26,25 +25,22 @@ import controllers.utils.RecoverableFuture
 import forms.AcquisitionCostsForm._
 import javax.inject.Inject
 import models.{AcquisitionCostsModel, BoughtForLessModel, DateModel, HowBecameOwnerModel}
-import play.api.Application
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-import views.html.calculation
+import views.html.calculation.acquisitionCosts
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class AcquisitionCostsController @Inject()(http: DefaultHttpClient,
                                            calcConnector: CalculatorConnector,
                                            calcElectionConstructor: DefaultCalculationElectionConstructor,
-                                           mcc: MessagesControllerComponents
-                                           )
-                                          (implicit val appConfig: ApplicationConfig,
-                                           implicit val application: Application)
+                                           mcc: MessagesControllerComponents,
+                                           acquisitionCostsView: acquisitionCosts
+                                           )(implicit ec: ExecutionContext)
   extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   private def isOwnerBeforeLegislationStart(implicit hc: HeaderCarrier): Future[Boolean] = {
@@ -82,8 +78,8 @@ class AcquisitionCostsController @Inject()(http: DefaultHttpClient,
   val acquisitionCosts: Action[AnyContent] = ValidateSession.async { implicit request =>
     def result(backLink: String, isOwnerBeforeLegislationStart: Boolean) = {
       calcConnector.fetchAndGetFormData[AcquisitionCostsModel](KeystoreKeys.acquisitionCosts).map {
-        case Some(data) => Ok(calculation.acquisitionCosts(acquisitionCostsForm.fill(data), backLink, isOwnerBeforeLegislationStart))
-        case None => Ok(calculation.acquisitionCosts(acquisitionCostsForm, backLink, isOwnerBeforeLegislationStart))
+        case Some(data) => Ok(acquisitionCostsView(acquisitionCostsForm.fill(data), backLink, isOwnerBeforeLegislationStart))
+        case None => Ok(acquisitionCostsView(acquisitionCostsForm, backLink, isOwnerBeforeLegislationStart))
       }
     }
 
@@ -119,7 +115,7 @@ class AcquisitionCostsController @Inject()(http: DefaultHttpClient,
 
     def errorAction(form: Form[AcquisitionCostsModel]): Future[Result] = {
       def result(backLink: String, isOwnerBeforeLegislationStart: Boolean) =
-        Future.successful(BadRequest(calculation.acquisitionCosts(form, backLink, isOwnerBeforeLegislationStart)))
+        Future.successful(BadRequest(acquisitionCostsView(form, backLink, isOwnerBeforeLegislationStart)))
 
       (for {
         backLink <- getBackLink

@@ -16,8 +16,20 @@
 
 @import play.twirl.api.HtmlFormat
 
-@(appConfig: config.AppConfig,
-  title: String,
+@this(
+    appConfig: config.AppConfig,
+    govukTemplate: layouts.GovUkTemplate,
+    headWithTrackingConsent: HeadWithTrackingConsent,
+    headerNav: HeaderNav,
+    uiFooter: Footer,
+    uiServiceInfo: ServiceInfo,
+    uiMainContentHeader: MainContentHeader,
+    reportAProblemLink: ReportAProblemLink,
+    uiMainContent: MainContent,
+    uiFooterLinks: FooterLinks
+)
+
+@(title: String,
   mainClass: Option[String] = None,
   mainDataAttributes: Option[Html] = None,
   bodyClasses: Option[String] = None,
@@ -29,8 +41,6 @@
   afterHeader: Html = HtmlFormat.empty
 )(implicit request: Request[_], messages: Messages)
 
-@import layouts.{govuk_template => hmrcGovUkTemplate}
-@import uk.gov.hmrc.play.views.html.{helpers => uiHelpers, layouts => uiLayouts}
 
 @scriptElement = {
     <script type="text/javascript" src='@routes.Assets.versioned("javascripts/cgt.js")'></script>
@@ -41,7 +51,7 @@
 }
 
 @head = {
-    @uiLayouts.headWithTrackingConsent(
+    @headWithTrackingConsent(
       linkElem = Some(linksElement),
       headScripts = None)
     <meta name="format-detection" content="telephone=no" />
@@ -53,7 +63,7 @@
 }
 
 @insideHeader = {
-    @uiLayouts.header_nav(
+    @headerNav(
       navTitle = Some(messages("calc.base.pageHeading")),
       navTitleLink = None,
       showBetaLink = false,
@@ -61,7 +71,7 @@
 }
 
 @bodyEnd = {
-    @uiLayouts.footer(
+    @uiFooter(
       analyticsToken = None,
       analyticsHost = "",
       ssoUrl = None,
@@ -73,7 +83,7 @@
 @footerLinks = {}
 
 @serviceInfo = {
-    @uiLayouts.serviceInfo(
+    @uiServiceInfo(
       betaBanner = HtmlFormat.empty,
       includeGridWrapper = false,
       serviceInfoContent = Some(serviceInfoContent),
@@ -83,14 +93,14 @@
 
 @mainContentHeader = {
     @if(contentHeader.isDefined) {
-        @uiLayouts.main_content_header(contentHeader = contentHeader.get)
+        @uiMainContentHeader(contentHeader = contentHeader.get)
     }
 }
 
-@getHelpForm = @{uiHelpers.reportAProblemLink(appConfig.reportAProblemPartialUrl, appConfig.reportAProblemNonJSUrl)}
+@getHelpForm = @{reportAProblemLink(appConfig.reportAProblemPartialUrl, appConfig.reportAProblemNonJSUrl)}
 
 @content = {
-    @uiLayouts.main_content(
+    @uiMainContent(
       article = mainContent,
       mainClass = mainClass,
       mainDataAttributes = mainDataAttributes,
@@ -100,4 +110,4 @@
       sidebar = sidebar)
 }
 
-@hmrcGovUkTemplate(Some(title), bodyClasses)(head, bodyEnd, insideHeader, afterHeader, footerTop, Some(uiLayouts.footer_links()), true)(content)
+@govukTemplate(Some(title), bodyClasses)(head, bodyEnd, insideHeader, afterHeader, footerTop, Some(uiFooterLinks()), true)(content)

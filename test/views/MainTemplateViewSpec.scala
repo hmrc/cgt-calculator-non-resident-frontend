@@ -30,11 +30,12 @@ class MainTemplateViewSpec extends CommonPlaySpec with WithCommonFakeApplication
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   implicit lazy val fakeApp: Application = fakeApplication
-
+  lazy val mainTemplateView = fakeApplication.injector.instanceOf[main_template]
 
   "Main Template" should {
     "produce the same output when render and f are called" in {
-      main_template.f("Title", None, None, None, None, None, false, false)(Html(""))(FakeRequest("GET", ""), mockMessage, fakeApplication, mockConfig) shouldBe main_template.render("Title", None, None, None, None, None, false, false, Html(""), FakeRequest("GET", ""), mockMessage, fakeApplication, mockConfig)
+      mainTemplateView.f("Title", None, None, None, None, None, false, false)(Html(""))(FakeRequest("GET", ""), mockMessage) shouldBe
+        mainTemplateView.render("Title", None, None, None, None, None, false, false, Html(""), FakeRequest("GET", ""), mockMessage)
     }
   }
 }

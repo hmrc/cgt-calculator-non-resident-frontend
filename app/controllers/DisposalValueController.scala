@@ -17,38 +17,35 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import config.ApplicationConfig
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import forms.DisposalValueForm._
 import javax.inject.Inject
 import models.DisposalValueModel
-import play.api.Application
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-import views.html.calculation
+import views.html.calculation.disposalValue
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class DisposalValueController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
-                                        mcc: MessagesControllerComponents)(implicit val applicationConfig: ApplicationConfig,
-                                                                           implicit val application: Application)
+                                        mcc: MessagesControllerComponents,
+                                        disposalValueView: disposalValue)(implicit ec: ExecutionContext)
                                           extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   val disposalValue = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[DisposalValueModel](KeystoreKeys.disposalValue).map {
-      case Some(data) => Ok(calculation.disposalValue(disposalValueForm.fill(data)))
-      case None => Ok(calculation.disposalValue(disposalValueForm))
+      case Some(data) => Ok(disposalValueView(disposalValueForm.fill(data)))
+      case None => Ok(disposalValueView(disposalValueForm))
     }
   }
 
   val submitDisposalValue = ValidateSession.async { implicit request =>
 
-    def errorAction(form: Form[DisposalValueModel]) = Future.successful(BadRequest(calculation.disposalValue(form)))
+    def errorAction(form: Form[DisposalValueModel]) = Future.successful(BadRequest(disposalValueView(form)))
 
     def successAction(model: DisposalValueModel) = {
       calcConnector.saveFormData(KeystoreKeys.disposalValue, model).map(_ =>

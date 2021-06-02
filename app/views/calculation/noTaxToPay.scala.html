@@ -14,13 +14,11 @@
  * limitations under the License.
  *@
 
-@import views.html.main_template
-@import play.api.Application
+@this(mainTemplate: main_template)
 
-@import config.ApplicationConfig
-@(forCharity: Boolean)(implicit request: Request[_], messages: Messages, application: Application, applicationConfig: ApplicationConfig)
+@(forCharity: Boolean)(implicit request: Request[_], messages: Messages)
 
-@main_template(title = Messages("calc.noTaxToPay.title")) {
+@mainTemplate(title = Messages("calc.noTaxToPay.title")) {
 
     <a id="back-link" class="back-link" href="@controllers.routes.WhoDidYouGiveItToController.whoDidYouGiveItTo().url">@Messages("calc.base.back")</a>
 

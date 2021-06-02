@@ -23,18 +23,18 @@ import constructors._
 import javax.inject.Inject
 import models._
 import play.api.libs.json.Format
+import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.cache.client.{CacheMap, SessionCache}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-import uk.gov.hmrc.http.HttpReads.Implicits._
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class CalculatorConnector @Inject()(val http: DefaultHttpClient,
                                     val appConfig: ApplicationConfig,
                                     val servicesConfig: ServicesConfig)
+                                   (implicit ec: ExecutionContext)
                                     extends SessionCache {
 
   override lazy val domain: String = servicesConfig.getConfString("cachable.session-cache.domain", throw new Exception(s"Could not find config 'cachable.session-cache.domain'"))

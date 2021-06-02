@@ -31,10 +31,11 @@ class OtherReliefsFlatViewSpec extends CommonPlaySpec with WithCommonFakeApplica
 
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  lazy val otherReliefsFlatView = fakeApplication.injector.instanceOf[otherReliefsFlat]
 
   "The Other Reliefs Flat view" when {
     "not supplied with a pre-existing stored value and a taxable gain" should {
-      lazy val view = otherReliefsFlat(otherReliefsForm, hasExistingReliefAmount = false, BigDecimal(2000), BigDecimal(2500))(fakeRequest, mockMessage, fakeApplication, mockConfig)
+      lazy val view = otherReliefsFlatView(otherReliefsForm, hasExistingReliefAmount = false, BigDecimal(2000), BigDecimal(2500))(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have a back link" which {
@@ -129,13 +130,13 @@ class OtherReliefsFlatViewSpec extends CommonPlaySpec with WithCommonFakeApplica
       }
 
       "should produce the same output when render and f are called" in {
-        otherReliefsFlat.f(otherReliefsForm, false, BigDecimal(2000), BigDecimal(2500))(fakeRequest, mockMessage, fakeApplication, mockConfig) shouldBe otherReliefsFlat.render(otherReliefsForm, false, BigDecimal(2000), BigDecimal(2500), fakeRequest, mockMessage, fakeApplication, mockConfig)
+        otherReliefsFlatView.f(otherReliefsForm, false, BigDecimal(2000), BigDecimal(2500))(fakeRequest, mockMessage) shouldBe otherReliefsFlatView.render(otherReliefsForm, false, BigDecimal(2000), BigDecimal(2500), fakeRequest, mockMessage)
       }
     }
 
     "supplied with a pre-existing stored value and a negative taxable gain" should {
       val map = Map("otherReliefs" -> "1000")
-      lazy val view = otherReliefsFlat(otherReliefsForm.bind(map), hasExistingReliefAmount = true, BigDecimal(-1000), BigDecimal(2000))(fakeRequest, mockMessage, fakeApplication, mockConfig)
+      lazy val view = otherReliefsFlatView(otherReliefsForm.bind(map), hasExistingReliefAmount = true, BigDecimal(-1000), BigDecimal(2000))(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "has a list entry with the loss carried forward message and value" in {
@@ -162,7 +163,7 @@ class OtherReliefsFlatViewSpec extends CommonPlaySpec with WithCommonFakeApplica
     "supplied with an invalid map" should {
       val model = CalculationResultModel(100, 1000, -100, 18, 0, None, None, None)
       val map = Map("otherReliefs" -> "-1000")
-      lazy val view = otherReliefsFlat(otherReliefsForm.bind(map), hasExistingReliefAmount = true, BigDecimal(2000), BigDecimal(2000))(fakeRequest, mockMessage, fakeApplication, mockConfig)
+      lazy val view = otherReliefsFlatView(otherReliefsForm.bind(map), hasExistingReliefAmount = true, BigDecimal(2000), BigDecimal(2000))(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

@@ -28,6 +28,7 @@ import views.html.helpers.summarySectionNoLink
 class SummarySectionNoLinkViewSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   implicit val mockLang = mock[Lang]
+  lazy val summarySectionNoLinkView = fakeApplication.injector.instanceOf[summarySectionNoLink]
 
   "Creating a summary section" when {
     val firstItem = QuestionAnswerModel[String]("firstID", "firstData", "firstQuestion", Some("first-link"))
@@ -36,7 +37,7 @@ class SummarySectionNoLinkViewSpec extends CommonPlaySpec with WithCommonFakeApp
 
     "passing in a sequence of one item" should {
       val sequence = Seq(firstItem)
-      lazy val result = summarySectionNoLink("sectionID", "sectionTitle", sequence)
+      lazy val result = summarySectionNoLinkView("sectionID", "sectionTitle", sequence)
       lazy val doc = Jsoup.parse(result.body)
 
       "contain a section with the ID 'sectionID' and the class 'summary-section'" in {
@@ -69,7 +70,7 @@ class SummarySectionNoLinkViewSpec extends CommonPlaySpec with WithCommonFakeApp
 
     "passing in a sequence of two items" should {
       val sequence = Seq(firstItem, secondItem)
-      lazy val result = summarySectionNoLink("sectionID-two", "sectionTitle-two", sequence)
+      lazy val result = summarySectionNoLinkView("sectionID-two", "sectionTitle-two", sequence)
       lazy val doc = Jsoup.parse(result.body)
 
       "contain a section with the ID 'sectionID-two' and the class 'summary-section'" in {
@@ -106,7 +107,7 @@ class SummarySectionNoLinkViewSpec extends CommonPlaySpec with WithCommonFakeApp
 
     "passing in a sequence of three items" should {
       val sequence = Seq(firstItem, secondItem, thirdItem)
-      lazy val result = summarySectionNoLink("sectionID", "sectionTitle", sequence)
+      lazy val result = summarySectionNoLinkView("sectionID", "sectionTitle", sequence)
       lazy val doc = Jsoup.parse(result.body)
 
       "contain three divs for the three summaryRow" in {
@@ -124,7 +125,7 @@ class SummarySectionNoLinkViewSpec extends CommonPlaySpec with WithCommonFakeApp
 
     "passing in an empty sequence" should {
       val sequence = Seq()
-      lazy val result = summarySectionNoLink("sectionID", "sectionTitle", sequence)
+      lazy val result = summarySectionNoLinkView("sectionID", "sectionTitle", sequence)
       lazy val doc = Jsoup.parse(result.body)
 
       "not have any content" in {

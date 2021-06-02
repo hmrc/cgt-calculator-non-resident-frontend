@@ -17,7 +17,6 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import config.ApplicationConfig
 import connectors.CalculatorConnector
 import constructors.DefaultCalculationElectionConstructor
 import controllers.predicates.ValidActiveSession
@@ -25,35 +24,32 @@ import controllers.utils.RecoverableFuture
 import forms.BoughtForLessForm._
 import javax.inject.Inject
 import models.BoughtForLessModel
-import play.api.Application
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-import views.html.calculation
+import views.html.calculation.boughtForLess
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class BoughtForLessController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
                                         calcElectionConstructor: DefaultCalculationElectionConstructor,
-                                        mcc: MessagesControllerComponents)
-                                       (implicit val applicationConfig: ApplicationConfig,
-                                        implicit val application: Application)
+                                        mcc: MessagesControllerComponents,
+                                        boughtForLessView: boughtForLess)(implicit ec: ExecutionContext)
                                           extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
 
   val boughtForLess = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[BoughtForLessModel](KeystoreKeys.boughtForLess).map {
-      case Some(data) => Ok(calculation.boughtForLess(boughtForLessForm.fill(data)))
-      case None => Ok(calculation.boughtForLess(boughtForLessForm))
+      case Some(data) => Ok(boughtForLessView(boughtForLessForm.fill(data)))
+      case None => Ok(boughtForLessView(boughtForLessForm))
     }
   }
 
   val submitBoughtForLess = ValidateSession.async {implicit request =>
 
-    def errorAction(errors: Form[BoughtForLessModel]) = Future.successful(BadRequest(calculation.boughtForLess(errors)))
+    def errorAction(errors: Form[BoughtForLessModel]) = Future.successful(BadRequest(boughtForLessView(errors)))
 
     def routeRequest(model: BoughtForLessModel) = {
       if (model.boughtForLess) Future.successful(Redirect(routes.WorthWhenBoughtForLessController.worthWhenBoughtForLess()))

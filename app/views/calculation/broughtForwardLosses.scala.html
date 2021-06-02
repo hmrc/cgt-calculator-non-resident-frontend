@@ -15,12 +15,16 @@
  *@
 
 @import models.BroughtForwardLossesModel
-@import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
-@import views.html.helpers._
-@import play.api.Application
 
-@import config.ApplicationConfig
-@(broughtForwardLossesForm: Form[BroughtForwardLossesModel], backLink: String)(implicit request: Request[_], messages: Messages, application: Application, applicationConfig: ApplicationConfig)
+@this(
+    form: FormWithCSRF,
+    mainTemplate: main_template,
+    formInputMoneyHTML: helpers.formInputMoneyHTML,
+    errorSummary: helpers.errorSummary,
+    formHiddenYesNoRadio: helpers.formHiddenYesNoRadio
+)
+
+@(broughtForwardLossesForm: Form[BroughtForwardLossesModel], backLink: String)(implicit request: Request[_], messages: Messages)
 
 @hiddenContent = {
     <div class="form-group">
@@ -33,7 +37,7 @@
     </div>
 }
 
-@main_template(Messages("calc.broughtForwardLosses.question")) {
+@mainTemplate(Messages("calc.broughtForwardLosses.question")) {
 
     <a id="back-link" class="back-link" href="@backLink">@Messages("calc.base.back")</a>
 
@@ -41,7 +45,7 @@
 
     <h1 class="heading-xlarge">@Messages("calc.broughtForwardLosses.question")</h1>
 
-    @govHelpers.form(action = controllers.routes.BroughtForwardLossesController.submitBroughtForwardLosses) {
+    @form(action = controllers.routes.BroughtForwardLossesController.submitBroughtForwardLosses) {
 
         <div class="form-hint">
             <p>@Messages("calc.broughtForwardLosses.helpText")</p>

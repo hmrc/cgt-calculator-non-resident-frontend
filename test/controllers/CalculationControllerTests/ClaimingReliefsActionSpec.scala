@@ -34,27 +34,30 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import views.html.calculation.claimingReliefs
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class ClaimingReliefsActionSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with MockitoSugar {
 
   implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
 
   val materializer = mock[Materializer]
+  val ec = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
   val defaultCache = mock[CacheMap]
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
-
+  val claimingReliefsView = fakeApplication.injector.instanceOf[claimingReliefs]
 
   class Setup {
     val controller = new ClaimingReliefsController(
       mockHttp,
       mockCalcConnector,
-      mockMessagesControllerComponents
-    )(mockConfig, fakeApplication)
+      mockMessagesControllerComponents,
+      claimingReliefsView
+    )(ec)
   }
   def setupTarget(model: Option[ClaimingReliefsModel]): ClaimingReliefsController = {
 
@@ -68,7 +71,7 @@ class ClaimingReliefsActionSpec extends CommonPlaySpec with WithCommonFakeApplic
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new ClaimingReliefsController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig, fakeApplication) {
+    new ClaimingReliefsController(mockHttp, mockCalcConnector, mockMessagesControllerComponents, claimingReliefsView)(ec) {
     }
   }
 
@@ -83,7 +86,7 @@ class ClaimingReliefsActionSpec extends CommonPlaySpec with WithCommonFakeApplic
       }
 
       "return the claiming-reliefs view" in {
-        Jsoup.parse(bodyOf(result)(materializer)).title shouldBe messages.title
+        Jsoup.parse(bodyOf(result)(materializer, ec)).title shouldBe messages.title
       }
     }
 
@@ -96,7 +99,7 @@ class ClaimingReliefsActionSpec extends CommonPlaySpec with WithCommonFakeApplic
       }
 
       "return the claiming-reliefs view" in {
-        Jsoup.parse(bodyOf(result)(materializer)).title shouldBe messages.title
+        Jsoup.parse(bodyOf(result)(materializer, ec)).title shouldBe messages.title
       }
     }
 
@@ -154,7 +157,7 @@ class ClaimingReliefsActionSpec extends CommonPlaySpec with WithCommonFakeApplic
       }
 
       "return to the claiming-reliefs page" in {
-        Jsoup.parse(bodyOf(result)(materializer)).title shouldBe messages.title
+        Jsoup.parse(bodyOf(result)(materializer, ec)).title shouldBe messages.title
       }
     }
   }

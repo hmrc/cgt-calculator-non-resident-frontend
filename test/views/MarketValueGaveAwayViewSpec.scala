@@ -32,10 +32,11 @@ class MarketValueGaveAwayViewSpec extends CommonPlaySpec with WithCommonFakeAppl
 
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  val marketValueGaveAwayView = fakeApplication.injector.instanceOf[marketValueGaveAway]
 
   "The market value when gave away page" should {
 
-    lazy val view = marketValueGaveAway(marketValueForm)(fakeRequest, mockMessage, fakeApplication, mockConfig)
+    lazy val view = marketValueGaveAwayView(marketValueForm)(fakeRequest, mockMessage)
     lazy val document = Jsoup.parse(view.body)
 
     "supplied with no errors" should {
@@ -122,13 +123,13 @@ class MarketValueGaveAwayViewSpec extends CommonPlaySpec with WithCommonFakeAppl
       }
 
       "should produce the same output when render and f are called" in {
-        marketValueGaveAway.f(marketValueForm)(fakeRequest, mockMessage, fakeApplication, mockConfig) shouldBe marketValueGaveAway.render(marketValueForm, fakeRequest, mockMessage, fakeApplication, mockConfig)
+        marketValueGaveAwayView.f(marketValueForm)(fakeRequest, mockMessage) shouldBe marketValueGaveAwayView.render(marketValueForm, fakeRequest, mockMessage)
       }
     }
 
     "supplied with a form with errors" should {
       lazy val form = marketValueForm.bind(Map("disposalValue" -> "testData"))
-      lazy val view = marketValueGaveAway(form)(fakeRequest, mockMessage, fakeApplication, mockConfig)
+      lazy val view = marketValueGaveAwayView(form)(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

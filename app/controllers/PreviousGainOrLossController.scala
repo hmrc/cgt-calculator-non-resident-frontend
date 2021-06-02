@@ -17,33 +17,31 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import config.ApplicationConfig
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import controllers.utils.RecoverableFuture
 import forms.PreviousLossOrGainForm._
 import javax.inject.Inject
 import models.PreviousLossOrGainModel
-import play.api.Application
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{MessagesControllerComponents, Result}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-import views.html.{calculation => views}
+import views.html.calculation.previousLossOrGain
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class PreviousGainOrLossController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
-                                             mcc: MessagesControllerComponents)(implicit val applicationConfig: ApplicationConfig,
-                                                                                implicit val application: Application)
+                                             mcc: MessagesControllerComponents,
+                                             previousLossOrGainView: previousLossOrGain)
+                                            (implicit ec: ExecutionContext)
                                               extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   val previousGainOrLoss = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[PreviousLossOrGainModel](KeystoreKeys.previousLossOrGain) map {
-      case Some(data) => Ok(views.previousLossOrGain(previousLossOrGainForm.fill(data)))
-      case None => Ok(views.previousLossOrGain(previousLossOrGainForm))
+      case Some(data) => Ok(previousLossOrGainView(previousLossOrGainForm.fill(data)))
+      case None => Ok(previousLossOrGainView(previousLossOrGainForm))
     }
   }
 
@@ -51,7 +49,7 @@ class PreviousGainOrLossController @Inject()(http: DefaultHttpClient,calcConnect
     implicit request =>
 
       def errorAction(form: Form[PreviousLossOrGainModel]) = {
-        Future.successful(BadRequest(views.previousLossOrGain(form)))
+        Future.successful(BadRequest(previousLossOrGainView(form)))
       }
       def successAction(model: PreviousLossOrGainModel) = {
         (for {

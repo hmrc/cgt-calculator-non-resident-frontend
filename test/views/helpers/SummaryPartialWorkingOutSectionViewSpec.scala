@@ -25,16 +25,18 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.i18n.Lang
 import play.api.mvc.MessagesControllerComponents
 import views.html.helpers
+import views.html.helpers.summaryPartialWorkingOutSection
 
 class SummaryPartialWorkingOutSectionViewSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with MockitoSugar {
   implicit val mockLang = mock[Lang]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  lazy val summaryPartialWorkingOutSectionView = fakeApplication.injector.instanceOf[summaryPartialWorkingOutSection]
 
   "The workingOutSummary partial" when {
 
     "supplied with a flat calculation and a gain" should {
 
-      lazy val view = helpers.summaryPartialWorkingOutSection(
+      lazy val view = summaryPartialWorkingOutSectionView(
         CalculationType.flat,
         disposalValue = 100000,
         acquisitionValue = 20000,
@@ -106,7 +108,7 @@ class SummaryPartialWorkingOutSectionViewSpec extends CommonPlaySpec with WithCo
 
     "supplied with a rebased calculation and a loss" should {
 
-      lazy val view = helpers.summaryPartialWorkingOutSection(
+      lazy val view = summaryPartialWorkingOutSectionView(
         CalculationType.rebased,
         disposalValue = 100000,
         acquisitionValue = 120000,
@@ -178,7 +180,7 @@ class SummaryPartialWorkingOutSectionViewSpec extends CommonPlaySpec with WithCo
 
     "supplied with a time-apportioned calculation and a zero gain" should {
 
-      lazy val view = helpers.summaryPartialWorkingOutSection(
+      lazy val view = summaryPartialWorkingOutSectionView(
         CalculationType.timeApportioned,
         disposalValue = 100000,
         acquisitionValue = 20000,
@@ -262,7 +264,7 @@ class SummaryPartialWorkingOutSectionViewSpec extends CommonPlaySpec with WithCo
 
     "supplied with a time-apportioned calculation and a loss" should {
 
-      lazy val view = helpers.summaryPartialWorkingOutSection(
+      lazy val view = summaryPartialWorkingOutSectionView(
         CalculationType.timeApportioned,
         disposalValue = 100000,
         acquisitionValue = 120000,

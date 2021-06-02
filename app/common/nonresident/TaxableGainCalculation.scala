@@ -21,10 +21,9 @@ import common.TaxDates
 import connectors.CalculatorConnector
 import constructors.AnswersConstructor
 import models._
-
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 import uk.gov.hmrc.http.HeaderCarrier
+
+import scala.concurrent.{ExecutionContext, Future}
 
 object TaxableGainCalculation {
 
@@ -36,14 +35,14 @@ object TaxableGainCalculation {
   }
 
   def getPropertyLivedInResponse(gainExists: Boolean, calcConnector: CalculatorConnector)
-                                (implicit hc: HeaderCarrier): Future[Option[PropertyLivedInModel]] = {
+                                (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[PropertyLivedInModel]] = {
     if (gainExists) {
       calcConnector.fetchAndGetFormData[PropertyLivedInModel](KeystoreKeys.propertyLivedIn)
     } else Future(None)
   }
 
   def getPrrResponse(propertyLivedInResponse: Option[PropertyLivedInModel],
-                     calcConnector: CalculatorConnector)(implicit hc: HeaderCarrier):
+                     calcConnector: CalculatorConnector)(implicit hc: HeaderCarrier, ec: ExecutionContext):
   Future[Option[PrivateResidenceReliefModel]] = {
     propertyLivedInResponse match {
       case Some(data) if data.propertyLivedIn =>
@@ -70,7 +69,7 @@ object TaxableGainCalculation {
   def getFinalSectionsAnswers(totalGainResultsModel: TotalGainResultsModel,
                               calculationResultsWithPRRModel: Option[CalculationResultsWithPRRModel],
                               calcConnector: CalculatorConnector,
-                              answersConstructor: AnswersConstructor)(implicit hc: HeaderCarrier):
+                              answersConstructor: AnswersConstructor)(implicit hc: HeaderCarrier, ec: ExecutionContext):
   Future[Option[TotalPersonalDetailsCalculationModel]] = {
 
     calculationResultsWithPRRModel match {
@@ -106,7 +105,7 @@ object TaxableGainCalculation {
                         propertyLivedInModel: Option[PropertyLivedInModel],
                         personalDetailsModel: Option[TotalPersonalDetailsCalculationModel],
                         maxAEA: BigDecimal,
-                        calcConnector: CalculatorConnector)(implicit hc: HeaderCarrier): Future[Option[CalculationResultsWithTaxOwedModel]] = {
+                        calcConnector: CalculatorConnector)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[CalculationResultsWithTaxOwedModel]] = {
 
     personalDetailsModel match {
       case Some(_) => calcConnector.calculateNRCGTTotalTax(totalGainAnswersModel,

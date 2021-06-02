@@ -20,43 +20,40 @@ import java.util.UUID
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.TaxDates
-import config.ApplicationConfig
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import forms.DisposalDateForm._
 import javax.inject.Inject
 import models.DateModel
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.MessagesControllerComponents
-import play.api.{Application, Logging}
 import uk.gov.hmrc.http.SessionKeys
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-import views.html.calculation
+import views.html.calculation.disposalDate
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 
 class DisposalDateController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
-                                       mcc: MessagesControllerComponents)
-                                      (implicit val applicationConfig: ApplicationConfig,
-                                       implicit val application: Application)
+                                       mcc: MessagesControllerComponents,
+                                       disposalDateView: disposalDate)
+                                      (implicit ec: ExecutionContext)
                                         extends FrontendController(mcc) with ValidActiveSession with I18nSupport with Logging{
 
   val disposalDate = Action.async { implicit request =>
     implicit val lang = mcc.messagesApi.preferred(request).lang
     if (request.session.get(SessionKeys.sessionId).isEmpty) {
       val sessionId = UUID.randomUUID.toString
-      Future.successful(Ok(views.html.calculation.
-        disposalDate(disposalDateForm)).withSession(request.session +
+      Future.successful(Ok(disposalDateView(disposalDateForm)).withSession(request.session +
         (SessionKeys.sessionId -> s"session-$sessionId")))
     }
     else {
       calcConnector.fetchAndGetFormData[DateModel](KeystoreKeys.disposalDate).map {
-        case Some(data) => Ok(calculation.disposalDate(disposalDateForm.fill(data)))
-        case None => Ok(calculation.disposalDate(disposalDateForm))
+        case Some(data) => Ok(disposalDateView(disposalDateForm.fill(data)))
+        case None => Ok(disposalDateView(disposalDateForm))
       }
     }
   }
@@ -64,7 +61,7 @@ class DisposalDateController @Inject()(http: DefaultHttpClient,calcConnector: Ca
   val submitDisposalDate = ValidateSession.async { implicit request =>
     implicit val lang = mcc.messagesApi.preferred(request).lang
 
-    def errorAction(form: Form[DateModel]) = Future.successful(BadRequest(calculation.disposalDate(form)))
+    def errorAction(form: Form[DateModel]) = Future.successful(BadRequest(disposalDateView(form)))
 
     def successAction(model: DateModel) = {
       logger.info("Saving disposalDate as : " + model)

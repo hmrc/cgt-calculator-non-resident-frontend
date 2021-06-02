@@ -34,27 +34,33 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import views.html.calculation.{marketValueGaveAway, marketValueSold}
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class MarketValueWhenSoldOrGaveAwayActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
   implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val materializer = mock[Materializer]
+  val ec = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockEnvironment =mock[Environment]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
   val defaultCache = mock[CacheMap]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
+  val marketValueSoldView = fakeApplication.injector.instanceOf[marketValueSold]
+  val marketValueGaveAwayView = fakeApplication.injector.instanceOf[marketValueGaveAway]
 
   class Setup {
     val controller = new MarketValueWhenSoldOrGaveAwayController(
       mockEnvironment,
       mockHttp,
       mockCalcConnector,
-      mockMessagesControllerComponents
-    )(mockConfig, fakeApplication)
+      mockMessagesControllerComponents,
+      marketValueSoldView,
+      marketValueGaveAwayView
+    )(ec)
   }
 
   def setupTarget(getData: Option[DisposalValueModel]): MarketValueWhenSoldOrGaveAwayController = {
@@ -65,14 +71,14 @@ class MarketValueWhenSoldOrGaveAwayActionSpec extends CommonPlaySpec with WithCo
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new MarketValueWhenSoldOrGaveAwayController(mockEnvironment, mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig, fakeApplication)
+    new MarketValueWhenSoldOrGaveAwayController(mockEnvironment, mockHttp, mockCalcConnector, mockMessagesControllerComponents, marketValueSoldView, marketValueGaveAwayView)(ec)
   }
 
   "The marketValueWhenGaveAway action" when {
     "not supplied with a pre-existing stored model" should {
       val target = setupTarget(None)
       lazy val result = target.marketValueWhenGaveAway(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       "return a 200" in {
         status(result) shouldBe 200
@@ -86,7 +92,7 @@ class MarketValueWhenSoldOrGaveAwayActionSpec extends CommonPlaySpec with WithCo
     "supplied with a pre-existing stored model" should {
       val target = setupTarget(Some(DisposalValueModel(1000)))
       lazy val result = target.marketValueWhenGaveAway(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       "return a 200" in {
         status(result) shouldBe 200
@@ -115,7 +121,7 @@ class MarketValueWhenSoldOrGaveAwayActionSpec extends CommonPlaySpec with WithCo
     "not supplied with a pre-existing stored model" should {
       val target = setupTarget(None)
       lazy val result = target.marketValueWhenSold(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       "return a 200" in {
         status(result) shouldBe 200
@@ -129,7 +135,7 @@ class MarketValueWhenSoldOrGaveAwayActionSpec extends CommonPlaySpec with WithCo
     "supplied with a pre-existing stored model" should {
       val target = setupTarget(Some(DisposalValueModel(1000)))
       lazy val result = target.marketValueWhenSold(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       "return a 200" in {
         status(result) shouldBe 200
@@ -157,7 +163,7 @@ class MarketValueWhenSoldOrGaveAwayActionSpec extends CommonPlaySpec with WithCo
       lazy val target = setupTarget(None)
       lazy val request = fakeRequestToPOSTWithSession(("disposalValue", "invalid text"))
       lazy val result = target.submitMarketValueWhenSold(request)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       "generate a 400 error" in {
         status(result) shouldEqual 400
@@ -205,7 +211,7 @@ class MarketValueWhenSoldOrGaveAwayActionSpec extends CommonPlaySpec with WithCo
       lazy val target = setupTarget(None)
       lazy val request = fakeRequestToPOSTWithSession(("disposalValue", "invalid text"))
       lazy val result = target.submitMarketValueWhenGaveAway(request)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       "generate a 400 error" in {
         status(result) shouldEqual 400

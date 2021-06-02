@@ -24,16 +24,18 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.i18n.Lang
 import play.api.mvc.MessagesControllerComponents
 import views.html.helpers
+import views.html.helpers.summaryPartialTaxableGain
 
 class SummaryPartialTaxableGainViewSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with MockitoSugar {
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   implicit val mockLang = mock[Lang]
+  lazy val summaryPartialTaxableGainView = fakeApplication.injector.instanceOf[summaryPartialTaxableGain]
 
   "The workingOutSummary partial" when {
 
     "supplied with a flat calculation" should {
 
-      lazy val view = helpers.summaryPartialTaxableGain(
+      lazy val view = summaryPartialTaxableGainView(
         gain = 3000,
         totalDeductions = 2000,
         taxableGain = 1000

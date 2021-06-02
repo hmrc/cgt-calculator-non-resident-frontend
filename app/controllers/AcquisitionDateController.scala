@@ -18,43 +18,40 @@ package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.TaxDates
-import config.ApplicationConfig
 import connectors.CalculatorConnector
 import constructors.DefaultCalculationElectionConstructor
 import controllers.predicates.ValidActiveSession
 import forms.AcquisitionDateForm._
 import javax.inject.Inject
 import models.DateModel
-import play.api.Application
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-import views.html.calculation
+import views.html.calculation.acquisitionDate
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class  AcquisitionDateController @Inject()(http: DefaultHttpClient,
                                            calcConnector: CalculatorConnector,
                                            calcElectionConstructor: DefaultCalculationElectionConstructor,
-                                           mcc: MessagesControllerComponents)
-                                          (implicit val applicationConfig: ApplicationConfig,
-                                           implicit val application: Application)
+                                           mcc: MessagesControllerComponents,
+                                           acquisitionDateView: acquisitionDate)
+                                          (implicit ec: ExecutionContext)
                                               extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
 
   val acquisitionDate: Action[AnyContent] = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[DateModel](KeystoreKeys.acquisitionDate).map {
-      case Some(data) => Ok(calculation.acquisitionDate(acquisitionDateForm.fill(data)))
-      case None => Ok(calculation.acquisitionDate(acquisitionDateForm))
+      case Some(data) => Ok(acquisitionDateView(acquisitionDateForm.fill(data)))
+      case None => Ok(acquisitionDateView(acquisitionDateForm))
     }
   }
 
   val submitAcquisitionDate: Action[AnyContent] = ValidateSession.async { implicit request =>
 
-    def errorAction(form: Form[DateModel]) = Future.successful(BadRequest(calculation.acquisitionDate(form)))
+    def errorAction(form: Form[DateModel]) = Future.successful(BadRequest(acquisitionDateView(form)))
 
     def successAction(model: DateModel) = {
       calcConnector.saveFormData(KeystoreKeys.acquisitionDate, model).map(_ =>

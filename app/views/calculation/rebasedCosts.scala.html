@@ -15,14 +15,18 @@
  *@
 
 @import models.RebasedCostsModel
-@import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
-@import views.html.helpers._
-@import play.api.Application
 
-@import config.ApplicationConfig
-@(rebasedCosts: Form[RebasedCostsModel])(implicit request: Request[_], messages: Messages, application: Application, applicationConfig: ApplicationConfig)
+@this(
+    mainTemplate: main_template,
+    errorSummary: helpers.errorSummary,
+    form: FormWithCSRF,
+    formHiddenYesNoRadio: helpers.formHiddenYesNoRadio,
+    formInputMoney: helpers.formInputMoney
+)
 
-@main_template(Messages("calc.rebasedCosts.question")) {
+@(rebasedCosts: Form[RebasedCostsModel])(implicit request: Request[_], messages: Messages)
+
+@mainTemplate(Messages("calc.rebasedCosts.question")) {
 
     <a id="back-link" class="back-link" href="@controllers.routes.RebasedValueController.rebasedValue">@Messages("calc.base.back")</a>
 
@@ -30,7 +34,7 @@
 
     <h1 class="heading-xlarge">@Messages("calc.rebasedCosts.question")</h1>
 
-    @govHelpers.form(action = controllers.routes.RebasedCostsController.submitRebasedCosts) {
+    @form(action = controllers.routes.RebasedCostsController.submitRebasedCosts) {
 
         @formHiddenYesNoRadio(rebasedCosts,
                                 "hasRebasedCosts",

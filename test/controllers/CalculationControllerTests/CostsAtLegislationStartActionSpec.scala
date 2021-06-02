@@ -34,26 +34,30 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import views.html.calculation.costsAtLegislationStart
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class CostsAtLegislationStartActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
   implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
 
   val materializer = mock[Materializer]
+  val ec = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
   val defaultCache = mock[CacheMap]
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
+  val costsAtLegislationStartView = fakeApplication.injector.instanceOf[costsAtLegislationStart]
 
   class Setup {
     val controller = new CostsAtLegislationStartController(
       mockHttp,
       mockCalcConnector,
-      mockMessagesControllerComponents
-    )(mockConfig, fakeApplication)
+      mockMessagesControllerComponents,
+      costsAtLegislationStartView
+    )(ec)
   }
 
   def setupTarget(getData: Option[CostsAtLegislationStartModel]): CostsAtLegislationStartController = {
@@ -67,7 +71,7 @@ class CostsAtLegislationStartActionSpec extends CommonPlaySpec with WithCommonFa
       ArgumentMatchers.eq(KeystoreKeys.costAtLegislationStart), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(successfulSave)
 
-    new CostsAtLegislationStartController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig, fakeApplication)
+    new CostsAtLegislationStartController(mockHttp, mockCalcConnector, mockMessagesControllerComponents, costsAtLegislationStartView)(ec)
   }
 
   // GET Tests
@@ -89,7 +93,7 @@ class CostsAtLegislationStartActionSpec extends CommonPlaySpec with WithCommonFa
     "no data has already been saved" should {
       val target = setupTarget(None)
       lazy val result = target.costsAtLegislationStart(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       "return a 200" in {
         status(result) shouldBe 200
@@ -103,7 +107,7 @@ class CostsAtLegislationStartActionSpec extends CommonPlaySpec with WithCommonFa
     "some data has already been supplied" should {
       val target = setupTarget(Some(CostsAtLegislationStartModel("Yes", Some(1500))))
       lazy val result = target.costsAtLegislationStart(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       "return a 200" in {
         status(result) shouldBe 200
@@ -136,7 +140,7 @@ class CostsAtLegislationStartActionSpec extends CommonPlaySpec with WithCommonFa
       val target = setupTarget(None)
       lazy val request = fakeRequestToPOSTWithSession("hasCosts" -> "Yes", "costs" -> "")
       lazy val result = target.submitCostsAtLegislationStart(request)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       "return a 400" in {
         status(result) shouldBe 400

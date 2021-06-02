@@ -17,29 +17,26 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import config.ApplicationConfig
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import controllers.utils.RecoverableFuture
 import forms.CurrentIncomeForm._
 import javax.inject.Inject
 import models.{CurrentIncomeModel, PropertyLivedInModel}
-import play.api.Application
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-import views.html.calculation
+import views.html.calculation.currentIncome
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class CurrentIncomeController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
-                                        mcc: MessagesControllerComponents)
-                                       (implicit val applicationConfig: ApplicationConfig,
-                                        implicit val application: Application)
+                                        mcc: MessagesControllerComponents,
+                                        currentIncomeView: currentIncome)
+                                       (implicit ec: ExecutionContext)
                                           extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   def getBackLink(implicit hc: HeaderCarrier): Future[String] = {
@@ -61,7 +58,7 @@ class CurrentIncomeController @Inject()(http: DefaultHttpClient,calcConnector: C
     (for {
       backLink <- getBackLink
       form <- getForm
-    } yield Ok(calculation.currentIncome(form, backLink))).recoverToStart
+    } yield Ok(currentIncomeView(form, backLink))).recoverToStart
   }
 
   val submitCurrentIncome = ValidateSession.async { implicit request =>
@@ -79,7 +76,7 @@ class CurrentIncomeController @Inject()(http: DefaultHttpClient,calcConnector: C
     }
 
     currentIncomeForm.bindFromRequest.fold(
-      errors => getBackLink.map{backLink => BadRequest(calculation.currentIncome(errors, backLink))},
+      errors => getBackLink.map{backLink => BadRequest(currentIncomeView(errors, backLink))},
       success => successAction(success)
     )
   }

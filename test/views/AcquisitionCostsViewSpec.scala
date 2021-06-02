@@ -31,11 +31,12 @@ class AcquisitionCostsViewSpec extends CommonPlaySpec with WithCommonFakeApplica
 
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  lazy val acquisitionCostsView = fakeApplication.injector.instanceOf[acquisitionCosts]
 
   "Acquisition costs view" when {
 
     "supplied with no errors and is owner before legislation start" should {
-      lazy val view = acquisitionCosts(acquisitionCostsForm, "back-link", ownerBeforeLegislation = true)(fakeRequest,mockMessage, fakeApplication, mockConfig)
+      lazy val view = acquisitionCostsView(acquisitionCostsForm, "back-link", ownerBeforeLegislation = true)(fakeRequest,mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${messages.AcquisitionCosts.question}'" in {
@@ -140,13 +141,13 @@ class AcquisitionCostsViewSpec extends CommonPlaySpec with WithCommonFakeApplica
       }
 
       "produce the same output when render and f are called" in {
-        acquisitionCosts.render(acquisitionCostsForm, "back-link", ownerBeforeLegislation = true, fakeRequest,mockMessage, fakeApplication, mockConfig) shouldBe
-          acquisitionCosts.f(acquisitionCostsForm, "back-link", true)(fakeRequest,mockMessage, fakeApplication, mockConfig)
+        acquisitionCostsView.render(acquisitionCostsForm, "back-link", ownerBeforeLegislation = true, fakeRequest,mockMessage) shouldBe
+          acquisitionCostsView.f(acquisitionCostsForm, "back-link", true)(fakeRequest,mockMessage)
       }
     }
 
     "is owner after legislation start" should {
-      lazy val view = acquisitionCosts(acquisitionCostsForm, "back-link", ownerBeforeLegislation = false)(fakeRequest,mockMessage, fakeApplication, mockConfig)
+      lazy val view = acquisitionCostsView(acquisitionCostsForm, "back-link", ownerBeforeLegislation = false)(fakeRequest,mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have a list" which {
@@ -161,7 +162,7 @@ class AcquisitionCostsViewSpec extends CommonPlaySpec with WithCommonFakeApplica
 
   "supplied with errors" should {
     lazy val form = acquisitionCostsForm.bind(Map("acquisitionCosts" -> "a"))
-    lazy val view = acquisitionCosts(form, "back-link", ownerBeforeLegislation = true)(fakeRequest,mockMessage, fakeApplication, mockConfig)
+    lazy val view = acquisitionCostsView(form, "back-link", ownerBeforeLegislation = true)(fakeRequest,mockMessage)
     lazy val document = Jsoup.parse(view.body)
 
     "have an error summary" in {

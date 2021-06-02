@@ -24,16 +24,19 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.i18n.{Lang, Messages}
 import play.api.mvc.MessagesControllerComponents
 import views.html.helpers
+import views.html.helpers.summaryPartialTaxToPay
 
 
 class SummaryPartialTaxToPayViewSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with MockitoSugar {
   implicit val mockLang = mock[Lang]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  lazy val summaryPartialTaxToPayView = fakeApplication.injector.instanceOf[summaryPartialTaxToPay]
+
   "The workingOutSummary partial" when {
 
     "supplied with a flat calculation with a taxable gain and both tax rates" should {
 
-      lazy val view = helpers.summaryPartialTaxToPay(
+      lazy val view = summaryPartialTaxToPayView(
         taxToPay = 10000,
         gainAtBandOne = 1000,
         gainAtBandTwo = 500,
@@ -87,7 +90,7 @@ class SummaryPartialTaxToPayViewSpec extends CommonPlaySpec with WithCommonFakeA
 
     "supplied with a flat calculation with a taxable gain and only the lower tax rate" should {
 
-      lazy val view = helpers.summaryPartialTaxToPay(
+      lazy val view = summaryPartialTaxToPayView(
         taxToPay = 10000,
         gainAtBandOne = 1000,
         gainAtBandTwo = 0,
@@ -109,7 +112,7 @@ class SummaryPartialTaxToPayViewSpec extends CommonPlaySpec with WithCommonFakeA
 
     "supplied with a flat calculation with a taxable gain and only the higher tax rate" should {
 
-      lazy val view = helpers.summaryPartialTaxToPay(
+      lazy val view = summaryPartialTaxToPayView(
         taxToPay = 10000,
         gainAtBandOne = 0,
         gainAtBandTwo = 1000,
@@ -131,7 +134,7 @@ class SummaryPartialTaxToPayViewSpec extends CommonPlaySpec with WithCommonFakeA
 
     "supplied with a flat calculation with a loss" should {
 
-      lazy val view = helpers.summaryPartialTaxToPay(
+      lazy val view = summaryPartialTaxToPayView(
         taxToPay = 0,
         gainAtBandOne = 10,
         gainAtBandTwo = 10,

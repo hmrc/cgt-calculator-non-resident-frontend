@@ -31,12 +31,13 @@ class WorthBeforeLegislationStartViewSpec extends CommonPlaySpec with WithCommon
 
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  lazy val worthBeforeLegislationStartView = fakeApplication.injector.instanceOf[worthBeforeLegislationStart]
 
   "The Worth Before Legislation Start view spec" when {
 
     "supplied with no errors" should {
 
-      lazy val view = worthBeforeLegislationStart(worthBeforeLegislationStartForm)(fakeRequest, mockMessage,fakeApplication,mockConfig)
+      lazy val view = worthBeforeLegislationStartView(worthBeforeLegislationStartForm)(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${WorthBeforeLegislationStart.question}'" in {
@@ -121,7 +122,7 @@ class WorthBeforeLegislationStartViewSpec extends CommonPlaySpec with WithCommon
         }
       }
       "should produce the same output when render and f are called" in {
-        worthBeforeLegislationStart.f(worthBeforeLegislationStartForm)(fakeRequest, mockMessage,fakeApplication,mockConfig) shouldBe worthBeforeLegislationStart.render(worthBeforeLegislationStartForm, fakeRequest, mockMessage,fakeApplication,mockConfig)
+        worthBeforeLegislationStartView.f(worthBeforeLegislationStartForm)(fakeRequest, mockMessage) shouldBe worthBeforeLegislationStartView.render(worthBeforeLegislationStartForm, fakeRequest, mockMessage)
       }
 
       }
@@ -129,7 +130,7 @@ class WorthBeforeLegislationStartViewSpec extends CommonPlaySpec with WithCommon
     "supplied with a form with errors" should {
 
       lazy val form = worthBeforeLegislationStartForm.bind(Map("worthBeforeLegislationStart" -> "a"))
-      lazy val view = worthBeforeLegislationStart(form)(fakeRequest, mockMessage,fakeApplication,mockConfig)
+      lazy val view = worthBeforeLegislationStartView(form)(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

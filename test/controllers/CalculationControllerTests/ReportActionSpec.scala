@@ -37,19 +37,22 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import views.html.calculation.summaryReport
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class ReportActionSpec @Inject()(pdfGenerator: PdfGenerator) extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with MockitoSugar {
 
   implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val materializer = mock[Materializer]
+  val ec = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
   val mockAnswersConstructor = mock[AnswersConstructor]
   val defaultCache = mock[CacheMap]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
+  val summaryReportView = fakeApplication.injector.instanceOf[summaryReport]
 
   class Setup {
     val controller = new ReportController(
@@ -58,8 +61,9 @@ class ReportActionSpec @Inject()(pdfGenerator: PdfGenerator) extends CommonPlayS
       mockCalcConnector,
       mockAnswersConstructor,
       mockMessagesControllerComponents,
-      pdfGenerator
-    )(mockConfig, fakeApplication)
+      pdfGenerator,
+      summaryReportView
+    )(ec)
   }
 
   def setupTarget
@@ -127,7 +131,7 @@ class ReportActionSpec @Inject()(pdfGenerator: PdfGenerator) extends CommonPlayS
     when(mockCalcConnector.calculateTotalCosts(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(BigDecimal(1000.00)))
 
-    new ReportController(fakeApplication.configuration, mockHttp, mockCalcConnector, mockAnswersConstructor, mockMessagesControllerComponents, pdfGenerator)(mockConfig, fakeApplication)
+    new ReportController(fakeApplication.configuration, mockHttp, mockCalcConnector, mockAnswersConstructor, mockMessagesControllerComponents, pdfGenerator, summaryReportView)(ec)
   }
 
   val model = TotalGainAnswersModel(DateModel(5, 10, 2016),

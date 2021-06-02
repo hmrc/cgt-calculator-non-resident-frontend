@@ -18,6 +18,14 @@
 @import common.nonresident.CalculationType
 @import uk.gov.hmrc.play.views.helpers.MoneyPounds
 
+@this(
+    summaryPartialDeductionsSection: summaryPartialDeductionsSection,
+    summaryPartialWorkingOutSection: summaryPartialWorkingOutSection,
+    summaryPartialTaxableGain: summaryPartialTaxableGain,
+    summaryPartialTaxToPay: summaryPartialTaxToPay,
+    summaryNumericRow: summaryNumericRow
+)
+
 @(calculationResult: TotalTaxOwedModel, taxYearModel: TaxYearModel, calculationType: String,
 disposalValue: BigDecimal, acquisitionValue: BigDecimal, totalCosts: BigDecimal, flatGain: Option[BigDecimal] = None, reliefsUsed: BigDecimal = 0)(implicit request: Request[_], messages: Messages, messagesApi: Option[MessagesApi] = None)
 

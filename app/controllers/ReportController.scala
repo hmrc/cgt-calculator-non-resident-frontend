@@ -19,7 +19,6 @@ package controllers
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.nonresident.CalculationType
 import common.nonresident.TaxableGainCalculation._
-import config.ApplicationConfig
 import connectors.CalculatorConnector
 import constructors.{AnswersConstructor, YourAnswersConstructor}
 import controllers.predicates.ValidActiveSession
@@ -27,16 +26,15 @@ import controllers.utils.RecoverableFuture
 import it.innove.play.pdf.PdfGenerator
 import javax.inject.Inject
 import models._
-import play.api.{Application, Configuration}
+import play.api.Configuration
 import play.api.i18n.{I18nSupport, Lang, Messages}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, RequestHeader}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-import views.html.calculation
+import views.html.calculation.summaryReport
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 
 class ReportController @Inject()(config: Configuration,
@@ -44,8 +42,8 @@ class ReportController @Inject()(config: Configuration,
                                  calcConnector: CalculatorConnector,
                                  answersConstructor: AnswersConstructor,
                                  mcc: MessagesControllerComponents,
-                                 pdfGenerator: PdfGenerator)(implicit val applicationConfig: ApplicationConfig,
-                                                             implicit val application: Application)
+                                 pdfGenerator: PdfGenerator,
+                                 summaryReportView: summaryReport)(implicit ec: ExecutionContext)
                                   extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   lazy val platformHost: Option[String] = config.getOptional[String]("platform.frontend.host")
@@ -131,7 +129,7 @@ class ReportController @Inject()(config: Configuration,
       lazy val view = calculationType.get.calculationType match {
         case CalculationType.flat =>
           implicit val lang: Lang = mcc.messagesApi.preferred(request).lang
-          calculation.summaryReport(questionAnswerRows, calculationResult, taxYearModel.get, calculationType.get.calculationType,
+          summaryReportView(questionAnswerRows, calculationResult, taxYearModel.get, calculationType.get.calculationType,
             answers.disposalValueModel.disposalValue,
             answers.acquisitionValueModel.acquisitionValueAmt,
             totalCosts,
@@ -139,7 +137,7 @@ class ReportController @Inject()(config: Configuration,
 
         case CalculationType.timeApportioned =>
           implicit val lang: Lang = mcc.messagesApi.preferred(request).lang
-          calculation.summaryReport(questionAnswerRows, calculationResult, taxYearModel.get, calculationType.get.calculationType,
+          summaryReportView(questionAnswerRows, calculationResult, taxYearModel.get, calculationType.get.calculationType,
             answers.disposalValueModel.disposalValue,
             answers.acquisitionValueModel.acquisitionValueAmt,
             totalCosts,
@@ -148,7 +146,7 @@ class ReportController @Inject()(config: Configuration,
 
         case CalculationType.rebased =>
           implicit val lang: Lang = mcc.messagesApi.preferred(request).lang
-          calculation.summaryReport(questionAnswerRows, calculationResult, taxYearModel.get, calculationType.get.calculationType,
+          summaryReportView(questionAnswerRows, calculationResult, taxYearModel.get, calculationType.get.calculationType,
             answers.disposalValueModel.disposalValue,
             answers.rebasedValueModel.get.rebasedValueAmt,
             totalCosts,

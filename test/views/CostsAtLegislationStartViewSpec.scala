@@ -30,11 +30,12 @@ class CostsAtLegislationStartViewSpec extends CommonPlaySpec with WithCommonFake
 
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  lazy val costsAtLegislationStartView = fakeApplication.injector.instanceOf[costsAtLegislationStart]
 
   "The costs at legislation start date view" when {
 
     "not supplied with a pre-existing stored model" should {
-      lazy val view = costsAtLegislationStart(costsAtLegislationStartForm)(fakeRequest, mockMessage, fakeApplication, mockConfig)
+      lazy val view = costsAtLegislationStartView(costsAtLegislationStartForm)(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       s"Have the title ${messages.CostsAtLegislationStart.title}" in {
@@ -114,8 +115,8 @@ class CostsAtLegislationStartViewSpec extends CommonPlaySpec with WithCommonFake
       }
 
       "should produce the same output when render and f are called" in {
-        costsAtLegislationStart.f(costsAtLegislationStartForm)(fakeRequest, mockMessage, fakeApplication, mockConfig) shouldBe
-          costsAtLegislationStart.render(costsAtLegislationStartForm, fakeRequest, mockMessage, fakeApplication, mockConfig)
+        costsAtLegislationStartView.f(costsAtLegislationStartForm)(fakeRequest, mockMessage) shouldBe
+          costsAtLegislationStartView.render(costsAtLegislationStartForm, fakeRequest, mockMessage)
       }
     }
 
@@ -124,7 +125,7 @@ class CostsAtLegislationStartViewSpec extends CommonPlaySpec with WithCommonFake
         "hasCosts" -> "Yes",
         "costs" -> ""
       ))
-      lazy val view = costsAtLegislationStart(form)(fakeRequest, mockMessage, fakeApplication, mockConfig)
+      lazy val view = costsAtLegislationStartView(form)(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

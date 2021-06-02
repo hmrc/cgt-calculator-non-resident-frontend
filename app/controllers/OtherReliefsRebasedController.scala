@@ -18,7 +18,6 @@ package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.nonresident.TaxableGainCalculation._
-import config.ApplicationConfig
 import connectors.CalculatorConnector
 import constructors.AnswersConstructor
 import controllers.predicates.ValidActiveSession
@@ -26,21 +25,21 @@ import controllers.utils.RecoverableFuture
 import forms.OtherReliefsForm._
 import javax.inject.Inject
 import models.{CalculationResultsWithTaxOwedModel, OtherReliefsModel, TotalGainResultsModel}
-import play.api.Application
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-import views.html.calculation
+import views.html.calculation.otherReliefsRebased
 
-import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.ExecutionContext
 
 class OtherReliefsRebasedController @Inject()(http: DefaultHttpClient,
                                               calcConnector: CalculatorConnector,
                                               answersConstructor: AnswersConstructor,
-                                              mcc: MessagesControllerComponents)(implicit val applicationConfig: ApplicationConfig,
-                                                                                 implicit val application: Application)
+                                              mcc: MessagesControllerComponents,
+                                              otherReliefsRebasedView: otherReliefsRebased)
+                                             (implicit ec: ExecutionContext)
                                                 extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   val otherReliefsRebased: Action[AnyContent] = ValidateSession.async { implicit request =>
@@ -52,8 +51,8 @@ class OtherReliefsRebasedController @Inject()(http: DefaultHttpClient,
       val gain = totalGain.fold(BigDecimal(0))(_.rebasedGain.get)
       val chargeableGain = chargeableGainResult.fold(BigDecimal(0))(_.rebasedResult.get.taxableGain)
 
-      val result = model.fold(calculation.otherReliefsRebased(otherReliefsForm, hasExistingRelief, chargeableGain, gain)) { data =>
-        calculation.otherReliefsRebased(otherReliefsForm.fill(data), hasExistingRelief, chargeableGain, gain)
+      val result = model.fold(otherReliefsRebasedView(otherReliefsForm, hasExistingRelief, chargeableGain, gain)) { data =>
+        otherReliefsRebasedView(otherReliefsForm.fill(data), hasExistingRelief, chargeableGain, gain)
       }
 
       Ok(result)
@@ -66,10 +65,10 @@ class OtherReliefsRebasedController @Inject()(http: DefaultHttpClient,
       propertyLivedIn <- getPropertyLivedInResponse(gainExists, calcConnector)
       prrAnswers <- getPrrResponse(propertyLivedIn, calcConnector)
       totalGainWithPRR <- getPrrIfApplicable(answers, prrAnswers, propertyLivedIn, calcConnector)(hc)
-      allAnswers <- getFinalSectionsAnswers(gain.get, totalGainWithPRR, calcConnector, answersConstructor)(hc)
+      allAnswers <- getFinalSectionsAnswers(gain.get, totalGainWithPRR, calcConnector, answersConstructor)
       taxYear <- getTaxYear(answers, calcConnector)(hc)
       maxAEA <- getMaxAEA(taxYear, calcConnector)(hc)
-      chargeableGainResult <- getChargeableGain(answers, prrAnswers, propertyLivedIn, allAnswers, maxAEA.get, calcConnector)(hc)
+      chargeableGainResult <- getChargeableGain(answers, prrAnswers, propertyLivedIn, allAnswers, maxAEA.get, calcConnector)
       reliefs <- calcConnector.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsRebased)
     } yield routeRequest(reliefs, gain, chargeableGainResult)).recoverToStart
   }
@@ -84,10 +83,10 @@ class OtherReliefsRebasedController @Inject()(http: DefaultHttpClient,
         propertyLivedIn <- getPropertyLivedInResponse(gainExists, calcConnector)
         prrAnswers <- getPrrResponse(propertyLivedIn, calcConnector)
         totalGainWithPRR <- getPrrIfApplicable(answers, prrAnswers, propertyLivedIn, calcConnector)(hc)
-        allAnswers <- getFinalSectionsAnswers(gain.get, totalGainWithPRR, calcConnector, answersConstructor)(hc)
+        allAnswers <- getFinalSectionsAnswers(gain.get, totalGainWithPRR, calcConnector, answersConstructor)
         taxYear <- getTaxYear(answers, calcConnector)(hc)
         maxAEA <- getMaxAEA(taxYear, calcConnector)(hc)
-        chargeableGainResult <- getChargeableGain(answers, prrAnswers, propertyLivedIn, allAnswers, maxAEA.get, calcConnector)(hc)
+        chargeableGainResult <- getChargeableGain(answers, prrAnswers, propertyLivedIn, allAnswers, maxAEA.get, calcConnector)
         route <- errorRoute(gain, chargeableGainResult, form)
       } yield route).recoverToStart
     }
@@ -98,8 +97,8 @@ class OtherReliefsRebasedController @Inject()(http: DefaultHttpClient,
       val chargeableGain = chargeableGainResult.fold(BigDecimal(0))(_.rebasedResult.get.taxableGain)
       calcConnector.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsRebased).map {
 
-        case Some(_) => BadRequest(calculation.otherReliefsRebased(form, hasExistingReliefAmount = true, chargeableGain, gain))
-        case _ => BadRequest(calculation.otherReliefsRebased(form, hasExistingReliefAmount = false, chargeableGain, gain))
+        case Some(_) => BadRequest(otherReliefsRebasedView(form, hasExistingReliefAmount = true, chargeableGain, gain))
+        case _ => BadRequest(otherReliefsRebasedView(form, hasExistingReliefAmount = false, chargeableGain, gain))
       }
     }
 

@@ -29,11 +29,12 @@ class SessionTimeoutViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   implicit lazy val fakeApp: Application = fakeApplication
+  lazy val sessionTimeoutView = fakeApplication.injector.instanceOf[sessionTimeout]
 
 
   "Session Timeout View" should {
     "produce the same output when render and f are called" in {
-      sessionTimeout.f()(FakeRequest("GET", ""), mockMessage, fakeApplication, mockConfig) shouldBe sessionTimeout.render(FakeRequest("GET", ""), mockMessage, fakeApplication, mockConfig)
+      sessionTimeoutView.f()(FakeRequest("GET", ""), mockMessage) shouldBe sessionTimeoutView.render(FakeRequest("GET", ""), mockMessage)
     }
   }
 }

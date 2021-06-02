@@ -15,19 +15,20 @@
  *@
 
 @import models.QuestionAnswerModel
-@import views.html.helpers._
-@import uk.gov.hmrc.play.views.html.helpers.form
 @import java.time._
-@import uk.gov.hmrc.play.views.helpers._
 @import common.Dates._
 @import common.Dates.TemplateImplicits._
 @import common.Transformers.{booleanToMessageString, localDateMonthKey, checkIfBooleanAsString, finalDate}
-@import play.api.Application
+@import uk.gov.hmrc.play.views.helpers.MoneyPounds
 
-@import config.ApplicationConfig
-@(questions: Seq[(QuestionAnswerModel[Any])], backLink: String)(implicit request: Request[_], messages: Messages, lang: Lang, application: Application, messagesApi: Option[MessagesApi] = None, applicationConfig: ApplicationConfig)
+@this(
+    mainTemplate: main_template,
+    form: FormWithCSRF
+)
 
-@main_template(messages("calc.checkYourAnswers.title"), articleLayout = false){
+@(questions: Seq[(QuestionAnswerModel[Any])], backLink: String)(implicit request: Request[_], messages: Messages, lang: Lang, messagesApi: Option[MessagesApi] = None)
+
+@mainTemplate(messages("calc.checkYourAnswers.title"), articleLayout = false){
 
     <a id="back-link" class="back-link" href="@backLink">@messages("calc.base.back")</a>
 

@@ -36,27 +36,30 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import views.html.calculation.disposalCosts
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class DisposalCostsActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper with BeforeAndAfterEach {
   implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
 
   val materializer = mock[Materializer]
+  val ec = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
   val defaultCache = mock[CacheMap]
   val mockMessage = mock[Messages]
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
-
+  val disposalCostsView = fakeApplication.injector.instanceOf[disposalCosts]
 
   class Setup {
     val controller = new DisposalCostsController(
       mockHttp,
       mockCalcConnector,
-      mockMessagesControllerComponents
-    )(mockConfig, fakeApplication)
+      mockMessagesControllerComponents,
+      disposalCostsView
+    )(ec)
   }
 
   def setupTarget(getData: Option[DisposalCostsModel],
@@ -76,7 +79,7 @@ class DisposalCostsActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new DisposalCostsController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig, fakeApplication)
+    new DisposalCostsController(mockHttp, mockCalcConnector, mockMessagesControllerComponents, disposalCostsView)(ec)
   }
 
   //GET Tests
@@ -93,14 +96,14 @@ class DisposalCostsActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
       s"have the title ${messages.question}" in new Setup {
         val target = setupTarget(None, None, None)
         lazy val result = target.disposalCosts(fakeRequestWithSession)
-        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
         document.getElementsByTag("title").text shouldBe messages.question
       }
 
       "have a back link ot the missing data route" in new Setup {
         val target = setupTarget(None, None, None)
         lazy val result = target.disposalCosts(fakeRequestWithSession)
-        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
         document.select("#back-link").attr("href") shouldEqual common.DefaultRoutes.missingDataRoute
       }
     }
@@ -116,7 +119,7 @@ class DisposalCostsActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
       s"have the title ${messages.question}" in {
         val target = setupTarget(None, None, None)
         lazy val result = target.disposalCosts(fakeRequestWithSession)
-        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
         document.getElementsByTag("title").text shouldBe messages.question
       }
@@ -148,14 +151,14 @@ class DisposalCostsActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
       s"have the title ${messages.question}" in new Setup {
         val target = setupTarget(None, Some(SoldOrGivenAwayModel(false)), Some(SoldForLessModel(true)))
         lazy val result = target.disposalCosts(fakeRequestWithSession)
-        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
         document.getElementsByTag("title").text shouldBe messages.question
       }
 
       "have a back link to the market value controller gave away" in new Setup {
         val target = setupTarget(None, Some(SoldOrGivenAwayModel(false)), Some(SoldForLessModel(true)))
         lazy val result = target.disposalCosts(fakeRequestWithSession)
-        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
         document.select("#back-link").attr("href") shouldEqual routes.MarketValueWhenSoldOrGaveAwayController.marketValueWhenGaveAway().url
       }
     }
@@ -171,14 +174,14 @@ class DisposalCostsActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
       s"have the title ${messages.question}" in {
         val target = setupTarget(None, Some(SoldOrGivenAwayModel(true)), Some(SoldForLessModel(true)))
         lazy val result = target.disposalCosts(fakeRequestWithSession)
-        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
         document.getElementsByTag("title").text shouldBe messages.question
       }
 
       "have a back link to the market value controller when sold" in {
         val target = setupTarget(None, Some(SoldOrGivenAwayModel(true)), Some(SoldForLessModel(true)))
         lazy val result = target.disposalCosts(fakeRequestWithSession)
-        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
         document.select("#back-link").attr("href") shouldEqual routes.MarketValueWhenSoldOrGaveAwayController.marketValueWhenSold().url
       }
     }
@@ -194,14 +197,14 @@ class DisposalCostsActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
       s"have the title ${messages.question}" in {
         val target = setupTarget(None, Some(SoldOrGivenAwayModel(true)), Some(SoldForLessModel(false)))
         lazy val result = target.disposalCosts(fakeRequestWithSession)
-        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
         document.getElementsByTag("title").text shouldBe messages.question
       }
 
       "have a back link to the market value controller disposal value" in {
         val target = setupTarget(None, Some(SoldOrGivenAwayModel(true)), Some(SoldForLessModel(false)))
         lazy val result = target.disposalCosts(fakeRequestWithSession)
-        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
         document.select("#back-link").attr("href") shouldEqual routes.DisposalValueController.disposalValue().url
       }
     }
@@ -240,7 +243,7 @@ class DisposalCostsActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
         val target = setupTarget(None, None, None)
         lazy val request = fakeRequestToPOSTWithSession(("disposalCosts", ""))
         lazy val result = target.submitDisposalCosts(request)
-        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
         document.title shouldEqual messages.question
       }
     }

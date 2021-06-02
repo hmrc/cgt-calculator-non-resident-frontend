@@ -35,19 +35,22 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import views.html.calculation.otherReliefs
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class OtherReliefsActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
   implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val materializer = mock[Materializer]
+  val ec = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
   val mockAnswersConstructor = mock[AnswersConstructor]
   val defaultCache = mock[CacheMap]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
+  val otherReliefsView = fakeApplication.injector.instanceOf[otherReliefs]
 
 
   class Setup {
@@ -55,8 +58,9 @@ class OtherReliefsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
       mockHttp,
       mockCalcConnector,
       mockAnswersConstructor,
-      mockMessagesControllerComponents
-    )(mockConfig, fakeApplication)
+      mockMessagesControllerComponents,
+      otherReliefsView
+    )(ec)
   }
   def setupTarget(getData: Option[OtherReliefsModel],
                   calculationResultsModel: CalculationResultsWithTaxOwedModel,
@@ -103,7 +107,7 @@ class OtherReliefsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new OtherReliefsController(mockHttp, mockCalcConnector, mockAnswersConstructor, mockMessagesControllerComponents)(mockConfig, fakeApplication)
+    new OtherReliefsController(mockHttp, mockCalcConnector, mockAnswersConstructor, mockMessagesControllerComponents, otherReliefsView)(ec)
   }
 
   val personalDetailsModel = TotalPersonalDetailsCalculationModel(
@@ -130,7 +134,7 @@ class OtherReliefsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
         calculationResultsModel,
         personalDetailsModel)
       lazy val result = target.otherReliefs(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       "return a status of 200" in {
         status(result) shouldBe 200
@@ -151,7 +155,7 @@ class OtherReliefsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
         calculationResultsModel,
         personalDetailsModel)
       lazy val result = target.otherReliefs(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       "return a status of 200" in {
         status(result) shouldBe 200
@@ -202,7 +206,7 @@ class OtherReliefsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
         personalDetailsModel)
       lazy val request = fakeRequestToPOSTWithSession("otherReliefs" -> "")
       lazy val result = target.submitOtherReliefs(request)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       "return a status of 400" in {
         status(result) shouldBe 400

@@ -28,23 +28,10 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.play.bootstrap.frontend.http.ApplicationException
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 
 class CgtErrorHandlerSpec extends CommonPlaySpec with WithCommonFakeApplication {
-
-  lazy val actionBuilder = app.injector.instanceOf[DefaultActionBuilder]
-
-  def routeWithError[A](app: Application, request: Request[A])
-                       (implicit writeable: Writeable[A]): Option[Future[Result]] = {
-    route(app, request).map {
-      _.recoverWith {
-        case e =>
-          app.errorHandler.onServerError(request, e)
-      }
-    }
-  }
 
   val routerForTest: Router = {
     import play.api.routing.sird._
@@ -62,7 +49,21 @@ class CgtErrorHandlerSpec extends CommonPlaySpec with WithCommonFakeApplication 
     }
   }
 
-  implicit lazy val app = new GuiceApplicationBuilder().router(routerForTest).build()
+  val app = new GuiceApplicationBuilder().router(routerForTest).build()
+
+  lazy val actionBuilder = app.injector.instanceOf[DefaultActionBuilder]
+
+  implicit val ec = app.injector.instanceOf[ExecutionContext]
+
+  def routeWithError[A](app: Application, request: Request[A])
+                       (implicit writeable: Writeable[A]): Option[Future[Result]] = {
+    route(app, request).map {
+      _.recoverWith {
+        case e =>
+          app.errorHandler.onServerError(request, e)
+      }
+    }
+  }
 
   "Application returns OK for no exception" in {
     val request = FakeRequest("GET", "/ok")

@@ -32,6 +32,7 @@ class DisposalDateViewSpec extends CommonPlaySpec with WithCommonFakeApplication
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   private val api: MessagesApi = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi
   implicit lazy val mockMessage = api.preferred(fakeRequest)
+  lazy val disposalDateView = fakeApplication.injector.instanceOf[disposalDate]
 
   lazy val welshLanguage: Lang = Lang("cy")
   lazy val cyMockMessage = api.preferred(Seq(
@@ -42,10 +43,10 @@ class DisposalDateViewSpec extends CommonPlaySpec with WithCommonFakeApplication
 
     "return some HTML" which {
 
-      lazy val view = disposalDate(disposalDateForm)(fakeRequest, mockMessage, Lang("en"), fakeApplication, mockConfig)
+      lazy val view = disposalDateView(disposalDateForm)(fakeRequest, mockMessage, Lang("en"))
       lazy val document = Jsoup.parse(view.body)
 
-      lazy val welshView = disposalDate(disposalDateForm)(fakeRequest, cyMockMessage, welshLanguage, fakeApplication, mockConfig)
+      lazy val welshView = disposalDateView(disposalDateForm)(fakeRequest, cyMockMessage, welshLanguage)
       lazy val welshDocument = Jsoup.parse(welshView.body)
 
       "have the title 'When did you sign the contract that made someone else the owner?'" in {
@@ -105,13 +106,13 @@ class DisposalDateViewSpec extends CommonPlaySpec with WithCommonFakeApplication
       }
 
       "should produce the same output when render and f are called" in {
-        disposalDate.f(disposalDateForm)(fakeRequest, mockMessage, Lang("en"), fakeApplication, mockConfig) shouldBe disposalDate.render(disposalDateForm, fakeRequest, mockMessage, Lang("en"), fakeApplication, mockConfig)
+        disposalDateView.f(disposalDateForm)(fakeRequest, mockMessage, Lang("en")) shouldBe disposalDateView.render(disposalDateForm, fakeRequest, mockMessage, Lang("en"))
       }
     }
 
     "supplied with errors" should {
       lazy val form = disposalDateForm.bind(Map("disposalDateDay" -> "a"))
-      lazy val view = disposalDate(form)(fakeRequest, mockMessage, Lang("en"), fakeApplication, mockConfig)
+      lazy val view = disposalDateView(form)(fakeRequest, mockMessage, Lang("en"))
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {
