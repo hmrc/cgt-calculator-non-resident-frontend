@@ -23,16 +23,16 @@ import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.i18n.Lang
 import play.api.mvc.MessagesControllerComponents
-import views.html.helpers
+import views.html.helpers.summaryPartialDeductionsSection
 
 
 class SummaryPartialDeductionsSectionViewSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with MockitoSugar {
   implicit val mockLang = mock[Lang]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
-
+  lazy val summaryPartialDeductionsSectionView = fakeApplication.injector.instanceOf[summaryPartialDeductionsSection]
   "The deductions section with all options supplied" should {
 
-    lazy val view = helpers.summaryPartialDeductionsSection(
+    lazy val view = summaryPartialDeductionsSectionView(
       reliefsUsed = 10000,
       aeaUsed = 11000,
       inYearLossesUsed = 10,
@@ -98,7 +98,7 @@ class SummaryPartialDeductionsSectionViewSpec extends CommonPlaySpec with WithCo
 
   "The deductions section with no options supplied" should {
 
-    lazy val view = helpers.summaryPartialDeductionsSection(
+    lazy val view = summaryPartialDeductionsSectionView(
       reliefsUsed = 0,
       aeaUsed = 11000,
       inYearLossesUsed = 0,

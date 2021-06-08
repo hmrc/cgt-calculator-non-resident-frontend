@@ -32,6 +32,7 @@ class SummaryReportViewSpec extends CommonPlaySpec with WithCommonFakeApplicatio
 
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  lazy val summaryReportView = fakeApplication.injector.instanceOf[summaryReport]
 
   "The report summary view" when {
 
@@ -64,11 +65,11 @@ class SummaryReportViewSpec extends CommonPlaySpec with WithCommonFakeApplicatio
       val questionAnswer = QuestionAnswerModel[String]("text", "1000", "test-question", None)
       val seqQuestionAnswers = Seq(questionAnswer, questionAnswer)
 
-      lazy val view = summaryReport(seqQuestionAnswers, totalTaxOwedModel, taxYear, sumModelFlat.calculationElectionModel.calculationType,
+      lazy val view = summaryReportView(seqQuestionAnswers, totalTaxOwedModel, taxYear, sumModelFlat.calculationElectionModel.calculationType,
         disposalValue = 1000.00,
         acquisitionValue = 1000.00,
         totalCosts = 1000,
-        flatGain = Some(1000.00))(fakeRequest, mockMessage, Lang("en"), fakeApplication, mockConfig)
+        flatGain = Some(1000.00))(fakeRequest, mockMessage, Lang("en"))
 
       lazy val document = Jsoup.parse(view.body)
 
@@ -89,8 +90,8 @@ class SummaryReportViewSpec extends CommonPlaySpec with WithCommonFakeApplicatio
       }
 
       "should produce the same output when render and f are called" in {
-        summaryReport.f(seqQuestionAnswers, totalTaxOwedModel, taxYear, sumModelFlat.calculationElectionModel.calculationType, 1000.00, 1000.00, 1000, Some(1000.00), BigDecimal(100.0))(fakeRequest, mockMessage, Lang("en"), fakeApplication, mockConfig) shouldBe
-          summaryReport.render(seqQuestionAnswers, totalTaxOwedModel, taxYear, sumModelFlat.calculationElectionModel.calculationType, 1000.00, 1000.00, 1000, Some(1000.00), BigDecimal(100.0), fakeRequest, mockMessage, Lang("en"), fakeApplication, mockConfig)
+        summaryReportView.f(seqQuestionAnswers, totalTaxOwedModel, taxYear, sumModelFlat.calculationElectionModel.calculationType, 1000.00, 1000.00, 1000, Some(1000.00), BigDecimal(100.0))(fakeRequest, mockMessage, Lang("en")) shouldBe
+          summaryReportView.render(seqQuestionAnswers, totalTaxOwedModel, taxYear, sumModelFlat.calculationElectionModel.calculationType, 1000.00, 1000.00, 1000, Some(1000.00), BigDecimal(100.0), fakeRequest, mockMessage, Lang("en"))
 
       }
     }
@@ -123,11 +124,11 @@ class SummaryReportViewSpec extends CommonPlaySpec with WithCommonFakeApplicatio
       val questionAnswer = QuestionAnswerModel[String]("text", "1000", "test-question", None)
       val seqQuestionAnswers = Seq(questionAnswer, questionAnswer)
 
-      lazy val view = summaryReport(seqQuestionAnswers, totalTaxOwedModel, taxYear, sumModelFlat.calculationElectionModel.calculationType,
+      lazy val view = summaryReportView(seqQuestionAnswers, totalTaxOwedModel, taxYear, sumModelFlat.calculationElectionModel.calculationType,
         disposalValue = 1000.00,
         acquisitionValue = 1000.00,
         totalCosts = 1000,
-        flatGain = Some(1000.00))(fakeRequest, mockMessage, Lang("en"), fakeApplication, mockConfig)
+        flatGain = Some(1000.00))(fakeRequest, mockMessage, Lang("en"))
 
       lazy val document = Jsoup.parse(view.body)
 

@@ -15,7 +15,8 @@
  *@
 
 @import common.nonresident.CalculationType
-@import views.html.helpers._
+
+@this(summaryNumericRow: summaryNumericRow)
 
 @(calculationType: String, disposalValue: BigDecimal, acquisitionValue: BigDecimal, totalCosts: BigDecimal, totalGain: BigDecimal = 0,
 percentageTotalGain: BigDecimal = 0, percentageOfGain: Int = 0)(implicit request: Request[_], messages: Messages, messagesApi: Option[MessagesApi] = None)

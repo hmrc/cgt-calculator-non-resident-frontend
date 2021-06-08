@@ -35,8 +35,9 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import views.html.calculation.rebasedValue
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class RebasedValueActionSpec @Inject()(rebasedValueController: RebasedValueController)
   extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
@@ -44,7 +45,9 @@ class RebasedValueActionSpec @Inject()(rebasedValueController: RebasedValueContr
   implicit val hc = new HeaderCarrier()
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   lazy val materializer = mock[Materializer]
+  val ec = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
+  val rebasedValueView = fakeApplication.injector.instanceOf[rebasedValue]
 
   def setupTarget(getData: Option[RebasedValueModel],
                   acquisitionDateModel: Option[DateModel] = Some(DateModel(10, 10, 2015))): RebasedValueController = {
@@ -64,7 +67,7 @@ class RebasedValueActionSpec @Inject()(rebasedValueController: RebasedValueContr
       .thenReturn(Future.successful(mock[CacheMap]))
 
     new RebasedValueController(http = mock[DefaultHttpClient],
-      calcConnector = mock[CalculatorConnector], mockMessagesControllerComponents)(mockConfig, fakeApplication)
+      calcConnector = mock[CalculatorConnector], mockMessagesControllerComponents, rebasedValueView)(ec)
   }
 
   //GET tests
@@ -88,7 +91,7 @@ class RebasedValueActionSpec @Inject()(rebasedValueController: RebasedValueContr
 
       val target = setupTarget(None)
       lazy val result = target.rebasedValue(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       "return a 200" in {
         status(result) shouldBe 200
@@ -102,7 +105,7 @@ class RebasedValueActionSpec @Inject()(rebasedValueController: RebasedValueContr
     "supplied with a pre-existing stored model" should {
       val target = setupTarget(Some(RebasedValueModel(1000)))
       lazy val result = target.rebasedValue(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       "return a 200" in {
         status(result) shouldBe 200
@@ -136,7 +139,7 @@ class RebasedValueActionSpec @Inject()(rebasedValueController: RebasedValueContr
 
       lazy val request = fakeRequestToPOSTWithSession(("rebasedValueAmt", ""))
       lazy val result = target.submitRebasedValue(request)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       "return a 400" in {
         status(result) shouldBe 400

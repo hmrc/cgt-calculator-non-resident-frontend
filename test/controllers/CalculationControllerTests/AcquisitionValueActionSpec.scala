@@ -34,12 +34,14 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import views.html.calculation.acquisitionValue
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class AcquisitionValueActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
   implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
+  val ec = fakeApplication.injector.instanceOf[ExecutionContext]
 
   val materializer = mock[Materializer]
   val mockHttp =mock[DefaultHttpClient]
@@ -47,14 +49,16 @@ class AcquisitionValueActionSpec extends CommonPlaySpec with WithCommonFakeAppli
   val defaultCache = mock[CacheMap]
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
+  val acquisitionValueView =  fakeApplication.injector.instanceOf[acquisitionValue]
 
 
   class Setup {
     val controller = new AcquisitionValueController(
       mockHttp,
       mockCalcConnector,
-      mockMessagesControllerComponents
-    )(mockConfig, fakeApplication)
+      mockMessagesControllerComponents,
+      acquisitionValueView
+    )(ec)
   }
   def setupTarget(getData: Option[AcquisitionValueModel]): AcquisitionValueController = {
 
@@ -65,7 +69,7 @@ class AcquisitionValueActionSpec extends CommonPlaySpec with WithCommonFakeAppli
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new AcquisitionValueController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig, fakeApplication) {
+    new AcquisitionValueController(mockHttp, mockCalcConnector, mockMessagesControllerComponents, acquisitionValueView)(ec) {
     }
   }
 
@@ -76,7 +80,7 @@ class AcquisitionValueActionSpec extends CommonPlaySpec with WithCommonFakeAppli
 
       val target = setupTarget(None)
       lazy val result = target.acquisitionValue(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       "return a 200" in {
         status(result) shouldBe 200
@@ -91,7 +95,7 @@ class AcquisitionValueActionSpec extends CommonPlaySpec with WithCommonFakeAppli
 
       val target = setupTarget(Some(AcquisitionValueModel(1000)))
       lazy val result = target.acquisitionValue(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       "return a 200" in {
         status(result) shouldBe 200
@@ -137,7 +141,7 @@ class AcquisitionValueActionSpec extends CommonPlaySpec with WithCommonFakeAppli
       lazy val request = fakeRequestToPOSTWithSession(("acquisitionValue", "-1000"))
       lazy val target = setupTarget(None)
       lazy val result = target.submitAcquisitionValue(request)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       "return a 400" in {
         status(result) shouldBe 400

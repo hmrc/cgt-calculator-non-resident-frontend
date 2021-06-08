@@ -34,26 +34,30 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import views.html.calculation.rebasedCosts
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class RebasedCostsActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
   implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
 
   val materializer = mock[Materializer]
+  val ec = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
   val defaultCache = mock[CacheMap]
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
+  val rebasedCostsView = fakeApplication.injector.instanceOf[rebasedCosts]
 
   class Setup {
     val controller = new RebasedCostsController(
       mockHttp,
       mockCalcConnector,
-      mockMessagesControllerComponents
-    )(mockConfig, fakeApplication)
+      mockMessagesControllerComponents,
+      rebasedCostsView
+    )(ec)
   }
 
   def setupTarget(getData: Option[RebasedCostsModel]): RebasedCostsController = {
@@ -65,7 +69,7 @@ class RebasedCostsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new RebasedCostsController(mockHttp, mockCalcConnector,mockMessagesControllerComponents)(mockConfig, fakeApplication)
+    new RebasedCostsController(mockHttp, mockCalcConnector,mockMessagesControllerComponents, rebasedCostsView)(ec)
   }
 
   // GET Tests
@@ -74,7 +78,7 @@ class RebasedCostsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
     "not supplied with a pre-existing stored model" should {
       val target = setupTarget(None)
       lazy val result = target.rebasedCosts(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       "return a 200" in {
         status(result) shouldBe 200
@@ -87,7 +91,7 @@ class RebasedCostsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
       "a previous value is supplied with a pre-existing stored model" should {
         val target = setupTarget(Some(RebasedCostsModel("Yes", Some(1500))))
         lazy val result = target.rebasedCosts(fakeRequestWithSession)
-        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
         "return a 200" in {
           status(result) shouldBe 200
@@ -134,7 +138,7 @@ class RebasedCostsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
       val target = setupTarget(None)
       lazy val request = fakeRequestToPOSTWithSession("hasRebasedCosts" -> "Yes", "rebasedCosts" -> "")
       lazy val result = target.submitRebasedCosts(request)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       "return a 400" in {
         status(result) shouldBe 400

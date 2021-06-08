@@ -35,11 +35,13 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import views.html.calculation.broughtForwardLosses
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class BroughtForwardLossesActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
   implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
+  val ec = fakeApplication.injector.instanceOf[ExecutionContext]
 
   val materializer = mock[Materializer]
   val mockHttp =mock[DefaultHttpClient]
@@ -48,13 +50,15 @@ class BroughtForwardLossesActionSpec extends CommonPlaySpec with WithCommonFakeA
   val defaultCache = mock[CacheMap]
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
+  val broughtForwardLossesView = fakeApplication.injector.instanceOf[broughtForwardLosses]
 
   class Setup {
     val controller = new BroughtForwardLossesController(
       mockHttp,
       mockCalcConnector,
-      mockMessagesControllerComponents
-    )(mockConfig, fakeApplication)
+      mockMessagesControllerComponents,
+      broughtForwardLossesView
+    )(ec)
   }
 
 
@@ -85,7 +89,7 @@ class BroughtForwardLossesActionSpec extends CommonPlaySpec with WithCommonFakeA
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new BroughtForwardLossesController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig, fakeApplication) {
+    new BroughtForwardLossesController(mockHttp, mockCalcConnector, mockMessagesControllerComponents, broughtForwardLossesView)(ec) {
     }
   }
 
@@ -94,7 +98,7 @@ class BroughtForwardLossesActionSpec extends CommonPlaySpec with WithCommonFakeA
     "provided with no previous data" should {
       val target = setupTarget(None)
       lazy val result = target.broughtForwardLosses(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       "return a status of 200" in {
         status(result) shouldBe 200
@@ -112,7 +116,7 @@ class BroughtForwardLossesActionSpec extends CommonPlaySpec with WithCommonFakeA
     "provided with previous data" should {
       val target = setupTarget(Some(BroughtForwardLossesModel(isClaiming = false, None)))
       lazy val result = target.broughtForwardLosses(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       "return a status of 200" in {
         status(result) shouldBe 200
@@ -157,7 +161,7 @@ class BroughtForwardLossesActionSpec extends CommonPlaySpec with WithCommonFakeA
       val target = setupTarget(None)
       lazy val request = fakeRequestToPOSTWithSession(("isClaiming", "Yes"), ("broughtForwardLoss", ""))
       lazy val result = target.submitBroughtForwardLosses(request)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       "return a status of 400" in {
         status(result) shouldBe 400
@@ -187,7 +191,7 @@ class BroughtForwardLossesActionSpec extends CommonPlaySpec with WithCommonFakeA
     "return a back link to the OtherProperties page when there is an answer of no to Other Properties" in {
       val target = setupTarget(None, Some(OtherPropertiesModel("No")))
       lazy val result = target.broughtForwardLosses(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       document.select("#back-link").attr("href") shouldBe controllers.routes.OtherPropertiesController.otherProperties().url
     }
@@ -195,7 +199,7 @@ class BroughtForwardLossesActionSpec extends CommonPlaySpec with WithCommonFakeA
     "return a back link to the HowMuchGain page when there is a previous positive gain" in {
       val target = setupTarget(None, Some(OtherPropertiesModel("Yes")), Some(PreviousLossOrGainModel("Gain")), Some(HowMuchGainModel(1)))
       lazy val result = target.broughtForwardLosses(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       document.select("#back-link").attr("href") shouldBe controllers.routes.HowMuchGainController.howMuchGain().url
     }
@@ -203,7 +207,7 @@ class BroughtForwardLossesActionSpec extends CommonPlaySpec with WithCommonFakeA
     "return a back link to the AnnualExemptAmount page when there is a previous gain of 0" in {
       val target = setupTarget(None, Some(OtherPropertiesModel("Yes")), Some(PreviousLossOrGainModel("Gain")), Some(HowMuchGainModel(0)))
       lazy val result = target.broughtForwardLosses(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       document.select("#back-link").attr("href") shouldBe controllers.routes.AnnualExemptAmountController.annualExemptAmount().url
     }
@@ -211,7 +215,7 @@ class BroughtForwardLossesActionSpec extends CommonPlaySpec with WithCommonFakeA
     "return a back link to the HowMuchLoss page when there is a previous positive loss" in {
       val target = setupTarget(None, Some(OtherPropertiesModel("Yes")), Some(PreviousLossOrGainModel("Loss")), howMuchLossModel = Some(HowMuchLossModel(1)))
       lazy val result = target.broughtForwardLosses(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       document.select("#back-link").attr("href") shouldBe controllers.routes.HowMuchLossController.howMuchLoss().url
     }
@@ -219,7 +223,7 @@ class BroughtForwardLossesActionSpec extends CommonPlaySpec with WithCommonFakeA
     "return a back link to the AnnualExemptAmount page when there is a previous loss of 0" in {
       val target = setupTarget(None, Some(OtherPropertiesModel("Yes")), Some(PreviousLossOrGainModel("Loss")), howMuchLossModel = Some(HowMuchLossModel(0)))
       lazy val result = target.broughtForwardLosses(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       document.select("#back-link").attr("href") shouldBe controllers.routes.AnnualExemptAmountController.annualExemptAmount().url
     }
@@ -227,7 +231,7 @@ class BroughtForwardLossesActionSpec extends CommonPlaySpec with WithCommonFakeA
     "return a back link to the AnnualExemptAmount page when there is a previous disposal that breaks even" in {
       val target = setupTarget(None, Some(OtherPropertiesModel("Yes")), Some(PreviousLossOrGainModel("Neither")))
       lazy val result = target.broughtForwardLosses(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       document.select("#back-link").attr("href") shouldBe controllers.routes.AnnualExemptAmountController.annualExemptAmount().url
     }

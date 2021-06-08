@@ -14,14 +14,17 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
 @import play.api.i18n._
+
+@this(
+    inputRadioGroup: InputRadioGroup
+)
 
 @(field: Field, legend: String, legendClass: Option[String] = None)(implicit messages: Messages, messagesApi: Option[MessagesApi] = None)
 
 @{legendClass match {
     case Some(legendClass) => {
-        govHelpers.input_radio_group(
+        inputRadioGroup(
             field = field,
             Seq(
             "Yes" -> Messages("calc.base.yes"),
@@ -35,7 +38,7 @@
             '_fieldsetAttributes -> "aria-details = help")
     }
     case _ => {
-        govHelpers.input_radio_group(
+        inputRadioGroup(
             field = field,
             Seq(
             "Yes" -> Messages("calc.base.yes"),

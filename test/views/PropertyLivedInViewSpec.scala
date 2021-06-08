@@ -32,12 +32,13 @@ import views.html.calculation.propertyLivedIn
 class PropertyLivedInViewSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper with AssertHelpers {
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  lazy val propertyLivedInView = fakeApplication.injector.instanceOf[propertyLivedIn]
 
   "PropertyLivedIn view" when {
 
     "supplied with no errors" should {
       lazy val form = PropertyLivedInForm.propertyLivedInForm
-      lazy val view = propertyLivedIn(form)(fakeRequest, mockMessage, fakeApplication, mockConfig)
+      lazy val view = propertyLivedInView(form)(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of ${messages.title}" in {
@@ -196,12 +197,12 @@ class PropertyLivedInViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
       }
 
       "should produce the same output when render and f are called" in {
-        propertyLivedIn.f(form)(fakeRequest, mockMessage, fakeApplication, mockConfig) shouldBe propertyLivedIn.render(form, fakeRequest, mockMessage, fakeApplication, mockConfig)
+        propertyLivedInView.f(form)(fakeRequest, mockMessage) shouldBe propertyLivedInView.render(form, fakeRequest, mockMessage)
       }
     }
 
     "supplied with a filled form of 'Yes'" which {
-      lazy val view = propertyLivedIn(propertyLivedInForm.fill(PropertyLivedInModel(true)))(fakeRequest, mockMessage, fakeApplication, mockConfig)
+      lazy val view = propertyLivedInView(propertyLivedInForm.fill(PropertyLivedInModel(true)))(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "for the option 'Yes'" should {
@@ -217,7 +218,7 @@ class PropertyLivedInViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
     "Property Lived In view with form errors" should {
 
       lazy val form = propertyLivedInForm.bind(Map("propertyLivedIn" -> ""))
-      lazy val view = propertyLivedIn(form)(fakeRequest, mockMessage, fakeApplication, mockConfig)
+      lazy val view = propertyLivedInView(form)(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" which {

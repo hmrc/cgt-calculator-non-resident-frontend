@@ -34,26 +34,29 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import views.html.calculation.howMuchLoss
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class HowMuchLossActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
   implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val materializer = mock[Materializer]
+  val ec = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
   val defaultCache = mock[CacheMap]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
-
+  val howMuchLossView = fakeApplication.injector.instanceOf[howMuchLoss]
 
   class Setup {
     val controller = new HowMuchLossController(
       mockHttp,
       mockCalcConnector,
-      mockMessagesControllerComponents
-    )(mockConfig, fakeApplication)
+      mockMessagesControllerComponents,
+      howMuchLossView
+    )(ec)
   }
 
   def setupTarget(getData: Option[HowMuchLossModel]): HowMuchLossController = {
@@ -64,7 +67,7 @@ class HowMuchLossActionSpec extends CommonPlaySpec with WithCommonFakeApplicatio
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new HowMuchLossController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig, fakeApplication)
+    new HowMuchLossController(mockHttp, mockCalcConnector, mockMessagesControllerComponents, howMuchLossView)(ec)
   }
 
   "Calling the .howMuchLoss method" when {
@@ -72,7 +75,7 @@ class HowMuchLossActionSpec extends CommonPlaySpec with WithCommonFakeApplicatio
     "not provided with any data" should {
       val target = setupTarget(None)
       lazy val result = target.howMuchLoss(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       "return a status of 200" in {
         status(result) shouldBe 200
@@ -86,7 +89,7 @@ class HowMuchLossActionSpec extends CommonPlaySpec with WithCommonFakeApplicatio
     "provided with some data" should {
       val target = setupTarget(Some(HowMuchLossModel(100)))
       lazy val result = target.howMuchLoss(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       "return a status of 200" in {
         status(result) shouldBe 200
@@ -145,7 +148,7 @@ class HowMuchLossActionSpec extends CommonPlaySpec with WithCommonFakeApplicatio
       val target = setupTarget(None)
       lazy val request = fakeRequestToPOSTWithSession(("loss", ""))
       lazy val result = target.submitHowMuchLoss(request)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       "return a status of 400" in {
         status(result) shouldBe 400

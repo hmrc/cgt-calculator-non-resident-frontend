@@ -23,16 +23,20 @@ import forms.CalculationElectionForm
 import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
+import views.html.helpers.calculationElectionHelperForm
 
 class CalculationElectionHelperFormSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
+
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  implicit lazy val calculationElectionHelperFormView = fakeApplication.injector.instanceOf[calculationElectionHelperForm]
+
   "Creating a calculationElectionHelperForm" should {
 
     "when passing in a single element with other reliefs to render" should {
 
       val seq: Seq[(String, String, String, String, Option[String], Option[BigDecimal])] =
         Seq(("flat", "1000", "messages", "calcType", Some("dateMessages"), Some(BigDecimal(2000))))
-      lazy val partial = views.html.helpers.calculationElectionHelperForm(
+      lazy val partial = calculationElectionHelperFormView(
         CalculationElectionForm.calculationElectionForm("calculationElection"),
         seq,
         showErrorText = true)
@@ -67,7 +71,7 @@ class CalculationElectionHelperFormSpec extends CommonPlaySpec with WithCommonFa
 
       val seq: Seq[(String, String, String, String, Option[String], Option[BigDecimal])] =
         Seq(("flat", "1000", "messages", "calcType", None, None))
-      lazy val partial = views.html.helpers.calculationElectionHelperForm(
+      lazy val partial = calculationElectionHelperFormView(
         CalculationElectionForm.calculationElectionForm("calculationElection"),
         seq,
         showErrorText = true)
@@ -86,7 +90,7 @@ class CalculationElectionHelperFormSpec extends CommonPlaySpec with WithCommonFa
 
       val seq: Seq[(String, String, String, String, Option[String], Option[BigDecimal])] =
         Seq(("flat", "1000", "messages", "calcType", None, Some(0)))
-      lazy val partial = views.html.helpers.calculationElectionHelperForm(
+      lazy val partial = calculationElectionHelperFormView(
         CalculationElectionForm.calculationElectionForm("calculationElection"),
         seq,
         showErrorText = true)
@@ -103,7 +107,7 @@ class CalculationElectionHelperFormSpec extends CommonPlaySpec with WithCommonFa
           ("one", "1000", "messages", "calcType", None, Some(0)),
           ("two", "1000", "messages", "calcType", None, Some(0))
         )
-      lazy val partial = views.html.helpers.calculationElectionHelperForm(
+      lazy val partial = calculationElectionHelperFormView(
         CalculationElectionForm.calculationElectionForm("calculationElection"),
         seq,
         showErrorText = true)
@@ -125,7 +129,7 @@ class CalculationElectionHelperFormSpec extends CommonPlaySpec with WithCommonFa
           ("two", "1000", "messages", "calcType", None, Some(0)),
           ("three", "1000", "messages", "calcType", None, Some(0))
         )
-      lazy val partial = views.html.helpers.calculationElectionHelperForm(
+      lazy val partial = calculationElectionHelperFormView(
         CalculationElectionForm.calculationElectionForm("calculationElection"),
         seq,
         showErrorText = true)

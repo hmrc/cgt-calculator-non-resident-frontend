@@ -31,10 +31,11 @@ class PreviousLossOrGainViewSpec extends CommonPlaySpec with WithCommonFakeAppli
 
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  lazy val previousLossOrGainView = fakeApplication.injector.instanceOf[previousLossOrGain]
 
   "The PreviousLossOrGain view" should {
 
-    lazy val view = previousLossOrGain(previousLossOrGainForm)(fakeRequest, mockMessage, fakeApplication, mockConfig)
+    lazy val view = previousLossOrGainView(previousLossOrGainForm)(fakeRequest, mockMessage)
     lazy val document = Jsoup.parse(view.body)
 
     "return some HTML" which {
@@ -128,13 +129,13 @@ class PreviousLossOrGainViewSpec extends CommonPlaySpec with WithCommonFakeAppli
     }
 
     "should produce the same output when render and f are called" in {
-      previousLossOrGain.f(previousLossOrGainForm)(fakeRequest, mockMessage, fakeApplication, mockConfig) shouldBe previousLossOrGain.render(previousLossOrGainForm, fakeRequest, mockMessage, fakeApplication, mockConfig)
+      previousLossOrGainView.f(previousLossOrGainForm)(fakeRequest, mockMessage) shouldBe previousLossOrGainView.render(previousLossOrGainForm, fakeRequest, mockMessage)
     }
   }
 
   "PreviousLossOrGainView with form errors" should {
     lazy val form = previousLossOrGainForm.bind(Map("previousLossOrGain" -> ""))
-    lazy val view = previousLossOrGain(form)(fakeRequest, mockMessage, fakeApplication, mockConfig)
+    lazy val view = previousLossOrGainView(form)(fakeRequest, mockMessage)
     lazy val doc = Jsoup.parse(view.body)
 
     "display an error summary message regarding incorrect value being inputted" in {

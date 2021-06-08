@@ -15,13 +15,16 @@
  *@
 
 @import models.OtherReliefsModel
-@import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
 @import uk.gov.hmrc.play.views.helpers.MoneyPounds
-@import views.html.helpers._
-@import play.api.Application
 
-@import config.ApplicationConfig
-@(otherReliefsForm: Form[OtherReliefsModel], chargeableGain: BigDecimal, gain: BigDecimal)(implicit request: Request[_], messages: Messages, application: Application, applicationConfig: ApplicationConfig)
+@this(
+    errorSummary: helpers.errorSummary,
+    mainTemplate: main_template,
+    form: FormWithCSRF,
+    formInputMoney: helpers.formInputMoney
+)
+
+@(otherReliefsForm: Form[OtherReliefsModel], chargeableGain: BigDecimal, gain: BigDecimal)(implicit request: Request[_], messages: Messages)
 
 @helpContent = {
     <div id="otherReliefHelp" class="form-hint">
@@ -49,7 +52,7 @@
     </div>
 }
 
-@main_template(Messages("calc.otherReliefs.question")) {
+@mainTemplate(Messages("calc.otherReliefs.question")) {
 
     <a id="back-link" class="back-link" href="@controllers.routes.CheckYourAnswersController.checkYourAnswers()">@Messages("calc.base.back")</a>
 
@@ -61,7 +64,7 @@
 
         @helpContent
 
-        @govHelpers.form(action = controllers.routes.OtherReliefsController.submitOtherReliefs) {
+        @form(action = controllers.routes.OtherReliefsController.submitOtherReliefs) {
 
             @formInputMoney(otherReliefsForm,
                 "otherReliefs",

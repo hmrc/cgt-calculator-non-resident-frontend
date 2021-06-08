@@ -15,15 +15,17 @@
  *@
 
 @import models.AcquisitionValueModel
-@import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
-@import views.html.helpers._
-@import play.api.Application
-@import views.html.main_template
 
-@import config.ApplicationConfig
-@(acquisitionMarketValue : Form[AcquisitionValueModel])(implicit request: Request[_], messages: Messages, application: Application, applicationConfig: ApplicationConfig)
+@this(
+    errorSummary: helpers.errorSummary,
+    form: FormWithCSRF,
+    formInputMoney: helpers.formInputMoney,
+    mainTemplate: main_template
+)
 
-@main_template(Messages("calc.worthWhenGiftedTo.question")) {
+@(acquisitionMarketValue : Form[AcquisitionValueModel])(implicit request: Request[_], messages: Messages)
+
+@mainTemplate(Messages("calc.worthWhenGiftedTo.question")) {
 
     <a id="back-link" class="back-link" href="@controllers.routes.HowBecameOwnerController.howBecameOwner">@Messages("calc.base.back")</a>
 
@@ -40,7 +42,7 @@
     </div>
 
 
-    @govHelpers.form(action = controllers.routes.WorthWhenGiftedToController.submitWorthWhenGiftedTo) {
+    @form(action = controllers.routes.WorthWhenGiftedToController.submitWorthWhenGiftedTo) {
 
         @formInputMoney(acquisitionMarketValue, "acquisitionMarketValue", Messages("calc.worthWhenGiftedTo.question"), hideLabel = true)
 

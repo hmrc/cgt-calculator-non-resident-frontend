@@ -17,39 +17,37 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import config.ApplicationConfig
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import forms.OtherPropertiesForm._
 import javax.inject.Inject
 import models.OtherPropertiesModel
-import play.api.Application
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{MessagesControllerComponents, Result}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-import views.html.calculation
+import views.html.calculation.otherProperties
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class OtherPropertiesController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
-                                          mcc: MessagesControllerComponents)(implicit val applicationConfig: ApplicationConfig,
-                                                                             implicit val application: Application)
+                                          mcc: MessagesControllerComponents,
+                                          otherPropertiesView: otherProperties)
+                                         (implicit ec: ExecutionContext)
                                             extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   val otherProperties = ValidateSession.async { implicit request =>
 
     calcConnector.fetchAndGetFormData[OtherPropertiesModel](KeystoreKeys.otherProperties).map {
-      case Some(data) => Ok(calculation.otherProperties(otherPropertiesForm.fill(data)))
-      case _ => Ok(calculation.otherProperties(otherPropertiesForm))
+      case Some(data) => Ok(otherPropertiesView(otherPropertiesForm.fill(data)))
+      case _ => Ok(otherPropertiesView(otherPropertiesForm))
     }
   }
 
   val submitOtherProperties = ValidateSession.async { implicit request =>
     def errorAction(form: Form[OtherPropertiesModel]) = {
-      Future.successful(BadRequest(calculation.otherProperties(form)))
+      Future.successful(BadRequest(otherPropertiesView(form)))
     }
 
     def successAction(model: OtherPropertiesModel) = {

@@ -15,14 +15,17 @@
  *@
 
 @import models.PreviousLossOrGainModel
-@import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
-@import views.html.helpers._
-@import play.api.Application
 
-@import config.ApplicationConfig
-@(previousLossOrGainForm: Form[PreviousLossOrGainModel])(implicit request: Request[_], messages: Messages, application: Application, applicationConfig: ApplicationConfig)
+@this(
+    errorSummary: helpers.errorSummary,
+    mainTemplate: main_template,
+    form: FormWithCSRF,
+    inputRadioGroup: InputRadioGroup
+)
 
-@main_template(Messages("calc.previousLossOrGain.question")) {
+@(previousLossOrGainForm: Form[PreviousLossOrGainModel])(implicit request: Request[_], messages: Messages)
+
+@mainTemplate(Messages("calc.previousLossOrGain.question")) {
 
     <a id="back-link" class="back-link" href="@controllers.routes.OtherPropertiesController.otherProperties()">@Messages("calc.base.back")</a>
 
@@ -36,8 +39,8 @@
         <p>@Messages("calc.previousLossOrGain.hintTwo")</p>
     </div>
 
-    @govHelpers.form(action = controllers.routes.PreviousGainOrLossController.submitPreviousGainOrLoss()) {
-        @govHelpers.input_radio_group(
+    @form(action = controllers.routes.PreviousGainOrLossController.submitPreviousGainOrLoss()) {
+        @inputRadioGroup(
             field = previousLossOrGainForm("previousLossOrGain"),
             Seq(
                     "Loss" -> Messages("calc.previousLossOrGain.loss"),

@@ -21,7 +21,6 @@ import java.time.LocalDate
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.nonresident.TaxableGainCalculation.{checkGainExists, getPropertyLivedInResponse}
 import common.{Dates, TaxDates}
-import config.ApplicationConfig
 import connectors.CalculatorConnector
 import constructors.AnswersConstructor
 import controllers.predicates.ValidActiveSession
@@ -29,22 +28,21 @@ import controllers.utils.RecoverableFuture
 import forms.PrivateResidenceReliefForm._
 import javax.inject.Inject
 import models._
-import play.api.Application
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, Lang}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-import views.html.calculation
+import views.html.calculation.privateResidenceRelief
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class PrivateResidenceReliefController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
                                                  answersConstructor: AnswersConstructor,
-                                                 mcc: MessagesControllerComponents)(implicit val applicationConfig: ApplicationConfig,
-                                                                                    implicit val application: Application)
+                                                 mcc: MessagesControllerComponents,
+                                                 privateResidenceReliefView: privateResidenceRelief)
+                                                (implicit ec: ExecutionContext)
                                                   extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   def getAcquisitionDate(implicit hc: HeaderCarrier): Future[Option[LocalDate]] =
@@ -99,9 +97,9 @@ class PrivateResidenceReliefController @Inject()(http: DefaultHttpClient,calcCon
       val disposalDateLessMonths = Dates.dateMinusMonths(disposalDate, pRRDateDetails.months)
 
       calcConnector.fetchAndGetFormData[PrivateResidenceReliefModel](KeystoreKeys.privateResidenceRelief).map {
-        case Some(data) => Ok(calculation.privateResidenceRelief(privateResidenceReliefForm(showFirstQuestion,
+        case Some(data) => Ok(privateResidenceReliefView(privateResidenceReliefForm(showFirstQuestion,
           showBetweenQuestion).fill(data), showBetweenQuestion, showFirstQuestion, disposalDateLessMonths, pRRDateDetails.months, showOnlyFlatQuestion))
-        case None => Ok(calculation.privateResidenceRelief(privateResidenceReliefForm(showFirstQuestion, showBetweenQuestion),
+        case None => Ok(privateResidenceReliefView(privateResidenceReliefForm(showFirstQuestion, showBetweenQuestion),
           showBetweenQuestion, showFirstQuestion, disposalDateLessMonths, pRRDateDetails.months, showOnlyFlatQuestion))
       }
     }
@@ -139,7 +137,7 @@ class PrivateResidenceReliefController @Inject()(http: DefaultHttpClient,calcCon
 
       def errorAction(form: Form[PrivateResidenceReliefModel]) = {
         implicit val lang: Lang = mcc.messagesApi.preferred(request).lang
-        Future.successful(BadRequest(calculation.privateResidenceRelief(form, showBetweenQuestion,
+        Future.successful(BadRequest(privateResidenceReliefView(form, showBetweenQuestion,
           showFirstQuestion, disposalDateLessMonths, 0, showOnlyFlatQuestion)))
       }
 

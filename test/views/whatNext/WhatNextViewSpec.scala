@@ -30,11 +30,12 @@ import views.html.whatNext.whatNext
 class WhatNextViewSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  val whatNextView = fakeApplication.injector.instanceOf[whatNext]
 
   "What next view should" when {
     implicit lazy val fakeApp: Application = fakeApplication
 
-    lazy val view = whatNext(isDateAfter = false)(FakeRequest("GET", ""), mockMessage, fakeApplication, mockConfig)
+    lazy val view = whatNextView(isDateAfter = false)(FakeRequest("GET", ""), mockMessage)
     lazy val doc = Jsoup.parse(view.body)
 
     s"have a title of ${messages.title}" in {
@@ -106,12 +107,12 @@ class WhatNextViewSpec extends CommonPlaySpec with WithCommonFakeApplication wit
     }
 
     "should produce the same output when render and f are called" in {
-      whatNext.f(false)(FakeRequest("GET", ""), mockMessage, fakeApplication, mockConfig) shouldBe whatNext.render(false, FakeRequest("GET", ""), mockMessage, fakeApplication, mockConfig)
+      whatNextView.f(false)(FakeRequest("GET", ""), mockMessage) shouldBe whatNextView.render(false, FakeRequest("GET", ""), mockMessage)
     }
   }
 
   "Disposal date is after 6 April 2020" which {
-    lazy val view2 = whatNext(isDateAfter = true)(FakeRequest("GET", ""), mockMessage, fakeApplication, mockConfig)
+    lazy val view2 = whatNextView(isDateAfter = true)(FakeRequest("GET", ""), mockMessage)
     lazy val doc2 = Jsoup.parse(view2.body)
 
     "doesn't have information for sa users" in {

@@ -30,12 +30,14 @@ class OtherReliefsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
 
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  lazy val otherReliefsView = fakeApplication.injector.instanceOf[otherReliefs]
+
   "The Other Reliefs Flat view" when {
 
     "not supplied with a pre-existing stored value and a taxable gain" should {
       val totalGain = 1234
       val totalChargeableGain = 4321
-      lazy val view = otherReliefs(otherReliefsForm, totalChargeableGain, totalGain)(fakeRequest, mockMessage, fakeApplication, mockConfig)
+      lazy val view = otherReliefsView(otherReliefsForm, totalChargeableGain, totalGain)(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of ${messages.OtherReliefs.question}" in {
@@ -121,7 +123,7 @@ class OtherReliefsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
         }
       }
       "should produce the same output when render and f are called" in {
-        otherReliefs.f(otherReliefsForm, totalChargeableGain, totalGain)(fakeRequest, mockMessage, fakeApplication, mockConfig) shouldBe otherReliefs.render(otherReliefsForm, totalChargeableGain, totalGain, fakeRequest, mockMessage, fakeApplication, mockConfig)
+        otherReliefsView.f(otherReliefsForm, totalChargeableGain, totalGain)(fakeRequest, mockMessage) shouldBe otherReliefsView.render(otherReliefsForm, totalChargeableGain, totalGain, fakeRequest, mockMessage)
       }
     }
 
@@ -129,7 +131,7 @@ class OtherReliefsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
       val totalGain = -1234
       val totalChargeableGain = -4321
 
-      lazy val view = otherReliefs(otherReliefsForm, totalChargeableGain, totalGain)(fakeRequest, mockMessage, fakeApplication, mockConfig)
+      lazy val view = otherReliefsView(otherReliefsForm, totalChargeableGain, totalGain)(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have the correct additional help text" in {
@@ -148,7 +150,7 @@ class OtherReliefsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
 
     "supplied with an invalid map" should {
       val map = Map("otherReliefs" -> "-1000")
-      lazy val view = otherReliefs(otherReliefsForm.bind(map), 0, 0)(fakeRequest, mockMessage, fakeApplication, mockConfig)
+      lazy val view = otherReliefsView(otherReliefsForm.bind(map), 0, 0)(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

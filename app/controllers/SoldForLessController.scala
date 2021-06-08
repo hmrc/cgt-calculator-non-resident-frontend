@@ -17,39 +17,37 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import config.ApplicationConfig
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import controllers.utils.RecoverableFuture
 import forms.SoldForLessForm._
 import javax.inject.Inject
 import models.SoldForLessModel
-import play.api.Application
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-import views.html.{calculation => views}
+import views.html.calculation.soldForLess
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class SoldForLessController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
-                                      mcc: MessagesControllerComponents)(implicit val applicationConfig: ApplicationConfig,
-                                                                         implicit val application: Application)
+                                      mcc: MessagesControllerComponents,
+                                      soldForLessView: soldForLess)
+                                     (implicit ec: ExecutionContext)
                                         extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   val soldForLess = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[SoldForLessModel](KeystoreKeys.soldForLess).map {
-      case Some(data) => Ok(views.soldForLess(soldForLessForm.fill(data)))
-      case None => Ok(views.soldForLess(soldForLessForm))
+      case Some(data) => Ok(soldForLessView(soldForLessForm.fill(data)))
+      case None => Ok(soldForLessView(soldForLessForm))
     }
   }
 
   val submitSoldForLess = ValidateSession.async { implicit request =>
 
-    def errorAction(errors: Form[SoldForLessModel]) = Future.successful(BadRequest(views.soldForLess(errors)))
+    def errorAction(errors: Form[SoldForLessModel]) = Future.successful(BadRequest(soldForLessView(errors)))
 
     def routeRequest(model: SoldForLessModel) = {
       if (model.soldForLess) Future.successful(Redirect(routes.MarketValueWhenSoldOrGaveAwayController.marketValueWhenSold()))

@@ -15,15 +15,18 @@
  *@
 
 @import models._
-@import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
 @import uk.gov.hmrc.play.views.helpers.MoneyPounds
-@import views.html.helpers._
-@import play.api.Application
 
-@import config.ApplicationConfig
-@(otherReliefsForm: Form[OtherReliefsModel], hasExistingReliefAmount: Boolean, chargeableGain: BigDecimal, gain: BigDecimal)(implicit request: Request[_], messages: Messages, application: Application, applicationConfig: ApplicationConfig)
+@this(
+    mainTemplate: main_template,
+    form: FormWithCSRF,
+    errorSummary: helpers.errorSummary,
+    formInputMoney: helpers.formInputMoney
+)
 
-@main_template(Messages("calc.otherReliefs.question")) {
+@(otherReliefsForm: Form[OtherReliefsModel], hasExistingReliefAmount: Boolean, chargeableGain: BigDecimal, gain: BigDecimal)(implicit request: Request[_], messages: Messages)
+
+@mainTemplate(Messages("calc.otherReliefs.question")) {
 
     <a id="back-link" class="back-link" href="@controllers.routes.CalculationElectionController.calculationElection">@Messages("calc.base.back")</a>
 
@@ -31,7 +34,7 @@
 
     <h1 class="heading-xlarge">@Messages("calc.otherReliefs.question")</h1>
 
-    @govHelpers.form(action = controllers.routes.OtherReliefsRebasedController.submitOtherReliefsRebased) {
+    @form(action = controllers.routes.OtherReliefsRebasedController.submitOtherReliefsRebased) {
 
         <label for="otherReliefs" class="visuallyhidden">@Messages("calc.otherReliefs.question")</label>
 

@@ -35,26 +35,30 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import views.html.calculation.soldOrGivenAway
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class SoldOrGivenAwayActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
   val materializer = mock[Materializer]
+  val ec = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
   val mockAnswersConstructor = mock[AnswersConstructor]
   val defaultCache = mock[CacheMap]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
+  val soldOrGivenAwayView = fakeApplication.injector.instanceOf[soldOrGivenAway]
 
   class Setup {
     val controller = new SoldOrGivenAwayController(
       mockHttp,
       mockCalcConnector,
-      mockMessagesControllerComponents
-    )(mockConfig, fakeApplication)
+      mockMessagesControllerComponents,
+      soldOrGivenAwayView
+    )(ec)
   }
 
   def setUpTarget(getData: Option[SoldOrGivenAwayModel]): SoldOrGivenAwayController = {
@@ -66,7 +70,7 @@ class SoldOrGivenAwayActionSpec extends CommonPlaySpec with WithCommonFakeApplic
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new SoldOrGivenAwayController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig, fakeApplication)
+    new SoldOrGivenAwayController(mockHttp, mockCalcConnector, mockMessagesControllerComponents, soldOrGivenAwayView)(ec)
   }
 
   //GET Tests
@@ -75,7 +79,7 @@ class SoldOrGivenAwayActionSpec extends CommonPlaySpec with WithCommonFakeApplic
     "not supplied with a pre-existing model" should {
       val target = setUpTarget(None)
       lazy val result = target.soldOrGivenAway(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       "return a 200 response" in {
         status(result) shouldBe 200
@@ -89,7 +93,7 @@ class SoldOrGivenAwayActionSpec extends CommonPlaySpec with WithCommonFakeApplic
     "supplied with a pre-existing model" should {
       val target = setUpTarget(Some(SoldOrGivenAwayModel(true)))
       lazy val result = target.soldOrGivenAway(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       "return a 200 response" in {
         status(result) shouldBe 200
@@ -149,7 +153,7 @@ class SoldOrGivenAwayActionSpec extends CommonPlaySpec with WithCommonFakeApplic
       val target = setUpTarget(None)
       lazy val request = fakeRequestToPOSTWithSession("soldIt" -> "")
       lazy val result = target.submitSoldOrGivenAway(request)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       "return a 400 response" in {
         status(result) shouldBe 400

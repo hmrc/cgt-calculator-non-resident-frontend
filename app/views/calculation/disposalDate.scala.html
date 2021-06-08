@@ -15,21 +15,24 @@
  *@
 
 @import models.DateModel
-@import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
-@import views.html.helpers._
 @import controllers.CgtLanguageController
-@import play.api.Application
 
-@import config.ApplicationConfig
-@(disposalDateForm: Form[DateModel])(implicit request: Request[_], messages: Messages, lang: Lang, application: Application, applicationConfig: ApplicationConfig)
+@this(
+    errorSummary: helpers.errorSummary,
+    mainTemplate: main_template,
+    form: FormWithCSRF,
+    formInlineDateInput: helpers.formInlineDateInput
+)
 
-@main_template(Messages("calc.disposalDate.question")) {
+@(disposalDateForm: Form[DateModel])(implicit request: Request[_], messages: Messages, lang: Lang)
+
+@mainTemplate(Messages("calc.disposalDate.question")) {
 
     @errorSummary(disposalDateForm, "disposal-date", "disposalDateDay")
 
     <h1 class="heading-xlarge">@Messages("calc.disposalDate.question")</h1>
 
-    @govHelpers.form(action = controllers.routes.DisposalDateController.submitDisposalDate) {
+    @form(action = controllers.routes.DisposalDateController.submitDisposalDate) {
 
         @formInlineDateInput(disposalDateForm,
         "disposalDate",

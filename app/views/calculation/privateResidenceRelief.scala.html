@@ -15,15 +15,21 @@
  *@
 
 @import models.PrivateResidenceReliefModel
-@import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
-@import views.html.helpers._
-@import play.api.Application
 @import java.time.LocalDate
 @import common.Dates
 @import common.Dates.TemplateImplicits._
 
-@import config.ApplicationConfig
-@(privateResidenceReliefForm: Form[PrivateResidenceReliefModel], daysBetweenShow: Boolean, showFirstQuestion: Boolean, disposalDateLess18Months: Option[LocalDate], pRRMonths: Int, showOnlyFlatQuestion: Boolean)(implicit request: Request[_], messages: Messages, lang: Lang, application: Application, applicationConfig: ApplicationConfig)
+@this(
+    uiInput: Input,
+    formHiddenYesNoRadio: helpers.formHiddenYesNoRadio,
+    inputRadioGroup: InputRadioGroup,
+    form: FormWithCSRF,
+    mainTemplate: main_template,
+    errorSummary: helpers.errorSummary,
+    expandableHelpTextHelper: helpers.expandableHelpTextHelper
+)
+
+@(privateResidenceReliefForm: Form[PrivateResidenceReliefModel], daysBetweenShow: Boolean, showFirstQuestion: Boolean, disposalDateLess18Months: Option[LocalDate], pRRMonths: Int, showOnlyFlatQuestion: Boolean)(implicit request: Request[_], messages: Messages, lang: Lang)
 
 
 @disposalDateLess18MonthsString = {@disposalDateLess18Months.map(_.localFormat("d MMMM yyyy")).getOrElse("")}
@@ -48,7 +54,7 @@
     @if(showFirstQuestion) {
 
         <div class="form-group">
-        @govHelpers.input(
+        @uiInput(
             privateResidenceReliefForm("daysClaimed"),
             '_label ->{if(showOnlyFlatQuestion){messages("calc.privateResidenceRelief.questionFlat", disposalDateLess18MonthsString)}else{messages("calc.privateResidenceRelief.firstQuestion")}} ,
             '_labelClass -> "bold",
@@ -62,7 +68,7 @@
     @if(daysBetweenShow) {
 
         <div class="form-group">
-        @govHelpers.input(
+        @uiInput(
             privateResidenceReliefForm("daysClaimedAfter"),
             '_label -> messages("calc.privateResidenceRelief.questionBetween", disposalDateLess18MonthsString),
             '_labelClass -> "bold",
@@ -85,7 +91,7 @@
     }
 }
 
-@main_template(messages("calc.privateResidenceRelief.question")) {
+@mainTemplate(messages("calc.privateResidenceRelief.question")) {
 
     <a id="back-link" class="back-link" href="@controllers.routes.PropertyLivedInController.propertyLivedIn()">@messages("calc.base.back")</a>
 
@@ -119,11 +125,11 @@
         </p>
     </div>
 
-    @govHelpers.form(action = controllers.routes.PrivateResidenceReliefController.submitPrivateResidenceRelief) {
+    @form(action = controllers.routes.PrivateResidenceReliefController.submitPrivateResidenceRelief) {
 
         @if(!(showFirstQuestion || daysBetweenShow)) {
             <div class="inline form-group">
-            @govHelpers.input_radio_group(
+            @inputRadioGroup(
                 field = privateResidenceReliefForm("isClaimingPRR"),
                 Seq(
                     "Yes" -> messages("calc.base.yes"),

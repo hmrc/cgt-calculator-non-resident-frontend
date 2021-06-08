@@ -34,8 +34,9 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import views.html.calculation.noCapitalGainsTax
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class NoCapitalGainsTaxActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
@@ -43,17 +44,20 @@ class NoCapitalGainsTaxActionSpec extends CommonPlaySpec with WithCommonFakeAppl
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
 
   val materializer = mock[Materializer]
+  val ec = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
   val defaultCache = mock[CacheMap]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
+  val noCapitalGainsTaxView = fakeApplication.injector.instanceOf[noCapitalGainsTax]
 
   class Setup {
     val controller = new NoCapitalGainsTaxController(
       mockHttp,
       mockCalcConnector,
-      mockMessagesControllerComponents
-    )(mockConfig, fakeApplication)
+      mockMessagesControllerComponents,
+      noCapitalGainsTaxView
+    )(ec)
   }
 
   def setupTarget(getData: Option[DateModel]): NoCapitalGainsTaxController = {
@@ -62,7 +66,7 @@ class NoCapitalGainsTaxActionSpec extends CommonPlaySpec with WithCommonFakeAppl
       ArgumentMatchers.eq(KeystoreKeys.disposalDate))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    new NoCapitalGainsTaxController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig, fakeApplication)
+    new NoCapitalGainsTaxController(mockHttp, mockCalcConnector, mockMessagesControllerComponents, noCapitalGainsTaxView)(ec)
   }
 
   //GET Tests
@@ -71,7 +75,7 @@ class NoCapitalGainsTaxActionSpec extends CommonPlaySpec with WithCommonFakeAppl
     "called with a valid session" should {
       val target = setupTarget(Some(DateModel(1, 1, 2015)))
       lazy val result = target.noCapitalGainsTax(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       "return a 200" in {
         status(result) shouldBe 200

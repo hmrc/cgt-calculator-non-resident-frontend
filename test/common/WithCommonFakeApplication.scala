@@ -17,9 +17,9 @@
 package common
 
 import org.scalatest.{BeforeAndAfterAll, Suite}
-import play.api.{Application, Play}
 import play.api.inject.guice.{GuiceApplicationBuilder, GuiceableModule}
 import play.api.test.Helpers.running
+import play.api.{Application, Play}
 
 trait WithCommonFakeApplication extends BeforeAndAfterAll {
   this: Suite =>

@@ -18,7 +18,6 @@ package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.TaxDates
-import config.ApplicationConfig
 import connectors.CalculatorConnector
 import constructors.AnswersConstructor
 import controllers.predicates.ValidActiveSession
@@ -26,22 +25,20 @@ import controllers.utils.RecoverableFuture
 import forms.ImprovementsForm._
 import javax.inject.Inject
 import models._
-import play.api.Application
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-import views.html.calculation
+import views.html.calculation.improvements
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class ImprovementsController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
                                        answersConstructor: AnswersConstructor,
-                                       mcc: MessagesControllerComponents)(implicit val applicationConfig: ApplicationConfig,
-                                                                          implicit val application: Application)
+                                       mcc: MessagesControllerComponents,
+                                       improvementsView: improvements)(implicit ec: ExecutionContext)
                                         extends FrontendController(mcc) with ValidActiveSession with I18nSupport{
 
   private def improvementsBackUrl(acquisitionDate: Option[DateModel]): Future[String] = {
@@ -80,10 +77,10 @@ class ImprovementsController @Inject()(http: DefaultHttpClient,calcConnector: Ca
                      ownerBeforeLegislationStart: Boolean): Future[Result] = {
       improvementsModel match {
         case Some(data) =>
-          Future.successful(Ok(calculation.improvements(improvementsForm(improvementsOptions).fill(data),
+          Future.successful(Ok(improvementsView(improvementsForm(improvementsOptions).fill(data),
             improvementsOptions, backUrl, ownerBeforeLegislationStart)))
         case None =>
-          Future.successful(Ok(calculation.improvements(improvementsForm(improvementsOptions),
+          Future.successful(Ok(improvementsView(improvementsForm(improvementsOptions),
             improvementsOptions, backUrl, ownerBeforeLegislationStart)))
       }
     }
@@ -112,7 +109,7 @@ class ImprovementsController @Inject()(http: DefaultHttpClient,calcConnector: Ca
 
     def errorAction(errors: Form[ImprovementsModel], backUrl: String, improvementsOptions: Boolean,
                     ownerBeforeLegislationStart: Boolean) = {
-      Future.successful(BadRequest(calculation.improvements(errors, improvementsOptions, backUrl, ownerBeforeLegislationStart)))
+      Future.successful(BadRequest(improvementsView(errors, improvementsOptions, backUrl, ownerBeforeLegislationStart)))
     }
 
     def successAction(improvements: ImprovementsModel): Future[Result] = {

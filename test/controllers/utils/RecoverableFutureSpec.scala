@@ -24,12 +24,13 @@ import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.FakeRequest
 import uk.gov.hmrc.play.bootstrap.frontend.http.ApplicationException
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class RecoverableFutureSpec extends WordSpec with ScalaFutures with Matchers with IntegrationPatience with Status with WithCommonFakeApplication {
 
   ".recoverToStart" should {
+    implicit val ec = fakeApplication.injector.instanceOf[ExecutionContext]
+
     "convert a `NoSuchElementException` into an `ApplicationException`" in {
 
       implicit val request: Request[AnyContent] = FakeRequest()
@@ -48,6 +49,7 @@ class RecoverableFutureSpec extends WordSpec with ScalaFutures with Matchers wit
     "not convert any other exception into an `ApplicationException`" in {
 
       implicit val request: Request[AnyContent] = FakeRequest()
+
       val ex = new IllegalArgumentException("test message")
 
       val future: Future[Result] = Future.failed(ex).recoverToStart

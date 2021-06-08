@@ -33,25 +33,30 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import views.html.calculation.howBecameOwner
+
+import scala.concurrent.ExecutionContext
 
 class HowBecameOwnerActionSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with MockitoSugar {
 
   implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
 
   val materializer = mock[Materializer]
+  val ec = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
   val defaultCache = mock[CacheMap]
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
-
+  val howBecameOwnerView = fakeApplication.injector.instanceOf[howBecameOwner]
 
   class Setup {
     val controller = new HowBecameOwnerController(
       mockHttp,
       mockCalcConnector,
-      mockMessagesControllerComponents
-    )(mockConfig, fakeApplication)
+      mockMessagesControllerComponents,
+      howBecameOwnerView
+    )(ec)
   }
 
   def setupTarget(getData: Option[HowBecameOwnerModel]): HowBecameOwnerController = {
@@ -63,7 +68,7 @@ class HowBecameOwnerActionSpec extends CommonPlaySpec with WithCommonFakeApplica
       ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(mock[CacheMap])
 
-    new HowBecameOwnerController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig, fakeApplication)
+    new HowBecameOwnerController(mockHttp, mockCalcConnector, mockMessagesControllerComponents, howBecameOwnerView)(ec)
   }
 
   "Calling .howBecameOwner action" when {
@@ -71,7 +76,7 @@ class HowBecameOwnerActionSpec extends CommonPlaySpec with WithCommonFakeApplica
     "provided with a valid session with no stored data" should {
       lazy val target = setupTarget(None)
       lazy val result = target.howBecameOwner(fakeRequestWithSession)
-      lazy val doc = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val doc = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       "return a status of 200" in {
         status(result) shouldBe 200
@@ -85,7 +90,7 @@ class HowBecameOwnerActionSpec extends CommonPlaySpec with WithCommonFakeApplica
     "provided with a valid session with stored data" should {
       lazy val target = setupTarget(Some(HowBecameOwnerModel("Bought")))
       lazy val result = target.howBecameOwner(fakeRequestWithSession)
-      lazy val doc = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val doc = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       "return a status of 200" in {
         status(result) shouldBe 200
@@ -156,7 +161,7 @@ class HowBecameOwnerActionSpec extends CommonPlaySpec with WithCommonFakeApplica
   "an invalid form with no answer is submitted" should {
     lazy val target = setupTarget(None)
     lazy val result = target.submitHowBecameOwner(fakeRequestToPOSTWithSession(("gainedBy", "")))
-    lazy val doc = Jsoup.parse(bodyOf(result)(materializer))
+    lazy val doc = Jsoup.parse(bodyOf(result)(materializer, ec))
 
     "return a status of 400" in {
       status(result) shouldBe 400

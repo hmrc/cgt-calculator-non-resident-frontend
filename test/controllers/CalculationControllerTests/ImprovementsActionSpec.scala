@@ -36,29 +36,32 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import views.html.calculation.improvements
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class ImprovementsActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
   implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
 
   val materializer = mock[Materializer]
+  val ec = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
   val defaultCache = mock[CacheMap]
   val mockAnswersConstructor = mock[AnswersConstructor]
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
-
+  val improvementsView = fakeApplication.injector.instanceOf[improvements]
 
   class Setup {
     val controller = new ImprovementsController(
       mockHttp,
       mockCalcConnector,
       mockAnswersConstructor,
-      mockMessagesControllerComponents
-    )(mockConfig, fakeApplication)
+      mockMessagesControllerComponents,
+      improvementsView
+    )(ec)
   }
 
   def setupTarget(getData: Option[ImprovementsModel],
@@ -87,7 +90,7 @@ class ImprovementsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
     when(mockCalcConnector.saveFormData[ImprovementsModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(mock[CacheMap]))
 
-    new ImprovementsController(mockHttp, mockCalcConnector, mockAnswersConstructor, mockMessagesControllerComponents)(mockConfig, fakeApplication)
+    new ImprovementsController(mockHttp, mockCalcConnector, mockAnswersConstructor, mockMessagesControllerComponents, improvementsView)(ec)
   }
 
   "In CalculationController calling the .improvements action " when {
@@ -98,7 +101,7 @@ class ImprovementsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
 
         lazy val target = setupTarget(None, Some(DateModel(1, 1, 2017)), Some(RebasedValueModel(1000)))
         lazy val result = target.improvements(fakeRequestWithSession)
-        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
         "return a 200" in {
           status(result) shouldBe 200
@@ -124,7 +127,7 @@ class ImprovementsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
           Some(RebasedValueModel(500))
         )
         lazy val result = target.improvements(fakeRequestWithSession)
-        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
         s"have a back link that contains ${commonMessages.back}" in {
           document.body.getElementById("back-link").text shouldEqual commonMessages.back
@@ -192,7 +195,7 @@ class ImprovementsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
       val target = setupTarget(None, Some(DateModel(1, 1, 2014)))
       lazy val request = fakeRequestToPOSTWithSession("isClaimingImprovements" -> "testData123", "improvementsAmt" -> "fhu39awd8")
       lazy val result = target.submitImprovements(request)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       "return a 400" in {
         status(result) shouldBe 400

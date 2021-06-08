@@ -17,24 +17,22 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => keystoreKeys}
-import config.ApplicationConfig
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import controllers.utils.RecoverableFuture
 import javax.inject.Inject
 import models.DateModel
-import play.api.Application
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-import views.html.{calculation => views}
+import views.html.calculation.outsideTaxYear
 
-import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.ExecutionContext
 
 class OutsideTaxYearController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
-                                         mcc: MessagesControllerComponents)(implicit val applicationConfig: ApplicationConfig,
-                                                                            implicit val application: Application)
+                                         mcc: MessagesControllerComponents,
+                                         outsideTaxYearView: outsideTaxYear)(implicit ec: ExecutionContext)
   extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   val outsideTaxYear: Action[AnyContent] = ValidateSession.async { implicit request =>
@@ -42,7 +40,7 @@ class OutsideTaxYearController @Inject()(http: DefaultHttpClient,calcConnector: 
       disposalDate <- calcConnector.fetchAndGetFormData[DateModel](keystoreKeys.disposalDate)
       taxYear <- calcConnector.getTaxYear(s"${disposalDate.get.year}-${disposalDate.get.month}-${disposalDate.get.day}")
     } yield {
-      Ok(views.outsideTaxYear(
+      Ok(outsideTaxYearView(
         taxYear = taxYear.get))
     }).recoverToStart
   }

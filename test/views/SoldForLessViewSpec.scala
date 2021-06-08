@@ -31,13 +31,13 @@ class SoldForLessViewSpec extends CommonPlaySpec with WithCommonFakeApplication 
 
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
-
+  lazy val soldForLessView = fakeApplication.injector.instanceOf[soldForLess]
 
   "The Sold for Less view spec" when {
 
     "supplied with no errors" should {
 
-      lazy val view = soldForLess(soldForLessForm)(fakeRequest, mockMessage, fakeApplication, mockConfig)
+      lazy val view = soldForLessView(soldForLessForm)(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${messages.question}'" in {
@@ -123,14 +123,14 @@ class SoldForLessViewSpec extends CommonPlaySpec with WithCommonFakeApplication 
       }
 
       "should produce the same output when render and f are called" in {
-        soldForLess.f(soldForLessForm)(fakeRequest, mockMessage, fakeApplication, mockConfig) shouldBe soldForLess.render(soldForLessForm, fakeRequest, mockMessage, fakeApplication, mockConfig)
+        soldForLessView.f(soldForLessForm)(fakeRequest, mockMessage) shouldBe soldForLessView.render(soldForLessForm, fakeRequest, mockMessage)
       }
     }
 
     "supplied with a form with errors" should {
 
       lazy val form = soldForLessForm.bind(Map("soldForLess" -> "a"))
-      lazy val view = soldForLess(form)(fakeRequest, mockMessage, fakeApplication, mockConfig)
+      lazy val view = soldForLessView(form)(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

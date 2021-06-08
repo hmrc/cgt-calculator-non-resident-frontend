@@ -30,11 +30,12 @@ class HowMuchGainViewSpec extends CommonPlaySpec with WithCommonFakeApplication 
 
   lazy val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  lazy val howMuchGainView = fakeApplication.injector.instanceOf[howMuchGain]
 
   "How Much Gain view" should {
 
     "supplied with no errors" when {
-      lazy val view = howMuchGain(howMuchGainForm)(fakeRequest, mockMessage, fakeApplication, mockConfig)
+      lazy val view = howMuchGainView(howMuchGainForm)(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${messages.HowMuchGain.question}'" in {
@@ -119,13 +120,13 @@ class HowMuchGainViewSpec extends CommonPlaySpec with WithCommonFakeApplication 
       }
 
       "should produce the same output when render and f are called" in {
-        howMuchGain.f(howMuchGainForm)(fakeRequest, mockMessage, fakeApplication, mockConfig) shouldBe howMuchGain.render(howMuchGainForm, fakeRequest, mockMessage, fakeApplication, mockConfig)
+        howMuchGainView.f(howMuchGainForm)(fakeRequest, mockMessage) shouldBe howMuchGainView.render(howMuchGainForm, fakeRequest, mockMessage)
       }
     }
 
     "supplied with a form with errors" should {
       lazy val form = howMuchGainForm.bind(Map("howMuchGain" -> "testData"))
-      lazy val view = howMuchGain(form)(fakeRequest, mockMessage, fakeApplication, mockConfig)
+      lazy val view = howMuchGainView(form)(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

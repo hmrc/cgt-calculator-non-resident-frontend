@@ -32,8 +32,9 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import org.mockito.Mockito._
+import views.html.whatNext.whatNext
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class WhatNextControllerSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
@@ -41,14 +42,16 @@ class WhatNextControllerSpec extends CommonPlaySpec with WithCommonFakeApplicati
   val mockHttp = mock[DefaultHttpClient]
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   lazy val materializer = mock[Materializer]
+  val ec = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val mockAnswersConstructor = mock[AnswersConstructor]
+  val whatNextView = fakeApplication.injector.instanceOf[whatNext]
 
   def setupTarget(summary: TotalGainAnswersModel): WhatNextController = {
     when(mockAnswersConstructor.getNRTotalGainAnswers(ArgumentMatchers.any()))
       .thenReturn(Future.successful(summary))
 
-    new WhatNextController(http = mock[DefaultHttpClient], mockAnswersConstructor, mockConfig, fakeApplication, mockMessagesControllerComponents)
+    new WhatNextController(http = mock[DefaultHttpClient], mockAnswersConstructor, mockMessagesControllerComponents, whatNextView)(ec)
   }
 
   lazy val answerModel = TotalGainAnswersModel(
@@ -72,7 +75,7 @@ class WhatNextControllerSpec extends CommonPlaySpec with WithCommonFakeApplicati
     lazy val target = setupTarget(answerModel)
     "provided with a valid request" should {
       lazy val result = target.whatNext(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       "return a status of 200" in {
         status(result) shouldBe 200

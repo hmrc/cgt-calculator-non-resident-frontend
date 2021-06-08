@@ -19,29 +19,26 @@ package controllers
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.nonresident.CalculationType
 import common.nonresident.TaxableGainCalculation._
-import config.ApplicationConfig
 import connectors.CalculatorConnector
 import constructors.AnswersConstructor
 import controllers.predicates.ValidActiveSession
 import controllers.utils.RecoverableFuture
 import javax.inject.Inject
 import models._
-import play.api.Application
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-import views.html.calculation
+import views.html.calculation.summary
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Random
 
 class SummaryController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
                                   answersConstructor: AnswersConstructor,
-                                  mcc: MessagesControllerComponents)(implicit val applicationConfig: ApplicationConfig,
-                                                                     implicit val application: Application)
+                                  mcc: MessagesControllerComponents,
+                                  summaryView: summary)(implicit ec: ExecutionContext)
                                     extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   val summary: Action[AnyContent] = ValidateSession.async { implicit request =>
@@ -116,7 +113,7 @@ class SummaryController @Inject()(http: DefaultHttpClient,calcConnector: Calcula
     } yield {
       calculationType.get.calculationType match {
         case CalculationType.flat =>
-          Ok(calculation.summary(calculationResult, taxYearModel.get, calculationType.get.calculationType,
+          Ok(summaryView(calculationResult, taxYearModel.get, calculationType.get.calculationType,
             answers.disposalValueModel.disposalValue,
             answers.acquisitionValueModel.acquisitionValueAmt,
             totalCosts,
@@ -125,7 +122,7 @@ class SummaryController @Inject()(http: DefaultHttpClient,calcConnector: Calcula
             showUserResearchPanel = showUserResearchPanel)
           )
         case CalculationType.timeApportioned =>
-          Ok(calculation.summary(calculationResult, taxYearModel.get, calculationType.get.calculationType,
+          Ok(summaryView(calculationResult, taxYearModel.get, calculationType.get.calculationType,
             answers.disposalValueModel.disposalValue,
             answers.acquisitionValueModel.acquisitionValueAmt,
             totalCosts,
@@ -134,7 +131,7 @@ class SummaryController @Inject()(http: DefaultHttpClient,calcConnector: Calcula
             showUserResearchPanel = showUserResearchPanel)
           )
         case CalculationType.rebased =>
-          Ok(calculation.summary(calculationResult, taxYearModel.get, calculationType.get.calculationType,
+          Ok(summaryView(calculationResult, taxYearModel.get, calculationType.get.calculationType,
             answers.disposalValueModel.disposalValue,
             answers.rebasedValueModel.get.rebasedValueAmt,
             totalCosts,

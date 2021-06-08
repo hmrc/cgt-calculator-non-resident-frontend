@@ -16,21 +16,25 @@
 
 package constructors
 
+import com.google.inject.Inject
 import models.ImprovementsModel
 import play.api.data.Form
 import play.api.i18n.{Messages, MessagesApi}
 import play.twirl.api.HtmlFormat
-import views.html.helpers._
+import views.html.helpers.{formHiddenYesNoRadio, formMultipleInputMoney, formInputMoney}
 
-object ImprovementsConstructor {
+class ImprovementsConstructor @Inject()(formHiddenYesNoRadioView: formHiddenYesNoRadio,
+                                        formMultipleInputMoneyView: formMultipleInputMoney,
+                                        formInputMoneyView: formInputMoney
+                                        ) {
   def generateImprovements(improvementsForm: Form[ImprovementsModel], improvementsOptions: Boolean,
                            question: String)(implicit messages: Messages, messagesApi: Option[MessagesApi] = None): HtmlFormat.Appendable = {
       if (improvementsOptions) {
-      formHiddenYesNoRadio(
+        formHiddenYesNoRadioView(
         improvementsForm,
         "isClaimingImprovements",
         question,
-        formMultipleInputMoney(
+          formMultipleInputMoneyView(
           improvementsForm,
           Seq(
             ("improvementsAmt", "calc.improvements.questionThree", None),
@@ -42,11 +46,11 @@ object ImprovementsConstructor {
         hideLegend = true
       )(messages)
     } else {
-      formHiddenYesNoRadio(
+        formHiddenYesNoRadioView(
         improvementsForm,
         "isClaimingImprovements",
         question,
-        formInputMoney(improvementsForm, "improvementsAmt", "calc.improvements.questionTwo", labelClasses = "bold-small")(messages, messagesApi),
+          formInputMoneyView(improvementsForm, "improvementsAmt", "calc.improvements.questionTwo", labelClasses = "bold-small")(messages, messagesApi),
         None,
         hideLegend = true
       )(messages)

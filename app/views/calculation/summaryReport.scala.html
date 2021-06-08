@@ -14,22 +14,23 @@
  * limitations under the License.
  *@
 
-@import views.html.helpers.summarySectionNoLink
-@import views.html.helpers.summaryPartial
 @import models._
-@import uk.gov.hmrc.play.views.helpers.MoneyPounds
+
 @import constructors.OtherReliefsDetailsConstructor
 @import common.Transformers.{booleanToMessageString, checkIfBooleanAsString}
 @import common.Dates._
 @import common.Dates.TemplateImplicits._
 @import java.time._
-@import views.html.helpers._
-@import play.api.Application
+@import uk.gov.hmrc.play.views.helpers.MoneyPounds
 
-@import config.ApplicationConfig
+@this(
+    summaryPartial: helpers.summaryPartial,
+    summarySectionNoLink: helpers.summarySectionNoLink
+)
+
 @(questions: Seq[QuestionAnswerModel[Any]],
 calculationResult: TotalTaxOwedModel, taxYearModel: TaxYearModel, calculationType: String,
-disposalValue: BigDecimal, acquisitionValue: BigDecimal, totalCosts: BigDecimal, flatGain: Option[BigDecimal] = None, reliefsUsed: BigDecimal = 0)(implicit request: Request[_], messages: Messages, lang: Lang, application: Application, applicationConfig: ApplicationConfig)
+disposalValue: BigDecimal, acquisitionValue: BigDecimal, totalCosts: BigDecimal, flatGain: Option[BigDecimal] = None, reliefsUsed: BigDecimal = 0)(implicit request: Request[_], messages: Messages, lang: Lang)
 
 <!DOCTYPE html>
 <html>

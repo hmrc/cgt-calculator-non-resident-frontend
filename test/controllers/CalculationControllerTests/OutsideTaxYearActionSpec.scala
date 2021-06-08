@@ -33,8 +33,9 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import views.html.calculation.outsideTaxYear
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class OutsideTaxYearActionSpec()
   extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with MockitoSugar {
@@ -42,10 +43,12 @@ class OutsideTaxYearActionSpec()
   implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val materializer = mock[Materializer]
+  val ec = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
   val defaultCache = mock[CacheMap]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
+  val outsideTaxYearView = fakeApplication.injector.instanceOf[outsideTaxYear]
 
   def setupTarget(disposalDateModel: Option[DateModel], taxYearModel: Option[TaxYearModel]): OutsideTaxYearController = {
 
@@ -55,7 +58,7 @@ class OutsideTaxYearActionSpec()
     when(mockCalcConnector.getTaxYear(ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(Future.successful(taxYearModel))
 
-    new OutsideTaxYearController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig, fakeApplication) {
+    new OutsideTaxYearController(mockHttp, mockCalcConnector, mockMessagesControllerComponents, outsideTaxYearView)(ec) {
     }
   }
 
@@ -74,11 +77,11 @@ class OutsideTaxYearActionSpec()
       }
 
       s"return a title of ${messages.title}" in {
-        Jsoup.parse(bodyOf(result)(materializer)).title shouldBe messages.title
+        Jsoup.parse(bodyOf(result)(materializer, ec)).title shouldBe messages.title
       }
 
       s"have a back link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-        Jsoup.parse(bodyOf(result)(materializer)).getElementById("back-link").attr("href") shouldBe controllers.routes.DisposalDateController.disposalDate().url
+        Jsoup.parse(bodyOf(result)(materializer, ec)).getElementById("back-link").attr("href") shouldBe controllers.routes.DisposalDateController.disposalDate().url
       }
     }
 

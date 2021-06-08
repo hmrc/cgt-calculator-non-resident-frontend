@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import views.html.helpers._
+@this(summaryNumericRow: summaryNumericRow)
 
 @(gain: BigDecimal, totalDeductions: BigDecimal, taxableGain: BigDecimal)(implicit request: Request[_], messages: Messages, messagesApi: Option[MessagesApi] = None)
 

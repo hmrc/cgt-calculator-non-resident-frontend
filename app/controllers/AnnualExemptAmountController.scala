@@ -19,7 +19,6 @@ package controllers
 import common.DefaultRoutes._
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.TaxDates
-import config.ApplicationConfig
 import connectors.CalculatorConnector
 import constructors.DefaultCalculationElectionConstructor
 import controllers.predicates.ValidActiveSession
@@ -27,24 +26,21 @@ import controllers.utils.RecoverableFuture
 import forms.AnnualExemptAmountForm._
 import javax.inject.Inject
 import models._
-import play.api.Application
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-import views.html.calculation
+import views.html.calculation.annualExemptAmount
 
-import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
-
 
 class AnnualExemptAmountController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
                                              calcElectionConstructor: DefaultCalculationElectionConstructor,
-                                             mcc: MessagesControllerComponents)
-                                            (implicit val applicationConfig: ApplicationConfig,
-                                             implicit val application: Application)
+                                             mcc: MessagesControllerComponents,
+                                             annualExemptAmountView: annualExemptAmount)(implicit ec: ExecutionContext)
                                               extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
 
@@ -104,8 +100,8 @@ class AnnualExemptAmountController @Inject()(http: DefaultHttpClient,calcConnect
 
     def routeRequest(model: Option[AnnualExemptAmountModel], maxAEA: BigDecimal, backUrl: String): Future[Result] = {
       calcConnector.fetchAndGetFormData[AnnualExemptAmountModel](KeystoreKeys.annualExemptAmount).map {
-        case Some(data) => Ok(calculation.annualExemptAmount(annualExemptAmountForm().fill(data), maxAEA, backUrl))
-        case None => Ok(calculation.annualExemptAmount(annualExemptAmountForm(), maxAEA, backUrl))
+        case Some(data) => Ok(annualExemptAmountView(annualExemptAmountForm().fill(data), maxAEA, backUrl))
+        case None => Ok(annualExemptAmountView(annualExemptAmountForm(), maxAEA, backUrl))
       }
     }
 
@@ -127,7 +123,7 @@ class AnnualExemptAmountController @Inject()(http: DefaultHttpClient,calcConnect
   val submitAnnualExemptAmount: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     def errorAction(form: Form[AnnualExemptAmountModel], maxAEA: BigDecimal, backUrl: String) = {
-      Future.successful(BadRequest(calculation.annualExemptAmount(form, maxAEA, backUrl)))
+      Future.successful(BadRequest(annualExemptAmountView(form, maxAEA, backUrl)))
     }
 
     def successAction(model: AnnualExemptAmountModel) = {

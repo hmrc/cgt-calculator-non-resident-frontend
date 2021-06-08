@@ -17,41 +17,39 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => keystoreKeys}
-import config.ApplicationConfig
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import controllers.utils.RecoverableFuture
 import forms.WhoDidYouGiveItToForm._
 import javax.inject.Inject
 import models.WhoDidYouGiveItToModel
-import play.api.Application
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-import views.html.{calculation => views}
+import views.html.calculation.{noTaxToPay, whoDidYouGiveItTo}
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 
 class WhoDidYouGiveItToController @Inject()(http: DefaultHttpClient,
                                             calcConnector: CalculatorConnector,
                                             mcc: MessagesControllerComponents,
-                                            implicit val appConfig: ApplicationConfig,
-                                            implicit val application: Application) extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
+                                            noTaxToPayView: noTaxToPay,
+                                            whoDidYouGiveItToView: whoDidYouGiveItTo)
+                                           (implicit ec: ExecutionContext) extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   val whoDidYouGiveItTo = ValidateSession.async { implicit request =>
 
     calcConnector.fetchAndGetFormData[WhoDidYouGiveItToModel](keystoreKeys.whoDidYouGiveItTo).map {
-      case Some(data) => Ok(views.whoDidYouGiveItTo(whoDidYouGiveItToForm.fill(data)))
-      case _ => Ok(views.whoDidYouGiveItTo(whoDidYouGiveItToForm))
+      case Some(data) => Ok(whoDidYouGiveItToView(whoDidYouGiveItToForm.fill(data)))
+      case _ => Ok(whoDidYouGiveItToView(whoDidYouGiveItToForm))
     }
   }
 
   val submitWhoDidYouGiveItTo: Action[AnyContent] = ValidateSession.async { implicit request =>
     whoDidYouGiveItToForm.bindFromRequest.fold(
-      errors => Future.successful(BadRequest(views.whoDidYouGiveItTo(errors))),
+      errors => Future.successful(BadRequest(whoDidYouGiveItToView(errors))),
       success => {
         calcConnector.saveFormData[WhoDidYouGiveItToModel](keystoreKeys.whoDidYouGiveItTo, success).map(_ =>
         success match {
@@ -72,7 +70,7 @@ class WhoDidYouGiveItToController @Inject()(http: DefaultHttpClient,
     }
 
     def result(input: Boolean): Future[Result] = {
-      Future.successful(Ok(views.noTaxToPay(input)))
+      Future.successful(Ok(noTaxToPayView(input)))
     }
 
     (for {

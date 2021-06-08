@@ -18,7 +18,6 @@ package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.nonresident.TaxableGainCalculation._
-import config.ApplicationConfig
 import connectors.CalculatorConnector
 import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
 import controllers.predicates.ValidActiveSession
@@ -26,26 +25,24 @@ import controllers.utils.RecoverableFuture
 import forms.CalculationElectionForm._
 import javax.inject.Inject
 import models._
-import play.api.Application
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-import views.html.calculation
+import views.html.calculation.{calculationElection, calculationElectionNoReliefs}
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 
 class CalculationElectionController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
                                               calcAnswersConstructor: AnswersConstructor,
                                               calcElectionConstructor: DefaultCalculationElectionConstructor,
-                                              mcc: MessagesControllerComponents)
-                                             (implicit val applicationConfig: ApplicationConfig,
-                                              implicit val application: Application)
-                                                extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
+                                              mcc: MessagesControllerComponents,
+                                              calculationElectionView: calculationElection,
+                                              calculationElectionNoReliefsView: calculationElectionNoReliefs)(implicit ec: ExecutionContext)
+                                             extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   def orderElements(content: Seq[(String, String, String, String, Option[String], Option[BigDecimal])],
                     claimingReliefs: Boolean): Seq[(String, String, String, String, Option[String], Option[BigDecimal])] = {
@@ -134,16 +131,16 @@ class CalculationElectionController @Inject()(http: DefaultHttpClient,calcConnec
           case _ => calculationElectionForm
         }
 
-        if (isClaimingReliefs) Ok(calculation.calculationElection(form, content))
-        else Ok(calculation.calculationElectionNoReliefs(form, content, backLink))
+        if (isClaimingReliefs) Ok(calculationElectionView(form, content))
+        else Ok(calculationElectionNoReliefsView(form, content, backLink))
       }
 
     (for {
-      totalGainAnswers <- calcAnswersConstructor.getNRTotalGainAnswers(hc)
-      totalGain <- calcConnector.calculateTotalGain(totalGainAnswers)(hc)
+      totalGainAnswers <- calcAnswersConstructor.getNRTotalGainAnswers
+      totalGain <- calcConnector.calculateTotalGain(totalGainAnswers)
       gainExists <- checkGainExists(totalGain.get)
-      propertyLivedIn <- getPropertyLivedInResponse(gainExists, calcConnector)(hc)
-      prrAnswers <- getPrrResponse(propertyLivedIn, calcConnector)(hc)
+      propertyLivedIn <- getPropertyLivedInResponse(gainExists, calcConnector)
+      prrAnswers <- getPrrResponse(propertyLivedIn, calcConnector)
       isClaimingReliefs <- determineClaimingReliefs(totalGain.get)
       totalGainWithPRR <- getPrrIfApplicable(totalGainAnswers, prrAnswers, propertyLivedIn, calcConnector)
       allAnswers <- getFinalSectionsAnswers(totalGain.get, totalGainWithPRR, calcConnector, calcAnswersConstructor)
@@ -172,16 +169,16 @@ class CalculationElectionController @Inject()(http: DefaultHttpClient,calcConnec
     def errorAction(form: Form[CalculationElectionModel]) = {
 
       def action(content: Seq[(String, String, String, String, Option[String], Option[BigDecimal])], isClaimingReliefs: Boolean, backLink: String) = {
-        if (isClaimingReliefs) BadRequest(calculation.calculationElection(form, content))
-        else BadRequest(calculation.calculationElectionNoReliefs(form, content, backLink))
+        if (isClaimingReliefs) BadRequest(calculationElectionView(form, content))
+        else BadRequest(calculationElectionNoReliefsView(form, content, backLink))
       }
 
       (for {
-        totalGainAnswers <- calcAnswersConstructor.getNRTotalGainAnswers(hc)
-        totalGain <- calcConnector.calculateTotalGain(totalGainAnswers)(hc)
+        totalGainAnswers <- calcAnswersConstructor.getNRTotalGainAnswers
+        totalGain <- calcConnector.calculateTotalGain(totalGainAnswers)
         gainExists <- checkGainExists(totalGain.get)
-        propertyLivedIn <- getPropertyLivedInResponse(gainExists, calcConnector)(hc)
-        prrAnswers <- getPrrResponse(propertyLivedIn, calcConnector)(hc)
+        propertyLivedIn <- getPropertyLivedInResponse(gainExists, calcConnector)
+        prrAnswers <- getPrrResponse(propertyLivedIn, calcConnector)
         isClaimingReliefs <- determineClaimingReliefs(totalGain.get)
         totalGainWithPRR <- getPrrIfApplicable(totalGainAnswers, prrAnswers, propertyLivedIn, calcConnector)
         allAnswers <- getFinalSectionsAnswers(totalGain.get, totalGainWithPRR, calcConnector, calcAnswersConstructor)

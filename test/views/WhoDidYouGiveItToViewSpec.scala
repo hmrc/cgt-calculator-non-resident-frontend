@@ -30,10 +30,11 @@ import views.html.calculation.whoDidYouGiveItTo
 class WhoDidYouGiveItToViewSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with MockitoSugar {
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  val whoDidYouGiveItToView = fakeApplication.injector.instanceOf[whoDidYouGiveItTo]
 
   "Property Recipient view" should {
 
-    lazy val view = whoDidYouGiveItTo(whoDidYouGiveItToForm)(fakeRequest, mockMessage, fakeApplication, mockConfig)
+    lazy val view = whoDidYouGiveItToView(whoDidYouGiveItToForm)(fakeRequest, mockMessage)
     lazy val doc = Jsoup.parse(view.body)
 
     "have a charset of UTF-8" in {
@@ -115,13 +116,13 @@ class WhoDidYouGiveItToViewSpec extends CommonPlaySpec with WithCommonFakeApplic
     }
 
     "should produce the same output when render and f are called" in {
-      whoDidYouGiveItTo.f(whoDidYouGiveItToForm)(fakeRequest, mockMessage, fakeApplication, mockConfig) shouldBe whoDidYouGiveItTo.render(whoDidYouGiveItToForm, fakeRequest, mockMessage, fakeApplication, mockConfig)
+      whoDidYouGiveItToView.f(whoDidYouGiveItToForm)(fakeRequest, mockMessage) shouldBe whoDidYouGiveItToView.render(whoDidYouGiveItToForm, fakeRequest, mockMessage)
     }
   }
 
   "WhoDidYouGiveItToView with form with errors" should {
     lazy val form = whoDidYouGiveItToForm.bind(Map("whoDidYouGiveItTo" -> ""))
-    lazy val view = whoDidYouGiveItTo(form)(fakeRequest, mockMessage, fakeApplication, mockConfig)
+    lazy val view = whoDidYouGiveItToView(form)(fakeRequest, mockMessage)
     lazy val doc = Jsoup.parse(view.body)
 
     "display an error summary message regarding incorrect value being inputted" in {

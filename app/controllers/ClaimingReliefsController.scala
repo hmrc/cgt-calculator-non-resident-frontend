@@ -17,40 +17,36 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import config.ApplicationConfig
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import forms.ClaimingReliefsForm.claimingReliefsForm
 import javax.inject.Inject
 import models.ClaimingReliefsModel
-import play.api.Application
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-import views.html.calculation
+import views.html.calculation.claimingReliefs
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class ClaimingReliefsController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
-                                          mcc: MessagesControllerComponents)
-                                         (implicit val applicationConfig: ApplicationConfig,
-                                          implicit val application: Application)
+                                          mcc: MessagesControllerComponents,
+                                          claimingReliefsView: claimingReliefs)(implicit ec: ExecutionContext)
                                             extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   val claimingReliefs: Action[AnyContent] = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[ClaimingReliefsModel](KeystoreKeys.claimingReliefs).map {
-      case Some(data) => Ok(calculation.claimingReliefs(claimingReliefsForm.fill(data)))
-      case None => Ok(calculation.claimingReliefs(claimingReliefsForm))
+      case Some(data) => Ok(claimingReliefsView(claimingReliefsForm.fill(data)))
+      case None => Ok(claimingReliefsView(claimingReliefsForm))
     }
   }
 
   val submitClaimingReliefs: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     def errorAction(errors: Form[ClaimingReliefsModel]) =
-      Future.successful(BadRequest(views.html.calculation.claimingReliefs(errors)))
+      Future.successful(BadRequest(claimingReliefsView(errors)))
 
     def successAction(model: ClaimingReliefsModel) = {
       calcConnector.saveFormData(KeystoreKeys.claimingReliefs, model).map(_ =>

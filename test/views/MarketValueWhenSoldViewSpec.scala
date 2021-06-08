@@ -32,10 +32,12 @@ class MarketValueWhenSoldViewSpec extends CommonPlaySpec with WithCommonFakeAppl
 
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  lazy val marketValueSoldView = fakeApplication.injector.instanceOf[marketValueSold]
+
 
   "The market value when gave away page" should {
 
-    lazy val view = marketValueSold(marketValueForm)(fakeRequest, mockMessage, fakeApplication, mockConfig)
+    lazy val view = marketValueSoldView(marketValueForm)(fakeRequest, mockMessage)
     lazy val document = Jsoup.parse(view.body)
 
     "supplied with no errors" should {
@@ -122,13 +124,13 @@ class MarketValueWhenSoldViewSpec extends CommonPlaySpec with WithCommonFakeAppl
       }
 
       "should produce the same output when render and f are called" in {
-        marketValueSold.f(marketValueForm)(fakeRequest, mockMessage, fakeApplication, mockConfig) shouldBe marketValueSold.render(marketValueForm, fakeRequest, mockMessage, fakeApplication, mockConfig)
+        marketValueSoldView.f(marketValueForm)(fakeRequest, mockMessage) shouldBe marketValueSoldView.render(marketValueForm, fakeRequest, mockMessage)
       }
     }
 
     "supplied with a form with errors" should {
       lazy val form = marketValueForm.bind(Map("disposalValue" -> "testData"))
-      lazy val view = marketValueSold(form)(fakeRequest, mockMessage, fakeApplication, mockConfig)
+      lazy val view = marketValueSoldView(form)(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

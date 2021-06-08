@@ -36,8 +36,9 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import views.html.calculation.{noTaxToPay, whoDidYouGiveItTo}
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 
 class WhoDidYouGiveItToControllerSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with MockitoSugar {
@@ -45,17 +46,20 @@ class WhoDidYouGiveItToControllerSpec extends CommonPlaySpec with WithCommonFake
   implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val materializer = mock[Materializer]
+  val ec = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
   val defaultCache = mock[CacheMap]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
+  val noTaxToPayView = fakeApplication.injector.instanceOf[noTaxToPay]
+  val whoDidYouGiveItToView = fakeApplication.injector.instanceOf[whoDidYouGiveItTo]
 
   class Setup {
     val controller = new WhoDidYouGiveItToController(
       mockHttp,
       mockCalcConnector,
       mockMessagesControllerComponents,
-      mockConfig, fakeApplication)
+       noTaxToPayView, whoDidYouGiveItToView)(ec)
   }
 
   def setupTarget(getData: Option[WhoDidYouGiveItToModel]): WhoDidYouGiveItToController = {
@@ -66,7 +70,7 @@ class WhoDidYouGiveItToControllerSpec extends CommonPlaySpec with WithCommonFake
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new WhoDidYouGiveItToController(mockHttp, mockCalcConnector, mockMessagesControllerComponents, mockConfig, fakeApplication)
+    new WhoDidYouGiveItToController(mockHttp, mockCalcConnector, mockMessagesControllerComponents, noTaxToPayView, whoDidYouGiveItToView)(ec)
   }
 
 
@@ -80,7 +84,7 @@ class WhoDidYouGiveItToControllerSpec extends CommonPlaySpec with WithCommonFake
       }
 
       s"return some html with title of ${MessageLookup.WhoDidYouGiveItTo.title}" in {
-        Jsoup.parse(bodyOf(result)(materializer)).select("h1").text shouldEqual MessageLookup.WhoDidYouGiveItTo.title
+        Jsoup.parse(bodyOf(result)(materializer, ec)).select("h1").text shouldEqual MessageLookup.WhoDidYouGiveItTo.title
       }
     }
 
@@ -93,7 +97,7 @@ class WhoDidYouGiveItToControllerSpec extends CommonPlaySpec with WithCommonFake
       }
 
       s"return some html with title of ${MessageLookup.WhoDidYouGiveItTo.title}" in {
-        Jsoup.parse(bodyOf(result)(materializer)).select("h1").text shouldEqual MessageLookup.WhoDidYouGiveItTo.title
+        Jsoup.parse(bodyOf(result)(materializer, ec)).select("h1").text shouldEqual MessageLookup.WhoDidYouGiveItTo.title
       }
     }
   }
@@ -150,7 +154,7 @@ class WhoDidYouGiveItToControllerSpec extends CommonPlaySpec with WithCommonFake
     "A valid session is provided when gifted to charity" should {
       lazy val target = setupTarget(Some(WhoDidYouGiveItToModel("Charity")))
       lazy val result = target.noTaxToPay(fakeRequestWithSession)
-      lazy val doc = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val doc = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       "return a status of 200" in {
         status(result) shouldBe 200
@@ -167,7 +171,7 @@ class WhoDidYouGiveItToControllerSpec extends CommonPlaySpec with WithCommonFake
       "A valid session is provided when gifted to a spouse" should {
         lazy val target = setupTarget(Some(WhoDidYouGiveItToModel("Spouse")))
         lazy val result = target.noTaxToPay(fakeRequestWithSession)
-        lazy val doc = Jsoup.parse(bodyOf(result)(materializer))
+        lazy val doc = Jsoup.parse(bodyOf(result)(materializer, ec))
 
         "return a status of 200" in {
           status(result) shouldBe 200

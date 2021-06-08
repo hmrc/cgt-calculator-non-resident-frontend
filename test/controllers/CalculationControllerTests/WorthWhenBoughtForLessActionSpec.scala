@@ -34,8 +34,9 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import views.html.calculation.worthWhenBoughtForLess
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class WorthWhenBoughtForLessActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
@@ -43,17 +44,20 @@ class WorthWhenBoughtForLessActionSpec extends CommonPlaySpec with WithCommonFak
 
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val materializer = mock[Materializer]
+  val ec = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
   val defaultCache = mock[CacheMap]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
+  val worthWhenBoughtForLessView = fakeApplication.injector.instanceOf[worthWhenBoughtForLess]
 
   class Setup {
     val controller = new WorthWhenBoughtForLessController(
       mockHttp,
       mockCalcConnector,
-      mockMessagesControllerComponents
-    )(mockConfig, fakeApplication)
+      mockMessagesControllerComponents,
+      worthWhenBoughtForLessView
+    )(ec)
   }
 
   def setupTarget(getData: Option[AcquisitionValueModel]): WorthWhenBoughtForLessController = {
@@ -65,7 +69,7 @@ class WorthWhenBoughtForLessActionSpec extends CommonPlaySpec with WithCommonFak
     when(mockCalcConnector.saveFormData[AcquisitionValueModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(mock[CacheMap]))
 
-    new WorthWhenBoughtForLessController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig, fakeApplication)
+    new WorthWhenBoughtForLessController(mockHttp, mockCalcConnector, mockMessagesControllerComponents, worthWhenBoughtForLessView)(ec)
   }
 
   "Calling .worthWhenBoughtForLess" when {
@@ -81,7 +85,7 @@ class WorthWhenBoughtForLessActionSpec extends CommonPlaySpec with WithCommonFak
 
       s"return some html with title of ${messages.question}" in {
         contentType(result) shouldBe Some("text/html")
-        Jsoup.parse(bodyOf(result)(materializer)).title shouldEqual messages.question
+        Jsoup.parse(bodyOf(result)(materializer, ec)).title shouldEqual messages.question
       }
     }
 
@@ -96,7 +100,7 @@ class WorthWhenBoughtForLessActionSpec extends CommonPlaySpec with WithCommonFak
 
       s"return some html with title of ${messages.question}" in {
         contentType(result) shouldBe Some("text/html")
-        Jsoup.parse(bodyOf(result)(materializer)).title shouldEqual messages.question
+        Jsoup.parse(bodyOf(result)(materializer, ec)).title shouldEqual messages.question
       }
     }
 
@@ -137,7 +141,7 @@ class WorthWhenBoughtForLessActionSpec extends CommonPlaySpec with WithCommonFak
       lazy val target = setupTarget(None)
       lazy val request = fakeRequestToPOSTWithSession(("acquisitionMarketValue", "a"))
       lazy val result = target.submitWorthWhenBoughtForLess(request)
-      lazy val doc = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val doc = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       "return a status of 400" in {
         status(result) shouldBe 400

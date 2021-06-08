@@ -29,12 +29,12 @@ import views.html.calculation.rebasedCosts
 class RebasedCostsViewSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with MockitoSugar {
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
-
+  lazy val rebasedCostsView = fakeApplication.injector.instanceOf[rebasedCosts]
 
   "The rebased value view" when {
 
     "not supplied with a pre-existing stored model" should {
-      lazy val view = rebasedCosts(rebasedCostsForm)(fakeRequest, mockMessage, fakeApplication, mockConfig)
+      lazy val view = rebasedCostsView(rebasedCostsForm)(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       s"Have the title ${messages.RebasedCosts.question}" in {
@@ -122,7 +122,7 @@ class RebasedCostsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
       }
 
       "should produce the same output when render and f are called" in {
-        rebasedCosts.f(rebasedCostsForm)(fakeRequest, mockMessage, fakeApplication, mockConfig) shouldBe rebasedCosts.render(rebasedCostsForm, fakeRequest, mockMessage, fakeApplication, mockConfig)
+        rebasedCostsView.f(rebasedCostsForm)(fakeRequest, mockMessage) shouldBe rebasedCostsView.render(rebasedCostsForm, fakeRequest, mockMessage)
       }
     }
 
@@ -131,7 +131,7 @@ class RebasedCostsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
         "hasRebasedCosts" -> "Yes",
         "rebasedCosts" -> ""
       ))
-      lazy val view = rebasedCosts(form)(fakeRequest, mockMessage, fakeApplication, mockConfig)
+      lazy val view = rebasedCostsView(form)(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

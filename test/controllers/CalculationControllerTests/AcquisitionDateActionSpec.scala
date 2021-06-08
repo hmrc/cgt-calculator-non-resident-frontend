@@ -35,13 +35,15 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import views.html.calculation.acquisitionDate
+import views.html.warnings.sessionTimeout
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class AcquisitionDateActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
   implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
-
+  val ec = fakeApplication.injector.instanceOf[ExecutionContext]
   val materializer = mock[Materializer]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
@@ -49,6 +51,8 @@ class AcquisitionDateActionSpec extends CommonPlaySpec with WithCommonFakeApplic
   val mockDefaultCalcElecConstructor = mock[DefaultCalculationElectionConstructor]
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
+  val acquisitionCostsView = fakeApplication.injector.instanceOf[acquisitionDate]
+  val sessionTimeoutView = fakeApplication.injector.instanceOf[sessionTimeout]
 
 
   class Setup {
@@ -56,8 +60,9 @@ class AcquisitionDateActionSpec extends CommonPlaySpec with WithCommonFakeApplic
       mockHttp,
       mockCalcConnector,
       mockDefaultCalcElecConstructor,
-      mockMessagesControllerComponents
-    )(mockConfig, fakeApplication)
+      mockMessagesControllerComponents,
+      acquisitionCostsView
+    )(ec)
   }
 
   def setupTarget(getData: Option[DateModel]
@@ -69,11 +74,11 @@ class AcquisitionDateActionSpec extends CommonPlaySpec with WithCommonFakeApplic
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new AcquisitionDateController(mockHttp, mockCalcConnector, mockDefaultCalcElecConstructor, mockMessagesControllerComponents)(mockConfig, fakeApplication) {
+    new AcquisitionDateController(mockHttp, mockCalcConnector, mockDefaultCalcElecConstructor, mockMessagesControllerComponents, acquisitionCostsView)(ec) {
     }
   }
 
-  val controller = new TimeoutController(mockMessagesControllerComponents)(mockConfig, fakeApplication)
+  val controller = new TimeoutController(mockMessagesControllerComponents, sessionTimeoutView)
 
 
   "Calling the .acquisitionDate action " should {
@@ -95,7 +100,7 @@ class AcquisitionDateActionSpec extends CommonPlaySpec with WithCommonFakeApplic
 
       val target = setupTarget(None)
       lazy val result = target.acquisitionDate(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       "return a 200" in {
         status(result) shouldBe 200
@@ -111,7 +116,7 @@ class AcquisitionDateActionSpec extends CommonPlaySpec with WithCommonFakeApplic
       val testAcquisitionDateModel = new DateModel(10, 12, 2016)
       val target = setupTarget(Some(testAcquisitionDateModel))
       lazy val result = target.acquisitionDate(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       "return a 200" in {
         status(result) shouldBe 200

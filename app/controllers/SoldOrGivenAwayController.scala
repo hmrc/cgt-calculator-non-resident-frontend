@@ -17,38 +17,36 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import config.ApplicationConfig
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import forms.SoldOrGivenAwayForm._
 import javax.inject.Inject
 import models.SoldOrGivenAwayModel
-import play.api.Application
 import play.api.i18n.I18nSupport
 import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-import views.html.calculation
+import views.html.calculation.soldOrGivenAway
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class SoldOrGivenAwayController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
-                                          mcc: MessagesControllerComponents)(implicit val applicationConfig: ApplicationConfig,
-                                                                             implicit val application: Application)
+                                          mcc: MessagesControllerComponents,
+                                          soldOrGivenAwayView: soldOrGivenAway)
+                                         (implicit ec: ExecutionContext)
                                             extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   val soldOrGivenAway = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[SoldOrGivenAwayModel](KeystoreKeys.soldOrGivenAway).map {
-      case Some(data) => Ok(calculation.soldOrGivenAway(soldOrGivenAwayForm.fill(data)))
-      case None => Ok(calculation.soldOrGivenAway(soldOrGivenAwayForm))
+      case Some(data) => Ok(soldOrGivenAwayView(soldOrGivenAwayForm.fill(data)))
+      case None => Ok(soldOrGivenAwayView(soldOrGivenAwayForm))
     }
   }
 
   val submitSoldOrGivenAway = ValidateSession.async { implicit request =>
 
     soldOrGivenAwayForm.bindFromRequest.fold(
-      errors => Future.successful(BadRequest(calculation.soldOrGivenAway(errors))),
+      errors => Future.successful(BadRequest(soldOrGivenAwayView(errors))),
       success => {
         calcConnector.saveFormData[SoldOrGivenAwayModel](KeystoreKeys.soldOrGivenAway, success).map(_ =>
         success match {

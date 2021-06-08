@@ -26,16 +26,17 @@ import forms.AcquisitionValueForm._
 import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
-import views.html.{calculation => views}
+import views.html.calculation.acquisitionValue
 
 class AcquisitionValueViewSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with MockitoSugar {
 
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  lazy val acquisitionValueView = fakeApplication.injector.instanceOf[acquisitionValue]
 
   "the Acquisition Value View" should {
 
-    lazy val view = views.acquisitionValue(acquisitionValueForm)(fakeRequest,mockMessage, fakeApplication, mockConfig)
+    lazy val view = acquisitionValueView(acquisitionValueForm)(fakeRequest,mockMessage)
     lazy val document = Jsoup.parse(view.body)
 
     "have a h1 tag that" should {
@@ -113,7 +114,7 @@ class AcquisitionValueViewSpec extends CommonPlaySpec with WithCommonFakeApplica
 
     "supplied with errors" should {
       lazy val form = acquisitionValueForm.bind(Map("acquisitionValue" -> "a"))
-      lazy val view = views.acquisitionValue(form)(fakeRequest,mockMessage, fakeApplication, mockConfig)
+      lazy val view = acquisitionValueView(form)(fakeRequest,mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {
@@ -122,8 +123,8 @@ class AcquisitionValueViewSpec extends CommonPlaySpec with WithCommonFakeApplica
     }
 
     "produce the same output when render and f are called " in {
-      views.acquisitionValue.render(acquisitionValueForm, fakeRequest,mockMessage, fakeApplication, mockConfig) shouldBe
-        views.acquisitionValue.f(acquisitionValueForm)(fakeRequest,mockMessage, fakeApplication, mockConfig)
+      acquisitionValueView.render(acquisitionValueForm, fakeRequest,mockMessage) shouldBe
+        acquisitionValueView.f(acquisitionValueForm)(fakeRequest,mockMessage)
     }
   }
 }

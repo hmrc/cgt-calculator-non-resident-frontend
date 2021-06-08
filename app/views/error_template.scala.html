@@ -14,10 +14,9 @@
  * limitations under the License.
  *@
 
-@import config.ApplicationConfig
-@import play.api.Application
+@this(govukWrapper: govuk_wrapper)
 
-@(pageTitle: String, heading: String, message: String)(implicit request: Request[_], messages: Messages, applicationConfig: ApplicationConfig)
+@(pageTitle: String, heading: String, message: String)(implicit request: Request[_], messages: Messages)
 
 @contentHeader = {
   <h1>@heading</h1>
@@ -27,4 +26,4 @@
   <p>@message</p>
 }
 
-@govuk_wrapper(appConfig = applicationConfig, title = pageTitle, contentHeader = Some(contentHeader), mainContent = mainContent)
+@govukWrapper(title = pageTitle, contentHeader = Some(contentHeader), mainContent = mainContent)

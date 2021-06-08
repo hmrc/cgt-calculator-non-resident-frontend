@@ -16,6 +16,8 @@
 
 @import models.QuestionAnswerModel
 
+@this(questionAnswerRowNoLink: questionAnswerRowNoLink)
+
 @(sectionID: String, sectionTitle: String, rows: Seq[QuestionAnswerModel[Any]], decimalPlaces: Int = 2)(implicit messages: Messages, lang: Lang)
 
 @if(rows.nonEmpty) {

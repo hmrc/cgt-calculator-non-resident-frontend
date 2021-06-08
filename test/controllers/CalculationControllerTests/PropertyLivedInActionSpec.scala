@@ -34,27 +34,30 @@ import play.api.test.Helpers.{contentType, _}
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import views.html.calculation.propertyLivedIn
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class PropertyLivedInActionSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with MockitoSugar {
 
   implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
 
   val materializer = mock[Materializer]
+  val ec = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
   val defaultCache = mock[CacheMap]
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
-
+  val propertyLivedInView = fakeApplication.injector.instanceOf[propertyLivedIn]
 
   class Setup {
     val controller = new PropertyLivedInController(
       mockHttp,
       mockCalcConnector,
-      mockMessagesControllerComponents
-    )(mockConfig, fakeApplication)
+      mockMessagesControllerComponents,
+      propertyLivedInView
+    )(ec)
   }
 
 
@@ -67,7 +70,7 @@ class PropertyLivedInActionSpec extends CommonPlaySpec with WithCommonFakeApplic
     when(mockCalcConnector.saveFormData[PropertyLivedInModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(mock[CacheMap]))
 
-    new PropertyLivedInController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig, fakeApplication)
+    new PropertyLivedInController(mockHttp, mockCalcConnector, mockMessagesControllerComponents, propertyLivedInView)(ec)
   }
 
   "Calling .propertyLivedIn from the resident PropertyLivedInController" when {
@@ -83,7 +86,7 @@ class PropertyLivedInActionSpec extends CommonPlaySpec with WithCommonFakeApplic
 
       s"return some html with title of ${messages.title}" in {
         contentType(result) shouldBe Some("text/html")
-        Jsoup.parse(bodyOf(result)(materializer)).title shouldEqual messages.title
+        Jsoup.parse(bodyOf(result)(materializer, ec)).title shouldEqual messages.title
       }
     }
 
@@ -98,7 +101,7 @@ class PropertyLivedInActionSpec extends CommonPlaySpec with WithCommonFakeApplic
 
       s"return some html with title of ${messages.title}" in {
         contentType(result) shouldBe Some("text/html")
-        Jsoup.parse(bodyOf(result)(materializer)).title shouldEqual messages.title
+        Jsoup.parse(bodyOf(result)(materializer, ec)).title shouldEqual messages.title
       }
     }
 
@@ -154,7 +157,7 @@ class PropertyLivedInActionSpec extends CommonPlaySpec with WithCommonFakeApplic
       lazy val target = setupTarget(None)
       lazy val request = fakeRequestToPOSTWithSession(("propertyLivedIn", ""))
       lazy val result = target.submitPropertyLivedIn(request)
-      lazy val doc = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val doc = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       "return a status of 400" in {
         status(result) shouldBe 400

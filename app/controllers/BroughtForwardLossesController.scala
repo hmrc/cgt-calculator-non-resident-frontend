@@ -17,30 +17,26 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import config.ApplicationConfig
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import controllers.utils.RecoverableFuture
 import forms.BroughtForwardLossesForm._
 import javax.inject.Inject
 import models._
-import play.api.Application
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-import views.html.calculation
+import views.html.calculation.broughtForwardLosses
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class BroughtForwardLossesController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
-                                               mcc: MessagesControllerComponents)
-                                              (implicit val applicationConfig: ApplicationConfig,
-                                               implicit val application: Application)
-                                                extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
+                                               mcc: MessagesControllerComponents,
+                                               broughtForwardLossesView: broughtForwardLosses)(implicit ec: ExecutionContext)
+                                              extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
 
   def generateBackLink(implicit hc: HeaderCarrier): Future[String] = {
@@ -76,7 +72,7 @@ class BroughtForwardLossesController @Inject()(http: DefaultHttpClient,calcConne
     (for {
       backLink <- generateBackLink(hc)
       form <- generateForm
-    } yield Ok(calculation.broughtForwardLosses(form, backLink))).recoverToStart
+    } yield Ok(broughtForwardLossesView(form, backLink))).recoverToStart
   }
 
   val submitBroughtForwardLosses = ValidateSession.async { implicit request =>
@@ -89,7 +85,7 @@ class BroughtForwardLossesController @Inject()(http: DefaultHttpClient,calcConne
     def errorAction(form: Form[BroughtForwardLossesModel]) = {
       (for {
         backLink <- generateBackLink(hc)
-      } yield BadRequest(calculation.broughtForwardLosses(form, backLink))).recoverToStart
+      } yield BadRequest(broughtForwardLossesView(form, backLink))).recoverToStart
     }
 
     broughtForwardLossesForm.bindFromRequest.fold(

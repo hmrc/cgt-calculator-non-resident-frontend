@@ -17,39 +17,36 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import config.ApplicationConfig
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import forms.AcquisitionValueForm._
 import javax.inject.Inject
 import models.AcquisitionValueModel
-import play.api.Application
 import play.api.i18n.I18nSupport
 import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-import views.html.calculation
+import views.html.calculation.acquisitionValue
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
-class AcquisitionValueController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
-                                           mcc: MessagesControllerComponents)
-                                          (implicit val applicationConfig: ApplicationConfig,
-                                           implicit val application: Application)
-                                            extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
+class AcquisitionValueController @Inject()(http: DefaultHttpClient,
+                                           calcConnector: CalculatorConnector,
+                                           mcc: MessagesControllerComponents,
+                                           acquisitionValueView: acquisitionValue
+                                          )(implicit ec: ExecutionContext) extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
 
   val acquisitionValue = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[AcquisitionValueModel](KeystoreKeys.acquisitionValue).map {
-      case Some(data) => Ok(calculation.acquisitionValue(acquisitionValueForm.fill(data)))
-      case None => Ok(calculation.acquisitionValue(acquisitionValueForm))
+      case Some(data) => Ok(acquisitionValueView(acquisitionValueForm.fill(data)))
+      case None => Ok(acquisitionValueView(acquisitionValueForm))
     }
   }
 
   val submitAcquisitionValue = ValidateSession.async { implicit request =>
     acquisitionValueForm.bindFromRequest.fold(
-      errors => Future.successful(BadRequest(calculation.acquisitionValue(errors))),
+      errors => Future.successful(BadRequest(acquisitionValueView(errors))),
       success => {
         calcConnector.saveFormData(KeystoreKeys.acquisitionValue, success).map(_ => Redirect(routes.AcquisitionCostsController.acquisitionCosts()))
       }

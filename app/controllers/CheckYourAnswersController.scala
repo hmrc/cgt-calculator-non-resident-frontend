@@ -19,29 +19,25 @@ package controllers
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.nonresident.CalculationType
 import common.nonresident.TaxableGainCalculation._
-import config.ApplicationConfig
 import connectors.CalculatorConnector
 import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor, YourAnswersConstructor}
 import controllers.predicates.ValidActiveSession
 import controllers.utils.RecoverableFuture
 import javax.inject.Inject
 import models._
-import play.api.Application
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-import views.html.calculation
+import views.html.calculation.checkYourAnswers
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class CheckYourAnswersController @Inject()(http: DefaultHttpClient,calculatorConnector: CalculatorConnector,
                                            answersConstructor: AnswersConstructor,
                                            calcElectionConstructor: DefaultCalculationElectionConstructor,
-                                           mcc: MessagesControllerComponents)
-                                          (implicit val applicationConfig: ApplicationConfig,
-                                           implicit val application: Application)
+                                           mcc: MessagesControllerComponents,
+                                           checkYourAnswersView: checkYourAnswers)(implicit ec: ExecutionContext)
                                               extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   def getBackLink(totalGainResultsModel: TotalGainResultsModel,
@@ -82,7 +78,7 @@ class CheckYourAnswersController @Inject()(http: DefaultHttpClient,calculatorCon
       answers <- Future.successful(YourAnswersConstructor.fetchYourAnswers(model, prrModel, finalAnswers, propertyLivedIn))
       backLink <- getBackLink(totalGainResult.get, model.acquisitionDateModel, finalAnswers)
     } yield {
-      Ok(calculation.checkYourAnswers(answers, backLink))
+      Ok(checkYourAnswersView(answers, backLink))
     }).recoverToStart
   }
 

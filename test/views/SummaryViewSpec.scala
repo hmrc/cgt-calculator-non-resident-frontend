@@ -33,12 +33,13 @@ class SummaryViewSpec extends CommonPlaySpec with WithCommonFakeApplication with
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   implicit val mockLang = mock[Lang]
+  lazy val summaryView = fakeApplication.injector.instanceOf[summary]
 
   "Summary view" when {
     "supplied with a disposal date within the valid tax years" should {
       val totalTaxOwedModel = TotalTaxOwedModel(100000, 500, 20, None, None, 500, 500, None, None, None, None, 0, None, None, None, None, None, None, None)
       val taxYearModel: TaxYearModel = TaxYearModel("2016/17", isValidYear = true, "2016/17")
-      lazy val view = summary(totalTaxOwedModel, taxYearModel, "flat", 1000.0, 100, 100, "back-link", showUserResearchPanel = false)(fakeRequest, mockMessage, fakeApplication, mockConfig)
+      lazy val view = summaryView(totalTaxOwedModel, taxYearModel, "flat", 1000.0, 100, 100, "back-link", showUserResearchPanel = false)(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${messages.Summary.title}'" in {
@@ -110,14 +111,14 @@ class SummaryViewSpec extends CommonPlaySpec with WithCommonFakeApplication with
       }
 
       "should produce the same output when render and f are called" in {
-        summary.f(totalTaxOwedModel, taxYearModel, "flat", 1000.0, 100, 100, "back-link", Some(BigDecimal(100.1)), BigDecimal(10000.0), false)(fakeRequest, mockMessage, fakeApplication, mockConfig) shouldBe summary.render(totalTaxOwedModel, taxYearModel, "flat", 1000.0, 100, 100, "back-link", Some(BigDecimal(100.1)), BigDecimal(10000.0), false, fakeRequest, mockMessage, fakeApplication, mockConfig)
+        summaryView.f(totalTaxOwedModel, taxYearModel, "flat", 1000.0, 100, 100, "back-link", Some(BigDecimal(100.1)), BigDecimal(10000.0), false)(fakeRequest, mockMessage) shouldBe summaryView.render(totalTaxOwedModel, taxYearModel, "flat", 1000.0, 100, 100, "back-link", Some(BigDecimal(100.1)), BigDecimal(10000.0), false, fakeRequest, mockMessage)
       }
     }
 
     "supplied with a disposal date not within the valid tax years" should {
       val totalTaxOwedModel = TotalTaxOwedModel(500, 500, 20, None, None, 500, 500, None, None, None, None, 0, None, None, None, None, None, None, None)
       val taxYearModel: TaxYearModel = TaxYearModel("2018/19", isValidYear = false, "2017/18")
-      lazy val view = summary(totalTaxOwedModel, taxYearModel, "flat", 1000.0, 100, 100, "back-url", showUserResearchPanel = true)(fakeRequest, mockMessage, fakeApplication, mockConfig)
+      lazy val view = summaryView(totalTaxOwedModel, taxYearModel, "flat", 1000.0, 100, 100, "back-url", showUserResearchPanel = true)(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "display a tax year warning" in {

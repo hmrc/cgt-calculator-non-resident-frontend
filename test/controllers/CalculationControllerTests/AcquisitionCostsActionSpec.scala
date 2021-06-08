@@ -36,13 +36,15 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import views.html.calculation.acquisitionCosts
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class AcquisitionCostsActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper
   with BeforeAndAfterEach {
 
   implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
+  val ec = fakeApplication.injector.instanceOf[ExecutionContext]
 
   val materializer = mock[Materializer]
   val mockHttp =mock[DefaultHttpClient]
@@ -51,14 +53,16 @@ class AcquisitionCostsActionSpec extends CommonPlaySpec with WithCommonFakeAppli
   val mockDefaultCalcElecConstructor = mock[DefaultCalculationElectionConstructor]
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
+  val acquisitionCostsView = fakeApplication.injector.instanceOf[acquisitionCosts]
 
   class Setup {
     val controller = new AcquisitionCostsController(
       mockHttp,
       mockCalcConnector,
       mockDefaultCalcElecConstructor,
-      mockMessagesControllerComponents
-    )(mockConfig, fakeApplication)
+      mockMessagesControllerComponents,
+      acquisitionCostsView
+    )(ec)
   }
 
   def setupTarget(getData: Option[AcquisitionCostsModel],
@@ -85,7 +89,7 @@ class AcquisitionCostsActionSpec extends CommonPlaySpec with WithCommonFakeAppli
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new AcquisitionCostsController(mockHttp, mockCalcConnector, mockDefaultCalcElecConstructor, mockMessagesControllerComponents)(mockConfig, fakeApplication)
+    new AcquisitionCostsController(mockHttp, mockCalcConnector, mockDefaultCalcElecConstructor, mockMessagesControllerComponents, acquisitionCostsView)(ec)
   }
 
   "Calling the .backLink method" should {
@@ -143,14 +147,14 @@ class AcquisitionCostsActionSpec extends CommonPlaySpec with WithCommonFakeAppli
       "load the acquisitionCosts page" in {
         val target = setupTarget(None, acquisitionDateData = Some(DateModel(1, 1, 2016)), Some(HowBecameOwnerModel("Gifted")))
         lazy val result = target.acquisitionCosts(fakeRequestWithSession)
-        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
         document.title shouldBe messages.question
       }
 
       "have a back link to the WorthWhenGiftedTo page" in {
         val target = setupTarget(None, acquisitionDateData = Some(DateModel(1, 1, 2016)), Some(HowBecameOwnerModel("Gifted")))
         lazy val result = target.acquisitionCosts(fakeRequestWithSession)
-        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
         document.select("#back-link").attr("href") shouldBe controllers.routes.WorthWhenGiftedToController.worthWhenGiftedTo().url
       }
     }
@@ -168,7 +172,7 @@ class AcquisitionCostsActionSpec extends CommonPlaySpec with WithCommonFakeAppli
         val testAcquisitionCostsModel = new AcquisitionCostsModel(1000)
         val target = setupTarget(Some(testAcquisitionCostsModel))
         lazy val result = target.acquisitionCosts(fakeRequestWithSession)
-        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
         document.title shouldBe messages.question
       }
     }
@@ -238,7 +242,7 @@ class AcquisitionCostsActionSpec extends CommonPlaySpec with WithCommonFakeAppli
         val target = setupTarget(None, acquisitionDateData = Some(DateModel(1, 1, 2016)), Some(HowBecameOwnerModel("Inherited")))
         lazy val request = fakeRequestToPOSTWithSession(("acquisitionCosts", "a"))
         lazy val result = target.submitAcquisitionCosts(request)
-        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
         document.title shouldBe messages.question
       }
 
@@ -246,7 +250,7 @@ class AcquisitionCostsActionSpec extends CommonPlaySpec with WithCommonFakeAppli
         val target = setupTarget(None, acquisitionDateData = Some(DateModel(1, 1, 2016)), Some(HowBecameOwnerModel("Inherited")))
         lazy val request = fakeRequestToPOSTWithSession(("acquisitionCosts", "a"))
         lazy val result = target.submitAcquisitionCosts(request)
-        lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+        lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
         document.select("#back-link").attr("href") shouldBe controllers.routes.WorthWhenInheritedController.worthWhenInherited().url
       }
     }

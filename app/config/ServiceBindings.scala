@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,17 +12,14 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@this()
+package config
 
-@(fullWidthBannerContent: Option[Html])(implicit messages: Messages)
+import play.api.inject.{Binding, Module}
+import play.api.{Configuration, Environment}
 
-<div id="ur-panel" class="banner-panel">
-    <section class="centered-content visible banner-panel__container" aria-hidden="false">
-        @fullWidthBannerContent
-        <a class="banner-panel__close" href="#" role="button"
-           data-journey-click="link - click:UR Banner:Dismiss"
-        ><span aria-hidden="true">@Messages("calc.summary.dismissBanner")</span><span class="visually-hidden">@Messages("calc.summary.dismissBanner.screenreader")</span></a>
-    </section>
-</div>
+class ServiceBindings extends Module {
+  override def bindings(environment: Environment, configuration: Configuration): Seq[Binding[_]] =
+    Seq(bind[AppConfig].to(classOf[ApplicationConfig]))
+}

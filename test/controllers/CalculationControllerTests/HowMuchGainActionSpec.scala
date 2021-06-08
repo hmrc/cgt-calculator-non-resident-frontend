@@ -33,25 +33,29 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import views.html.calculation.howMuchGain
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class HowMuchGainActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
   implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val materializer = mock[Materializer]
+  val ec = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
   val defaultCache = mock[CacheMap]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
+  val howMuchGainView = fakeApplication.injector.instanceOf[howMuchGain]
 
   class Setup {
     val controller = new HowMuchGainController(
       mockHttp,
       mockCalcConnector,
-      mockMessagesControllerComponents
-    )(mockConfig, fakeApplication)
+      mockMessagesControllerComponents,
+      howMuchGainView
+    )(ec)
   }
 
   def setupTarget(getData: Option[HowMuchGainModel]): HowMuchGainController = {
@@ -62,7 +66,7 @@ class HowMuchGainActionSpec extends CommonPlaySpec with WithCommonFakeApplicatio
     when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map.empty)))
 
-    new HowMuchGainController(mockHttp, mockCalcConnector, mockMessagesControllerComponents)(mockConfig, fakeApplication)
+    new HowMuchGainController(mockHttp, mockCalcConnector, mockMessagesControllerComponents, howMuchGainView)(ec)
   }
 
   //GET Tests
@@ -71,7 +75,7 @@ class HowMuchGainActionSpec extends CommonPlaySpec with WithCommonFakeApplicatio
     "not supplied with a pre-existing stored model" should {
       val target = setupTarget(None)
       lazy val result = target.howMuchGain(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       "return a 200" in {
         status(result) shouldBe 200
@@ -85,7 +89,7 @@ class HowMuchGainActionSpec extends CommonPlaySpec with WithCommonFakeApplicatio
     "supplied with a pre-existing stored model" should {
       val target = setupTarget(Some(HowMuchGainModel(1000)))
       lazy val result = target.howMuchGain(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       "return a 200" in {
         status(result) shouldBe 200
@@ -144,7 +148,7 @@ class HowMuchGainActionSpec extends CommonPlaySpec with WithCommonFakeApplicatio
       val target = setupTarget(None)
       lazy val request = fakeRequestToPOSTWithSession(("howMuchGain", "-100"))
       lazy val result = target.submitHowMuchGain(request)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer))
+      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       "return a 400" in {
         status(result) shouldBe 400

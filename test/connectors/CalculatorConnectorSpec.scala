@@ -31,7 +31,7 @@ import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class CalculatorConnectorSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar {
 
@@ -42,7 +42,7 @@ class CalculatorConnectorSpec extends CommonPlaySpec with WithCommonFakeApplicat
   val sessionId        = UUID.randomUUID.toString
 
   implicit val hc: HeaderCarrier = HeaderCarrier(sessionId = Some(SessionId(sessionId.toString)))
-
+  implicit val ec = fakeApplication.injector.instanceOf[ExecutionContext]
   class Setup {
     val connector = new CalculatorConnector(mockHttp, mockConfig, mockServiceConf)
   }

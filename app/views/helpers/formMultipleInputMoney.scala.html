@@ -14,9 +14,11 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
 @import play.api.data._
-@import views.html.helpers._
+
+@this(
+    formInputMoney: helpers.formInputMoney
+)
 
 @(inputForm: Form[_], inputDetails: Seq[(String, String, Option[String])], boldText:Boolean = false)(implicit messages: Messages, messagesApi: Option[MessagesApi])
 

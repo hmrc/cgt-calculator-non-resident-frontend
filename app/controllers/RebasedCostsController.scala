@@ -17,39 +17,37 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import config.ApplicationConfig
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import forms.RebasedCostsForm._
 import javax.inject.Inject
 import models.RebasedCostsModel
-import play.api.Application
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-import views.html.calculation
+import views.html.calculation.rebasedCosts
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class RebasedCostsController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
-                                       mcc: MessagesControllerComponents)(implicit val applicationConfig: ApplicationConfig,
-                                                                          implicit val application: Application)
+                                       mcc: MessagesControllerComponents,
+                                       rebasedCostsView: rebasedCosts)
+                                      (implicit ec: ExecutionContext)
                                          extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   val rebasedCosts: Action[AnyContent] = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[RebasedCostsModel](KeystoreKeys.rebasedCosts).map {
-      case Some(data) => Ok(calculation.rebasedCosts(rebasedCostsForm.fill(data)))
-      case None => Ok(calculation.rebasedCosts(rebasedCostsForm))
+      case Some(data) => Ok(rebasedCostsView(rebasedCostsForm.fill(data)))
+      case None => Ok(rebasedCostsView(rebasedCostsForm))
     }
   }
 
   val submitRebasedCosts: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     def errorAction(form: Form[RebasedCostsModel]) = {
-      Future.successful(BadRequest(calculation.rebasedCosts(form)))
+      Future.successful(BadRequest(rebasedCostsView(form)))
     }
 
     def successAction(model: RebasedCostsModel) = {
