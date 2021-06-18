@@ -20,18 +20,18 @@ import play.core.PlayVersion
 
 object AppDependencies {
 
-  val bootstrapVersion         = "5.2.0"
-  val govUKTemplateVersion     = "5.66.0-play-27"
-  val playUiVersion            = "8.21.0-play-27"
-  val playPartialsVersion      = "8.1.0-play-27"
-  val httpCachingClientVersion = "9.4.0-play-27"
+  val bootstrapVersion         = "5.4.0"
+  val govUKTemplateVersion     = "5.68.0-play-28"
+  val playUiVersion            = "9.5.0-play-28"
+  val playPartialsVersion      = "8.1.0-play-28"
+  val httpCachingClientVersion = "9.5.0-play-28"
   val play2PdfVersion          = "1.10.0"
-  val mongoCachingVersion      = "6.16.0-play-27"
-  val playLanguageVersion      = "4.7.0-play-27"
+  val mongoCachingVersion      = "7.0.0-play-28"
+  val playLanguageVersion      = "5.1.0-play-28"
 
   val compile = Seq(
     ws,
-    "uk.gov.hmrc"     %% "bootstrap-frontend-play-27"   % bootstrapVersion,
+    "uk.gov.hmrc"     %% "bootstrap-frontend-play-28"   % bootstrapVersion,
     "uk.gov.hmrc"     %% "play-partials"                % playPartialsVersion,
     "uk.gov.hmrc"     %% "http-caching-client"          % httpCachingClientVersion,
     "uk.gov.hmrc"     %% "mongo-caching"                % mongoCachingVersion,
@@ -50,7 +50,7 @@ object AppDependencies {
   object Test {
     def apply(): Seq[ModuleID] = new TestDependencies {
       override lazy val test = Seq(
-        "org.scalatestplus.play"  %% "scalatestplus-play"   % "4.0.3"             % scope,
+        "org.scalatestplus.play"  %% "scalatestplus-play"   % "5.0.0"             % scope,
         "org.mockito"             % "mockito-core"          % "3.3.3"             % scope,
         "org.pegdown"             % "pegdown"               % "1.6.0"             % scope,
         "org.jsoup"               % "jsoup"                 % "1.13.1"            % scope,

@@ -7,11 +7,9 @@ addSbtPlugin("uk.gov.hmrc" % "sbt-distributables" % "2.1.0")
 
 resolvers += "Typesafe Releases" at "https://repo.typesafe.com/typesafe/releases/"
 
-addSbtPlugin("com.typesafe.play" %% "sbt-plugin" % "2.7.4")
+addSbtPlugin("com.typesafe.play" %% "sbt-plugin" % "2.8.7")
 
-addSbtPlugin("org.scoverage" % "sbt-scoverage" % "1.7.0")
-
-addSbtPlugin("net.virtual-void" % "sbt-dependency-graph" % "0.9.2")
+addSbtPlugin("org.scoverage" % "sbt-scoverage" % "1.8.2")
 
 addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "1.0.0")
 

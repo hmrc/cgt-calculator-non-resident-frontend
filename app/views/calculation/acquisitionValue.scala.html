@@ -19,7 +19,8 @@
 @this(
     errorSummary: helpers.errorSummary,
     mainTemplate: main_template,
-    formInputMoney: helpers.formInputMoney
+    formInputMoney: helpers.formInputMoney,
+    form: FormWithCSRF
 )
 
 @(acquisitionValueForm: Form[AcquisitionValueModel])(implicit request: Request[_], messages: Messages)
