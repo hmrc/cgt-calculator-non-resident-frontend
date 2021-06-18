@@ -20,7 +20,8 @@
     mainTemplate: main_template,
     errorSummary: helpers.errorSummary,
     formHiddenYesNoRadio: helpers.formHiddenYesNoRadio,
-    formInputMoney: helpers.formInputMoney
+    formInputMoney: helpers.formInputMoney,
+    form: FormWithCSRF
 )
 
 @(data: Form[CostsAtLegislationStartModel])(implicit request: Request[_], messages: Messages)
