@@ -1,3 +1,5 @@
+service.name = Calculate your Non-Resident Capital Gains Tax
+
 ## Base ##
 calc.base.pageHeading = Calculate your Non-Resident Capital Gains Tax
 calc.base.continue = Continue
