@@ -28,10 +28,12 @@ object AppDependencies {
   val play2PdfVersion          = "1.10.0"
   val mongoCachingVersion      = "7.0.0-play-28"
   val playLanguageVersion      = "5.1.0-play-28"
+  val playFrontendVersion      = "0.88.0-play-28"
 
   val compile = Seq(
     ws,
     "uk.gov.hmrc"     %% "bootstrap-frontend-play-28"   % bootstrapVersion,
+    "uk.gov.hmrc"     %% "play-frontend-hmrc"           % playFrontendVersion,
     "uk.gov.hmrc"     %% "play-partials"                % playPartialsVersion,
     "uk.gov.hmrc"     %% "http-caching-client"          % httpCachingClientVersion,
     "uk.gov.hmrc"     %% "mongo-caching"                % mongoCachingVersion,

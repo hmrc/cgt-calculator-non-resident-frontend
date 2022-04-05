@@ -1,0 +1,45 @@
+@*
+ * Copyright 2021 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import models.QuestionAnswerModel
+@import java.time._
+@import uk.gov.hmrc.play.views.helpers._
+@import common.Dates._
+@import common.Dates.TemplateImplicits._
+@import uk.gov.hmrc.play.views.helpers.MoneyPounds
+
+@this()
+
+@(questionAnswer: QuestionAnswerModel[Any], decimalPlaces: Int)(implicit messages: Messages, lang: Lang)
+
+<div id="@{s"${questionAnswer.id}-question"}" class="grid-layout__column grid-layout__column--1-2">
+    <span class="lede">@questionAnswer.question</span>
+</div>
+<div id="@questionAnswer.id-answer" class="grid-layout__column grid-layout__column--1-2">
+    <span class="lede summary-answer">@{questionAnswer.data match {
+        case string: String => string
+        case int: Int => int.toString
+        case bigDecimal: BigDecimal => s"£${MoneyPounds(bigDecimal, decimalPlaces).quantity}"
+        case date: LocalDate => date.localFormat("d MMMM yyyy")
+        case boolean: Boolean => if (boolean) "Yes" else "No"
+        case (taxGain: BigDecimal, taxRate: Int, additionalGain: BigDecimal, additionalRate: Int) => {
+            <p class="lede">{Messages("calc.summary.calculation.details.taxRateValue", s"£${MoneyPounds(taxGain, 2).quantity}", taxRate)}</p>
+            <p class="lede">{Messages("calc.summary.calculation.details.taxRateValue", s"£${MoneyPounds(additionalGain, 2).quantity}", additionalRate)}</p>
+        }
+        case _ => ""
+        }
+    }</span>
+</div>
