@@ -18,6 +18,7 @@ package controllers.CalculationControllerTests
 
 import akka.stream.Materializer
 import assets.MessageLookup.NonResident.{DisposalDate => messages}
+import assets.MessageLookup.{NonResident => commonMessages}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import config.ApplicationConfig
 import connectors.CalculatorConnector
@@ -49,6 +50,7 @@ class DisposalDateActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val disposalDateView = fakeApplication.injector.instanceOf[disposalDate]
+  val pageTitle = s"""${messages.question} - ${commonMessages.pageHeading} - GOV.UK"""
 
   class Setup {
     val controller = new DisposalDateController(
@@ -86,8 +88,8 @@ class DisposalDateActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
         status(result) shouldBe 200
       }
 
-      "should return to the disposal date page" in {
-        document.title shouldEqual messages.question
+      "return to the disposal date page" in {
+        document.title shouldEqual pageTitle
       }
     }
 
@@ -101,8 +103,8 @@ class DisposalDateActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
         status(result) shouldBe 200
       }
 
-      "should return to the disposal date page" in {
-        document.title shouldEqual messages.question
+      "return to the disposal date page" in {
+        document.title shouldEqual pageTitle
       }
     }
 
@@ -115,8 +117,8 @@ class DisposalDateActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
         status(result) shouldBe 200
       }
 
-      "should return to the disposal date page" in {
-        document.title shouldEqual messages.question
+      "return to the disposal date page" in {
+        document.title shouldEqual pageTitle
       }
     }
   }
