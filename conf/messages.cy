@@ -1,5 +1,7 @@
 service.name = Cyfrifo''ch Treth Enillion Cyfalaf
 
+site.title.error = Error: {0}
+
 ##Month Names##
 calc.month.1 = Ionawr
 calc.month.2 = Chwefror
