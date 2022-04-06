@@ -58,19 +58,19 @@ class DisposalDateViewSpec extends CommonPlaySpec with WithCommonFakeApplication
       }
 
       s"have the Welsh language option on the first page" in {
-        document.body.getElementById("cymraeg-switch").attr("href") shouldEqual "/calculate-your-capital-gains/non-resident/language/cymraeg"
+        document.body.select("body > div > nav > ul > li:nth-child(2) > a").attr("href") shouldEqual "/calculate-your-capital-gains/non-resident/hmrc-frontend/language/cy"
       }
 
       s"have the English language option selected on the first page" in {
-        document.body.getElementById("cymraeg-switch").parent().text() should include("English |")
+        document.body.select("body > div > nav > ul > li:nth-child(1) > span").text() should include("English")
       }
 
       s"have the English language option on the first page when viewed in Welsh" in {
-        welshDocument.body.getElementById("english-switch").attr("href") shouldEqual "/calculate-your-capital-gains/non-resident/language/english"
+        welshDocument.body.select("body > div > nav > ul > li:nth-child(1) > a").attr("href") shouldEqual "/calculate-your-capital-gains/non-resident/hmrc-frontend/language/en"
       }
 
       s"have the Welsh language option selected on the first page when viewed in Welsh" in {
-        welshDocument.body.getElementById("english-switch").parent().text() should include("| Cymraeg")
+        welshDocument.body.select("body > div > nav > ul > li:nth-child(2) > span").text() should include("Cymraeg")
       }
 
       s"have the question '${messages.question}'" in {
@@ -78,26 +78,22 @@ class DisposalDateViewSpec extends CommonPlaySpec with WithCommonFakeApplication
       }
 
       "have inputs using the id acquisitionDate" in {
-        document.body().select("input[type=number]").attr("id") should include("disposalDate")
+        document.body().getElementsByClass("govuk-date-input").attr("id") should include("disposalDate")
       }
 
       s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-        document.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
+        document.select("body > header > div > div > div.govuk-header__content > a").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
       }
 
       "have a button" which {
         lazy val button = document.select("button")
 
         "has the class 'button'" in {
-          button.attr("class") shouldBe "button"
-        }
-
-        "has the type 'submit'" in {
-          button.attr("type") shouldBe "submit"
+          button.attr("class") shouldBe "govuk-button"
         }
 
         "has the id 'continue-button'" in {
-          button.attr("id") shouldBe "continue-button"
+          button.attr("id") shouldBe "submit"
         }
 
         "has the text 'Continue'" in {
@@ -116,7 +112,7 @@ class DisposalDateViewSpec extends CommonPlaySpec with WithCommonFakeApplication
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {
-        document.select("#error-summary-display").size() shouldBe 1
+        document.getElementsByClass("govuk-error-summary").size() shouldBe 1
       }
     }
   }
