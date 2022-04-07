@@ -26,12 +26,14 @@ import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import views.html.calculation.soldForLess
+import assets.MessageLookup.{NonResident => commonMessages}
 
 class SoldForLessViewSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   lazy val soldForLessView = fakeApplication.injector.instanceOf[soldForLess]
+  lazy val pageTitle = s"""${messages.question} - ${commonMessages.pageHeading} - GOV.UK"""
 
   "The Sold for Less view spec" when {
 
@@ -41,7 +43,7 @@ class SoldForLessViewSpec extends CommonPlaySpec with WithCommonFakeApplication 
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${messages.question}'" in {
-        document.title() shouldBe messages.question
+        document.title() shouldBe pageTitle
       }
 
       "have a back link" which {
