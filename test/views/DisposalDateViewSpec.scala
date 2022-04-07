@@ -38,6 +38,7 @@ class DisposalDateViewSpec extends CommonPlaySpec with WithCommonFakeApplication
   lazy val cyMockMessage = api.preferred(Seq(
     welshLanguage
   ))
+  lazy val pageTitle = s"""${messages.question} - ${commonMessages.pageHeading} - GOV.UK"""
 
   "The Disposal Date View" should {
 
@@ -49,8 +50,8 @@ class DisposalDateViewSpec extends CommonPlaySpec with WithCommonFakeApplication
       lazy val welshView = disposalDateView(disposalDateForm)(fakeRequest, cyMockMessage, welshLanguage)
       lazy val welshDocument = Jsoup.parse(welshView.body)
 
-      "have the title 'When did you sign the contract that made someone else the owner?'" in {
-        document.title shouldEqual messages.question
+      s"have the title '$pageTitle" in {
+        document.title shouldEqual pageTitle
       }
 
       s"have the heading ${messages.question} " in {

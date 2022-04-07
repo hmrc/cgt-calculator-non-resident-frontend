@@ -58,7 +58,7 @@
 }
 
 @govukLayout(
-    pageTitle = Some(pageTitle),
+    pageTitle = Some(s"""$pageTitle - ${messages("service.name")} - GOV.UK"""),
     headBlock = Some(hmrcHead()),
     headerBlock = Some(hmrcStandardHeader(
         serviceUrl = Some(controllers.routes.DisposalDateController.disposalDate().url)
