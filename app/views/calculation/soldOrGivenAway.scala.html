@@ -18,39 +18,32 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
-    mainTemplate: main_template,
-    errorSummary: helpers.errorSummary,
+    errorSummary: playComponents.errorSummary,
+    layout: Layout,
     form: FormWithCSRF,
-    inputRadioGroup: InputRadioGroup
+    submitButton: playComponents.submitButton,
+    inputRadio: playComponents.input_radio
 )
 
 @(soldOrGivenAway: Form[SoldOrGivenAwayModel])(implicit request: Request[_], messages: Messages)
 
-@mainTemplate(Messages("calc.soldOrGivenAway.question")){
+@title = @{
+    if(soldOrGivenAway.errors.nonEmpty) messages("site.title.error", Messages("calc.soldOrGivenAway.question")) else Messages("calc.soldOrGivenAway.question")
+}
 
-    <a id="back-link" class="back-link" href="@controllers.routes.DisposalDateController.disposalDate()">@Messages("calc.base.back")</a>
-
-    @errorSummary(soldOrGivenAway, "soldIt")
-
-    <h1 class="heading-xlarge">@Messages("calc.soldOrGivenAway.question")</h1>
-
+@layout(
+    pageTitle = title
+){
+    @errorSummary(soldOrGivenAway.errors)
     @form(action = controllers.routes.SoldOrGivenAwayController.submitSoldOrGivenAway) {
-
-        @inputRadioGroup(
-            field = soldOrGivenAway("soldIt"),
-            Seq(
-            "Yes" -> Messages("calc.soldOrGivenAway.sold"),
-            "No" -> Messages("calc.soldOrGivenAway.gave")),
-            '_legend -> Messages("calc.soldOrGivenAway.question"),
-            '_legendID -> "soldIt",
-            '_legendClass -> "visuallyhidden",
-            '_labelAfter -> true,
-            '_labelClass -> "block-label",
-            '_groupClass -> "form-group radio-list",
-            '_fieldsetAttributes -> ""
+        @inputRadio(
+            legend = Messages("calc.soldOrGivenAway.question"),
+            items = Seq(
+                RadioItem(content = Text(Messages("calc.soldOrGivenAway.sold")), value = Option("Yes")),
+                RadioItem(content = Text(Messages("calc.soldOrGivenAway.gave")), value = Option("No"))
+            ),
+            field = soldOrGivenAway("soldIt")
         )
-
-        <button id="continue-button" class="button" type="submit">@Messages("calc.base.continue")</button>
+        @submitButton()
     }
-
 }
