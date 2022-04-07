@@ -160,7 +160,7 @@ class SoldForLessActionSpec extends CommonPlaySpec with WithCommonFakeApplicatio
       }
 
       "return to the Sold for Less page" in {
-        doc.title() shouldEqual messages.question
+        doc.title() shouldEqual s"""Error: ${messages.question}"""
       }
     }
   }

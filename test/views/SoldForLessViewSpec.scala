@@ -48,28 +48,24 @@ class SoldForLessViewSpec extends CommonPlaySpec with WithCommonFakeApplication 
         lazy val backLink = document.body().select("#back-link")
 
         "has a class of 'back-link'" in {
-          backLink.attr("class") shouldBe "back-link"
+          backLink.attr("class") shouldBe "govuk-back-link"
         }
 
         "has the text" in {
           backLink.text shouldBe commonMessages.back
         }
 
-        s"has a route to 'sold-or-given-away'" in {
-          backLink.attr("href") shouldBe controllers.routes.SoldOrGivenAwayController.soldOrGivenAway().url
+        s"has a back link to previous page " in {
+          backLink.attr("href") shouldBe "javascript:history.back()"
         }
-      }
-
-      s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-        document.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
       }
 
       "have a heading" which {
 
         lazy val heading = document.body().select("h1")
 
-        "has a class of heading-large" in {
-          heading.attr("class") shouldBe "heading-xlarge"
+        "has a class of govuk-fieldset__heading" in {
+          heading.attr("class") shouldBe "govuk-fieldset__heading"
         }
 
         s"has the text '${messages.question}'" in {
@@ -85,9 +81,6 @@ class SoldForLessViewSpec extends CommonPlaySpec with WithCommonFakeApplication 
           legend.text shouldEqual messages.question
         }
 
-        "has the class visuallyhidden" in {
-          document.body.select("legend").hasClass("visuallyhidden") shouldBe true
-        }
       }
 
       "have inputs containing the id 'soldForLess'" in {
@@ -110,15 +103,11 @@ class SoldForLessViewSpec extends CommonPlaySpec with WithCommonFakeApplication 
         lazy val button = document.select("button")
 
         "has the class 'button'" in {
-          button.attr("class") shouldBe "button"
+          button.attr("class") shouldBe "govuk-button"
         }
 
-        "has the type 'submit'" in {
-          button.attr("type") shouldBe "submit"
-        }
-
-        "has the id 'continue-button'" in {
-          button.attr("id") shouldBe "continue-button"
+        "has the id of 'submit'" in {
+          button.attr("id") shouldBe "submit"
         }
       }
 
@@ -134,7 +123,7 @@ class SoldForLessViewSpec extends CommonPlaySpec with WithCommonFakeApplication 
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {
-        document.select("#error-summary-display").size() shouldBe 1
+        document.getElementsByClass("govuk-error-summary").size shouldBe 1
       }
     }
 
