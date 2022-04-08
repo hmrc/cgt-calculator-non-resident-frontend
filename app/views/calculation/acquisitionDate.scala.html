@@ -18,31 +18,38 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
-    errorSummary: helpers.errorSummary,
-    mainTemplate: main_template,
+    errorSummary: playComponents.errorSummary,
+    layout: Layout,
     form: FormWithCSRF,
-    formInlineDateInput: helpers.formInlineDateInput
+    formInlineDateInput: playComponents.formInlineDateInput,
+    submitButton: playComponents.submitButton
 )
 
 @(acquisitionDateForm: Form[DateModel])(implicit request: Request[_], messages: Messages)
 
-@mainTemplate(Messages("calc.acquisitionDate.question")) {
+@title = @{
+    if(acquisitionDateForm.errors.nonEmpty) messages("site.title.error", Messages("calc.acquisitionDate.question")) else Messages("calc.acquisitionDate.question")
+}
+@layout(
+    pageTitle = title
+) {
 
-    <a id="back-link" class="back-link" href="@controllers.routes.DisposalCostsController.disposalCosts.url">@Messages("calc.base.back")</a>
+    @errorSummary(acquisitionDateForm.errors)
 
-    @errorSummary(acquisitionDateForm, "acquisition-date", "acquisitionDateDay")
+    <h1 class="govuk-fieldset__legend govuk-label--xl ">@Messages("calc.acquisitionDate.question")</h1>
 
-    <h1 class="heading-xlarge">@Messages("calc.acquisitionDate.question")</h1>
-
-    <p class="form-hint">@Messages("calc.acquisitionDate.hintText")</p>
+    <p class="govuk-hint">@Messages("calc.acquisitionDate.hintText")</p>
 
     @form(action = controllers.routes.AcquisitionDateController.submitAcquisitionDate) {
 
-        @formInlineDateInput(acquisitionDateForm,
-            "acquisitionDate",
-            Messages("calc.acquisitionDate.question"),
-            '_visually_hidden -> true)
+        @formInlineDateInput(
+            content = Messages("calc.acquisitionDate.question"),
+            hintContent = Some(Messages("calc.common.date.hint")),
+            field = acquisitionDateForm("acquisitionDate"),
+            pageHeading = true,
+            labelClass = Some("govuk-visually-hidden"),
+        )
 
-        <button class="button" type="submit" id="continue-button">@Messages("calc.base.continue")</button>
+        @submitButton()
     }
 }
