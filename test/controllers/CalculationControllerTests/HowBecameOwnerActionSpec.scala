@@ -18,6 +18,7 @@ package controllers.CalculationControllerTests
 
 import akka.stream.Materializer
 import assets.MessageLookup.NonResident.{HowBecameOwner => messages}
+import assets.MessageLookup.{NonResident => commonMessages}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import config.ApplicationConfig
 import connectors.CalculatorConnector
@@ -49,6 +50,7 @@ class HowBecameOwnerActionSpec extends CommonPlaySpec with WithCommonFakeApplica
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val howBecameOwnerView = fakeApplication.injector.instanceOf[howBecameOwner]
+  val pageTitle = s"""${messages.question} - ${commonMessages.pageHeading} - GOV.UK"""
 
   class Setup {
     val controller = new HowBecameOwnerController(
@@ -83,7 +85,7 @@ class HowBecameOwnerActionSpec extends CommonPlaySpec with WithCommonFakeApplica
       }
 
       s"return some html with title of ${messages.question}" in {
-        doc.title shouldEqual messages.question
+        doc.title shouldEqual pageTitle
       }
     }
 
@@ -96,8 +98,8 @@ class HowBecameOwnerActionSpec extends CommonPlaySpec with WithCommonFakeApplica
         status(result) shouldBe 200
       }
 
-      s"return some html with title of ${messages.question}" in {
-        doc.title shouldEqual messages.question
+      s"return some html with title of $pageTitle" in {
+        doc.title shouldEqual pageTitle
       }
     }
 
@@ -168,11 +170,11 @@ class HowBecameOwnerActionSpec extends CommonPlaySpec with WithCommonFakeApplica
     }
 
     "return to the page" in {
-      doc.title shouldEqual messages.question
+      doc.title shouldEqual s"Error: $pageTitle"
     }
 
     "raise an error on the page" in {
-      doc.body.select("#gainedBy-error-summary").size shouldBe 1
+      doc.getElementsByClass("govuk-error-summary").size shouldBe 1
     }
   }
 }

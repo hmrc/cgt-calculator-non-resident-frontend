@@ -32,6 +32,7 @@ class HowBecameOwnerViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   lazy val howBecameOwnerView = fakeApplication.injector.instanceOf[howBecameOwner]
+  val pageTitle = s"""${messages.question} - ${commonMessages.pageHeading} - GOV.UK"""
 
   "The Sold for Less view spec" when {
 
@@ -40,15 +41,15 @@ class HowBecameOwnerViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
       lazy val view = howBecameOwnerView(howBecameOwnerForm)(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
-      s"have a title of '${messages.question}'" in {
-        document.title() shouldBe messages.question
+      s"have a title of '$pageTitle'" in {
+        document.title() shouldBe pageTitle
       }
 
       "have a back link" which {
         lazy val backLink = document.body().select("#back-link")
 
-        "has a class of 'back-link'" in {
-          backLink.attr("class") shouldBe "back-link"
+        "has a class of 'govuk-back-link'" in {
+          backLink.attr("class") shouldBe "govuk-back-link"
         }
 
         "has the text" in {
@@ -56,12 +57,13 @@ class HowBecameOwnerViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
         }
 
         s"has a route to acquisition date" in {
-          backLink.attr("href") shouldBe controllers.routes.AcquisitionDateController.acquisitionDate().url
+          backLink.attr("href") shouldBe "javascript:history.back()"
         }
       }
 
       s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-        document.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
+        document.select("body > header > div > div > div.govuk-header__content > a")
+          .attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
       }
 
       "have a heading" which {
@@ -69,7 +71,7 @@ class HowBecameOwnerViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
         lazy val heading = document.body().select("h1")
 
         "has a class of heading-large" in {
-          heading.attr("class") shouldBe "heading-xlarge"
+          heading.attr("class") shouldBe "govuk-fieldset__heading"
         }
 
         s"has the text '${messages.question}'" in {
@@ -83,10 +85,6 @@ class HowBecameOwnerViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
 
         s"has the question ${messages.question}" in {
           legend.text shouldEqual messages.question
-        }
-
-        "has the class visuallyhidden" in {
-          document.body.select("legend").hasClass("visuallyhidden") shouldBe true
         }
       }
 
@@ -109,16 +107,12 @@ class HowBecameOwnerViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
       "have a button" which {
         lazy val button = document.select("button")
 
-        "has the class 'button'" in {
-          button.attr("class") shouldBe "button"
+        "has the class 'govuk-button'" in {
+          button.attr("class") shouldBe "govuk-button"
         }
 
-        "has the type 'submit'" in {
-          button.attr("type") shouldBe "submit"
-        }
-
-        "has the id 'continue-button'" in {
-          button.attr("id") shouldBe "continue-button"
+        "has the id 'submit'" in {
+          button.attr("id") shouldBe "submit"
         }
       }
 
@@ -134,7 +128,7 @@ class HowBecameOwnerViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {
-        document.select("#error-summary-display").size() shouldBe 1
+        document.getElementsByClass("govuk-error-summary").size() shouldBe 1
       }
     }
 
