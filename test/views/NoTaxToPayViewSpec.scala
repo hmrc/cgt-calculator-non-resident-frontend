@@ -41,25 +41,25 @@ class NoTaxToPayViewSpec extends CommonPlaySpec with WithCommonFakeApplication w
     }
 
     s"have a title of ${messages.title}" in {
-      doc.title() shouldBe messages.title
+      doc.title() shouldBe s"${messages.title} - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
     }
 
     "have a back link to back-link" in {
-      doc.body().select("a#back-link").attr("href") shouldBe "/calculate-your-capital-gains/non-resident/who-did-you-give-it-to"
+      doc.body().select("a#back-link").attr("href") shouldBe "javascript:history.back()"
     }
 
     s"have a header of ${messages.title}" in {
-      doc.body().select("h1.heading-large").text() shouldBe messages.title
+      doc.body().getElementsByClass("govuk-heading-xl").text() shouldBe messages.title
     }
 
     "have text explaining why tax is not owed" in {
-      doc.body().select("article p").text() shouldBe messages.spouseText
+      doc.body().getElementById("reasonText").text() shouldBe messages.spouseText
     }
 
     "have a link to the Gov.Uk page" which {
 
       "has the href to https://www.gov.uk/" in {
-        doc.body().select("a#exit-calculator").attr("href") shouldBe "https://www.gov.uk/"
+        doc.body().getElementById("exit-calculator").attr("href") shouldBe "https://www.gov.uk/"
       }
 
       s"has the text ${messages.returnToGov}" in {
@@ -77,7 +77,7 @@ class NoTaxToPayViewSpec extends CommonPlaySpec with WithCommonFakeApplication w
     lazy val doc = Jsoup.parse(view.body)
 
     "have text explaining why tax is not owed" in {
-      doc.body().select("article p").text() shouldBe messages.charityText
+      doc.body().getElementById("reasonText").text() shouldBe messages.charityText
     }
   }
 }
