@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,44 +18,37 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
-    mainTemplate: main_template,
-    errorSummary: helpers.errorSummary,
+    layout: Layout,
+    errorSummary: playComponents.errorSummary,
     form: FormWithCSRF,
-    formInputMoney: helpers.formInputMoney
+    formInputMoney: playComponents.input_money,
+    submitButton: playComponents.submitButton,
 )
 
 @(disposalCostsForm: Form[DisposalCostsModel], backLink: String)(implicit request: Request[_], messages: Messages)
 
-@additionalContent = {
-
-    <span id="input-hint" class="form-hint">
-        <p id="bullet-list-title">@Messages("calc.disposalCosts.helpTitle") </p>
-        <ul class="list-bullet">
-            <li>@Messages("calc.disposalCosts.helpBulletOne")</li>
-            <li>@Messages("calc.disposalCosts.helpBulletTwo")</li>
-            <li>@Messages("calc.disposalCosts.helpBulletThree")</li>
-            <li>@Messages("calc.disposalCosts.helpBulletFour")</li>
-        </ul>
-    </span>
+@title = @{
+    if(disposalCostsForm.errors.nonEmpty) messages("site.title.error", Messages("calc.disposalCosts.question")) else Messages("calc.disposalCosts.question")
 }
+@layout(
+    pageTitle = title
+) {
 
-@mainTemplate(Messages("calc.disposalCosts.question")) {
-
-    <a id="back-link" class="back-link" href="@backLink">@Messages("calc.base.back")</a>
-
-    @errorSummary(disposalCostsForm, "disposal-costs")
-
-    <h1 class="heading-xlarge">@Messages("calc.disposalCosts.question")</h1>
-
-    @additionalContent
-
+    @errorSummary(disposalCostsForm.errors)
+    <h1 class="govuk-heading-xl" for="disposal-value">@Messages("calc.disposalCosts.question")</h1>
+        <span id="input-hint" class="govuk-hint">
+            <p id="bullet-list-title">@Messages("calc.disposalCosts.helpTitle") </p>
+            <ul class="govuk-list govuk-list--bullet govuk-hint">
+                <li >@Messages("calc.disposalCosts.helpBulletOne")</li>
+                <li>@Messages("calc.disposalCosts.helpBulletTwo")</li>
+                <li>@Messages("calc.disposalCosts.helpBulletThree")</li>
+                <li>@Messages("calc.disposalCosts.helpBulletFour")</li>
+            </ul>
+        </span>
     @form(action = controllers.routes.DisposalCostsController.submitDisposalCosts) {
-
-        <p class="panel-indent panel-indent--wide panel-indent--gutter">@Messages("calc.disposalCosts.jointOwnership")</p>
+    <p class="govuk-inset-text">@Messages("calc.disposalCosts.jointOwnership")</p>
 
         @formInputMoney(disposalCostsForm, "disposalCosts", Messages("calc.disposalCosts.question"), hideLabel = true)
-
-        <button class="button" type="submit" id="continue-button">@Messages("calc.base.continue")</button>
-
+        @submitButton()
     }
 }
