@@ -33,6 +33,8 @@ class MarketValueWhenSoldViewSpec extends CommonPlaySpec with WithCommonFakeAppl
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   lazy val marketValueSoldView = fakeApplication.injector.instanceOf[marketValueSold]
+  lazy val pageTitle = s"""${MarketValueMessages.disposalSoldQuestion} - ${commonMessages.pageHeading} - GOV.UK"""
+
 
 
   "The market value when gave away page" should {
@@ -42,7 +44,7 @@ class MarketValueWhenSoldViewSpec extends CommonPlaySpec with WithCommonFakeAppl
 
     "supplied with no errors" should {
       s"have a title of ${MarketValueMessages.disposalSoldQuestion}" in {
-        document.title() shouldBe MarketValueMessages.disposalSoldQuestion
+        document.title() shouldBe pageTitle
       }
 
       s"have a header" which {
@@ -52,18 +54,18 @@ class MarketValueWhenSoldViewSpec extends CommonPlaySpec with WithCommonFakeAppl
         }
 
         s"has the class 'head-xlarge'" in {
-          header.attr("class") shouldBe "heading-xlarge"
+          header.attr("class") shouldBe "govuk-heading-xl"
         }
       }
 
       s"have a paragraph" which {
-        lazy val helpText = document.select("p.form-hint")
+        lazy val helpText = document.select("p.govuk-hint")
         s"has the help text'${MarketValueMessages.disposalHelpText}'" in {
           helpText.html() shouldBe MarketValueMessages.disposalHelpText +
             " " + MarketValueMessages.disposalHelpTextAdditional
         }
         s"has the class 'form-hint'" in {
-          helpText.attr("class") shouldBe "form-hint"
+          helpText.attr("class") shouldBe "govuk-hint"
         }
       }
 
@@ -71,7 +73,7 @@ class MarketValueWhenSoldViewSpec extends CommonPlaySpec with WithCommonFakeAppl
         lazy val backLink = document.body().select("#back-link")
 
         "has a class of 'back-link'" in {
-          backLink.attr("class") shouldBe "back-link"
+          backLink.attr("class") shouldBe "govuk-back-link"
         }
 
         "has the text" in {
@@ -79,7 +81,7 @@ class MarketValueWhenSoldViewSpec extends CommonPlaySpec with WithCommonFakeAppl
         }
 
         s"has a route to 'sold-for-less'" in {
-          backLink.attr("href") shouldBe controllers.routes.SoldForLessController.soldForLess().url
+          backLink.attr("href") shouldBe "javascript:history.back()"
         }
       }
 
@@ -95,7 +97,7 @@ class MarketValueWhenSoldViewSpec extends CommonPlaySpec with WithCommonFakeAppl
         }
 
         s"has the hidden text ${MessageLookup.NonResident.MarketValue.disposalSoldQuestion}" in {
-          form.select("div.visuallyhidden").text() shouldBe MessageLookup.NonResident.MarketValue.disposalSoldQuestion
+          document.getElementsByClass("govuk-heading-xl").text() shouldBe MessageLookup.NonResident.MarketValue.disposalSoldQuestion
         }
 
         s"has the input ID disposalValue" in {
@@ -103,7 +105,7 @@ class MarketValueWhenSoldViewSpec extends CommonPlaySpec with WithCommonFakeAppl
         }
 
         s"that has a paragraph with the text ${MarketValueMessages.jointOwnership}" in {
-          document.select("p.panel-indent").text shouldBe MarketValueMessages.jointOwnership
+          document.getElementsByClass("govuk-inset-text").text shouldBe MarketValueMessages.jointOwnership
         }
       }
 
@@ -111,15 +113,15 @@ class MarketValueWhenSoldViewSpec extends CommonPlaySpec with WithCommonFakeAppl
         lazy val button = document.select("button")
 
         "has the class 'button'" in {
-          button.attr("class") shouldBe "button"
+          button.attr("class") shouldBe "govuk-button"
         }
 
         "has the type 'submit'" in {
-          button.attr("type") shouldBe "submit"
+          button.attr("id") shouldBe "submit"
         }
 
         "has the id 'continue-button'" in {
-          button.attr("id") shouldBe "continue-button"
+          button.attr("id") shouldBe "submit"
         }
       }
 
@@ -134,7 +136,7 @@ class MarketValueWhenSoldViewSpec extends CommonPlaySpec with WithCommonFakeAppl
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {
-        document.select("#error-summary-display").size() shouldBe 1
+        document.getElementsByClass("govuk-error-summary").size() shouldBe 1
       }
     }
   }
