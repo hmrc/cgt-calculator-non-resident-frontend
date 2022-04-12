@@ -14,62 +14,25 @@
  * limitations under the License.
  *@
 
-@import play.api.data._
+@import uk.gov.hmrc.govukfrontend.views.html.components._
 
-@this(
-    moneyInputFormat: helpers.moneyInputFormat
-)
 
-@(inputForm: Form[_], fieldName: String, questionText: String, helpText: Option[String] = None, additionalHTMLContent: Option[String] = None, hideLabel: Boolean = false, step: String = "0.01", labelClasses: String = "")(implicit messages: Messages, messagesApi: Option[MessagesApi] = None)
+@this(govukInput : GovukInput)
 
-    <div class="form-group">
+@(
+        field: Field,
+        question: String,
+        hideLabel: Boolean
+)(implicit messages: Messages)
 
-        @if(hideLabel) {
-            @if(additionalHTMLContent.isDefined) {
-                @moneyInputFormat(
-                    inputForm(fieldName),
-                    '_label -> questionText,
-                    '_labelTextClass -> "visuallyhidden",
-                    '_additionalContent -> Html(additionalHTMLContent.get),
-                    '_inputHint -> Html(helpText.getOrElse("")),
-                    '_type -> "number",
-                    '_inputClass -> "input--no-spinner",
-                    '_step -> step
-                )
-            } else {
-                @moneyInputFormat(
-                    inputForm(fieldName),
-                    '_label -> questionText,
-                    '_labelTextClass -> "visuallyhidden",
-                    '_inputHint -> Html(helpText.getOrElse("")),
-                    '_type -> "number",
-                    '_inputClass -> "input--no-spinner",
-                    '_step -> step
-                )
-            }
-        } else {
-            @if(additionalHTMLContent.isDefined) {
-                @moneyInputFormat(
-                    inputForm(fieldName),
-                    '_label -> questionText,
-                    '_labelTextClass -> labelClasses,
-                    '_additionalContent -> Html(additionalHTMLContent.get),
-                    '_inputHint -> Html(helpText.getOrElse("")),
-                    '_type -> "number",
-                    '_inputClass -> "input--no-spinner",
-                    '_step -> step
-                )
-            } else {
-                @moneyInputFormat(
-                    inputForm(fieldName),
-                    '_label -> questionText,
-                    '_labelTextClass -> labelClasses,
-                    '_inputHint -> Html(helpText.getOrElse("")),
-                    '_type -> "number",
-                    '_inputClass -> "input--no-spinner",
-                    '_step -> step
-                )
-            }
-        }
-
-    </div>
+@govukInput(Input(
+    label = Label(
+        isPageHeading = !hideLabel,
+        classes = "govuk-label--l",
+    ),
+    classes = "govuk-input--width-10",
+    spellcheck = Some(false),
+    prefix = Some(PrefixOrSuffix(
+        content = Text("£")
+    ))
+).withFormField(field))

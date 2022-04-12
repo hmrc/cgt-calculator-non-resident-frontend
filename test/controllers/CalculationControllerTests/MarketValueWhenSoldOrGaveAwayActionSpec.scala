@@ -18,6 +18,7 @@ package controllers.CalculationControllerTests
 
 import akka.stream.Materializer
 import assets.MessageLookup.NonResident.{MarketValue => marketValueMessages}
+import assets.MessageLookup.{NonResident => commonMessages}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import config.ApplicationConfig
 import connectors.CalculatorConnector
@@ -51,6 +52,7 @@ class MarketValueWhenSoldOrGaveAwayActionSpec extends CommonPlaySpec with WithCo
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val marketValueSoldView = fakeApplication.injector.instanceOf[marketValueSold]
   val marketValueGaveAwayView = fakeApplication.injector.instanceOf[marketValueGaveAway]
+  val pageTitle = s"""${marketValueMessages.disposalSoldQuestion} - ${commonMessages.pageHeading} - GOV.UK"""
 
   class Setup {
     val controller = new MarketValueWhenSoldOrGaveAwayController(
@@ -128,7 +130,7 @@ class MarketValueWhenSoldOrGaveAwayActionSpec extends CommonPlaySpec with WithCo
       }
 
       "load the market value page" in {
-        document.title shouldBe marketValueMessages.disposalSoldQuestion
+        document.title shouldBe pageTitle
       }
     }
 
@@ -142,7 +144,7 @@ class MarketValueWhenSoldOrGaveAwayActionSpec extends CommonPlaySpec with WithCo
       }
 
       "load the market value page" in {
-        document.title shouldBe marketValueMessages.disposalSoldQuestion
+        document.title shouldBe pageTitle
       }
     }
 
@@ -169,8 +171,8 @@ class MarketValueWhenSoldOrGaveAwayActionSpec extends CommonPlaySpec with WithCo
         status(result) shouldEqual 400
       }
 
-      s"and lead to the current page reloading and return some HTML with title of ${marketValueMessages.disposalSoldQuestion}" in {
-        document.title shouldEqual marketValueMessages.disposalSoldQuestion
+      s"and lead to the current page reloading and return some HTML with title of $pageTitle" in {
+        document.title shouldEqual s"Error: $pageTitle"
       }
     }
   }
