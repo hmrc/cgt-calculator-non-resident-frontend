@@ -32,6 +32,7 @@ class WorthWhenInheritedViewSpec extends CommonPlaySpec with WithCommonFakeAppli
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   lazy val worthWhenInheritedView = fakeApplication.injector.instanceOf[worthWhenInherited]
+  lazy val pageTitle = s"""${WorthWhenInherited.question} - ${commonMessages.pageHeading} - GOV.UK"""
 
   "The Worth When Inherited To view spec" when {
 
@@ -40,15 +41,15 @@ class WorthWhenInheritedViewSpec extends CommonPlaySpec with WithCommonFakeAppli
       lazy val view = worthWhenInheritedView(acquisitionMarketValueForm)(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
-      s"have a title of '${WorthWhenInherited.question}'" in {
-        document.title() shouldBe WorthWhenInherited.question
+      s"have a title of '$pageTitle'" in {
+        document.title() shouldBe pageTitle
       }
 
       "have a back link" which {
         lazy val backLink = document.body().select("#back-link")
 
-        "has a class of 'back-link'" in {
-          backLink.attr("class") shouldBe "back-link"
+        "has a class of 'govuk-back-link'" in {
+          backLink.attr("class") shouldBe "govuk-back-link"
         }
 
         "has the text" in {
@@ -56,20 +57,16 @@ class WorthWhenInheritedViewSpec extends CommonPlaySpec with WithCommonFakeAppli
         }
 
         s"has a route to 'how-became-owner'" in {
-          backLink.attr("href") shouldBe controllers.routes.HowBecameOwnerController.howBecameOwner().url
+          backLink.attr("href") shouldBe "javascript:history.back()"
         }
-      }
-
-      s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-        document.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
       }
 
       "have a heading" which {
 
         lazy val heading = document.body().select("h1")
 
-        "has a class of heading-large" in {
-          heading.attr("class") shouldBe "heading-xlarge"
+        "has a class of govuk-heading-xl" in {
+          heading.attr("class") shouldBe "govuk-heading-xl"
         }
 
         s"has the text '${WorthWhenInherited.question}'" in {
@@ -79,8 +76,8 @@ class WorthWhenInheritedViewSpec extends CommonPlaySpec with WithCommonFakeAppli
 
       "have help text" which {
 
-        lazy val helpText = document.body().select("#helpText")
-        lazy val hintText = document.body().select("#hintText")
+        lazy val helpText = document.body().select(".govuk-inset-text")
+        lazy val hintText = document.body().select(".govuk-hint")
 
 
         s"contains hint text '${WorthWhenInherited.hint}'" in {
@@ -111,16 +108,12 @@ class WorthWhenInheritedViewSpec extends CommonPlaySpec with WithCommonFakeAppli
       "have a button" which {
         lazy val button = document.select("button")
 
-        "has the class 'button'" in {
-          button.attr("class") shouldBe "button"
+        "has the class 'govuk-button'" in {
+          button.attr("class") shouldBe "govuk-button"
         }
 
-        "has the type 'submit'" in {
-          button.attr("type") shouldBe "submit"
-        }
-
-        "has the id 'continue-button'" in {
-          button.attr("id") shouldBe "continue-button"
+        "has the id 'submit'" in {
+          button.attr("id") shouldBe "submit"
         }
       }
 
@@ -136,7 +129,7 @@ class WorthWhenInheritedViewSpec extends CommonPlaySpec with WithCommonFakeAppli
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {
-        document.select("#error-summary-display").size() shouldBe 1
+        document.select(".govuk-error-summary").size() shouldBe 1
       }
     }
   }
