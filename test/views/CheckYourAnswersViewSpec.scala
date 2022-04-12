@@ -20,6 +20,7 @@ import java.time.LocalDate
 
 import assets.MessageLookup
 import assets.MessageLookup.NonResident.{CheckYourAnswers => messages}
+import assets.MessageLookup.{NonResident => commonMessages}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
@@ -36,7 +37,7 @@ class CheckYourAnswersViewSpec extends CommonPlaySpec with WithCommonFakeApplica
   lazy val lang: Lang = Lang("cy")
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   lazy val checkYourAnswersView = fakeApplication.injector.instanceOf[checkYourAnswers]
-
+  lazy val pageTitle = s"""${messages.question} - ${commonMessages.pageHeading} - GOV.UK"""
   val mockMessagesApi = mock[MessagesApi]
 
 
@@ -49,8 +50,8 @@ class CheckYourAnswersViewSpec extends CommonPlaySpec with WithCommonFakeApplica
 
       lazy val document = Jsoup.parse(view.body)
 
-      s"has the title text ${messages.question}" in {
-        document.title shouldBe messages.question
+      s"has the title text $pageTitle" in {
+        document.title shouldBe pageTitle
       }
 
       "have a back link" which {
@@ -59,12 +60,12 @@ class CheckYourAnswersViewSpec extends CommonPlaySpec with WithCommonFakeApplica
           document.body.getElementById("back-link").text shouldEqual MessageLookup.NonResident.back
         }
 
-        "has the back-link class" in {
-          document.select("a#back-link").hasClass("back-link") shouldBe true
+        "has the govuk-back-link class" in {
+          document.select("a#back-link").hasClass("govuk-back-link") shouldBe true
         }
 
         s"should have a route too 'back-link'" in {
-          document.body.getElementById("back-link").attr("href") shouldEqual "some-back-link"
+          document.body.getElementById("back-link").attr("href") shouldEqual "javascript:history.back()"
         }
       }
 
@@ -74,13 +75,13 @@ class CheckYourAnswersViewSpec extends CommonPlaySpec with WithCommonFakeApplica
           heading.text() shouldBe messages.question
         }
 
-        "has a class of 'heading-xlarge'" in {
-          heading.attr("class") shouldBe "heading-xlarge"
+        "has a class of 'govuk-heading-xl'" in {
+          heading.attr("class") shouldBe "govuk-heading-xl"
         }
       }
 
       "has a continue button" which {
-        lazy val continueButton = document.select("#continue-button")
+        lazy val continueButton = document.select("#submit")
 
         s"have the text ${MessageLookup.NonResident.continue}" in {
           continueButton.text() shouldBe MessageLookup.NonResident.continue
@@ -101,30 +102,32 @@ class CheckYourAnswersViewSpec extends CommonPlaySpec with WithCommonFakeApplica
       lazy val model = Seq(QuestionAnswerModel[String]("id", "answer", "question", Some("change-link")))
       lazy val result = checkYourAnswersView(model, "hello")(fakeRequest, mockMessage, lang, Some(mockMessagesApi))
       lazy val doc = Jsoup.parse(result.body)
+      lazy val questionCell = doc.select("dl dt").first()
+      lazy val answerCell = doc.select("dl dd").get(0)
+      lazy val changeCell = doc.select("dl dd").get(1)
 
       "have a table row with a table row for the question with ID id-question" which {
 
         "has a question column with the question 'question'" in {
-          doc.select("tr > td").first().text() shouldBe "question"
+          questionCell.text() shouldBe "question"
         }
 
         "has a data column for the answer" which {
-
-          "should have the id 'id'" in {
-            doc.select("tr > td").get(1).attr("id") shouldBe "id-answer"
+          "should have the class 'govuk-summary-list__value'" in {
+            answerCell.attr("class") shouldBe "govuk-summary-list__value"
           }
 
           "should have the answer 'answer'" in {
-            doc.select("tr > td").get(1).text() shouldBe "answer"
+            answerCell.text() shouldBe "answer"
           }
         }
 
         "has the hyper-link text 'Change'" in {
-          doc.select("tr > td").last().text should include(messages.change)
+          changeCell.text should include(messages.change)
         }
 
         "has a link to 'change-link'" in {
-          doc.select("tr > td > a").attr("href") shouldBe "change-link"
+          changeCell.select("a").attr("href") shouldBe "change-link"
         }
       }
     }
@@ -133,7 +136,7 @@ class CheckYourAnswersViewSpec extends CommonPlaySpec with WithCommonFakeApplica
       lazy val model = Seq(QuestionAnswerModel[Int]("id", 200, "question", Some("change-link")))
       lazy val result = checkYourAnswersView(model, "hello")(fakeRequest, mockMessage, lang, Some(mockMessagesApi))
       lazy val doc = Jsoup.parse(result.body)
-      lazy val dataColumnContents = doc.select("tr > td").get(1).text()
+      lazy val dataColumnContents = doc.select("dl dd").get(0).text()
 
       s"generate a row with a data column with 200 as the data" in {
         dataColumnContents shouldBe "200"
@@ -144,7 +147,7 @@ class CheckYourAnswersViewSpec extends CommonPlaySpec with WithCommonFakeApplica
       lazy val model = Seq(QuestionAnswerModel[BigDecimal]("id", BigDecimal(1000.01), "question", Some("change-link")))
       lazy val result = checkYourAnswersView(model, "hello")(fakeRequest, mockMessage, lang, Some(mockMessagesApi))
       lazy val doc = Jsoup.parse(result.body)
-      lazy val dataColumnContents = doc.select("tr > td").get(1).text()
+      lazy val dataColumnContents = doc.select("dl dd").get(0).text()
 
       s"generate a row with a data column with '£1,000.01' as the data" in {
         dataColumnContents shouldBe "£1,000.01"
@@ -155,7 +158,7 @@ class CheckYourAnswersViewSpec extends CommonPlaySpec with WithCommonFakeApplica
       lazy val model = Seq(QuestionAnswerModel[LocalDate]("id", LocalDate.parse("2016-05-04"), "question", Some("change-link")))
       lazy val result = checkYourAnswersView(model, "hello")(fakeRequest, mockMessage, lang, Some(mockMessagesApi))
       lazy val doc = Jsoup.parse(result.body)
-      lazy val dataColumnContents = doc.select("tr > td").get(1).text()
+      lazy val dataColumnContents = doc.select("dl dd").get(0).text()
 
       s"generate a row with a data column with '4 May 2016' as the data" in {
         dataColumnContents shouldBe "4 May 2016"
@@ -166,7 +169,7 @@ class CheckYourAnswersViewSpec extends CommonPlaySpec with WithCommonFakeApplica
       lazy val model = Seq(QuestionAnswerModel[Boolean]("id", true, "question", Some("change-link")))
       lazy val result = checkYourAnswersView(model, "hello")(fakeRequest, mockMessage, lang, Some(mockMessagesApi))
       lazy val doc = Jsoup.parse(result.body)
-      lazy val dataColumnContents = doc.select("tr > td").get(1).text()
+      lazy val dataColumnContents = doc.select("dl dd").get(0).text()
 
       s"generate a row with a data column with 'Yes' as the data'" in {
         dataColumnContents shouldBe "Yes"
@@ -179,7 +182,7 @@ class CheckYourAnswersViewSpec extends CommonPlaySpec with WithCommonFakeApplica
       lazy val doc = Jsoup.parse(result.body)
 
       "generate a data column with a blank answer" in {
-        doc.select("id-data").text() shouldBe ""
+        doc.select("dl dd").get(0).text() shouldBe ""
       }
     }
   }
@@ -194,21 +197,24 @@ class CheckYourAnswersViewSpec extends CommonPlaySpec with WithCommonFakeApplica
     lazy val doc = Jsoup.parse(result.body)
 
     s"have a table row with a table row for the question with ID $idString" which {
-      lazy val row = doc.select("tr").get(1).select("td")
+      lazy val row = doc.select("div.govuk-summary-list__row").first()
+      lazy val questionCell = row.select("dt")
+      lazy val answerCell = row.select("dd").first()
+      lazy val changeCell = row.select("dd").last()
       "has a question column with the question 'question'" in {
-        row.first().text() shouldBe "question"
+        questionCell.text() shouldBe "question"
       }
 
       "has a data column with the data 'answer'" in {
-        row.get(1).text() shouldBe "answer"
+        answerCell.text() shouldBe "answer"
       }
 
       "has the hyper-link text 'Change'" in {
-        row.last().text() should include(messages.change)
+        changeCell.text() should include(messages.change)
       }
 
       "has a visually hidden tag" in {
-        row.select("span").hasClass("visuallyhidden") shouldBe true
+        row.select("span").hasClass("govuk-visually-hidden") shouldBe true
       }
 
       s"has a visually hidden message of ${messages.hiddenText}" in {
@@ -222,17 +228,20 @@ class CheckYourAnswersViewSpec extends CommonPlaySpec with WithCommonFakeApplica
     }
 
     s"have a table row with a table row for the question with ID $idBoolean" which {
-      lazy val row = doc.select("tr").get(2).select("td")
+      lazy val row = doc.select("div.govuk-summary-list__row").get(1)
+      lazy val questionCell = row.select("dt")
+      lazy val answerCell = row.select("dd").first()
+      lazy val changeCell = row.select("dd").last()
       "has a question column with the question 'question'" in {
-        row.first().text() shouldBe "question"
+        questionCell.text() shouldBe "question"
       }
 
       "has a data column with the data 'No'" in {
-        row.get(1).text() shouldBe "No"
+        answerCell.text() shouldBe "No"
       }
 
       "has a visually hidden tag" in {
-        row.select("span").hasClass("visuallyhidden") shouldBe true
+        row.select("span").hasClass("govuk-visually-hidden") shouldBe true
       }
 
       s"has a visually hidden message of ${messages.hiddenText}" in {
@@ -240,7 +249,7 @@ class CheckYourAnswersViewSpec extends CommonPlaySpec with WithCommonFakeApplica
       }
 
       "has the hyper-link text 'Change'" in {
-        row.last().text() should include(messages.change)
+        changeCell.text() should include(messages.change)
       }
 
       "has a link to 'change-link-diff'" in {

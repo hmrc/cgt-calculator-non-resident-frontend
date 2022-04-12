@@ -23,51 +23,46 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
-    mainTemplate: main_template,
-    form: FormWithCSRF
+    layout: Layout,
+    form: FormWithCSRF,
+    submitButton: playComponents.submitButton,
+    govukSummaryList : GovukSummaryList
 )
 
 @(questions: Seq[(QuestionAnswerModel[Any])], backLink: String)(implicit request: Request[_], messages: Messages, lang: Lang, messagesApi: Option[MessagesApi] = None)
 
-@mainTemplate(messages("calc.checkYourAnswers.title"), articleLayout = false){
+@rows = @{
+    questions.map { question =>
+        val key = messages(question.question, question.oDate.map(_.localFormat("d MMMM yyyy")).getOrElse(""))
+        val value = question.data match {
+            case string: String => messages(checkIfBooleanAsString(string))
+            case int: Int => int.toString
+            case bigDecimal: BigDecimal => s"£${MoneyPounds(bigDecimal, 2).quantity}"
+            case date: LocalDate => date.localFormat("d MMMM yyyy")
+            case boolean: Boolean => messages(booleanToMessageString(boolean))
+            case _ => ""
+        }
+        val actionHref = question.link
+        val actionText = messages("calc.checkYourAnswers.change")
+        val actionVisuallyHiddenText = s"""${messages("calc.checkYourAnswers.hidden.text")} $key"""
+        SummaryListRow(
+            key = Key(content = Text(key)),
+            value = Value(content = Text(value)),
+            actions = actionHref.map( href => (Actions(items = Seq(ActionItem(
+                href = href,
+                content = Text(actionText),
+                visuallyHiddenText = Some(actionVisuallyHiddenText)
+            )))))
+        )
+    }
+}
 
-    <a id="back-link" class="back-link" href="@backLink">@messages("calc.base.back")</a>
+@layout(messages("calc.checkYourAnswers.title")){
 
-    <h1 class="heading-xlarge">@messages("calc.checkYourAnswers.title")</h1>
-
-<div class="form-group">
-        <table class="check-your-answers">
-            <thead>
-                <tr>
-                    <th class="heading-medium" colspan="2">@messages("calc.checkYourAnswers.tableHeading")</th>
-                </tr>
-            </thead>
-            <tbody>
-                @questions.map { question =>
-                    <tr data-question="@question.question">
-                        <td>
-                            @messages(question.question, question.oDate.map(_.localFormat("d MMMM yyyy")).getOrElse(""))
-                        </td>
-                        <td id="@{s"${question.id}-answer"}">
-                        @{question.data match {
-                            case string: String => messages(checkIfBooleanAsString(string))
-                            case int: Int => int.toString
-                            case bigDecimal: BigDecimal => s"£${MoneyPounds(bigDecimal, 2).quantity}"
-                            case date: LocalDate => date.localFormat("d MMMM yyyy")
-                            case boolean: Boolean => messages(booleanToMessageString(boolean))
-                            case _ => ""
-                            }}
-                        </td>
-                        <td class= "change-your-answer"><a href="@question.link">@messages("calc.checkYourAnswers.change")<span class="visuallyhidden">@messages("calc.checkYourAnswers.hidden.text") @question.question</span></a></td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-</div>
-
+    <h1 class="govuk-heading-xl">@messages("calc.checkYourAnswers.title")</h1>
+    <h2 class="govuk-heading-m">@messages("calc.checkYourAnswers.tableHeading")</h2>
+    @govukSummaryList(SummaryList(rows = rows))
     @form(action = controllers.routes.CheckYourAnswersController.submitCheckYourAnswers()) {
-        <div class="form-group">
-            <button class="button" type="submit" id="continue-button">@messages("calc.base.continue")</button>
-        </div>
+        @submitButton()
     }
 }
