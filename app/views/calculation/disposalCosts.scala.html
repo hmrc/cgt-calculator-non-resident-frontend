@@ -21,7 +21,7 @@
     layout: Layout,
     errorSummary: playComponents.errorSummary,
     form: FormWithCSRF,
-    formInputMoney: playComponents.input_money,
+    formInputMoney: playComponents.formInputMoney,
     submitButton: playComponents.submitButton,
 )
 
@@ -48,7 +48,7 @@
     @form(action = controllers.routes.DisposalCostsController.submitDisposalCosts) {
     <p class="govuk-inset-text">@Messages("calc.disposalCosts.jointOwnership")</p>
 
-        @formInputMoney(disposalCostsForm, "disposalCosts", Messages("calc.disposalCosts.question"), hideLabel = true, disposalCostsForm("disposalCosts"))
+        @formInputMoney(disposalCostsForm("disposalCosts"), Messages("calc.disposalCosts.question"), hideLabel = true)
         @submitButton()
     }
 }
