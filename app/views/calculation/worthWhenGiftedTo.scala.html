@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,35 +18,30 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
-    errorSummary: helpers.errorSummary,
+    layout: Layout,
+    errorSummary: playComponents.errorSummary,
     form: FormWithCSRF,
-    formInputMoney: helpers.formInputMoney,
-    mainTemplate: main_template
+    formInputMoney: playComponents.formInputMoney,
+    submitButton: playComponents.submitButton,
 )
 
-@(acquisitionMarketValue : Form[AcquisitionValueModel])(implicit request: Request[_], messages: Messages)
+@(acquisitionMarketValueForm : Form[AcquisitionValueModel])(implicit request: Request[_], messages: Messages)
 
-@mainTemplate(Messages("calc.worthWhenGiftedTo.question")) {
+@title = @{
+    if(acquisitionMarketValueForm.errors.nonEmpty) messages("site.title.error", Messages("calc.worthWhenGiftedTo.question")) else Messages("calc.worthWhenGiftedTo.question")
+}
+@layout(
+    pageTitle = title
+) {
 
-    <a id="back-link" class="back-link" href="@controllers.routes.HowBecameOwnerController.howBecameOwner">@Messages("calc.base.back")</a>
-
-    @errorSummary(acquisitionMarketValue, "acquisitionMarketValue")
-
-    <h1 class="heading-xlarge">@Messages("calc.worthWhenGiftedTo.question")</h1>
-
-    <div class="form-hint">
-        <p>@Messages("calc.worthWhenGiftedTo.help")</p>
-    </div>
-
-    <div class="panel-indent panel-indent--wide panel-indent--gutter">
-        <p>@Messages("calc.worthWhenGiftedTo.jointOwnership")</p>
-    </div>
-
+    @errorSummary(acquisitionMarketValueForm.errors)
+    <h1 class="govuk-heading-xl" for="disposal-value">@Messages("calc.worthWhenGiftedTo.question")</h1>
+    <p class="govuk-hint">@Messages("calc.worthWhenGiftedTo.help")</p>
 
     @form(action = controllers.routes.WorthWhenGiftedToController.submitWorthWhenGiftedTo) {
+        <p class="govuk-inset-text">@Messages("calc.worthWhenGiftedTo.jointOwnership")</p>
 
-        @formInputMoney(acquisitionMarketValue, "acquisitionMarketValue", Messages("calc.worthWhenGiftedTo.question"), hideLabel = true)
-
-        <button class="button" type="submit" id="continue-button">@Messages("calc.base.continue")</button>
+        @formInputMoney(acquisitionMarketValueForm("acquisitionMarketValue"), Messages("calc.worthWhenGiftedTo.question"), hideLabel = true)
+        @submitButton()
     }
 }
