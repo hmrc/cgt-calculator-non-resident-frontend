@@ -18,7 +18,7 @@
 
 @this(govukInput : GovukInput)
 
-@(form: Form[_], fieldName: String, question: String, hideLabel: Boolean)
+@(form: Form[_], fieldName: String, question: String, hideLabel: Boolean, field: Field)(implicit messages: Messages)
 
 @govukInput(Input(
     id = fieldName,
@@ -32,4 +32,4 @@
     prefix = Some(PrefixOrSuffix(
         content = Text("£")
     ))
-))
+).withFormField(field))
