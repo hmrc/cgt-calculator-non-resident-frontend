@@ -36,15 +36,15 @@ class AcquisitionDateFormSpec extends CommonPlaySpec with WithCommonFakeApplicat
       }
 
       "return a form containing the data" in {
-        form.data shouldBe Map("acquisitionDateDay" -> "1", "acquisitionDateMonth" -> "1", "acquisitionDateYear" -> "2015")
+        form.data shouldBe Map("acquisitionDate.day" -> "1", "acquisitionDate.month" -> "1", "acquisitionDate.year" -> "2015")
       }
     }
 
     "passing in a valid map with a date" should {
       val map = Map(
-        "acquisitionDateDay" -> "1",
-        "acquisitionDateMonth" -> "5",
-        "acquisitionDateYear" -> "2015")
+        "acquisitionDate.day" -> "1",
+        "acquisitionDate.month" -> "5",
+        "acquisitionDate.year" -> "2015")
       lazy val form = acquisitionDateForm.bind(map)
 
       "return a valid form with no errors" in {
@@ -58,9 +58,9 @@ class AcquisitionDateFormSpec extends CommonPlaySpec with WithCommonFakeApplicat
 
     "passing in an invalid map with an invalid date" should {
       val map = Map(
-        "acquisitionDateDay" -> "100",
-        "acquisitionDateMonth" -> "5",
-        "acquisitionDateYear" -> "2015")
+        "acquisitionDate.day" -> "100",
+        "acquisitionDate.month" -> "5",
+        "acquisitionDate.year" -> "2015")
       lazy val form = acquisitionDateForm.bind(map)
 
       "return an invalid form with one errors" in {
@@ -74,9 +74,9 @@ class AcquisitionDateFormSpec extends CommonPlaySpec with WithCommonFakeApplicat
 
     "passing in an invalid map with a date containing a string" should {
       val map = Map(
-        "acquisitionDateDay" -> "A",
-        "acquisitionDateMonth" -> "B",
-        "acquisitionDateYear" -> "C")
+        "acquisitionDate.day" -> "A",
+        "acquisitionDate.month" -> "B",
+        "acquisitionDate.year" -> "C")
       lazy val form = acquisitionDateForm.bind(map)
 
       "return an invalid form with one errors" in {
@@ -90,9 +90,9 @@ class AcquisitionDateFormSpec extends CommonPlaySpec with WithCommonFakeApplicat
 
     "passing in an invalid map with missing day data" should {
       val map = Map(
-        "acquisitionDateDay" -> "",
-        "acquisitionDateMonth" -> "1",
-        "acquisitionDateYear" -> "2015")
+        "acquisitionDate.day" -> "",
+        "acquisitionDate.month" -> "1",
+        "acquisitionDate.year" -> "2015")
       lazy val form = acquisitionDateForm.bind(map)
 
       "return an invalid form with one errors" in {
@@ -100,15 +100,15 @@ class AcquisitionDateFormSpec extends CommonPlaySpec with WithCommonFakeApplicat
       }
 
       s"return an error message of '${messages.errorInvalidDay}" in {
-        form.error("acquisitionDateDay").get.message shouldBe messages.errorInvalidDay
+        form.error("acquisitionDate.day").get.message shouldBe messages.errorInvalidDay
       }
     }
 
     "passing in an invalid map with missing month data" should {
       val map = Map(
-        "acquisitionDateDay" -> "1",
-        "acquisitionDateMonth" -> "",
-        "acquisitionDateYear" -> "2015")
+        "acquisitionDate.day" -> "1",
+        "acquisitionDate.month" -> "",
+        "acquisitionDate.year" -> "2015")
       lazy val form = acquisitionDateForm.bind(map)
 
       "return an invalid form with one errors" in {
@@ -116,15 +116,15 @@ class AcquisitionDateFormSpec extends CommonPlaySpec with WithCommonFakeApplicat
       }
 
       s"return an error message of '${messages.errorInvalidMonth}" in {
-        form.error("acquisitionDateMonth").get.message shouldBe messages.errorInvalidMonth
+        form.error("acquisitionDate.month").get.message shouldBe messages.errorInvalidMonth
       }
     }
 
     "passing in an invalid map with missing year data" should {
       val map = Map(
-        "acquisitionDateDay" -> "1",
-        "acquisitionDateMonth" -> "2",
-        "acquisitionDateYear" -> "")
+        "acquisitionDate.day" -> "1",
+        "acquisitionDate.month" -> "2",
+        "acquisitionDate.year" -> "")
       lazy val form = acquisitionDateForm.bind(map)
 
       "return an invalid form with one errors" in {
@@ -132,16 +132,16 @@ class AcquisitionDateFormSpec extends CommonPlaySpec with WithCommonFakeApplicat
       }
 
       s"return an error message of '${messages.errorInvalidYear}" in {
-        form.error("acquisitionDateYear").get.message shouldBe messages.errorInvalidYear
+        form.error("acquisitionDate.year").get.message shouldBe messages.errorInvalidYear
       }
     }
 
     "passing in an invalid map with a future date" should {
       val date: LocalDate = LocalDate.now().plusDays(1)
       lazy val map = Map(
-        "acquisitionDateDay" -> date.getDayOfMonth.toString,
-        "acquisitionDateMonth" -> date.getMonthValue.toString,
-        "acquisitionDateYear" -> date.getYear.toString)
+        "acquisitionDate.day" -> date.getDayOfMonth.toString,
+        "acquisitionDate.month" -> date.getMonthValue.toString,
+        "acquisitionDate.year" -> date.getYear.toString)
       lazy val form = acquisitionDateForm.bind(map)
 
       "return an invalid form with one error" in {

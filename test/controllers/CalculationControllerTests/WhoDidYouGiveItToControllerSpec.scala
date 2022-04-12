@@ -161,11 +161,11 @@ class WhoDidYouGiveItToControllerSpec extends CommonPlaySpec with WithCommonFake
       }
 
       s"return some html with title of ${messages.title}" in {
-        doc.title shouldEqual messages.title
+        doc.title shouldEqual s"${messages.title} - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
       }
 
       "have text explaining why tax is not owed" in {
-        doc.body().select("article p").text() shouldBe messages.charityText
+        doc.body().getElementById("reasonText").text() shouldBe messages.charityText
       }
 
       "A valid session is provided when gifted to a spouse" should {
@@ -178,11 +178,11 @@ class WhoDidYouGiveItToControllerSpec extends CommonPlaySpec with WithCommonFake
         }
 
         s"return some html with title of ${messages.title}" in {
-          doc.title shouldEqual messages.title
+          doc.title shouldEqual s"${messages.title} - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
         }
 
         "have text explaining why tax is not owed" in {
-          doc.body().select("article p").text() shouldBe messages.spouseText
+          doc.body().getElementById("reasonText").text() shouldBe messages.spouseText
         }
       }
 
