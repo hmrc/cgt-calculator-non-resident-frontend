@@ -18,6 +18,7 @@ package controllers.CalculationControllerTests
 
 import akka.stream.Materializer
 import assets.MessageLookup.NonResident.{WorthWhenInherited => messages}
+import assets.MessageLookup.{NonResident => commonMessages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import config.ApplicationConfig
@@ -52,6 +53,7 @@ class WorthWhenInheritedActionSpec extends CommonPlaySpec with WithCommonFakeApp
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val worthWhenInheritedView = fakeApplication.injector.instanceOf[worthWhenInherited]
+  val pageTitle = s"""${messages.question} - ${commonMessages.pageHeading} - GOV.UK"""
 
   class Setup {
     val controller = new WorthWhenInheritedController(
@@ -86,9 +88,9 @@ class WorthWhenInheritedActionSpec extends CommonPlaySpec with WithCommonFakeApp
         status(result) shouldBe 200
       }
 
-      s"return some html with title of ${messages.question}" in {
+      s"return some html with title of $pageTitle" in {
         contentType(result) shouldBe Some("text/html")
-        Jsoup.parse(bodyOf(result)(materializer, ec)).title shouldEqual messages.question
+        Jsoup.parse(bodyOf(result)(materializer, ec)).title shouldEqual pageTitle
       }
     }
 
@@ -101,9 +103,9 @@ class WorthWhenInheritedActionSpec extends CommonPlaySpec with WithCommonFakeApp
         status(result) shouldBe 200
       }
 
-      s"return some html with title of ${messages.question}" in {
+      s"return some html with title of $pageTitle" in {
         contentType(result) shouldBe Some("text/html")
-        Jsoup.parse(bodyOf(result)(materializer, ec)).title shouldEqual messages.question
+        Jsoup.parse(bodyOf(result)(materializer, ec)).title shouldEqual pageTitle
       }
     }
 
@@ -151,7 +153,7 @@ class WorthWhenInheritedActionSpec extends CommonPlaySpec with WithCommonFakeApp
       }
 
       "return to the Worth When Inherited page" in {
-        doc.title() shouldEqual messages.question
+        doc.title() shouldEqual s"Error: $pageTitle"
       }
     }
   }
