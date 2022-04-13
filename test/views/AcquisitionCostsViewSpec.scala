@@ -32,6 +32,7 @@ class AcquisitionCostsViewSpec extends CommonPlaySpec with WithCommonFakeApplica
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   lazy val acquisitionCostsView = fakeApplication.injector.instanceOf[acquisitionCosts]
+  lazy val pageTitle = s"""${messages.AcquisitionCosts.question} - ${messages.pageHeading} - GOV.UK"""
 
   "Acquisition costs view" when {
 
@@ -39,8 +40,8 @@ class AcquisitionCostsViewSpec extends CommonPlaySpec with WithCommonFakeApplica
       lazy val view = acquisitionCostsView(acquisitionCostsForm, "back-link", ownerBeforeLegislation = true)(fakeRequest,mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
-      s"have a title of '${messages.AcquisitionCosts.question}'" in {
-        document.title() shouldBe messages.AcquisitionCosts.question
+      s"have a title of '${pageTitle}'" in {
+        document.title() shouldBe pageTitle
       }
 
       "have a back link" which {
@@ -51,23 +52,19 @@ class AcquisitionCostsViewSpec extends CommonPlaySpec with WithCommonFakeApplica
         }
 
         s"has a route to 'back-link'" in {
-          backLink.attr("href") shouldBe "back-link"
+          backLink.attr("href") shouldBe "javascript:history.back()"
         }
 
         "has the class 'back-link'" in {
-          backLink.attr("class") shouldBe "back-link"
+          backLink.attr("class") shouldBe "govuk-back-link"
         }
-      }
-
-      s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-        document.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
       }
 
       "have a heading" which {
         lazy val heading = document.body().select("h1")
 
         "has a class of heading-large" in {
-          heading.attr("class") shouldBe "heading-xlarge"
+          heading.attr("class") shouldBe "govuk-heading-xl"
         }
 
         s"has the text '${messages.AcquisitionCosts.question}'" in {
@@ -76,15 +73,14 @@ class AcquisitionCostsViewSpec extends CommonPlaySpec with WithCommonFakeApplica
       }
 
       s"have the question '${messages.AcquisitionCosts.question}'" in {
-        document.body.select("label div").first().text shouldBe messages.AcquisitionCosts.question
+        document.getElementsByClass("govuk-heading-xl").text shouldBe messages.AcquisitionCosts.question
       }
       s"have a paragraph that has the text '${messages.AcquisitionCosts.bulletTitle}" in {
-        document.body.select("p#bulletTitle").text() shouldBe messages.AcquisitionCosts.bulletTitle
+        document.body.select("p#bullet-list-title").text() shouldBe messages.AcquisitionCosts.bulletTitle
       }
 
       "have a list" which {
-        lazy val list = document.body().select("#helpList")
-
+        lazy val list = document.body().select("#input-hint > ul > li")
         s"has a bullet point with the text '${messages.AcquisitionCosts.bulletOne}'" in {
           list.select(":first-child").text() shouldBe messages.AcquisitionCosts.bulletOne
         }
@@ -97,12 +93,8 @@ class AcquisitionCostsViewSpec extends CommonPlaySpec with WithCommonFakeApplica
           list.select(":last-child").text() shouldBe messages.AcquisitionCosts.bulletThree
         }
 
-        "has the class 'list list-bullet'" in {
-          list.attr("class") shouldBe "form-hint list list-bullet"
-        }
-
         s"has the joint ownership text ${messages.AcquisitionCosts.hint}" in {
-          document.select("article > div.panel-indent > p").text shouldEqual messages.AcquisitionCosts.hint
+          document.getElementsByClass("govuk-inset-text").text shouldEqual messages.AcquisitionCosts.hint
         }
 
       }
@@ -128,15 +120,11 @@ class AcquisitionCostsViewSpec extends CommonPlaySpec with WithCommonFakeApplica
         lazy val button = document.select("button")
 
         "has the class 'button'" in {
-          button.attr("class") shouldBe "button"
+          button.attr("class") shouldBe "govuk-button"
         }
 
-        "has the type 'submit'" in {
-          button.attr("type") shouldBe "submit"
-        }
-
-        "has the id 'continue-button'" in {
-          button.attr("id") shouldBe "continue-button"
+        "has the id 'submit'" in {
+          button.attr("id") shouldBe "submit"
         }
       }
 
@@ -151,7 +139,7 @@ class AcquisitionCostsViewSpec extends CommonPlaySpec with WithCommonFakeApplica
       lazy val document = Jsoup.parse(view.body)
 
       "have a list" which {
-        lazy val list = document.body().select("#helpList")
+        lazy val list = document.body().select("#input-hint > ul > li")
 
         s"has a bullet point with the text '${messages.AcquisitionCosts.bulletThree}'" in {
           list.select(":last-child").text() shouldBe messages.AcquisitionCosts.bulletThree
@@ -166,7 +154,7 @@ class AcquisitionCostsViewSpec extends CommonPlaySpec with WithCommonFakeApplica
     lazy val document = Jsoup.parse(view.body)
 
     "have an error summary" in {
-      document.select("#error-summary-display").size() shouldBe 1
+      document.getElementsByClass("govuk-error-summary").size() shouldBe 1
     }
   }
 }
