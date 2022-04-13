@@ -1032,7 +1032,8 @@ object MessageLookup {
 
 
   object WhatNext extends Common {
-    val title = "Report your property now"
+    val title = "Report your property now - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
+    val heading = "Report your property now"
     val listTitle = "You have 30 days from the date you completed the transfer of your property (the 'conveyance date') to:"
     val listOne = "tell us about the property you've sold or gave away"
     val listTwo = "pay any Capital Gains Tax"

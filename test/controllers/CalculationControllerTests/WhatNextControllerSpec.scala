@@ -83,7 +83,7 @@ class WhatNextControllerSpec extends CommonPlaySpec with WithCommonFakeApplicati
 
       "load the whatNext page" in {
         document.title() shouldBe MessageLookup.WhatNext.title
-        document.body().select("a.button").attr("href") shouldBe "/capital-gains-tax-uk-property/start/report-pay-capital-gains-tax-uk-property"
+        document.body().select(".govuk-button").attr("href") shouldBe "/capital-gains-tax-uk-property/start/report-pay-capital-gains-tax-uk-property"
       }
     }
 
