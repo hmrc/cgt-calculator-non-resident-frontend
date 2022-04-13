@@ -18,15 +18,19 @@
 
 @(gain: BigDecimal, totalDeductions: BigDecimal, taxableGain: BigDecimal)(implicit request: Request[_], messages: Messages, messagesApi: Option[MessagesApi] = None)
 
-<div id="yourTaxableGain" class="summary-underline summary-details-padding">
+<div id="yourTaxableGain">
 
-    @if(gain > 0){
-            <h3>@Messages("calc.summaryPartial.yourTaxableGain")</h3>
-            @summaryNumericRow("gain", Messages("calc.summaryPartial.totalGain"), gain)
-            @summaryNumericRow("minusDeductions", Messages("calc.summaryPartial.minusDeductions"), totalDeductions)
-            @summaryNumericRow("taxableGain", Messages("calc.summaryPartial.taxableGain"), taxableGain, isTotal = true)
-        }else{
-            @summaryNumericRow("taxableGain", Messages("calc.summaryPartial.taxableGain"), taxableGain, isTotal = true)
-        }
+    <table class="govuk-table">
+        <tbody class="govuk-table__body">
+            @if(gain > 0){
+                <h3 class="govuk-heading-m">@Messages("calc.summaryPartial.yourTaxableGain")</h3>
+                @summaryNumericRow("gain", Messages("calc.summaryPartial.totalGain"), gain)
+                @summaryNumericRow("minusDeductions", Messages("calc.summaryPartial.minusDeductions"), totalDeductions)
+                @summaryNumericRow("taxableGain", Messages("calc.summaryPartial.taxableGain"), taxableGain, isTotal = true)
+            }else{
+                @summaryNumericRow("taxableGain", Messages("calc.summaryPartial.taxableGain"), taxableGain, isTotal = true)
+            }
+        </tbody>
+    </table>
 
 </div>

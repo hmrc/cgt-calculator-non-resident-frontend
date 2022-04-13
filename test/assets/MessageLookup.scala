@@ -446,7 +446,7 @@ object MessageLookup {
 
     object Summary {
 
-      val title = "Summary"
+      val title = "Summary - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
       val secondaryHeading = "You owe"
       val amountOwed = "Amount you owe"
       val calculationDetailsTitle = "Calculation details"
@@ -480,12 +480,13 @@ object MessageLookup {
       val yourAnswers = "You've told us"
       val noticeSummary: String = "Your result may be inaccurate because the calculator does not support the date of sale you entered. " +
         "Do not use these figures to report your Capital Gains Tax."
+      val newNoticeSummary: String = "Warning Your result may be inaccurate because the calculator does not support the date of sale you entered. " +
+        "Do not use these figures to report your Capital Gains Tax."
       val whoOwnedIt = "Who owned the property?"
-      val bannerPanelTitle = "Help improve GOV.UK"
+      val bannerPanelTitle = "Help improve HMRC service"
       val bannerPanelLinkURL = "https://signup.take-part-in-research.service.gov.uk/?utm_campaign=CGT_non_resident_summary&utm_source=Survey_Banner&utm_medium=other&t=HMRC&id=116"
-      val bannerPanelLinkText = "Help improve this digital service by joining the HMRC user panel (opens in new window)"
+      val bannerPanelLinkText = "Sign up to take part in user research (opens in new tab)"
       val bannerPanelCloseVisibleText = "No thanks"
-      val bannerPanelCloseHiddenText = "I don't want to answer any questions about joining the research panel"
 
       def basedOnYear(year: String): String = s"These figures are based on the tax rates from the $year tax year"
     }

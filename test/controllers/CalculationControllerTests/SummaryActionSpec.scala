@@ -179,7 +179,7 @@ class SummaryActionSpec extends CommonPlaySpec with WithCommonFakeApplication wi
       }
 
       "has a back-link to the calculation election page" in {
-        document.select("#back-link").attr("href") shouldEqual controllers.routes.CalculationElectionController.calculationElection().url
+        document.select("#back-link").attr("href") shouldEqual "javascript:history.back()"
       }
     }
 
@@ -205,7 +205,7 @@ class SummaryActionSpec extends CommonPlaySpec with WithCommonFakeApplication wi
       }
 
       "has a back-link to the check your answers page" in {
-        document.select("#back-link").attr("href") shouldEqual controllers.routes.CheckYourAnswersController.checkYourAnswers().url
+        document.select("#back-link").attr("href") shouldEqual "javascript:history.back()"
       }
     }
 
