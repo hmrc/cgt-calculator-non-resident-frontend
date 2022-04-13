@@ -14,14 +14,20 @@
  * limitations under the License.
  *@
 
-@this(mainTemplate: main_template)
+@this(layout: Layout, button: playComponents.button_link)
 
 @()(implicit request: Request[_], messages: Messages)
 
-@mainTemplate(Messages("session.timeout.message")) {
-
-    <h1 class="heading-large">@Messages("session.timeout.message")</h1>
-
-    <a id="startAgain" class="button" role="button" href="@common.DefaultRoutes.restartUrl" data-journey-click="nav:calc:restart">@Messages("calc.summary.startAgain")</a>
-
+@layout(
+    pageTitle = Messages("session.timeout.message"),
+    backLinkEnabled = false,
+    timeoutEnabled = false
+) {
+    <h1 class="govuk-heading-xl">@Messages("session.timeout.message")</h1>
+    <div>
+        @button(
+            href = common.DefaultRoutes.restartUrl,
+            messageKey = "calc.summary.startAgain"
+        )
+    </div>
 }
