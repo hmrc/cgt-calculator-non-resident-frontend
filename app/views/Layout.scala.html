@@ -33,7 +33,8 @@
 
 @(
     pageTitle: String,
-    backLinkEnabled: Boolean = true
+    backLinkEnabled: Boolean = true,
+    timeoutEnabled: Boolean = true
 )(
     contentBlock: Html
 )(
@@ -48,6 +49,13 @@
     @if(backLinkEnabled) { @backLink() }
 }
 
+@head = {
+    @if(timeoutEnabled) {
+        @hmrcTimeoutDialogHelper(
+            signOutUrl = controllers.utils.routes.TimeoutController.timeout.url,
+        )
+    }
+}
 
 @mainContent = {
     @contentBlock
@@ -56,7 +64,7 @@
 
 @govukLayout(
     pageTitle = Some(s"""$pageTitle - ${messages("service.name")} - GOV.UK"""),
-    headBlock = Some(hmrcHead()),
+    headBlock = Some(hmrcHead(headBlock = Some(head))),
     headerBlock = Some(hmrcStandardHeader(
         serviceUrl = Some(controllers.routes.DisposalDateController.disposalDate().url)
     )),
