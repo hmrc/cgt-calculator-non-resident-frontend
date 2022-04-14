@@ -33,7 +33,7 @@ class CalculationElectionViewSpec extends CommonPlaySpec with WithCommonFakeAppl
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   lazy val calculationElectionView = fakeApplication.injector.instanceOf[calculationElection]
-
+  lazy val pageTitle = s"""${messages.heading} - ${commonMessages.pageHeading} - GOV.UK"""
 
   "The Calculation Election View" should {
 
@@ -44,7 +44,7 @@ class CalculationElectionViewSpec extends CommonPlaySpec with WithCommonFakeAppl
     lazy val doc = Jsoup.parse(view.body)
 
     s"have a title of '${messages.heading}" in {
-      doc.title() shouldBe messages.heading
+      doc.title() shouldBe pageTitle
     }
 
     "have a h1 tag that" should {
@@ -53,13 +53,9 @@ class CalculationElectionViewSpec extends CommonPlaySpec with WithCommonFakeAppl
         doc.select("h1").text() shouldBe messages.heading
       }
 
-      "have the heading-xlarge class" in {
-        doc.select("h1").hasClass("heading-xlarge") shouldBe true
+      "have the govuk-heading-xl class" in {
+        doc.select("h1").hasClass("govuk-heading-xl") shouldBe true
       }
-    }
-
-    s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-      doc.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
     }
 
     "have a dynamic back button" which {
@@ -68,12 +64,12 @@ class CalculationElectionViewSpec extends CommonPlaySpec with WithCommonFakeAppl
         doc.select("a#back-link").text shouldBe commonMessages.back
       }
 
-      "has the back-link class" in {
-        doc.select("a#back-link").hasClass("back-link") shouldBe true
+      "has the govuk-back-link class" in {
+        doc.select("a#back-link").hasClass("govuk-back-link") shouldBe true
       }
 
       "has a back link to 'claiming-reliefs'" in {
-        doc.select("a#back-link").attr("href") shouldBe controllers.routes.ClaimingReliefsController.claimingReliefs().url
+        doc.select("a#back-link").attr("href") shouldBe "javascript:history.back()"
       }
     }
 
@@ -102,11 +98,11 @@ class CalculationElectionViewSpec extends CommonPlaySpec with WithCommonFakeAppl
     }
 
     "display a 'Continue' button " in {
-      doc.body.getElementById("continue-button").text shouldEqual commonMessages.continue
+      doc.body.getElementById("submit").text shouldEqual commonMessages.continue
     }
 
     "have no pre-selected option" in {
-      doc.body.getElementById("calculationElection-flat").parent.classNames().contains("selected") shouldBe false
+      doc.body.getElementById("calculationElection").parent.classNames().contains("selected") shouldBe false
     }
 
     "supplied with errors" should {
@@ -115,7 +111,7 @@ class CalculationElectionViewSpec extends CommonPlaySpec with WithCommonFakeAppl
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {
-        document.select("#error-summary-display").size() shouldBe 1
+        document.getElementsByClass("govuk-error-summary").size() shouldBe 1
       }
     }
 
