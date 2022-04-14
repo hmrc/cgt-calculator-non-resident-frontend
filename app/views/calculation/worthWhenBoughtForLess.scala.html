@@ -18,30 +18,37 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
-    mainTemplate: main_template,
-    errorSummary: helpers.errorSummary,
+    layout: Layout,
+    errorSummary: playComponents.errorSummary,
     form: FormWithCSRF,
-    formInputMoney: helpers.formInputMoney
+    formInputMoney: playComponents.formInputMoney,
+    submitButton: playComponents.submitButton,
+
 )
 
 @(acquisitionMarketValue : Form[AcquisitionValueModel])(implicit request: Request[_], messages: Messages)
 
-@mainTemplate(Messages("calc.worthWhenBoughtForLess.question")) {
+@title = @{
+    if(acquisitionMarketValue.errors.nonEmpty) messages("site.title.error", Messages("calc.worthWhenBoughtForLess.question")) else Messages("calc.worthWhenBoughtForLess.question")
+}
 
-    <a id="back-link" class="back-link" href="@controllers.routes.BoughtForLessController.boughtForLess">@Messages("calc.base.back")</a>
+@layout(
+    pageTitle = title
+) {
 
-    @errorSummary(acquisitionMarketValue, "acquisitionMarketValue")
+    @errorSummary(acquisitionMarketValue.errors)
 
-    <h1 class="heading-xlarge">@Messages("calc.worthWhenBoughtForLess.question")</h1>
+    <h1 class="govuk-heading-xl">@Messages("calc.worthWhenBoughtForLess.question")</h1>
 
-    <p id="hintText" class="form-hint">@Messages("calc.worthWhenBoughtForLess.hint")</p>
+    <p class="govuk-hint" class="form-hint">@Messages("calc.worthWhenBoughtForLess.hint")</p>
 
-    <p id="helpText" class="panel-indent panel-indent--wide panel-indent--gutter">@Messages("calc.worthWhenBoughtForLess.helpText")</p>
+    <p class="govuk-inset-text" class="panel-indent panel-indent--wide panel-indent--gutter">@Messages("calc.worthWhenBoughtForLess.helpText")</p>
 
     @form(action = controllers.routes.WorthWhenBoughtForLessController.submitWorthWhenBoughtForLess) {
 
-        @formInputMoney(acquisitionMarketValue, "acquisitionMarketValue", Messages("calc.worthWhenBoughtForLess.question"), hideLabel = true)
+        @formInputMoney(acquisitionMarketValue("acquisitionMarketValue"), Messages("calc.worthWhenBoughtForLess.question"), hideLabel = true)
 
-        <button class="button" type="submit" id="continue-button">@Messages("calc.base.continue")</button>
+        @submitButton()
+
     }
 }
