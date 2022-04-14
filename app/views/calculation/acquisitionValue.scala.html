@@ -18,28 +18,31 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
-    errorSummary: helpers.errorSummary,
-    mainTemplate: main_template,
-    formInputMoney: helpers.formInputMoney,
+    errorSummary: playComponents.errorSummary,
+    layout: Layout,
+    formInputMoney: playComponents.formInputMoney,
+    submitButton: playComponents.submitButton,
     form: FormWithCSRF
 )
 
 @(acquisitionValueForm: Form[AcquisitionValueModel])(implicit request: Request[_], messages: Messages)
 
-@mainTemplate(Messages("calc.acquisitionValue.question")) {
 
-    <a id="back-link" class="back-link" href="@controllers.routes.BoughtForLessController.boughtForLess">@Messages("calc.base.back")</a>
+@title = @{
+    if(acquisitionValueForm.errors.nonEmpty) messages("site.title.error", messages("calc.acquisitionValue.question")) else messages("calc.acquisitionValue.question")
+}
+@layout(pageTitle = title) {
 
-    @errorSummary(acquisitionValueForm, "acquisition-value")
+    @errorSummary(acquisitionValueForm.errors)
 
-    <h1 class="heading-xlarge">@Messages("calc.acquisitionValue.question")</h1>
+    <h1 class="govuk-heading-xl">@Messages("calc.acquisitionValue.question")</h1>
 
-    <p id="helpText" class="panel-indent panel-indent--wide panel-indent--gutter">@Messages("calc.acquisitionValue.helpText")</p>
+    <p class="govuk-inset-text">@Messages("calc.acquisitionValue.helpText")</p>
 
     @form(action = controllers.routes.AcquisitionValueController.submitAcquisitionValue) {
 
-        @formInputMoney(acquisitionValueForm, "acquisitionValue", Messages("calc.acquisitionValue.question"), None, None, true)
+        @formInputMoney(acquisitionValueForm("acquisitionValue"), Messages("calc.acquisitionValue.question"), true)
 
-        <button class="button" type="submit" id="continue-button">@Messages("calc.base.continue")</button>
+        @submitButton()
     }
 }

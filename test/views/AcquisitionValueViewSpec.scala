@@ -46,32 +46,32 @@ class AcquisitionValueViewSpec extends CommonPlaySpec with WithCommonFakeApplica
       }
 
       "have the heading-large class" in {
-        document.select("h1").hasClass("heading-xlarge") shouldBe true
+        document.select("h1").hasClass("govuk-heading-xl") shouldBe true
       }
     }
 
     s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-      document.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
+      document.getElementsByClass("govuk-header__link govuk-header__link--service-name").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
     }
 
     "have a 'Back link' that" should{
 
-      lazy val helpText = document.body().select("#helpText")
+      lazy val helpText = document.getElementsByClass("govuk-inset-text")
 
       s"have the text of ${commonMessages.back}" in {
         document.select("a#back-link").text shouldEqual commonMessages.back
       }
 
       s"have a link to ${routes.BoughtForLessController.boughtForLess().url}" in {
-       document.select("a#back-link").attr("href") shouldEqual routes.BoughtForLessController.boughtForLess().url
+        document.select("a#back-link").attr("href") shouldEqual "javascript:history.back()"
       }
 
       "has the back-link class" in {
-        document.select("a#back-link").hasClass("back-link") shouldBe true
+        document.select("#back-link").attr("href") shouldBe "javascript:history.back()"
       }
 
       s"contains help text '${messages.helpText}'" in {
-        helpText.text() should include(messages.helpText)
+        helpText.text should include(messages.helpText)
       }
     }
 
@@ -100,15 +100,15 @@ class AcquisitionValueViewSpec extends CommonPlaySpec with WithCommonFakeApplica
       }
 
       "have the class 'button'" in {
-        button.attr("class") shouldBe "button"
+        button.attr("class") shouldBe "govuk-button"
       }
 
       "have the type 'submit'" in {
-        button.attr("type") shouldBe "submit"
+        button.attr("id") shouldBe "submit"
       }
 
       "have the id 'continue-button'" in {
-        button.attr("id") shouldBe "continue-button"
+        button.attr("id") shouldBe "submit"
       }
     }
 
@@ -118,7 +118,7 @@ class AcquisitionValueViewSpec extends CommonPlaySpec with WithCommonFakeApplica
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {
-        document.select("#error-summary-display").size() shouldBe 1
+        document.getElementsByClass("govuk-error-summary").size() shouldBe 1
       }
     }
 
