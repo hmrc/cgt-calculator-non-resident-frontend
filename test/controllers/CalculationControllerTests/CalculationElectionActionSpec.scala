@@ -184,7 +184,7 @@ class CalculationElectionActionSpec ()
       }
 
       "be on the calculation election page" in {
-        document.title() shouldEqual nRMessages.title
+        document.title() shouldEqual calculationElectionNoReliefsPageTitle
       }
     }
 
@@ -228,11 +228,11 @@ class CalculationElectionActionSpec ()
       }
 
       "be on the calculation election no reliefs page" in {
-        document.title() shouldEqual nRMessages.title
+        document.title() shouldEqual calculationElectionNoReliefsPageTitle
       }
 
-      s"has a back link of ${routes.CheckYourAnswersController.checkYourAnswers().url}" in{
-        document.select("a#back-link").attr("href") shouldBe routes.CheckYourAnswersController.checkYourAnswers().url
+      s"has a back link of 'javascript:history.back()'" in{
+        document.select("a#back-link").attr("href") shouldBe "javascript:history.back()"
       }
     }
 
@@ -253,11 +253,11 @@ class CalculationElectionActionSpec ()
       }
 
       "be on the calculation election page" in {
-        document.title() shouldEqual nRMessages.title
+        document.title() shouldEqual calculationElectionNoReliefsPageTitle
       }
 
-      s"has a back link of ${routes.ClaimingReliefsController.claimingReliefs().url}" in{
-        document.select("a#back-link").attr("href") shouldBe routes.ClaimingReliefsController.claimingReliefs().url
+      s"has a back link of 'javascript:history.back()'" in{
+        document.select("a#back-link").attr("href") shouldBe "javascript:history.back()"
       }
     }
   }
@@ -365,7 +365,7 @@ class CalculationElectionActionSpec ()
       }
 
       "return to the calculation election page" in {
-        document.title shouldEqual nRMessages.title
+        document.title shouldEqual s"Error: $calculationElectionNoReliefsPageTitle"
       }
     }
   }

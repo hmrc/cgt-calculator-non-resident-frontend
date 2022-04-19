@@ -18,56 +18,44 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
+    layout: Layout,
     form: FormWithCSRF,
-    calculationElectionHelperForm: helpers.calculationElectionHelperForm,
-    mainTemplate: main_template,
-    errorSummary: helpers.errorSummary
+    calculationElectionHelperForm: playComponents.calculationElectionHelperForm,
+    errorSummary: playComponents.errorSummary,
+    submitButton: playComponents.submitButton
 )
 
-@(calculationElectionForm: Form[CalculationElectionModel], content: Seq[(String, String, String, String, Option[String], Option[BigDecimal])],
-        backLink: String)(implicit request: Request[_], messages: Messages)
+@(calculationElectionForm: Form[CalculationElectionModel], content: Seq[(String, String, String, String, Option[String], Option[BigDecimal])])(implicit request: Request[_], messages: Messages)
 
-@mainTemplate(Messages("calc.calculationElectionNoReliefs.title")) {
+@title = @{if(calculationElectionForm.errors.nonEmpty) messages("site.title.error", Messages("calc.calculationElectionNoReliefs.title")) else Messages("calc.calculationElectionNoReliefs.title")}
 
-  <a id="back-link" class="back-link" href="@backLink">@Messages("calc.base.back")</a>
+@layout(
+    pageTitle = title
+) {
+    @errorSummary(calculationElectionForm.errors)
 
-    @errorSummary(calculationElectionForm, "calculation-election")
+    <h1 class="govuk-heading-xl">@Messages("calc.calculationElectionNoReliefs.title")</h1>
 
-    <h1 class="heading-xlarge">@Messages("calc.calculationElectionNoReliefs.title")</h1>
-
-  <div id="help-text">
-    <p>@Messages("calc.calculationElectionNoReliefs.helpText")</p>
-
-    <p>
-      @Messages("calc.calculationElectionNoReliefs.helpTextMethodPartOne")
-      <strong>@(Messages(content.head._4).toLowerCase)</strong>
-      @Messages("calc.calculationElectionNoReliefs.helpTextMethodPartTwo")
-    </p>
-  </div>
-
-  @form(action = controllers.routes.CalculationElectionController.submitCalculationElection) {
-
-    <div class="form-group">
-      @calculationElectionHelperForm(
-        field = calculationElectionForm("calculationElection"),
-        Seq(content.head),
-        showErrorText = true,
-        '_labelClass -> "block-label election",
-        '_legendClass -> "bold-medium")
-
-      <div class="calculation-election-margin">
-        <p>@Messages("calc.calculationElectionNoReliefs.helpTextChooseMethod")</p>
-      </div>
-
-      @calculationElectionHelperForm(
-        field = calculationElectionForm("calculationElection"),
-        content.tail,
-        showErrorText = false,
-        '_labelClass -> "block-label election",
-        '_legendClass -> "bold-medium")
+    <div id="help-text">
+        <p class="govuk-body">@Messages("calc.calculationElectionNoReliefs.helpText")</p>
+        <p class="govuk-body">
+          @Messages("calc.calculationElectionNoReliefs.helpTextMethodPartOne")
+          <span class="govuk-!-font-weight-bold">@(Messages(content.head._4).toLowerCase)</span>
+          @Messages("calc.calculationElectionNoReliefs.helpTextMethodPartTwo")
+        </p>
     </div>
 
-    <button class="button" type="submit" id="continue-button">@Messages("calc.base.continue")</button>
+    @form(action = controllers.routes.CalculationElectionController.submitCalculationElection) {
+
+        @calculationElectionHelperForm(
+            legend = Messages("calc.calculationElectionNoReliefs.title"),
+            legendClass = Some("govuk-visually-hidden"),
+            isPageHeading = false,
+            field = calculationElectionForm("calculationElection"),
+            radioOptions = content
+        )
+
+        @submitButton()
   }
 
 }
