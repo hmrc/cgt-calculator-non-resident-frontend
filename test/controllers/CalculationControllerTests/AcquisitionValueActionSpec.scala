@@ -87,7 +87,7 @@ class AcquisitionValueActionSpec extends CommonPlaySpec with WithCommonFakeAppli
       }
 
       s"have the title of ${messages.question}" in {
-        document.title shouldEqual messages.question
+        document.title() shouldBe s"${messages.question} - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
       }
     }
 
@@ -102,7 +102,7 @@ class AcquisitionValueActionSpec extends CommonPlaySpec with WithCommonFakeAppli
       }
 
       s"have the title of ${messages.question}" in {
-        document.title shouldEqual messages.question
+        document.title() shouldBe s"${messages.question} - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
       }
     }
 
@@ -148,7 +148,7 @@ class AcquisitionValueActionSpec extends CommonPlaySpec with WithCommonFakeAppli
       }
 
       s"fail with message ${messages.errorNegative}" in {
-        document.getElementsByClass("error-notification").text should include (messages.errorNegative)
+        document.getElementsByClass("govuk-error-summary").text should include (messages.errorNegative)
       }
     }
   }
