@@ -18,6 +18,7 @@ package controllers.CalculationControllerTests
 
 import akka.stream.Materializer
 import assets.MessageLookup.NonResident.{CalculationElection => messages, CalculationElectionNoReliefs => nRMessages}
+import assets.MessageLookup.{NonResident => commonMessages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.{CommonPlaySpec, TestModels, WithCommonFakeApplication}
 import config.ApplicationConfig
@@ -55,6 +56,8 @@ class CalculationElectionActionSpec ()
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val calculationElectionView = fakeApplication.injector.instanceOf[calculationElection]
   val calculationElectionNoReliefsView = fakeApplication.injector.instanceOf[calculationElectionNoReliefs]
+  val calculationElectionPageTitle = s"""${messages.heading} - ${commonMessages.pageHeading} - GOV.UK"""
+  val calculationElectionNoReliefsPageTitle = s"""${nRMessages.title} - ${commonMessages.pageHeading} - GOV.UK"""
 
   class Setup {
     val controller = new CalculationElectionController(
@@ -201,11 +204,11 @@ class CalculationElectionActionSpec ()
       }
 
       "be on the calculation election page" in {
-        document.title() shouldEqual messages.heading
+        document.title() shouldEqual calculationElectionPageTitle
       }
 
       s"has a back link of ${routes.ClaimingReliefsController.claimingReliefs().url}" in{
-        document.select("a#back-link").attr("href") shouldBe routes.ClaimingReliefsController.claimingReliefs().url
+        document.select("a#back-link").attr("href") shouldBe "javascript:history.back()"
       }
     }
 
