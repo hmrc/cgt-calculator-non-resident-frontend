@@ -16,7 +16,8 @@
 
 package views
 
-import assets.MessageLookup.{NonResident => messages}
+import assets.MessageLookup.{NonResident => commonMessages}
+import assets.MessageLookup.NonResident.{CurrentIncome => messages}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
@@ -31,32 +32,29 @@ class CurrentIncomeViewSpec extends CommonPlaySpec with WithCommonFakeApplicatio
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   val currentIncomeView = fakeApplication.injector.instanceOf[currentIncome]
+  val pageTitle = s"${messages.question} - ${commonMessages.pageHeading} - GOV.UK"
 
 
   "Current Income view" when {
 
     "supplied with no errors" should {
-      lazy val view = currentIncomeView(currentIncomeForm, "google.com")(fakeRequest, mockMessage)
+      lazy val view = currentIncomeView(currentIncomeForm)(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       s"have the correct title" in {
-        document.title() shouldBe messages.CurrentIncome.question
+        document.title() shouldBe pageTitle
       }
 
       "have a dynamically provided back link" which {
         lazy val backLink = document.body().select("#back-link")
 
         "has the text" in {
-          backLink.text shouldBe messages.back
+          backLink.text shouldBe commonMessages.back
         }
 
-        s"has a dynamic back link to 'google.com'" in {
-          backLink.attr("href") shouldBe "google.com"
+        s"has a dynamic back link 'javascript:history.back()'" in {
+          backLink.attr("href") shouldBe "javascript:history.back()"
         }
-      }
-
-      s"have a home link to the disposal date view'" in {
-        document.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
       }
 
       "have a form" which {
@@ -72,11 +70,11 @@ class CurrentIncomeViewSpec extends CommonPlaySpec with WithCommonFakeApplicatio
       }
 
       s"have the correct question" in {
-        document.body.select("label div").first().text shouldBe messages.CurrentIncome.question
+        document.body.select("h1").first().text shouldBe messages.question
       }
 
       s"have the correct hint text" in {
-        document.body.select("span.form-hint").text() shouldBe messages.CurrentIncome.helpText
+        document.body.select("span.govuk-hint").text() shouldBe messages.helpText
       }
 
       "have an input with the correct id" in {
@@ -86,27 +84,23 @@ class CurrentIncomeViewSpec extends CommonPlaySpec with WithCommonFakeApplicatio
       "have a button" which {
         lazy val button = document.select("button")
 
-        "has the type 'submit'" in {
-          button.attr("type") shouldBe "submit"
-        }
-
         "has the id 'continue-button'" in {
-          button.attr("id") shouldBe "continue-button"
+          button.attr("id") shouldBe "submit"
         }
       }
 
       "should produce the same output when render and f are called" in {
-        currentIncomeView.f(currentIncomeForm, "google.com")(fakeRequest, mockMessage) shouldBe currentIncomeView.render(currentIncomeForm, "google.com", fakeRequest, mockMessage)
+        currentIncomeView.f(currentIncomeForm)(fakeRequest, mockMessage) shouldBe currentIncomeView.render(currentIncomeForm, fakeRequest, mockMessage)
       }
     }
 
     "supplied with errors" should {
       lazy val form = currentIncomeForm.bind(Map("currentIncome" -> "a"))
-      lazy val view = currentIncomeView(form, "")(fakeRequest, mockMessage)
+      lazy val view = currentIncomeView(form)(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {
-        document.select("#error-summary-display").size() shouldBe 1
+        document.select(".govuk-error-summary").size() shouldBe 1
       }
     }
   }
