@@ -51,6 +51,8 @@ class WorthWhenBoughtForLessActionSpec extends CommonPlaySpec with WithCommonFak
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val worthWhenBoughtForLessView = fakeApplication.injector.instanceOf[worthWhenBoughtForLess]
 
+  lazy val pageTitle = s"""${messages.question} - ${messages.pageHeading} - GOV.UK"""
+
   class Setup {
     val controller = new WorthWhenBoughtForLessController(
       mockHttp,
@@ -85,7 +87,7 @@ class WorthWhenBoughtForLessActionSpec extends CommonPlaySpec with WithCommonFak
 
       s"return some html with title of ${messages.question}" in {
         contentType(result) shouldBe Some("text/html")
-        Jsoup.parse(bodyOf(result)(materializer, ec)).title shouldEqual messages.question
+        Jsoup.parse(bodyOf(result)(materializer, ec)).select("h1").text shouldEqual messages.question
       }
     }
 
@@ -100,7 +102,7 @@ class WorthWhenBoughtForLessActionSpec extends CommonPlaySpec with WithCommonFak
 
       s"return some html with title of ${messages.question}" in {
         contentType(result) shouldBe Some("text/html")
-        Jsoup.parse(bodyOf(result)(materializer, ec)).title shouldEqual messages.question
+        Jsoup.parse(bodyOf(result)(materializer, ec)).select("h1").text shouldEqual messages.question
       }
     }
 
@@ -148,7 +150,7 @@ class WorthWhenBoughtForLessActionSpec extends CommonPlaySpec with WithCommonFak
       }
 
       "return to the Worth When Bought For Less page" in {
-        doc.title() shouldEqual messages.question
+        doc.title() shouldBe s"Error: $pageTitle"
       }
     }
   }

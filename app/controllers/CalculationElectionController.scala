@@ -132,7 +132,7 @@ class CalculationElectionController @Inject()(http: DefaultHttpClient,calcConnec
         }
 
         if (isClaimingReliefs) Ok(calculationElectionView(form, content))
-        else Ok(calculationElectionNoReliefsView(form, content, backLink))
+        else Ok(calculationElectionNoReliefsView(form, content))
       }
 
     (for {
@@ -170,7 +170,7 @@ class CalculationElectionController @Inject()(http: DefaultHttpClient,calcConnec
 
       def action(content: Seq[(String, String, String, String, Option[String], Option[BigDecimal])], isClaimingReliefs: Boolean, backLink: String) = {
         if (isClaimingReliefs) BadRequest(calculationElectionView(form, content))
-        else BadRequest(calculationElectionNoReliefsView(form, content, backLink))
+        else BadRequest(calculationElectionNoReliefsView(form, content))
       }
 
       (for {

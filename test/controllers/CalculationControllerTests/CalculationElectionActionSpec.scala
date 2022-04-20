@@ -18,6 +18,7 @@ package controllers.CalculationControllerTests
 
 import akka.stream.Materializer
 import assets.MessageLookup.NonResident.{CalculationElection => messages, CalculationElectionNoReliefs => nRMessages}
+import assets.MessageLookup.{NonResident => commonMessages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.{CommonPlaySpec, TestModels, WithCommonFakeApplication}
 import config.ApplicationConfig
@@ -55,6 +56,8 @@ class CalculationElectionActionSpec ()
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val calculationElectionView = fakeApplication.injector.instanceOf[calculationElection]
   val calculationElectionNoReliefsView = fakeApplication.injector.instanceOf[calculationElectionNoReliefs]
+  val calculationElectionPageTitle = s"""${messages.heading} - ${commonMessages.pageHeading} - GOV.UK"""
+  val calculationElectionNoReliefsPageTitle = s"""${nRMessages.title} - ${commonMessages.pageHeading} - GOV.UK"""
 
   class Setup {
     val controller = new CalculationElectionController(
@@ -181,7 +184,7 @@ class CalculationElectionActionSpec ()
       }
 
       "be on the calculation election page" in {
-        document.title() shouldEqual nRMessages.title
+        document.title() shouldEqual calculationElectionNoReliefsPageTitle
       }
     }
 
@@ -201,11 +204,11 @@ class CalculationElectionActionSpec ()
       }
 
       "be on the calculation election page" in {
-        document.title() shouldEqual messages.heading
+        document.title() shouldEqual calculationElectionPageTitle
       }
 
       s"has a back link of ${routes.ClaimingReliefsController.claimingReliefs().url}" in{
-        document.select("a#back-link").attr("href") shouldBe routes.ClaimingReliefsController.claimingReliefs().url
+        document.select("a#back-link").attr("href") shouldBe "javascript:history.back()"
       }
     }
 
@@ -225,11 +228,11 @@ class CalculationElectionActionSpec ()
       }
 
       "be on the calculation election no reliefs page" in {
-        document.title() shouldEqual nRMessages.title
+        document.title() shouldEqual calculationElectionNoReliefsPageTitle
       }
 
-      s"has a back link of ${routes.CheckYourAnswersController.checkYourAnswers().url}" in{
-        document.select("a#back-link").attr("href") shouldBe routes.CheckYourAnswersController.checkYourAnswers().url
+      s"has a back link of 'javascript:history.back()'" in{
+        document.select("a#back-link").attr("href") shouldBe "javascript:history.back()"
       }
     }
 
@@ -250,11 +253,11 @@ class CalculationElectionActionSpec ()
       }
 
       "be on the calculation election page" in {
-        document.title() shouldEqual nRMessages.title
+        document.title() shouldEqual calculationElectionNoReliefsPageTitle
       }
 
-      s"has a back link of ${routes.ClaimingReliefsController.claimingReliefs().url}" in{
-        document.select("a#back-link").attr("href") shouldBe routes.ClaimingReliefsController.claimingReliefs().url
+      s"has a back link of 'javascript:history.back()'" in{
+        document.select("a#back-link").attr("href") shouldBe "javascript:history.back()"
       }
     }
   }
@@ -362,7 +365,7 @@ class CalculationElectionActionSpec ()
       }
 
       "return to the calculation election page" in {
-        document.title shouldEqual nRMessages.title
+        document.title shouldEqual s"Error: $calculationElectionNoReliefsPageTitle"
       }
     }
   }

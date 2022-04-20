@@ -33,6 +33,8 @@ class ClaimingReliefsViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   lazy val claimingReliefsView = fakeApplication.injector.instanceOf[claimingReliefs]
 
+  lazy val pageTitle = s"""${messages.title} - ${commonMessages.pageHeading} - GOV.UK"""
+
   "ClaimingReliefs view" when {
 
     "supplied with no errors" should {
@@ -41,7 +43,7 @@ class ClaimingReliefsViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
       lazy val document = Jsoup.parse(view.body)
 
       s"have the title ${messages.title}" in {
-        document.title() shouldBe messages.title
+        document.title() shouldBe pageTitle
       }
 
       "have a back link" which {
@@ -52,7 +54,7 @@ class ClaimingReliefsViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
         }
 
         s"has a link to ${controllers.routes.CheckYourAnswersController.checkYourAnswers().url}" in {
-          backLink.attr("href") shouldBe controllers.routes.CheckYourAnswersController.checkYourAnswers().url
+          backLink.attr("href") shouldBe "javascript:history.back()"
         }
       }
 
@@ -66,7 +68,7 @@ class ClaimingReliefsViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
       }
 
       s"have a p with text ${messages.helpText}" in {
-        document.select("#content > article > p").text() shouldBe messages.helpText
+        document.getElementsByClass("govuk-body").text() shouldBe messages.helpText
       }
 
       "render a form tag with a submit action" in {
@@ -85,12 +87,12 @@ class ClaimingReliefsViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
 
         lazy val button = document.select("button")
 
-        "has type of 'submit'" in {
-          button.attr("type") shouldEqual "submit"
+        "has class of 'govuk-button'" in {
+          button.attr("class") shouldEqual "govuk-button"
         }
 
-        "has the id 'continue-button'" in {
-          button.attr("id") shouldEqual "continue-button"
+        "has the id 'submit'" in {
+          button.attr("id") shouldBe "submit"
         }
 
         s"has the text ${commonMessages.continue}" in {
@@ -109,7 +111,7 @@ class ClaimingReliefsViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {
-        document.select("#error-summary-display").size() shouldBe 1
+        document.getElementsByClass("govuk-error-summary").size() shouldBe 1
       }
     }
   }

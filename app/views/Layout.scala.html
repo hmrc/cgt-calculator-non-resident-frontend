@@ -50,6 +50,13 @@
     @if(backLinkEnabled) { @backLink() }
 }
 
+@head = {
+    @if(timeoutEnabled) {
+        @hmrcTimeoutDialogHelper(
+            signOutUrl = controllers.utils.routes.TimeoutController.timeout.url,
+        )
+    }
+}
 
 @mainContent = {
     @contentBlock
@@ -58,7 +65,7 @@
 
 @govukLayout(
     pageTitle = Some(s"""$pageTitle - ${messages("service.name")} - GOV.UK"""),
-    headBlock = Some(hmrcHead()),
+    headBlock = Some(hmrcHead(headBlock = Some(head))),
     headerBlock = Some(hmrcStandardHeader(
         serviceUrl = Some(controllers.routes.DisposalDateController.disposalDate().url),
         userResearchBanner = if (userResearchBannerEnabled) {Some(UserResearchBanner(url = appConfig.urBannerLink))} else None

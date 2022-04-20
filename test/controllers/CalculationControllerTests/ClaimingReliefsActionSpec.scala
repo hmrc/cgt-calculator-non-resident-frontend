@@ -18,6 +18,7 @@ package controllers.CalculationControllerTests
 
 import akka.stream.Materializer
 import assets.MessageLookup.NonResident.{ClaimingReliefs => messages}
+import assets.MessageLookup.{NonResident => commonMessages}
 import common.KeystoreKeys.NonResidentKeys
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import config.ApplicationConfig
@@ -50,6 +51,7 @@ class ClaimingReliefsActionSpec extends CommonPlaySpec with WithCommonFakeApplic
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val claimingReliefsView = fakeApplication.injector.instanceOf[claimingReliefs]
+  lazy val pageTitle = s"""${messages.title} - ${commonMessages.pageHeading} - GOV.UK"""
 
   class Setup {
     val controller = new ClaimingReliefsController(
@@ -86,7 +88,7 @@ class ClaimingReliefsActionSpec extends CommonPlaySpec with WithCommonFakeApplic
       }
 
       "return the claiming-reliefs view" in {
-        Jsoup.parse(bodyOf(result)(materializer, ec)).title shouldBe messages.title
+        Jsoup.parse(bodyOf(result)(materializer, ec)).title shouldBe pageTitle
       }
     }
 
@@ -99,7 +101,7 @@ class ClaimingReliefsActionSpec extends CommonPlaySpec with WithCommonFakeApplic
       }
 
       "return the claiming-reliefs view" in {
-        Jsoup.parse(bodyOf(result)(materializer, ec)).title shouldBe messages.title
+        Jsoup.parse(bodyOf(result)(materializer, ec)).title shouldBe pageTitle
       }
     }
 
@@ -157,7 +159,7 @@ class ClaimingReliefsActionSpec extends CommonPlaySpec with WithCommonFakeApplic
       }
 
       "return to the claiming-reliefs page" in {
-        Jsoup.parse(bodyOf(result)(materializer, ec)).title shouldBe messages.title
+        Jsoup.parse(bodyOf(result)(materializer, ec)).title shouldBe "Error: " + pageTitle
       }
     }
   }

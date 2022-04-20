@@ -19,6 +19,7 @@ package controllers
 import akka.stream.Materializer
 import akka.util.Timeout
 import common.{CommonPlaySpec, WithCommonFakeApplication}
+import assets.MessageLookup.{NonResident => commonMessages}
 import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import controllers.utils.TimeoutController
@@ -40,6 +41,7 @@ class TimeoutControllerSpec extends CommonPlaySpec with WithCommonFakeApplicatio
   lazy val timeout = mock[Timeout]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   val sessionTimeoutView = fakeApplication.injector.instanceOf[sessionTimeout]
+  lazy val pageTitle = s"""${Messages("session.timeout.message")} - ${commonMessages.pageHeading} - GOV.UK"""
 
 
     class fakeRequestTo(url : String, controllerAction : Action[AnyContent]) {
@@ -61,7 +63,7 @@ class TimeoutControllerSpec extends CommonPlaySpec with WithCommonFakeApplicatio
       }
 
       "have the title" in {
-        timeoutTestDataItem.jsoupDoc.getElementsByTag("title").text shouldEqual Messages("session.timeout.message")
+        timeoutTestDataItem.jsoupDoc.getElementsByTag("title").text shouldEqual pageTitle
       }
 
       "contain the heading 'Your session has timed out." in {
@@ -69,7 +71,8 @@ class TimeoutControllerSpec extends CommonPlaySpec with WithCommonFakeApplicatio
       }
 
       "have a restart link to href of 'test'" in {
-        timeoutTestDataItem.jsoupDoc.getElementById("startAgain").attr("href") shouldEqual common.DefaultRoutes.restartUrl
+        timeoutTestDataItem.jsoupDoc.getElementsByClass("govuk-button").first()
+          .attr("href") shouldEqual common.DefaultRoutes.restartUrl
       }
     }
   }
