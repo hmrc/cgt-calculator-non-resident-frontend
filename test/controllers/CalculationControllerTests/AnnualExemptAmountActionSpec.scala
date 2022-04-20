@@ -120,7 +120,7 @@ class AnnualExemptAmountActionSpec extends CommonPlaySpec with WithCommonFakeApp
         val target = setupTarget(None)
         lazy val result = target.annualExemptAmount(fakeRequestWithSession)
         lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
-        document.title shouldEqual messages.question
+        document.title shouldEqual s"${messages.question} - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
       }
     }
 
@@ -193,7 +193,7 @@ class AnnualExemptAmountActionSpec extends CommonPlaySpec with WithCommonFakeApp
         val target = setupTarget(None, previousLossOrGain = Some(PreviousLossOrGainModel("Neither")))
         lazy val result = target.annualExemptAmount(fakeRequestWithSession)
         lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
-        document.select("#back-link").attr("href") shouldEqual routes.PreviousGainOrLossController.previousGainOrLoss().url
+        document.select("#back-link").attr("href") shouldEqual "javascript:history.back()"
       }
     }
 
@@ -203,7 +203,7 @@ class AnnualExemptAmountActionSpec extends CommonPlaySpec with WithCommonFakeApp
         val target = setupTarget(None, previousLossOrGain = Some(PreviousLossOrGainModel("Loss")), howMuchLoss = Some(HowMuchLossModel(0)))
         lazy val result = target.annualExemptAmount(fakeRequestWithSession)
         lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
-        document.select("#back-link").attr("href") shouldEqual routes.HowMuchLossController.howMuchLoss().url
+        document.select("#back-link").attr("href") shouldEqual "javascript:history.back()"
       }
     }
 
@@ -213,7 +213,7 @@ class AnnualExemptAmountActionSpec extends CommonPlaySpec with WithCommonFakeApp
         val target = setupTarget(None, previousLossOrGain = Some(PreviousLossOrGainModel("Gain")), howMuchGain = Some(HowMuchGainModel(0)))
         lazy val result = target.annualExemptAmount(fakeRequestWithSession)
         lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
-        document.select("#back-link").attr("href") shouldEqual routes.HowMuchGainController.howMuchGain().url
+        document.select("#back-link").attr("href") shouldEqual "javascript:history.back()"
       }
     }
   }
@@ -252,7 +252,7 @@ class AnnualExemptAmountActionSpec extends CommonPlaySpec with WithCommonFakeApp
         lazy val request = fakeRequestToPOSTWithSession(("annualExemptAmount", "1000000"))
         lazy val result = target.submitAnnualExemptAmount(request)
         lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
-        document.title shouldBe messages.question
+        document.title shouldBe s"Error: ${messages.question} - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
       }
     }
   }
