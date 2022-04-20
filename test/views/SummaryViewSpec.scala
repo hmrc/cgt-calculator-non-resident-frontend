@@ -54,12 +54,12 @@ class SummaryViewSpec extends CommonPlaySpec with WithCommonFakeApplication with
         }
 
         s"has a route to 'back-link'" in {
-          backLink.attr("href") shouldBe "back-link"
+          backLink.attr("href") shouldBe "javascript:history.back()"
         }
       }
 
       s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-        document.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
+        document.select("body > header > div.govuk-header.hmrc-header > div > div.govuk-header__content > a").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
       }
 
       "have a heading" which {
@@ -83,7 +83,7 @@ class SummaryViewSpec extends CommonPlaySpec with WithCommonFakeApplication with
       }
 
       "have a save pdf button" which {
-        lazy val savePDF = document.select("a.save-pdf-link")
+        lazy val savePDF = document.select("#pdfSave")
 
         "which has the text 'Save as PDF'" in {
           savePDF.text() shouldBe messages.Summary.saveAsPdf
@@ -95,7 +95,7 @@ class SummaryViewSpec extends CommonPlaySpec with WithCommonFakeApplication with
       }
 
       "have a continue button" which {
-        lazy val continue = document.select("a.button")
+        lazy val continue = document.select(".govuk-button")
 
         "have the text 'Continue" in {
           continue.text() shouldBe messages.continue
@@ -122,21 +122,12 @@ class SummaryViewSpec extends CommonPlaySpec with WithCommonFakeApplication with
       lazy val document = Jsoup.parse(view.body)
 
       "display a tax year warning" in {
-        document.select("div.notice-wrapper").size() shouldBe 1
+        document.select(".govuk-warning-text__text").size() shouldBe 1
+        document.select(".govuk-warning-text__text").text() shouldBe messages.Summary.newNoticeSummary
       }
 
-      "does have ur panel" in {
-        document.select("div#ur-panel").size() shouldBe 1
-
-        document.select(".banner-panel__close").size() shouldBe 1
-        document.select(".banner-panel__title").text() shouldBe messages.Summary.bannerPanelTitle
-
-        document.select("section > a").first().attr("href") shouldBe messages.Summary.bannerPanelLinkURL
-        document.select("section > a").first().text() shouldBe messages.Summary.bannerPanelLinkText
-
-        document.select("a > span").first().text() shouldBe Summary.bannerPanelCloseVisibleText
-        document.select("a > span").eq(1).text() shouldBe Summary.bannerPanelCloseHiddenText
-
+      "have ur panel" in {
+        document.toString.contains("Help improve HMRC services")
       }
 
     }

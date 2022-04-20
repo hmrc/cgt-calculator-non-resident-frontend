@@ -21,9 +21,9 @@
 @(calculationType: String, disposalValue: BigDecimal, acquisitionValue: BigDecimal, totalCosts: BigDecimal, totalGain: BigDecimal = 0,
 percentageTotalGain: BigDecimal = 0, percentageOfGain: Int = 0)(implicit request: Request[_], messages: Messages, messagesApi: Option[MessagesApi] = None)
 
-<div id="workedOutSection" class="summary-underline summary-details-padding">
-    <h2>@Messages("calc.summaryPartial.workingOutSectionHeading")</h2>
-    <p class="lede">
+<div id="workedOutSection">
+    <h2 class="govuk-heading-m">@Messages("calc.summaryPartial.workingOutSectionHeading")</h2>
+    <p class="govuk-body">
         @{calculationType match {
             case CalculationType.flat => Messages("calc.summary.flat.description")
             case CalculationType.rebased => <span>{Messages("calc.summary.rebased.description")}</span> <span class="no-wrap"> {Messages("calc.calculationElection.message.rebasedDate")}</span>
@@ -32,8 +32,10 @@ percentageTotalGain: BigDecimal = 0, percentageOfGain: Int = 0)(implicit request
         }
     </p>
 
-    <h3>@if(totalGain >= 0){@Messages("calc.summaryPartial.yourTotalGain")}else{@Messages("calc.summaryPartial.yourTotalLoss")}</h3>
+    <h3 class="govuk-heading-m">@if(totalGain >= 0){@Messages("calc.summaryPartial.yourTotalGain")}else{@Messages("calc.summaryPartial.yourTotalLoss")}</h3>
 
+    <table class="govuk-table">
+        <tbody class="govuk-table__body">
     @summaryNumericRow("disposalValue",Messages("calc.summaryPartial.valueWhenSold"), disposalValue)
 
     @{if(calculationType == CalculationType.flat || calculationType == CalculationType.timeApportioned)
@@ -52,13 +54,13 @@ percentageTotalGain: BigDecimal = 0, percentageOfGain: Int = 0)(implicit request
             else Messages("calc.summaryPartial.lossMadeOnProperty"),
             totalGain)
 
-        <div id="percentageOfGain" class="grid-layout grid-layout--no-margin font-small hint-text">
-            <div id="percentageOfGain-text" class="grid-layout__column--1-2">
+        <div id="percentageOfGain">
+            <div id="percentageOfGain-text">
                 @{if (totalGain >= 0) Messages("calc.summaryPartial.percentageOfGain")
                 else Messages("calc.summaryPartial.percentageOfLoss")}
             </div>
 
-            <div id="percentageOfGain-value" class="grid-layout__column--1-3 text--right">
+            <div id="percentageOfGain-value">
                 @percentageOfGain&percnt;
             </div>
         </div>
@@ -73,5 +75,7 @@ percentageTotalGain: BigDecimal = 0, percentageOfGain: Int = 0)(implicit request
         if(totalGain >= 0) summaryNumericRow("totalGain", Messages("calc.summaryPartial.totalGain"), totalGain, isTotal = true)
         else summaryNumericRow("totalGain", Messages("calc.summaryPartial.totalLoss"), totalGain, isTotal = true)
     }
+        </tbody>
+    </table>
 
 </div>
