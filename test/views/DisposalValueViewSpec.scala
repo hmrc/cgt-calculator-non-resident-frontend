@@ -16,7 +16,8 @@
 
 package views
 
-import assets.MessageLookup.{NonResident => messages}
+import assets.MessageLookup.{NonResident => commonMessages}
+import assets.MessageLookup.NonResident.{DisposalValue => messages}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
@@ -31,6 +32,7 @@ class DisposalValueViewSpec extends CommonPlaySpec with WithCommonFakeApplicatio
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   lazy val disposalValueView = fakeApplication.injector.instanceOf[disposalValue]
+  lazy val pageTitle = s"${messages.question} - ${commonMessages.pageHeading} - GOV.UK"
 
   "Disposal value view" when {
 
@@ -38,49 +40,42 @@ class DisposalValueViewSpec extends CommonPlaySpec with WithCommonFakeApplicatio
       lazy val view = disposalValueView(disposalValueForm)(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
-      s"have a title of '${messages.DisposalValue.question}'" in {
-        document.title() shouldBe messages.DisposalValue.question
+      s"have a title of '$pageTitle'" in {
+        document.title() shouldBe pageTitle
       }
 
       "have a back link" which {
         lazy val backLink = document.body().select("#back-link")
 
         "has the text" in {
-          backLink.text shouldBe messages.back
+          backLink.text shouldBe commonMessages.back
         }
 
         s"has a route to 'sold-for-less'" in {
-          backLink.attr("href") shouldBe controllers.routes.SoldForLessController.soldForLess().url
+          backLink.attr("href") shouldBe "javascript:history.back()"
         }
       }
 
       "have a heading" which {
         lazy val heading = document.body().select("h1")
 
-        "has a class of heading-xlarge" in {
-          heading.attr("class") shouldBe "heading-xlarge"
+        "has a class of govuk-label-wrapper" in {
+          heading.attr("class") shouldBe "govuk-label-wrapper"
         }
 
-        s"has the text '${messages.DisposalValue.question}'" in {
-          heading.text shouldBe messages.DisposalValue.question
+        s"has the text '${messages.question}'" in {
+          heading.text shouldBe messages.question
         }
-      }
-
-      s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-        document.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
       }
 
       s"have a label" which {
 
-        lazy val label = document.select("label div").first()
+        lazy val label = document.select("label").first()
 
-        s"has the question '${messages.DisposalValue.question}'" in {
-          label.text shouldBe messages.DisposalValue.question
+        s"has the question '${messages.question}'" in {
+          label.text shouldBe messages.question
         }
 
-        "has the class visuallyhidden" in {
-          label.hasClass("visuallyhidden") shouldEqual true
-        }
       }
 
       "have an input with the id 'disposalValue" in {
@@ -98,24 +93,20 @@ class DisposalValueViewSpec extends CommonPlaySpec with WithCommonFakeApplicatio
           form.attr("action") shouldBe controllers.routes.DisposalValueController.submitDisposalValue().url
         }
 
-        s"has a paragraph with the text ${messages.DisposalValue.jointOwnership}" in {
-          document.body().select("p.panel-indent").text shouldBe messages.DisposalValue.jointOwnership
+        s"has a paragraph with the text ${messages.jointOwnership}" in {
+          document.body().select(".govuk-hint").text shouldBe messages.jointOwnership
         }
       }
 
       "have a button" which {
         lazy val button = document.select("button")
 
-        "has the class 'button'" in {
-          button.attr("class") shouldBe "button"
+        "has the class 'govuk-button'" in {
+          button.attr("class") shouldBe "govuk-button"
         }
 
-        "has the type 'submit'" in {
-          button.attr("type") shouldBe "submit"
-        }
-
-        "has the id 'continue-button'" in {
-          button.attr("id") shouldBe "continue-button"
+        "has the id 'submit'" in {
+          button.attr("id") shouldBe "submit"
         }
       }
 
@@ -130,7 +121,7 @@ class DisposalValueViewSpec extends CommonPlaySpec with WithCommonFakeApplicatio
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {
-        document.select("#error-summary-display").size() shouldBe 1
+        document.select(".govuk-error-summary").size() shouldBe 1
       }
     }
   }

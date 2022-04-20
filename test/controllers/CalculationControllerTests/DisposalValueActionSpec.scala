@@ -18,6 +18,7 @@ package controllers.CalculationControllerTests
 
 import akka.stream.Materializer
 import assets.MessageLookup.NonResident.{DisposalValue => messages}
+import assets.MessageLookup.{NonResident => commonMessages}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import config.ApplicationConfig
 import connectors.CalculatorConnector
@@ -50,6 +51,7 @@ class DisposalValueActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val disposalValueView = fakeApplication.injector.instanceOf[disposalValue]
+  val pageTitle = s"${messages.question} - ${commonMessages.pageHeading} - GOV.UK"
 
   class Setup {
     val controller = new DisposalValueController(
@@ -86,7 +88,7 @@ class DisposalValueActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
       }
 
       "load the disposal value page" in {
-        document.title shouldBe messages.question
+        document.title shouldBe pageTitle
       }
     }
 
@@ -100,7 +102,7 @@ class DisposalValueActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
       }
 
       "load the disposal value page" in {
-        document.title shouldBe messages.question
+        document.title shouldBe pageTitle
       }
     }
 
@@ -145,7 +147,7 @@ class DisposalValueActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
       }
 
       "load the Disposal Value page" in {
-        document.title shouldBe messages.question
+        document.title shouldBe s"Error: $pageTitle"
       }
     }
   }
