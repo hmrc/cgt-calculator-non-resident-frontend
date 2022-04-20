@@ -58,7 +58,7 @@ class CurrentIncomeController @Inject()(http: DefaultHttpClient,calcConnector: C
     (for {
       backLink <- getBackLink
       form <- getForm
-    } yield Ok(currentIncomeView(form, backLink))).recoverToStart
+    } yield Ok(currentIncomeView(form))).recoverToStart
   }
 
   val submitCurrentIncome = ValidateSession.async { implicit request =>
@@ -76,7 +76,7 @@ class CurrentIncomeController @Inject()(http: DefaultHttpClient,calcConnector: C
     }
 
     currentIncomeForm.bindFromRequest.fold(
-      errors => getBackLink.map{backLink => BadRequest(currentIncomeView(errors, backLink))},
+      errors => Future.successful(BadRequest(currentIncomeView(errors))),
       success => successAction(success)
     )
   }
