@@ -22,14 +22,17 @@
 @(
         field: Field,
         question: String,
-        hideLabel: Boolean
+        hideLabel: Boolean,
+        hintText: Option[String] = None
 )(implicit messages: Messages)
 
 @govukInput(Input(
     label = Label(
         isPageHeading = !hideLabel,
-        classes = "govuk-label--l",
+        classes = if(hideLabel) "govuk-visually-hidden" else "govuk-label--xl",
+        content = Text(question)
     ),
+    hint = hintText.map(text => (Hint(content = Text(text)))),
     classes = "govuk-input--width-10",
     spellcheck = Some(false),
     prefix = Some(PrefixOrSuffix(
