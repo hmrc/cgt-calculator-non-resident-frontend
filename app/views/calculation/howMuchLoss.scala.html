@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,26 +18,27 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
-    errorSummary: helpers.errorSummary,
-    mainTemplate: main_template,
+    layout: Layout,
+    errorSummary: playComponents.errorSummary,
     form: FormWithCSRF,
-    formInputMoney: helpers.formInputMoney
+    formInputMoney: playComponents.formInputMoney,
+    submitButton: playComponents.submitButton,
 )
 
 @(howMuchLossForm: Form[HowMuchLossModel])(implicit request: Request[_], messages: Messages)
 
-@mainTemplate(Messages("calc.howMuchLoss.question")) {
+@title = @{
+    if(howMuchLossForm.errors.nonEmpty) messages("site.title.error", Messages("calc.howMuchLoss.question")) else Messages("calc.howMuchLoss.question")
+}
 
-    <a id="back-link" class="back-link" href="@controllers.routes.PreviousGainOrLossController.previousGainOrLoss">@Messages("calc.base.back")</a>
+@layout(
+    pageTitle = title
+) {
 
-    @errorSummary(howMuchLossForm, "loss")
-
-    <h1 class="heading-xlarge">@Messages("calc.howMuchLoss.question")</h1>
-
+    @errorSummary(howMuchLossForm.errors)
+    <h1 class="govuk-heading-xl">@Messages("calc.howMuchLoss.question")</h1>
     @form(action = controllers.routes.HowMuchLossController.submitHowMuchLoss) {
-
-        @formInputMoney(howMuchLossForm, "loss", Messages("calc.howMuchLoss.question"), hideLabel = true)
-
-        <button class="button" type="submit" id="continue-button">@Messages("calc.base.continue")</button>
+        @formInputMoney(howMuchLossForm("loss"), Messages("calc.howMuchLoss.question"), hideLabel = true)
+        @submitButton()
     }
 }

@@ -49,6 +49,7 @@ class HowMuchLossActionSpec extends CommonPlaySpec with WithCommonFakeApplicatio
   val defaultCache = mock[CacheMap]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val howMuchLossView = fakeApplication.injector.instanceOf[howMuchLoss]
+  val pageTitle = s"""${messages.HowMuchLoss.question} - ${messages.pageHeading} - GOV.UK"""
 
   class Setup {
     val controller = new HowMuchLossController(
@@ -82,7 +83,7 @@ class HowMuchLossActionSpec extends CommonPlaySpec with WithCommonFakeApplicatio
       }
 
       "load the How Much Loss Page" in {
-        document.title() shouldBe messages.HowMuchLoss.question
+        document.title() shouldBe pageTitle
       }
     }
 
@@ -96,7 +97,7 @@ class HowMuchLossActionSpec extends CommonPlaySpec with WithCommonFakeApplicatio
       }
 
       "load the How Much Loss Page" in {
-        document.title() shouldBe messages.HowMuchLoss.question
+        document.title() shouldBe pageTitle
       }
     }
 
@@ -155,7 +156,7 @@ class HowMuchLossActionSpec extends CommonPlaySpec with WithCommonFakeApplicatio
       }
 
       "return to the How Much Loss page" in {
-        document.title shouldBe messages.HowMuchLoss.question
+        document.title shouldBe s"""Error: ${pageTitle}"""
       }
     }
 
