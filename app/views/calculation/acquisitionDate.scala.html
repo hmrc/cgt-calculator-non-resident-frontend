@@ -34,7 +34,7 @@
     pageTitle = title
 ) {
 
-    @errorSummary(acquisitionDateForm.errors)
+    @errorSummary(acquisitionDateForm.errors, Some("acquisitionDateDay"))
 
     <h1 class="govuk-fieldset__legend govuk-label--xl ">@Messages("calc.acquisitionDate.question")</h1>
 

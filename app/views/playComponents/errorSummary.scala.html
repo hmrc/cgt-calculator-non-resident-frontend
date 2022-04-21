@@ -18,14 +18,17 @@
     govukErrorSummary : GovukErrorSummary
 )
 
-@(errors: Seq[FormError])(implicit messages: Messages)
+@(
+    errors: Seq[FormError],
+    errorKey: Option[String] = None
+)(implicit messages: Messages)
 
 @if(errors.nonEmpty) {
     @govukErrorSummary(ErrorSummary(
         title       = Text(messages("error.summary.title")),
         errorList   = for(error <- errors) yield {
             ErrorLink(
-                href    = Some(s"#${error.key}"),
+                href    = if(error.key.equals("")) Some(s"#${errorKey.get}") else Some(s"#${error.key}"),
                 content = Text(messages(error.message, error.args:_*))
             )
         }

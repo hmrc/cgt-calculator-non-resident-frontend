@@ -18,39 +18,79 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
-    mainTemplate: main_template,
-    errorSummary: helpers.errorSummary,
-    formHiddenYesNoRadio: helpers.formHiddenYesNoRadio,
-    formInputMoney: helpers.formInputMoney,
+    layout: Layout,
+    errorSummary: playComponents.errorSummary,
+    submitButton: playComponents.submitButton,
     form: FormWithCSRF
 )
 
 @(data: Form[CostsAtLegislationStartModel])(implicit request: Request[_], messages: Messages)
 
-@mainTemplate(Messages("calc.costsAtLegislationStart.title")) {
+@title = @{
+    if(data.errors.nonEmpty) messages("site.title.error", Messages("calc.costsAtLegislationStart.title")) else Messages("calc.costsAtLegislationStart.title")
+}
 
-    <a id="back-link" class="back-link" href="@controllers.routes.WorthBeforeLegislationStartController.worthBeforeLegislationStart().url">@Messages("calc.base.back")</a>
+@errorClass = @{
+    if(data.errors.nonEmpty) "govuk-form-group govuk-form-group--error" else "govuk-form-group"
+}
 
-    @errorSummary(data, "costs", "costs")
+@pageError = @{
+    for(error <- data.errors) yield {
+        messages(error.message, error.args:_*)
+    }
+}
+@layout(
+    pageTitle = title
+) {
 
-    <h1 class="heading-xlarge">@Messages("calc.costsAtLegislationStart.title")</h1>
+    @errorSummary(data.errors, Some("costs"))
 
     @form(action = controllers.routes.CostsAtLegislationStartController.submitCostsAtLegislationStart) {
 
-        @formHiddenYesNoRadio(data,
-            "hasCosts",
-            Messages("calc.costsAtLegislationStart.title"),
-            formInputMoney(data,
-                "costs",
-                Messages("calc.costsAtLegislationStart.howMuch"),
-                additionalHTMLContent = Some(s"""<p>${Messages("calc.costsAtLegislationStart.helpText")}</p>"""),
-                labelClasses = "heading-small"
-            ),
-            hideLegend = true,
-            hidePanel = true
-        )
+        <div class="govuk-form-group">
+            <fieldset class="govuk-fieldset">
+                <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                    <h1 class="govuk-fieldset__heading">
+                        @Messages("calc.costsAtLegislationStart.title")
+                    </h1>
+                </legend>
+                <div class="govuk-radios" data-module="govuk-radios" id="hasCosts">
+                    <div class="govuk-radios__item">
+                        <input class="govuk-radios__input" id="hasCosts-yes" name="hasCosts" type="radio" value="Yes" checked data-aria-controls="conditional-costs">
+                        <label class="govuk-label govuk-radios__label" for="hasCosts-yes">
+                            @Messages("calc.base.yes")
+                        </label>
+                    </div>
+                    <div class="govuk-radios__conditional" id="conditional-costs">
+                        <div class="@errorClass">
+                            <label class="govuk-label">
+                                @Messages("calc.costsAtLegislationStart.howMuch")
+                            </label>
+                            <div id="costs-hint" class="govuk-hint">
+                                @Messages("calc.costsAtLegislationStart.helpText")
+                            </div>
+                            <p id="costs-error" class="govuk-error-message">
+                                <span class="govuk-visually-hidden">Error:</span> @pageError
+                            </p>
+                            <div class="govuk-input__wrapper">
+                                <div class="govuk-input__prefix" aria-hidden="true">£</div>
+                                <input class="govuk-input govuk-input--width-5" id="costs" name="costs" type="text" spellcheck="false" value step="0.01">
+                            </div>
+                        </div>
 
-        <button class="button" type="submit" id="continue-button">@Messages("calc.base.continue")</button>
+                    </div>
+                    <div class="govuk-radios__item">
+                        <input class="govuk-radios__input" id="hasCosts-no" name="hasCosts" type="radio" value="No">
+                        <label class="govuk-label govuk-radios__label">
+                            @Messages("calc.base.no")
+                        </label>
+                    </div>
+                </div>
+
+            </fieldset>
+        </div>
+
+        @submitButton()
 
     }
 }

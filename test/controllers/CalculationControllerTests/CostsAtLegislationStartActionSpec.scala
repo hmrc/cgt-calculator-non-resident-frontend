@@ -147,7 +147,7 @@ class CostsAtLegislationStartActionSpec extends CommonPlaySpec with WithCommonFa
       }
 
       "return to the 'costs at legislation start' page" in {
-        document.title() shouldBe messages.title
+        document.title() shouldBe s"Error: ${messages.title}"
       }
     }
   }
