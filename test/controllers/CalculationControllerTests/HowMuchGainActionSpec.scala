@@ -17,6 +17,7 @@
 package controllers.CalculationControllerTests
 
 import akka.stream.Materializer
+import assets.MessageLookup.{NonResident => commonMessages}
 import assets.MessageLookup.NonResident.{HowMuchGain => messages}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import config.ApplicationConfig
@@ -48,6 +49,7 @@ class HowMuchGainActionSpec extends CommonPlaySpec with WithCommonFakeApplicatio
   val defaultCache = mock[CacheMap]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val howMuchGainView = fakeApplication.injector.instanceOf[howMuchGain]
+  val pageTitle = s"""${messages.question} - ${commonMessages.pageHeading} - GOV.UK"""
 
   class Setup {
     val controller = new HowMuchGainController(
@@ -82,7 +84,7 @@ class HowMuchGainActionSpec extends CommonPlaySpec with WithCommonFakeApplicatio
       }
 
       "load the How Much Gain page" in {
-        document.title shouldBe messages.question
+        document.title shouldBe pageTitle
       }
     }
 
@@ -96,7 +98,7 @@ class HowMuchGainActionSpec extends CommonPlaySpec with WithCommonFakeApplicatio
       }
 
       "load the How Much Gain page" in {
-        document.title shouldBe messages.question
+        document.title shouldBe pageTitle
       }
     }
 
@@ -155,7 +157,7 @@ class HowMuchGainActionSpec extends CommonPlaySpec with WithCommonFakeApplicatio
       }
 
       "load the How Much Gain page" in {
-        document.title shouldBe messages.question
+        document.title shouldBe s"""Error: ${pageTitle}"""
       }
     }
 
