@@ -43,7 +43,7 @@ class AnnualExemptAmountViewSpec extends CommonPlaySpec with WithCommonFakeAppli
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${messages.question}'" in {
-        document.title() shouldBe messages.question
+        document.title() shouldBe s"${messages.question} - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
       }
 
       "have a back link" which {
@@ -54,19 +54,19 @@ class AnnualExemptAmountViewSpec extends CommonPlaySpec with WithCommonFakeAppli
         }
 
         s"has a link to 'back-url'" in {
-          backLink.attr("href") shouldBe "back-url"
+          backLink.attr("href") shouldBe "javascript:history.back()"
         }
       }
 
       s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-        document.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
+        document.select("body > header > div > div > div.govuk-header__content > a").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
       }
 
       "have a title" which {
         lazy val heading = document.body().select("h1")
 
         "has a class of heading-large" in {
-          heading.attr("class") shouldBe "heading-xlarge"
+          heading.attr("class") shouldBe "govuk-heading-xl"
         }
 
         s"has the text '${messages.question}'" in {
@@ -87,7 +87,7 @@ class AnnualExemptAmountViewSpec extends CommonPlaySpec with WithCommonFakeAppli
       }
 
       s"have the question '${messages.question}'" in {
-        document.body.select("label div").first().text shouldBe messages.question
+        document.getElementsByClass("govuk-template__body").text should include {messages.question}
       }
 
       "have an input with the id 'annualExemptAmount" in {
@@ -98,15 +98,15 @@ class AnnualExemptAmountViewSpec extends CommonPlaySpec with WithCommonFakeAppli
         lazy val button = document.select("button")
 
         "has the class 'button'" in {
-          button.attr("class") shouldBe "button"
+          button.attr("class") shouldBe "govuk-button"
         }
 
         "has the type 'submit'" in {
-          button.attr("type") shouldBe "submit"
+          button.attr("id") shouldBe "submit"
         }
 
         "has the id 'continue-button'" in {
-          button.attr("id") shouldBe "continue-button"
+          button.attr("id") shouldBe "submit"
         }
       }
     }
@@ -117,7 +117,7 @@ class AnnualExemptAmountViewSpec extends CommonPlaySpec with WithCommonFakeAppli
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {
-        document.select("#error-summary-display").size() shouldBe 1
+        document.getElementsByClass("govuk-error-summary").size() shouldBe 1
       }
     }
 
