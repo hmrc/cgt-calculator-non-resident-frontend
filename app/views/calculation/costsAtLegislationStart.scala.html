@@ -20,6 +20,7 @@
 @this(
     layout: Layout,
     errorSummary: playComponents.errorSummary,
+    formHiddenYesNoRadioCurrencyInput: playComponents.formHiddenYesNoRadioCurrencyInput,
     submitButton: playComponents.submitButton,
     form: FormWithCSRF
 )
@@ -30,15 +31,6 @@
     if(data.errors.nonEmpty) messages("site.title.error", Messages("calc.costsAtLegislationStart.title")) else Messages("calc.costsAtLegislationStart.title")
 }
 
-@errorClass = @{
-    if(data.errors.nonEmpty) "govuk-form-group govuk-form-group--error" else "govuk-form-group"
-}
-
-@pageError = @{
-    for(error <- data.errors) yield {
-        messages(error.message, error.args:_*)
-    }
-}
 @layout(
     pageTitle = title
 ) {
@@ -47,48 +39,14 @@
 
     @form(action = controllers.routes.CostsAtLegislationStartController.submitCostsAtLegislationStart) {
 
-        <div class="govuk-form-group">
-            <fieldset class="govuk-fieldset">
-                <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                    <h1 class="govuk-fieldset__heading">
-                        @Messages("calc.costsAtLegislationStart.title")
-                    </h1>
-                </legend>
-                <div class="govuk-radios" data-module="govuk-radios" id="hasCosts">
-                    <div class="govuk-radios__item">
-                        <input class="govuk-radios__input" id="hasCosts-yes" name="hasCosts" type="radio" value="Yes" checked data-aria-controls="conditional-costs">
-                        <label class="govuk-label govuk-radios__label" for="hasCosts-yes">
-                            @Messages("calc.base.yes")
-                        </label>
-                    </div>
-                    <div class="govuk-radios__conditional" id="conditional-costs">
-                        <div class="@errorClass">
-                            <label class="govuk-label">
-                                @Messages("calc.costsAtLegislationStart.howMuch")
-                            </label>
-                            <div id="costs-hint" class="govuk-hint">
-                                @Messages("calc.costsAtLegislationStart.helpText")
-                            </div>
-                            <p id="costs-error" class="govuk-error-message">
-                                <span class="govuk-visually-hidden">Error:</span> @pageError
-                            </p>
-                            <div class="govuk-input__wrapper">
-                                <div class="govuk-input__prefix" aria-hidden="true">£</div>
-                                <input class="govuk-input govuk-input--width-5" id="costs" name="costs" type="text" spellcheck="false" value step="0.01">
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="govuk-radios__item">
-                        <input class="govuk-radios__input" id="hasCosts-no" name="hasCosts" type="radio" value="No">
-                        <label class="govuk-label govuk-radios__label">
-                            @Messages("calc.base.no")
-                        </label>
-                    </div>
-                </div>
-
-            </fieldset>
-        </div>
+        @formHiddenYesNoRadioCurrencyInput(
+            form = data,
+            yesNoFieldName = "hasCosts",
+            conditionalInputFieldName = "costs",
+            yesNoQuestionText = Messages("calc.costsAtLegislationStart.title"),
+            conditionalInputQuestionText = Messages("calc.costsAtLegislationStart.howMuch"),
+            conditionalInputHint = Some(Messages("calc.costsAtLegislationStart.helpText"))
+        )
 
         @submitButton()
 

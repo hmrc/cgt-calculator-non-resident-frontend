@@ -347,6 +347,8 @@ object MessageLookup {
     }
 
     object RebasedCosts {
+      val title = "Did you pay to have the property valued at 5 April 2015? - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
+      val errorTitle = "Error: Did you pay to have the property valued at 5 April 2015? - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
       val question = "Did you pay to have the property valued at 5 April 2015?"
       val inputQuestion = "How much did it cost to get the property valued?"
       val jointOwnership = "If you owned the property with someone else, only enter your share of the cost, as agreed with your co-owner."

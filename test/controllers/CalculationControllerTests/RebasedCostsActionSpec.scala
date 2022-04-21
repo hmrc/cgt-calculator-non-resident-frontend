@@ -85,7 +85,7 @@ class RebasedCostsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
       }
 
       "load the rebased costs page" in {
-        document.title() shouldBe messages.question
+        document.title() shouldBe messages.title
       }
 
       "a previous value is supplied with a pre-existing stored model" should {
@@ -98,7 +98,7 @@ class RebasedCostsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
         }
 
         "load the rebased costs page" in {
-          document.title() shouldBe messages.question
+          document.title() shouldBe messages.title
         }
       }
 
@@ -145,7 +145,7 @@ class RebasedCostsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
       }
 
       "return to the rebased costs page" in {
-        document.title() shouldBe messages.question
+        document.title() shouldBe messages.errorTitle
       }
     }
   }

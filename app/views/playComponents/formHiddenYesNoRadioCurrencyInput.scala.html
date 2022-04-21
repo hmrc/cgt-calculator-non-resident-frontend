@@ -1,0 +1,119 @@
+@*
+ * Copyright 2021 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@this()
+
+@(
+    form: Form[_],
+    yesNoFieldName: String,
+    conditionalInputFieldName: String,
+    yesNoQuestionText:String,
+    conditionalInputQuestionText: String,
+    conditionalInputHint: Option[String] = None,
+)(implicit messages: Messages)
+
+@errorClassOne = @{
+    if (form.errors.nonEmpty) {
+        for(error <- form.errors) yield {
+            if(error.key.equals("")) "govuk-form-group" else "govuk-form-group govuk-form-group--error"
+        }
+    }
+    else {
+        "govuk-form-group"
+    }
+}
+
+@errorClassTwo = @{
+    for(error <- form.errors) yield {
+        if(error.key.equals("")) "govuk-form-group govuk-form-group--error" else "govuk-form-group"
+    }
+}
+
+@pageErrorOne = @{
+    if (form.errors.nonEmpty) {
+        for(error <- form.errors) yield {
+            if(error.key.equals("")) "" else messages(error.message, error.args:_*)
+        }
+    }
+    else {
+        ""
+    }
+}
+
+@pageErrorTwo = @{
+    if (form.errors.nonEmpty) {
+        for(error <- form.errors) yield {
+            if(error.key.equals("")) messages(error.message, error.args:_*) else ""
+        }
+    }
+    else {
+        ""
+    }
+}
+
+@radioChecked = @{
+    for(error <- form.errors) yield {
+        if(error.key.equals("")) "checked" else ""
+    }
+}
+
+<div class="@errorClassOne">
+    <fieldset class="govuk-fieldset">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+            <h1 class="govuk-fieldset__heading">
+                @yesNoQuestionText
+            </h1>
+        </legend>
+        <p id="@{yesNoFieldName}-error" class="govuk-error-message">
+            <span class="govuk-visually-hidden">Error:</span> @pageErrorOne
+        </p>
+        <div class="govuk-radios" data-module="govuk-radios">
+            <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id=@yesNoFieldName name=@yesNoFieldName type="radio" value="Yes" @radioChecked data-aria-controls=conditional-@{conditionalInputFieldName}>
+                <label class="govuk-label govuk-radios__label" for=@yesNoFieldName>
+                    @Messages("calc.base.yes")
+                </label>
+            </div>
+            <div class="govuk-radios__conditional" id=conditional-@{conditionalInputFieldName}>
+                <div class="@errorClassTwo">
+                    <label class="govuk-label">
+                        @conditionalInputQuestionText
+                    </label>
+                    @if(conditionalInputHint != None){
+                        <div id=@{conditionalInputFieldName}-hint class="govuk-hint">
+                            @conditionalInputHint
+                        </div>
+                    }
+                    <p id=@{conditionalInputFieldName}-error class="govuk-error-message">
+                        <span class="govuk-visually-hidden">Error:</span> @pageErrorTwo
+                    </p>
+                    <div class="govuk-input__wrapper">
+                        <div class="govuk-input__prefix" aria-hidden="true">£</div>
+                        <input class="govuk-input govuk-input--width-5" id=@conditionalInputFieldName name=@conditionalInputFieldName type="text" spellcheck="false" value step="0.01">
+                    </div>
+                </div>
+
+            </div>
+            <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id=@{yesNoFieldName}-2 name=@yesNoFieldName type="radio" value="No">
+                <label class="govuk-label govuk-radios__label">
+                    @Messages("calc.base.no")
+                </label>
+            </div>
+        </div>
+
+    </fieldset>
+</div>
