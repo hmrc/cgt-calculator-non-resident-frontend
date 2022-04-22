@@ -263,6 +263,7 @@ object MessageLookup {
     }
 
     object OtherReliefs {
+      val title = "How much extra tax relief are you claiming? - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
       val help = "For example, lettings relief."
       val question = "How much extra tax relief are you claiming?"
       val totalGain = "Total gain"
