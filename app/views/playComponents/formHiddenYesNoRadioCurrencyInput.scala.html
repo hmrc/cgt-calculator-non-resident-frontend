@@ -22,6 +22,7 @@
     conditionalInputFieldName: String,
     yesNoQuestionText:String,
     conditionalInputQuestionText: String,
+    inputHint: Option[String] = None,
     conditionalInputHint: Option[String] = None,
 )(implicit messages: Messages)
 
@@ -77,6 +78,11 @@
                 @yesNoQuestionText
             </h1>
         </legend>
+        @if(inputHint != None){
+        <div id=@{yesNoFieldName}-hint class="govuk-hint">
+            @inputHint
+        </div>
+        }
         <p id="@{yesNoFieldName}-error" class="govuk-error-message">
             <span class="govuk-visually-hidden">Error:</span> @pageErrorOne
         </p>
