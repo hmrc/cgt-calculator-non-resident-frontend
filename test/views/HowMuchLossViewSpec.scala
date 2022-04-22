@@ -31,6 +31,7 @@ class HowMuchLossViewSpec extends CommonPlaySpec with WithCommonFakeApplication 
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   lazy val howMuchLossView = fakeApplication.injector.instanceOf[howMuchLoss]
+  val pageTitle = s"""${messages.HowMuchLoss.question} - ${messages.pageHeading} - GOV.UK"""
 
   "Previous Loss view" when {
 
@@ -38,8 +39,8 @@ class HowMuchLossViewSpec extends CommonPlaySpec with WithCommonFakeApplication 
       lazy val view = howMuchLossView(howMuchLossForm)(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
-      s"have a title of ${messages.HowMuchLoss.question}" in {
-        document.title shouldBe messages.HowMuchLoss.question
+      s"have a title of ${pageTitle}" in {
+        document.title shouldBe pageTitle
       }
 
       "have a back link" which {
@@ -50,11 +51,11 @@ class HowMuchLossViewSpec extends CommonPlaySpec with WithCommonFakeApplication 
         }
 
         "has the class back-link" in {
-          backLink.attr("class") shouldBe "back-link"
+          backLink.attr("class") shouldBe "govuk-back-link"
         }
 
         s"has a route to 'Previous Gain Or Loss'" in {
-          backLink.attr("href") shouldBe controllers.routes.PreviousGainOrLossController.previousGainOrLoss().url
+          backLink.attr("href") shouldBe "javascript:history.back()"
         }
       }
 
@@ -62,7 +63,7 @@ class HowMuchLossViewSpec extends CommonPlaySpec with WithCommonFakeApplication 
         lazy val heading = document.body().select("h1")
 
         "has a class of heading-xlarge" in {
-          heading.attr("class") shouldBe "heading-xlarge"
+          heading.attr("class") shouldBe "govuk-heading-xl"
         }
 
         s"has the text '${messages.HowMuchLoss.question}'" in {
@@ -84,14 +85,10 @@ class HowMuchLossViewSpec extends CommonPlaySpec with WithCommonFakeApplication 
 
       s"have a label" which {
 
-        lazy val label = document.select("label div").first()
+        lazy val label = document.body().select("h1")
 
         s"has the question '${messages.HowMuchLoss.question}'" in {
           label.text shouldBe messages.HowMuchLoss.question
-        }
-
-        "has the class visuallyhidden" in {
-          label.hasClass("visuallyhidden") shouldEqual true
         }
       }
 
@@ -103,15 +100,11 @@ class HowMuchLossViewSpec extends CommonPlaySpec with WithCommonFakeApplication 
         lazy val button = document.select("button")
 
         "has the class 'button'" in {
-          button.attr("class") shouldBe "button"
-        }
-
-        "has the type 'submit'" in {
-          button.attr("type") shouldBe "submit"
+          button.attr("class") shouldBe "govuk-button"
         }
 
         "has the id 'continue-button'" in {
-          button.attr("id") shouldBe "continue-button"
+          button.attr("id") shouldBe "submit"
         }
       }
 
@@ -126,7 +119,7 @@ class HowMuchLossViewSpec extends CommonPlaySpec with WithCommonFakeApplication 
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {
-        document.select("#error-summary-display").size() shouldBe 1
+        document.getElementsByClass("govuk-error-summary").size() shouldBe 1
       }
     }
   }
