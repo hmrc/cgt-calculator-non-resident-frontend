@@ -19,61 +19,63 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
-    errorSummary: helpers.errorSummary,
-    mainTemplate: main_template,
+    errorSummary: playComponents.errorSummary,
+    layout: Layout,
     form: FormWithCSRF,
-    formInputMoney: helpers.formInputMoney
+    formInputMoney: playComponents.formInputMoney,
+    submitButton: playComponents.submitButton
 )
 
 @(otherReliefsForm: Form[OtherReliefsModel], chargeableGain: BigDecimal, gain: BigDecimal)(implicit request: Request[_], messages: Messages)
 
 @helpContent = {
-    <div id="otherReliefHelp" class="form-hint">
+    <div id="otherReliefHelp" class="govuk-hint">
         @Messages("calc.otherReliefs.help")
         <br/>
         @Messages("calc.otherReliefs.helpTwo")
     </div>
 
-    <div id="otherReliefHelpTwo" class="panel-indent panel-indent--gutter panel-indent--wide">
-        <p class="form-hint">
+    <div id="otherReliefHelpTwo" class="govuk-inset-text">
+        <p class="govuk-hint">
             @if(chargeableGain < 0) {
                 @Messages("calc.otherReliefs.gainInfo.part1.loss")
             } else {
                 @Messages("calc.otherReliefs.gainInfo.part1")
             }
-            <span class="bold-small">&pound;@MoneyPounds(chargeableGain, 0).quantity</span>
+            <span><strong>&pound;@MoneyPounds(chargeableGain, 0).quantity</strong></span>
             @if(gain < 0) {
                 @Messages("calc.otherReliefs.gainInfo.part2.loss")
             } else {
                 @Messages("calc.otherReliefs.gainInfo.part2")
             }
-            <span class="bold-small">&pound;@MoneyPounds(gain, 0).quantity</span>
+            <span><strong>&pound;@MoneyPounds(gain, 0).quantity</strong></span>
             @Messages("calc.otherReliefs.gainInfo.part3")
         </p>
     </div>
 }
 
-@mainTemplate(Messages("calc.otherReliefs.question")) {
+@title = @{
+    if(otherReliefsForm.errors.nonEmpty) messages("site.title.error", Messages("calc.otherReliefs.question")) else Messages("calc.otherReliefs.question")
+}
 
-    <a id="back-link" class="back-link" href="@controllers.routes.CheckYourAnswersController.checkYourAnswers()">@Messages("calc.base.back")</a>
+@layout(
+    pageTitle = title
+) {
 
-    @errorSummary(otherReliefsForm, "other-reliefs", "otherReliefs")
+    @errorSummary(otherReliefsForm.errors)
 
-    <h1 class="heading-xlarge">@Messages("calc.otherReliefs.question")</h1>
+    <h1 class="govuk-heading-xl">@Messages("calc.otherReliefs.question")</h1>
 
-    <div class="form-group">
+    @helpContent
 
-        @helpContent
+    @form(action = controllers.routes.OtherReliefsController.submitOtherReliefs) {
 
-        @form(action = controllers.routes.OtherReliefsController.submitOtherReliefs) {
+        @formInputMoney(
+            field = otherReliefsForm("otherReliefs"),
+            question = Messages("calc.otherReliefs.question"),
+            hideLabel = true
+        )
 
-            @formInputMoney(otherReliefsForm,
-                "otherReliefs",
-                Messages("calc.otherReliefs.question"),
-                hideLabel = true
-            )
-
-            <button class="button" id="continue-button">@Messages("calc.base.button.continue")</button>
-        }
-    </div>
+        @submitButton()
+    }
 }
