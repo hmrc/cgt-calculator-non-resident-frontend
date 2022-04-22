@@ -87,7 +87,7 @@ class MarketValueWhenSoldOrGaveAwayActionSpec extends CommonPlaySpec with WithCo
       }
 
       "load the market value page" in {
-        document.title shouldBe marketValueMessages.disposalGaveAwayQuestion
+        document.title shouldBe s"${marketValueMessages.disposalGaveAwayQuestion} - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
       }
     }
 
@@ -101,7 +101,7 @@ class MarketValueWhenSoldOrGaveAwayActionSpec extends CommonPlaySpec with WithCo
       }
 
       "load the market value page" in {
-        document.title shouldBe marketValueMessages.disposalGaveAwayQuestion
+        document.title shouldBe s"${marketValueMessages.disposalGaveAwayQuestion} - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
       }
     }
 
@@ -220,7 +220,7 @@ class MarketValueWhenSoldOrGaveAwayActionSpec extends CommonPlaySpec with WithCo
       }
 
       s"and lead to the current page reloading and return some HTML with title of ${marketValueMessages.disposalGaveAwayQuestion}" in {
-        document.title shouldEqual marketValueMessages.disposalGaveAwayQuestion
+        document.title shouldEqual s"Error: ${marketValueMessages.disposalGaveAwayQuestion} - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
       }
     }
   }
