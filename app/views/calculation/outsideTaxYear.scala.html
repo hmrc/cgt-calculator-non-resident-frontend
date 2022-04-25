@@ -19,9 +19,7 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
-    form: FormWithCSRF,
     layout: Layout,
-    submitButton: playComponents.submitButton,
 )
 
 @(taxYear: TaxYearModel)(implicit request: Request[_], messages: Messages)
@@ -34,8 +32,6 @@
     pageTitle = title
 ) {
     <h1 class="govuk-heading-xl">@Messages("calc.nonresident.outsideTaxYears.title")</h1>
-    @form(action = controllers.routes.SoldOrGivenAwayController.soldOrGivenAway) {
-        <p class="govuk-body">@Messages("calc.nonresident.outsideTaxYears.message", taxYear.calculationTaxYear)</p>
-        @submitButton()
-    }
+    <p class="govuk-body">@Messages("calc.nonresident.outsideTaxYears.message", taxYear.calculationTaxYear)</p>
+    <p><a class="govuk-button" href="@controllers.routes.SoldOrGivenAwayController.soldOrGivenAway" id="continue-button">@Messages("calc.base.continue")</a></p>
 }

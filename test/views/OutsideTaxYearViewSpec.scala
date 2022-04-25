@@ -71,10 +71,13 @@ class OutsideTaxYearViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
       }
 
       "have a continue button" should {
-        lazy val continue = doc.select("button")
-
+        lazy val continue = doc.select("a#continue-button")
         "have the text continue" in {
           continue.text shouldBe commonMessages.continue
+        }
+
+        s" have a link to ${controllers.routes.SoldOrGivenAwayController.soldOrGivenAway().url}" in {
+          continue.attr("href") shouldBe controllers.routes.SoldOrGivenAwayController.soldOrGivenAway().url
         }
       }
 
