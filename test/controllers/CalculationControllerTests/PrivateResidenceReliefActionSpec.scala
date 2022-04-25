@@ -244,7 +244,7 @@ class PrivateResidenceReliefActionSpec
       }
 
       "load the private residence relief page" in {
-        document.title() shouldBe messages.question
+        document.title() shouldBe messages.title
       }
     }
 
@@ -262,7 +262,7 @@ class PrivateResidenceReliefActionSpec
       }
 
       "load the private residence relief page" in {
-        document.title() shouldBe messages.question
+        document.title() shouldBe messages.title
       }
     }
 
@@ -345,7 +345,7 @@ class PrivateResidenceReliefActionSpec
       }
 
       "return to the private residence relief page" in {
-        document.title() shouldBe messages.question
+        document.title() shouldBe s"Error: ${messages.title}"
       }
     }
   }

@@ -21,8 +21,18 @@
     yesNoFieldName: String,
     conditionalInputFieldName: String,
     yesNoQuestionText:String,
+    yesNoQuestionTextIsHeading: Boolean = true,
     conditionalInputQuestionText: String,
     conditionalInputHint: Option[String] = None,
+    hasSecondField: Boolean = false,
+    secondConditionalInputQuestionText: Option[String] = None,
+    secondConditionalInputHint: Option[String] = None,
+    secondConditionalInputFieldName: Option[String] = None,
+    currency: Boolean = true,
+    detailSummary: Option[String] = None,
+    detailHtml: Option[Html] = None,
+    preQuestionHtml: Option[Html] = None,
+    hasErrorMessageForSecondConditionalInput: Boolean = true
 )(implicit messages: Messages)
 
 @errorClassOne = @{
@@ -70,9 +80,13 @@
     }
 }
 
+@legendClass = @{
+    if(yesNoQuestionTextIsHeading) "govuk-fieldset__legend govuk-fieldset__legend--xl" else "govuk-fieldset__legend govuk-fieldset__legend--l govuk-visually-hidden"
+}
+
 <div class="@errorClassOne">
     <fieldset class="govuk-fieldset">
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+        <legend class="@legendClass">
             <h1 class="govuk-fieldset__heading">
                 @yesNoQuestionText
             </h1>
@@ -89,6 +103,9 @@
             </div>
             <div class="govuk-radios__conditional" id=conditional-@{conditionalInputFieldName}>
                 <div class="@errorClassTwo">
+                    @if(preQuestionHtml!=None){
+                        @preQuestionHtml
+                    }
                     <label class="govuk-label">
                         @conditionalInputQuestionText
                     </label>
@@ -101,11 +118,47 @@
                         <span class="govuk-visually-hidden">Error:</span> @pageErrorTwo
                     </p>
                     <div class="govuk-input__wrapper">
-                        <div class="govuk-input__prefix" aria-hidden="true">£</div>
+                        @if(currency){
+                            <div class="govuk-input__prefix" aria-hidden="true">£</div>
+                        }
                         <input class="govuk-input govuk-input--width-5" id=@conditionalInputFieldName name=@conditionalInputFieldName type="text" spellcheck="false" value step="0.01">
                     </div>
                 </div>
-
+                @if(hasSecondField) {
+                    <br>
+                    <div class="@errorClassTwo">
+                        <label class="govuk-label">
+                            @secondConditionalInputQuestionText
+                        </label>
+                        @if(secondConditionalInputHint != None){
+                        <div id=@{secondConditionalInputFieldName}-hint class="govuk-hint">
+                            @secondConditionalInputHint
+                        </div>
+                        }
+                        <p id="@secondConditionalInputFieldName-error" class="govuk-error-message">
+                            <span class="govuk-visually-hidden">Error:</span> @pageErrorTwo
+                        </p>
+                        <div class="govuk-input__wrapper">
+                            @if(currency){
+                                <div class="govuk-input__prefix" aria-hidden="true">£</div>
+                            }
+                            <input class="govuk-input govuk-input--width-5" id="@secondConditionalInputFieldName" name="@secondConditionalInputFieldName" type="number" spellcheck="false" value step="0.01">
+                        </div>
+                    </div>
+                }
+                @if(detailSummary!=None && detailHtml!=None){
+                <br>
+                <details class="govuk-details" data-module="govuk-details">
+                    <summary class="govuk-details__summary">
+                            <span class="govuk-details__summary-text">
+                                @detailSummary
+                            </span>
+                    </summary>
+                    <div class="govuk-details__text">
+                        @detailHtml
+                    </div>
+                </details>
+                }
             </div>
             <div class="govuk-radios__item">
                 <input class="govuk-radios__input" id=@{yesNoFieldName}-2 name=@yesNoFieldName type="radio" value="No">
