@@ -51,6 +51,7 @@ class BroughtForwardLossesActionSpec extends CommonPlaySpec with WithCommonFakeA
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val broughtForwardLossesView = fakeApplication.injector.instanceOf[broughtForwardLosses]
+  lazy val pageTitle = s"""${messages.BroughtForwardLosses.question} - ${messages.pageHeading} - GOV.UK"""
 
   class Setup {
     val controller = new BroughtForwardLossesController(
@@ -105,11 +106,11 @@ class BroughtForwardLossesActionSpec extends CommonPlaySpec with WithCommonFakeA
       }
 
       "load the Brought Forward Losses page" in {
-        document.title() shouldBe messages.BroughtForwardLosses.question
+        document.title() shouldBe pageTitle
       }
 
       "have a back link to Annual Exempt Amount page" in {
-        document.select("#back-link").attr("href") shouldBe controllers.routes.AnnualExemptAmountController.annualExemptAmount().url
+        document.select("#back-link").attr("href") shouldBe "javascript:history.back()"
       }
     }
 
@@ -123,7 +124,7 @@ class BroughtForwardLossesActionSpec extends CommonPlaySpec with WithCommonFakeA
       }
 
       "load the Brought Forward Losses page" in {
-        document.title() shouldBe messages.BroughtForwardLosses.question
+        document.title() shouldBe pageTitle
       }
     }
 
@@ -168,7 +169,7 @@ class BroughtForwardLossesActionSpec extends CommonPlaySpec with WithCommonFakeA
       }
 
       "load the Brought Forward Losses page" in {
-        document.title() shouldBe messages.BroughtForwardLosses.question
+        document.title() shouldBe s"Error: $pageTitle"
       }
     }
 
@@ -193,7 +194,7 @@ class BroughtForwardLossesActionSpec extends CommonPlaySpec with WithCommonFakeA
       lazy val result = target.broughtForwardLosses(fakeRequestWithSession)
       lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
-      document.select("#back-link").attr("href") shouldBe controllers.routes.OtherPropertiesController.otherProperties().url
+      document.select("#back-link").attr("href") shouldBe "javascript:history.back()"
     }
 
     "return a back link to the HowMuchGain page when there is a previous positive gain" in {
@@ -201,7 +202,7 @@ class BroughtForwardLossesActionSpec extends CommonPlaySpec with WithCommonFakeA
       lazy val result = target.broughtForwardLosses(fakeRequestWithSession)
       lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
-      document.select("#back-link").attr("href") shouldBe controllers.routes.HowMuchGainController.howMuchGain().url
+      document.select("#back-link").attr("href") shouldBe "javascript:history.back()"
     }
 
     "return a back link to the AnnualExemptAmount page when there is a previous gain of 0" in {
@@ -209,7 +210,7 @@ class BroughtForwardLossesActionSpec extends CommonPlaySpec with WithCommonFakeA
       lazy val result = target.broughtForwardLosses(fakeRequestWithSession)
       lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
-      document.select("#back-link").attr("href") shouldBe controllers.routes.AnnualExemptAmountController.annualExemptAmount().url
+      document.select("#back-link").attr("href") shouldBe "javascript:history.back()"
     }
 
     "return a back link to the HowMuchLoss page when there is a previous positive loss" in {
@@ -217,7 +218,7 @@ class BroughtForwardLossesActionSpec extends CommonPlaySpec with WithCommonFakeA
       lazy val result = target.broughtForwardLosses(fakeRequestWithSession)
       lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
-      document.select("#back-link").attr("href") shouldBe controllers.routes.HowMuchLossController.howMuchLoss().url
+      document.select("#back-link").attr("href") shouldBe "javascript:history.back()"
     }
 
     "return a back link to the AnnualExemptAmount page when there is a previous loss of 0" in {
@@ -225,7 +226,7 @@ class BroughtForwardLossesActionSpec extends CommonPlaySpec with WithCommonFakeA
       lazy val result = target.broughtForwardLosses(fakeRequestWithSession)
       lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
-      document.select("#back-link").attr("href") shouldBe controllers.routes.AnnualExemptAmountController.annualExemptAmount().url
+      document.select("#back-link").attr("href") shouldBe "javascript:history.back()"
     }
 
     "return a back link to the AnnualExemptAmount page when there is a previous disposal that breaks even" in {
@@ -233,7 +234,7 @@ class BroughtForwardLossesActionSpec extends CommonPlaySpec with WithCommonFakeA
       lazy val result = target.broughtForwardLosses(fakeRequestWithSession)
       lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
-      document.select("#back-link").attr("href") shouldBe controllers.routes.AnnualExemptAmountController.annualExemptAmount().url
+      document.select("#back-link").attr("href") shouldBe "javascript:history.back()"
     }
   }
 }
