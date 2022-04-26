@@ -53,6 +53,7 @@ class ImprovementsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val improvementsView = fakeApplication.injector.instanceOf[improvements]
+  lazy val pageTitle = s"""${messages.question} - ${commonMessages.pageHeading} - GOV.UK"""
 
   class Setup {
     val controller = new ImprovementsController(
@@ -109,13 +110,13 @@ class ImprovementsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
 
         "return some HTML that" should {
 
-          s"have the title ${messages.question}" in {
-            document.title shouldEqual messages.question
+          s"have the title ${pageTitle}" in {
+            document.title shouldEqual pageTitle
           }
         }
 
         s"have a 'Back' link to ${routes.AcquisitionCostsController.acquisitionCosts().url} " in {
-          document.body.getElementById("back-link").attr("href") shouldEqual routes.AcquisitionCostsController.acquisitionCosts().url
+          document.body.getElementById("back-link").attr("href") shouldEqual "javascript:history.back()"
         }
       }
 
@@ -134,7 +135,7 @@ class ImprovementsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
         }
 
         s"have a 'Back' link to ${routes.RebasedCostsController.rebasedCosts().url} " in {
-          document.body.getElementById("back-link").attr("href") shouldEqual routes.RebasedCostsController.rebasedCosts().url
+          document.body.getElementById("back-link").attr("href") shouldEqual "javascript:history.back()"
         }
       }
     }
@@ -202,7 +203,7 @@ class ImprovementsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
       }
 
       "return to the improvements page" in {
-        document.title shouldBe messages.question
+        document.title shouldBe "Error: " + pageTitle
       }
     }
   }

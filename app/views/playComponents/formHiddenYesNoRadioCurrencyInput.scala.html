@@ -20,9 +20,14 @@
     form: Form[_],
     yesNoFieldName: String,
     conditionalInputFieldName: String,
-    yesNoQuestionText:String,
+    yesNoQuestionText: String,
+    yesNoQuestionTextIsHeading: Boolean = true,
     conditionalInputQuestionText: String,
     conditionalInputHint: Option[String] = None,
+    hasSecondField: Boolean = false,
+    secondConditionalInputQuestionText: Option[String] = None,
+    secondConditionalInputHint: Option[String] = None,
+    secondConditionalInputFieldName: Option[String] = None
 )(implicit messages: Messages)
 
 @errorClassOne = @{
@@ -70,9 +75,13 @@
     }
 }
 
+@legendClass = @{
+    if(yesNoQuestionTextIsHeading) "govuk-fieldset__legend govuk-fieldset__legend--xl" else "govuk-fieldset__legend govuk-fieldset__legend--l govuk-visually-hidden"
+}
+
 <div class="@errorClassOne">
     <fieldset class="govuk-fieldset">
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+        <legend class="@legendClass">
             <h1 class="govuk-fieldset__heading">
                 @yesNoQuestionText
             </h1>
@@ -105,7 +114,26 @@
                         <input class="govuk-input govuk-input--width-5" id=@conditionalInputFieldName name=@conditionalInputFieldName type="text" spellcheck="false" value step="0.01">
                     </div>
                 </div>
-
+                @if(hasSecondField) {
+                    <br>
+                    <div class="@errorClassTwo">
+                        <label class="govuk-label">
+                            @secondConditionalInputQuestionText
+                        </label>
+                        @if(conditionalInputHint != None){
+                            <div id=@{secondConditionalInputFieldName}-hint class="govuk-hint">
+                                @secondConditionalInputHint
+                            </div>
+                        }
+                        <p id="@secondConditionalInputFieldName-error" class="govuk-error-message">
+                            <span class="govuk-visually-hidden">Error:</span> @pageErrorTwo
+                        </p>
+                        <div class="govuk-input__wrapper">
+                            <div class="govuk-input__prefix" aria-hidden="true">£</div>
+                            <input class="govuk-input govuk-input--width-5" id="@secondConditionalInputFieldName" name="@secondConditionalInputFieldName" type="number" spellcheck="false" value step="0.01">
+                        </div>
+                    </div>
+                }
             </div>
             <div class="govuk-radios__item">
                 <input class="govuk-radios__input" id=@{yesNoFieldName}-2 name=@yesNoFieldName type="radio" value="No">
