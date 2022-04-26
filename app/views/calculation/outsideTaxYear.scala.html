@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,20 +18,20 @@
 @import models._
 @import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
-@this(mainTemplate: main_template)
+@this(
+    layout: Layout,
+)
 
 @(taxYear: TaxYearModel)(implicit request: Request[_], messages: Messages)
 
-@mainTemplate(
-    Messages("calc.nonresident.outsideTaxYears.title")
+@title = @{
+   Messages("calc.nonresident.outsideTaxYears.title")
+}
+
+@layout(
+    pageTitle = title
 ) {
-
-    <a id="back-link" class="back-link" href="@controllers.routes.DisposalDateController.disposalDate().url">@Messages("calc.base.back")</a>
-
-    <h1 class="heading-large">@Messages("calc.nonresident.outsideTaxYears.title")</h1>
-
-    <p class="lede">@Messages("calc.nonresident.outsideTaxYears.message", taxYear.calculationTaxYear)</p>
-
-    <a href="@controllers.routes.SoldOrGivenAwayController.soldOrGivenAway().url" id="continue-button" class="button">@Messages("calc.base.button.continue")</a>
-
+    <h1 class="govuk-heading-xl">@Messages("calc.nonresident.outsideTaxYears.title")</h1>
+    <p class="govuk-body">@Messages("calc.nonresident.outsideTaxYears.message", taxYear.calculationTaxYear)</p>
+    <p><a class="govuk-button" href="@controllers.routes.SoldOrGivenAwayController.soldOrGivenAway" id="continue-button">@Messages("calc.base.continue")</a></p>
 }
