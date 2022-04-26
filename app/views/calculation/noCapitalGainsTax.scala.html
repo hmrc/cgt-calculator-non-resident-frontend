@@ -19,26 +19,28 @@
 @import common.Dates.TemplateImplicits._
 @import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
-@this(mainTemplate: main_template)
+@this(layout: Layout)
 
 @(data: DateModel)(implicit request: Request[_], messages: Messages, lang: Lang)
 
-@mainTemplate(Messages("nocgt.invaliddate.title")) {
+@layout(
+    messages("nocgt.invaliddate.title")
+){
 
-    <a id="back-link" class="back-link" href="@controllers.routes.DisposalDateController.disposalDate">@Messages("calc.base.back")</a>
-
-    <h1 class="heading-xlarge">@Messages("nocgt.invaliddate.title")</h1>
-    <p>@Messages("nocgt.content.one")</p>
-    <p>
+    <h1 class="govuk-heading-xl">@Messages("nocgt.invaliddate.title")</h1>
+    <p class="govuk-body">@Messages("nocgt.content.one")</p>
+    <p class="govuk-body">
         @Messages("nocgt.content.two")
         <span class = "no-wrap">
-            <span class="bold-small">@Dates.constructDate(data.day, data.month, data.year).localFormat("d MMMM uuuu")</span>.
+            <span class="govuk-!-font-weight-bold">@Dates.constructDate(data.day, data.month, data.year).localFormat("d MMMM uuuu")</span>.
         </span>
     </p>
     <div class="form-group">
-        <a class="button" id="change-link" href="@controllers.routes.DisposalDateController.disposalDate">@Messages("nocgt.content.change")</a>
+        <a class="govuk-button" id="change-link" href="@controllers.routes.DisposalDateController.disposalDate">@Messages("nocgt.content.change")</a>
     </div>
     <div>
-        <a href="http://www.gov.uk">@Messages("nocgt.content.return")</a>
+        <a class="govuk-link" href="http://www.gov.uk">@Messages("nocgt.content.return")</a>
     </div>
+    <br>
+
 }

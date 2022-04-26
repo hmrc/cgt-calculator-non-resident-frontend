@@ -82,7 +82,7 @@ class NoCapitalGainsTaxActionSpec extends CommonPlaySpec with WithCommonFakeAppl
       }
 
       "load the No Capital Gains Tax page" in {
-        document.title() shouldBe messages.title
+        document.title() shouldBe s"${messages.title} - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
       }
     }
 
