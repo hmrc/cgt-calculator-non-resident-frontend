@@ -29,8 +29,7 @@
 )(implicit messages: Messages)
 
 @bigDecimalToPounds(decimal: BigDecimal) = @{
-    val maybeMinus = if(decimal < 0) "&minus;" else ""
-    Html(s"${maybeMinus}&pound;%,.2f".format(decimal.setScale(2, BigDecimal.RoundingMode.FLOOR).abs))
+    Html(s"&pound;%,.2f".format(decimal.setScale(2, BigDecimal.RoundingMode.FLOOR).abs))
 }
 
 @itemContent(radioTitle: String, message: String, optDateMessage: Option[String], amount: BigDecimal) = {
