@@ -122,7 +122,7 @@ class PersonalAllowanceViewSpec extends CommonPlaySpec with WithCommonFakeApplic
           }
 
           "have the class 'external-link'" in {
-            link.attr("class") shouldBe "external-link"
+            link.attr("class") shouldBe "govuk-link"
           }
 
           "have a rel of 'external'" in {
