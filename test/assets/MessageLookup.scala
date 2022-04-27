@@ -251,6 +251,7 @@ object MessageLookup {
     }
 
     object PreviousLossOrGain {
+      val title = "Did these disposals result in an overall Capital Gains Tax loss or gain? - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
       val question = "Did these disposals result in an overall Capital Gains Tax loss or gain?"
       val mandatoryCheck = "Please tell us whether you made a gain or loss"
       val loss = "Loss"

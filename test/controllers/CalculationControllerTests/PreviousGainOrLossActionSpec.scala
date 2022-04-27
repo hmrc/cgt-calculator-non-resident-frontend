@@ -162,7 +162,7 @@ class PreviousGainOrLossActionSpec extends CommonPlaySpec with WithCommonFakeApp
       }
 
       "return to the page" in {
-        doc.title shouldEqual messages.question
+        doc.title shouldEqual s"Error: ${messages.title}"
       }
     }
   }
