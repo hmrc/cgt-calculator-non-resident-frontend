@@ -398,6 +398,7 @@ object MessageLookup {
     }
 
     object WorthBeforeLegislationStart {
+      val title = "What was the market value of the property on 31 March 1982? - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
       val question = "What was the market value of the property on 31 March 1982?"
       val information = "If you had your property before 31 March 1982, use the market value on 31 March 1982 to work out your Capital Gains Tax. After this date, use the original cost."
       val hintText = "If you don't know the exact value, you must provide a realistic estimate. " +
