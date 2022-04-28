@@ -129,7 +129,7 @@ class OtherReliefsFlatActionSpec extends CommonPlaySpec with WithCommonFakeAppli
       }
 
       "load the otherReliefs flat page" in {
-        document.title() shouldBe messages.question
+        document.title() shouldBe s"${messages.question} - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
       }
 
       s"have a total gain message with text '${messages.totalGain}' £200" in {
@@ -156,7 +156,7 @@ class OtherReliefsFlatActionSpec extends CommonPlaySpec with WithCommonFakeAppli
       }
 
       "load the otherReliefs flat page" in {
-        document.title() shouldBe messages.question
+        document.title() shouldBe s"${messages.question} - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
       }
     }
 
@@ -213,7 +213,7 @@ class OtherReliefsFlatActionSpec extends CommonPlaySpec with WithCommonFakeAppli
       }
 
       "return to the other reliefs flat page" in {
-        document.title() shouldBe messages.question
+        document.title() shouldBe s"Error: ${messages.question} - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
       }
     }
   }

@@ -31,6 +31,7 @@ class OutsideTaxYearViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   lazy val outsideTaxYearView = fakeApplication.injector.instanceOf[outsideTaxYear]
+  lazy val pageTitle = s"""${messages.title} - ${commonMessages.pageHeading} - GOV.UK"""
 
 
   "Outside tax years views" when {
@@ -44,12 +45,8 @@ class OutsideTaxYearViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
         doc.charset().toString shouldBe "UTF-8"
       }
 
-      s"return a title of ${messages.title}" in {
-        doc.title shouldBe messages.title
-      }
-
-      "have a home link to '/calculate-your-capital-gains/non-resident/'" in {
-        doc.getElementById("homeNavHref").attr("href") shouldEqual "/calculate-your-capital-gains/non-resident/"
+      s"return a title of ${pageTitle}" in {
+        doc.title shouldBe pageTitle
       }
 
       s"have a heading of ${messages.title}" in {
@@ -57,7 +54,7 @@ class OutsideTaxYearViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
       }
 
       s"have a message of ${messages.content("2017/18")}" in {
-        doc.select("p.lede").text() shouldBe messages.content("2017/18")
+        doc.select("p.govuk-body").text() shouldBe messages.content("2017/18")
       }
 
       "have a back link that" should {
@@ -68,14 +65,13 @@ class OutsideTaxYearViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
         }
 
         s"have a link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-          backLink.attr("href") shouldBe controllers.routes.DisposalDateController.disposalDate().url
+          backLink.attr("href") shouldBe "javascript:history.back()"
         }
 
       }
 
       "have a continue button" should {
         lazy val continue = doc.select("a#continue-button")
-
         "have the text continue" in {
           continue.text shouldBe commonMessages.continue
         }

@@ -41,7 +41,7 @@ class OtherReliefsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of ${messages.OtherReliefs.question}" in {
-        document.title() shouldBe messages.OtherReliefs.question
+        document.title() shouldBe messages.OtherReliefs.title
       }
 
       "have a back link" which {
@@ -52,12 +52,11 @@ class OtherReliefsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
         }
 
         "should have a class of back-link" in {
-          backLink.attr("class") shouldBe "back-link"
+          backLink.attr("class") shouldBe "govuk-back-link"
         }
 
         s"should have a route to 'check-your-answers'" in {
-          backLink.attr("href") shouldEqual
-            controllers.routes.CheckYourAnswersController.checkYourAnswers().url
+          backLink.attr("href") shouldEqual "javascript:history.back()"
         }
       }
 
@@ -65,7 +64,7 @@ class OtherReliefsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
         lazy val heading = document.body().select("h1")
 
         "has a class of heading-xlarge" in {
-          heading.attr("class") shouldBe "heading-xlarge"
+          heading.attr("class") shouldBe "govuk-heading-xl"
         }
 
         s"has the text '${messages.OtherReliefs.question}'" in {
@@ -74,7 +73,7 @@ class OtherReliefsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
       }
 
       s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-        document.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
+        document.getElementsByClass("govuk-header__link govuk-header__link--service-name").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
       }
 
       "have a form" which {
@@ -94,7 +93,7 @@ class OtherReliefsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
       }
 
       "have an input using the id otherReliefs" in {
-        document.body().select("input[type=number]").attr("id") should include("otherReliefs")
+        document.body().getElementsByClass("govuk-input govuk-input--width-10").attr("id") should include("otherReliefs")
       }
 
       "have the correct help text" in {
@@ -111,11 +110,11 @@ class OtherReliefsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
         lazy val button = document.select("button")
 
         "has the class 'button'" in {
-          button.attr("class") shouldBe "button"
+          button.attr("class") shouldBe "govuk-button"
         }
 
         "has the id 'continue-button'" in {
-          button.attr("id") shouldBe "continue-button"
+          button.attr("id") shouldBe "submit"
         }
 
         s"has the text ${messages.continue}" in {
@@ -154,7 +153,7 @@ class OtherReliefsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {
-        document.select("#error-summary-display").size() shouldBe 1
+        document.getElementsByClass("govuk-error-summary").size() shouldBe 1
       }
     }
   }

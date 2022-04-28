@@ -133,7 +133,7 @@ class OtherReliefsRebasedActionSpec extends CommonPlaySpec with WithCommonFakeAp
       "load the otherReliefs rebased page" in new Setup {
         setupMocks()
         lazy val result = controller.otherReliefsRebased(fakeRequestWithSession)
-        document(result).title() shouldBe messages.question
+        document(result).title() shouldBe messages.title
       }
 
       s"have a total gain message with text '${messages.totalGain}' £500" in new Setup {
@@ -168,7 +168,7 @@ class OtherReliefsRebasedActionSpec extends CommonPlaySpec with WithCommonFakeAp
         setupStubs()
         lazy val result = controller.otherReliefsRebased(fakeRequestWithSession)
         val doc = document(result)
-        doc.title() shouldBe messages.question
+        doc.title() shouldBe messages.title
       }
     }
 
@@ -239,7 +239,7 @@ class OtherReliefsRebasedActionSpec extends CommonPlaySpec with WithCommonFakeAp
         setupStubs
         lazy val request = fakeRequestToPOSTWithSession(("isClaimingOtherReliefs", "Yes"), ("otherReliefs", "-1000"))
         lazy val result = controller.submitOtherReliefsRebased(request)
-        document(result).title() shouldBe messages.question
+        document(result).title() shouldBe s"Error: ${messages.title}"
       }
     }
   }

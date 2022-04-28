@@ -20,9 +20,10 @@
     form: Form[_],
     yesNoFieldName: String,
     conditionalInputFieldName: String,
-    yesNoQuestionText:String,
+    yesNoQuestionText: String,
     yesNoQuestionTextIsHeading: Boolean = true,
     conditionalInputQuestionText: String,
+    inputHint: Option[String] = None,
     conditionalInputHint: Option[String] = None,
     hasSecondField: Boolean = false,
     secondConditionalInputQuestionText: Option[String] = None,
@@ -91,6 +92,11 @@
                 @yesNoQuestionText
             </h1>
         </legend>
+        @if(inputHint != None){
+        <div id=@{yesNoFieldName}-hint class="govuk-hint">
+            @inputHint
+        </div>
+        }
         <p id="@{yesNoFieldName}-error" class="govuk-error-message">
             <span class="govuk-visually-hidden">Error:</span> @pageErrorOne
         </p>
@@ -130,10 +136,10 @@
                         <label class="govuk-label">
                             @secondConditionalInputQuestionText
                         </label>
-                        @if(secondConditionalInputHint != None){
-                        <div id=@{secondConditionalInputFieldName}-hint class="govuk-hint">
-                            @secondConditionalInputHint
-                        </div>
+                        @if(conditionalInputHint != None){
+                            <div id=@{secondConditionalInputFieldName}-hint class="govuk-hint">
+                                @secondConditionalInputHint
+                            </div>
                         }
                         <p id="@secondConditionalInputFieldName-error" class="govuk-error-message">
                             <span class="govuk-visually-hidden">Error:</span> @pageErrorTwo

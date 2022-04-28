@@ -19,52 +19,66 @@
 
 @this(
     mainTemplate: main_template,
-    errorSummary: helpers.errorSummary,
+    layout: Layout,
+    errorSummary: playComponents.errorSummary,
     form: FormWithCSRF,
-    expandableHelpTextHelper: helpers.expandableHelpTextHelper,
-    improvementsConstructor: constructors.ImprovementsConstructor
+    formHiddenYesNoRadioCurrencyInput: playComponents.formHiddenYesNoRadioCurrencyInput,
+    govukDetails: playComponents.govukDetails,
+    submitButton: playComponents.submitButton
 )
 
 @(improvementsForm: Form[ImprovementsModel], improvementsOptions: Boolean, backUrl: String, ownerBeforeLegislationStart: Boolean)(implicit request: Request[_], messages: Messages, messagesApi: MessagesApi)
 
 @exampleContent = {
-    <p>@Messages("calc.improvements.exampleOne")
-        @Messages("calc.improvements.exampleTwo")</p>
+    @messages("calc.improvements.exampleOne") +
+    @messages("calc.improvements.exampleTwo")
 }
 
 @jointOwnershipText = {
-    <p id="jointOwner">@Messages("calc.improvements.jointOwnership")</p>
+    <p id="jointOwner">@messages("calc.improvements.jointOwnership")</p>
 }
 
-@defining(if(ownerBeforeLegislationStart) { Messages("calc.improvements.ownerBeforeLegislationStartQuestion") }
-          else { Messages("calc.improvements.question") }) { question =>
+@titleText = @{
+    if(ownerBeforeLegislationStart) messages("calc.improvements.ownerBeforeLegislationStartQuestion") else messages("calc.improvements.question")
+}
 
-    @mainTemplate(question) {
+@layout(
+    pageTitle = if(improvementsForm.errors.nonEmpty) messages("site.title.error", titleText) else titleText
+) {
 
-        <a id="back-link" class="back-link" href="@backUrl">@Messages("calc.base.back")</a>
+    @errorSummary(improvementsForm.errors, Some("improvementsAmt"))
 
-        @errorSummary(improvementsForm, "improvements", "improvementsAmt")
+    <h1 class="govuk-heading-xl">@titleText</h1>
 
-        <h1 class="heading-xlarge">@question</h1>
+    <p class="govuk-hint">
+        @messages("calc.improvements.helpOne")
+        @messages("calc.improvements.helpTwo")
+    </p>
 
-        <p class="form-hint">
-            @Messages("calc.improvements.helpOne")
-            @Messages("calc.improvements.helpTwo")
-        </p>
+    <div class="govuk-inset-text">
+        @messages("calc.improvements.jointOwnership")
+    </div>
 
-        <div class="panel-indent form-group">
-            <p id="jointOwner">@Messages("calc.improvements.jointOwnership")</p>
-        </div>
+    @govukDetails(
+        summaryText = messages("calc.improvements.exampleTitle"),
+        contentText = messages("calc.improvements.exampleOne") + " " + messages("calc.improvements.exampleTwo")
+    )
 
-        <div class="form-group">
-        @expandableHelpTextHelper(Messages("calc.improvements.exampleTitle"), exampleContent)
-        </div>
+    @form(action = controllers.routes.ImprovementsController.submitImprovements) {
 
-        @form(action = controllers.routes.ImprovementsController.submitImprovements) {
+        @formHiddenYesNoRadioCurrencyInput(
+            form = improvementsForm,
+            yesNoFieldName = "isClaimingImprovements",
+            conditionalInputFieldName = "improvementsAmt",
+            yesNoQuestionText = titleText,
+            yesNoQuestionTextIsHeading = false,
+            conditionalInputQuestionText = messages("calc.improvements.questionThree"),
+            hasSecondField = if(improvementsOptions) true else false,
+            secondConditionalInputQuestionText = Some(messages("calc.improvements.questionFour")),
+            secondConditionalInputFieldName = Some("improvementsAmtAfter")
+        )
 
-            @improvementsConstructor.generateImprovements(improvementsForm, improvementsOptions, question)
-
-            <button class="button" type="submit" id="continue-button">@Messages("calc.base.continue")</button>
-        }
+        @submitButton()
     }
+
 }

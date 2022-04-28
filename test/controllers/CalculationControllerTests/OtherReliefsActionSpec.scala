@@ -141,7 +141,7 @@ class OtherReliefsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
       }
 
       "load the other reliefs page" in {
-        document.title() shouldBe messages.question
+        document.title() shouldBe messages.title
       }
 
       s"show help text with text '${messages.additionalHelp(200, 100)}'" in {
@@ -162,7 +162,7 @@ class OtherReliefsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
       }
 
       "load the other reliefs page" in {
-        document.title() shouldBe messages.question
+        document.title() shouldBe messages.title
       }
     }
 
@@ -213,7 +213,7 @@ class OtherReliefsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
       }
 
       "return to the other reliefs page" in {
-        document.title() shouldBe messages.question
+        document.title() shouldBe s"Error: ${messages.title}"
       }
     }
   }

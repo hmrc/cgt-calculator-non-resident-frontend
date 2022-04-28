@@ -32,6 +32,7 @@ class BroughtForwardLossesViewSpec extends CommonPlaySpec with WithCommonFakeApp
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   lazy val broughtForwardLossesView = fakeApplication.injector.instanceOf[broughtForwardLosses]
+  lazy val pageTitle = s"""${messages.BroughtForwardLosses.question} - ${messages.pageHeading} - GOV.UK"""
 
   "Brought forward losses view" when {
 
@@ -39,8 +40,8 @@ class BroughtForwardLossesViewSpec extends CommonPlaySpec with WithCommonFakeApp
       lazy val view = broughtForwardLossesView(broughtForwardLossesForm, "back-link")(fakeRequest,mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
-      s"have a title of ${messages.BroughtForwardLosses.question}" in {
-        document.title() shouldBe messages.BroughtForwardLosses.question
+      s"have a title of ${pageTitle}" in {
+        document.title() shouldBe pageTitle
       }
 
       "have a back link" which {
@@ -51,7 +52,7 @@ class BroughtForwardLossesViewSpec extends CommonPlaySpec with WithCommonFakeApp
         }
 
         "has a class of back-link" in {
-          assertHTML(backLink)(_.attr("class") shouldBe "back-link")
+          assertHTML(backLink)(_.attr("class") shouldBe "govuk-back-link")
         }
 
         "has a message of back-link" in {
@@ -59,7 +60,7 @@ class BroughtForwardLossesViewSpec extends CommonPlaySpec with WithCommonFakeApp
         }
 
         "has a link to back-link" in {
-          assertHTML(backLink)(_.attr("href") shouldBe "back-link")
+          assertHTML(backLink)(_.attr("href") shouldBe "javascript:history.back()")
         }
       }
 
@@ -75,12 +76,12 @@ class BroughtForwardLossesViewSpec extends CommonPlaySpec with WithCommonFakeApp
         }
 
         "has the class" in {
-          assertHTML(header)(_.attr("class") shouldBe "heading-xlarge")
+          assertHTML(header)(_.attr("class") shouldBe "govuk-fieldset__heading")
         }
       }
 
       "have a form" which {
-        lazy val form = document.body().select("form")
+        lazy val form = document.select("form")
 
         "has a method of POST" in {
           form.attr("method") shouldBe "POST"
@@ -92,16 +93,14 @@ class BroughtForwardLossesViewSpec extends CommonPlaySpec with WithCommonFakeApp
       }
 
       "have help text" which {
-        lazy val helpText = document.select("div.form-hint")
-
-        "has only a single div with a class of form-hint" in {
+        lazy val helpText = document.body().select("#isClaiming-hint")
+        "has only a single div with a class of govuk-hint" in {
           helpText.size() shouldBe 1
         }
 
         s"has a paragraph with the text ${messages.BroughtForwardLosses.helpText}" in {
-          helpText.select("p").text shouldBe messages.BroughtForwardLosses.helpText
+          helpText.text shouldBe messages.BroughtForwardLosses.helpText
         }
-
       }
 
       s"have a legend with the text ${messages.BroughtForwardLosses.question}" in {
@@ -113,26 +112,22 @@ class BroughtForwardLossesViewSpec extends CommonPlaySpec with WithCommonFakeApp
       }
 
       s"have a hidden question of ${messages.BroughtForwardLosses.inputQuestion}" in {
-        document.select("label[for=broughtForwardLoss]").text() startsWith messages.BroughtForwardLosses.inputQuestion
+        document.select("#conditional-broughtForwardLoss > div > label").text() startsWith messages.BroughtForwardLosses.inputQuestion
       }
 
       "have an input id of 'broughtForwardLoss'" in {
-        document.select("label[for=broughtForwardLoss] input").attr("id") should include("broughtForwardLoss")
+        document.select("#broughtForwardLoss").attr("id") should include("broughtForwardLoss")
       }
 
       "have a button" which {
         lazy val button = document.select("button")
 
         "has the class 'button'" in {
-          button.attr("class") shouldBe "button"
+          button.attr("class") shouldBe "govuk-button"
         }
 
-        "has the type 'submit'" in {
-          button.attr("type") shouldBe "submit"
-        }
-
-        "has the id 'continue-button'" in {
-          button.attr("id") shouldBe "continue-button"
+        "has the id 'submit'" in {
+          button.attr("id") shouldBe "submit"
         }
       }
     }
@@ -143,7 +138,7 @@ class BroughtForwardLossesViewSpec extends CommonPlaySpec with WithCommonFakeApp
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {
-        document.select("#error-summary-display").size() shouldBe 1
+        document.select(".govuk-error-summary").size() shouldBe 1
       }
     }
 

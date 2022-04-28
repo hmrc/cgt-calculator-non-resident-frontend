@@ -19,37 +19,43 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
-    mainTemplate: main_template,
+    layout: Layout,
     form: FormWithCSRF,
-    errorSummary: helpers.errorSummary,
-    formInputMoney: helpers.formInputMoney
+    errorSummary: playComponents.errorSummary,
+    formInputMoney: playComponents.formInputMoney
 )
 
 @(otherReliefsForm: Form[OtherReliefsModel], hasExistingReliefAmount: Boolean, chargeableGain: BigDecimal, gain: BigDecimal)(implicit request: Request[_], messages: Messages)
 
-@mainTemplate(Messages("calc.otherReliefs.question")) {
+@title = @{
+    if(otherReliefsForm.errors.nonEmpty) messages("site.title.error", messages("calc.otherReliefs.question")) else messages("calc.otherReliefs.question")
+}
 
-    <a id="back-link" class="back-link" href="@controllers.routes.CalculationElectionController.calculationElection">@Messages("calc.base.back")</a>
+@bigDecimalToPounds(decimal: BigDecimal) = @{
+    Html(s"&pound;%,d".format(decimal.setScale(0, BigDecimal.RoundingMode.FLOOR).abs.toInt))
+}
 
-    @errorSummary(otherReliefsForm, "other-reliefs-flat")
+@layout(pageTitle = title) {
 
-    <h1 class="heading-xlarge">@Messages("calc.otherReliefs.question")</h1>
+    @errorSummary(otherReliefsForm.errors)
+
+    <h1 class="govuk-heading-xl">@Messages("calc.otherReliefs.question")</h1>
 
     @form(action = controllers.routes.OtherReliefsFlatController.submitOtherReliefsFlat) {
 
-        <label for="otherReliefs" class="visuallyhidden">@Messages("calc.otherReliefs.question")</label>
+        <label for="otherReliefs" class="govuk-visually-hidden">@Messages("calc.otherReliefs.question")</label>
 
-        <span class="form-hint">@Messages("calc.otherReliefs.help")</span>
+        <span class="govuk-hint">@Messages("calc.otherReliefs.help")</span>
 
-        <div class="panel-indent gain-padding">
-            <ul class="list">
+        <div class="govuk-inset-text">
+            <ul class="govuk-list">
                 <li id="totalGain">
                         @if(gain < 0) {
                             @Messages("calc.otherReliefs.totalLoss")
                         } else {
                             @Messages("calc.otherReliefs.totalGain")
                         }
-                    <b>&pound;@{MoneyPounds(gain, 0).quantity}</b>
+                    <span class="govuk-body govuk-!-font-weight-bold">@bigDecimalToPounds(gain)</span>
                 </li>
 
                 <li id="taxableGain">
@@ -58,17 +64,17 @@
                     } else {
                         @Messages("calc.summary.calculation.details.lossCarriedForward")
                     }
-                    <b>&pound;@{MoneyPounds(chargeableGain, 0).quantity}</b>
+                    <span class="govuk-body govuk-!-font-weight-bold">@bigDecimalToPounds(chargeableGain)</span>
                 </li>
             </ul>
         </div>
 
-        @formInputMoney(otherReliefsForm, "otherReliefs", "")
+        @formInputMoney(otherReliefsForm("otherReliefs"), Messages("calc.otherReliefs.question"), true)
 
         @if(hasExistingReliefAmount) {
-            <button id="add-relief-button" class="button">@Messages("calc.otherReliefs.button.updateRelief")</button>
+            <button id="add-relief-button" class="govuk-button">@Messages("calc.otherReliefs.button.updateRelief")</button>
         } else {
-            <button id="add-relief-button" class="button">@Messages("calc.otherReliefs.button.addRelief")</button>
+            <button id="add-relief-button" class="govuk-button">@Messages("calc.otherReliefs.button.addRelief")</button>
         }
 
     }

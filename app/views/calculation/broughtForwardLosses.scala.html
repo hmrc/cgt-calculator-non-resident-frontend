@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,46 +18,37 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
+    layout: Layout,
+    errorSummary: playComponents.errorSummary,
     form: FormWithCSRF,
-    mainTemplate: main_template,
-    formInputMoneyHTML: helpers.formInputMoneyHTML,
-    errorSummary: helpers.errorSummary,
-    formHiddenYesNoRadio: helpers.formHiddenYesNoRadio
+    formHiddenYesNoRadioCurrencyInput: playComponents.formHiddenYesNoRadioCurrencyInput,
+    submitButton: playComponents.submitButton
 )
 
 @(broughtForwardLossesForm: Form[BroughtForwardLossesModel], backLink: String)(implicit request: Request[_], messages: Messages)
 
-@hiddenContent = {
-    <div class="form-group">
-        @formInputMoneyHTML(
-            broughtForwardLossesForm,
-            "broughtForwardLoss",
-            Messages("calc.broughtForwardLosses.inputQuestion"),
-            hideLabel = false
-        )
-    </div>
+@title = @{
+    if(broughtForwardLossesForm.errors.nonEmpty) messages("site.title.error", Messages("calc.broughtForwardLosses.question")) else Messages("calc.broughtForwardLosses.question")
 }
 
-@mainTemplate(Messages("calc.broughtForwardLosses.question")) {
+@layout(
+    pageTitle = title
+) {
 
-    <a id="back-link" class="back-link" href="@backLink">@Messages("calc.base.back")</a>
-
-    @errorSummary(broughtForwardLossesForm, "broughtForwardLoss")
-
-    <h1 class="heading-xlarge">@Messages("calc.broughtForwardLosses.question")</h1>
+    @errorSummary(broughtForwardLossesForm.errors, Some("broughtForwardLoss"))
 
     @form(action = controllers.routes.BroughtForwardLossesController.submitBroughtForwardLosses) {
 
-        <div class="form-hint">
-            <p>@Messages("calc.broughtForwardLosses.helpText")</p>
-        </div>
+        @formHiddenYesNoRadioCurrencyInput(
+            form = broughtForwardLossesForm,
+            yesNoFieldName = "isClaiming",
+            conditionalInputFieldName = "broughtForwardLoss",
+            yesNoQuestionText = Messages("calc.broughtForwardLosses.question"),
+            conditionalInputQuestionText = Messages("calc.broughtForwardLosses.inputQuestion"),
+            inputHint = Some(Messages("calc.broughtForwardLosses.helpText"))
+        )
 
-        @formHiddenYesNoRadio(broughtForwardLossesForm,
-                                "isClaiming",
-                                Messages("calc.broughtForwardLosses.question"),
-                                hiddenContent,
-                                hideLegend = true)
+        @submitButton()
 
-        <button class="button" type="submit" id="continue-button">@Messages("calc.base.continue")</button>
     }
 }

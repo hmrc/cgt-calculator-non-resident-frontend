@@ -18,39 +18,45 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
-    mainTemplate: main_template,
-    errorSummary: helpers.errorSummary,
+    layout: Layout,
+    errorSummary: playComponents.errorSummary,
     form: FormWithCSRF,
-    formInputMoney: helpers.formInputMoney
+    formInputMoney: playComponents.formInputMoney,
+    submitButton: playComponents.submitButton
 )
 
 @(worthBeforeLegislationStart : Form[WorthBeforeLegislationStartModel])(implicit request: Request[_], messages: Messages)
 
-@exampleContent = {
-    <p>@Messages("calc.worthBeforeLegislationStart.expandableText")</p>
+@title = @{
+    if(worthBeforeLegislationStart.errors.nonEmpty) messages("site.title.error", Messages("calc.worthBeforeLegislationStart.question")) else Messages("calc.worthBeforeLegislationStart.question")
 }
-@mainTemplate(Messages("calc.worthBeforeLegislationStart.question")) {
 
-    <a id="back-link" class="back-link" href="@controllers.routes.AcquisitionDateController.acquisitionDate">@Messages("calc.base.back")</a>
+@layout(
+    pageTitle = title
+) {
 
-    @errorSummary(worthBeforeLegislationStart, "worthBeforeLegislationStart")
+    @errorSummary(worthBeforeLegislationStart.errors)
 
-    <h1 class="heading-xlarge">@Messages("calc.worthBeforeLegislationStart.question")</h1>
+    <h1 class="govuk-heading-xl">@Messages("calc.worthBeforeLegislationStart.question")</h1>
 
-    <p>@Messages("calc.worthBeforeLegislationStart.information")</p>
+    <p class="govuk-body">@Messages("calc.worthBeforeLegislationStart.information")</p>
 
-    <div class="form-hint">
+    <div class="govuk-hint">
          <p>@Messages("calc.worthBeforeLegislationStart.help")</p>
     </div>
 
-    <div class="panel-indent panel-indent--wide panel-indent--gutter">
+    <div class="govuk-inset-text">
         <p>@Messages("calc.worthBeforeLegislationStart.jointOwnership")</p>
     </div>
 
     @form(action = controllers.routes.WorthBeforeLegislationStartController.submitWorthBeforeLegislationStart) {
 
-        @formInputMoney(worthBeforeLegislationStart, "worthBeforeLegislationStart", Messages("calc.worthBeforeLegislationStart.question"), hideLabel = true)
+        @formInputMoney(
+            field = worthBeforeLegislationStart("worthBeforeLegislationStart"),
+            question = Messages("calc.worthBeforeLegislationStart.question"),
+            hideLabel = true
+        )
 
-        <button class="button" type="submit" id="continue-button">@Messages("calc.base.continue")</button>
+        @submitButton()
     }
 }

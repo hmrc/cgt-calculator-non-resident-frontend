@@ -46,12 +46,12 @@ class OtherReliefsTAViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
         }
 
         "should have the class 'back-link'" in {
-          backLink.attr("class") shouldBe "back-link"
+          backLink.attr("class") shouldBe "govuk-back-link"
         }
 
         s"should have a route to 'calculation-election'" in {
           backLink.attr("href") shouldEqual
-            controllers.routes.CalculationElectionController.calculationElection().url
+            "javascript:history.back()"
         }
       }
 
@@ -59,16 +59,12 @@ class OtherReliefsTAViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
         lazy val heading = document.body().select("h1")
 
         "has a class of heading-large" in {
-          heading.attr("class") shouldBe "heading-xlarge"
+          heading.attr("class") shouldBe "govuk-heading-xl"
         }
 
         s"has the text '${messages.pageHeading}'" in {
           heading.text shouldBe messages.OtherReliefs.question
         }
-      }
-
-      s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-        document.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
       }
 
       "have a form" which {
@@ -88,24 +84,24 @@ class OtherReliefsTAViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
         s"has the text '${messages.OtherReliefs.question}'" in {
           label.text shouldBe messages.OtherReliefs.question
         }
-        "has the class 'visuallyhidden'" in {
-          label.attr("class") shouldBe "visuallyhidden"
+        "has the class 'govuk-visually-hidden'" in {
+          label.attr("class") contains "govuk-visually-hidden"
         }
       }
 
       s"have the help text '${messages.OtherReliefs.help}'" in {
-        document.body.select("form span.form-hint").text() shouldBe messages.OtherReliefs.help
+        document.body.select("span.govuk-hint").text() shouldBe messages.OtherReliefs.help
       }
 
       "have additional content" which {
-        lazy val content = document.select("form > div")
+        lazy val content = document.select(".govuk-inset-text")
 
-        "has a class of panel-indent gain-padding" in {
-          content.attr("class") shouldBe "panel-indent gain-padding"
+        "has a class of govuk-inset-text" in {
+          content.attr("class") shouldBe "govuk-inset-text"
         }
 
-        "has a list of class list" in {
-          content.select("ul").attr("class") shouldBe "list"
+        "has a list of class govuk-list" in {
+          content.select("ul").attr("class") shouldBe "govuk-list"
         }
 
         "has a list entry with the total gain message and value" in {
@@ -121,7 +117,7 @@ class OtherReliefsTAViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
         lazy val button = document.select("button")
 
         "has the class 'button'" in {
-          button.attr("class") shouldBe "button"
+          button.attr("class") shouldBe "govuk-button"
         }
 
         "has the id 'add-relief-button'" in {
@@ -151,7 +147,7 @@ class OtherReliefsTAViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
         lazy val button = document.select("button")
 
         "has the class 'button'" in {
-          button.attr("class") shouldBe "button"
+          button.attr("class") shouldBe "govuk-button"
         }
 
         "has the id 'update-relief-button'" in {
@@ -170,7 +166,7 @@ class OtherReliefsTAViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {
-        document.select("#error-summary-display").size() shouldBe 1
+        document.getElementsByClass("govuk-error-summary").size() shouldBe 1
       }
     }
   }
