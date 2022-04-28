@@ -24,10 +24,12 @@
 @this(
     uiInput: Input,
     formHiddenYesNoRadio: helpers.formHiddenYesNoRadio,
-    inputRadioGroup: InputRadioGroup,
+    formHiddenYesNoRadioCurrencyInput : playComponents.formHiddenYesNoRadioCurrencyInput,
+    inputYesNo : playComponents.input_yes_no,
     form: FormWithCSRF,
-    mainTemplate: main_template,
-    errorSummary: helpers.errorSummary,
+    layout: Layout,
+    errorSummary: playComponents.errorSummary,
+    submitButton: playComponents.submitButton,
     expandableHelpTextHelper: helpers.expandableHelpTextHelper
 )
 
@@ -36,81 +38,45 @@
 
 @disposalDateLess18MonthsString = {@disposalDateLess18Months.map(_.localFormat("d MMMM yyyy")).getOrElse("")}
 
-@whyThisDate(showBoth: Boolean) = {
-    @if(showBoth){
-        <p id="bulletPointTitle">@messages("calc.privateResidenceRelief.helpTextSubTitle")</p>
+@preQuestionHtml = {
+    <p id="formExplanation" class="govuk-body">@messages("calc.privateResidenceRelief.formHintExplanation")</p>
+}
 
-        <ul class="list-bullet">
-                <li>@messages("calc.privateResidenceRelief.daysBeforeHelpText")</li>
-                <li>@messages("calc.privateResidenceRelief.daysBetweenHelpText", disposalDateLess18MonthsString, pRRMonths)</li>
+@detailHtml = {
+    @if(showFirstQuestion && daysBetweenShow) {
+        <p class="govuk-body" id="bulletPointTitle">@messages("calc.privateResidenceRelief.helpTextSubTitle")</p>
+
+        <ul>
+            <li id="detailsBullet1">@messages("calc.privateResidenceRelief.daysBeforeHelpText")</li>
+            <li id="detailsBullet2">@messages("calc.privateResidenceRelief.daysBetweenHelpText", disposalDateLess18MonthsString, pRRMonths)</li>
         </ul>
-    }else{
-        <p id="helpTextBetween">@messages("calc.privateResidenceRelief.daysBetweenHelpText", disposalDateLess18MonthsString)</p>
+    }
+    @if(showFirstQuestion && !daysBetweenShow){
+        <p id="helpTextBetween" class="govuk-body">@messages("calc.privateResidenceRelief.daysBetweenHelpText", disposalDateLess18MonthsString)</p>
     }
 }
 
-@hiddenContent = {
-
-    <p id="formExplanation">@messages("calc.privateResidenceRelief.formHintExplanation")</p>
-
-    @if(showFirstQuestion) {
-
-        <div class="form-group">
-        @uiInput(
-            privateResidenceReliefForm("daysClaimed"),
-            '_label ->{if(showOnlyFlatQuestion){messages("calc.privateResidenceRelief.questionFlat", disposalDateLess18MonthsString)}else{messages("calc.privateResidenceRelief.firstQuestion")}} ,
-            '_labelClass -> "bold",
-            '_labelTextClass -> "form-group",
-            '_type -> "text",
-            '_inputClass -> "form-group input--no-spinner",
-            '_type -> "number"
-        )
-        </div>
-    }
-    @if(daysBetweenShow) {
-
-        <div class="form-group">
-        @uiInput(
-            privateResidenceReliefForm("daysClaimedAfter"),
-            '_label -> messages("calc.privateResidenceRelief.questionBetween", disposalDateLess18MonthsString),
-            '_labelClass -> "bold",
-            '_labelTextClass -> "form-group",
-            '_type -> "text",
-            '_inputClass -> "form-group input--no-spinner",
-            '_type -> "number"
-        )
-        </div>
-    }
-
-    @(showFirstQuestion, daysBetweenShow) match {
-        case (true, true) => {
-            @expandableHelpTextHelper(messages("calc.privateResidenceRelief.helpTextBeforeAfter"), whyThisDate(true), false, true)
-        }
-        case (true, false) => {
-            @expandableHelpTextHelper(messages("calc.privateResidenceRelief.helpTextJustBefore"), whyThisDate(false), false, true)
-        }
-        case _ => {}
-    }
+@title = @{
+    if(privateResidenceReliefForm.errors.nonEmpty) messages("site.title.error", Messages("calc.privateResidenceRelief.question")) else Messages("calc.privateResidenceRelief.question")
 }
 
-@mainTemplate(messages("calc.privateResidenceRelief.question")) {
-
-    <a id="back-link" class="back-link" href="@controllers.routes.PropertyLivedInController.propertyLivedIn()">@messages("calc.base.back")</a>
+@layout(
+    pageTitle = title
+) {
 
     @if(showFirstQuestion) {
-        @errorSummary(privateResidenceReliefForm, "private-residence-relief", "daysClaimed")
+        @errorSummary(privateResidenceReliefForm.errors, Some("daysClaimed"))
     } else {
         @if(daysBetweenShow) {
-            @errorSummary(privateResidenceReliefForm, "private-residence-relief", "daysClaimedAfter")
+            @errorSummary(privateResidenceReliefForm.errors, Some("daysClaimedAfter"))
         } else {
-            @errorSummary(privateResidenceReliefForm, "private-residence-relief")
+            @errorSummary(privateResidenceReliefForm.errors)
         }
     }
 
+    <h1 class="govuk-heading-xl">@messages("calc.privateResidenceRelief.question")</h1>
 
-    <h1 class="heading-xlarge">@messages("calc.privateResidenceRelief.question")</h1>
-
-    <p id="intro">
+    <p class="govuk-body" id="intro">
         @if(daysBetweenShow) {
             @messages("calc.privateResidenceRelief.intro2")
         } else {
@@ -120,8 +86,8 @@
     </p>
 
     <div id="privateResidenceReliefLink">
-        <p>@messages("calc.privateResidenceRelief.helpText")
-            <a class="external-link" rel="external" href="https://www.gov.uk/tax-live-abroad-sell-uk-home" target="_blank">
+        <p class="govuk-body">@messages("calc.privateResidenceRelief.helpText")
+            <a class="govuk-link" rel="external" href="https://www.gov.uk/tax-live-abroad-sell-uk-home" target="_blank">
                 @messages("calc.privateResidenceRelief.helpLink") <span>@messages("calc.base.externalLink")</span>
             </a>
         </p>
@@ -129,29 +95,59 @@
 
     @form(action = controllers.routes.PrivateResidenceReliefController.submitPrivateResidenceRelief) {
 
-        @if(!(showFirstQuestion || daysBetweenShow)) {
-            <div class="inline form-group">
-            @inputRadioGroup(
-                field = privateResidenceReliefForm("isClaimingPRR"),
-                Seq(
-                    "Yes" -> messages("calc.base.yes"),
-                    "No" -> messages("calc.base.no")),
-                '_legend -> messages("calc.privateResidenceRelief.question"),
-                '_labelAfter -> true,
-                '_labelClass -> "block-label",
-                '_legendID -> "isClaimingPRR",
-                '_legendClass -> "visuallyhidden"
-            )
-            </div>
-        } else {
-            @formHiddenYesNoRadio(
-                privateResidenceReliefForm,
-                "isClaimingPRR",
-                messages("calc.privateResidenceRelief.question"),
-                hiddenContent,
-                hideLegend = true
+        @if(!showFirstQuestion && !daysBetweenShow) {
+            @inputYesNo(
+                legend = messages("calc.privateResidenceRelief.question"),
+                legendClass = Some("govuk-visually-hidden"),
+                field = privateResidenceReliefForm("isClaimingPRR")
             )
         }
-        <button class="button" type="submit" id="continue-button">@messages("calc.base.continue")</button>
+        @if(showFirstQuestion && daysBetweenShow){
+            @formHiddenYesNoRadioCurrencyInput(
+                form = privateResidenceReliefForm,
+                yesNoFieldName = "isClaimingPRR",
+                conditionalInputFieldName = "daysClaimed",
+                yesNoQuestionText = messages("calc.privateResidenceRelief.question"),
+                yesNoQuestionTextIsHeading = false,
+                conditionalInputQuestionText = {if(showOnlyFlatQuestion){messages("calc.privateResidenceRelief.questionFlat", disposalDateLess18MonthsString)}else{messages("calc.privateResidenceRelief.firstQuestion")}},
+                currency = false,
+                detailSummary = Some(Messages("calc.privateResidenceRelief.helpTextBeforeAfter")),
+                detailHtml = Some(detailHtml),
+                preQuestionHtml = Some(preQuestionHtml),
+                hasSecondField = true,
+                secondConditionalInputQuestionText = Some(messages("calc.privateResidenceRelief.questionBetween", disposalDateLess18MonthsString)),
+                secondConditionalInputFieldName = Some("daysClaimedAfter")
+            )
+        }
+
+        @if(showFirstQuestion && !daysBetweenShow){
+            @formHiddenYesNoRadioCurrencyInput(
+                form = privateResidenceReliefForm,
+                yesNoFieldName = "isClaimingPRR",
+                conditionalInputFieldName = "daysClaimed",
+                yesNoQuestionText = messages("calc.privateResidenceRelief.question"),
+                yesNoQuestionTextIsHeading = false,
+                conditionalInputQuestionText = {if(showOnlyFlatQuestion){messages("calc.privateResidenceRelief.questionFlat", disposalDateLess18MonthsString)}else{messages("calc.privateResidenceRelief.firstQuestion")}},
+                currency = false,
+                detailSummary = Some(Messages("calc.privateResidenceRelief.helpTextJustBefore")),
+                detailHtml = Some(detailHtml),
+                preQuestionHtml = Some(preQuestionHtml)
+            )
+        }
+
+        @if(!showFirstQuestion && daysBetweenShow){
+            @formHiddenYesNoRadioCurrencyInput(
+                form = privateResidenceReliefForm,
+                yesNoFieldName = "isClaimingPRR",
+                conditionalInputFieldName = "daysClaimedAfter",
+                yesNoQuestionText = messages("calc.privateResidenceRelief.question"),
+                yesNoQuestionTextIsHeading = false,
+                conditionalInputQuestionText = Messages("calc.privateResidenceRelief.questionBetween", disposalDateLess18MonthsString),
+                currency = false,
+                preQuestionHtml = Some(preQuestionHtml)
+            )
+        }
+
+        @submitButton()
     }
 }
