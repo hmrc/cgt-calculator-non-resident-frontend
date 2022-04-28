@@ -86,7 +86,7 @@ class SummaryReportViewSpec extends CommonPlaySpec with WithCommonFakeApplicatio
       }
 
       "have a 'You've told us' section that" in {
-        document.select("div.check-your-answers-report h2").text should include(nrMessages.Summary.yourAnswers)
+        document.select("caption").text should include(nrMessages.Summary.yourAnswers)
       }
 
       "should produce the same output when render and f are called" in {
@@ -133,18 +133,14 @@ class SummaryReportViewSpec extends CommonPlaySpec with WithCommonFakeApplicatio
       lazy val document = Jsoup.parse(view.body)
 
       "have a notice summary" which {
-        lazy val notice = document.body().select("div.notice-wrapper")
+        lazy val notice = document.body().select(".govuk-warning-text")
 
-        "has a div with the class 'notice'" in {
-          notice.select("div.notice-wrapper > div").attr("class") shouldBe "notice"
-        }
-
-        "has a message with class of 'bold-small'" in {
-          notice.select("strong").attr("class") shouldBe "bold-small"
+        "has a message with class of 'govuk-warning-text__text'" in {
+          notice.select("strong").attr("class") shouldBe "govuk-warning-text__text"
         }
 
         "has the correct message text" in {
-          notice.select("strong").text() shouldBe nrMessages.Summary.noticeSummary
+          document.select(".govuk-warning-text__text").text() shouldBe nrMessages.Summary.newNoticeSummary
         }
       }
     }
