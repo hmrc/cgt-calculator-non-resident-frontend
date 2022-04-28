@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,16 +18,23 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
-    mainTemplate: main_template,
-    errorSummary: helpers.errorSummary,
+    layout: Layout,
+    errorSummary: playComponents.errorSummary,
     form: FormWithCSRF,
-    formInputMoneyHTML: helpers.formInputMoneyHTML
+    formInputMoney: playComponents.formInputMoney,
+    submitButton: playComponents.submitButton,
 )
+
 
 @(personalAllowanceForm: Form[PersonalAllowanceModel])(implicit request: Request[_], messages: Messages)
 
+
+@title = @{
+    if(personalAllowanceForm.errors.nonEmpty) messages("site.title.error", Messages("calc.personalAllowance.question")) else Messages("calc.personalAllowance.question")
+}
+
 @helpLink = {
-    <a id="helpLink2" class="external-link" rel="external" href="https://www.gov.uk/income-tax-rates/current-rates-and-allowances"
+    <a id="helpLink2" class="govuk-link" rel="external" href="https://www.gov.uk/income-tax-rates/current-rates-and-allowances"
        target="_blank" data-journey-click="help:govUK:personalAllowancesCurrentAndPast">
         @Messages("calc.personalAllowance.link")
         <span>@Messages("calc.base.externalLink")</span>
@@ -38,20 +45,18 @@
     <p>@Messages("calc.personalAllowance.help") @helpLink</p>
 }
 
-@mainTemplate(Messages("calc.personalAllowance.question")) {
+@layout(
+    pageTitle = title
+) {
 
-    <a id="back-link" class="back-link" href="@controllers.routes.CurrentIncomeController.currentIncome">@Messages("calc.base.back")</a>
+    @errorSummary(personalAllowanceForm.errors)
+    <h1 class="govuk-heading-xl" for="disposal-value">@Messages("calc.personalAllowance.question")</h1>
 
-    @errorSummary(personalAllowanceForm, "personal-allowance")
-
-    <h1 class="heading-xlarge">@Messages("calc.personalAllowance.question")</h1>
 
     @form(action = controllers.routes.PersonalAllowanceController.submitPersonalAllowance) {
-
-        @formInputMoneyHTML(personalAllowanceForm, "personalAllowance", Messages("calc.personalAllowance.question"), helpText = Some(helpAndLink), hideLabel = true)
-
-        <button class="button" type="submit" id="continue-button">@Messages("calc.base.continue")</button>
-
+        <span class="govuk-hint">@helpAndLink</span>
+        @formInputMoney(personalAllowanceForm("personalAllowance"), Messages("calc.personalAllowance.question"), hideLabel = true)
+        @submitButton()
     }
-
 }
+
