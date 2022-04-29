@@ -18,30 +18,32 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
-    errorSummary: helpers.errorSummary,
-    mainTemplate: main_template,
+    errorSummary: playComponents.errorSummary,
+    layout: Layout,
     form: FormWithCSRF,
-    formYesNoRadio: helpers.formYesNoRadio
+    inputYesNo: playComponents.input_yes_no,
+    submitButton: playComponents.submitButton
 )
 
 @(propertyLivedInForm: Form[PropertyLivedInModel])(implicit request: Request[_], messages: Messages)
 
-@mainTemplate(Messages("calc.propertyLivedIn.title")) {
+@title = @{
+    if(propertyLivedInForm.errors.nonEmpty) messages("site.title.error", messages("calc.propertyLivedIn.title")) else messages("calc.propertyLivedIn.title")
+}
+@layout(pageTitle = title) {
 
-  <a id="back-link" class="back-link" href="@controllers.routes.ImprovementsController.improvements.url">@Messages("calc.base.back")</a>
+    @errorSummary(propertyLivedInForm.errors)
 
-    @errorSummary(propertyLivedInForm, "propertyLivedIn")
-
-  <h1 class="heading-xlarge">@Messages("calc.propertyLivedIn.title")</h1>
+  <h1 class="govuk-heading-xl">@Messages("calc.propertyLivedIn.title")</h1>
 
   @form(action = controllers.routes.PropertyLivedInController.submitPropertyLivedIn) {
 
-     @formYesNoRadio(
+     @inputYesNo(
        field = propertyLivedInForm("propertyLivedIn"),
        legend = Messages("calc.propertyLivedIn.title"),
-       legendClass = Some("visuallyhidden")
+       legendClass = Some("govuk-visually-hidden")
      )
 
-     <button class="button" type="submit" id="continue-button">@Messages("calc.base.continue")</button>
+    @submitButton()
   }
 }

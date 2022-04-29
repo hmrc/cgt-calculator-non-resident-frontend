@@ -86,7 +86,7 @@ class PropertyLivedInActionSpec extends CommonPlaySpec with WithCommonFakeApplic
 
       s"return some html with title of ${messages.title}" in {
         contentType(result) shouldBe Some("text/html")
-        Jsoup.parse(bodyOf(result)(materializer, ec)).title shouldEqual messages.title
+        Jsoup.parse(bodyOf(result)(materializer, ec)).title shouldEqual s"${messages.title} - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
       }
     }
 
@@ -101,7 +101,7 @@ class PropertyLivedInActionSpec extends CommonPlaySpec with WithCommonFakeApplic
 
       s"return some html with title of ${messages.title}" in {
         contentType(result) shouldBe Some("text/html")
-        Jsoup.parse(bodyOf(result)(materializer, ec)).title shouldEqual messages.title
+        Jsoup.parse(bodyOf(result)(materializer, ec)).title shouldEqual s"${messages.title} - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
       }
     }
 
@@ -164,7 +164,7 @@ class PropertyLivedInActionSpec extends CommonPlaySpec with WithCommonFakeApplic
       }
 
       "render the Property Lived In page" in {
-        doc.title() shouldEqual messages.title
+        doc.title() shouldEqual s"Error: ${messages.title} - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
       }
     }
   }
