@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,45 +18,39 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
-    errorSummary: helpers.errorSummary,
-    mainTemplate: main_template,
+    errorSummary: playComponents.errorSummary,
+    layout: Layout,
     form: FormWithCSRF,
-    inputRadioGroup: InputRadioGroup
+    submitButton: playComponents.submitButton,
+    inputRadio: playComponents.input_radio
 )
 
 @(previousLossOrGainForm: Form[PreviousLossOrGainModel])(implicit request: Request[_], messages: Messages)
 
-@mainTemplate(Messages("calc.previousLossOrGain.question")) {
+@title = @{
+    if(previousLossOrGainForm.errors.nonEmpty) messages("site.title.error", Messages("calc.previousLossOrGain.question")) else Messages("calc.previousLossOrGain.question")
+}
 
-    <a id="back-link" class="back-link" href="@controllers.routes.OtherPropertiesController.otherProperties()">@Messages("calc.base.back")</a>
-
-    @errorSummary(previousLossOrGainForm, "previousLossOrGain")
-
-    <h1 class="heading-xlarge">@Messages("calc.previousLossOrGain.question")</h1>
-
-    <div class="form-hint">
+@layout(
+    pageTitle = title
+){
+    @errorSummary(previousLossOrGainForm.errors)
+    <h1 class="govuk-heading-xl">@Messages("calc.previousLossOrGain.question")</h1>
+    <div class="govuk-hint">
         <p>@Messages("calc.previousLossOrGain.hintOne")</p>
 
         <p>@Messages("calc.previousLossOrGain.hintTwo")</p>
     </div>
-
-    @form(action = controllers.routes.PreviousGainOrLossController.submitPreviousGainOrLoss()) {
-        @inputRadioGroup(
-            field = previousLossOrGainForm("previousLossOrGain"),
-            Seq(
-                    "Loss" -> Messages("calc.previousLossOrGain.loss"),
-                    "Gain" -> Messages("calc.previousLossOrGain.gain"),
-                    "Neither" -> Messages("calc.previousLossOrGain.neither")),
-            '_legend -> Messages("calc.previousLossOrGain.question"),
-            '_legendID -> "previousLossOrGain",
-            '_legendClass -> "visuallyhidden",
-            '_labelAfter -> true,
-            '_labelClass -> "block-label",
-            '_groupClass -> "form-group radio-list",
-            '_fieldsetAttributes -> ""
-            )
-        <input type="hidden" name="previousLossOrGain" value="" />
-        <button class="button yes-no-button" type="submit" id="continue-button">@Messages("calc.base.continue")</button>
+    @form(action = controllers.routes.PreviousGainOrLossController.submitPreviousGainOrLoss) {
+        @inputRadio(
+            legend = Messages(""),
+            items = Seq(
+                RadioItem(content = Text(Messages("calc.previousLossOrGain.loss")), value = Option("Loss")),
+                RadioItem(content = Text(Messages("calc.previousLossOrGain.gain")), value = Option("Gain")),
+                RadioItem(content = Text(Messages("calc.previousLossOrGain.neither")), value = Option("Neither"))
+            ),
+            field = previousLossOrGainForm("previousLossOrGain")
+        )
+        @submitButton()
     }
-
 }
