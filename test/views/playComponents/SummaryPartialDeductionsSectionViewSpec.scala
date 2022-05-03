@@ -23,7 +23,7 @@ import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.i18n.Lang
 import play.api.mvc.MessagesControllerComponents
-import views.html.helpers.summaryPartialDeductionsSection
+import views.html.playComponents.summaryPartialDeductionsSection
 
 
 class SummaryPartialDeductionsSectionViewSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with MockitoSugar {

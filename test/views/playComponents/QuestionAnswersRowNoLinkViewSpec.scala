@@ -24,18 +24,18 @@ import models.QuestionAnswerModel
 import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
-import views.html.helpers.questionAnswerRow
+import views.html.playComponents.questionAnswerRowNoLink
 
-class QuestionAnswersRowViewSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
+class QuestionAnswersRowNoLinkViewSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   implicit lazy val lang = mockMessage.lang
-  lazy val questionAnswerRowView = fakeApplication.injector.instanceOf[questionAnswerRow]
+  implicit lazy val questionAnswerRowNoLinkView = fakeApplication.injector.instanceOf[questionAnswerRowNoLink]
 
   "Creating questionAnswerRow" when {
 
     "passing in a String answer" should {
-      val model = QuestionAnswerModel[String]("id", "answer", "question", Some("change-link"))
-      lazy val result = questionAnswerRowView(model, 2)
+      val model = QuestionAnswerModel[String]("id", "answer", "question", None)
+      lazy val result = questionAnswerRowNoLinkView(model, 2)
       lazy val doc = Jsoup.parse(result.body)
 
       "have a div for the question with an id of 'id-question' which" which {
@@ -60,22 +60,18 @@ class QuestionAnswersRowViewSpec extends CommonPlaySpec with WithCommonFakeAppli
         }
 
         "has a change link with a class of 'lede' and 'summary-answer" in {
-          doc.select("div#id-answer a").attr("class") shouldBe "lede summary-answer"
-        }
-
-        "has a change link to 'change-link'" in {
-          doc.select("div#id-answer a").attr("href") shouldBe "change-link"
+          doc.select("div#id-answer span").attr("class") shouldBe "lede summary-answer"
         }
 
         "has the text 'answer'" in {
-          doc.select("div#id-answer a").text() shouldBe "answer"
+          doc.select("div#id-answer span").text() shouldBe "answer"
         }
       }
     }
 
     "passing in an Int answer" should {
-      val model = QuestionAnswerModel[Int]("id-two", 1, "question-two", Some("other-change-link"))
-      lazy val result = questionAnswerRowView(model, 2)
+      val model = QuestionAnswerModel[Int]("id-two", 1, "question-two", Some("change-link"))
+      lazy val result = questionAnswerRowNoLinkView(model, 2)
       lazy val doc = Jsoup.parse(result.body)
 
       "have the question with the text 'question-two'" in {
@@ -83,41 +79,71 @@ class QuestionAnswersRowViewSpec extends CommonPlaySpec with WithCommonFakeAppli
       }
 
       "have the answer '1'" in {
-        doc.select("div#id-two-answer a").text() shouldBe "1"
-      }
-
-      "have a change link to 'other-change-link'" in {
-        doc.select("div#id-two-answer a").attr("href") shouldBe "other-change-link"
+        doc.select("div#id-two-answer span").text() shouldBe "1"
       }
     }
 
     "passing in a BigDecimal answer" should {
       val model = QuestionAnswerModel[BigDecimal]("id", BigDecimal(1000.53), "question", Some("change-link"))
-      lazy val result = questionAnswerRowView(model, 2)
+      lazy val result = questionAnswerRowNoLinkView(model, 2)
       lazy val doc = Jsoup.parse(result.body)
 
       "have the answer '£1,000'" in {
-        doc.select("div#id-answer a").text() shouldBe "£1,000.53"
+        doc.select("div#id-answer span").text() shouldBe "£1,000.53"
       }
     }
 
     "passing in a Date answer" should {
       val model = QuestionAnswerModel[LocalDate]("id", LocalDate.parse("2016-05-04"), "question", Some("change-link"))
-      lazy val result = questionAnswerRowView(model, 2)
+      lazy val result = questionAnswerRowNoLinkView(model, 2)
       lazy val doc = Jsoup.parse(result.body)
 
       "have the answer '04 May 2016'" in {
-        doc.select("div#id-answer a").text() shouldBe "4 May 2016"
+        doc.select("div#id-answer span").text() shouldBe "4 May 2016"
       }
     }
 
     "passing in a non-matching type" should {
       val model = QuestionAnswerModel[Double]("id", 52.3, "question", Some("change-link"))
-      lazy val result = questionAnswerRowView(model, 2)
+      lazy val result = questionAnswerRowNoLinkView(model, 2)
       lazy val doc = Jsoup.parse(result.body)
 
       "have a blank answer'" in {
-        doc.select("div#id-answer a").text() shouldBe ""
+        doc.select("div#id-answer span").text() shouldBe ""
+      }
+    }
+
+    "passing in a boolean type with true" should {
+      val model = QuestionAnswerModel[Boolean]("id", true, "question", Some("change-link"))
+      lazy val result = questionAnswerRowNoLinkView(model, 2)
+      lazy val doc = Jsoup.parse(result.body)
+
+      "have an answer 'Yes'" in {
+        doc.select("div#id-answer span").text() shouldBe "Yes"
+      }
+    }
+
+    "passing in a boolean type with false" should {
+      val model = QuestionAnswerModel[Boolean]("id", false, "question", Some("change-link"))
+      lazy val result = questionAnswerRowNoLinkView(model, 2)
+      lazy val doc = Jsoup.parse(result.body)
+
+      "have an answer 'No'" in {
+        doc.select("div#id-answer span").text() shouldBe "No"
+      }
+    }
+
+    "passing in a tax rates tuple" should {
+      val model = QuestionAnswerModel[(BigDecimal, Int, BigDecimal, Int)]("id", (1000, 10, 2000, 20), "question", Some("change-link"))
+      lazy val result = questionAnswerRowNoLinkView(model, 2)
+      lazy val doc = Jsoup.parse(result.body)
+
+      "have a message for one tax rate" in {
+        doc.select("div#id-answer span p").first().text() shouldBe "£1,000.00 at 10%"
+      }
+
+      "have a message for the additional tax rate" in {
+        doc.select("div#id-answer span p").last().text() shouldBe "£2,000.00 at 20%"
       }
     }
   }

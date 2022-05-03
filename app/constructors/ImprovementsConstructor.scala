@@ -19,40 +19,32 @@ package constructors
 import com.google.inject.Inject
 import models.ImprovementsModel
 import play.api.data.Form
-import play.api.i18n.{Messages, MessagesApi}
+import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
-import views.html.helpers.{formHiddenYesNoRadio, formMultipleInputMoney, formInputMoney}
+import views.html.playComponents.formHiddenYesNoRadioCurrencyInput
 
-class ImprovementsConstructor @Inject()(formHiddenYesNoRadioView: formHiddenYesNoRadio,
-                                        formMultipleInputMoneyView: formMultipleInputMoney,
-                                        formInputMoneyView: formInputMoney
+class ImprovementsConstructor @Inject()(formHiddenYesNoRadioView: formHiddenYesNoRadioCurrencyInput
                                         ) {
   def generateImprovements(improvementsForm: Form[ImprovementsModel], improvementsOptions: Boolean,
-                           question: String)(implicit messages: Messages, messagesApi: Option[MessagesApi] = None): HtmlFormat.Appendable = {
+                           question: String)(implicit messages: Messages): HtmlFormat.Appendable = {
       if (improvementsOptions) {
         formHiddenYesNoRadioView(
-        improvementsForm,
-        "isClaimingImprovements",
-        question,
-          formMultipleInputMoneyView(
-          improvementsForm,
-          Seq(
-            ("improvementsAmt", "calc.improvements.questionThree", None),
-            ("improvementsAmtAfter", "calc.improvements.questionFour", None)
-          ),
-          boldText = true
-        )(messages, messagesApi),
-        None,
-        hideLegend = true
-      )(messages)
+          form = improvementsForm,
+          yesNoFieldName = "isClaimingImprovements",
+          conditionalInputFieldName = "improvementsAmt",
+          yesNoQuestionText = question,
+          conditionalInputQuestionText = messages("calc.improvements.questionThree"),
+          hasSecondField = true,
+          secondConditionalInputQuestionText = Some(messages("calc.improvements.questionFour")),
+          secondConditionalInputFieldName = Some("improvementsAmtAfter")
+        )(messages)
     } else {
         formHiddenYesNoRadioView(
-        improvementsForm,
-        "isClaimingImprovements",
-        question,
-          formInputMoneyView(improvementsForm, "improvementsAmt", "calc.improvements.questionTwo", labelClasses = "bold-small")(messages, messagesApi),
-        None,
-        hideLegend = true
+          form = improvementsForm,
+          yesNoFieldName = "isClaimingImprovements",
+          conditionalInputFieldName = "improvementsAmt",
+          yesNoQuestionText = question,
+          conditionalInputQuestionText = messages("calc.improvements.questionTwo")
       )(messages)
     }
   }
