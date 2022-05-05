@@ -24,18 +24,18 @@ import play.api.Application
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.FakeRequest
 import play.twirl.api.Html
-import views.html.main_template
+import views.html.Layout
 
-class MainTemplateViewSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
+class LayoutViewSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   implicit lazy val fakeApp: Application = fakeApplication
-  lazy val mainTemplateView = fakeApplication.injector.instanceOf[main_template]
+  lazy val LayoutView = fakeApplication.injector.instanceOf[Layout]
 
   "Main Template" should {
     "produce the same output when render and f are called" in {
-      mainTemplateView.f("Title", None, None, None, None, None, false, false)(Html(""))(FakeRequest("GET", ""), mockMessage) shouldBe
-        mainTemplateView.render("Title", None, None, None, None, None, false, false, Html(""), FakeRequest("GET", ""), mockMessage)
+      LayoutView.f("Title", false, false, false)(Html(""))(FakeRequest("GET", ""), mockMessage) shouldBe
+        LayoutView.render("Title", false, false, false, Html(""), FakeRequest("GET", ""), mockMessage)
     }
   }
 }

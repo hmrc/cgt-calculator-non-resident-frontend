@@ -22,8 +22,9 @@ import controllers.helpers.FakeRequestHelper
 import forms.CalculationElectionForm
 import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.i18n.Messages
 import play.api.mvc.MessagesControllerComponents
-import views.html.helpers.calculationElectionHelperForm
+import views.html.playComponents.calculationElectionHelperForm
 
 class CalculationElectionHelperFormSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
@@ -37,9 +38,10 @@ class CalculationElectionHelperFormSpec extends CommonPlaySpec with WithCommonFa
       val seq: Seq[(String, String, String, String, Option[String], Option[BigDecimal])] =
         Seq(("flat", "1000", "messages", "calcType", Some("dateMessages"), Some(BigDecimal(2000))))
       lazy val partial = calculationElectionHelperFormView(
-        CalculationElectionForm.calculationElectionForm("calculationElection"),
         seq,
-        showErrorText = true)
+        Messages("calc.calculationElectionNoReliefs.title"),
+        field = CalculationElectionForm.calculationElectionForm("calculationElection")
+      )
       lazy val doc = Jsoup.parse(partial.body)
 
       "has a value for the input of 'flat'" in {
@@ -47,23 +49,23 @@ class CalculationElectionHelperFormSpec extends CommonPlaySpec with WithCommonFa
       }
 
       "has a value in a span for the amount" in {
-        doc.select("label > div > span.bold-small").text shouldBe "£1,000.00"
+        doc.getElementsByClass("govuk-body govuk-!-font-weight-bold").get(1).text shouldBe "£1,000.00"
       }
 
       "has the message messages.en" in {
-        doc.select("div.form-group > span > span").get(0).text shouldBe "messages"
+        doc.getElementsByClass("govuk-body").get(1).text should include("messages")
       }
 
       "has the calculation type calcType" in {
-        doc.select("label > span.bold-small").text shouldBe "calcType"
+        doc.getElementsByClass("govuk-body govuk-!-font-weight-bold").get(0).text shouldBe "calcType"
       }
 
       "displays the date message dateMessages" in {
-        doc.select("div.form-group > span > span").get(1).text shouldBe "dateMessages"
+        doc.getElementsByClass("govuk-body").get(1).text should include("dateMessages")
       }
 
       "displays the other reliefs change link" in {
-        doc.select("div.panel-indent span.align-bottom").text shouldBe MessageLookup.NonResident.CalculationElection.someOtherTaxRelief
+        doc.getElementsByClass("govuk-button").text shouldBe MessageLookup.NonResident.CalculationElection.someOtherTaxReliefButton
       }
     }
 
@@ -72,9 +74,10 @@ class CalculationElectionHelperFormSpec extends CommonPlaySpec with WithCommonFa
       val seq: Seq[(String, String, String, String, Option[String], Option[BigDecimal])] =
         Seq(("flat", "1000", "messages", "calcType", None, None))
       lazy val partial = calculationElectionHelperFormView(
-        CalculationElectionForm.calculationElectionForm("calculationElection"),
         seq,
-        showErrorText = true)
+        Messages("calc.calculationElectionNoReliefs.title"),
+        field = CalculationElectionForm.calculationElectionForm("calculationElection")
+      )
       lazy val doc = Jsoup.parse(partial.body)
 
       "does not display the date message dateMessages" in {
@@ -91,13 +94,14 @@ class CalculationElectionHelperFormSpec extends CommonPlaySpec with WithCommonFa
       val seq: Seq[(String, String, String, String, Option[String], Option[BigDecimal])] =
         Seq(("flat", "1000", "messages", "calcType", None, Some(0)))
       lazy val partial = calculationElectionHelperFormView(
-        CalculationElectionForm.calculationElectionForm("calculationElection"),
         seq,
-        showErrorText = true)
+        Messages("calc.calculationElectionNoReliefs.title"),
+        field = CalculationElectionForm.calculationElectionForm("calculationElection")
+      )
       lazy val doc = Jsoup.parse(partial.body)
 
       "displays the other reliefs change link" in {
-        doc.select("div.panel-indent button.button").text shouldBe MessageLookup.NonResident.CalculationElection.otherTaxRelief
+        doc.getElementsByClass("govuk-button").text shouldBe MessageLookup.NonResident.CalculationElection.otherTaxRelief
       }
     }
 
@@ -108,9 +112,10 @@ class CalculationElectionHelperFormSpec extends CommonPlaySpec with WithCommonFa
           ("two", "1000", "messages", "calcType", None, Some(0))
         )
       lazy val partial = calculationElectionHelperFormView(
-        CalculationElectionForm.calculationElectionForm("calculationElection"),
         seq,
-        showErrorText = true)
+        Messages("calc.calculationElectionNoReliefs.title"),
+        field = CalculationElectionForm.calculationElectionForm("calculationElection")
+      )
       lazy val doc = Jsoup.parse(partial.body)
 
       "render the first element" in {
@@ -130,9 +135,10 @@ class CalculationElectionHelperFormSpec extends CommonPlaySpec with WithCommonFa
           ("three", "1000", "messages", "calcType", None, Some(0))
         )
       lazy val partial = calculationElectionHelperFormView(
-        CalculationElectionForm.calculationElectionForm("calculationElection"),
         seq,
-        showErrorText = true)
+        Messages("calc.calculationElectionNoReliefs.title"),
+        field = CalculationElectionForm.calculationElectionForm("calculationElection")
+      )
       lazy val doc = Jsoup.parse(partial.body)
 
       "render the first element" in {

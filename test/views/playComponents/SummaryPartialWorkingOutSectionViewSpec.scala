@@ -24,8 +24,7 @@ import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.i18n.Lang
 import play.api.mvc.MessagesControllerComponents
-import views.html.helpers
-import views.html.helpers.summaryPartialWorkingOutSection
+import views.html.playComponents.summaryPartialWorkingOutSection
 
 class SummaryPartialWorkingOutSectionViewSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with MockitoSugar {
   implicit val mockLang = mock[Lang]
@@ -50,7 +49,7 @@ class SummaryPartialWorkingOutSectionViewSpec extends CommonPlaySpec with WithCo
       }
 
       s"have the message for a flat calculation type ${messages.flatCalculationSummary}" in {
-        doc.select("p.lede").text shouldBe messages.flatCalculationSummary
+        doc.select("#workedOutSection > p").text shouldBe messages.flatCalculationSummary
       }
 
       s"have the text ${messages.yourTotalGain}" in {
@@ -122,7 +121,7 @@ class SummaryPartialWorkingOutSectionViewSpec extends CommonPlaySpec with WithCo
       }
 
       s"have the message for a rebased calculation type ${messages.rebasedCalculationSummary} ${messages.rebasedCalculationSummaryDate}" in {
-        doc.select("p.lede").text shouldBe s"${messages.rebasedCalculationSummary} ${messages.rebasedCalculationSummaryDate}"
+        doc.select("#workedOutSection > p").text shouldBe s"${messages.rebasedCalculationSummary} ${messages.rebasedCalculationSummaryDate}"
       }
 
       s"have the text ${messages.yourTotalLoss}" in {
@@ -194,7 +193,7 @@ class SummaryPartialWorkingOutSectionViewSpec extends CommonPlaySpec with WithCo
       }
 
       s"have the message for a time calculation type ${messages.timeCalculationSummary} ${messages.timeCalculationSummaryDate}" in {
-        doc.select("p.lede").text shouldBe s"${messages.timeCalculationSummary} ${messages.timeCalculationSummaryDate}"
+        doc.select("#workedOutSection > p").text shouldBe s"${messages.timeCalculationSummary} ${messages.timeCalculationSummaryDate}"
       }
 
       s"have the text ${messages.yourTotalGain}" in {

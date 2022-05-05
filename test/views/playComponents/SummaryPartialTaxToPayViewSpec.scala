@@ -23,8 +23,7 @@ import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.i18n.{Lang, Messages}
 import play.api.mvc.MessagesControllerComponents
-import views.html.helpers
-import views.html.helpers.summaryPartialTaxToPay
+import views.html.playComponents.summaryPartialTaxToPay
 
 
 class SummaryPartialTaxToPayViewSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with MockitoSugar {
@@ -106,7 +105,7 @@ class SummaryPartialTaxToPayViewSpec extends CommonPlaySpec with WithCommonFakeA
       }
 
       "does not have a row for tax band two" in {
-          doc.select("#taxBandTwo-text").isEmpty shouldBe true
+        doc.select("#taxBandTwo-text").isEmpty shouldBe true
       }
     }
 

@@ -122,6 +122,7 @@ object MessageLookup {
       val legend = "Choose a method then add your other reliefs"
       val otherTaxRelief = "Add other tax relief"
       val someOtherTaxRelief = "Other tax relief"
+      val someOtherTaxReliefButton = "Change"
     }
 
     object CalculationElectionNoReliefs {
@@ -485,8 +486,6 @@ object MessageLookup {
       val taxYearWarning = "Your total might be less accurate because you didn't sell or give away your property in this tax year"
       val saveAsPdf = "Download your Capital Gains Tax calculation (PDF, under 25kB)"
       val yourAnswers = "You've told us"
-      val noticeSummary: String = "Your result may be inaccurate because the calculator does not support the date of sale you entered. " +
-        "Do not use these figures to report your Capital Gains Tax."
       val newNoticeSummary: String = "Warning Your result may be inaccurate because the calculator does not support the date of sale you entered. " +
         "Do not use these figures to report your Capital Gains Tax."
       val whoOwnedIt = "Who owned the property?"
@@ -989,7 +988,7 @@ object MessageLookup {
   object SummaryPartialMessages {
     val headingTwo: String => String = taxYear => s"Capital Gains Tax to pay for $taxYear tax year"
     val warningHidden: String = "Warning"
-    val warningNoticeSummary: String = "Your result may be inaccurate because the calculator does not support the date of sale you entered. " +
+    val warningNoticeSummary: String = "Warning Your result may be inaccurate because the calculator does not support the date of sale you entered. " +
       "Do not use these figures to report your Capital Gains Tax."
 
     val workingOutSectionHeading = "How we've worked this out"

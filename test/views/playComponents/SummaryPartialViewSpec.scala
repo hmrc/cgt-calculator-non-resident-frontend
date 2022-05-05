@@ -24,8 +24,7 @@ import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.i18n.Lang
 import play.api.mvc.MessagesControllerComponents
-import views.html.helpers
-import views.html.helpers.summaryPartial
+import views.html.playComponents.summaryPartial
 
 class SummaryPartialViewSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with MockitoSugar {
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
@@ -76,7 +75,7 @@ class SummaryPartialViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
         }
 
         s"contain the second heading text ${messages.headingTwo("2016 to 2017")}" in {
-          doc.select("div#tax-owed-banner h2").text shouldEqual messages.headingTwo("2016 to 2017")
+          doc.select("#tax-owed-banner > div > strong").text shouldEqual messages.headingTwo("2016 to 2017")
         }
       }
 
@@ -175,26 +174,20 @@ class SummaryPartialViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
         }
 
         s"contain the second heading text ${messages.headingTwo("2018 to 2019")}" in {
-          doc.select("div#tax-owed-banner h2").text shouldEqual messages.headingTwo("2018 to 2019")
+          doc.select("#tax-owed-banner > div > strong").text shouldEqual messages.headingTwo("2018 to 2019")
         }
       }
 
       "display the out of tax years section" which {
 
-        lazy val outsideTaxYearsSummary = doc.select("div#notice-summary")
+        lazy val outsideTaxYearsSummary = doc.select(".govuk-warning-text")
 
         "is not empty" in {
           outsideTaxYearsSummary.isEmpty shouldBe false
         }
 
-        "has an icon with the icon and icon-important classes" in {
-          //Why is the icon in an italics tag?
-          outsideTaxYearsSummary.select("i").hasClass("icon") shouldBe true
-          outsideTaxYearsSummary.select("i").hasClass("icon-important") shouldBe true
-        }
-
         s"has a visually hidden message of ${messages.warningHidden}" in {
-          outsideTaxYearsSummary.select("span.visuallyhidden").text shouldBe messages.warningHidden
+          outsideTaxYearsSummary.select(".govuk-warning-text__assistive").text shouldBe messages.warningHidden
         }
 
         s"has a strong tag with the text ${messages.warningNoticeSummary}" in {
