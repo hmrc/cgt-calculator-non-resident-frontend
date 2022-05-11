@@ -16,7 +16,7 @@
 
 package assets
 
-import uk.gov.hmrc.play.views.helpers.MoneyPounds
+import common.nonresident.MoneyPounds
 import common.Constants
 
 object MessageLookup {

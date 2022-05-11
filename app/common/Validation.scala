@@ -17,8 +17,8 @@
 package common
 
 import common.Dates.constructDate
+import common.nonresident.MoneyPounds
 import play.api.data.validation._
-import uk.gov.hmrc.play.views.helpers.MoneyPounds
 
 import scala.util.{Failure, Success, Try}
 

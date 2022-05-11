@@ -18,10 +18,10 @@ package forms
 
 import common.Transformers._
 import common.Validation._
+import common.nonresident.MoneyPounds
 import models.AnnualExemptAmountModel
 import play.api.data.Forms._
 import play.api.data._
-import uk.gov.hmrc.play.views.helpers.MoneyPounds
 
 object AnnualExemptAmountForm {
 
