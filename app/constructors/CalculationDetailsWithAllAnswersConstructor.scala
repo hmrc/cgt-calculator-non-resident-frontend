@@ -16,13 +16,11 @@
 
 package constructors
 
-import common.nonresident.CalculationType
+import common.nonresident.{CalculationType, MoneyPounds}
+
 import javax.inject.Inject
 import models.{CalculationResultsWithTaxOwedModel, QuestionAnswerModel}
 import play.api.i18n.{Messages, MessagesProvider}
-import uk.gov.hmrc.play.views.helpers.MoneyPounds
-
-
 
 
 class CalculationDetailsWithAllAnswersConstructor @Inject()(val calculationDetailsConstructor: CalculationDetailsConstructor,

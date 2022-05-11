@@ -15,13 +15,11 @@
  *@
 
 @import models._
-
-@import constructors.OtherReliefsDetailsConstructor
 @import common.Transformers.{booleanToMessageString, checkIfBooleanAsString}
-@import common.Dates._
 @import common.Dates.TemplateImplicits._
+@import common.nonresident.MoneyPounds
+
 @import java.time._
-@import uk.gov.hmrc.play.views.helpers.MoneyPounds
 
 @this(
     summaryPartial: playComponents.summaryPartial
