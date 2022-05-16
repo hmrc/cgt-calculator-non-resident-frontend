@@ -20,7 +20,7 @@ import play.core.PlayVersion
 
 object AppDependencies {
 
-  val bootstrapVersion         = "5.4.0"
+  val bootstrapVersion         = "5.19.0"
   val playPartialsVersion      = "8.1.0-play-28"
   val httpCachingClientVersion = "9.5.0-play-28"
   val play2PdfVersion          = "1.10.0"
