@@ -1,6 +1,6 @@
 service.name = Cyfrifo''ch Treth Enillion Cyfalaf
 
-site.title.error = Error: {0}
+site.title.error = Gwall: {0}
 
 ##Month Names##
 calc.month.1 = Ionawr
