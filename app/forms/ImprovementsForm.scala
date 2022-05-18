@@ -59,9 +59,9 @@ object ImprovementsForm {
 
   def improvementsForm(showHiddenQuestion: Boolean): Form[ImprovementsModel] = Form(
     mapping(
-      "isClaimingImprovements" -> text
-      .verifying("calc.common.error.fieldRequired", mandatoryCheck)
-      .verifying("calc.common.error.fieldRequired", yesNoCheck),
+      "isClaimingImprovements" -> common.Formatters.text("calc.improvements.errors.required")
+      .verifying("calc.improvements.errors.required", mandatoryCheck)
+      .verifying("calc.calc.improvements.errors.required", yesNoCheck),
       "improvementsAmt" -> optional(text)
         .transform(optionalStringToOptionalBigDecimal, optionalBigDecimalToOptionalString),
       "improvementsAmtAfter" -> optional(text)

@@ -76,8 +76,8 @@ class BroughtForwardLossesFormSpec extends CommonPlaySpec with WithCommonFakeApp
         form.errors.size shouldBe 1
       }
 
-      s"return the error message ${messages.errorRequired}" in {
-        form.error("isClaiming").get.message shouldBe messages.errorRequired
+      s"return the error message ${messages.errorRequired("broughtForwardLosses")}" in {
+        form.error("isClaiming").get.message shouldBe messages.errorRequired("broughtForwardLosses")
       }
     }
 
@@ -90,8 +90,8 @@ class BroughtForwardLossesFormSpec extends CommonPlaySpec with WithCommonFakeApp
         form.errors.size shouldBe 1
       }
 
-      s"return the error message ${messages.errorRequired}" in {
-        form.error("isClaiming").get.message shouldBe messages.errorRequired
+      s"return the error message ${messages.errorRequired("broughtForwardLosses")}" in {
+        form.error("isClaiming").get.message shouldBe messages.errorRequired("broughtForwardLosses")
       }
     }
 

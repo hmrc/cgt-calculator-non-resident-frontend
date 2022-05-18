@@ -64,8 +64,8 @@ class CalculationElectionFormSpec extends CommonPlaySpec with WithCommonFakeAppl
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of ${messages.optionReqError}" in {
-        form.error("calculationElection").get.message shouldBe messages.optionReqError
+      s"return an error message of ${messages.errorRequired("calculationElection")}" in {
+        form.error("calculationElection").get.message shouldBe messages.errorRequired("calculationElection")
       }
     }
 
@@ -81,8 +81,8 @@ class CalculationElectionFormSpec extends CommonPlaySpec with WithCommonFakeAppl
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of ${messages.optionReqError}" in {
-        form.error("calculationElection").get.message shouldBe messages.optionReqError
+      s"return an error message of ${messages.errorRequired("calculationElection")}" in {
+        form.error("calculationElection").get.message shouldBe messages.errorRequired("calculationElection")
       }
 
     }
@@ -99,8 +99,8 @@ class CalculationElectionFormSpec extends CommonPlaySpec with WithCommonFakeAppl
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of ${messages.optionReqError}" in {
-        form.error("calculationElection").get.message shouldBe messages.optionReqError
+      s"return an error message of ${messages.errorRequired("calculationElection")}" in {
+        form.error("calculationElection").get.message shouldBe messages.errorRequired("calculationElection")
       }
 
     }

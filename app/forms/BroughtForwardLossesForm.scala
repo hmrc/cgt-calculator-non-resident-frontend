@@ -49,9 +49,9 @@ object BroughtForwardLossesForm {
 
   val broughtForwardLossesForm = Form(
     mapping(
-      "isClaiming" -> text
-        .verifying("calc.common.error.fieldRequired", mandatoryCheck)
-        .verifying("calc.common.error.fieldRequired", yesNoCheck)
+      "isClaiming" -> common.Formatters.text("calc.broughtForwardLosses.errors.required")
+        .verifying("calc.broughtForwardLosses.errors.required", mandatoryCheck)
+        .verifying("calc.broughtForwardLosses.errors.required", yesNoCheck)
         .transform(stringToBoolean, booleanToString),
       "broughtForwardLoss" -> text
         .transform(stringToOptionalBigDecimal, optionalBigDecimalToString)

@@ -80,8 +80,8 @@ class CostsAtLegislationStartFormSpec extends CommonPlaySpec with WithCommonFake
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.errorRequired}" in {
-        form.error("hasCosts").get.message shouldBe messages.errorRequired
+      s"return an error message of '${messages.errorRequired("costsAtLegislationStart")}" in {
+        form.error("hasCosts").get.message shouldBe messages.errorRequired("costsAtLegislationStart")
       }
     }
 
@@ -95,8 +95,8 @@ class CostsAtLegislationStartFormSpec extends CommonPlaySpec with WithCommonFake
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.errorRequired}" in {
-        form.error("hasCosts").get.message shouldBe messages.errorRequired
+      s"return an error message of '${messages.errorRequired("costsAtLegislationStart")}" in {
+        form.error("hasCosts").get.message shouldBe messages.errorRequired("costsAtLegislationStart")
       }
     }
 
