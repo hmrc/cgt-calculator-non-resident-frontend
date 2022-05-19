@@ -55,7 +55,7 @@ calc.base.button.continue = Yn eich blaen
 calc.base.calculate.tax.heading = Cyfrifo''ch Treth Enillion Cyfalaf
 calc.base.change = Newid
 calc.base.continue = Yn eich blaen
-calc.base.externalLink = (yn agor ffenestr newydd)
+calc.base.externalLink = (yn agor tab newydd)
 calc.base.home = Hafan
 calc.base.no = Na
 calc.base.nonresident.home = Cyfrifo''ch Treth Enillion Cyfalaf
@@ -372,11 +372,6 @@ calc.worthBeforeLegislationStart.help = Os nad ydych yn gwybod yr union werth, m
 calc.worthBeforeLegislationStart.information = Os cawsoch eich eiddo cyn 31 Mawrth 1982, defnyddiwch y gwerth marchnadol ar 31 Mawrth 1982 i gyfrifo''ch Treth Enillion Cyfalaf. Ar ôl y dyddiad hwn, defnyddiwch y gost wreiddiol.
 calc.worthBeforeLegislationStart.jointOwnership = Os oeddech yn berchen ar yr eiddo gyda rhywun arall, dylech ond nodi''ch cyfran chi o werth yr eiddo.
 calc.worthBeforeLegislationStart.question = Beth oedd gwerth marchnadol yr eiddo ar 31 Mawrth 1982?
-
-calc.summary.dismissBanner = No thanks
-calc.summary.dismissBanner.screenreader = I don''t want to answer any questions about joining the research panel
-calc.summary.userResearchLink.title = Help improve GOV.UK
-calc.summary.userResearchLink.link = Help improve this digital service by joining the HMRC user panel (opens in new window)
 
 calc.worthWhenBoughtForLess.helpText = Os oeddech yn berchen ar yr eiddo gyda rhywun arall, dylech ond nodi''ch cyfran chi o werth yr eiddo.
 calc.worthWhenBoughtForLess.hint = Gallwch ddefnyddio prisiad gan syrfëwr. Os nad ydych yn gwybod yr union werth, mae''n rhaid i chi roi amcangyfrif realistig. Efallai y bydd yn rhaid i chi dalu rhagor os ydym o''r farn nad yw''ch amcangyfrif yn realistig.

@@ -26,7 +26,7 @@ object MessageLookup {
 
   trait Common {
 
-    val externalLink = "(opens in a new window)"
+    val externalLink = "(opens in new tab)"
     val change = "change"
     val back = "Back"
     val continue = "Continue"
@@ -638,7 +638,7 @@ object MessageLookup {
     val title = "Work out how much Capital Gains Tax you owe"
     val subheading = "Do you need to use this calculator?"
     val paragraph = "You probably don't need to pay Capital Gains Tax if the property you've sold is your own home. You'll be entitled to a tax relief called Private Residence Relief."
-    val entitledLinkText = "Find out if you're entitled to Private Residence Relief (opens in a new window)."
+    val entitledLinkText = "Find out if you're entitled to Private Residence Relief (opens in new tab)."
     val continuationInstructions = "Continue to use this calculator if you've never lived at the property, or you're entitled to only some or no Private Residence Relief."
   }
 
@@ -840,8 +840,8 @@ object MessageLookup {
   //Lettings Relief messages.en
   object LettingsRelief {
     val title = "Are you entitled to Letting Relief?"
-    val help = "You may be able entitled to Letting Relief if you've rented out the property. Find out more about Letting Relief (opens in a new window)"
-    val helpOne = "Letting Relief (opens in a new window)"
+    val help = "You may be able entitled to Letting Relief if you've rented out the property. Find out more about Letting Relief (opens in new tab)"
+    val helpOne = "Letting Relief (opens in new tab)"
     val helpLink = "https://www.gov.uk/government/publications/private-residence-relief-hs283-self-assessment-helpsheet/hs283-private-residence-relief-2016#letting-relief"
     val errorSelect = "Tell us if you want to claim Letting Relief"
   }

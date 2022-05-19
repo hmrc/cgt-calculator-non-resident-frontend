@@ -11,7 +11,7 @@ calc.base.yes = Yes
 calc.base.no = No
 calc.base.back = Back
 calc.base.optionReqError = Choose one of the options
-calc.base.externalLink = (opens in a new window)
+calc.base.externalLink = (opens in new tab)
 calc.base.undefinedMessage = Undefined message
 calc.base.change = change
 calc.base.nonresident.home = Calculate your Capital Gains Tax
@@ -368,11 +368,6 @@ calc.summary.warning.taxYear = Your total might be less accurate because you did
 calc.summary.flat.description = Gain over whole period of ownership method: based on the amount you''ve gained on the property since you became the owner
 calc.summary.time.description = Straight-line apportionment method: based on the percentage of your total gain made since
 calc.summary.rebased.description = Rebasing method: based on the amount you''ve gained on the property since
-
-calc.summary.dismissBanner = No thanks
-calc.summary.dismissBanner.screenreader = I don''t want to answer any questions about joining the research panel
-calc.summary.userResearchLink.title = Help improve GOV.UK
-calc.summary.userResearchLink.link = Help improve this digital service by joining the HMRC user panel (opens in new window)
 
 calc.report.title = Calculate your Capital Gains Tax
 calc.report.logoText = HM Revenue & Customs
