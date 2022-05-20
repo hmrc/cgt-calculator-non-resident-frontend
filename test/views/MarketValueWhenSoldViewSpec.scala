@@ -59,13 +59,10 @@ class MarketValueWhenSoldViewSpec extends CommonPlaySpec with WithCommonFakeAppl
       }
 
       s"have a paragraph" which {
-        lazy val helpText = document.select("p.govuk-hint")
-        s"has the help text'${MarketValueMessages.disposalHelpText}'" in {
-          helpText.html() shouldBe MarketValueMessages.disposalHelpText +
+        lazy val bodyText = document.select("p.govuk-body")
+        s"has the body text'${MarketValueMessages.disposalHelpText}'" in {
+          bodyText.html() shouldBe MarketValueMessages.disposalHelpText +
             " " + MarketValueMessages.disposalHelpTextAdditional
-        }
-        s"has the class 'form-hint'" in {
-          helpText.attr("class") shouldBe "govuk-hint"
         }
       }
 

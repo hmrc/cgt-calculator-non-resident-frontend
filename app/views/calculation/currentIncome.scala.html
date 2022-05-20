@@ -41,8 +41,10 @@
 
     @form(action = controllers.routes.CurrentIncomeController.submitCurrentIncome) {
 
-        <span class="govuk-hint">@Messages("calc.currentIncome.helpText.line1")</span>
-        <span class="govuk-hint">@Messages("calc.currentIncome.helpText.line2")</span>
+        <p class="govuk-body">@Messages("calc.currentIncome.helpText.line1")</p>
+
+        <p class="govuk-body">@Messages("calc.currentIncome.helpText.line2")</p>
+
 
         @formInputMoney(currentIncomeForm("currentIncome"), Messages("calc.currentIncome.question"), hideLabel = true)
 

@@ -67,16 +67,8 @@ class BroughtForwardLossesViewSpec extends CommonPlaySpec with WithCommonFakeApp
       "have a H1 tag" which {
         lazy val header = document.select("h1")
 
-        "has only a single header" in {
-          header.size() shouldBe 1
-        }
-
-        s"has the text of ${messages.BroughtForwardLosses.question}" in {
-          assertHTML(header)(_.text() shouldBe messages.BroughtForwardLosses.question)
-        }
-
         "has the class" in {
-          assertHTML(header)(_.attr("class") shouldBe "govuk-fieldset__heading")
+          header.attr("class") shouldBe "govuk-heading-xl"
         }
       }
 
@@ -92,20 +84,27 @@ class BroughtForwardLossesViewSpec extends CommonPlaySpec with WithCommonFakeApp
         }
       }
 
-      "have help text" which {
-        lazy val helpText = document.body().select("#isClaiming-hint")
+      "have body text" which {
+        lazy val bodyText = document.body().select("p.govuk-body")
         "has only a single div with a class of govuk-hint" in {
-          helpText.size() shouldBe 1
+          bodyText.size() shouldBe 1
         }
 
         s"has a paragraph with the text ${messages.BroughtForwardLosses.helpText}" in {
-          helpText.text shouldBe messages.BroughtForwardLosses.helpText
+          bodyText.text shouldBe messages.BroughtForwardLosses.helpText
         }
       }
 
-      s"have a legend with the text ${messages.BroughtForwardLosses.question}" in {
-        document.select("legend").text() shouldBe messages.BroughtForwardLosses.question
-      }
+      "have a heading" which {
+        lazy val heading = document.body.select("h1")
+
+        "has the class govuk-heading-xl" in {
+          heading.attr("class") shouldBe "govuk-heading-xl"
+        }
+          s"with the text ${messages.BroughtForwardLosses.question}" in {
+            heading.text() should include(messages.BroughtForwardLosses.question)
+          }
+        }
 
       "have an input id of 'isClaiming'" in {
         document.select("input").attr("id") should include("isClaiming")

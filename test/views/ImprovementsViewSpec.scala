@@ -83,7 +83,7 @@ class ImprovementsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
 
         "have hint text" which {
 
-          lazy val helpText = document.getElementsByClass("govuk-hint")
+          lazy val helpText = document.getElementsByClass("govuk-body")
 
           s"should have a first sentence of ${messages.Improvements.helpOne}" in {
             helpText.text() should include(messages.Improvements.helpOne)
@@ -91,20 +91,6 @@ class ImprovementsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
 
           s"should have a second sentence of ${messages.Improvements.helpTwo}" in {
             helpText.text() should include(messages.Improvements.helpTwo)
-          }
-        }
-
-        "have a drop down example section" which {
-
-          lazy val example = document.select("details")
-
-          "should have a span for the title" which {
-
-            lazy val exampleTitle = example.select("span")
-
-            s"should have the text ${messages.Improvements.exampleTitle}" in {
-              exampleTitle.text shouldEqual messages.Improvements.exampleTitle
-            }
           }
         }
 
@@ -139,22 +125,6 @@ class ImprovementsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
 
         s"have a paragraph with the text ${messages.Improvements.jointOwnership}" in {
           document.getElementsByClass("govuk-inset-text").text shouldBe messages.Improvements.jointOwnership
-        }
-
-        "have some hidden content" which {
-          lazy val hiddenContent = document.body().select("#hidden")
-
-          "which has a single details with a class of govuk-details__summary-text" in {
-            document.getElementsByClass("govuk-details__summary-text").size() shouldBe 1
-          }
-
-          "contains an input with the id 'improvementsAmt'" in {
-            document.getElementsByClass("govuk-input govuk-input--width-5").attr("id") shouldBe "improvementsAmt"
-          }
-
-          s"contains the question ${messages.Improvements.questionTwo}" in {
-            hiddenContent.select("label").text() startsWith messages.Improvements.questionTwo
-          }
         }
 
         "have a button" which {

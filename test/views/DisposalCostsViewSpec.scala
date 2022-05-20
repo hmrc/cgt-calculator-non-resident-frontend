@@ -77,7 +77,7 @@ class DisposalCostsViewSpec extends CommonPlaySpec with WithCommonFakeApplicatio
         lazy val hint = document.select("#input-hint")
 
         "should have the class form-hint" in {
-          hint.hasClass("govuk-hint") shouldEqual true
+          hint.hasClass("govuk-body") shouldEqual true
         }
 
         "should contain a bullet list" which {

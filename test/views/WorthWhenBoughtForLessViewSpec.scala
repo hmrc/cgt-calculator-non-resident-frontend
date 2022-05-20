@@ -81,11 +81,11 @@ class WorthWhenBoughtForLessViewSpec extends CommonPlaySpec with WithCommonFakeA
 
       "have help text" which {
 
-        lazy val hintText = document.getElementsByClass("govuk-hint")
+        lazy val bodyText = document.getElementsByClass("govuk-body")
         lazy val helpText = document.getElementsByClass("govuk-inset-text")
 
         s"contains hint text '${WorthWhenBoughtForLess.hintOne}'" in {
-          hintText.text() should include(WorthWhenBoughtForLess.hintOne)
+          bodyText.text() should include(WorthWhenBoughtForLess.hintOne)
         }
 
         s"contains help text '${WorthWhenBoughtForLess.helpText}'" in {
