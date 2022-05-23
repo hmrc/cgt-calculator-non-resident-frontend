@@ -37,7 +37,7 @@
 
     @errorSummary(rebasedValueForm.errors)
     <h1 class="govuk-heading-xl">@Messages("calc.nonResident.rebasedValue.question") <span class="no-wrap">@Messages("calc.nonResident.rebasedValue.date")</span></h1>
-    <p class="govuk-hint">@Messages("calc.nonResident.rebasedValue.hintText")</p>
+    <p class="govuk-body">@Messages("calc.nonResident.rebasedValue.hintText")</p>
 
     @form(action = controllers.routes.RebasedValueController.submitRebasedValue) {
         <p class="govuk-inset-text">@Messages("calc.nonResident.rebasedValue.jointOwnership")</p>

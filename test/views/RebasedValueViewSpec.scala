@@ -77,11 +77,11 @@ class RebasedValueViewSpec extends CommonPlaySpec with WithCommonFakeApplication
         document.select("""article > p[class=""]""").isEmpty shouldBe true
       }
 
-      "have some hint text" which {
-        lazy val hintText = document.getElementsByClass("govuk-hint")
+      "have some body text" which {
+        lazy val bodyText = document.getElementsByClass("govuk-body")
 
         s"should have the text ${messages.inputHintText}" in {
-          hintText.text shouldEqual messages.inputHintText
+          bodyText.text shouldEqual messages.inputHintText
         }
       }
 

@@ -81,8 +81,8 @@ class WorthBeforeLegislationStartViewSpec extends CommonPlaySpec with WithCommon
         document.select("#main-content > div > div > p").text should include(WorthBeforeLegislationStart.information)
       }
 
-      s"has the hint text ${WorthBeforeLegislationStart.hintText}" in {
-        document.select(".govuk-hint").text shouldEqual WorthBeforeLegislationStart.hintText
+      s"has the body text ${WorthBeforeLegislationStart.hintText}" in {
+        document.select(".govuk-body").text should include(WorthBeforeLegislationStart.hintText)
       }
 
       s"has the joint ownership text ${WorthBeforeLegislationStart.jointOwnership}" in {

@@ -54,7 +54,7 @@
 
 
     @form(action = controllers.routes.PersonalAllowanceController.submitPersonalAllowance) {
-        <span class="govuk-hint">@helpAndLink</span>
+        <span class="govuk-body">@helpAndLink</span>
         @formInputMoney(personalAllowanceForm("personalAllowance"), Messages("calc.personalAllowance.question"), hideLabel = true)
         @submitButton()
     }

@@ -49,19 +49,19 @@
 
     <h1 class="govuk-heading-xl">@titleText</h1>
 
-    <p class="govuk-hint">
+    <p class="govuk-body">
         @messages("calc.improvements.helpOne")
         @messages("calc.improvements.helpTwo")
+    </p>
+
+    <p class="govuk-body">
+        @messages("calc.improvements.exampleOne")
+        @messages("calc.improvements.exampleTwo")
     </p>
 
     <div class="govuk-inset-text">
         @messages("calc.improvements.jointOwnership")
     </div>
-
-    @govukDetails(
-        summaryText = messages("calc.improvements.exampleTitle"),
-        contentText = messages("calc.improvements.exampleOne") + " " + messages("calc.improvements.exampleTwo")
-    )
 
     @form(action = controllers.routes.ImprovementsController.submitImprovements) {
 

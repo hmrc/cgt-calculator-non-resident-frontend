@@ -73,8 +73,8 @@ class CurrentIncomeViewSpec extends CommonPlaySpec with WithCommonFakeApplicatio
         document.body.select("h1").first().text shouldBe messages.question
       }
 
-      s"have the correct hint text" in {
-        document.body.select("span.govuk-hint").text() shouldBe messages.helpText
+      s"have the correct body text" in {
+        document.body.select("p.govuk-body").text() shouldBe messages.helpText
       }
 
       "have an input with the correct id" in {
