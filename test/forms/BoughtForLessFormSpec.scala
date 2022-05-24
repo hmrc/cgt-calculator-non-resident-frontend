@@ -77,8 +77,8 @@ class BoughtForLessFormSpec extends CommonPlaySpec with WithCommonFakeApplicatio
         form.errors.size shouldBe 1
       }
 
-      s"contain an error message of ${messages.errorRequired}" in {
-        assertSomeErrors(form.error("boughtForLess"))(_.message shouldBe messages.errorRequired)
+      s"contain an error message of ${messages.errorRequired("boughtForLess")}" in {
+        assertSomeErrors(form.error("boughtForLess"))(_.message shouldBe messages.errorRequired("boughtForLess"))
       }
     }
 
@@ -90,8 +90,8 @@ class BoughtForLessFormSpec extends CommonPlaySpec with WithCommonFakeApplicatio
         form.errors.size shouldBe 1
       }
 
-      s"contain an error message of ${messages.errorRequired}" in {
-        assertSomeErrors(form.error("boughtForLess"))(_.message shouldBe messages.errorRequired)
+      s"contain an error message of ${messages.errorRequired("boughtForLess")}" in {
+        assertSomeErrors(form.error("boughtForLess"))(_.message shouldBe messages.errorRequired("boughtForLess"))
       }
     }
   }

@@ -73,8 +73,8 @@ class SoldOrGivenAwayFormSpec extends CommonPlaySpec with WithCommonFakeApplicat
         form.errors.size shouldBe 1
       }
 
-      s"return the error message of ${commonMessages.errorRequired}" in {
-        form.error("soldIt").get.message shouldBe commonMessages.errorRequired
+      s"return the error message of ${commonMessages.errorRequired("soldOrGivenAway")}" in {
+        form.error("soldIt").get.message shouldBe commonMessages.errorRequired("soldOrGivenAway")
       }
     }
 
@@ -86,8 +86,8 @@ class SoldOrGivenAwayFormSpec extends CommonPlaySpec with WithCommonFakeApplicat
         form.errors.size shouldBe 1
       }
 
-      s"return the error message of ${commonMessages.errorRequired}" in {
-        form.error("soldIt").get.message shouldBe commonMessages.errorRequired
+      s"return the error message of ${commonMessages.errorRequired("soldOrGivenAway")}" in {
+        form.error("soldIt").get.message shouldBe commonMessages.errorRequired("soldOrGivenAway")
       }
     }
   }

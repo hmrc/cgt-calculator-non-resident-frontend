@@ -80,8 +80,8 @@ class RebasedCostsFormSpec extends CommonPlaySpec with WithCommonFakeApplication
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.errorRequired}" in {
-        form.error("hasRebasedCosts").get.message shouldBe messages.errorRequired
+      s"return an error message of '${messages.errorRequired("rebasedCosts")}" in {
+        form.error("hasRebasedCosts").get.message shouldBe messages.errorRequired("rebasedCosts")
       }
     }
 
@@ -95,8 +95,8 @@ class RebasedCostsFormSpec extends CommonPlaySpec with WithCommonFakeApplication
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.errorRequired}" in {
-        form.error("hasRebasedCosts").get.message shouldBe messages.errorRequired
+      s"return an error message of '${messages.errorRequired("rebasedCosts")}" in {
+        form.error("hasRebasedCosts").get.message shouldBe messages.errorRequired("rebasedCosts")
       }
     }
 

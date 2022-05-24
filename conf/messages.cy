@@ -70,9 +70,11 @@ calc.base.undefinedMessage = Neges heb ei diffinio
 calc.base.yes = Iawn
 
 calc.boughtForLess.question = A wnaethoch brynu''r eiddo am lai na''i werth oherwydd bod y gwerthwr eisiau''ch helpu?
+calc.boughtForLess.errors.required = Dewiswch ''Iawn'' os gwnaethoch brynu''r eiddo am lai na''i werth
 
 calc.broughtForwardLosses.errorDecimal = Mae gormod o rifau ar ôl y pwynt degol yn eich colled a ddygwyd ymlaen
 calc.broughtForwardLosses.errorNegative = Nodwch rif positif ar gyfer eich colled a ddygwyd ymlaen
+calc.broughtForwardLosses.errors.required = Dewiswch ''Iawn'' os oes gennych golledion i''w dwyn ymlaen o flynyddoedd treth blaenorol
 calc.broughtForwardLosses.helpText = Colledion nas defnyddiwyd yw''r rhain, a gwmpesir gan Dreth Enillion Cyfalaf ar gyfer pobl nad ydynt yn breswyl yn y DU.
 calc.broughtForwardLosses.inputQuestion = Faint yr hoffech ei ddwyn ymlaen?
 calc.broughtForwardLosses.question = A oes gennych golledion yr ydych am eu dwyn ymlaen o flynyddoedd treth blaenorol?
@@ -91,6 +93,7 @@ calc.calculationElection.pageHeading = Dewiswch eich dull cyfrifo
 calc.calculationElection.paragraph.one = Gallwn gyfrifo''ch Treth Enillion Cyfalaf drwy ddilyn un o dri dull.
 calc.calculationElection.paragraph.two = Os oes gennych hawl i ryddhad o fathau eraill, gall y rhain newid pa ddull sy''n rhoi''r canlyniad isaf.
 calc.calculationElection.someOtherRelief = Rhyddhad treth arall
+calc.calculationElection.errors.required = Dewiswch ddull o gyfrifo''ch Treth Enillion Cyfalaf ar gyfer Person nad yw''n Breswyl
 
 calc.calculationElectionNoReliefs.helpText = Gallwn gyfrifo''ch Treth Enillion Cyfalaf ar gyfer pobl nad ydynt yn breswyl yn y DU drwy ddilyn un o dri dull.
 calc.calculationElectionNoReliefs.helpTextChooseMethod = Mae croeso i ddewis dull arall, os dymunwch.
@@ -104,7 +107,7 @@ calc.checkYourAnswers.hidden.text = eich ateb i''r cwestiwn
 calc.checkYourAnswers.tableHeading = Rydych wedi rhoi gwybod i ni am:
 calc.checkYourAnswers.title = Gwirio''ch atebion
 
-calc.claimingReliefs.errorMandatory = Rhowch wybod i ni a oes gennych hawl i ryddhad arall
+calc.claimingReliefs.errorMandatory = Dewiswch ''Iawn'' os oes gennych hawl i unrhyw ryddhad arall
 calc.claimingReliefs.helpText = Er enghraifft, Rhyddhad Gosod (os ydych eisoes wedi hawlio Rhyddhad Preswylfan Preifat) neu Ryddhad Treigl.
 calc.claimingReliefs.title = A oes gennych hawl i ryddhad arall?
 
@@ -122,6 +125,7 @@ calc.common.readMore = Rhagor o wybodaeth
 calc.costsAtLegislationStart.error.no.value.supplied = Nodwch y swm ar gyfer eich costau
 calc.costsAtLegislationStart.errorDecimalPlaces = Mae gormod o rifau ar ôl y pwynt degol yn eich costau
 calc.costsAtLegislationStart.errorNegative = Nodwch rif positif ar gyfer eich costau
+calc.costsAtLegislationStart.errors.required = Dewiswch ''Iawn'' os gwnaethoch dalu i gael yr eiddo wedi''i brisio ar 31 Mawrth 1982
 calc.costsAtLegislationStart.helpText = Os oeddech yn berchen ar yr eiddo gyda rhywun arall, dylech ond nodi''ch cyfran chi o''r costau, fel y cytunwyd gyda''ch cydberchennog.
 calc.costsAtLegislationStart.howMuch = Beth oedd y gost o brisio''r eiddo?
 calc.costsAtLegislationStart.title = A wnaethoch dalu i gael prisio''r eiddo ar 31 Mawrth 1982?
@@ -165,6 +169,7 @@ calc.howMuchLoss.errorDecimal = Mae gormod o rifau ar ôl y pwynt degol yn eich 
 calc.howMuchLoss.errorMinimum = Nodwch rif positif ar gyfer eich colled
 calc.howMuchLoss.question = Faint o golled a wnaethoch roi gwybod amdani?
 
+calc.improvements.errors.required = Dewiswch ''Iawn'' os gwnaethoch unrhyw welliannau i''r eiddo
 calc.improvements.error.no.value.supplied = Nodwch werth eich gwelliannau
 calc.improvements.errorDecimalPlaces = Mae gormod o rifau ar ôl y pwynt degol ar gyfer cost eich gwelliannau
 calc.improvements.errorNegative = Nodwch rif positif ar gyfer cost eich gwelliannau
@@ -202,7 +207,9 @@ calc.nonResident.rebasedValue.hintText = Os nad ydych yn gwybod yr union werth, 
 calc.nonResident.rebasedValue.jointOwnership = Os oeddech yn berchen ar yr eiddo gyda rhywun arall, dylech ond nodi''ch cyfran chi o werth yr eiddo.
 calc.nonResident.rebasedValue.question = Beth oedd gwerth marchnadol yr eiddo ar
 calc.nonResident.rebasedValue.questionAndDate = Beth oedd gwerth marchnadol yr eiddo ar 5 Ebrill 2015?
+
 calc.nonResident.soldForLess.question = A wnaethoch werthu''r eiddo am lai na''i werth er mwyn helpu''r prynwr?
+calc.nonResident.soldForLess.errors.required = Dewiswch ''Iawn'' os gwnaethoch werthu''r eiddo am lai na''i werth
 
 calc.noTaxToPay.charityText = Y rheswm am hyn yw nid yw Treth Enillion Cyfalaf yn gymwys os ydych yn rhoi eiddo i elusen.
 calc.noTaxToPay.returnToGov = Yn ôl i GOV.UK
@@ -210,6 +217,7 @@ calc.noTaxToPay.spouseText = Y rheswm am hyn yw nid yw Treth Enillion Cyfalaf yn
 calc.noTaxToPay.title = Does dim treth i''w thalu
 
 calc.otherProperties.question = A wnaethoch werthu neu roi i ffwrdd eiddo preswyl arall yn y DU yn y flwyddyn dreth pan wnaethoch beidio â bod yn berchen ar yr eiddo?
+calc.otherProperties.errors.required = Dewiswch ''Iawn'' os gwnaethoch werthu neu roi eiddo preswyl arall yn y DU i ffwrdd
 
 calc.otherReliefs.button.addRelief = Ychwanegu rhyddhad
 calc.otherReliefs.button.updateRelief = Diweddaru rhyddhad
@@ -244,6 +252,7 @@ calc.previousLossOrGain.question = A wnaeth y gwarediadau hyn arwain at golledio
 
 calc.privateResidenceRelief.daysBeforeHelpText = 6 Ebrill 2015 yw pan ddaeth y rheolau Treth Enillion Cyfalaf ar gyfer rhai nad ydynt yn breswyl yn y DU i rym
 calc.privateResidenceRelief.daysBetweenHelpText = {0} yw''r dyddiad y gwnaethoch drosglwyddo''r eiddo, llai {1} mis (byddwch yn cael Lwfans Preswylfan Preifat yn awtomatig am y {1} mis diwethaf yr oeddech yn berchen ar yr eiddo)
+calc.privateResidenceRelief.errors.required = Dewiswch ''Iawn'' os ydych yn hawlio Rhyddhad Preswylfa Breifat
 calc.privateResidenceRelief.error.errorDecimalPlaces = Mae gormod o rifau ar ôl y pwynt degol yn nifer y diwrnodau rydych yn gwneud cais ar eu cyfer
 calc.privateResidenceRelief.error.errorNegative = Nodwch rif positif ar gyfer sawl diwrnod rydych yn gwneud cais ar eu cyfer
 calc.privateResidenceRelief.error.maxNumericExceeded = Nodwch rif ar gyfer sawl diwrnod rydych yn gwneud cais ar eu cyfer sy''n {0} neu lai
@@ -262,9 +271,10 @@ calc.privateResidenceRelief.question = Ydych chi''n hawlio Rhyddhad Preswylfan P
 calc.privateResidenceRelief.questionBetween = Am sawl diwrnod rhwng 6 Ebrill 2015 a {0} yr oedd yr eiddo hwn yn gymwys am ryddhad?
 calc.privateResidenceRelief.questionFlat = AAm sawl diwrnod cyn {0} yr oedd yr eiddo hwn yn gymwys am ryddhad?
 
-calc.propertyLivedIn.noSelectError = Rhowch wybod i ni a ydych wedi byw yn yr eiddo ar ryw adeg ers i chi ddod yn berchennog
+calc.propertyLivedIn.errors.required = Dewiswch ''Iawn'' os ydych erioed wedi byw yn yr eiddo ers i chi ddod yn berchennog arno
 calc.propertyLivedIn.title = Ydych chi wedi byw yn yr eiddo ar ryw adeg ers i chi ddod yn berchennog?
 
+calc.rebasedCosts.errors.required =  Dewiswch ''Iawn'' os gwnaethoch dalu i gael yr eiddo wedi''i brisio ar 5 Ebrill 2015
 calc.rebasedCosts.error.no.value.supplied = Nodwch y swm ar gyfer eich costau
 calc.rebasedCosts.errorDecimalPlaces = Mae gormod o rifau ar ôl y pwynt degol yn eich costau
 calc.rebasedCosts.errorNegative = Nodwch rif positif ar gyfer eich costau
@@ -291,6 +301,7 @@ calc.resident.summary.saveAsPdf = Lawrlwytho''ch cyfrifiad Treth Enillion Cyfala
 calc.soldOrGivenAway.gave = Fe''i rhoddais i ffwrdd
 calc.soldOrGivenAway.question = A wnaethoch werthu''r eiddo neu ei roi i ffwrdd?
 calc.soldOrGivenAway.sold = Fe''i gwerthais
+calc.soldOrGivenAway.errors.required = Dewiswch a wnaethoch werthu''r eiddo neu ei roi i ffwrdd
 
 calc.summary.amount.you.owe = Swm sydd arnoch
 calc.summary.calculation.details.allowableLossesUsed = Colled a ddefnyddiwyd o''r flwyddyn dreth {0}

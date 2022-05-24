@@ -78,7 +78,7 @@ class SoldForLessFormSpec extends CommonPlaySpec with WithCommonFakeApplication 
           }
 
           "associate the correct error message to the error" in {
-            form.error("soldForLess").get.message shouldBe commonMessages.errorRequired
+            form.error("soldForLess").get.message shouldBe commonMessages.errorRequired("nonResident.soldForLess")
           }
         }
 
@@ -95,7 +95,7 @@ class SoldForLessFormSpec extends CommonPlaySpec with WithCommonFakeApplication 
           }
 
           "associate the correct error message to the error" in {
-            form.error("soldForLess").get.message shouldBe commonMessages.errorRequired
+            form.error("soldForLess").get.message shouldBe commonMessages.errorRequired("nonResident.soldForLess")
           }
         }
       }

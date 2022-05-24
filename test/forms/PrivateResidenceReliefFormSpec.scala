@@ -62,8 +62,8 @@ class PrivateResidenceReliefFormSpec extends CommonPlaySpec with WithCommonFakeA
           form.errors.size shouldBe 1
         }
 
-        s"return an error message of '${messages.errorRequired}" in {
-          form.error("isClaimingPRR").get.message shouldBe messages.errorRequired
+        s"return an error message of '${messages.errorRequired("privateResidenceRelief")}" in {
+          form.error("isClaimingPRR").get.message shouldBe messages.errorRequired("privateResidenceRelief")
         }
       }
 
@@ -75,8 +75,8 @@ class PrivateResidenceReliefFormSpec extends CommonPlaySpec with WithCommonFakeA
           form.errors.size shouldBe 1
         }
 
-        s"return an error message of '${messages.errorRequired}" in {
-          form.error("isClaimingPRR").get.message shouldBe messages.errorRequired
+        s"return an error message of '${messages.errorRequired("privateResidenceRelief")}" in {
+          form.error("isClaimingPRR").get.message shouldBe messages.errorRequired("privateResidenceRelief")
         }
       }
     }

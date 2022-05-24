@@ -16,7 +16,7 @@
 
 package forms
 
-import assets.KeyLookup.{PropertyLivedIn => messages}
+import assets.KeyLookup.{NonResident => messages}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import forms.PropertyLivedInForm._
 import models.PropertyLivedInModel
@@ -58,8 +58,8 @@ class PropertyLivedInFormSpec extends CommonPlaySpec with WithCommonFakeApplicat
         form.errors.length shouldBe 1
       }
 
-      s"return a form with the error message ${messages.errorNoSelect}" in {
-        form.error("propertyLivedIn").get.message shouldBe messages.errorNoSelect
+      s"return a form with the error message ${messages.errorRequired("propertyLivedIn")}" in {
+        form.error("propertyLivedIn").get.message shouldBe messages.errorRequired("propertyLivedIn")
       }
     }
 
@@ -74,8 +74,8 @@ class PropertyLivedInFormSpec extends CommonPlaySpec with WithCommonFakeApplicat
         form.errors.length shouldBe 1
       }
 
-      s"return a form with the error message ${messages.errorNoSelect}" in {
-        form.error("propertyLivedIn").get.message shouldBe messages.errorNoSelect
+      s"return a form with the error message ${messages.errorRequired("propertyLivedIn")}" in {
+        form.error("propertyLivedIn").get.message shouldBe messages.errorRequired("propertyLivedIn")
       }
     }
   }

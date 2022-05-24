@@ -21,15 +21,16 @@ import common.Validation._
 import models.BoughtForLessModel
 import play.api.data.Forms._
 import play.api.data._
+import common.Formatters.text
 
 object BoughtForLessForm {
 
   val boughtForLessForm =
     Form(
       mapping(
-        "boughtForLess" -> text
-          .verifying("calc.common.error.fieldRequired", mandatoryCheck)
-          .verifying("calc.common.error.fieldRequired", yesNoCheck)
+        "boughtForLess" -> text("calc.boughtForLess.errors.required")
+          .verifying("calc.boughtForLess.errors.required", mandatoryCheck)
+          .verifying("calc.boughtForLess.errors.required", yesNoCheck)
           .transform(stringToBoolean, booleanToString)
       )(BoughtForLessModel.apply)(BoughtForLessModel.unapply)
     )

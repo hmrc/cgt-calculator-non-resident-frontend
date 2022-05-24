@@ -55,9 +55,9 @@ object CostsAtLegislationStartForm {
 
   val costsAtLegislationStartForm = Form(
     mapping(
-      "hasCosts" -> text
-        .verifying("calc.common.error.fieldRequired", mandatoryCheck)
-        .verifying("calc.common.error.fieldRequired", yesNoCheck),
+      "hasCosts" -> common.Formatters.text("calc.costsAtLegislationStart.errors.required")
+        .verifying("calc.costsAtLegislationStart.errors.required", mandatoryCheck)
+        .verifying("calc.costsAtLegislationStart.errors.required", yesNoCheck),
       "costs" -> text
         .transform(stringToOptionalBigDecimal, optionalBigDecimalToString)
     )(CostsAtLegislationStartModel.apply)(CostsAtLegislationStartModel.unapply)
