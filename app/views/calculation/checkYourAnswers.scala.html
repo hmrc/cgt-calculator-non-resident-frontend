@@ -57,7 +57,10 @@
     }
 }
 
-@layout(messages("calc.checkYourAnswers.title")){
+@layout(
+    messages("calc.checkYourAnswers.title"),
+    fullGrid = true
+){
 
     <h1 class="govuk-heading-xl">@messages("calc.checkYourAnswers.title")</h1>
     <h2 class="govuk-heading-m">@messages("calc.checkYourAnswers.tableHeading")</h2>
