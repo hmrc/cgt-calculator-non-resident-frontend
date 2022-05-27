@@ -68,7 +68,7 @@ class BroughtForwardLossesViewSpec extends CommonPlaySpec with WithCommonFakeApp
         lazy val header = document.select("h1")
 
         "has the class" in {
-          header.attr("class") shouldBe "govuk-heading-xl"
+          header.attr("class") shouldBe "govuk-fieldset__heading"
         }
       }
 
@@ -85,7 +85,7 @@ class BroughtForwardLossesViewSpec extends CommonPlaySpec with WithCommonFakeApp
       }
 
       "have body text" which {
-        lazy val bodyText = document.body().select("p.govuk-body")
+        lazy val bodyText = document.body().select(".govuk-hint")
         "has only a single div with a class of govuk-hint" in {
           bodyText.size() shouldBe 1
         }
@@ -98,8 +98,8 @@ class BroughtForwardLossesViewSpec extends CommonPlaySpec with WithCommonFakeApp
       "have a heading" which {
         lazy val heading = document.body.select("h1")
 
-        "has the class govuk-heading-xl" in {
-          heading.attr("class") shouldBe "govuk-heading-xl"
+        "has the class govuk-fieldset__heading" in {
+          heading.attr("class") shouldBe "govuk-fieldset__heading"
         }
           s"with the text ${messages.BroughtForwardLosses.question}" in {
             heading.text() should include(messages.BroughtForwardLosses.question)

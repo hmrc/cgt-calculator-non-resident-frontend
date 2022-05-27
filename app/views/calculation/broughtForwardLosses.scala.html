@@ -35,10 +35,6 @@
     pageTitle = title
 ) {
 
-    <h1 class="govuk-heading-xl">@Messages("calc.broughtForwardLosses.question")</h1>
-
-    <p class="govuk-body">@Messages("calc.broughtForwardLosses.helpText")</p>
-
     @errorSummary(broughtForwardLossesForm.errors, Some("broughtForwardLoss"))
 
     @form(action = controllers.routes.BroughtForwardLossesController.submitBroughtForwardLosses) {
@@ -47,7 +43,8 @@
             form = broughtForwardLossesForm,
             yesNoFieldName = "isClaiming",
             conditionalInputFieldName = "broughtForwardLoss",
-            yesNoQuestionText = "",
+            yesNoQuestionText = Messages("calc.broughtForwardLosses.question"),
+            inputHint = Some(Messages("calc.broughtForwardLosses.helpText")),
             conditionalInputQuestionText = ""
         )
 
