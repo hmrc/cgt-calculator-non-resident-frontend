@@ -57,9 +57,9 @@ class CheckYourAnswersController @Inject()(http: DefaultHttpClient,calculatorCon
                     totalGainResultsModel: TotalGainResultsModel): Future[Result] = {
     (calculationResultsWithPRRModel, totalGainResultsModel) match {
       case (Some(CalculationResultsWithPRRModel(data, _, _)),_) if data.taxableGain > 0 =>
-        Future.successful(Redirect(routes.OtherReliefsController.otherReliefs()))
+        Future.successful(Redirect(routes.SummaryController.summary()))
       case (None, TotalGainResultsModel(data, _, _)) if data > 0 =>
-        Future.successful(Redirect(routes.OtherReliefsController.otherReliefs()))
+        Future.successful(Redirect(routes.SummaryController.summary()))
       case _ => Future.successful(Redirect(routes.SummaryController.summary()))
     }
   }

@@ -79,7 +79,7 @@ class BroughtForwardLossesController @Inject()(http: DefaultHttpClient,calcConne
 
     def successAction(model: BroughtForwardLossesModel) = {
       calcConnector.saveFormData[BroughtForwardLossesModel](KeystoreKeys.broughtForwardLosses, model).map(_ =>
-        Redirect(controllers.routes.CheckYourAnswersController.checkYourAnswers()))
+        Redirect(controllers.routes.OtherReliefsController.otherReliefs()))
     }
 
     def errorAction(form: Form[BroughtForwardLossesModel]) = {

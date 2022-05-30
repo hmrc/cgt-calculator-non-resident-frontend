@@ -99,7 +99,7 @@ class OtherReliefsController @Inject()(http: DefaultHttpClient,calcConnector: Ca
 
     def successAction(model: OtherReliefsModel) = {
       calcConnector.saveFormData(KeystoreKeys.otherReliefsFlat, model).map(_ =>
-        Redirect(routes.SummaryController.summary()))
+        Redirect(routes.CheckYourAnswersController.checkYourAnswers()))
     }
 
     otherReliefsForm.bindFromRequest.fold(
