@@ -33,7 +33,8 @@ import views.html.calculation.checkYourAnswers
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class CheckYourAnswersController @Inject()(http: DefaultHttpClient,calculatorConnector: CalculatorConnector,
+class CheckYourAnswersController @Inject()(http: DefaultHttpClient,
+                                           calculatorConnector: CalculatorConnector,
                                            answersConstructor: AnswersConstructor,
                                            calcElectionConstructor: DefaultCalculationElectionConstructor,
                                            mcc: MessagesControllerComponents,
@@ -75,7 +76,8 @@ class CheckYourAnswersController @Inject()(http: DefaultHttpClient,calculatorCon
       prrModel <- getPrrResponse(propertyLivedIn, calculatorConnector)
       totalGainWithPRRResult <- getPrrIfApplicable(model, prrModel, propertyLivedIn, calculatorConnector)
       finalAnswers <- getFinalSectionsAnswers(totalGainResult.get, totalGainWithPRRResult, calculatorConnector, answersConstructor)
-      answers <- Future.successful(YourAnswersConstructor.fetchYourAnswers(model, prrModel, finalAnswers, propertyLivedIn))
+      otherReliefs <- getOtherReliefsResponse(calculatorConnector)
+      answers <- Future.successful(YourAnswersConstructor.fetchYourAnswers(model, prrModel, finalAnswers, propertyLivedIn, otherReliefs ))
       backLink <- getBackLink(totalGainResult.get, model.acquisitionDateModel, finalAnswers)
     } yield {
       Ok(checkYourAnswersView(answers, backLink))

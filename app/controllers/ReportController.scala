@@ -98,15 +98,16 @@ class ReportController @Inject()(config: Configuration,
                            totalGainResultsModel: TotalGainResultsModel,
                            privateResidenceReliefModel: Option[PrivateResidenceReliefModel],
                            personalAndPreviousDetailsModel: Option[TotalPersonalDetailsCalculationModel],
-                           propertyLivedInModel: Option[PropertyLivedInModel]): Future[Seq[QuestionAnswerModel[Any]]] = {
+                           propertyLivedInModel: Option[PropertyLivedInModel],
+                           otherReliefsModel: Option[OtherReliefsModel]): Future[Seq[QuestionAnswerModel[Any]]] = {
 
       val optionSeq = Seq(totalGainResultsModel.rebasedGain, totalGainResultsModel.timeApportionedGain).flatten
       val finalSeq = Seq(totalGainResultsModel.flatGain) ++ optionSeq
 
       if (finalSeq.forall(_ <= 0)) {
-        Future.successful(YourAnswersConstructor.fetchYourAnswers(totalGainAnswersModel, privateResidenceReliefModel, None, propertyLivedInModel))
+        Future.successful(YourAnswersConstructor.fetchYourAnswers(totalGainAnswersModel, privateResidenceReliefModel, None, propertyLivedInModel, otherReliefsModel))
       }
-      else Future.successful(YourAnswersConstructor.fetchYourAnswers(totalGainAnswersModel, privateResidenceReliefModel, personalAndPreviousDetailsModel, propertyLivedInModel))
+      else Future.successful(YourAnswersConstructor.fetchYourAnswers(totalGainAnswersModel, privateResidenceReliefModel, personalAndPreviousDetailsModel, propertyLivedInModel, otherReliefsModel))
     }
 
     (for {
@@ -118,10 +119,11 @@ class ReportController @Inject()(config: Configuration,
       totalGainWithPRR <- getPrrIfApplicable(answers, prrModel, propertyLivedIn, calcConnector)
       finalAnswers <- getFinalSectionsAnswers(totalGainResultsModel.get, totalGainWithPRR, calcConnector, answersConstructor)
       otherReliefsModel <- getAllOtherReliefs(finalAnswers)
+      otherReliefs <- getOtherReliefsResponse(calcConnector)
       taxYearModel <- getTaxYear(answers, calcConnector)
       maxAEA <- getMaxAEA(taxYearModel, calcConnector)
       finalResult <- calculateTaxOwed(answers, prrModel, propertyLivedIn, finalAnswers, maxAEA.get, otherReliefsModel)
-      questionAnswerRows <- questionAnswerRows(answers, totalGainResultsModel.get, prrModel, finalAnswers, propertyLivedIn)
+      questionAnswerRows <- questionAnswerRows(answers, totalGainResultsModel.get, prrModel, finalAnswers, propertyLivedIn, otherReliefs)
       calculationType <- calcConnector.fetchAndGetFormData[CalculationElectionModel](KeystoreKeys.calculationElection)
       totalCosts <- calcConnector.calculateTotalCosts(answers, calculationType)
       calculationResult <- getCalculationResult(finalResult, calculationType.get.calculationType)

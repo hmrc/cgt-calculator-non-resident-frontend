@@ -116,4 +116,10 @@ object TaxableGainCalculation {
       case None => Future(None)
     }
   }
+
+  def getOtherReliefsResponse(calcConnector: CalculatorConnector)
+                                (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[OtherReliefsModel]] = {
+
+    calcConnector.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.propertyLivedIn)
+  }
 }

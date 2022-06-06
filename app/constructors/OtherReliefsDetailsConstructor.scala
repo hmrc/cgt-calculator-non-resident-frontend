@@ -18,11 +18,9 @@ package constructors
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.nonresident.CalculationType
-import javax.inject.Inject
 import models.{OtherReliefsModel, QuestionAnswerModel}
-import play.api.i18n.{Messages, MessagesProvider}
 
-class OtherReliefsDetailsConstructor @Inject()(implicit messagesProvider: MessagesProvider) {
+object OtherReliefsDetailsConstructor {
 
   def getOtherReliefsSection(otherReliefs: Option[OtherReliefsModel],
                              calculationElection: String): Seq[QuestionAnswerModel[Any]] = {
@@ -41,7 +39,7 @@ class OtherReliefsDetailsConstructor @Inject()(implicit messagesProvider: Messag
         Some(QuestionAnswerModel(
           s"${KeystoreKeys.otherReliefsRebased}",
           value,
-          Messages("calc.otherReliefs.question"),
+          "calc.otherReliefs.question",
           None
         ))
       case _ => None
@@ -55,7 +53,7 @@ class OtherReliefsDetailsConstructor @Inject()(implicit messagesProvider: Messag
         Some(QuestionAnswerModel(
           s"${KeystoreKeys.otherReliefsTA}",
           value,
-          Messages("calc.otherReliefs.question"),
+          "calc.otherReliefs.question",
           None
         ))
       case _ => None
@@ -69,7 +67,7 @@ class OtherReliefsDetailsConstructor @Inject()(implicit messagesProvider: Messag
         Some(QuestionAnswerModel(
           s"${KeystoreKeys.otherReliefsFlat}",
           value,
-          Messages("calc.otherReliefs.question"),
+          "calc.otherReliefs.question",
           None
         ))
       case _ => None
