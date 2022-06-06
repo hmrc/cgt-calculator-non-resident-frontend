@@ -170,8 +170,8 @@ class ImprovementsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
         status(result) shouldBe 303
       }
 
-      s"redirect to ${routes.CheckYourAnswersController.checkYourAnswers()}" in {
-        redirectLocation(result) shouldBe Some(s"${routes.CheckYourAnswersController.checkYourAnswers()}")
+      s"redirect to ${routes.OtherReliefsController.otherReliefs()}" in {
+        redirectLocation(result) shouldBe Some(s"${routes.OtherReliefsController.otherReliefs()}")
       }
     }
 

@@ -34,7 +34,7 @@ object TestModels {
     None,
     None,
     ImprovementsModel("No", None),
-    Some(OtherReliefsModel(0))
+    Some(AllOtherReliefsModel(Some(OtherReliefsModel(0)), Some(OtherReliefsModel(0)), Some(OtherReliefsModel(0))))
   )
 
   val sumModelFlat = SummaryModel(
@@ -366,7 +366,7 @@ object TestModels {
     Some(RebasedValueModel(950000)),
     Some(RebasedCostsModel("No", None)),
     ImprovementsModel("No", None),
-    Some(OtherReliefsModel(0))
+    Some(AllOtherReliefsModel(Some(OtherReliefsModel(0)), Some(OtherReliefsModel(0)), Some(OtherReliefsModel(0))))
   )
 
   val calculationResultsModelWithRebased = CalculationResultsWithTaxOwedModel(

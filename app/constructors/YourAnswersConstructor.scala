@@ -29,7 +29,8 @@ object YourAnswersConstructor {
     val propertyDetailsRows = PropertyDetailsConstructor.propertyDetailsRows(totalGainAnswersModel)
     val deductionDetailsRows = DeductionDetailsConstructor.deductionDetailsRows(totalGainAnswersModel, privateResidenceReliefModel, propertyLivedInModel)
     val personalAndPreviousDetailsRows = PersonalAndPreviousDetailsConstructor.personalAndPreviousDetailsRows(personalAndPreviousDetailsModel)
+    val otherReliefsRows = OtherReliefsConstructor.getOtherReliefsSection(Some(totalGainAnswersModel))
 
-      salesDetailsRows ++ purchaseDetailsRows ++ propertyDetailsRows ++  deductionDetailsRows ++ personalAndPreviousDetailsRows
+      salesDetailsRows ++ purchaseDetailsRows ++ propertyDetailsRows ++  deductionDetailsRows ++ personalAndPreviousDetailsRows ++ otherReliefsRows
   }
 }

@@ -102,7 +102,7 @@ class ImprovementsController @Inject()(http: DefaultHttpClient,calcConnector: Ca
         case Some(model) =>
           val totalGainResults: Seq[BigDecimal] = Seq(model.flatGain) ++ Seq(model.rebasedGain, model.timeApportionedGain).flatten
           if(!totalGainResults.forall(_ <= 0)) Redirect(routes.PropertyLivedInController.propertyLivedIn())
-          else Redirect(routes.CheckYourAnswersController.checkYourAnswers())
+          else Redirect(routes.OtherReliefsController.otherReliefs())
         case None => Redirect(common.DefaultRoutes.missingDataRoute)
       }
     }

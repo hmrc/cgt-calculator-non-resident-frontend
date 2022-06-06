@@ -55,7 +55,7 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
     None,
     None,
     ImprovementsModel("No", None, None),
-    Some(OtherReliefsModel(0))
+    Some(AllOtherReliefsModel(Some(OtherReliefsModel(0)), None, None))
   )
 
   val yesOtherReliefs = TotalGainAnswersModel(
@@ -72,7 +72,7 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
     Some(RebasedValueModel(1)),
     Some(RebasedCostsModel("No", None)),
     ImprovementsModel("No", None, None),
-    Some(OtherReliefsModel(1450))
+    Some(AllOtherReliefsModel(Some(OtherReliefsModel(1450)), None, None))
   )
 
   val within18Months = TotalGainAnswersModel(
@@ -89,7 +89,7 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
     None,
     None,
     ImprovementsModel("No", None, None),
-    Some(OtherReliefsModel(1450))
+    Some(AllOtherReliefsModel(Some(OtherReliefsModel(1450)), None, None))
   )
 
   val validDates = TotalGainAnswersModel(
@@ -106,7 +106,7 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
     None,
     None,
     ImprovementsModel("No", None, None),
-    Some(OtherReliefsModel(1450))
+    Some(AllOtherReliefsModel(Some(OtherReliefsModel(1450)), None, None))
   )
 
   val edgeDatesJustDaysBefore = TotalGainAnswersModel(
@@ -123,7 +123,7 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
     None,
     None,
     ImprovementsModel("No", None, None),
-    Some(OtherReliefsModel(1450))
+    Some(AllOtherReliefsModel(Some(OtherReliefsModel(1450)), None, None))
   )
 
   val acquisitionDateAfterStart = TotalGainAnswersModel(
@@ -140,7 +140,7 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
     None,
     None,
     ImprovementsModel("No", None, None),
-    Some(OtherReliefsModel(1450))
+    Some(AllOtherReliefsModel(Some(OtherReliefsModel(1450)), None, None))
   )
 
   val disposalDateWithin18Months = TotalGainAnswersModel(
@@ -157,7 +157,7 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
     None,
     None,
     ImprovementsModel("No", None, None),
-    Some(OtherReliefsModel(1450))
+    Some(AllOtherReliefsModel(Some(OtherReliefsModel(1450)), None, None))
   )
 
   val yesPRRModel = PrivateResidenceReliefModel("Yes", Some(2), Some(3))

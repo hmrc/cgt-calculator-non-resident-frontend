@@ -63,7 +63,7 @@ class TaxableGainCalculationSpec extends CommonPlaySpec with GuiceOneAppPerSuite
     Some(RebasedValueModel(950000)),
     Some(RebasedCostsModel("No", None)),
     ImprovementsModel("No", None),
-    Some(OtherReliefsModel(0))
+    Some(AllOtherReliefsModel(Some(OtherReliefsModel(0)), Some(OtherReliefsModel(0)), Some(OtherReliefsModel(0))))
   )
   val calculationResultsModel = CalculationResultsWithTaxOwedModel(
     TotalTaxOwedModel(100, 100, 20, None, None, 200, 100, None, None, None, None, 0, None, None, None, None, None, None, None),

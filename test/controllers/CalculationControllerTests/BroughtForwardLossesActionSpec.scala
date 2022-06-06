@@ -154,7 +154,7 @@ class BroughtForwardLossesActionSpec extends CommonPlaySpec with WithCommonFakeA
       }
 
       "redirect to the Check Your Answers page" in {
-        redirectLocation(result) shouldBe Some(controllers.routes.CheckYourAnswersController.checkYourAnswers().url)
+        redirectLocation(result) shouldBe Some(controllers.routes.OtherReliefsController.otherReliefs().url)
       }
     }
 

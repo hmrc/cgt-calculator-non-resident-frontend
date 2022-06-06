@@ -107,9 +107,9 @@ class AnswersConstructorSpec extends CommonPlaySpec with MockitoSugar with WithC
     when(mockCalcConnector.fetchAndGetFormData[ImprovementsModel](ArgumentMatchers.eq(KeystoreKeys.improvements))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(totalGainAnswersModel.improvementsModel)))
 
-    when(mockCalcConnector.fetchAndGetFormData[OtherReliefsModel](
+    when(mockCalcConnector.fetchAndGetFormData[AllOtherReliefsModel](
       ArgumentMatchers.eq(KeystoreKeys.otherReliefsFlat))(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(totalGainAnswersModel.otherReliefsFlat))
+      .thenReturn(Future.successful(totalGainAnswersModel.allOtherReliefsModel))
 
     new AnswersConstructor(mockCalcConnector)
   }
@@ -179,7 +179,7 @@ class AnswersConstructorSpec extends CommonPlaySpec with MockitoSugar with WithC
     Some(RebasedValueModel(7500)),
     Some(RebasedCostsModel("Yes", Some(150))),
     ImprovementsModel("Yes", Some(50), Some(25)),
-    Some(OtherReliefsModel(1000))
+    Some(AllOtherReliefsModel(Some(OtherReliefsModel(1000)), None, None))
   )
 
   val modelDateBeforeLegislationStart = TotalGainAnswersModel(
@@ -196,7 +196,7 @@ class AnswersConstructorSpec extends CommonPlaySpec with MockitoSugar with WithC
     Some(RebasedValueModel(7500)),
     Some(RebasedCostsModel("Yes", Some(150))),
     ImprovementsModel("Yes", Some(50), Some(25)),
-    Some(OtherReliefsModel(1000))
+    Some(AllOtherReliefsModel(Some(OtherReliefsModel(1000)), None, None))
   )
 
   val totalGainBoughtForLess = TotalGainAnswersModel(
@@ -213,7 +213,7 @@ class AnswersConstructorSpec extends CommonPlaySpec with MockitoSugar with WithC
     Some(RebasedValueModel(7500)),
     Some(RebasedCostsModel("Yes", Some(150))),
     ImprovementsModel("Yes", Some(50), Some(25)),
-    Some(OtherReliefsModel(1000))
+    Some(AllOtherReliefsModel(Some(OtherReliefsModel(1000)), None, None))
   )
 
   val totalGainSoldForLess = TotalGainAnswersModel(
@@ -230,7 +230,7 @@ class AnswersConstructorSpec extends CommonPlaySpec with MockitoSugar with WithC
     Some(RebasedValueModel(7500)),
     Some(RebasedCostsModel("Yes", Some(150))),
     ImprovementsModel("Yes", Some(50), Some(25)),
-    Some(OtherReliefsModel(1000))
+    Some(AllOtherReliefsModel(Some(OtherReliefsModel(1000)), None, None))
   )
 
   "Calling getNRTotalGainAnswers" should {

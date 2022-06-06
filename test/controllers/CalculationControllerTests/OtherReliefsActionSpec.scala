@@ -145,7 +145,7 @@ class OtherReliefsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
       }
 
       s"show help text with text '${messages.additionalHelp(200, 100)}'" in {
-        document.body().select("#otherReliefHelpTwo").select("p").text() shouldBe messages.additionalHelp(200, 100)
+        document.body().select("#main-content > div > div > p").text() shouldBe messages.additionalHelp(200, 100)
       }
     }
 
@@ -196,7 +196,7 @@ class OtherReliefsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
       }
 
       "redirect to the summary page" in {
-        redirectLocation(result).get shouldBe controllers.routes.SummaryController.summary().url
+        redirectLocation(result).get shouldBe controllers.routes.CheckYourAnswersController.checkYourAnswers().url
       }
     }
 

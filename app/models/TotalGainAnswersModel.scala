@@ -32,7 +32,7 @@ case class TotalGainAnswersModel(disposalDateModel: DateModel,
                                  rebasedValueModel: Option[RebasedValueModel],
                                  rebasedCostsModel: Option[RebasedCostsModel],
                                  improvementsModel: ImprovementsModel,
-                                 otherReliefsFlat: Option[OtherReliefsModel],
+                                 allOtherReliefsModel: Option[AllOtherReliefsModel],
                                  costsAtLegislationStart: Option[CostsAtLegislationStartModel] = None)
 
 object TotalGainAnswersModel {

@@ -158,7 +158,7 @@ class TotalGainAnswersModelSpec extends CommonPlaySpec with MockitoSugar {
         Some(RebasedValueModel(450000)),
         Some(RebasedCostsModel("Yes", Some(20000))),
         ImprovementsModel("Yes", Some(9000), Some(1000)),
-        Some(OtherReliefsModel(4500)),
+        Some(AllOtherReliefsModel(Some(OtherReliefsModel(4500)), None, None)),
         Some(CostsAtLegislationStartModel("Yes", Some(6000))))
 
       Json.toJson(model) shouldBe outputJson

@@ -43,7 +43,6 @@ class AnswersConstructor @Inject()(calculatorConnector: CalculatorConnector)(imp
     val rebasedValue = calculatorConnector.fetchAndGetFormData[RebasedValueModel](KeystoreKeys.rebasedValue)
     val rebasedCosts = calculatorConnector.fetchAndGetFormData[RebasedCostsModel](KeystoreKeys.rebasedCosts)
     val improvements = calculatorConnector.fetchAndGetFormData[ImprovementsModel](KeystoreKeys.improvements).map(data => data.get)
-    val otherReliefsFlat = calculatorConnector.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsFlat)
     val costsBeforeLegislationStart = calculatorConnector.fetchAndGetFormData[CostsAtLegislationStartModel](KeystoreKeys.costAtLegislationStart)
 
     def disposalValue(soldOrGivenAwayModel: SoldOrGivenAwayModel,
@@ -73,6 +72,17 @@ class AnswersConstructor @Inject()(calculatorConnector: CalculatorConnector)(imp
         case _ => calculatorConnector.fetchAndGetFormData[AcquisitionValueModel](KeystoreKeys.acquisitionValue).map(data => data.get)
       }
 
+    def allOtherReliefs()(implicit hc: HeaderCarrier): Future[Option[AllOtherReliefsModel]] = {
+        val flat = calculatorConnector.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsFlat)
+        val rebased = calculatorConnector.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsRebased)
+        val time = calculatorConnector.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsTA)
+        for {
+          flatReliefs <- flat
+          rebasedReliefs <- rebased
+          timeReliefs <- time
+        } yield Some(AllOtherReliefsModel(flatReliefs, rebasedReliefs, timeReliefs))
+    }
+
     for {
       disposalDate <- disposalDate
       soldOrGivenAway <- soldOrGivenAway
@@ -87,11 +97,11 @@ class AnswersConstructor @Inject()(calculatorConnector: CalculatorConnector)(imp
       rebasedValue <- rebasedValue
       rebasedCosts <- rebasedCosts
       improvements <- improvements
-      otherReliefsFlat <- otherReliefsFlat
+      allOtherReliefs <- allOtherReliefs()
       costsBeforeLegislationStart <- costsBeforeLegislationStart
     } yield TotalGainAnswersModel(disposalDate, soldOrGivenAway, soldForLess, disposalValue, disposalCosts,
       howBecameOwner, boughtForLess, acquisitionValue, acquisitionCosts, acquisitionDate,
-      rebasedValue, rebasedCosts, improvements, otherReliefsFlat, costsBeforeLegislationStart)
+      rebasedValue, rebasedCosts, improvements, allOtherReliefs, costsBeforeLegislationStart)
   }
 
   def getPersonalDetailsAndPreviousCapitalGainsAnswers(implicit hc: HeaderCarrier): Future[Option[TotalPersonalDetailsCalculationModel]] = {

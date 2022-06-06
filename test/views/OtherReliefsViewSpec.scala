@@ -103,7 +103,7 @@ class OtherReliefsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
 
       "have the correct gain values in the additional help text" in {
         val expectedText = messages.OtherReliefs.additionalHelp(totalGain, totalChargeableGain)
-        document.body().select("#otherReliefHelpTwo").select("p").text() shouldBe expectedText
+        document.body().select("#main-content > div > div > p").text() shouldBe expectedText
       }
 
       "have a button" which {
@@ -135,15 +135,15 @@ class OtherReliefsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
 
       "have the correct additional help text" in {
         val expectedText = messages.OtherReliefs.additionalHelp(totalGain, totalChargeableGain)
-        document.body().select("#otherReliefHelpTwo").text() shouldBe expectedText
+        document.body().select("#main-content > div > div > p").text() shouldBe expectedText
       }
 
       "have the words 'total loss' in the additional help text" in {
-        document.body().select("#otherReliefHelpTwo").text() should include("total loss of £1,234")
+        document.body().select("#main-content > div > div > p").text() should include("total loss of £1,234")
       }
 
       "have the words 'allowable loss' in the additional help text" in {
-        document.body().select("#otherReliefHelpTwo").text() should include("an allowable loss of £4,321")
+        document.body().select("#main-content > div > div > p").text() should include("an allowable loss of £4,321")
       }
     }
 
