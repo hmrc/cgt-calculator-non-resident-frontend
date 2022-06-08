@@ -144,8 +144,8 @@ class OtherReliefsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
         document.title() shouldBe messages.title
       }
 
-      s"show help text with text '${messages.additionalHelp(200, 100)}'" in {
-        document.body().select("#otherReliefHelpTwo").select("p").text() shouldBe messages.additionalHelp(200, 100)
+      s"show body text with text '${messages.additionalHelp(200, 100)}'" in {
+        document.body().select("#main-content > div > div > p").text() shouldBe messages.additionalHelp(200, 100)
       }
     }
 

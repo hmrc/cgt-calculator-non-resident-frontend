@@ -19,38 +19,36 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
-    errorSummary: playComponents.errorSummary,
-    layout: Layout,
-    form: FormWithCSRF,
-    formInputMoney: playComponents.formInputMoney,
-    submitButton: playComponents.submitButton
+        errorSummary: playComponents.errorSummary,
+        layout: Layout,
+        form: FormWithCSRF,
+        formInputMoney: playComponents.formInputMoney,
+        submitButton: playComponents.submitButton
 )
 
 @(otherReliefsForm: Form[OtherReliefsModel], chargeableGain: BigDecimal, gain: BigDecimal)(implicit request: Request[_], messages: Messages)
 
 @helpContent = {
-    <div id="otherReliefHelp" class="govuk-hint">
+    <p class="govuk-body">
+        @if(chargeableGain < 0) {
+            @Messages("calc.otherReliefs.gainInfo.part1.loss")
+        } else {
+            @Messages("calc.otherReliefs.gainInfo.part1")
+        }
+        <span><strong>&pound;@MoneyPounds(chargeableGain, 0).quantity</strong></span>
+        @if(gain < 0) {
+            @Messages("calc.otherReliefs.gainInfo.part2.loss")
+        } else {
+            @Messages("calc.otherReliefs.gainInfo.part2")
+        }
+        <span><strong>&pound;@MoneyPounds(gain, 0).quantity</strong></span>
+        @Messages("calc.otherReliefs.gainInfo.part3")
+    </p>
+
+    <div id="otherReliefHelp" class="govuk-body">
         @Messages("calc.otherReliefs.help")
         <br/>
         @Messages("calc.otherReliefs.helpTwo")
-    </div>
-
-    <div id="otherReliefHelpTwo" class="govuk-inset-text">
-        <p class="govuk-hint">
-            @if(chargeableGain < 0) {
-                @Messages("calc.otherReliefs.gainInfo.part1.loss")
-            } else {
-                @Messages("calc.otherReliefs.gainInfo.part1")
-            }
-            <span><strong>&pound;@MoneyPounds(chargeableGain, 0).quantity</strong></span>
-            @if(gain < 0) {
-                @Messages("calc.otherReliefs.gainInfo.part2.loss")
-            } else {
-                @Messages("calc.otherReliefs.gainInfo.part2")
-            }
-            <span><strong>&pound;@MoneyPounds(gain, 0).quantity</strong></span>
-            @Messages("calc.otherReliefs.gainInfo.part3")
-        </p>
     </div>
 }
 
