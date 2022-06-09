@@ -15,32 +15,37 @@
  *@
 
 @import models.AcquisitionValueModel
+@import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
-    errorSummary: helpers.errorSummary,
-    mainTemplate: main_template,
+    errorSummary: playComponents.errorSummary,
+    layout: Layout,
     form: FormWithCSRF,
-    formInputMoney: helpers.formInputMoney
+    submitButton: playComponents.submitButton,
+    formInputMoney: playComponents.formInputMoney
 )
 
 @(acquisitionMarketValue : Form[AcquisitionValueModel])(implicit request: Request[_], messages: Messages)
 
-@mainTemplate(Messages("calc.worthWhenInherited.question")) {
+@title = @{
+    if(acquisitionMarketValue.errors.nonEmpty) messages("site.title.error", Messages("calc.worthWhenInherited.question")) else Messages("calc.worthWhenInherited.question")
+}
 
-    <a id="back-link" class="back-link" href="@controllers.routes.HowBecameOwnerController.howBecameOwner">@Messages("calc.base.back")</a>
+@layout(
+    pageTitle = title
+){
+    @errorSummary(acquisitionMarketValue.errors)
 
-    @errorSummary(acquisitionMarketValue, "acquisitionMarketValue")
+    <h1 class="govuk-heading-xl">@Messages("calc.worthWhenInherited.question")</h1>
 
-    <h1 class="heading-xlarge">@Messages("calc.worthWhenInherited.question")</h1>
+    <p class="govuk-hint">@Messages("calc.worthWhenInherited.hint")</p>
 
-    <p id="hintText" class="form-hint">@Messages("calc.worthWhenInherited.hint")</p>
-
-    <p id="helpText" class="panel-indent panel-indent--wide panel-indent--gutter">@Messages("calc.worthWhenBoughtForLess.helpText")</p>
+    <p class="govuk-inset-text">@Messages("calc.worthWhenBoughtForLess.helpText")</p>
 
     @form(action = controllers.routes.WorthWhenInheritedController.submitWorthWhenInherited) {
 
-        @formInputMoney(acquisitionMarketValue, "acquisitionMarketValue", Messages("calc.worthWhenInherited.question"), hideLabel = true)
+        @formInputMoney(acquisitionMarketValue("acquisitionMarketValue"), Messages("calc.worthWhenInherited.question"), hideLabel = true)
 
-        <button class="button" type="submit" id="continue-button">@Messages("calc.base.continue")</button>
+        @submitButton()
     }
 }

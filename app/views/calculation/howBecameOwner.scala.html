@@ -15,44 +15,36 @@
  *@
 
 @import models.HowBecameOwnerModel
+@import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
-    mainTemplate: main_template,
-    errorSummary: helpers.errorSummary,
+    errorSummary: playComponents.errorSummary,
+    layout: Layout,
     form: FormWithCSRF,
-    inputRadioGroup: InputRadioGroup
+    submitButton: playComponents.submitButton,
+    inputRadio: playComponents.input_radio
 )
 
 @(howBecameOwnerForm: Form[HowBecameOwnerModel])(implicit request: Request[_], messages: Messages)
 
-@mainTemplate(title = Messages("calc.howBecameOwner.question")) {
+@title = @{
+    if(howBecameOwnerForm.errors.nonEmpty) messages("site.title.error", Messages("calc.howBecameOwner.question")) else Messages("calc.howBecameOwner.question")
+}
 
-    <a id="back-link" class="back-link" href="@controllers.routes.AcquisitionDateController.acquisitionDate.url">@Messages("calc.base.back")</a>
-
-    @errorSummary(howBecameOwnerForm, "gainedBy")
-
-    <h1 class="heading-xlarge">@Messages("calc.howBecameOwner.question")</h1>
-
+@layout(
+    pageTitle = title
+){
+    @errorSummary(howBecameOwnerForm.errors)
     @form(action = controllers.routes.HowBecameOwnerController.submitHowBecameOwner) {
-
-        <div class="form-group">
-            @inputRadioGroup(
-                field = howBecameOwnerForm("gainedBy"),
-                Seq(
-                    "Bought" -> Messages("calc.howBecameOwner.bought"),
-                    "Inherited" -> Messages("calc.howBecameOwner.inherited"),
-                    "Gifted" -> Messages("calc.howBecameOwner.gifted")
-                ),
-                '_legend -> Messages("calc.howBecameOwner.question"),
-                '_legendID -> "gainedBy",
-                '_legendClass -> "visuallyhidden",
-                '_labelAfter -> true,
-                '_labelClass -> "block-label",
-                '_groupClass -> "form-group radio-list",
-                '_fieldsetAttributes -> ""
-            )
-        </div>
-
-        <button class="button" type="submit" id="continue-button">@Messages("calc.base.continue")</button>
+        @inputRadio(
+            legend = Messages("calc.howBecameOwner.question"),
+            items = Seq(
+                RadioItem(content = Text(Messages("calc.howBecameOwner.bought")), value = Option("Bought")),
+                RadioItem(content = Text(Messages("calc.howBecameOwner.inherited")), value = Option("Inherited")),
+                RadioItem(content = Text(Messages("calc.howBecameOwner.gifted")), value = Option("Gifted"))
+            ),
+            field = howBecameOwnerForm("gainedBy")
+        )
+        @submitButton()
     }
 }

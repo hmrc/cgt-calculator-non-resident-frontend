@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,9 +37,10 @@ class HowMuchGainViewSpec extends CommonPlaySpec with WithCommonFakeApplication 
     "supplied with no errors" when {
       lazy val view = howMuchGainView(howMuchGainForm)(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
+      val pageTitle = s"""${messages.HowMuchGain.question} - ${messages.pageHeading} - GOV.UK"""
 
-      s"have a title of '${messages.HowMuchGain.question}'" in {
-        document.title() shouldBe messages.HowMuchGain.question
+      s"have a title of '${pageTitle}'" in {
+        document.title() shouldBe pageTitle
       }
 
       "have a back link" which {
@@ -50,11 +51,11 @@ class HowMuchGainViewSpec extends CommonPlaySpec with WithCommonFakeApplication 
         }
 
         "has the class back-link" in {
-          backLink.attr("class") shouldBe "back-link"
+          backLink.attr("class") shouldBe "govuk-back-link"
         }
 
         s"has a route to 'previous-gain-or-loss'" in {
-          backLink.attr("href") shouldBe controllers.routes.PreviousGainOrLossController.previousGainOrLoss().url
+          backLink.attr("href") shouldBe "javascript:history.back()"
         }
       }
 
@@ -62,7 +63,7 @@ class HowMuchGainViewSpec extends CommonPlaySpec with WithCommonFakeApplication 
         lazy val heading = document.body().select("h1")
 
         "has a class of heading-xlarge" in {
-          heading.attr("class") shouldBe "heading-xlarge"
+          heading.attr("class") shouldBe "govuk-heading-xl"
         }
 
         s"has the text '${messages.HowMuchGain.question}'" in {
@@ -70,20 +71,12 @@ class HowMuchGainViewSpec extends CommonPlaySpec with WithCommonFakeApplication 
         }
       }
 
-      s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-        document.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
-      }
-
       s"have a label" which {
 
-        lazy val label = document.select("label div").first()
+        lazy val label = document.body().select("h1")
 
         s"has the question '${messages.HowMuchGain.question}'" in {
           label.text shouldBe messages.HowMuchGain.question
-        }
-
-        "has the class visuallyhidden" in {
-          label.hasClass("visuallyhidden") shouldEqual true
         }
       }
 
@@ -107,15 +100,11 @@ class HowMuchGainViewSpec extends CommonPlaySpec with WithCommonFakeApplication 
         lazy val button = document.select("button")
 
         "has the class 'button'" in {
-          button.attr("class") shouldBe "button"
-        }
-
-        "has the type 'submit'" in {
-          button.attr("type") shouldBe "submit"
+          button.attr("class") shouldBe "govuk-button"
         }
 
         "has the id 'continue-button'" in {
-          button.attr("id") shouldBe "continue-button"
+          button.attr("id") shouldBe "submit"
         }
       }
 
@@ -130,7 +119,7 @@ class HowMuchGainViewSpec extends CommonPlaySpec with WithCommonFakeApplication 
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {
-        document.select("#error-summary-display").size() shouldBe 1
+        document.getElementsByClass("govuk-error-summary").size() shouldBe 1
       }
     }
   }

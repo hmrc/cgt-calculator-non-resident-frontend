@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,13 +35,13 @@ class DisposalDateFormSpec extends CommonPlaySpec with WithCommonFakeApplication
       }
 
       "return a form containing the data" in {
-        form.data shouldBe Map("disposalDateDay" -> "1", "disposalDateMonth" -> "4", "disposalDateYear" -> "2016")
+        form.data shouldBe Map("disposalDate.day" -> "1", "disposalDate.month" -> "4", "disposalDate.year" -> "2016")
       }
     }
 
     "passing in a valid map" should {
 
-      lazy val map = Map("disposalDateDay" -> "29", "disposalDateMonth" -> "2", "disposalDateYear" -> "2016")
+      lazy val map = Map("disposalDate.day" -> "29", "disposalDate.month" -> "2", "disposalDate.year" -> "2016")
       lazy val form = disposalDateForm.bind(map)
 
       "return a valid form with no errors" in {
@@ -55,7 +55,7 @@ class DisposalDateFormSpec extends CommonPlaySpec with WithCommonFakeApplication
 
     "passing in a date has letters in it" should {
 
-      lazy val map = Map("disposalDateDay" -> "a", "disposalDateMonth" -> "b", "disposalDateYear" -> "c")
+      lazy val map = Map("disposalDate.day" -> "a", "disposalDate.month" -> "b", "disposalDate.year" -> "c")
       lazy val form = disposalDateForm.bind(map)
 
       "return an invalid form with one error" in {
@@ -69,7 +69,7 @@ class DisposalDateFormSpec extends CommonPlaySpec with WithCommonFakeApplication
 
     "passing in a date without a day" should {
 
-      lazy val map = Map("disposalDateDay" -> "", "disposalDateMonth" -> "4", "disposalDateYear" -> "2009")
+      lazy val map = Map("disposalDate.day" -> "", "disposalDate.month" -> "4", "disposalDate.year" -> "2009")
       lazy val form = disposalDateForm.bind(map)
 
       "return an invalid form with one error" in {
@@ -77,13 +77,13 @@ class DisposalDateFormSpec extends CommonPlaySpec with WithCommonFakeApplication
       }
 
       s"return an error message of '${messages.errorInvalidDay}" in {
-        form.error("disposalDateDay").get.message shouldBe messages.errorInvalidDay
+        form.error("disposalDate.day").get.message shouldBe messages.errorInvalidDay
       }
     }
 
     "passing in a date without a month" should {
 
-      lazy val map = Map("disposalDateDay" -> "1", "disposalDateMonth" -> "", "disposalDateYear" -> "2009")
+      lazy val map = Map("disposalDate.day" -> "1", "disposalDate.month" -> "", "disposalDate.year" -> "2009")
       lazy val form = disposalDateForm.bind(map)
 
       "return an invalid form with one error" in {
@@ -91,13 +91,13 @@ class DisposalDateFormSpec extends CommonPlaySpec with WithCommonFakeApplication
       }
 
       s"return an error message of '${messages.errorInvalidMonth}" in {
-        form.error("disposalDateMonth").get.message shouldBe messages.errorInvalidMonth
+        form.error("disposalDate.month").get.message shouldBe messages.errorInvalidMonth
       }
     }
 
     "passing in a date without a year" should {
 
-      lazy val map = Map("disposalDateDay" -> "1", "disposalDateMonth" -> "4", "disposalDateYear" -> "")
+      lazy val map = Map("disposalDate.day" -> "1", "disposalDate.month" -> "4", "disposalDate.year" -> "")
       lazy val form = disposalDateForm.bind(map)
 
       "return an invalid form with one error" in {
@@ -105,13 +105,13 @@ class DisposalDateFormSpec extends CommonPlaySpec with WithCommonFakeApplication
       }
 
       s"return an error message of '${messages.errorInvalidYear}" in {
-        form.error("disposalDateYear").get.message shouldBe messages.errorInvalidYear
+        form.error("disposalDate.year").get.message shouldBe messages.errorInvalidYear
       }
     }
 
     "passing in a date with a days value over 31" should {
 
-      lazy val map = Map("disposalDateDay" -> "32", "disposalDateMonth" -> "4", "disposalDateYear" -> "2009")
+      lazy val map = Map("disposalDate.day" -> "32", "disposalDate.month" -> "4", "disposalDate.year" -> "2009")
       lazy val form = disposalDateForm.bind(map)
 
       "return an invalid form with one error" in {
@@ -125,7 +125,7 @@ class DisposalDateFormSpec extends CommonPlaySpec with WithCommonFakeApplication
 
     "passing in a date with a days value less than 1" should {
 
-      lazy val map = Map("disposalDateDay" -> "0", "disposalDateMonth" -> "4", "disposalDateYear" -> "2009")
+      lazy val map = Map("disposalDate.day" -> "0", "disposalDate.month" -> "4", "disposalDate.year" -> "2009")
       lazy val form = disposalDateForm.bind(map)
 
       "return an invalid form with one error" in {
@@ -139,7 +139,7 @@ class DisposalDateFormSpec extends CommonPlaySpec with WithCommonFakeApplication
 
     "passing in a date with a months value over 12" should {
 
-      lazy val map = Map("disposalDateDay" -> "1", "disposalDateMonth" -> "13", "disposalDateYear" -> "2009")
+      lazy val map = Map("disposalDate.day" -> "1", "disposalDate.month" -> "13", "disposalDate.year" -> "2009")
       lazy val form = disposalDateForm.bind(map)
 
       "return an invalid form with one error" in {
@@ -153,7 +153,7 @@ class DisposalDateFormSpec extends CommonPlaySpec with WithCommonFakeApplication
 
     "passing in a date with a months value over 1" should {
 
-      lazy val map = Map("disposalDateDay" -> "1", "disposalDateMonth" -> "0", "disposalDateYear" -> "2009")
+      lazy val map = Map("disposalDate.day" -> "1", "disposalDate.month" -> "0", "disposalDate.year" -> "2009")
       lazy val form = disposalDateForm.bind(map)
 
       "return an invalid form with one error" in {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,8 @@
 package common
 
 import common.Dates.constructDate
+import common.nonresident.MoneyPounds
 import play.api.data.validation._
-import uk.gov.hmrc.play.views.helpers.MoneyPounds
 
 import scala.util.{Failure, Success, Try}
 

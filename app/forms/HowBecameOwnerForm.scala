@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,12 +20,13 @@ import models.HowBecameOwnerModel
 import play.api.data.Form
 import play.api.data.Forms._
 import common.Validation._
+import common.Formatters.text
 
 object HowBecameOwnerForm {
 
   val howBecameOwnerForm = Form(
     mapping(
-      "gainedBy" -> text
+      "gainedBy" -> text("calc.howBecameOwner.errors.required")
         .verifying("calc.howBecameOwner.errors.required", mandatoryCheck)
         .verifying("calc.howBecameOwner.errors.required", howBecameOwnerCheck)
     )(HowBecameOwnerModel.apply)(HowBecameOwnerModel.unapply)

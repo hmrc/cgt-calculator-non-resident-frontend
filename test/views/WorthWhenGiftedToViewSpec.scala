@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +32,7 @@ class WorthWhenGiftedToViewSpec extends CommonPlaySpec with WithCommonFakeApplic
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   val worthWhenGiftedToView = fakeApplication.injector.instanceOf[worthWhenGiftedTo]
+  lazy val pageTitle = s"""${WorthWhenGiftedTo.question} - ${commonMessages.pageHeading} - GOV.UK"""
 
   "The Worth When Gifted To view spec" when {
 
@@ -40,15 +41,15 @@ class WorthWhenGiftedToViewSpec extends CommonPlaySpec with WithCommonFakeApplic
       lazy val view = worthWhenGiftedToView(acquisitionMarketValueForm)(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
-      s"have a title of '${WorthWhenGiftedTo.question}'" in {
-        document.title() shouldBe WorthWhenGiftedTo.question
+      s"have a title of '${pageTitle}'" in {
+        document.title() shouldBe pageTitle
       }
 
       "have a back link" which {
         lazy val backLink = document.body().select("#back-link")
 
         "has a class of 'back-link'" in {
-          backLink.attr("class") shouldBe "back-link"
+          backLink.attr("class") shouldBe "govuk-back-link"
         }
 
         "has the text" in {
@@ -56,12 +57,8 @@ class WorthWhenGiftedToViewSpec extends CommonPlaySpec with WithCommonFakeApplic
         }
 
         s"has a route to 'how-became-owner'" in {
-          backLink.attr("href") shouldBe controllers.routes.HowBecameOwnerController.howBecameOwner().url
+          backLink.attr("href") shouldBe "javascript:history.back()"
         }
-      }
-
-      s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-        document.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
       }
 
       "have a heading" which {
@@ -69,7 +66,7 @@ class WorthWhenGiftedToViewSpec extends CommonPlaySpec with WithCommonFakeApplic
         lazy val heading = document.body().select("h1")
 
         "has a class of heading-large" in {
-          heading.attr("class") shouldBe "heading-xlarge"
+          heading.attr("class") shouldBe "govuk-heading-xl"
         }
 
         s"has the text '${WorthWhenGiftedTo.question}'" in {
@@ -78,11 +75,11 @@ class WorthWhenGiftedToViewSpec extends CommonPlaySpec with WithCommonFakeApplic
       }
 
       s"has the hint text ${WorthWhenGiftedTo.hintText}" in {
-        document.select("article > div.form-hint > p").text shouldEqual WorthWhenGiftedTo.hintText
+        document.getElementsByClass("govuk-hint").text() shouldEqual WorthWhenGiftedTo.hintText
       }
 
       s"has the joint ownership text ${WorthWhenGiftedTo.jointOwnership}" in {
-        document.select("article > div.panel-indent > p").text shouldEqual WorthWhenGiftedTo.jointOwnership
+        document.getElementsByClass("govuk-inset-text").text shouldEqual WorthWhenGiftedTo.jointOwnership
       }
 
       "have input containing the id 'acquisitionMarketValue'" in {
@@ -105,15 +102,11 @@ class WorthWhenGiftedToViewSpec extends CommonPlaySpec with WithCommonFakeApplic
         lazy val button = document.select("button")
 
         "has the class 'button'" in {
-          button.attr("class") shouldBe "button"
-        }
-
-        "has the type 'submit'" in {
-          button.attr("type") shouldBe "submit"
+          button.attr("class") shouldBe "govuk-button"
         }
 
         "has the id 'continue-button'" in {
-          button.attr("id") shouldBe "continue-button"
+          button.attr("id") shouldBe "submit"
         }
       }
 
@@ -129,7 +122,7 @@ class WorthWhenGiftedToViewSpec extends CommonPlaySpec with WithCommonFakeApplic
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {
-        document.select("#error-summary-display").size() shouldBe 1
+        document.getElementsByClass("govuk-error-summary").size() shouldBe 1
       }
     }
   }

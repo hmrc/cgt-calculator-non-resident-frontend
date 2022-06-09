@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,24 +42,24 @@ class SoldOrGivenAwayViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
       "have a 'back-link' that" should {
         lazy val backLink = document.body().select("#back-link")
 
-        "have the class of 'back-link'" in {
-          backLink.attr("class") shouldBe "back-link"
+        "have the class of 'govuk-back-link'" in {
+          backLink.attr("class") shouldBe "govuk-back-link"
         }
 
         s"have the text of ${commonMessages.back}" in {
           backLink.text() shouldBe commonMessages.back
         }
 
-        "has the route to Disposal Date" in {
-          backLink.attr("href") shouldBe controllers.routes.DisposalDateController.disposalDate().url
+        "have the route to Disposal Date" in {
+          backLink.attr("href") shouldBe "javascript:history.back()"
         }
       }
 
       "have a heading that" should {
         lazy val heading = document.select("h1")
 
-        "have the class of heading-large" in {
-          heading.attr("class") shouldBe "heading-xlarge"
+        "have the class of govuk-fieldset__heading" in {
+          heading.attr("class") shouldBe "govuk-fieldset__heading"
         }
 
         s"have the text of ${messages.question}" in {
@@ -68,7 +68,8 @@ class SoldOrGivenAwayViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
       }
 
       s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-        document.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
+        document.select("body > header > div > div > div.govuk-header__content > a")
+          .attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
       }
 
       "have a form that" should {
@@ -94,28 +95,21 @@ class SoldOrGivenAwayViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
           legend.text shouldBe messages.question
         }
 
-        "be visually hidden" in {
-          legend.hasClass("visuallyhidden") shouldEqual true
-        }
       }
 
       "have a button that" should {
         lazy val button = document.select("button")
 
-        "has the class of button" in {
-          button.attr("class") shouldBe "button"
+        "has the class of govuk-button" in {
+          button.attr("class") shouldBe "govuk-button"
         }
 
         s"has the text of ${commonMessages.continue}" in {
           button.text shouldBe commonMessages.continue
         }
 
-        "has the type submit" in {
-          button.attr("type") shouldBe "submit"
-        }
-
-        "has the id of 'continue-button'" in {
-          button.attr("id") shouldBe "continue-button"
+        "has the id of 'submit'" in {
+          button.attr("id") shouldBe "submit"
         }
       }
 
@@ -130,7 +124,7 @@ class SoldOrGivenAwayViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {
-        document.select("#error-summary-display").size shouldBe 1
+        document.getElementsByClass("govuk-error-summary").size shouldBe 1
       }
     }
   }

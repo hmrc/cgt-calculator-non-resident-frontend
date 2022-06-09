@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -78,7 +78,7 @@ class SoldForLessFormSpec extends CommonPlaySpec with WithCommonFakeApplication 
           }
 
           "associate the correct error message to the error" in {
-            form.error("soldForLess").get.message shouldBe commonMessages.errorRequired
+            form.error("soldForLess").get.message shouldBe commonMessages.errorRequired("nonResident.soldForLess")
           }
         }
 
@@ -95,7 +95,7 @@ class SoldForLessFormSpec extends CommonPlaySpec with WithCommonFakeApplication 
           }
 
           "associate the correct error message to the error" in {
-            form.error("soldForLess").get.message shouldBe commonMessages.errorRequired
+            form.error("soldForLess").get.message shouldBe commonMessages.errorRequired("nonResident.soldForLess")
           }
         }
       }

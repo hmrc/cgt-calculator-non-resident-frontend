@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -77,8 +77,8 @@ class BoughtForLessFormSpec extends CommonPlaySpec with WithCommonFakeApplicatio
         form.errors.size shouldBe 1
       }
 
-      s"contain an error message of ${messages.errorRequired}" in {
-        assertSomeErrors(form.error("boughtForLess"))(_.message shouldBe messages.errorRequired)
+      s"contain an error message of ${messages.errorRequired("boughtForLess")}" in {
+        assertSomeErrors(form.error("boughtForLess"))(_.message shouldBe messages.errorRequired("boughtForLess"))
       }
     }
 
@@ -90,8 +90,8 @@ class BoughtForLessFormSpec extends CommonPlaySpec with WithCommonFakeApplicatio
         form.errors.size shouldBe 1
       }
 
-      s"contain an error message of ${messages.errorRequired}" in {
-        assertSomeErrors(form.error("boughtForLess"))(_.message shouldBe messages.errorRequired)
+      s"contain an error message of ${messages.errorRequired("boughtForLess")}" in {
+        assertSomeErrors(form.error("boughtForLess"))(_.message shouldBe messages.errorRequired("boughtForLess"))
       }
     }
   }

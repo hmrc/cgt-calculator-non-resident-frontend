@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,47 +43,47 @@ class WhatNextViewSpec extends CommonPlaySpec with WithCommonFakeApplication wit
     }
 
     "have a back link" which {
-      lazy val backLink = doc.select("a.back-link")
+      lazy val backLink = doc.select("#back-link")
 
       s"should have the text ${messages.back}" in {
         backLink.text() shouldBe messages.back
       }
 
       "should have a link to the summary page" in {
-        backLink.attr("href") shouldBe controllers.routes.SummaryController.summary().url
+        backLink.attr("href") shouldBe "javascript:history.back()"
       }
     }
 
     s"have a header of ${messages.title}" in {
-      doc.select("h1").text() shouldBe messages.title
+      doc.select("h1").text() shouldBe messages.heading
     }
 
     s"have a list title of ${messages.listTitle}" in {
-      doc.select("article p").get(0).text() shouldBe messages.listTitle
+      doc.select("#list-title").text() shouldBe messages.listTitle
     }
 
     s"have a first list entry of ${messages.listOne}" in {
-      doc.select("article li").get(0).text() shouldBe messages.listOne
+      doc.select("#item1").text() shouldBe messages.listOne
     }
 
     s"have a second list entry of ${messages.listTwo}" in {
-      doc.select("article li").get(1).text() shouldBe messages.listTwo
+      doc.select("#item2").text() shouldBe messages.listTwo
     }
 
     s"have a warning regarding penalties of ${messages.penaltyWarning}" in {
-      doc.select("article p").get(1).text() shouldBe messages.penaltyWarning
+      doc.select("#penalty-warning").text() shouldBe messages.penaltyWarning
     }
 
     s"have a progressive disclosure heading of ${messages.saHeader}" in {
-      doc.select("summary span").text() shouldBe messages.saHeader
+      doc.select(".govuk-details__summary-text").text() shouldBe messages.saHeader
     }
 
     s"have information for sa users of ${messages.saText}" in {
-      doc.select("article p").get(2).text() shouldBe messages.saText
+      doc.select(".govuk-details__text").text() shouldBe messages.saText
     }
 
     "have a button for reporting" which {
-      lazy val button = doc.select("a.button")
+      lazy val button = doc.select(".govuk-button")
 
       s"has the text ${messages.report}" in {
         button.text() shouldBe messages.report
@@ -95,7 +95,7 @@ class WhatNextViewSpec extends CommonPlaySpec with WithCommonFakeApplication wit
     }
 
     "have a link to finish" which {
-      lazy val link = doc.select("article a").get(2)
+      lazy val link = doc.select("#return-link")
 
       s"has the text ${messages.finish}" in {
         link.text() shouldBe messages.finish
@@ -116,11 +116,11 @@ class WhatNextViewSpec extends CommonPlaySpec with WithCommonFakeApplication wit
     lazy val doc2 = Jsoup.parse(view2.body)
 
     "doesn't have information for sa users" in {
-      doc2.select("article p").size shouldBe 2
+      doc2.select(".govuk-details").size shouldBe 0
     }
 
     "has a button for reporting" which {
-      lazy val button = doc2.select("a.button")
+      lazy val button = doc2.select(".govuk-button")
 
       s"has the text ${messages.report}" in {
         button.text() shouldBe messages.report

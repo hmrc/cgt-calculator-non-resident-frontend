@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,9 +52,9 @@ object RebasedCostsForm {
 
   val rebasedCostsForm = Form(
     mapping(
-      "hasRebasedCosts" -> text
-        .verifying("calc.common.error.fieldRequired", mandatoryCheck)
-        .verifying("calc.common.error.fieldRequired", yesNoCheck),
+      "hasRebasedCosts" -> common.Formatters.text("calc.rebasedCosts.errors.required")
+        .verifying("calc.rebasedCosts.errors.required", mandatoryCheck)
+        .verifying("calc.rebasedCosts.errors.required", yesNoCheck),
       "rebasedCosts" -> text
         .transform(stringToOptionalBigDecimal, optionalBigDecimalToString)
     )(RebasedCostsModel.apply)(RebasedCostsModel.unapply)

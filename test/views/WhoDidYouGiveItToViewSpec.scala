@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,6 +31,7 @@ class WhoDidYouGiveItToViewSpec extends CommonPlaySpec with WithCommonFakeApplic
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   val whoDidYouGiveItToView = fakeApplication.injector.instanceOf[whoDidYouGiveItTo]
+  val pageTitle = s"""${messages.title} - ${commonMessages.pageHeading} - GOV.UK"""
 
   "Property Recipient view" should {
 
@@ -41,8 +42,8 @@ class WhoDidYouGiveItToViewSpec extends CommonPlaySpec with WithCommonFakeApplic
       doc.charset().toString shouldBe "UTF-8"
     }
 
-    s"have a title of ${messages.title}" in {
-      doc.title() shouldBe messages.title
+    s"have a title of $pageTitle" in {
+      doc.title() shouldBe pageTitle
     }
 
     "have a back button that" should {
@@ -52,12 +53,12 @@ class WhoDidYouGiveItToViewSpec extends CommonPlaySpec with WithCommonFakeApplic
         backLink.text shouldBe commonMessages.back
       }
 
-      "have the back-link class" in {
-        backLink.hasClass("back-link") shouldBe true
+      "have the govuk-back-link class" in {
+        backLink.hasClass("govuk-back-link") shouldBe true
       }
 
       "have a link to Did You Sell or Give Away" in {
-        backLink.attr("href") shouldBe controllers.routes.SoldOrGivenAwayController.soldOrGivenAway().toString()
+        backLink.attr("href") shouldBe "javascript:history.back()"
       }
     }
 
@@ -67,8 +68,8 @@ class WhoDidYouGiveItToViewSpec extends CommonPlaySpec with WithCommonFakeApplic
       s"have the page heading '${messages.title}'" in {
         heading.text shouldBe messages.title
       }
-      "have the heading-large class" in {
-        heading.hasClass("heading-large") shouldBe true
+      "have the govuk-fieldset__heading class" in {
+        heading.hasClass("govuk-fieldset__heading") shouldBe true
       }
     }
 
@@ -100,18 +101,14 @@ class WhoDidYouGiveItToViewSpec extends CommonPlaySpec with WithCommonFakeApplic
     }
 
     "has a continue button that" should {
-      lazy val continueButton = doc.select("button#continue-button")
+      lazy val continueButton = doc.select("button#submit")
 
       s"have the button text '${commonMessages.continue}'" in {
         continueButton.text shouldBe commonMessages.continue
       }
 
-      "be of type submit" in {
-        continueButton.attr("type") shouldBe "submit"
-      }
-
-      "have the class 'button'" in {
-        continueButton.hasClass("button") shouldBe true
+      "have the class 'govuk-button'" in {
+        continueButton.hasClass("govuk-button") shouldBe true
       }
     }
 
@@ -126,7 +123,7 @@ class WhoDidYouGiveItToViewSpec extends CommonPlaySpec with WithCommonFakeApplic
     lazy val doc = Jsoup.parse(view.body)
 
     "display an error summary message regarding incorrect value being inputted" in {
-      doc.body.select(".form-group .error-notification").size shouldBe 1
+      doc.getElementsByClass("govuk-error-summary").size shouldBe 1
     }
   }
 }

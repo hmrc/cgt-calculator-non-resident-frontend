@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -83,7 +83,7 @@ class WhatNextControllerSpec extends CommonPlaySpec with WithCommonFakeApplicati
 
       "load the whatNext page" in {
         document.title() shouldBe MessageLookup.WhatNext.title
-        document.body().select("a.button").attr("href") shouldBe "/capital-gains-tax-uk-property/start/report-pay-capital-gains-tax-uk-property"
+        document.body().select(".govuk-button").attr("href") shouldBe "/capital-gains-tax-uk-property/start/report-pay-capital-gains-tax-uk-property"
       }
     }
 

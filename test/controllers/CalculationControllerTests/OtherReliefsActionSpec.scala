@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -141,11 +141,11 @@ class OtherReliefsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
       }
 
       "load the other reliefs page" in {
-        document.title() shouldBe messages.question
+        document.title() shouldBe messages.title
       }
 
-      s"show help text with text '${messages.additionalHelp(200, 100)}'" in {
-        document.body().select("#otherReliefHelpTwo").select("p").text() shouldBe messages.additionalHelp(200, 100)
+      s"show body text with text '${messages.additionalHelp(200, 100)}'" in {
+        document.body().select("#main-content > div > div > p").text() shouldBe messages.additionalHelp(200, 100)
       }
     }
 
@@ -162,7 +162,7 @@ class OtherReliefsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
       }
 
       "load the other reliefs page" in {
-        document.title() shouldBe messages.question
+        document.title() shouldBe messages.title
       }
     }
 
@@ -213,7 +213,7 @@ class OtherReliefsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
       }
 
       "return to the other reliefs page" in {
-        document.title() shouldBe messages.question
+        document.title() shouldBe s"Error: ${messages.title}"
       }
     }
   }

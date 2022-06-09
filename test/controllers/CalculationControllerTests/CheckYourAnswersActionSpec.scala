@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,8 @@
 package controllers.CalculationControllerTests
 
 import akka.stream.Materializer
-import assets.MessageLookup.{NonResident => messages}
+import assets.MessageLookup.{NonResident => commonMessages}
+import assets.MessageLookup.NonResident.{CheckYourAnswers => messages}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import config.ApplicationConfig
 import connectors.CalculatorConnector
@@ -53,6 +54,7 @@ class CheckYourAnswersActionSpec()
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val checkYourAnswersView = fakeApplication.injector.instanceOf[checkYourAnswers]
+  val pageTitle = s"""${messages.question} - ${commonMessages.pageHeading} - GOV.UK"""
 
 
   class Setup {
@@ -147,11 +149,11 @@ class CheckYourAnswersActionSpec()
       }
 
       "load the check your answers page" in {
-        document.title() shouldBe messages.CheckYourAnswers.question
+        document.title() shouldBe pageTitle
       }
 
       "have a back link to the improvements page" in {
-        document.select("#back-link").attr("href") shouldBe routes.ImprovementsController.improvements().url
+        document.select("#back-link").attr("href") shouldBe "javascript:history.back()"
       }
     }
 
@@ -179,11 +181,11 @@ class CheckYourAnswersActionSpec()
       }
 
       "load the check your answers page" in {
-        document.title() shouldBe messages.CheckYourAnswers.question
+        document.title() shouldBe pageTitle
       }
 
       "have a back link to the private residence relief page" in {
-        document.select("#back-link").attr("href") shouldBe routes.PrivateResidenceReliefController.privateResidenceRelief().url
+        document.select("#back-link").attr("href") shouldBe "javascript:history.back()"
       }
     }
 
@@ -198,11 +200,11 @@ class CheckYourAnswersActionSpec()
       }
 
       "load the check your answers page" in {
-        document.title() shouldBe messages.CheckYourAnswers.question
+        document.title() shouldBe pageTitle
       }
 
       "have a back link to the brought forward losses page" in {
-        document.select("#back-link").attr("href") shouldBe routes.BroughtForwardLossesController.broughtForwardLosses().url
+        document.select("#back-link").attr("href") shouldBe "javascript:history.back()"
       }
     }
   }

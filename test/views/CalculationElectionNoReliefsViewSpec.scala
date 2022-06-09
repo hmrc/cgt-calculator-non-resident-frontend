@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +33,8 @@ class CalculationElectionNoReliefsViewSpec extends CommonPlaySpec with WithCommo
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   lazy val calculationElectionNoReliefsView = fakeApplication.injector.instanceOf[calculationElectionNoReliefs]
+  lazy val pageTitle = s"""${messages.title} - ${commonMessages.pageHeading} - GOV.UK"""
+
 
   "Calculation Election No Reliefs View" when {
 
@@ -45,13 +47,13 @@ class CalculationElectionNoReliefsViewSpec extends CommonPlaySpec with WithCommo
 
     "supplied with no errors and lowest tax owed is rebased method" should {
 
-      lazy val view = calculationElectionNoReliefsView(calculationElectionForm, rebasedLowestTaxOwed, "back-link")(fakeRequest, mockMessage)
+      lazy val view = calculationElectionNoReliefsView(calculationElectionForm, rebasedLowestTaxOwed)(fakeRequest, mockMessage)
       lazy val doc = Jsoup.parse(view.body)
 
       "have a heading" which {
 
-        s"has the text ${messages.title}" in {
-          doc.title shouldBe messages.title
+        s"has the text $pageTitle" in {
+          doc.title shouldBe pageTitle
         }
       }
 
@@ -69,8 +71,8 @@ class CalculationElectionNoReliefsViewSpec extends CommonPlaySpec with WithCommo
           back.text() shouldBe commonMessages.back
         }
 
-        s"has a link to 'back-link'" in {
-          back.attr("href") shouldBe "back-link"
+        s"has a link to 'javascript:history.back()'" in {
+          back.attr("href") shouldBe "javascript:history.back()"
         }
       }
 
@@ -99,24 +101,20 @@ class CalculationElectionNoReliefsViewSpec extends CommonPlaySpec with WithCommo
           form.attr("method") shouldBe "POST"
         }
 
-        s"contains the text ${messages.helpTextChooseMethod}" in {
-          form.select("p").text should include(messages.helpTextChooseMethod)
-        }
-
         "contains inputs" which {
 
           lazy val input = form.select("input")
 
           "has the first element calculationElection-rebased'" in {
-            input.get(0).attr("id") shouldBe "calculationElection-rebased"
+            input.get(0).attr("id") shouldBe "calculationElection"
           }
 
           "has the second element calculationElection-flat'" in {
-            input.get(1).attr("id") shouldBe "calculationElection-flat"
+            input.get(1).attr("id") shouldBe "calculationElection-2"
           }
 
           "has the third element calculationElection-time'" in {
-            input.get(2).attr("id") shouldBe "calculationElection-time"
+            input.get(2).attr("id") shouldBe "calculationElection-3"
           }
         }
       }
@@ -131,7 +129,7 @@ class CalculationElectionNoReliefsViewSpec extends CommonPlaySpec with WithCommo
           ("time", "2000", "description", Messages("calc.calculationElection.description.time"), None, None)
         )
 
-      lazy val view = calculationElectionNoReliefsView(calculationElectionForm, flatLowestTaxOwed, "back-link")(fakeRequest, mockMessage)
+      lazy val view = calculationElectionNoReliefsView(calculationElectionForm, flatLowestTaxOwed)(fakeRequest, mockMessage)
       lazy val doc = Jsoup.parse(view.body)
 
       "have text in a paragraph" which {
@@ -152,15 +150,15 @@ class CalculationElectionNoReliefsViewSpec extends CommonPlaySpec with WithCommo
           lazy val input = form.select("input")
 
           "has the first element calculationElection-flat'" in {
-            input.get(0).attr("id") shouldBe "calculationElection-flat"
+            input.get(0).attr("id") shouldBe "calculationElection"
           }
 
           "has the second element calculationElection-rebased'" in {
-            input.get(1).attr("id") shouldBe "calculationElection-rebased"
+            input.get(1).attr("id") shouldBe "calculationElection-2"
           }
 
           "has the third element calculationElection-time'" in {
-            input.get(2).attr("id") shouldBe "calculationElection-time"
+            input.get(2).attr("id") shouldBe "calculationElection-3"
           }
         }
       }
@@ -168,11 +166,11 @@ class CalculationElectionNoReliefsViewSpec extends CommonPlaySpec with WithCommo
 
     "supplied with errors" should {
       lazy val form = calculationElectionForm.bind(Map("calculationElection" -> "a"))
-      lazy val view = calculationElectionNoReliefsView(form, rebasedLowestTaxOwed, "back-link")(fakeRequest, mockMessage)
+      lazy val view = calculationElectionNoReliefsView(form, rebasedLowestTaxOwed)(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {
-        document.select("#error-summary-display").size() shouldBe 1
+        document.select(".govuk-error-summary").size() shouldBe 1
       }
     }
 
@@ -185,7 +183,7 @@ class CalculationElectionNoReliefsViewSpec extends CommonPlaySpec with WithCommo
           ("time", "2000", "description", Messages("calc.calculationElection.description.time"), None, None)
         )
 
-      calculationElectionNoReliefsView.f(calculationElectionForm, flatLowestTaxOwed, "back-link")(fakeRequest, mockMessage) shouldBe calculationElectionNoReliefsView.render(calculationElectionForm, flatLowestTaxOwed, "back-link", fakeRequest, mockMessage)
+      calculationElectionNoReliefsView.f(calculationElectionForm, flatLowestTaxOwed)(fakeRequest, mockMessage) shouldBe calculationElectionNoReliefsView.render(calculationElectionForm, flatLowestTaxOwed, fakeRequest, mockMessage)
     }
   }
 }

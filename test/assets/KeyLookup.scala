@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,6 @@ object KeyLookup {
     val no = "calc.base.no"
 
     val mandatoryAmount = "calc.common.error.mandatoryAmount"
-    val errorRequired = "calc.common.error.fieldRequired"
 
     val numericPlayErrorOverride = "error.number"
     val optionReqError = "calc.base.optionReqError"
@@ -37,6 +36,10 @@ object KeyLookup {
   }
 
   object NonResident extends Common {
+
+    def errorRequired(formName: String): String = {
+      s"calc.$formName.errors.required"
+    }
 
     val errorInvalidDate = "calc.common.date.error.invalidDate"
     val errorInvalidDay = "calc.common.date.invalidDayError"
@@ -168,17 +171,15 @@ object KeyLookup {
       val errorNoValue = "calc.costsAtLegislationStart.error.no.value.supplied"
       val errorDecimalPlaces = "calc.costsAtLegislationStart.errorDecimalPlaces"
     }
+
   }
 
   object Resident extends Common {
     val errorInvalidDate = "Enter a real date"
   }
 
-  object PropertyLivedIn {
-    val errorNoSelect = "calc.propertyLivedIn.noSelectError"
-  }
-
   object WhoDidYouGiveItTo {
     val errormandatory = "calc.whoDidYouGiveThePropertyTo.errormandatory"
   }
+
 }

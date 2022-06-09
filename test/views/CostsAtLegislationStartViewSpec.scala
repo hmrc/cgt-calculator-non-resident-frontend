@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,7 +50,7 @@ class CostsAtLegislationStartViewSpec extends CommonPlaySpec with WithCommonFake
         }
 
         s"has a route to 'worth-before-legislation-start'" in {
-          backLink.attr("href") shouldBe controllers.routes.WorthBeforeLegislationStartController.worthBeforeLegislationStart().url
+          backLink.attr("href") shouldBe "javascript:history.back()"
         }
       }
 
@@ -58,16 +58,16 @@ class CostsAtLegislationStartViewSpec extends CommonPlaySpec with WithCommonFake
         lazy val heading = document.select("h1")
 
         "has a class of heading-xlarge" in {
-          heading.attr("class") shouldBe "heading-xlarge"
+          heading.attr("class") shouldBe "govuk-fieldset__heading"
         }
 
-        s"has the text '${messages.CostsAtLegislationStart.title}'" in {
-          heading.text shouldBe messages.CostsAtLegislationStart.title
+        s"has the text '${messages.CostsAtLegislationStart.heading}'" in {
+          heading.text shouldBe messages.CostsAtLegislationStart.heading
         }
       }
 
       s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-        document.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
+        document.select("body > header > div > div > div.govuk-header__content > a").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
       }
 
       "have a form" which {
@@ -83,15 +83,15 @@ class CostsAtLegislationStartViewSpec extends CommonPlaySpec with WithCommonFake
       }
 
       s"have an primary question with the correct text" in {
-        document.select("h1").text() shouldBe messages.CostsAtLegislationStart.title
+        document.select("h1").text() shouldBe messages.CostsAtLegislationStart.heading
       }
 
       s"have a secondary question with the correct text" in {
-        document.select("label[for=costs] > div").first().text() shouldBe messages.CostsAtLegislationStart.howMuch
+        document.select("#conditional-costs > div > label").text() shouldBe messages.CostsAtLegislationStart.howMuch
       }
 
       s"have help text for the secondary question" in {
-        document.select("label[for=costs] p").text() shouldBe messages.CostsAtLegislationStart.helpText
+        document.select("#costs-hint").text() shouldBe messages.CostsAtLegislationStart.helpText
       }
 
       "have a value input with the id 'costs'" in {
@@ -102,15 +102,11 @@ class CostsAtLegislationStartViewSpec extends CommonPlaySpec with WithCommonFake
         lazy val button = document.select("button")
 
         "has the class 'button'" in {
-          button.attr("class") shouldBe "button"
+          button.attr("class") shouldBe "govuk-button"
         }
 
-        "has the type 'submit'" in {
-          button.attr("type") shouldBe "submit"
-        }
-
-        "has the id 'continue-button'" in {
-          button.attr("id") shouldBe "continue-button"
+        "has the id 'submit'" in {
+          button.attr("id") shouldBe "submit"
         }
       }
 
@@ -129,7 +125,7 @@ class CostsAtLegislationStartViewSpec extends CommonPlaySpec with WithCommonFake
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {
-        document.select("#error-summary-display").size() shouldBe 1
+        document.select(".govuk-error-summary").size() shouldBe 1
       }
     }
   }

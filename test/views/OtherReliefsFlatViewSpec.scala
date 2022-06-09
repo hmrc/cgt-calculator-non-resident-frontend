@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,8 +46,7 @@ class OtherReliefsFlatViewSpec extends CommonPlaySpec with WithCommonFakeApplica
         }
 
         s"should have a route to 'calculation-election'" in {
-          backLink.attr("href") shouldEqual
-            controllers.routes.CalculationElectionController.calculationElection().url
+          backLink.attr("href") shouldEqual "javascript:history.back()"
         }
       }
 
@@ -55,7 +54,7 @@ class OtherReliefsFlatViewSpec extends CommonPlaySpec with WithCommonFakeApplica
         lazy val heading = document.body().select("h1")
 
         "has a class of heading-xlarge" in {
-          heading.attr("class") shouldBe "heading-xlarge"
+          heading.attr("class") shouldBe "govuk-heading-xl"
         }
 
         s"has the text '${messages.pageHeading}'" in {
@@ -64,7 +63,7 @@ class OtherReliefsFlatViewSpec extends CommonPlaySpec with WithCommonFakeApplica
       }
 
       s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-        document.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
+        document.getElementsByClass("govuk-header__link govuk-header__link--service-name").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
       }
 
       "have a form" which {
@@ -85,23 +84,23 @@ class OtherReliefsFlatViewSpec extends CommonPlaySpec with WithCommonFakeApplica
           label.text shouldBe messages.OtherReliefs.question
         }
         "has the class 'visuallyhidden'" in {
-          label.attr("class") shouldBe "visuallyhidden"
+          label.attr("class") shouldBe "govuk-visually-hidden"
         }
       }
 
       s"have the help text '${messages.OtherReliefs.help}'" in {
-        document.body.select("form span.form-hint").text() shouldBe messages.OtherReliefs.help
+        document.body.getElementsByClass("govuk-hint").text() shouldBe messages.OtherReliefs.help
       }
 
       "have additional content" which {
         lazy val content = document.select("form > div")
 
         "has a class of panel-indent gain-padding" in {
-          content.attr("class") shouldBe "panel-indent gain-padding"
+          content.attr("class") shouldBe "govuk-inset-text"
         }
 
         "has a list of class list" in {
-          content.select("ul").attr("class") shouldBe "list"
+          content.select("ul").attr("class") shouldBe "govuk-list"
         }
 
         "has a list entry with the total gain message and value" in {
@@ -114,10 +113,10 @@ class OtherReliefsFlatViewSpec extends CommonPlaySpec with WithCommonFakeApplica
       }
 
       "have a button" which {
-        lazy val button = document.select("button")
+        lazy val button = document.getElementsByClass("govuk-button")
 
         "has the class 'button'" in {
-          button.attr("class") shouldBe "button"
+          button.attr("class") shouldBe "govuk-button"
         }
 
         "has the id 'add-relief-button'" in {
@@ -147,7 +146,7 @@ class OtherReliefsFlatViewSpec extends CommonPlaySpec with WithCommonFakeApplica
         lazy val button = document.select("button")
 
         "has the class 'button'" in {
-          button.attr("class") shouldBe "button"
+          button.attr("class") shouldBe "govuk-button"
         }
 
         "has the id 'update-relief-button'" in {
@@ -167,7 +166,7 @@ class OtherReliefsFlatViewSpec extends CommonPlaySpec with WithCommonFakeApplica
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {
-        document.select("#error-summary-display").size() shouldBe 1
+        document.getElementsByClass("govuk-error-summary").size() shouldBe 1
       }
     }
   }

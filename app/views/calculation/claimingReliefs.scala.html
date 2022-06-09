@@ -15,36 +15,39 @@
  *@
 
 @import models.ClaimingReliefsModel
+@import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
-    errorSummary: helpers.errorSummary,
-    form: FormWithCSRF,
-    formYesNoRadio: helpers.formYesNoRadio,
-    mainTemplate: main_template
+    errorSummary: playComponents.errorSummary,
+    formWithCSRF: FormWithCSRF,
+    layout: Layout,
+    formYesNoRadio: playComponents.input_yes_no,
+    submitButton: playComponents.submitButton
 )
 
 @(claimingReliefsForm: Form[ClaimingReliefsModel])(implicit request: Request[_], messages: Messages)
 
-@mainTemplate(Messages("calc.claimingReliefs.title")) {
+@title = @{
+    if(claimingReliefsForm.errors.nonEmpty) messages("site.title.error", messages("calc.claimingReliefs.title")) else messages("calc.claimingReliefs.title")
+}
 
-  <a id="back-link" class="back-link" href="@controllers.routes.CheckYourAnswersController.checkYourAnswers().url">@Messages("calc.base.back")</a>
+@layout(pageTitle = title) {
+    @formWithCSRF(action = controllers.routes.ClaimingReliefsController.submitClaimingReliefs()) {
 
-    @errorSummary(claimingReliefsForm, "claimingReliefs")
+        @errorSummary(claimingReliefsForm.errors)
 
-    <h1 class="heading-xlarge">@Messages("calc.claimingReliefs.title")</h1>
+        <h1 class="govuk-heading-xl">@messages("calc.claimingReliefs.title")</h1>
 
-  <p>@Messages("calc.claimingReliefs.helpText")</p>
+        <p class="govuk-body">@messages("calc.claimingReliefs.helpText")</p>
 
-  @form(action = controllers.routes.ClaimingReliefsController.submitClaimingReliefs()) {
+        @formYesNoRadio(
+            legend = messages("calc.claimingReliefs.title"),
+            legendClass = Some("govuk-visually-hidden"),
+            isPageHeading = false,
+            field = claimingReliefsForm("isClaimingReliefs")
+        )
 
-    <div class="form-group">
-      @formYesNoRadio(
-        field = claimingReliefsForm("isClaimingReliefs"),
-        legend = Messages("calc.claimingReliefs.title"),
-        legendClass = Some("visuallyhidden")
-      )
-    </div>
+        @submitButton()
+    }
 
-    <button class="button" type="submit" id="continue-button">@Messages("calc.base.continue")</button>
-  }
 }

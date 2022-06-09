@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,15 +20,16 @@ import common.Validation._
 import models.OtherPropertiesModel
 import play.api.data.Forms._
 import play.api.data._
+import common.Formatters.text
 
 object OtherPropertiesForm {
 
 
   val otherPropertiesForm: Form[OtherPropertiesModel] = Form (
     mapping(
-      "otherProperties" -> text
-        .verifying("calc.common.error.fieldRequired", mandatoryCheck)
-        .verifying("calc.common.error.fieldRequired", yesNoCheck)
+      "otherProperties" -> text("calc.otherProperties.errors.required")
+        .verifying("calc.otherProperties.errors.required", mandatoryCheck)
+        .verifying("calc.otherProperties.errors.required", yesNoCheck)
     )(OtherPropertiesModel.apply)(OtherPropertiesModel.unapply)
   )
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package controllers.CalculationControllerTests
 
 import akka.stream.Materializer
 import assets.MessageLookup.NonResident.{CurrentIncome => messages}
+import assets.MessageLookup.{NonResident => commonMessages}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import config.ApplicationConfig
 import connectors.CalculatorConnector
@@ -49,6 +50,7 @@ class CurrentIncomeActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val currentIncomeView = fakeApplication.injector.instanceOf[currentIncome]
+  val pageTitle = s"${messages.question} - ${commonMessages.pageHeading} - GOV.UK"
 
   class Setup {
     val controller = new CurrentIncomeController(
@@ -87,7 +89,7 @@ class CurrentIncomeActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
       }
 
       "load the current income page" in {
-        document.title shouldBe messages.question
+        document.title shouldBe pageTitle
       }
     }
 
@@ -102,7 +104,7 @@ class CurrentIncomeActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
       }
 
       "load the current income page" in {
-        document.title shouldBe messages.question
+        document.title shouldBe pageTitle
       }
     }
 
@@ -162,7 +164,7 @@ class CurrentIncomeActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
       }
 
       "return to the current income page" in {
-        document.title shouldBe messages.question
+        document.title shouldBe s"Error: $pageTitle"
       }
     }
   }

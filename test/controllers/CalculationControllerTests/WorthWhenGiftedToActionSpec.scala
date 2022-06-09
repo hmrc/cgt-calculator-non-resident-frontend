@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@ import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.worthWhenGiftedTo
-
+import assets.MessageLookup.{NonResident => commonMessages}
 import scala.concurrent.{ExecutionContext, Future}
 
 class WorthWhenGiftedToActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
@@ -49,6 +49,7 @@ class WorthWhenGiftedToActionSpec extends CommonPlaySpec with WithCommonFakeAppl
   val defaultCache = mock[CacheMap]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val worthWhenGiftedToView = fakeApplication.injector.instanceOf[worthWhenGiftedTo]
+  val pageTitle = s"""${messages.question} - ${commonMessages.pageHeading} - GOV.UK"""
 
   class Setup {
     val controller = new WorthWhenGiftedToController(
@@ -82,9 +83,9 @@ class WorthWhenGiftedToActionSpec extends CommonPlaySpec with WithCommonFakeAppl
         status(result) shouldBe 200
       }
 
-      s"return some html with title of ${messages.question}" in {
+      s"return some html with title of ${pageTitle}" in {
         contentType(result) shouldBe Some("text/html")
-        Jsoup.parse(bodyOf(result)(materializer, ec)).title shouldEqual messages.question
+        Jsoup.parse(bodyOf(result)(materializer, ec)).title shouldEqual pageTitle
       }
     }
 
@@ -97,9 +98,9 @@ class WorthWhenGiftedToActionSpec extends CommonPlaySpec with WithCommonFakeAppl
         status(result) shouldBe 200
       }
 
-      s"return some html with title of ${messages.question}" in {
+      s"return some html with title of ${pageTitle}" in {
         contentType(result) shouldBe Some("text/html")
-        Jsoup.parse(bodyOf(result)(materializer, ec)).title shouldEqual messages.question
+        Jsoup.parse(bodyOf(result)(materializer, ec)).title shouldEqual pageTitle
       }
     }
 
@@ -147,7 +148,7 @@ class WorthWhenGiftedToActionSpec extends CommonPlaySpec with WithCommonFakeAppl
       }
 
       "return to the Worth When Gifted To page" in {
-        doc.title() shouldEqual messages.question
+        doc.title() shouldEqual s"""Error: ${pageTitle}"""
       }
     }
   }

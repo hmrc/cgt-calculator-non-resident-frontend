@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,15 +26,15 @@ object DisposalDateForm {
 
   val disposalDateForm = Form(
     mapping(
-      "disposalDateDay" -> text
+      "disposalDate.day" -> text
         .verifying("calc.common.date.invalidDayError", mandatoryCheck)
         .verifying("calc.common.date.error.invalidDate", integerCheck)
         .transform[Int](stringToInteger, _.toString),
-      "disposalDateMonth" -> text
+      "disposalDate.month" -> text
         .verifying("calc.common.date.invalidMonthError", mandatoryCheck)
         .verifying("calc.common.date.error.invalidDate", integerCheck)
         .transform[Int](stringToInteger, _.toString),
-      "disposalDateYear" -> text
+      "disposalDate.year" -> text
         .verifying("calc.common.date.invalidYearError", mandatoryCheck)
         .verifying("calc.common.date.error.invalidDate", integerCheck)
         .transform[Int](stringToInteger, _.toString)

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package controllers.CalculationControllerTests
 
 import akka.stream.Materializer
 import assets.MessageLookup.NonResident.{SoldOrGivenAway => messages}
+import assets.MessageLookup.{NonResident => commonMessages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import config.ApplicationConfig
@@ -51,6 +52,7 @@ class SoldOrGivenAwayActionSpec extends CommonPlaySpec with WithCommonFakeApplic
   val defaultCache = mock[CacheMap]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val soldOrGivenAwayView = fakeApplication.injector.instanceOf[soldOrGivenAway]
+  lazy val pageTitle = s"""${messages.question} - ${commonMessages.pageHeading} - GOV.UK"""
 
   class Setup {
     val controller = new SoldOrGivenAwayController(
@@ -85,8 +87,8 @@ class SoldOrGivenAwayActionSpec extends CommonPlaySpec with WithCommonFakeApplic
         status(result) shouldBe 200
       }
 
-      s"have the title of ${messages.question}" in {
-        document.title() shouldBe messages.question
+      s"have the title of $pageTitle" in {
+        document.title() shouldBe pageTitle
       }
     }
 
@@ -99,8 +101,8 @@ class SoldOrGivenAwayActionSpec extends CommonPlaySpec with WithCommonFakeApplic
         status(result) shouldBe 200
       }
 
-      s"have the title of ${messages.question}" in {
-        document.title() shouldBe messages.question
+      s"have the title of $pageTitle" in {
+        document.title() shouldBe pageTitle
       }
     }
 
@@ -160,7 +162,7 @@ class SoldOrGivenAwayActionSpec extends CommonPlaySpec with WithCommonFakeApplic
       }
 
       "stay on the SoldOrGivenAway page" in {
-        document.title shouldBe messages.question
+        document.title shouldBe s"Error: $pageTitle"
       }
     }
   }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,37 +39,34 @@ class PreviousLossOrGainViewSpec extends CommonPlaySpec with WithCommonFakeAppli
     lazy val document = Jsoup.parse(view.body)
 
     "return some HTML" which {
-      s"has the title ${messages.question}" in {
-        document.title shouldEqual messages.question
+      s"has the title ${messages.title}" in {
+        document.title shouldEqual messages.title
       }
 
       "have a heading" which {
         lazy val heading = document.body().select("h1")
 
         "has a class of heading-large" in {
-          heading.attr("class") shouldBe "heading-xlarge"
+          heading.attr("class") shouldBe "govuk-heading-xl"
         }
       }
     }
 
     s"has guidance that includes the text '${messages.hintOne}'" in {
-      document.select("article p").get(0).text() shouldBe messages.hintOne
+      document.select("main p").get(0).text() shouldBe messages.hintOne
     }
 
     s"has guidance that includes the text '${messages.hintTwo}'" in {
-      document.select("article p").get(1).text() shouldBe messages.hintTwo
+      document.select("main p").get(1).text() shouldBe messages.hintTwo
     }
 
     "have a legend that" should {
-      lazy val legend = document.body.select("legend")
+      lazy val label = document.body.select("h1")
 
       s"have the text of ${messages.question}" in {
-        legend.text shouldBe messages.question
+        label.text shouldBe messages.question
       }
 
-      "be visually hidden" in {
-        legend.hasClass("visuallyhidden") shouldEqual true
-      }
     }
 
     "have a back button that" should {
@@ -80,11 +77,11 @@ class PreviousLossOrGainViewSpec extends CommonPlaySpec with WithCommonFakeAppli
       }
 
       "have the back-link class" in {
-        backLink.hasClass("back-link") shouldBe true
+        backLink.hasClass("govuk-back-link") shouldBe true
       }
 
       "have a link to Other Properties" in {
-        backLink.attr("href") shouldBe controllers.routes.OtherPropertiesController.otherProperties().url
+        backLink.attr("href") shouldBe "javascript:history.back()"
       }
     }
 
@@ -113,18 +110,14 @@ class PreviousLossOrGainViewSpec extends CommonPlaySpec with WithCommonFakeAppli
     }
 
     "has a continue button that" should {
-      lazy val continueButton = document.select("button#continue-button")
+      lazy val continueButton = document.select("button#submit")
 
       s"have the button text '${commonMessages.continue}" in {
         continueButton.text shouldBe commonMessages.continue
       }
 
-      "be of type submit" in {
-        continueButton.attr("type") shouldBe "submit"
-      }
-
       "have the class 'button'" in {
-        continueButton.hasClass("button") shouldBe true
+        continueButton.hasClass("govuk-button") shouldBe true
       }
     }
 
@@ -139,7 +132,7 @@ class PreviousLossOrGainViewSpec extends CommonPlaySpec with WithCommonFakeAppli
     lazy val doc = Jsoup.parse(view.body)
 
     "display an error summary message regarding incorrect value being inputted" in {
-      doc.body.select(".form-group .error-notification").size shouldBe 1
+      doc.getElementsByClass("govuk-error-summary").size shouldBe 1
     }
   }
 

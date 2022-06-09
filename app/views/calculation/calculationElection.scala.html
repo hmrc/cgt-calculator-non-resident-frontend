@@ -15,44 +15,39 @@
  *@
 
 @import models._
+@import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
-    mainTemplate: main_template,
+    layout: Layout,
     form: FormWithCSRF,
-    calculationElectionHelperForm: helpers.calculationElectionHelperForm,
-    errorSummary: helpers.errorSummary
+    calculationElectionHelperForm: playComponents.calculationElectionHelperForm,
+    errorSummary: playComponents.errorSummary,
+    submitButton: playComponents.submitButton
 )
 
 @(calculationElectionForm: Form[CalculationElectionModel], content: Seq[(String, String, String, String, Option[String], Option[BigDecimal])])(implicit request: Request[_], messages: Messages)
 
-@mainTemplate(Messages("calc.calculationElection.pageHeading")) {
+@title = @{if(calculationElectionForm.errors.nonEmpty) messages("site.title.error", Messages("calc.calculationElection.pageHeading")) else Messages("calc.calculationElection.pageHeading")}
 
-    <a id="back-link" class="back-link" href="@controllers.routes.ClaimingReliefsController.claimingReliefs().url">@Messages("calc.base.back")</a>
+@layout(
+    pageTitle = title
+) {
+    @errorSummary(calculationElectionForm.errors)
 
-    @errorSummary(calculationElectionForm, "calculation-election")
+    <h1 class="govuk-heading-xl">@Messages("calc.calculationElection.pageHeading")</h1>
 
-    <div class="grid-row">
-        <h1 class="heading-xlarge">@Messages("calc.calculationElection.pageHeading")</h1>
-    </div>
+    <p class="govuk-body">@Messages("calc.calculationElection.paragraph.one")</p>
 
-    <p>@Messages("calc.calculationElection.paragraph.one")</p>
-
-    <p>@Messages("calc.calculationElection.paragraph.two")</p>
+    <p class="govuk-body">@Messages("calc.calculationElection.paragraph.two")</p>
 
     @form(action = controllers.routes.CalculationElectionController.submitCalculationElection) {
 
-        <div class="form-group">
-            @calculationElectionHelperForm(
-                field = calculationElectionForm("calculationElection"),
-                content,
-                showErrorText = true,
-                '_labelClass -> "block-label election",
-                '_legend -> Messages("calc.calculationElection.legend"),
-                '_legendClass -> "bold-medium")
-        </div>
-
-        <div class="grid-row form-group">
-            <button class="button" name="action" value="continue" id="continue-button">@Messages("calc.base.continue")</button>
-        </div>
+        @calculationElectionHelperForm(
+            radioOptions = content,
+            isPageHeading = false,
+            legend = Messages("calc.calculationElection.legend"),
+            field = calculationElectionForm("calculationElection")
+        )
+        @submitButton()
     }
 }

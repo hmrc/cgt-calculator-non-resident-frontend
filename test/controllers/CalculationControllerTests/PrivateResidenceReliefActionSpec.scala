@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -244,7 +244,7 @@ class PrivateResidenceReliefActionSpec
       }
 
       "load the private residence relief page" in {
-        document.title() shouldBe messages.question
+        document.title() shouldBe messages.title
       }
     }
 
@@ -262,7 +262,7 @@ class PrivateResidenceReliefActionSpec
       }
 
       "load the private residence relief page" in {
-        document.title() shouldBe messages.question
+        document.title() shouldBe messages.title
       }
     }
 
@@ -345,7 +345,7 @@ class PrivateResidenceReliefActionSpec
       }
 
       "return to the private residence relief page" in {
-        document.title() shouldBe messages.question
+        document.title() shouldBe s"Error: ${messages.title}"
       }
     }
   }

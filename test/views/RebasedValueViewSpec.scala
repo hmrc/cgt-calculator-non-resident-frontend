@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +32,7 @@ class RebasedValueViewSpec extends CommonPlaySpec with WithCommonFakeApplication
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   lazy val rebasedValueView = fakeApplication.injector.instanceOf[rebasedValue]
+  val pageTitle = s"""${messages.question} - ${commonMessages.pageHeading} - GOV.UK"""
 
   "The rebased value view" when {
 
@@ -40,19 +41,15 @@ class RebasedValueViewSpec extends CommonPlaySpec with WithCommonFakeApplication
       lazy val view = rebasedValueView(rebasedValueForm, "google.com")(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
-      s"Have the title ${messages.question}" in {
-        document.title shouldEqual messages.question
-      }
-
-      s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-        document.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
+      s"Have the title ${pageTitle}" in {
+        document.title shouldEqual pageTitle
       }
 
       "have a heading" which {
         lazy val heading = document.body().select("h1")
 
         "has a class of heading-xlarge" in {
-          heading.attr("class") shouldBe "heading-xlarge"
+          heading.attr("class") shouldBe "govuk-heading-xl"
         }
 
         s"has the text '${messages.question}'" in {
@@ -64,7 +61,7 @@ class RebasedValueViewSpec extends CommonPlaySpec with WithCommonFakeApplication
         lazy val backLink = document.body().select("#back-link")
 
         "has a class of 'back-link'" in {
-          backLink.attr("class") shouldBe "back-link"
+          backLink.attr("class") shouldBe "govuk-back-link"
         }
 
         "has the text" in {
@@ -72,7 +69,7 @@ class RebasedValueViewSpec extends CommonPlaySpec with WithCommonFakeApplication
         }
 
         s"has a route to 'google.com'" in {
-          backLink.attr("href") shouldBe "google.com"
+          backLink.attr("href") shouldBe "javascript:history.back()"
         }
       }
 
@@ -80,31 +77,26 @@ class RebasedValueViewSpec extends CommonPlaySpec with WithCommonFakeApplication
         document.select("""article > p[class=""]""").isEmpty shouldBe true
       }
 
-      "have some hint text" which {
-        lazy val hintText = document.select("article > span")
-
-        "should have the class form-hint" in {
-          hintText.hasClass("form-hint") shouldEqual true
-        }
+      "have some body text" which {
+        lazy val bodyText = document.getElementsByClass("govuk-body")
 
         s"should have the text ${messages.inputHintText}" in {
-          hintText.text shouldEqual messages.inputHintText
+          bodyText.text shouldEqual messages.inputHintText
         }
       }
 
       s"have a joint ownership section with the text ${messages.jointOwnership}" in {
-        document.select("p.panel-indent").first().text() shouldBe messages.jointOwnership
+        document.getElementsByClass("govuk-inset-text").first().text() shouldBe messages.jointOwnership
       }
 
       s"Have a hidden help section" which {
-        lazy val hiddenHelp = document.select("details")
 
         s"has a title ${messages.additionalContentTitle}" in {
-          hiddenHelp.select(".summary").text shouldEqual messages.additionalContentTitle
+          document.getElementsByClass("govuk-details__summary-text").text shouldEqual messages.additionalContentTitle
         }
 
         s"has the content ${messages.helpHiddenContent}" in {
-          hiddenHelp.select("div > p").text shouldEqual messages.helpHiddenContent
+          document.getElementById("help-text").text shouldEqual messages.helpHiddenContent
         }
       }
 
@@ -124,15 +116,11 @@ class RebasedValueViewSpec extends CommonPlaySpec with WithCommonFakeApplication
         lazy val button = document.select("button")
 
         "has the class 'button'" in {
-          button.attr("class") shouldBe "button"
-        }
-
-        "has the type 'submit'" in {
-          button.attr("type") shouldBe "submit"
+          button.attr("class") shouldBe "govuk-button"
         }
 
         "has the id 'continue-button'" in {
-          button.attr("id") shouldBe "continue-button"
+          button.attr("id") shouldBe "submit"
         }
 
         "has the text 'Continue'" in {
@@ -152,7 +140,7 @@ class RebasedValueViewSpec extends CommonPlaySpec with WithCommonFakeApplication
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {
-        document.select("#error-summary-display").size() shouldBe 1
+        document.getElementsByClass("govuk-error-summary").size() shouldBe 1
       }
     }
   }
