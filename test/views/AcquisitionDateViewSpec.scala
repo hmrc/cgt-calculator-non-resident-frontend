@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,7 +41,7 @@ class AcquisitionDateViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${messages.AcquisitionDate.question}'" in {
-        document.title shouldBe messages.AcquisitionDate.question
+        document.title shouldBe s"${messages.AcquisitionDate.question} - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
       }
 
       "have a back link" which {
@@ -51,16 +51,16 @@ class AcquisitionDateViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
         }
 
         s"should have a route to 'back-link'" in {
-          document.body.getElementById("back-link").attr("href") shouldEqual controllers.routes.DisposalCostsController.disposalCosts().url
+          document.body.getElementById("back-link").attr("href") shouldEqual "javascript:history.back()"
         }
       }
 
       s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-        document.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
+        document.getElementsByClass("govuk-header__link govuk-header__link--service-name").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
       }
 
       "have a heading" which {
-        lazy val heading = document.body().select("h1")
+        lazy val heading = document.body().getElementsByClass("govuk-fieldset__legend govuk-label--xl ")
 
         s"has the text '${messages.AcquisitionDate.question}'" in {
           heading.text shouldBe messages.AcquisitionDate.question
@@ -76,7 +76,7 @@ class AcquisitionDateViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
         }
 
         "be visually hidden" in {
-          legend.hasClass("visuallyhidden") shouldEqual true
+          legend.hasClass("govuk-visually-hidden") shouldEqual true
         }
       }
 
@@ -93,19 +93,16 @@ class AcquisitionDateViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
 
 
         s"have the hintText '${messages.AcquisitionDate.hintText}'" in {
-          document.select(".form-hint").first().text.stripSuffix(" ") shouldBe messages.AcquisitionDate.hintText
+          document.select("#main-content > div > div > p").first().text.stripSuffix(" ") shouldBe messages.AcquisitionDate.hintText
         }
       }
 
       "have a button" which {
         lazy val button = document.select("button")
 
-        "has the type 'submit'" in {
-          button.attr("type") shouldBe "submit"
-        }
 
-        "has the id 'continue-button'" in {
-          button.attr("id") shouldBe "continue-button"
+        "has the id 'submit'" in {
+          button.attr("id") shouldBe "submit"
         }
       }
 
@@ -116,58 +113,58 @@ class AcquisitionDateViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
     }
 
     "supplied with an invalid date error day" should {
-      lazy val form = acquisitionDateForm.bind(Map("acquisitionDateDay" -> "",
-        "acquisitionDateMonth" -> "1",
-        "acquisitionDateYear" -> "2015"))
+      lazy val form = acquisitionDateForm.bind(Map("acquisitionDate.day" -> "",
+        "acquisitionDate.month" -> "1",
+        "acquisitionDate.year" -> "2015"))
       lazy val view = acquisitionCostsView(form)(fakeRequest,mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" which {
 
         "has size 1" in {
-          document.select("#error-summary-display").size() shouldBe 1
+          document.getElementsByClass("govuk-error-summary").size() shouldBe 1
         }
 
         s"has the text ${messages.errorInvalidDay}" in {
-          document.select("#acquisitionDateDay-error-summary").text() shouldBe messages.errorInvalidDay
+          document.getElementById("acquisitionDate-error").text() shouldBe s"Error: ${messages.errorInvalidDay}"
         }
       }
     }
 
     "supplied with an invalid date error month" should {
-      lazy val form = acquisitionDateForm.bind(Map("acquisitionDateDay" -> "1",
-        "acquisitionDateMonth" -> "",
-        "acquisitionDateYear" -> "2015"))
+      lazy val form = acquisitionDateForm.bind(Map("acquisitionDate.day" -> "1",
+        "acquisitionDate.month" -> "",
+        "acquisitionDate.year" -> "2015"))
       lazy val view = acquisitionCostsView(form)(fakeRequest,mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" which {
 
         "has size 1" in {
-          document.select("#error-summary-display").size() shouldBe 1
+          document.getElementsByClass("govuk-error-summary").size() shouldBe 1
         }
 
         s"has the text ${messages.errorInvalidMonth}" in {
-          document.select("#acquisitionDateMonth-error-summary").text() shouldBe messages.errorInvalidMonth
+          document.getElementById("acquisitionDate-error").text() shouldBe s"Error: ${messages.errorInvalidMonth}"
         }
       }
     }
 
     "supplied with an invalid date error year" should {
-      lazy val form = acquisitionDateForm.bind(Map("acquisitionDateDay" -> "1",
-        "acquisitionDateMonth" -> "1",
-        "acquisitionDateYear" -> ""))
+      lazy val form = acquisitionDateForm.bind(Map("acquisitionDate.day" -> "1",
+        "acquisitionDate.month" -> "1",
+        "acquisitionDate.year" -> ""))
       lazy val view = acquisitionCostsView(form)(fakeRequest,mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" which {
 
         "has size 1" in {
-          document.select("#error-summary-display").size() shouldBe 1
+          document.getElementsByClass("govuk-error-summary").size() shouldBe 1
         }
 
         s"has the text ${messages.errorInvalidYear}" in {
-          document.select("#acquisitionDateYear-error-summary").text() shouldBe messages.errorInvalidYear
+          document.getElementById("acquisitionDate-error").text() shouldBe s"Error: ${messages.errorInvalidYear}"
         }
       }
     }
@@ -175,9 +172,9 @@ class AcquisitionDateViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
     "supplied with a future date error" should {
       val date: LocalDate = LocalDate.now().plusDays(1)
       lazy val map = Map(
-        "acquisitionDateDay" -> date.getDayOfMonth.toString,
-        "acquisitionDateMonth" -> date.getMonthValue.toString,
-        "acquisitionDateYear" -> date.getYear.toString)
+        "acquisitionDate.day" -> date.getDayOfMonth.toString,
+        "acquisitionDate.month" -> date.getMonthValue.toString,
+        "acquisitionDate.year" -> date.getYear.toString)
 
       lazy val form = acquisitionDateForm.bind(map)
       lazy val view = acquisitionCostsView(form)(fakeRequest,mockMessage)
@@ -186,11 +183,11 @@ class AcquisitionDateViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
       "have an error summary" which {
 
         "has size 1" in {
-          document.select("#error-summary-display").size() shouldBe 1
+          document.getElementsByClass("govuk-error-summary").size() shouldBe 1
         }
 
         s"has the text ${messages.AcquisitionDate.errorFutureDate}" in {
-          document.select("#acquisitionDateDay-error-summary").text() shouldBe messages.AcquisitionDate.errorFutureDate
+          document.getElementsByClass("govuk-list govuk-error-summary__list").text() shouldBe messages.AcquisitionDate.errorFutureDate
         }
       }
     }

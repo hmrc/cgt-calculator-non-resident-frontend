@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,11 @@
 
 package constructors
 
-import common.nonresident.CalculationType
+import common.nonresident.{CalculationType, MoneyPounds}
+
 import javax.inject.Inject
 import models.{CalculationResultsWithTaxOwedModel, QuestionAnswerModel}
 import play.api.i18n.{Messages, MessagesProvider}
-import uk.gov.hmrc.play.views.helpers.MoneyPounds
-
-
 
 
 class CalculationDetailsWithAllAnswersConstructor @Inject()(val calculationDetailsConstructor: CalculationDetailsConstructor,

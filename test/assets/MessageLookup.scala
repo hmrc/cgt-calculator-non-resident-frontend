@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package assets
 
-import uk.gov.hmrc.play.views.helpers.MoneyPounds
+import common.nonresident.MoneyPounds
 import common.Constants
 
 object MessageLookup {
@@ -26,7 +26,7 @@ object MessageLookup {
 
   trait Common {
 
-    val externalLink = "(opens in a new window)"
+    val externalLink = "(opens in new tab)"
     val change = "change"
     val back = "Back"
     val continue = "Continue"
@@ -122,6 +122,7 @@ object MessageLookup {
       val legend = "Choose a method then add your other reliefs"
       val otherTaxRelief = "Add other tax relief"
       val someOtherTaxRelief = "Other tax relief"
+      val someOtherTaxReliefButton = "Change"
     }
 
     object CalculationElectionNoReliefs {
@@ -251,6 +252,7 @@ object MessageLookup {
     }
 
     object PreviousLossOrGain {
+      val title = "Did these disposals result in an overall Capital Gains Tax loss or gain? - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
       val question = "Did these disposals result in an overall Capital Gains Tax loss or gain?"
       val mandatoryCheck = "Please tell us whether you made a gain or loss"
       val loss = "Loss"
@@ -263,6 +265,7 @@ object MessageLookup {
     }
 
     object OtherReliefs {
+      val title = "How much extra tax relief are you claiming? - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
       val help = "For example, lettings relief."
       val question = "How much extra tax relief are you claiming?"
       val totalGain = "Total gain"
@@ -319,6 +322,7 @@ object MessageLookup {
     }
 
     object PrivateResidenceRelief {
+      val title = "Are you claiming Private Residence Relief? - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
       val question = "Are you claiming Private Residence Relief?"
       val intro1 = "You could get full tax relief of 365 days for any tax years when you or your spouse or civil partner spent at least 90 days in your UK home."
       val intro2 = "You could get full tax relief of 365 days for any tax years after 6 April 2015 when you or your spouse or civil partner spent at least 90 days in your UK home."
@@ -347,6 +351,8 @@ object MessageLookup {
     }
 
     object RebasedCosts {
+      val title = "Did you pay to have the property valued at 5 April 2015? - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
+      val errorTitle = "Error: Did you pay to have the property valued at 5 April 2015? - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
       val question = "Did you pay to have the property valued at 5 April 2015?"
       val inputQuestion = "How much did it cost to get the property valued?"
       val jointOwnership = "If you owned the property with someone else, only enter your share of the cost, as agreed with your co-owner."
@@ -395,6 +401,7 @@ object MessageLookup {
     }
 
     object WorthBeforeLegislationStart {
+      val title = "What was the market value of the property on 31 March 1982? - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
       val question = "What was the market value of the property on 31 March 1982?"
       val information = "If you had your property before 31 March 1982, use the market value on 31 March 1982 to work out your Capital Gains Tax. After this date, use the original cost."
       val hintText = "If you don't know the exact value, you must provide a realistic estimate. " +
@@ -422,6 +429,7 @@ object MessageLookup {
       val question = "What was the market value of the property when you bought it?"
       val hintOne = "You can use a valuation from a surveyor. If you don't know the exact value, you must provide a realistic estimate. You might have to pay more if we think your estimate is unrealistic."
       val helpText = "If you owned the property with someone else, only enter your share of the property value."
+      val pageHeading = "Calculate your Non-Resident Capital Gains Tax"
     }
 
     object HowMuchLoss {
@@ -446,7 +454,7 @@ object MessageLookup {
 
     object Summary {
 
-      val title = "Summary"
+      val title = "Summary - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
       val secondaryHeading = "You owe"
       val amountOwed = "Amount you owe"
       val calculationDetailsTitle = "Calculation details"
@@ -478,14 +486,13 @@ object MessageLookup {
       val taxYearWarning = "Your total might be less accurate because you didn't sell or give away your property in this tax year"
       val saveAsPdf = "Download your Capital Gains Tax calculation (PDF, under 25kB)"
       val yourAnswers = "You've told us"
-      val noticeSummary: String = "Your result may be inaccurate because the calculator does not support the date of sale you entered. " +
+      val newNoticeSummary: String = "Warning Your result may be inaccurate because the calculator does not support the date of sale you entered. " +
         "Do not use these figures to report your Capital Gains Tax."
       val whoOwnedIt = "Who owned the property?"
-      val bannerPanelTitle = "Help improve GOV.UK"
+      val bannerPanelTitle = "Help improve HMRC service"
       val bannerPanelLinkURL = "https://signup.take-part-in-research.service.gov.uk/?utm_campaign=CGT_non_resident_summary&utm_source=Survey_Banner&utm_medium=other&t=HMRC&id=116"
-      val bannerPanelLinkText = "Help improve this digital service by joining the HMRC user panel (opens in new window)"
+      val bannerPanelLinkText = "Sign up to take part in user research (opens in new tab)"
       val bannerPanelCloseVisibleText = "No thanks"
-      val bannerPanelCloseHiddenText = "I don't want to answer any questions about joining the research panel"
 
       def basedOnYear(year: String): String = s"These figures are based on the tax rates from the $year tax year"
     }
@@ -502,7 +509,8 @@ object MessageLookup {
     }
 
     object CostsAtLegislationStart {
-      val title = "Did you pay to have the property valued at 31 March 1982?"
+      val title = "Did you pay to have the property valued at 31 March 1982? - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
+      val heading = "Did you pay to have the property valued at 31 March 1982?"
       val howMuch = "How much did it cost to get the property valued?"
       val helpText = "If you owned the property with someone else, only enter your share of the costs, as agreed with your co-owner."
       val errorNegative = "Enter a positive number for your costs"
@@ -630,7 +638,7 @@ object MessageLookup {
     val title = "Work out how much Capital Gains Tax you owe"
     val subheading = "Do you need to use this calculator?"
     val paragraph = "You probably don't need to pay Capital Gains Tax if the property you've sold is your own home. You'll be entitled to a tax relief called Private Residence Relief."
-    val entitledLinkText = "Find out if you're entitled to Private Residence Relief (opens in a new window)."
+    val entitledLinkText = "Find out if you're entitled to Private Residence Relief (opens in new tab)."
     val continuationInstructions = "Continue to use this calculator if you've never lived at the property, or you're entitled to only some or no Private Residence Relief."
   }
 
@@ -832,8 +840,8 @@ object MessageLookup {
   //Lettings Relief messages.en
   object LettingsRelief {
     val title = "Are you entitled to Letting Relief?"
-    val help = "You may be able entitled to Letting Relief if you've rented out the property. Find out more about Letting Relief (opens in a new window)"
-    val helpOne = "Letting Relief (opens in a new window)"
+    val help = "You may be able entitled to Letting Relief if you've rented out the property. Find out more about Letting Relief (opens in new tab)"
+    val helpOne = "Letting Relief (opens in new tab)"
     val helpLink = "https://www.gov.uk/government/publications/private-residence-relief-hs283-self-assessment-helpsheet/hs283-private-residence-relief-2016#letting-relief"
     val errorSelect = "Tell us if you want to claim Letting Relief"
   }
@@ -980,7 +988,7 @@ object MessageLookup {
   object SummaryPartialMessages {
     val headingTwo: String => String = taxYear => s"Capital Gains Tax to pay for $taxYear tax year"
     val warningHidden: String = "Warning"
-    val warningNoticeSummary: String = "Your result may be inaccurate because the calculator does not support the date of sale you entered. " +
+    val warningNoticeSummary: String = "Warning Your result may be inaccurate because the calculator does not support the date of sale you entered. " +
       "Do not use these figures to report your Capital Gains Tax."
 
     val workingOutSectionHeading = "How we've worked this out"
@@ -1032,7 +1040,8 @@ object MessageLookup {
 
 
   object WhatNext extends Common {
-    val title = "Report your property now"
+    val title = "Report your property now - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
+    val heading = "Report your property now"
     val listTitle = "You have 30 days from the date you completed the transfer of your property (the 'conveyance date') to:"
     val listOne = "tell us about the property you've sold or gave away"
     val listTwo = "pay any Capital Gains Tax"

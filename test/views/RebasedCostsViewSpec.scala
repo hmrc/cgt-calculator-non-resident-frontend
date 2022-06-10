@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ class RebasedCostsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
       lazy val document = Jsoup.parse(view.body)
 
       s"Have the title ${messages.RebasedCosts.question}" in {
-        document.title shouldEqual messages.RebasedCosts.question
+        document.title shouldEqual messages.RebasedCosts.title
       }
 
       "have a back link" which {
@@ -49,11 +49,11 @@ class RebasedCostsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
         }
 
         "has the class 'back-link'" in {
-          backLink.attr("class") shouldBe "back-link"
+          backLink.attr("class") shouldBe "govuk-back-link"
         }
 
         s"has a route to 'rebased-value'" in {
-          backLink.attr("href") shouldBe controllers.routes.RebasedValueController.rebasedValue().url
+          backLink.attr("href") shouldBe "javascript:history.back()"
         }
       }
 
@@ -61,7 +61,7 @@ class RebasedCostsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
         lazy val heading = document.body().select("h1")
 
         "has a class of heading-xlarge" in {
-          heading.attr("class") shouldBe "heading-xlarge"
+          heading.attr("class") shouldBe "govuk-fieldset__heading"
         }
 
         s"has the text '${messages.RebasedCosts.question}'" in {
@@ -70,7 +70,7 @@ class RebasedCostsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
       }
 
       s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-        document.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
+        document.select("body > header > div > div > div.govuk-header__content > a").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
       }
 
       "have a form" which {
@@ -94,30 +94,26 @@ class RebasedCostsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
       }
 
       s"have the input question '${messages.RebasedCosts.inputQuestion}'" in {
-        document.body().select("label[for=rebasedCosts] div").first().text() shouldBe messages.RebasedCosts.inputQuestion
+        document.body().select("#conditional-rebasedCosts > div > label").first().text() shouldBe messages.RebasedCosts.inputQuestion
       }
 
       s"have joint ownership text of ${messages.RebasedCosts.jointOwnership}" in {
-        document.body().select("label[for=rebasedCosts] p").text() shouldBe messages.RebasedCosts.jointOwnership
+        document.body().select("#rebasedCosts-hint").text() shouldBe messages.RebasedCosts.jointOwnership
       }
 
       "have a value input with the id 'rebasedCosts'" in {
-        document.body().select("input[type=number]").attr("id") should include("rebasedCosts")
+        document.select("#rebasedCosts").attr("id") should include("rebasedCosts")
       }
 
       "have a button" which {
         lazy val button = document.select("button")
 
         "has the class 'button'" in {
-          button.attr("class") shouldBe "button"
-        }
-
-        "has the type 'submit'" in {
-          button.attr("type") shouldBe "submit"
+          button.attr("class") shouldBe "govuk-button"
         }
 
         "has the id 'continue-button'" in {
-          button.attr("id") shouldBe "continue-button"
+          button.attr("id") shouldBe "submit"
         }
       }
 
@@ -135,7 +131,7 @@ class RebasedCostsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {
-        document.select("#error-summary-display").size() shouldBe 1
+        document.select(".govuk-error-summary").size() shouldBe 1
       }
     }
   }

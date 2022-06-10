@@ -15,32 +15,39 @@
  *@
 
 @import models.DisposalValueModel
+@import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
+
 
 @this(
     form: FormWithCSRF,
-    errorSummary: helpers.errorSummary,
-    formInputMoney: helpers.formInputMoney,
-    mainTemplate: main_template
+    errorSummary: playComponents.errorSummary,
+    formInputMoney: playComponents.formInputMoney,
+    submitButton: playComponents.submitButton,
+    layout: Layout
 )
 
 @(marketValueForm: Form[DisposalValueModel])(implicit request: Request[_], messages: Messages)
 
-@mainTemplate(Messages("calc.marketValue.sold.question")) {
+@title = @{
+    if(marketValueForm.errors.nonEmpty) messages("site.title.error", Messages("calc.marketValue.sold.question")) else Messages("calc.marketValue.sold.question")
+}
 
-    <a id="back-link" class="back-link" href="@controllers.routes.SoldForLessController.soldForLess">@Messages("calc.base.back")</a>
+@layout(
+    pageTitle = title
+) {
+    @errorSummary(marketValueForm.errors)
 
-    @errorSummary(marketValueForm, "disposalValue")
+    <h1 class="govuk-heading-xl" for="disposal-value">@Messages("calc.marketValue.sold.question")</h1>
 
-    <h1 class="heading-xlarge" for="disposal-value">@Messages("calc.marketValue.sold.question")</h1>
-
-    <p class="form-hint">@Messages("calc.marketValue.helpText") @Messages("calc.marketValue.helpTextAdditional")</p>
+    <p class="govuk-body">@Messages("calc.marketValue.helpText") @Messages("calc.marketValue.helpTextAdditional")</p>
 
     @form(action = controllers.routes.MarketValueWhenSoldOrGaveAwayController.submitMarketValueWhenSold()) {
 
-        <p class="panel-indent panel-indent--wide panel-indent--gutter">@Messages("calc.marketValue.jointOwnership")</p>
+        <p class="govuk-inset-text">@Messages("calc.marketValue.jointOwnership")</p>
 
-        @formInputMoney(marketValueForm, "disposalValue", Messages("calc.marketValue.sold.question"), hideLabel = true)
+        @formInputMoney(marketValueForm("disposalValue"), Messages("calc.marketValue.sold.question"), hideLabel = true)
 
-        <button id="continue-button" type="submit" class="button">@Messages("calc.base.button.continue")</button>
+        @submitButton()
+
     }
 }

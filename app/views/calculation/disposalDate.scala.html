@@ -15,31 +15,40 @@
  *@
 
 @import models.DateModel
-@import controllers.CgtLanguageController
+@import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
-    errorSummary: helpers.errorSummary,
-    mainTemplate: main_template,
+    errorSummary: playComponents.errorSummary,
+    layout: Layout,
     form: FormWithCSRF,
-    formInlineDateInput: helpers.formInlineDateInput
+    formInlineDateInput: playComponents.formInlineDateInput,
+    submitButton: playComponents.submitButton
 )
 
 @(disposalDateForm: Form[DateModel])(implicit request: Request[_], messages: Messages, lang: Lang)
 
-@mainTemplate(Messages("calc.disposalDate.question")) {
+@title = @{
+    if(disposalDateForm.errors.nonEmpty) messages("site.title.error", Messages("calc.disposalDate.question")) else Messages("calc.disposalDate.question")
+}
 
-    @errorSummary(disposalDateForm, "disposal-date", "disposalDateDay")
-
-    <h1 class="heading-xlarge">@Messages("calc.disposalDate.question")</h1>
+@layout(
+    pageTitle = title,
+    backLinkEnabled = false,
+    timeoutEnabled = false
+) {
+    @errorSummary(disposalDateForm.errors)
 
     @form(action = controllers.routes.DisposalDateController.submitDisposalDate) {
 
-        @formInlineDateInput(disposalDateForm,
-        "disposalDate",
-        Messages("calc.disposalDate.question"),
-        '_visually_hidden -> true)
+        @formInlineDateInput(
+            content = Messages("calc.disposalDate.question"),
+            hintContent = Some(Messages("calc.common.date.hint")),
+            field = disposalDateForm("disposalDate"),
+            pageHeading = true
+        )
 
-        <button id="continue-button" type="submit" class="button">@Messages("calc.base.button.continue")</button>
+
+        @submitButton()
 
     }
 }

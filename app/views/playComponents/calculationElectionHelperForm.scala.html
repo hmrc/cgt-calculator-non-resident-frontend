@@ -1,0 +1,74 @@
+@*
+ * Copyright 2021 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@this(
+    govukButton: GovukButton,
+    inputRadio: playComponents.input_radio
+)
+
+@(
+    radioOptions: Seq[(String, String, String, String, Option[String], Option[BigDecimal])],
+    legend: String,
+    legendClass: Option[String] = Some("govuk-label--m"),
+    hint: Option[String] = None,
+    isPageHeading: Boolean = true,
+    field: Field
+)(implicit messages: Messages)
+
+@bigDecimalToPounds(decimal: BigDecimal) = @{
+    Html(s"&pound;%,.2f".format(decimal.setScale(2, BigDecimal.RoundingMode.FLOOR).abs))
+}
+
+@itemContent(radioTitle: String, message: String, optDateMessage: Option[String], amount: BigDecimal) = {
+    <span class="govuk-body govuk-!-font-weight-bold">@radioTitle</span>
+    <p class="govuk-body">@message @optDateMessage</p>
+    <span class="govuk-body govuk-!-font-weight-bold">@bigDecimalToPounds(amount)</span>
+}
+
+@otherReliefsContent(amount: BigDecimal, value: String) = {
+    @if(amount > 0){
+        <span class="govuk-body">@messages("calc.calculationElection.someOtherRelief")</span>
+        <span class="govuk-body govuk-!-font-weight-bold">@bigDecimalToPounds(amount)</span>
+        <br>
+        @govukButton(Button(
+            name = Some("action"),
+            value = Some(value),
+            classes = "govuk-!-margin-top-2",
+            content = Text(messages("calc.checkYourAnswers.change"))
+        ))
+    } else {
+        @govukButton(Button(
+            name = Some("action"),
+            value = Some(value),
+            content = Text(messages("calc.calculationElection.otherRelief"))
+        ))
+    }
+}
+
+@inputRadio(
+    legend = legend,
+    legendClass = legendClass,
+    hint = hint,
+    isPageHeading = isPageHeading,
+    field = field,
+    items = radioOptions.map { case (value, amount, message, calcType, dateMessage, otherReliefs) =>
+        RadioItem(
+            value = Some(value),
+            content = HtmlContent(itemContent(Messages(calcType), Messages(message), dateMessage.map(Messages(_)), BigDecimal(amount))),
+            conditionalHtml = otherReliefs.map(otherReliefsContent(_, value))
+        )
+    }
+)

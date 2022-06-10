@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package controllers.CalculationControllerTests
 
 import akka.stream.Materializer
 import assets.MessageLookup.NonResident.{PersonalAllowance => messages}
+import assets.MessageLookup.{NonResident => commonMessages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import config.ApplicationConfig
@@ -50,6 +51,7 @@ class PersonalAllowanceActionSpec extends CommonPlaySpec with WithCommonFakeAppl
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val personalAllowanceView = fakeApplication.injector.instanceOf[personalAllowance]
+  lazy val pageTitle = s"""${messages.question} - ${commonMessages.pageHeading} - GOV.UK"""
 
   class Setup {
     val controller = new PersonalAllowanceController(
@@ -109,8 +111,8 @@ class PersonalAllowanceActionSpec extends CommonPlaySpec with WithCommonFakeAppl
         status(result) shouldBe 200
       }
 
-      s"have the title ${messages.question}" in {
-        document.title shouldEqual messages.question
+      s"have the title ${pageTitle}" in {
+        document.title shouldEqual pageTitle
       }
     }
 
@@ -124,8 +126,8 @@ class PersonalAllowanceActionSpec extends CommonPlaySpec with WithCommonFakeAppl
         status(result) shouldBe 200
       }
 
-      s"have the title ${messages.question}" in {
-        document.title shouldEqual messages.question
+      s"have the title ${pageTitle}" in {
+        document.title shouldEqual pageTitle
       }
     }
   }
@@ -161,7 +163,7 @@ class PersonalAllowanceActionSpec extends CommonPlaySpec with WithCommonFakeAppl
       }
 
       s"return to the personal allowance page" in {
-        document.title shouldEqual messages.question
+        document.title shouldEqual s"Error: $pageTitle"
       }
     }
   }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -82,7 +82,7 @@ class NoCapitalGainsTaxActionSpec extends CommonPlaySpec with WithCommonFakeAppl
       }
 
       "load the No Capital Gains Tax page" in {
-        document.title() shouldBe messages.title
+        document.title() shouldBe s"${messages.title} - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
       }
     }
 

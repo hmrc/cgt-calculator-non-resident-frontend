@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,6 +35,8 @@ class ImprovementsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
   val mockMessagesApi = mock[MessagesApi]
   lazy val improvementsView = fakeApplication.injector.instanceOf[improvements]
 
+  lazy val pageTitle = s"""${messages.Improvements.question} - ${messages.pageHeading} - GOV.UK"""
+  lazy val pageTitleOwnerBeforeLegislationStart = s"""${messages.Improvements.ownerBeforeLegislationStartQuestion} - ${messages.pageHeading} - GOV.UK"""
 
   "Improvements view" should {
 
@@ -46,12 +48,12 @@ class ImprovementsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
 
       "return some HTML that" should {
 
-        s"has the title of ${messages.Improvements.question}" in {
-          document.title shouldBe messages.Improvements.question
+        s"has the title of $pageTitle" in {
+          document.title shouldBe pageTitle
         }
 
         s"has the heading of ${messages.Improvements.question}" in {
-          document.body().getElementsByTag("h1").text shouldBe messages.Improvements.question
+          document.body().getElementsByTag("h1").first().text shouldBe messages.Improvements.question
         }
 
         "does not contain another component with an input box" in {
@@ -67,55 +69,28 @@ class ImprovementsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
           }
 
           "has a class of 'back-link'" in {
-            backLink.attr("class") shouldBe "back-link"
+            backLink.attr("class") shouldBe "govuk-back-link"
           }
 
           s"has a route to 'back-link'" in {
-            backLink.attr("href") shouldBe "back-link"
+            backLink.attr("href") shouldBe "javascript:history.back()"
           }
         }
 
         s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-          document.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
+          document.getElementsByClass("govuk-header__link govuk-header__link--service-name").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
         }
 
         "have hint text" which {
 
-          lazy val helpText = document.select(".form-hint")
+          lazy val helpText = document.getElementsByClass("govuk-body")
 
           s"should have a first sentence of ${messages.Improvements.helpOne}" in {
-            helpText.select("p").text() should include(messages.Improvements.helpOne)
+            helpText.text() should include(messages.Improvements.helpOne)
           }
 
           s"should have a second sentence of ${messages.Improvements.helpTwo}" in {
-            helpText.select("p").text() should include(messages.Improvements.helpTwo)
-          }
-        }
-
-        "have a drop down example section" which {
-
-          lazy val example = document.select("details")
-
-          "should have a span for the title" which {
-
-            lazy val exampleTitle = example.select("span")
-
-            s"should have the text ${messages.Improvements.exampleTitle}" in {
-              exampleTitle.text shouldEqual messages.Improvements.exampleTitle
-            }
-          }
-
-          "should have a div" which {
-
-            lazy val exampleContent = example.select("div")
-
-            s"should have a first sentence of ${messages.Improvements.exampleOne}" in {
-              exampleContent.select("p").text should include(messages.Improvements.exampleOne)
-            }
-
-            s"should have a second sentence of ${messages.Improvements.exampleTwo}" in {
-              exampleContent.select("p").text should include(messages.Improvements.exampleTwo)
-            }
+            helpText.text() should include(messages.Improvements.helpTwo)
           }
         }
 
@@ -127,8 +102,8 @@ class ImprovementsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
             legend.text shouldEqual messages.Improvements.question
           }
 
-          "have the class visuallyhidden" in {
-            legend.hasClass("visuallyhidden") shouldEqual true
+          "have the class govuk-visually-hidden" in {
+            legend.hasClass("govuk-visually-hidden") shouldEqual true
           }
         }
 
@@ -149,38 +124,18 @@ class ImprovementsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
         }
 
         s"have a paragraph with the text ${messages.Improvements.jointOwnership}" in {
-          document.getElementById("jointOwner").text shouldBe messages.Improvements.jointOwnership
-        }
-
-        "have some hidden content" which {
-          lazy val hiddenContent = document.body().select("#hidden")
-
-          "which has a single div with a class of form-group" in {
-            hiddenContent.select("div.form-group").size() shouldBe 1
-          }
-
-          "contains an input with the id 'improvementsAmt'" in {
-            hiddenContent.select("input").attr("id") shouldBe "improvementsAmt"
-          }
-
-          s"contains the question ${messages.Improvements.questionTwo}" in {
-            hiddenContent.select("label").text() startsWith messages.Improvements.questionTwo
-          }
+          document.getElementsByClass("govuk-inset-text").text shouldBe messages.Improvements.jointOwnership
         }
 
         "have a button" which {
           lazy val button = document.select("button")
 
           "has the class 'button'" in {
-            button.attr("class") shouldBe "button"
+            button.attr("class") shouldBe "govuk-button"
           }
 
-          "has the type 'submit'" in {
-            button.attr("type") shouldBe "submit"
-          }
-
-          "has the id 'continue-button'" in {
-            button.attr("id") shouldBe "continue-button"
+          "has the id 'submit'" in {
+            button.attr("id") shouldBe "submit"
           }
         }
       }
@@ -206,18 +161,16 @@ class ImprovementsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
         }
 
         "have some hidden content" which {
-          lazy val hiddenContent = document.body().select("#hidden")
-
           "which has a single div with a class of form-group" in {
-            hiddenContent.select("div.form-group").size() shouldBe 3
+            document.getElementsByClass("govuk-form-group").size() shouldBe 1
           }
 
           s"contains the question ${messages.Improvements.questionThree}" in {
-            hiddenContent.select("label").text() should include(messages.Improvements.questionThree)
+            document.getElementsByClass("govuk-label").text() should include(messages.Improvements.questionThree)
           }
 
           s"contains the question ${messages.Improvements.questionFour}" in {
-            hiddenContent.select("label").text() should include(messages.Improvements.questionFour)
+            document.getElementsByClass("govuk-label").text() should include(messages.Improvements.questionFour)
           }
         }
       }
@@ -232,12 +185,12 @@ class ImprovementsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
 
         "have that content" which {
 
-          s"has the title of ${messages.Improvements.ownerBeforeLegislationStartQuestion}" in {
-            document.title shouldBe messages.Improvements.ownerBeforeLegislationStartQuestion
+          s"has the title of ${pageTitleOwnerBeforeLegislationStart}" in {
+            document.title shouldBe pageTitleOwnerBeforeLegislationStart
           }
 
           s"has the heading of ${messages.Improvements.ownerBeforeLegislationStartQuestion}" in {
-            document.body().getElementsByTag("h1").text shouldBe messages.Improvements.ownerBeforeLegislationStartQuestion
+            document.body().getElementsByTag("h1").first.text shouldBe messages.Improvements.ownerBeforeLegislationStartQuestion
           }
 
           "have a legend that" should {
@@ -258,7 +211,7 @@ class ImprovementsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {
-        document.select("#error-summary-display").size() shouldBe 1
+        document.getElementsByClass("govuk-error-summary").size() shouldBe 1
       }
     }
   }

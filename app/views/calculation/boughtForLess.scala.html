@@ -15,32 +15,33 @@
  *@
 
 @import models.BoughtForLessModel
+@import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
     form: FormWithCSRF,
-    mainTemplate: main_template,
-    errorSummary: helpers.errorSummary,
-    formYesNoRadio: helpers.formYesNoRadio
+    layout: Layout,
+    errorSummary: playComponents.errorSummary,
+    formYesNoRadio: playComponents.input_yes_no,
+    submitButton: playComponents.submitButton
 )
 
 @(boughtForLessForm: Form[BoughtForLessModel])(implicit request: Request[_], messages: Messages)
 
-@mainTemplate(Messages("calc.boughtForLess.question")) {
+@title = @{
+    if(boughtForLessForm.errors.nonEmpty) messages("site.title.error", messages("calc.boughtForLess.question")) else messages("calc.boughtForLess.question")
+}
+@layout(pageTitle = title) {
 
-    <a id="back-link" class="back-link" href="@controllers.routes.HowBecameOwnerController.howBecameOwner">@Messages("calc.base.back")</a>
+        @form(action = controllers.routes.BoughtForLessController.submitBoughtForLess) {
 
-    @errorSummary(boughtForLessForm, "boughtForLess")
-
-    <h1 class="heading-xlarge">@Messages("calc.boughtForLess.question")</h1>
-
-    @form(action = controllers.routes.BoughtForLessController.submitBoughtForLess) {
+        @errorSummary(boughtForLessForm.errors)
 
         @formYesNoRadio(
-            field = boughtForLessForm("boughtForLess"),
-            legend = Messages("calc.boughtForLess.question"),
-            legendClass = Some("visuallyhidden")
+            legend = messages("calc.boughtForLess.question"),
+            field = boughtForLessForm("boughtForLess")
         )
 
-        <button class="button" type="submit" id="continue-button">@Messages("calc.base.continue")</button>
+        @submitButton()
     }
 }
+

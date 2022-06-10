@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,7 +41,7 @@ class MarketValueGaveAwayViewSpec extends CommonPlaySpec with WithCommonFakeAppl
 
     "supplied with no errors" should {
       s"have a title of ${MarketValueMessages.disposalGaveAwayQuestion}" in {
-        document.title() shouldBe MarketValueMessages.disposalGaveAwayQuestion
+        document.title() shouldBe s"${MarketValueMessages.disposalGaveAwayQuestion} - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
       }
 
       s"have a header" which {
@@ -51,26 +51,26 @@ class MarketValueGaveAwayViewSpec extends CommonPlaySpec with WithCommonFakeAppl
         }
 
         s"has the class 'head-xlarge'" in {
-          header.attr("class") shouldBe "heading-xlarge"
+          header.attr("class") shouldBe "govuk-heading-xl"
         }
       }
 
       s"have a paragraph" which {
-        lazy val helpText = document.select("p.form-hint")
+        lazy val helpText = document.getElementsByClass("govuk-hint")
         s"has the help text'${MarketValueMessages.disposalHelpText}'" in {
           helpText.html() shouldBe MarketValueMessages.disposalHelpText +
             " <br> " + MarketValueMessages.disposalHelpTextAdditional
         }
         s"has the class 'form-hint'" in {
-          helpText.attr("class") shouldBe "form-hint"
+          helpText.attr("class") shouldBe "govuk-hint"
         }
       }
 
       "have a back link" which {
-        lazy val backLink = document.body().select("#back-link")
+        lazy val backLink = document.select("#back-link")
 
         "has a class of 'back-link'" in {
-          backLink.attr("class") shouldBe "back-link"
+          backLink.attr("class") shouldBe "govuk-back-link"
         }
 
         "has the text" in {
@@ -78,7 +78,7 @@ class MarketValueGaveAwayViewSpec extends CommonPlaySpec with WithCommonFakeAppl
         }
 
         s"has a route to 'who-did-you-give-it-to'" in {
-          backLink.attr("href") shouldBe controllers.routes.WhoDidYouGiveItToController.whoDidYouGiveItTo().url
+          backLink.attr("href") shouldBe "javascript:history.back()"
         }
       }
 
@@ -94,7 +94,7 @@ class MarketValueGaveAwayViewSpec extends CommonPlaySpec with WithCommonFakeAppl
         }
 
         s"has the hidden text ${MessageLookup.NonResident.MarketValue.disposalGaveAwayQuestion}" in {
-          form.select("div.visuallyhidden").text() shouldBe MessageLookup.NonResident.MarketValue.disposalGaveAwayQuestion
+          document.getElementsByClass("govuk-heading-xl").text() shouldBe MessageLookup.NonResident.MarketValue.disposalGaveAwayQuestion
         }
 
         s"has the input ID disposalValue" in {
@@ -102,23 +102,23 @@ class MarketValueGaveAwayViewSpec extends CommonPlaySpec with WithCommonFakeAppl
         }
 
         s"that has a paragraph with the text ${MarketValueMessages.jointOwnership}" in {
-          document.select("p.panel-indent").text shouldBe MarketValueMessages.jointOwnership
+          document.getElementsByClass("govuk-inset-text").text shouldBe MarketValueMessages.jointOwnership
         }
       }
 
       "have a button" which {
-        lazy val button = document.select("button")
+        lazy val button = document.getElementsByClass("govuk-button")
 
         "has the class 'button'" in {
-          button.attr("class") shouldBe "button"
+          button.attr("class") shouldBe "govuk-button"
         }
 
         "has the type 'submit'" in {
-          button.attr("type") shouldBe "submit"
+          button.attr("id") shouldBe "submit"
         }
 
         "has the id 'continue-button'" in {
-          button.attr("id") shouldBe "continue-button"
+          button.attr("id") shouldBe "submit"
         }
       }
 
@@ -133,7 +133,7 @@ class MarketValueGaveAwayViewSpec extends CommonPlaySpec with WithCommonFakeAppl
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {
-        document.select("#error-summary-display").size() shouldBe 1
+        document.getElementsByClass("govuk-error-summary").size() shouldBe 1
       }
     }
   }

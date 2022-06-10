@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,14 +41,15 @@ class WorthWhenBoughtForLessViewSpec extends CommonPlaySpec with WithCommonFakeA
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${WorthWhenBoughtForLess.question}'" in {
-        document.title() shouldBe WorthWhenBoughtForLess.question
+        document.title() shouldBe WorthWhenBoughtForLess.question + " - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
+
       }
 
       "have a back link" which {
         lazy val backLink = document.body().select("#back-link")
 
         "has a class of 'back-link'" in {
-          backLink.attr("class") shouldBe "back-link"
+          backLink.attr("class") shouldBe "govuk-back-link"
         }
 
         "has the text" in {
@@ -56,20 +57,21 @@ class WorthWhenBoughtForLessViewSpec extends CommonPlaySpec with WithCommonFakeA
         }
 
         s"has a route to 'bought-for-less'" in {
-          backLink.attr("href") shouldBe controllers.routes.BoughtForLessController.boughtForLess().url
+          backLink.attr("href") shouldBe "javascript:history.back()"
         }
       }
 
       s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-        document.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
+        document.getElementsByClass("govuk-header__link govuk-header__link--service-name").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
       }
+
 
       "have a heading" which {
 
         lazy val heading = document.body().select("h1")
 
         "has a class of heading-large" in {
-          heading.attr("class") shouldBe "heading-xlarge"
+          heading.attr("class") shouldBe "govuk-heading-xl"
         }
 
         s"has the text '${WorthWhenBoughtForLess.question}'" in {
@@ -79,12 +81,11 @@ class WorthWhenBoughtForLessViewSpec extends CommonPlaySpec with WithCommonFakeA
 
       "have help text" which {
 
-        lazy val helpText = document.body().select("#helpText")
-        lazy val hintText = document.body().select("#hintText")
-
+        lazy val bodyText = document.getElementsByClass("govuk-body")
+        lazy val helpText = document.getElementsByClass("govuk-inset-text")
 
         s"contains hint text '${WorthWhenBoughtForLess.hintOne}'" in {
-          hintText.text() should include(WorthWhenBoughtForLess.hintOne)
+          bodyText.text() should include(WorthWhenBoughtForLess.hintOne)
         }
 
         s"contains help text '${WorthWhenBoughtForLess.helpText}'" in {
@@ -112,15 +113,15 @@ class WorthWhenBoughtForLessViewSpec extends CommonPlaySpec with WithCommonFakeA
         lazy val button = document.select("button")
 
         "has the class 'button'" in {
-          button.attr("class") shouldBe "button"
+          button.attr("class") shouldBe "govuk-button"
         }
 
         "has the type 'submit'" in {
-          button.attr("type") shouldBe "submit"
+          button.attr("id") shouldBe "submit"
         }
 
         "has the id 'continue-button'" in {
-          button.attr("id") shouldBe "continue-button"
+          button.attr("id") shouldBe "submit"
         }
       }
 
@@ -136,8 +137,7 @@ class WorthWhenBoughtForLessViewSpec extends CommonPlaySpec with WithCommonFakeA
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {
-        document.select("#error-summary-display").size() shouldBe 1
-      }
+        document.getElementsByClass("govuk-error-summary").size() shouldBe 1      }
     }
   }
 }

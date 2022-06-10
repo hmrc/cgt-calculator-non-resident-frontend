@@ -15,41 +15,40 @@
  *@
 
 @import models.RebasedCostsModel
+@import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
-    mainTemplate: main_template,
-    errorSummary: helpers.errorSummary,
+    layout: Layout,
+    errorSummary: playComponents.errorSummary,
     form: FormWithCSRF,
-    formHiddenYesNoRadio: helpers.formHiddenYesNoRadio,
-    formInputMoney: helpers.formInputMoney
+    formHiddenYesNoRadioCurrencyInput: playComponents.formHiddenYesNoRadioCurrencyInput,
+    submitButton: playComponents.submitButton
 )
 
 @(rebasedCosts: Form[RebasedCostsModel])(implicit request: Request[_], messages: Messages)
 
-@mainTemplate(Messages("calc.rebasedCosts.question")) {
+@title = @{
+    if(rebasedCosts.errors.nonEmpty) messages("site.title.error", Messages("calc.rebasedCosts.question")) else Messages("calc.rebasedCosts.question")
+}
 
-    <a id="back-link" class="back-link" href="@controllers.routes.RebasedValueController.rebasedValue">@Messages("calc.base.back")</a>
+@layout(
+   pageTitle = title
+) {
 
-    @errorSummary(rebasedCosts, "rebased-costs", "rebasedCosts")
-
-    <h1 class="heading-xlarge">@Messages("calc.rebasedCosts.question")</h1>
+    @errorSummary(rebasedCosts.errors, Some("rebasedCosts"))
 
     @form(action = controllers.routes.RebasedCostsController.submitRebasedCosts) {
 
-        @formHiddenYesNoRadio(rebasedCosts,
-                                "hasRebasedCosts",
-                                Messages("calc.rebasedCosts.question"),
-                                formInputMoney(rebasedCosts,
-                                    "rebasedCosts",
-                                    Messages("calc.rebasedCosts.questionTwo"),
-                                    additionalHTMLContent = Some(s"""<p>${Messages("calc.rebasedCosts.jointOwnership")}</p>"""),
-                                    labelClasses = "heading-small"
-                                ),
-                                hideLegend = true,
-                                hidePanel = true
-                              )
+        @formHiddenYesNoRadioCurrencyInput(
+            form = rebasedCosts,
+            yesNoFieldName = "hasRebasedCosts",
+            conditionalInputFieldName = "rebasedCosts",
+            yesNoQuestionText = Messages("calc.rebasedCosts.question"),
+            conditionalInputQuestionText = Messages("calc.rebasedCosts.questionTwo"),
+            conditionalInputHint = Some(Messages("calc.rebasedCosts.jointOwnership"))
+        )
 
-        <button class="button" type="submit" id="continue-button">@Messages("calc.base.continue")</button>
+        @submitButton()
 
     }
 }

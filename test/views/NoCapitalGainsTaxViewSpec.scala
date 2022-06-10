@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,7 +41,7 @@ class NoCapitalGainsTaxViewSpec extends CommonPlaySpec with WithCommonFakeApplic
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${messages.NoCapitalGainsTax.title}'" in {
-        document.title() shouldBe messages.NoCapitalGainsTax.title
+        document.title() shouldBe s"${messages.NoCapitalGainsTax.title} - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
       }
 
       "have a back link" which {
@@ -52,12 +52,12 @@ class NoCapitalGainsTaxViewSpec extends CommonPlaySpec with WithCommonFakeApplic
         }
 
         s"has a route to 'disposal-costs'" in {
-          backLink.attr("href") shouldBe controllers.routes.DisposalDateController.disposalDate().url
+          backLink.attr("href") shouldBe "javascript:history.back()"
         }
       }
 
       s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-        document.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
+        document.getElementsByClass("govuk-header__link govuk-header__link--service-name").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
       }
 
       "have a heading" which {
@@ -77,7 +77,7 @@ class NoCapitalGainsTaxViewSpec extends CommonPlaySpec with WithCommonFakeApplic
       }
 
       "contain a span within the second paragraph" which {
-        lazy val span = document.select("div#content p span")
+        lazy val span = document.getElementsByClass("no-wrap")
 
         "contains a date in a span" which {
           lazy val dateSpan = span.select("span > span")
@@ -89,7 +89,7 @@ class NoCapitalGainsTaxViewSpec extends CommonPlaySpec with WithCommonFakeApplic
       }
 
       "contains a change link" which {
-        lazy val changeLink = document.select("article div a").first()
+        lazy val changeLink = document.getElementById("change-link")
 
         "has an href to disposal-date page" in {
           changeLink.attr("href") shouldBe controllers.routes.DisposalDateController.disposalDate().url
@@ -101,14 +101,13 @@ class NoCapitalGainsTaxViewSpec extends CommonPlaySpec with WithCommonFakeApplic
       }
 
       "contains a return link" which {
-        lazy val returnLink = document.select("article div a").get(1)
 
         "has an href to disposal-date page" in {
-          returnLink.attr("href") shouldBe "http://www.gov.uk"
+          document.select("#main-content > div > div > div:nth-child(5) > a").attr("href") shouldBe "http://www.gov.uk"
         }
 
         s"has the text ${messages.NoCapitalGainsTax.returnLink}" in {
-          returnLink.text() shouldBe messages.NoCapitalGainsTax.returnLink
+          document.select("#main-content > div > div > div:nth-child(5) > a").text() shouldBe messages.NoCapitalGainsTax.returnLink
         }
       }
 
@@ -122,7 +121,7 @@ class NoCapitalGainsTaxViewSpec extends CommonPlaySpec with WithCommonFakeApplic
       lazy val document = Jsoup.parse(view.body)
 
       "has the date 12-11-2013" in {
-        document.select("div#content p span > span").text() shouldBe "12 November 2013"
+        document.getElementsByClass("no-wrap").select("span > span").text() shouldBe "12 November 2013"
       }
     }
   }

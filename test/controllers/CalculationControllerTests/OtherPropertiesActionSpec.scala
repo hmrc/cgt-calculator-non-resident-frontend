@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package controllers.CalculationControllerTests
 
 import akka.stream.Materializer
 import assets.MessageLookup.NonResident.{OtherProperties => messages}
+import assets.MessageLookup.{NonResident => commonMessages}
 import com.codahale.metrics.SharedMetricRegistries
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import config.ApplicationConfig
@@ -53,6 +54,7 @@ class OtherPropertiesActionSpec extends CommonPlaySpec with WithCommonFakeApplic
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val otherPropertiesView = fakeApplication.injector.instanceOf[otherProperties]
   val sessionTimeoutView = fakeApplication.injector.instanceOf[sessionTimeout]
+  lazy val pageTitle = s"""${messages.question} - ${commonMessages.pageHeading} - GOV.UK"""
 
   class Setup {
     val controller = new OtherPropertiesController(
@@ -106,7 +108,7 @@ class OtherPropertiesActionSpec extends CommonPlaySpec with WithCommonFakeApplic
         }
 
         "display the other properties page" in {
-          document.title shouldEqual messages.question
+          document.title shouldEqual pageTitle
         }
       }
     }
@@ -157,7 +159,7 @@ class OtherPropertiesActionSpec extends CommonPlaySpec with WithCommonFakeApplic
       }
 
       "return to the other properties page" in {
-        Jsoup.parse(bodyOf(result)(materializer, ec)).select("title").text shouldEqual messages.question
+        Jsoup.parse(bodyOf(result)(materializer, ec)).select("title").text shouldEqual s"""Error: ${pageTitle}"""
       }
     }
   }

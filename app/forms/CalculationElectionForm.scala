@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package forms
 import models.CalculationElectionModel
 import play.api.data.Forms._
 import play.api.data._
+import common.Formatters.text
 
 object CalculationElectionForm {
 
@@ -31,7 +32,8 @@ object CalculationElectionForm {
 
   val calculationElectionForm = Form(
     mapping(
-      "calculationElection" -> text.verifying("calc.base.optionReqError", validate)
+      "calculationElection" -> text("calc.calculationElection.errors.required")
+        .verifying("calc.calculationElection.errors.required", validate)
     )(CalculationElectionModel.apply)(CalculationElectionModel.unapply)
   )
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -107,7 +107,7 @@ class AcquisitionDateActionSpec extends CommonPlaySpec with WithCommonFakeApplic
       }
 
       "should render the acquisition date page" in {
-        document.title shouldEqual messages.question
+        document.title shouldEqual s"${messages.question} - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
       }
     }
 
@@ -123,7 +123,7 @@ class AcquisitionDateActionSpec extends CommonPlaySpec with WithCommonFakeApplic
       }
 
       s"have load the acquisition date page ${messages.question}" in {
-        document.title() shouldBe messages.question
+        document.title() shouldBe s"${messages.question} - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
       }
     }
   }
@@ -132,8 +132,8 @@ class AcquisitionDateActionSpec extends CommonPlaySpec with WithCommonFakeApplic
 
     "supplied with a valid model" should {
       val target = setupTarget(None)
-      lazy val request = fakeRequestToPOSTWithSession(("acquisitionDateDay", "31"),
-        ("acquisitionDateMonth", "03"), ("acquisitionDateYear", "2016"))
+      lazy val request = fakeRequestToPOSTWithSession(("acquisitionDate.day", "31"),
+        ("acquisitionDate.month", "03"), ("acquisitionDate.year", "2016"))
       lazy val result = target.submitAcquisitionDate(request)
 
       "return a 303" in {
@@ -147,8 +147,8 @@ class AcquisitionDateActionSpec extends CommonPlaySpec with WithCommonFakeApplic
 
     "supplied with a valid model with date before the legislation start" should {
       val target = setupTarget(None)
-      lazy val request = fakeRequestToPOSTWithSession(("acquisitionDateDay", "31"),
-        ("acquisitionDateMonth", "03"), ("acquisitionDateYear", "1982"))
+      lazy val request = fakeRequestToPOSTWithSession(("acquisitionDate.day", "31"),
+        ("acquisitionDate.month", "03"), ("acquisitionDate.year", "1982"))
       lazy val result = target.submitAcquisitionDate(request)
 
       "return a 303" in {
@@ -162,8 +162,8 @@ class AcquisitionDateActionSpec extends CommonPlaySpec with WithCommonFakeApplic
 
     "supplied with a valid model with date on the legislation start" should {
       val target = setupTarget(None)
-      lazy val request = fakeRequestToPOSTWithSession(("acquisitionDateDay", "01"),
-        ("acquisitionDateMonth", "04"), ("acquisitionDateYear", "1982"))
+      lazy val request = fakeRequestToPOSTWithSession(("acquisitionDate.day", "01"),
+        ("acquisitionDate.month", "04"), ("acquisitionDate.year", "1982"))
       lazy val result = target.submitAcquisitionDate(request)
 
       "return a 303" in {

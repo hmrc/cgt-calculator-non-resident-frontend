@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,7 +57,7 @@ class PrivateResidenceReliefViewSpec extends CommonPlaySpec with WithCommonFakeA
         lazy val document = Jsoup.parse(view.body)
 
         s"have a title of '${messages.PrivateResidenceRelief.question}'" in {
-          document.title() shouldBe messages.PrivateResidenceRelief.question
+          document.title() shouldBe messages.PrivateResidenceRelief.title
         }
 
         "have a back link" which {
@@ -68,12 +68,12 @@ class PrivateResidenceReliefViewSpec extends CommonPlaySpec with WithCommonFakeA
           }
 
           s"has a route to 'improvements'" in {
-            backLink.attr("href") shouldBe controllers.routes.PropertyLivedInController.propertyLivedIn().url
+            backLink.attr("href") shouldBe "javascript:history.back()"
           }
         }
 
         s"have a heading of '${messages.PrivateResidenceRelief.question}'" in {
-          document.body().select("h1").text shouldBe messages.PrivateResidenceRelief.question
+          document.body().getElementsByClass("govuk-heading-xl").text shouldBe messages.PrivateResidenceRelief.question
         }
 
         s"has the a paragraph with the text '${messages.PrivateResidenceRelief.intro2}' " in {
@@ -110,10 +110,10 @@ class PrivateResidenceReliefViewSpec extends CommonPlaySpec with WithCommonFakeA
 
         "have some hidden content" which {
 
-          lazy val hiddenContent = document.body().select("#hidden")
+          lazy val hiddenContent = document.body().select("#conditional-daysClaimed")
 
-          "which has a two divs with a class of form-group for the two questions" in {
-            hiddenContent.select("div.form-group").size() shouldBe 2
+          "which has a two divs for the two questions" in {
+            hiddenContent.select(".govuk-input__wrapper").size() shouldBe 2
           }
 
           "contains an input with the id 'daysClaimed'" in {
@@ -131,19 +131,19 @@ class PrivateResidenceReliefViewSpec extends CommonPlaySpec with WithCommonFakeA
           }
 
           s"contains the label ${messages.PrivateResidenceRelief.questionBefore}" in {
-            document.getElementsByTag("label").get(2).text() shouldBe messages.PrivateResidenceRelief.questionBefore
+            document.getElementsByTag("label").get(1).text() shouldBe messages.PrivateResidenceRelief.questionBefore
           }
 
           s"contains the label ${messages.PrivateResidenceRelief.questionBetween} $testDateString " +
             s"${messages.PrivateResidenceRelief.questionBetweenEnd}" in {
-            document.getElementsByTag("label").get(3).text() shouldBe s"${messages.PrivateResidenceRelief.questionBetween} " +
+            document.getElementsByTag("label").get(2).text() shouldBe s"${messages.PrivateResidenceRelief.questionBetween} " +
               s"$testDateString ${messages.PrivateResidenceRelief.questionBetweenEnd}"
           }
 
           "has an expandable help section" which {
 
             s"has the progressive disclosure title text ${messages.PrivateResidenceRelief.helpTextBeforeAfter}" in {
-              hiddenContent.select("span.summary").text() shouldBe messages.PrivateResidenceRelief.helpTextBeforeAfter
+              hiddenContent.select(".govuk-details__summary-text").text() shouldBe messages.PrivateResidenceRelief.helpTextBeforeAfter
             }
 
             s"has form help text ${messages.PrivateResidenceRelief.helpTextSubtitle}" in {
@@ -153,11 +153,11 @@ class PrivateResidenceReliefViewSpec extends CommonPlaySpec with WithCommonFakeA
             s"contains a bullet list of additional information list" which {
 
               s"has a bullet point with the text ${messages.PrivateResidenceRelief.questionBeforeWhyThisDate}" in {
-                document.getElementsByTag("li").get(1).text() shouldBe messages.PrivateResidenceRelief.questionBeforeWhyThisDate
+                hiddenContent.select("#detailsBullet1").text() shouldBe messages.PrivateResidenceRelief.questionBeforeWhyThisDate
               }
 
               s"has a bullet point with the text '$testDateString ${messages.PrivateResidenceRelief.questionBeforeWhyThisDate}'" in {
-                document.getElementsByTag("li").get(2).text() shouldBe s"$testDateString " + messages.PrivateResidenceRelief.questionBetweenWhyThisDate
+                hiddenContent.select("#detailsBullet2").text() shouldBe s"$testDateString " + messages.PrivateResidenceRelief.questionBetweenWhyThisDate
               }
             }
           }
@@ -166,12 +166,9 @@ class PrivateResidenceReliefViewSpec extends CommonPlaySpec with WithCommonFakeA
         "have a button" which {
           lazy val button = document.select("button")
 
-          "has the type 'submit'" in {
-            button.attr("type") shouldBe "submit"
-          }
 
-          "has the id 'continue-button'" in {
-            button.attr("id") shouldBe "continue-button"
+          "has the id 'submit'" in {
+            button.attr("id") shouldBe "submit"
           }
         }
 
@@ -202,7 +199,7 @@ class PrivateResidenceReliefViewSpec extends CommonPlaySpec with WithCommonFakeA
         lazy val document = Jsoup.parse(view.body)
 
         s"have a title of '${messages.PrivateResidenceRelief.question}'" in {
-          document.title() shouldBe messages.PrivateResidenceRelief.question
+          document.title() shouldBe messages.PrivateResidenceRelief.title
         }
 
         s"have a paragraph with the text '${messages.PrivateResidenceRelief.intro1}' " in {
@@ -211,27 +208,27 @@ class PrivateResidenceReliefViewSpec extends CommonPlaySpec with WithCommonFakeA
 
         "have some hidden content" which {
 
-          lazy val hiddenContent = document.body().select("#hidden")
+          lazy val hiddenContent = document.body().select("#conditional-daysClaimed")
 
           "has a two divs with a class of form-group for one question" in {
-            hiddenContent.select("div.form-group").size() shouldBe 1
+            hiddenContent.select(".govuk-input__wrapper").size() shouldBe 1
           }
 
           "contains an input with the id 'daysClaimed'" in {
             hiddenContent.select("input").attr("id") shouldBe "daysClaimed"
           }
           s"contains the label ${messages.PrivateResidenceRelief.questionAcquisitionDateAfterStartDate(testDateString)}" in {
-            document.getElementsByTag("label").get(2).text() shouldBe messages.PrivateResidenceRelief.questionAcquisitionDateAfterStartDate(testDateString)
+            document.getElementsByTag("label").get(1).text() shouldBe messages.PrivateResidenceRelief.questionAcquisitionDateAfterStartDate(testDateString)
           }
 
           "has an expandable help section" which {
 
             s"has the progressive disclosure title text ${messages.PrivateResidenceRelief.helpTextJustBefore}" in {
-              hiddenContent.select("span.summary").text() shouldBe messages.PrivateResidenceRelief.helpTextJustBefore
+              hiddenContent.select(".govuk-details__summary-text").text() shouldBe messages.PrivateResidenceRelief.helpTextJustBefore
             }
 
             s"has form help text ${s"$testDateString " + messages.PrivateResidenceRelief.questionBetweenWhyThisDate}" in {
-              hiddenContent.select("p#helpTextBetween").text() shouldBe s"$testDateString " + messages.PrivateResidenceRelief.questionBetweenWhyThisDateWithPlaceHolders
+              hiddenContent.select("#helpTextBetween").text() shouldBe s"$testDateString " + messages.PrivateResidenceRelief.questionBetweenWhyThisDateWithPlaceHolders
             }
           }
         }
@@ -251,7 +248,7 @@ class PrivateResidenceReliefViewSpec extends CommonPlaySpec with WithCommonFakeA
         lazy val document = Jsoup.parse(view.body)
 
         s"have a title of '${messages.PrivateResidenceRelief.question}'" in {
-          document.title() shouldBe messages.PrivateResidenceRelief.question
+          document.title() shouldBe messages.PrivateResidenceRelief.title
         }
 
         s"have a paragraph with the text '${messages.PrivateResidenceRelief.intro1}' " in {
@@ -275,7 +272,7 @@ class PrivateResidenceReliefViewSpec extends CommonPlaySpec with WithCommonFakeA
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {
-        document.select("#error-summary-display").size() shouldBe 1
+        document.select(".govuk-error-summary").size() shouldBe 1
       }
     }
   }

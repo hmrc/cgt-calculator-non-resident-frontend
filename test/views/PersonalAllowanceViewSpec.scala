@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ class PersonalAllowanceViewSpec extends CommonPlaySpec with WithCommonFakeApplic
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   lazy val personalAllowanceView = fakeApplication.injector.instanceOf[personalAllowance]
-
+  lazy val pageTitle = s"""${messages.question} - ${commonMessages.pageHeading} - GOV.UK"""
 
   "The Personal Allowance View" should {
 
@@ -42,15 +42,15 @@ class PersonalAllowanceViewSpec extends CommonPlaySpec with WithCommonFakeApplic
       lazy val view = personalAllowanceView(personalAllowanceForm(11000))(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
-      s"has the title ${messages.question}" in {
-        document.title shouldEqual messages.question
+      s"has the title ${pageTitle}" in {
+        document.title shouldEqual pageTitle
       }
 
       "have a heading" which {
         lazy val heading = document.body().select("h1")
 
         "has a class of heading-large" in {
-          heading.attr("class") shouldBe "heading-xlarge"
+          heading.attr("class") shouldBe "govuk-heading-xl"
         }
 
         s"has the text '${messages.question}'" in {
@@ -62,7 +62,7 @@ class PersonalAllowanceViewSpec extends CommonPlaySpec with WithCommonFakeApplic
         lazy val backLink = document.body().select("#back-link")
 
         "has a class of 'back-link'" in {
-          backLink.attr("class") shouldBe "back-link"
+          backLink.attr("class") shouldBe "govuk-back-link"
         }
 
         "has the text" in {
@@ -70,22 +70,14 @@ class PersonalAllowanceViewSpec extends CommonPlaySpec with WithCommonFakeApplic
         }
 
         s"has a route to 'customer-type'" in {
-          backLink.attr("href") shouldBe routes.CurrentIncomeController.currentIncome().url
+          backLink.attr("href") shouldBe "javascript:history.back()"
         }
-      }
-
-      s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-        document.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
       }
 
       "has a label for the input" which {
 
         s"has the question '${messages.question}'" in {
           document.body.getElementsByTag("label").text should include(messages.question)
-        }
-
-        "has the class visuallyhidden" in {
-          document.select("label > div").hasClass("visuallyhidden") shouldEqual true
         }
       }
 
@@ -97,15 +89,11 @@ class PersonalAllowanceViewSpec extends CommonPlaySpec with WithCommonFakeApplic
         lazy val button = document.select("button")
 
         "has the class 'button'" in {
-          button.attr("class") shouldBe "button"
+          button.attr("class") shouldBe "govuk-button"
         }
 
-        "has the type 'submit'" in {
-          button.attr("type") shouldBe "submit"
-        }
-
-        "has the id 'continue-button'" in {
-          button.attr("id") shouldBe "continue-button"
+        "has the id 'submit'" in {
+          button.attr("id") shouldBe "submit"
         }
 
         "has the text 'Continue'" in {
@@ -134,7 +122,7 @@ class PersonalAllowanceViewSpec extends CommonPlaySpec with WithCommonFakeApplic
           }
 
           "have the class 'external-link'" in {
-            link.attr("class") shouldBe "external-link"
+            link.attr("class") shouldBe "govuk-link"
           }
 
           "have a rel of 'external'" in {
@@ -159,7 +147,7 @@ class PersonalAllowanceViewSpec extends CommonPlaySpec with WithCommonFakeApplic
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {
-        document.select("#error-summary-display").size() shouldBe 1
+        document.getElementsByClass("govuk-error-summary").size() shouldBe 1
       }
     }
   }

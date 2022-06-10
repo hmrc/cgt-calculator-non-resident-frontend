@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,6 +52,7 @@ class BoughtForLessActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val boughtForLessView = fakeApplication.injector.instanceOf[boughtForLess]
 
+  lazy val pageTitle = s"""${messages.BoughtForLess.question} - ${messages.pageHeading} - GOV.UK"""
 
   class Setup {
     val controller = new BoughtForLessController(
@@ -88,7 +89,7 @@ class BoughtForLessActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
       }
 
       "load the bought for less page" in {
-        document.title() shouldBe messages.BoughtForLess.question
+        document.title() shouldBe pageTitle
       }
     }
 
@@ -102,7 +103,7 @@ class BoughtForLessActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
       }
 
       "load the bought for less page" in {
-        document.title() shouldBe messages.BoughtForLess.question
+        document.title() shouldBe pageTitle
       }
     }
 
@@ -161,7 +162,7 @@ class BoughtForLessActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
       }
 
       "return to the Bought For Less page" in {
-        document.title() shouldBe messages.BoughtForLess.question
+        document.title() shouldBe s"Error: $pageTitle"
       }
     }
   }

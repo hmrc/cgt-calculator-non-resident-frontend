@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package controllers.CalculationControllerTests
 
 import akka.stream.Materializer
 import assets.MessageLookup.NonResident.{DisposalDate => messages}
+import assets.MessageLookup.{NonResident => commonMessages}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import config.ApplicationConfig
 import connectors.CalculatorConnector
@@ -49,6 +50,7 @@ class DisposalDateActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val disposalDateView = fakeApplication.injector.instanceOf[disposalDate]
+  val pageTitle = s"""${messages.question} - ${commonMessages.pageHeading} - GOV.UK"""
 
   class Setup {
     val controller = new DisposalDateController(
@@ -86,8 +88,8 @@ class DisposalDateActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
         status(result) shouldBe 200
       }
 
-      "should return to the disposal date page" in {
-        document.title shouldEqual messages.question
+      "return to the disposal date page" in {
+        document.title shouldEqual pageTitle
       }
     }
 
@@ -101,8 +103,8 @@ class DisposalDateActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
         status(result) shouldBe 200
       }
 
-      "should return to the disposal date page" in {
-        document.title shouldEqual messages.question
+      "return to the disposal date page" in {
+        document.title shouldEqual pageTitle
       }
     }
 
@@ -115,8 +117,8 @@ class DisposalDateActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
         status(result) shouldBe 200
       }
 
-      "should return to the disposal date page" in {
-        document.title shouldEqual messages.question
+      "return to the disposal date page" in {
+        document.title shouldEqual pageTitle
       }
     }
   }
@@ -127,7 +129,7 @@ class DisposalDateActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
     "submitting a valid date 31/01/2016" should {
 
       lazy val target = setupTarget(None, Some(TaxYearModel("2015/16", true, "2015/16")))
-      lazy val request = fakeRequestToPOSTWithSession(("disposalDateDay", "31"), ("disposalDateMonth", "1"), ("disposalDateYear", "2016"))
+      lazy val request = fakeRequestToPOSTWithSession(("disposalDate.day", "31"), ("disposalDate.month", "1"), ("disposalDate.year", "2016"))
       lazy val result = target.submitDisposalDate(request)
 
       "return a 303" in {
@@ -142,7 +144,7 @@ class DisposalDateActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
     "submitting a valid leap year date 29/02/2016" should {
 
       lazy val target = setupTarget(None, Some(TaxYearModel("2015/16", true, "2015/16")))
-      lazy val request = fakeRequestToPOSTWithSession(("disposalDateDay", "29"), ("disposalDateMonth", "2"), ("disposalDateYear", "2016"))
+      lazy val request = fakeRequestToPOSTWithSession(("disposalDate.day", "29"), ("disposalDate.month", "2"), ("disposalDate.year", "2016"))
       lazy val result = target.submitDisposalDate(request)
 
       "return a 303" in {
@@ -157,7 +159,7 @@ class DisposalDateActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
     "submitting a valid date of 20/02/2014 before the tax start date" should {
 
       lazy val target = setupTarget(None, Some(TaxYearModel("2014/15", false, "2015/16")))
-      lazy val request = fakeRequestToPOSTWithSession(("disposalDateDay", "20"), ("disposalDateMonth", "2"), ("disposalDateYear", "2014"))
+      lazy val request = fakeRequestToPOSTWithSession(("disposalDate.day", "20"), ("disposalDate.month", "2"), ("disposalDate.year", "2014"))
       lazy val result = target.submitDisposalDate(request)
 
       "return a 303" in {
@@ -171,7 +173,7 @@ class DisposalDateActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
 
     "submitting a valid date in the future" should {
       lazy val target = setupTarget(None, Some(TaxYearModel("2020/21", false, "2017/18")))
-      lazy val request = fakeRequestToPOSTWithSession(("disposalDateDay", "20"), ("disposalDateMonth", "2"), ("disposalDateYear", "2021"))
+      lazy val request = fakeRequestToPOSTWithSession(("disposalDate.day", "20"), ("disposalDate.month", "2"), ("disposalDate.year", "2021"))
       lazy val result = target.submitDisposalDate(request)
 
       "return a 303" in {

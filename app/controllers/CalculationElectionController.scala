@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -132,7 +132,7 @@ class CalculationElectionController @Inject()(http: DefaultHttpClient,calcConnec
         }
 
         if (isClaimingReliefs) Ok(calculationElectionView(form, content))
-        else Ok(calculationElectionNoReliefsView(form, content, backLink))
+        else Ok(calculationElectionNoReliefsView(form, content))
       }
 
     (for {
@@ -170,7 +170,7 @@ class CalculationElectionController @Inject()(http: DefaultHttpClient,calcConnec
 
       def action(content: Seq[(String, String, String, String, Option[String], Option[BigDecimal])], isClaimingReliefs: Boolean, backLink: String) = {
         if (isClaimingReliefs) BadRequest(calculationElectionView(form, content))
-        else BadRequest(calculationElectionNoReliefsView(form, content, backLink))
+        else BadRequest(calculationElectionNoReliefsView(form, content))
       }
 
       (for {

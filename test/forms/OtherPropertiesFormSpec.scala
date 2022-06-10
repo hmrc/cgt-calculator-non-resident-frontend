@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,8 +59,8 @@ class OtherPropertiesFormSpec extends CommonPlaySpec with WithCommonFakeApplicat
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${commonMessages.errorRequired}" in {
-        form.error("otherProperties").get.message shouldBe commonMessages.errorRequired
+      s"return an error message of '${commonMessages.errorRequired("otherProperties")}" in {
+        form.error("otherProperties").get.message shouldBe commonMessages.errorRequired("otherProperties")
       }
     }
   }

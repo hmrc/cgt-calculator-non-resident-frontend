@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,14 +21,15 @@ import common.Validation._
 import models.SoldForLessModel
 import play.api.data.Form
 import play.api.data.Forms._
+import common.Formatters.text
 
 object SoldForLessForm {
 
   val soldForLessForm: Form[SoldForLessModel] = Form(
     mapping(
-      "soldForLess" -> text
-        .verifying("calc.common.error.fieldRequired", mandatoryCheck)
-        .verifying("calc.common.error.fieldRequired", yesNoCheck)
+      "soldForLess" -> text("calc.nonResident.soldForLess.errors.required")
+        .verifying("calc.nonResident.soldForLess.errors.required", mandatoryCheck)
+        .verifying("calc.nonResident.soldForLess.errors.required", yesNoCheck)
         .transform[Boolean](stringToBoolean, booleanToString)
     )(SoldForLessModel.apply)(SoldForLessModel.unapply)
   )

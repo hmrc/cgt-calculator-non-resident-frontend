@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,12 +26,15 @@ import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import views.html.calculation.boughtForLess
+import assets.MessageLookup.{NonResident => commonMessages}
 
 class BoughtForLessViewSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper with AssertHelpers {
 
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   lazy val boughtForLessView = fakeApplication.injector.instanceOf[boughtForLess]
+
+  lazy val pageTitle = s"""${messages.BoughtForLess.question} - ${commonMessages.pageHeading} - GOV.UK"""
 
   "Bought for less view" when {
 
@@ -40,7 +43,7 @@ class BoughtForLessViewSpec extends CommonPlaySpec with WithCommonFakeApplicatio
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of ${messages.BoughtForLess.question}" in {
-        document.title() shouldBe messages.BoughtForLess.question
+        document.title() shouldBe pageTitle
       }
 
       "have a back link" which {
@@ -51,7 +54,7 @@ class BoughtForLessViewSpec extends CommonPlaySpec with WithCommonFakeApplicatio
         }
 
         "has a class of back-link" in {
-          assertHTML(backLink)(_.attr("class") shouldBe "back-link")
+          assertHTML(backLink)(_.attr("class") shouldBe "govuk-back-link")
         }
 
         "has a message of back-link" in {
@@ -59,12 +62,12 @@ class BoughtForLessViewSpec extends CommonPlaySpec with WithCommonFakeApplicatio
         }
 
         "has an href to the how became owner page" in {
-          assertHTML(backLink)(_.attr("href") shouldBe controllers.routes.HowBecameOwnerController.howBecameOwner().url)
+          assertHTML(backLink)(_.attr("href") shouldBe "javascript:history.back()")
         }
       }
 
       s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-        document.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
+        document.getElementsByClass("govuk-header__link govuk-header__link--service-name").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
       }
 
       "have a H1 tag" which {
@@ -79,7 +82,7 @@ class BoughtForLessViewSpec extends CommonPlaySpec with WithCommonFakeApplicatio
         }
 
         "has the class" in {
-          assertHTML(header)(_.attr("class") shouldBe "heading-xlarge")
+          assertHTML(header)(_.attr("class") shouldBe "govuk-fieldset__heading")
         }
       }
 
@@ -111,15 +114,11 @@ class BoughtForLessViewSpec extends CommonPlaySpec with WithCommonFakeApplicatio
         lazy val button = document.select("button")
 
         "has the class 'button'" in {
-          button.attr("class") shouldBe "button"
-        }
-
-        "has the type 'submit'" in {
-          button.attr("type") shouldBe "submit"
+          button.attr("class") shouldBe "govuk-button"
         }
 
         "has the id 'continue-button'" in {
-          button.attr("id") shouldBe "continue-button"
+          button.attr("id") shouldBe "submit"
         }
       }
     }
@@ -130,7 +129,7 @@ class BoughtForLessViewSpec extends CommonPlaySpec with WithCommonFakeApplicatio
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {
-        document.select("#error-summary-display").size() shouldBe 1
+        document.getElementsByClass("govuk-error-summary").size() shouldBe 1
       }
     }
 

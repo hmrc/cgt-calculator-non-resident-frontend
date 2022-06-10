@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +32,7 @@ class OtherPropertiesViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   lazy val otherPropertiesView = fakeApplication.injector.instanceOf[otherProperties]
+  lazy val pageTitle = s"""${messages.question} - ${commonMessages.pageHeading} - GOV.UK"""
 
   "The other properties view" should {
 
@@ -40,8 +41,8 @@ class OtherPropertiesViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
       lazy val view = otherPropertiesView(otherPropertiesForm)(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
-      s"have the title '${messages.question}'" in {
-        document.title shouldEqual messages.question
+      s"have the title '${pageTitle}'" in {
+        document.title shouldEqual pageTitle
       }
 
       s"have the heading ${messages.question}" in {
@@ -55,21 +56,7 @@ class OtherPropertiesViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
         }
 
         s"should have an href to '${controllers.routes.PersonalAllowanceController.personalAllowance().url}'" in {
-          document.body.getElementById("back-link").attr("href") shouldEqual controllers.routes.PersonalAllowanceController.personalAllowance().url
-        }
-      }
-
-      s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-        document.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
-      }
-
-      s"have a legend of the input" which {
-        lazy val legend = document.body.getElementsByTag("legend")
-        s"has the text ${messages.question}" in {
-          legend.text should include(messages.question)
-        }
-        "has the class 'visuallyhidden'" in {
-          legend.attr("class") shouldBe "visuallyhidden"
+          document.body.getElementById("back-link").attr("href") shouldEqual "javascript:history.back()"
         }
       }
 
@@ -80,16 +67,12 @@ class OtherPropertiesViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
       "have a button" which {
         lazy val button = document.select("button")
 
-        "has the class 'button'" in {
-          button.attr("class") shouldBe "button"
+        "has the class 'govuk-button'" in {
+          button.attr("class") shouldBe "govuk-button"
         }
 
-        "has the type 'submit'" in {
-          button.attr("type") shouldBe "submit"
-        }
-
-        "has the id 'continue-button'" in {
-          button.attr("id") shouldBe "continue-button"
+        "has the id 'submit'" in {
+          button.attr("id") shouldBe "submit"
         }
 
         "has the text 'Continue'" in {
@@ -107,8 +90,8 @@ class OtherPropertiesViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
       lazy val view = otherPropertiesView(otherPropertiesForm)(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
-      s"have the title '${messages.question}'" in {
-        document.title shouldEqual messages.question
+      s"have the title '${pageTitle}'" in {
+        document.title shouldEqual pageTitle
       }
 
       "have inputs using the id 'otherProperties'" in {
@@ -127,7 +110,7 @@ class OtherPropertiesViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {
-        document.select("#error-summary-display").size() shouldBe 1
+        document.getElementsByClass("govuk-error-summary").size shouldBe 1
       }
     }
   }

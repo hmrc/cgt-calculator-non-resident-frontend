@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,41 +15,41 @@
  *@
 
 @import models.AcquisitionCostsModel
+@import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
-    errorSummary: helpers.errorSummary,
-    mainTemplate: main_template,
+    layout: Layout,
+    errorSummary: playComponents.errorSummary,
     form: FormWithCSRF,
-    formInputMoney: helpers.formInputMoney
+    formInputMoney: playComponents.formInputMoney,
+    submitButton: playComponents.submitButton,
 )
 
 @(acquisitionCostsForm: Form[AcquisitionCostsModel], backLink: String, ownerBeforeLegislation: Boolean)(implicit request: Request[_], messages: Messages)
 
-@mainTemplate(Messages("calc.acquisitionCosts.question")) {
+@title = @{
+    if(acquisitionCostsForm.errors.nonEmpty) messages("site.title.error", Messages("calc.acquisitionCosts.question")) else Messages("calc.acquisitionCosts.question")
+}
 
-    <a id="back-link" class="back-link" href="@backLink">@Messages("calc.base.back")</a>
+@layout(
+    pageTitle = title
+) {
 
-    @errorSummary(acquisitionCostsForm, "acquisition-costs")
-
-    <h1 class="heading-xlarge">@Messages("calc.acquisitionCosts.question")</h1>
-
-    <p class="form-hint" id="bulletTitle">@Messages("calc.acquisitionCosts.bulletTitle")</p>
-    <ul class="form-hint list list-bullet" id="helpList">
-        <li>@Messages("calc.acquisitionCosts.bulletOne")</li>
-        <li>@Messages("calc.acquisitionCosts.bulletTwo")</li>
-        <li>@Messages("calc.acquisitionCosts.bulletThree")</li>
-    </ul>
-
-    <div class="panel-indent panel-indent--wide panel-indent--gutter">
-        <p>@Messages("calc.acquisitionCosts.hint")</p>
-    </div>
+    @errorSummary(acquisitionCostsForm.errors)
+    <h1 class="govuk-heading-xl" for="disposal-value">@Messages("calc.acquisitionCosts.question")</h1>
+        <span id="input-hint" class="govuk-body">
+            <p id="bullet-list-title">@Messages("calc.acquisitionCosts.bulletTitle") </p>
+            <ul class="govuk-list govuk-list--bullet govuk-body">
+                <li>@Messages("calc.acquisitionCosts.bulletOne")</li>
+                <li>@Messages("calc.acquisitionCosts.bulletTwo")</li>
+                <li>@Messages("calc.acquisitionCosts.bulletThree")</li>
+            </ul>
+        </span>
 
     @form(action = controllers.routes.AcquisitionCostsController.submitAcquisitionCosts) {
+        <p class="govuk-inset-text">@Messages("calc.acquisitionCosts.hint")</p>
 
-        @formInputMoney(acquisitionCostsForm, "acquisitionCosts",Messages("calc.acquisitionCosts.question"), hideLabel=true)
-
-        <button class="button" type="submit" id="continue-button">@Messages("calc.base.continue")</button>
-
+        @formInputMoney(acquisitionCostsForm("acquisitionCosts"), Messages("calc.acquisitionCosts.question"), hideLabel = true)
+        @submitButton()
     }
-
 }

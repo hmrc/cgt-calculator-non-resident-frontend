@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -179,7 +179,7 @@ class SummaryActionSpec extends CommonPlaySpec with WithCommonFakeApplication wi
       }
 
       "has a back-link to the calculation election page" in {
-        document.select("#back-link").attr("href") shouldEqual controllers.routes.CalculationElectionController.calculationElection().url
+        document.select("#back-link").attr("href") shouldEqual "javascript:history.back()"
       }
     }
 
@@ -205,7 +205,7 @@ class SummaryActionSpec extends CommonPlaySpec with WithCommonFakeApplication wi
       }
 
       "has a back-link to the check your answers page" in {
-        document.select("#back-link").attr("href") shouldEqual controllers.routes.CheckYourAnswersController.checkYourAnswers().url
+        document.select("#back-link").attr("href") shouldEqual "javascript:history.back()"
       }
     }
 

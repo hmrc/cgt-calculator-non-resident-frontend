@@ -14,53 +14,45 @@
  * limitations under the License.
  *@
 
-@import views.html.helpers.expandableHelpTextHelper
 @import config.ApplicationConfig
 
 @this(
-    mainTemplate: main_template,
-    expandableHelpTextHelper: helpers.expandableHelpTextHelper,
+    layout: Layout,
+    expandableHelpTextHelper: playComponents.expandableHelpTextHelper,
     applicationConfig: ApplicationConfig
 )
 
 @(isDateAfter: Boolean)(implicit request: Request[_], messages: Messages)
 
-@hiddenContent = {
-    <p>@Messages("calc.whatNext.saText")</p>
-}
+@layout(
+    pageTitle = Messages("calc.whatNext.title")
+) {
 
-@mainTemplate(Messages("calc.whatNext.title")) {
+    <h1 class="govuk-heading-xl">@Messages("calc.whatNext.title")</h1>
 
-    <a class="back-link" href="@controllers.routes.SummaryController.summary().url">Back</a>
+    <p class="govuk-body" id="list-title">@Messages("calc.whatNext.listTitle")</p>
 
-    <h1 class="heading-large">@Messages("calc.whatNext.title")</h1>
+    <ul class="govuk-list govuk-list--bullet">
+        <li id="item1">@Messages("calc.whatNext.listOne")</li>
+        <li id="item2">@Messages("calc.whatNext.listTwo")</li>
+    </ul>
 
-    <div class="form-group">
-        <p>@Messages("calc.whatNext.listTitle")</p>
+    <p class="govuk-body" id="penalty-warning">@Messages("calc.whatNext.penaltyWarning")</p>
 
-        <ul class="list list-bullet">
-            <li>@Messages("calc.whatNext.listOne")</li>
-            <li>@Messages("calc.whatNext.listTwo")</li>
-        </ul>
-
-        <p>@Messages("calc.whatNext.penaltyWarning")</p>
-    </div>
-
-    <div class="form-group">
-        @if(!isDateAfter) {
-            @expandableHelpTextHelper(Messages("calc.whatNext.saHeader"), hiddenContent)
-        }
-    </div>
+    @if(!isDateAfter) {
+        @expandableHelpTextHelper(
+            Messages("calc.whatNext.saHeader"),
+            Messages("calc.whatNext.saText")
+        )
+    }
 
     <div class="form-group">
         @if(isDateAfter) {
-            <a class="button" href="@applicationConfig.nrReportServiceLink">@Messages("calc.whatNext.report")</a>
+            <a class="govuk-button" href="@applicationConfig.nrReportServiceLink">@Messages("calc.whatNext.report")</a>
         } else {
-            <a class="button" href="@applicationConfig.nrIFormLink">@Messages("calc.whatNext.report")</a>
+            <a class="govuk-button" href="@applicationConfig.nrIFormLink">@Messages("calc.whatNext.report")</a>
         }
     </div>
 
-    <div class="form-group">
-        <a href="@applicationConfig.govUkLink">@Messages("calc.whatNext.finish")</a>
-    </div>
+    <p><a class="govuk-link" href="@applicationConfig.govUkLink" id="return-link">@Messages("calc.whatNext.finish")</a></p>
 }

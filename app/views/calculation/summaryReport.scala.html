@@ -15,17 +15,14 @@
  *@
 
 @import models._
-
-@import constructors.OtherReliefsDetailsConstructor
 @import common.Transformers.{booleanToMessageString, checkIfBooleanAsString}
-@import common.Dates._
 @import common.Dates.TemplateImplicits._
+@import common.nonresident.MoneyPounds
+
 @import java.time._
-@import uk.gov.hmrc.play.views.helpers.MoneyPounds
 
 @this(
-    summaryPartial: helpers.summaryPartial,
-    summarySectionNoLink: helpers.summarySectionNoLink
+    summaryPartial: playComponents.summaryPartial
 )
 
 @(questions: Seq[QuestionAnswerModel[Any]],
@@ -39,6 +36,7 @@ disposalValue: BigDecimal, acquisitionValue: BigDecimal, totalCosts: BigDecimal,
     <meta name="viewport" content="width=device-width"/>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" type="text/css" href="@routes.Assets.versioned("stylesheets/cgt.css")">
+    <link href="/calculate-your-capital-gains/non-resident/hmrc-frontend/assets/hmrc-frontend-ie8-2.0.0.min.css" media="all" rel="stylesheet" type="text/css" />
     <title>@messages("calc.summary.title")</title>
 </head>
 
@@ -60,31 +58,31 @@ disposalValue: BigDecimal, acquisitionValue: BigDecimal, totalCosts: BigDecimal,
         </div>
     </span>
 
-    <div class="calculation-details">
-        @summaryPartial(calculationResult, taxYearModel, calculationType,
-            disposalValue, acquisitionValue, totalCosts, flatGain, reliefsUsed)
-    </div>
+    @summaryPartial(calculationResult, taxYearModel, calculationType,
+        disposalValue, acquisitionValue, totalCosts, flatGain, reliefsUsed)
 
-    <div class="check-your-answers-report">
-        <h2>@messages("calc.checkYourAnswers.tableHeading")</h2>
+    </br>
 
-        @questions.map { question =>
-            <div id="@question.id" class="grid-layout report-answer-row grid-layout--stacked summary-underline">
-                <div id="@{question.id}-question" class="grid-layout__column grid-layout__column--1-2">
-                    @messages(question.question, question.oDate.map(_.localFormat("d MMMM yyyy")).getOrElse(""))
-                </div>
-                <div id="@{question.id}-amount" class="grid-layout__column grid-layout__column--1-3 text--right">
-                    @{question.data match {
-                        case string: String => messages(checkIfBooleanAsString(string))
-                        case int: Int => int.toString
-                        case bigDecimal: BigDecimal => s"£${MoneyPounds(bigDecimal, 2).quantity}"
-                        case date: LocalDate => date.localFormat("d MMMM yyyy")
-                        case boolean: Boolean => messages(booleanToMessageString(boolean))
-                        case _ => ""
-                    }}
-                </div>
-            </div>
-        }
-    </div>
+    <table class="govuk-table">
+        <caption class="govuk-table__caption govuk-table__caption--m">@messages("calc.checkYourAnswers.tableHeading")</caption>
+        <tbody class="govuk-table__body">
+            @questions.map { question =>
+                <tr id="@question.id" class="govuk-table__row">
+                    <th id="@{question.id}-question" scope="row" class="govuk-table__header">@messages(question.question, question.oDate.map(_.localFormat("d MMMM yyyy")).getOrElse(""))</th>
+                    <td id="@{question.id}-amount" class="govuk-table__cell">
+                        @{question.data match {
+                            case string: String => messages(checkIfBooleanAsString(string))
+                            case int: Int => int.toString
+                            case bigDecimal: BigDecimal => s"£${MoneyPounds(bigDecimal, 2).quantity}"
+                            case date: LocalDate => date.localFormat("d MMMM yyyy")
+                            case boolean: Boolean => messages(booleanToMessageString(boolean))
+                            case _ => ""
+                        }}
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
 </div>
 </html>

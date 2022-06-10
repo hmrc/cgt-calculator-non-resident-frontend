@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,41 +15,33 @@
  *@
 
 @import models.OtherPropertiesModel
+@import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
-    mainTemplate: main_template,
-    errorSummary: helpers.errorSummary,
     form: FormWithCSRF,
-    inputRadioGroup: InputRadioGroup
+    layout: Layout,
+    submitButton: playComponents.submitButton,
+    inputYesNo: playComponents.input_yes_no,
+    errorSummary: playComponents.errorSummary
 )
 
 @(otherPropertiesForm: Form[OtherPropertiesModel])(implicit request: Request[_], messages: Messages)
 
-@mainTemplate(Messages("calc.otherProperties.question")) {
+@title = @{
+    if(otherPropertiesForm.errors.nonEmpty) messages("site.title.error", Messages("calc.otherProperties.question")) else Messages("calc.otherProperties.question")
+}
 
-    <a id="back-link" class="back-link" href="@{routes.PersonalAllowanceController.personalAllowance().url}">@Messages("calc.base.back")</a>
-
-    @errorSummary(otherPropertiesForm, "other-properties", "otherPropertiesAmt")
-
-    <h1 class="heading-xlarge">@Messages("calc.otherProperties.question")</h1>
-
+@layout(
+    pageTitle = title
+) {
+    @errorSummary(otherPropertiesForm.errors)
+    <h1 class="govuk-heading-xl" for="other-properties">@Messages("calc.otherProperties.question")</h1>
     @form(action = controllers.routes.OtherPropertiesController.submitOtherProperties) {
 
-        <fieldset>
-            <div class="inline form-group">
-                @inputRadioGroup(
-                    field = otherPropertiesForm("otherProperties"),
-                    Seq(
-                    "Yes"->Messages("calc.base.yes"),
-                    "No"->Messages("calc.base.no")),
-                    '_legend -> Messages("calc.otherProperties.question"),
-                    '_legendClass -> "visuallyhidden",
-                    '_labelAfter -> true,
-                    '_labelClass -> "block-label",
-                    '_legendID -> "otherProperties"
-                )
-            </div>
-        </fieldset>
-        <button class="button" type="submit" id="continue-button" >@Messages("calc.base.continue")</button>
+        @inputYesNo(
+            legend = Messages(""),
+            field = otherPropertiesForm("otherProperties"),
+        )
+        @submitButton()
     }
 }

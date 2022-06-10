@@ -15,42 +15,36 @@
  *@
 
 @import models.WhoDidYouGiveItToModel
+@import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
-    mainTemplate: main_template,
-    errorSummary: helpers.errorSummary,
+    errorSummary: playComponents.errorSummary,
+    layout: Layout,
     form: FormWithCSRF,
-    inputRadioGroup: InputRadioGroup
+    submitButton: playComponents.submitButton,
+    inputRadio: playComponents.input_radio
 )
 
 @(whoDidYouGiveItToForm: Form[WhoDidYouGiveItToModel])(implicit request: Request[_], messages: Messages)
 
-@mainTemplate(
-  title = Messages("calc.whoDidYouGiveThePropertyTo.title")) {
+@title = @{
+    if(whoDidYouGiveItToForm.errors.nonEmpty) messages("site.title.error", Messages("calc.whoDidYouGiveThePropertyTo.title")) else Messages("calc.whoDidYouGiveThePropertyTo.title")
+}
 
-    <a id="back-link" class="back-link" href="@controllers.routes.SoldOrGivenAwayController.soldOrGivenAway().url">@Messages("calc.base.back")</a>
-
-    @errorSummary(whoDidYouGiveItToForm, "whoDidYouGiveItTo")
-
-    <h1 class="heading-large">@Messages("calc.whoDidYouGiveThePropertyTo.title")</h1>
-
-  @form(action = controllers.routes.WhoDidYouGiveItToController.submitWhoDidYouGiveItTo) {
-
-    @inputRadioGroup(
-      field = whoDidYouGiveItToForm("whoDidYouGiveItTo"),
-      Seq(
-        "Spouse"-> Messages("calc.whoDidYouGiveThePropertyTo.spouse"),
-        "Charity"-> Messages("calc.whoDidYouGiveThePropertyTo.charity"),
-        "Other"->Messages("calc.whoDidYouGiveThePropertyTo.other")),
-      '_legend -> Messages("calc.whoDidYouGiveThePropertyToo.title"),
-      '_legendID -> "whoDidYouGiveItTo",
-      '_legendClass -> "visuallyhidden",
-      '_labelAfter -> true,
-      '_labelClass -> "block-label",
-      '_groupClass -> "form-group radio-list",
-      '_fieldsetAttributes -> "")
-
-      <input type="hidden" name="whoDidYouGiveItTo" value="" />
-      <button class="button yes-no-button" type="submit" id="continue-button">@Messages("calc.base.continue")</button>
-  }
+@layout(
+    pageTitle = title
+){
+    @errorSummary(whoDidYouGiveItToForm.errors)
+    @form(action = controllers.routes.WhoDidYouGiveItToController.submitWhoDidYouGiveItTo) {
+        @inputRadio(
+            legend = Messages("calc.whoDidYouGiveThePropertyTo.title"),
+            items = Seq(
+                RadioItem(content = Text(Messages("calc.whoDidYouGiveThePropertyTo.spouse")), value = Option("Spouse")),
+                RadioItem(content = Text(Messages("calc.whoDidYouGiveThePropertyTo.charity")), value = Option("Charity")),
+                RadioItem(content = Text(Messages("calc.whoDidYouGiveThePropertyTo.other")), value = Option("Other"))
+            ),
+            field = whoDidYouGiveItToForm("whoDidYouGiveItTo")
+        )
+        @submitButton()
+    }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,11 +20,14 @@ import common.Validation.{mandatoryCheck, previousLossOrGainCheck}
 import models.PreviousLossOrGainModel
 import play.api.data.Form
 import play.api.data.Forms._
+import common.Formatters.text
+
 
 object PreviousLossOrGainForm {
-  val previousLossOrGainForm = Form(
-    mapping(
-      "previousLossOrGain" -> text
+
+  def previousLossOrGainForm(): Form[PreviousLossOrGainModel] = Form(
+  mapping(
+      "previousLossOrGain" -> text("calc.previousLossOrGain.errors.required")
         .verifying("calc.previousLossOrGain.errors.required", mandatoryCheck)
         .verifying("calc.previousLossOrGain.errors.required", previousLossOrGainCheck)
     )(PreviousLossOrGainModel.apply)(PreviousLossOrGainModel.unapply)

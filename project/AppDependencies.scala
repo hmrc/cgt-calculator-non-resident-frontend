@@ -20,25 +20,23 @@ import play.core.PlayVersion
 
 object AppDependencies {
 
-  val bootstrapVersion         = "5.4.0"
-  val govUKTemplateVersion     = "5.68.0-play-28"
-  val playUiVersion            = "9.5.0-play-28"
+  val bootstrapVersion         = "5.19.0"
   val playPartialsVersion      = "8.1.0-play-28"
   val httpCachingClientVersion = "9.5.0-play-28"
   val play2PdfVersion          = "1.10.0"
   val mongoCachingVersion      = "7.0.0-play-28"
   val playLanguageVersion      = "5.1.0-play-28"
+  val playFrontendVersion      = "0.88.0-play-28"
 
   val compile = Seq(
     ws,
     "uk.gov.hmrc"     %% "bootstrap-frontend-play-28"   % bootstrapVersion,
+    "uk.gov.hmrc"     %% "play-frontend-hmrc"           % playFrontendVersion,
     "uk.gov.hmrc"     %% "play-partials"                % playPartialsVersion,
     "uk.gov.hmrc"     %% "http-caching-client"          % httpCachingClientVersion,
     "uk.gov.hmrc"     %% "mongo-caching"                % mongoCachingVersion,
     "uk.gov.hmrc"     %% "play-language"                % playLanguageVersion,
     "it.innove"       % "play2-pdf"                     % play2PdfVersion exclude("com.typesafe.play","*"),
-    "uk.gov.hmrc"     %% "govuk-template"               % govUKTemplateVersion,
-    "uk.gov.hmrc"     %% "play-ui"                      % playUiVersion,
     nettyServer
   )
 

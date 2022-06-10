@@ -1,0 +1,81 @@
+@*
+ * Copyright 2021 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import common.nonresident.CalculationType
+
+@this(summaryNumericRow: summaryNumericRow)
+
+@(calculationType: String, disposalValue: BigDecimal, acquisitionValue: BigDecimal, totalCosts: BigDecimal, totalGain: BigDecimal = 0,
+percentageTotalGain: BigDecimal = 0, percentageOfGain: Int = 0)(implicit request: Request[_], messages: Messages, messagesApi: Option[MessagesApi] = None)
+
+<div id="workedOutSection">
+    <h2 class="govuk-heading-m">@Messages("calc.summaryPartial.workingOutSectionHeading")</h2>
+    <p class="govuk-body">
+        @{calculationType match {
+            case CalculationType.flat => Messages("calc.summary.flat.description")
+            case CalculationType.rebased => <span>{Messages("calc.summary.rebased.description")}</span> <span class="no-wrap"> {Messages("calc.calculationElection.message.rebasedDate")}</span>
+            case CalculationType.timeApportioned => <span>{Messages("calc.summary.time.description")}</span> <span class="no-wrap"> {Messages("calc.calculationElection.message.timeDate")}</span>
+            }
+        }
+    </p>
+
+    <h3 class="govuk-heading-m">@if(totalGain >= 0){@Messages("calc.summaryPartial.yourTotalGain")}else{@Messages("calc.summaryPartial.yourTotalLoss")}</h3>
+
+    <table class="govuk-table">
+        <tbody class="govuk-table__body">
+    @summaryNumericRow("disposalValue",Messages("calc.summaryPartial.valueWhenSold"), disposalValue)
+
+    @{if(calculationType == CalculationType.flat || calculationType == CalculationType.timeApportioned)
+        summaryNumericRow("acquisitionValue", Messages("calc.summaryPartial.valueWhenAcquired"), acquisitionValue)
+    }
+
+    @{if(calculationType == CalculationType.rebased)
+        summaryNumericRow("acquisitionValue", Messages("calc.summaryPartial.valueAtTaxStart"), acquisitionValue)
+    }
+
+    @summaryNumericRow("totalCosts", Messages("calc.summaryPartial.totalCosts"), totalCosts)
+
+    @if(calculationType == CalculationType.timeApportioned) {
+        @summaryNumericRow("totalGain",
+            if (totalGain >= 0) Messages("calc.summaryPartial.gainMadeOnProperty")
+            else Messages("calc.summaryPartial.lossMadeOnProperty"),
+            totalGain)
+
+        <div id="percentageOfGain">
+            <div id="percentageOfGain-text">
+                @{if (totalGain >= 0) Messages("calc.summaryPartial.percentageOfGain")
+                else Messages("calc.summaryPartial.percentageOfLoss")}
+            </div>
+
+            <div id="percentageOfGain-value">
+                @percentageOfGain&percnt;
+            </div>
+        </div>
+
+        @{
+            if(percentageTotalGain >= 0) summaryNumericRow("percentageTotalGain", Messages("calc.summaryPartial.totalGain"), percentageTotalGain, isTotal = true)
+            else summaryNumericRow("percentageTotalGain", Messages("calc.summaryPartial.totalLoss"), percentageTotalGain, isTotal = true)
+        }
+    }
+
+    @{if(calculationType == CalculationType.flat || calculationType == CalculationType.rebased)
+        if(totalGain >= 0) summaryNumericRow("totalGain", Messages("calc.summaryPartial.totalGain"), totalGain, isTotal = true)
+        else summaryNumericRow("totalGain", Messages("calc.summaryPartial.totalLoss"), totalGain, isTotal = true)
+    }
+        </tbody>
+    </table>
+
+</div>

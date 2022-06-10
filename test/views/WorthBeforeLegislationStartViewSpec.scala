@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,14 +41,14 @@ class WorthBeforeLegislationStartViewSpec extends CommonPlaySpec with WithCommon
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${WorthBeforeLegislationStart.question}'" in {
-        document.title() shouldBe WorthBeforeLegislationStart.question
+        document.title() shouldBe WorthBeforeLegislationStart.title
       }
 
       "have a back link" which {
         lazy val backLink = document.body().select("#back-link")
 
         "has a class of 'back-link'" in {
-          backLink.attr("class") shouldBe "back-link"
+          backLink.attr("class") shouldBe "govuk-back-link"
         }
 
         "has the text" in {
@@ -56,12 +56,12 @@ class WorthBeforeLegislationStartViewSpec extends CommonPlaySpec with WithCommon
         }
 
         s"has a route to 'acquisition-date'" in {
-          backLink.attr("href") shouldBe controllers.routes.AcquisitionDateController.acquisitionDate().url
+          backLink.attr("href") shouldBe "javascript:history.back()"
         }
       }
 
       s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-        document.select("#homeNavHref").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
+        document.getElementsByClass("govuk-header__link govuk-header__link--service-name").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
       }
 
       "have a heading" which {
@@ -69,7 +69,7 @@ class WorthBeforeLegislationStartViewSpec extends CommonPlaySpec with WithCommon
         lazy val heading = document.body().select("h1")
 
         "has a class of heading-large" in {
-          heading.attr("class") shouldBe "heading-xlarge"
+          heading.attr("class") shouldBe "govuk-heading-xl"
         }
 
         s"has the text '${WorthBeforeLegislationStart.question}'" in {
@@ -78,15 +78,15 @@ class WorthBeforeLegislationStartViewSpec extends CommonPlaySpec with WithCommon
       }
 
       s"has the information text ${WorthBeforeLegislationStart.information}" in {
-        document.select("article > p").text should include(WorthBeforeLegislationStart.information)
+        document.select("#main-content > div > div > p").text should include(WorthBeforeLegislationStart.information)
       }
 
-      s"has the hint text ${WorthBeforeLegislationStart.hintText}" in {
-        document.select("article > div.form-hint > p").text shouldEqual WorthBeforeLegislationStart.hintText
+      s"has the body text ${WorthBeforeLegislationStart.hintText}" in {
+        document.select(".govuk-body").text should include(WorthBeforeLegislationStart.hintText)
       }
 
       s"has the joint ownership text ${WorthBeforeLegislationStart.jointOwnership}" in {
-        document.select("article > div.panel-indent > p").text shouldEqual WorthBeforeLegislationStart.jointOwnership
+        document.select(".govuk-inset-text").text shouldEqual WorthBeforeLegislationStart.jointOwnership
       }
 
 
@@ -110,15 +110,11 @@ class WorthBeforeLegislationStartViewSpec extends CommonPlaySpec with WithCommon
         lazy val button = document.select("button")
 
         "has the class 'button'" in {
-          button.attr("class") shouldBe "button"
-        }
-
-        "has the type 'submit'" in {
-          button.attr("type") shouldBe "submit"
+          button.attr("class") shouldBe "govuk-button"
         }
 
         "has the id 'continue-button'" in {
-          button.attr("id") shouldBe "continue-button"
+          button.attr("id") shouldBe "submit"
         }
       }
       "should produce the same output when render and f are called" in {
@@ -134,7 +130,7 @@ class WorthBeforeLegislationStartViewSpec extends CommonPlaySpec with WithCommon
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {
-        document.select("#error-summary-display").size() shouldBe 1
+        document.select(".govuk-error-summary").size() shouldBe 1
       }
     }
   }

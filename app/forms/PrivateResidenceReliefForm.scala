@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -67,9 +67,9 @@ object PrivateResidenceReliefForm {
 
   def privateResidenceReliefForm (showBefore: Boolean, showAfter: Boolean): Form[PrivateResidenceReliefModel] = Form(
     mapping(
-      "isClaimingPRR" -> text
-        .verifying("calc.common.error.fieldRequired", mandatoryCheck)
-        .verifying("calc.common.error.fieldRequired", yesNoCheck),
+      "isClaimingPRR" -> common.Formatters.text("calc.privateResidenceRelief.errors.required")
+        .verifying("calc.privateResidenceRelief.errors.required", mandatoryCheck)
+        .verifying("calc.privateResidenceRelief.errors.required", yesNoCheck),
       "daysClaimed" -> optional(text)
         .transform(optionalStringToOptionalBigDecimal, optionalBigDecimalToOptionalString),
       "daysClaimedAfter" -> optional(text)

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package controllers.CalculationControllerTests
 
 import akka.stream.Materializer
 import assets.MessageLookup.NonResident.{AcquisitionCosts => messages}
+import assets.MessageLookup.{NonResident => commonMessages}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import config.ApplicationConfig
@@ -54,6 +55,7 @@ class AcquisitionCostsActionSpec extends CommonPlaySpec with WithCommonFakeAppli
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val acquisitionCostsView = fakeApplication.injector.instanceOf[acquisitionCosts]
+  lazy val pageTitle = s"""${messages.question} - ${commonMessages.pageHeading} - GOV.UK"""
 
   class Setup {
     val controller = new AcquisitionCostsController(
@@ -148,14 +150,14 @@ class AcquisitionCostsActionSpec extends CommonPlaySpec with WithCommonFakeAppli
         val target = setupTarget(None, acquisitionDateData = Some(DateModel(1, 1, 2016)), Some(HowBecameOwnerModel("Gifted")))
         lazy val result = target.acquisitionCosts(fakeRequestWithSession)
         lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
-        document.title shouldBe messages.question
+        document.title shouldBe pageTitle
       }
 
       "have a back link to the WorthWhenGiftedTo page" in {
         val target = setupTarget(None, acquisitionDateData = Some(DateModel(1, 1, 2016)), Some(HowBecameOwnerModel("Gifted")))
         lazy val result = target.acquisitionCosts(fakeRequestWithSession)
         lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
-        document.select("#back-link").attr("href") shouldBe controllers.routes.WorthWhenGiftedToController.worthWhenGiftedTo().url
+        document.select("#back-link").attr("href") shouldBe "javascript:history.back()"
       }
     }
 
@@ -173,7 +175,7 @@ class AcquisitionCostsActionSpec extends CommonPlaySpec with WithCommonFakeAppli
         val target = setupTarget(Some(testAcquisitionCostsModel))
         lazy val result = target.acquisitionCosts(fakeRequestWithSession)
         lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
-        document.title shouldBe messages.question
+        document.title shouldBe pageTitle
       }
     }
 
@@ -243,7 +245,7 @@ class AcquisitionCostsActionSpec extends CommonPlaySpec with WithCommonFakeAppli
         lazy val request = fakeRequestToPOSTWithSession(("acquisitionCosts", "a"))
         lazy val result = target.submitAcquisitionCosts(request)
         lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
-        document.title shouldBe messages.question
+        document.title shouldBe s"""Error: ${pageTitle}"""
       }
 
       "have a back link to the WorthWhenInherited page" in {
@@ -251,7 +253,7 @@ class AcquisitionCostsActionSpec extends CommonPlaySpec with WithCommonFakeAppli
         lazy val request = fakeRequestToPOSTWithSession(("acquisitionCosts", "a"))
         lazy val result = target.submitAcquisitionCosts(request)
         lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
-        document.select("#back-link").attr("href") shouldBe controllers.routes.WorthWhenInheritedController.worthWhenInherited().url
+        document.select("#back-link").attr("href") shouldBe "javascript:history.back()"
       }
     }
   }

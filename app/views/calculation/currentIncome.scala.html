@@ -15,38 +15,40 @@
  *@
 
 @import models.CurrentIncomeModel
+@import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
-    mainTemplate: main_template,
-    errorSummary: helpers.errorSummary,
+    layout: Layout,
+    errorSummary: playComponents.errorSummary,
     form: FormWithCSRF,
-    formInputMoney: helpers.formInputMoney
+    formInputMoney: playComponents.formInputMoney,
+    submitButton: playComponents.submitButton
 )
 
-@(currentIncomeForm: Form[CurrentIncomeModel], backLink: String)(implicit request: Request[_], messages: Messages)
+@(currentIncomeForm: Form[CurrentIncomeModel])(implicit request: Request[_], messages: Messages)
 
+@title = @{
+    if(currentIncomeForm.errors.nonEmpty) messages("site.title.error", Messages("calc.currentIncome.question")) else Messages("calc.currentIncome.question")
+}
 
-@mainTemplate(Messages("calc.currentIncome.question")) {
+@layout(
+    pageTitle = title
+) {
 
-    <a id="back-link" class="back-link" href="@backLink">@Messages("calc.base.back")</a>
+    @errorSummary(currentIncomeForm.errors)
 
-    @errorSummary(currentIncomeForm, "current-income")
-
-    <h1 class="heading-xlarge">@Messages("calc.currentIncome.question")</h1>
+    <h1 class="govuk-heading-xl">@Messages("calc.currentIncome.question")</h1>
 
     @form(action = controllers.routes.CurrentIncomeController.submitCurrentIncome) {
 
-        <span class="form-hint">@Messages("calc.currentIncome.helpText.line1")</span>
-        <span class="form-hint">@Messages("calc.currentIncome.helpText.line2")</span>
+        <p class="govuk-body">@Messages("calc.currentIncome.helpText.line1")</p>
 
-        @formInputMoney(
-            inputForm = currentIncomeForm,
-            fieldName = "currentIncome",
-            questionText = Messages("calc.currentIncome.question"),
-            hideLabel = true
-        )
+        <p class="govuk-body">@Messages("calc.currentIncome.helpText.line2")</p>
 
-        <button class="button" type="submit" id="continue-button">@Messages("calc.base.continue")</button>
+
+        @formInputMoney(currentIncomeForm("currentIncome"), Messages("calc.currentIncome.question"), hideLabel = true)
+
+        @submitButton()
 
     }
 

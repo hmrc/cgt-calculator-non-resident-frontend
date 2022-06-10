@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,9 +55,9 @@ object CostsAtLegislationStartForm {
 
   val costsAtLegislationStartForm = Form(
     mapping(
-      "hasCosts" -> text
-        .verifying("calc.common.error.fieldRequired", mandatoryCheck)
-        .verifying("calc.common.error.fieldRequired", yesNoCheck),
+      "hasCosts" -> common.Formatters.text("calc.costsAtLegislationStart.errors.required")
+        .verifying("calc.costsAtLegislationStart.errors.required", mandatoryCheck)
+        .verifying("calc.costsAtLegislationStart.errors.required", yesNoCheck),
       "costs" -> text
         .transform(stringToOptionalBigDecimal, optionalBigDecimalToString)
     )(CostsAtLegislationStartModel.apply)(CostsAtLegislationStartModel.unapply)

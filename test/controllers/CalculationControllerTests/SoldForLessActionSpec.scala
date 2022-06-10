@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@ import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.soldForLess
-
+import assets.MessageLookup.{NonResident => commonMessages}
 import scala.concurrent.{ExecutionContext, Future}
 
 class SoldForLessActionSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with MockitoSugar {
@@ -49,6 +49,7 @@ class SoldForLessActionSpec extends CommonPlaySpec with WithCommonFakeApplicatio
   val defaultCache = mock[CacheMap]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val soldForLessView = fakeApplication.injector.instanceOf[soldForLess]
+  lazy val pageTitle = s"""${messages.question} - ${commonMessages.pageHeading} - GOV.UK"""
 
   class Setup {
     val controller = new SoldForLessController(
@@ -81,7 +82,7 @@ class SoldForLessActionSpec extends CommonPlaySpec with WithCommonFakeApplicatio
 
       s"return some html with title of ${messages.question}" in {
         contentType(result) shouldBe Some("text/html")
-        Jsoup.parse(bodyOf(result)(materializer, ec)).title shouldEqual messages.question
+        Jsoup.parse(bodyOf(result)(materializer, ec)).title shouldEqual pageTitle
       }
     }
 
@@ -96,7 +97,7 @@ class SoldForLessActionSpec extends CommonPlaySpec with WithCommonFakeApplicatio
 
       s"return some html with title of ${messages.question}" in {
         contentType(result) shouldBe Some("text/html")
-        Jsoup.parse(bodyOf(result)(materializer, ec)).title shouldEqual messages.question
+        Jsoup.parse(bodyOf(result)(materializer, ec)).title shouldEqual pageTitle
       }
     }
 
@@ -160,7 +161,7 @@ class SoldForLessActionSpec extends CommonPlaySpec with WithCommonFakeApplicatio
       }
 
       "return to the Sold for Less page" in {
-        doc.title() shouldEqual messages.question
+        doc.title() shouldEqual s"""Error: ${pageTitle}"""
       }
     }
   }

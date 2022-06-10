@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 package controllers.CalculationControllerTests
 
 import akka.stream.Materializer
-import assets.MessageLookup.{OutsideTaxYears => messages}
+import assets.MessageLookup.{NonResident => commonMessages, OutsideTaxYears => messages}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import config.ApplicationConfig
 import connectors.CalculatorConnector
@@ -49,6 +49,7 @@ class OutsideTaxYearActionSpec()
   val defaultCache = mock[CacheMap]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val outsideTaxYearView = fakeApplication.injector.instanceOf[outsideTaxYear]
+  lazy val pageTitle = s"""${messages.title} - ${commonMessages.pageHeading} - GOV.UK"""
 
   def setupTarget(disposalDateModel: Option[DateModel], taxYearModel: Option[TaxYearModel]): OutsideTaxYearController = {
 
@@ -76,12 +77,12 @@ class OutsideTaxYearActionSpec()
         contentType(result) shouldBe Some("text/html")
       }
 
-      s"return a title of ${messages.title}" in {
-        Jsoup.parse(bodyOf(result)(materializer, ec)).title shouldBe messages.title
+      s"return a title of ${pageTitle}" in {
+        Jsoup.parse(bodyOf(result)(materializer, ec)).title shouldBe pageTitle
       }
 
       s"have a back link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-        Jsoup.parse(bodyOf(result)(materializer, ec)).getElementById("back-link").attr("href") shouldBe controllers.routes.DisposalDateController.disposalDate().url
+        Jsoup.parse(bodyOf(result)(materializer, ec)).getElementById("back-link").attr("href") shouldBe "javascript:history.back()"
       }
     }
 

@@ -15,31 +15,40 @@
  *@
 
 @import models.DisposalValueModel
+@import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
-    mainTemplate: main_template,
-    errorSummary: helpers.errorSummary,
+    layout: Layout,
+    errorSummary: playComponents.errorSummary,
     form: FormWithCSRF,
-    formInputMoney: helpers.formInputMoney
+    formInputMoney: playComponents.formInputMoney,
+    submitButton: playComponents.submitButton
 )
 
 @(disposalValueForm: Form[DisposalValueModel])(implicit request: Request[_], messages: Messages)
 
-@mainTemplate(Messages("calc.disposalValue.question")) {
+@title = @{
+    if(disposalValueForm.errors.nonEmpty){
+        messages("site.title.error", messages("calc.disposalValue.question"))
+    } else {
+        messages("calc.disposalValue.question")
+    }
+}
 
-    <a id="back-link" class="back-link" href="@controllers.routes.SoldForLessController.soldForLess">@Messages("calc.base.back")</a>
+@layout(pageTitle = title) {
 
-    @errorSummary(disposalValueForm, "disposal-value")
-
-    <h1 class="heading-xlarge">@Messages("calc.disposalValue.question")</h1>
+    @errorSummary(disposalValueForm.errors)
 
     @form(action = controllers.routes.DisposalValueController.submitDisposalValue) {
 
-        <p class="panel-indent panel-indent--wide panel-indent--gutter">@Messages("calc.disposalValue.jointOwnership")</p>
+        @formInputMoney(
+            disposalValueForm("disposalValue"),
+            Messages("calc.disposalValue.question"),
+            hideLabel = false,
+            hintText = Some(Messages("calc.disposalValue.jointOwnership"))
+        )
 
-        @formInputMoney(disposalValueForm, "disposalValue", Messages("calc.disposalValue.question"), hideLabel = true)
-
-        <button id="continue-button" type="submit" class="button">@Messages("calc.base.button.continue")</button>
+        @submitButton()
 
     }
 }
