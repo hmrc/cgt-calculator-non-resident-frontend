@@ -124,7 +124,7 @@ class CostsAtLegislationStartActionSpec extends CommonPlaySpec with WithCommonFa
 
     "a valid form is submitted" should {
       val target = setupTarget(None)
-      lazy val request = fakeRequestToPOSTWithSession("hasCosts" -> "Yes", "costs" -> "1000")
+      lazy val request = fakeRequestToPOSTWithSession("hasCosts" -> "Yes", "costs" -> "1000").withMethod("POST")
       lazy val result = target.submitCostsAtLegislationStart(request)
 
       "return a 303" in {
@@ -132,7 +132,7 @@ class CostsAtLegislationStartActionSpec extends CommonPlaySpec with WithCommonFa
       }
 
       "redirect to the rebased value page" in {
-        redirectLocation(result).get shouldBe controllers.routes.RebasedValueController.rebasedValue().url
+        redirectLocation(result).get shouldBe controllers.routes.RebasedValueController.rebasedValue.url
       }
     }
 

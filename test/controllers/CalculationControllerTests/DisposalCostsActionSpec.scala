@@ -218,16 +218,16 @@ class DisposalCostsActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
 
       "return a 303" in {
         val target = setupTarget(None, None, None)
-        lazy val request = fakeRequestToPOSTWithSession(("disposalCosts", "1000"))
+        lazy val request = fakeRequestToPOSTWithSession(("disposalCosts", "1000")).withMethod("POST")
         lazy val result = target.submitDisposalCosts(request)
         status(result) shouldBe 303
       }
 
-      s"redirect to ${routes.AcquisitionDateController.acquisitionDate()}" in {
+      s"redirect to ${routes.AcquisitionDateController.acquisitionDate}" in {
         val target = setupTarget(None, None, None)
-        lazy val request = fakeRequestToPOSTWithSession(("disposalCosts", "1000"))
+        lazy val request = fakeRequestToPOSTWithSession(("disposalCosts", "1000")).withMethod("POST")
         lazy val result = target.submitDisposalCosts(request)
-        redirectLocation(result) shouldBe Some(s"${routes.AcquisitionDateController.acquisitionDate()}")
+        redirectLocation(result) shouldBe Some(s"${routes.AcquisitionDateController.acquisitionDate}")
       }
     }
 

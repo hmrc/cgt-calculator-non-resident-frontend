@@ -107,8 +107,8 @@ class RebasedValueViewSpec extends CommonPlaySpec with WithCommonFakeApplication
           form.attr("method") shouldBe "POST"
         }
 
-        s"has an action of '${controllers.routes.RebasedValueController.submitRebasedValue().url}'" in {
-          form.attr("action") shouldBe controllers.routes.RebasedValueController.submitRebasedValue().url
+        s"has an action of '${controllers.routes.RebasedValueController.submitRebasedValue.url}'" in {
+          form.attr("action") shouldBe controllers.routes.RebasedValueController.submitRebasedValue.url
         }
       }
 

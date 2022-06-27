@@ -147,7 +147,7 @@ class CalculationDetailsWithPRRConstructorSpec extends CommonPlaySpec with WithC
       "return correct link for the calculation election details" in {
         assertExpectedResult(result) { item =>
           assertExpectedLink(item.link) { link =>
-            link shouldBe routes.CalculationElectionController.calculationElection().url
+            link shouldBe routes.CalculationElectionController.calculationElection.url
           }
         }
       }
@@ -179,7 +179,7 @@ class CalculationDetailsWithPRRConstructorSpec extends CommonPlaySpec with WithC
       "return correct link for the calculation election details" in {
         assertExpectedResult(result) { item =>
           assertExpectedLink(item.link) { link =>
-            link shouldBe routes.CalculationElectionController.calculationElection().url
+            link shouldBe routes.CalculationElectionController.calculationElection.url
           }
         }
       }
@@ -211,7 +211,7 @@ class CalculationDetailsWithPRRConstructorSpec extends CommonPlaySpec with WithC
       "return correct link for the calculation election details" in {
         assertExpectedResult(result) { item =>
           assertExpectedLink(item.link) { link =>
-            link shouldBe routes.CalculationElectionController.calculationElection().url
+            link shouldBe routes.CalculationElectionController.calculationElection.url
           }
         }
       }

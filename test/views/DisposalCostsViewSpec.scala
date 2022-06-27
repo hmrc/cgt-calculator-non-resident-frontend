@@ -111,8 +111,8 @@ class DisposalCostsViewSpec extends CommonPlaySpec with WithCommonFakeApplicatio
           form.attr("method") shouldBe "POST"
         }
 
-        s"has an action of '${controllers.routes.DisposalCostsController.submitDisposalCosts().url}'" in {
-          form.attr("action") shouldBe controllers.routes.DisposalCostsController.submitDisposalCosts().url
+        s"has an action of '${controllers.routes.DisposalCostsController.submitDisposalCosts.url}'" in {
+          form.attr("action") shouldBe controllers.routes.DisposalCostsController.submitDisposalCosts.url
         }
 
         s"have a paragraph with the text ${messages.jointOwnership}" in {

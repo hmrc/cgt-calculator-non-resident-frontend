@@ -121,7 +121,7 @@ class SoldForLessActionSpec extends CommonPlaySpec with WithCommonFakeApplicatio
     "with valid form with the answer 'Yes'" should {
 
       lazy val target = setupTarget(None)
-      lazy val request = fakeRequestToPOSTWithSession(("soldForLess", "Yes"))
+      lazy val request = fakeRequestToPOSTWithSession(("soldForLess", "Yes")).withMethod("POST")
       lazy val result = target.submitSoldForLess(request)
 
       "return a status of 303" in {
@@ -129,7 +129,7 @@ class SoldForLessActionSpec extends CommonPlaySpec with WithCommonFakeApplicatio
       }
 
       "redirect to the market value when sold page" in {
-        redirectLocation(result).get shouldBe controllers.routes.MarketValueWhenSoldOrGaveAwayController.marketValueWhenSold().url
+        redirectLocation(result).get shouldBe controllers.routes.MarketValueWhenSoldOrGaveAwayController.marketValueWhenSold.url
 
       }
     }
@@ -137,7 +137,7 @@ class SoldForLessActionSpec extends CommonPlaySpec with WithCommonFakeApplicatio
     "with valid form with the answer 'No'" should {
 
       lazy val target = setupTarget(None)
-      lazy val request = fakeRequestToPOSTWithSession(("soldForLess", "No"))
+      lazy val request = fakeRequestToPOSTWithSession(("soldForLess", "No")).withMethod("POST")
       lazy val result = target.submitSoldForLess(request)
 
       "return a status of 303" in {

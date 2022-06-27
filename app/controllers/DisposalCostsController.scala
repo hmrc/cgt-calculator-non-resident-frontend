@@ -42,11 +42,11 @@ class DisposalCostsController @Inject()(http: DefaultHttpClient,calcConnector: C
 
   private def backUrl(soldOrGivenAwayModel: Option[SoldOrGivenAwayModel], soldForLessModel: Option[SoldForLessModel]): Future[String] =
     (soldOrGivenAwayModel, soldForLessModel) match {
-    case (Some(SoldOrGivenAwayModel(soldIt)), _) if !soldIt => Future.successful(routes.MarketValueWhenSoldOrGaveAwayController.marketValueWhenGaveAway().url)
+    case (Some(SoldOrGivenAwayModel(soldIt)), _) if !soldIt => Future.successful(routes.MarketValueWhenSoldOrGaveAwayController.marketValueWhenGaveAway.url)
     case (Some(SoldOrGivenAwayModel(soldIt)), Some(SoldForLessModel(soldForLess))) if soldIt && soldForLess =>
-      Future.successful(routes.MarketValueWhenSoldOrGaveAwayController.marketValueWhenSold().url)
+      Future.successful(routes.MarketValueWhenSoldOrGaveAwayController.marketValueWhenSold.url)
     case (Some(SoldOrGivenAwayModel(soldIt)), Some(SoldForLessModel(soldForLess))) if soldIt && !soldForLess =>
-      Future.successful(routes.DisposalValueController.disposalValue().url)
+      Future.successful(routes.DisposalValueController.disposalValue.url)
     case (_, _) => Future.successful(missingDataRoute)
   }
 
@@ -83,7 +83,7 @@ class DisposalCostsController @Inject()(http: DefaultHttpClient,calcConnector: C
 
     def successAction(model: DisposalCostsModel) = {
       calcConnector.saveFormData(KeystoreKeys.disposalCosts, model).map(_ =>
-        Redirect(routes.AcquisitionDateController.acquisitionDate()))
+        Redirect(routes.AcquisitionDateController.acquisitionDate))
     }
 
     def routeRequest(backLink: String) = {

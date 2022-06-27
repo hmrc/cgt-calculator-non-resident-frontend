@@ -76,7 +76,7 @@ class PropertyLivedInViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
       }
 
       "render a form tag with a submit action" in {
-        document.select("form").attr("action") shouldEqual controllers.routes.PropertyLivedInController.submitPropertyLivedIn().url
+        document.select("form").attr("action") shouldEqual controllers.routes.PropertyLivedInController.submitPropertyLivedIn.url
       }
 
       "have a legend for the radio inputs" which {

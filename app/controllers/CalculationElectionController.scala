@@ -82,8 +82,8 @@ class CalculationElectionController @Inject()(http: DefaultHttpClient,calcConnec
     val results = Seq(totalGainResultsModel.flatGain) ++ Seq(totalGainResultsModel.rebasedGain, totalGainResultsModel.timeApportionedGain).flatten
 
     if (results.exists(_ > 0)) {
-      Future.successful(routes.ClaimingReliefsController.claimingReliefs().url)
-    } else Future.successful(routes.CheckYourAnswersController.checkYourAnswers().url)
+      Future.successful(routes.ClaimingReliefsController.claimingReliefs.url)
+    } else Future.successful(routes.CheckYourAnswersController.checkYourAnswers.url)
   }
 
   private def getTaxOwedIfApplicable(totalGainAnswersModel: TotalGainAnswersModel,
@@ -159,10 +159,10 @@ class CalculationElectionController @Inject()(http: DefaultHttpClient,calcConnec
     def successAction(model: CalculationElectionModel) = {
       calcConnector.saveFormData(KeystoreKeys.calculationElection, model)
       request.body.asFormUrlEncoded.flatMap(_.get("action").map(_.head)) match {
-        case Some("flat") => Future.successful(Redirect(routes.OtherReliefsFlatController.otherReliefsFlat()))
-        case Some("time") => Future.successful(Redirect(routes.OtherReliefsTAController.otherReliefsTA()))
-        case Some("rebased") => Future.successful(Redirect(routes.OtherReliefsRebasedController.otherReliefsRebased()))
-        case _ => Future.successful(Redirect(routes.SummaryController.summary()))
+        case Some("flat") => Future.successful(Redirect(routes.OtherReliefsFlatController.otherReliefsFlat))
+        case Some("time") => Future.successful(Redirect(routes.OtherReliefsTAController.otherReliefsTA))
+        case Some("rebased") => Future.successful(Redirect(routes.OtherReliefsRebasedController.otherReliefsRebased))
+        case _ => Future.successful(Redirect(routes.SummaryController.summary))
       }
     }
 

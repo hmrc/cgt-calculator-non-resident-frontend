@@ -58,8 +58,8 @@ class AnnualExemptAmountViewSpec extends CommonPlaySpec with WithCommonFakeAppli
         }
       }
 
-      s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-        document.select("body > header > div > div > div.govuk-header__content > a").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
+      s"have a home link to '${controllers.routes.DisposalDateController.disposalDate.url}'" in {
+        document.select("body > header > div > div > div.govuk-header__content > a").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate.url
       }
 
       "have a title" which {
@@ -81,8 +81,8 @@ class AnnualExemptAmountViewSpec extends CommonPlaySpec with WithCommonFakeAppli
           form.attr("method") shouldBe "POST"
         }
 
-        s"has an action of '${controllers.routes.AnnualExemptAmountController.submitAnnualExemptAmount().url}'" in {
-          form.attr("action") shouldBe controllers.routes.AnnualExemptAmountController.submitAnnualExemptAmount().url
+        s"has an action of '${controllers.routes.AnnualExemptAmountController.submitAnnualExemptAmount.url}'" in {
+          form.attr("action") shouldBe controllers.routes.AnnualExemptAmountController.submitAnnualExemptAmount.url
         }
       }
 

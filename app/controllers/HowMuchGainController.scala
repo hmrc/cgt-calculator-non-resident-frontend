@@ -50,9 +50,9 @@ class HowMuchGainController @Inject()(http: DefaultHttpClient,calcConnector: Cal
     def successAction(model: HowMuchGainModel) = {
       calcConnector.saveFormData(KeystoreKeys.howMuchGain, model).map(_ =>
         if (model.howMuchGain > 0) {
-          Redirect(routes.BroughtForwardLossesController.broughtForwardLosses())
+          Redirect(routes.BroughtForwardLossesController.broughtForwardLosses)
         } else {
-          Redirect(routes.AnnualExemptAmountController.annualExemptAmount())
+          Redirect(routes.AnnualExemptAmountController.annualExemptAmount)
         }
       )
     }

@@ -52,8 +52,8 @@ class BoughtForLessController @Inject()(http: DefaultHttpClient,calcConnector: C
     def errorAction(errors: Form[BoughtForLessModel]) = Future.successful(BadRequest(boughtForLessView(errors)))
 
     def routeRequest(model: BoughtForLessModel) = {
-      if (model.boughtForLess) Future.successful(Redirect(routes.WorthWhenBoughtForLessController.worthWhenBoughtForLess()))
-      else Future.successful(Redirect(routes.AcquisitionValueController.acquisitionValue()))
+      if (model.boughtForLess) Future.successful(Redirect(routes.WorthWhenBoughtForLessController.worthWhenBoughtForLess))
+      else Future.successful(Redirect(routes.AcquisitionValueController.acquisitionValue))
     }
 
     def successAction(model: BoughtForLessModel) = {

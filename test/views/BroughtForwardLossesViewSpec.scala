@@ -79,8 +79,8 @@ class BroughtForwardLossesViewSpec extends CommonPlaySpec with WithCommonFakeApp
           form.attr("method") shouldBe "POST"
         }
 
-        s"has an action of '${controllers.routes.BroughtForwardLossesController.submitBroughtForwardLosses().url}'" in {
-          form.attr("action") shouldBe controllers.routes.BroughtForwardLossesController.submitBroughtForwardLosses().url
+        s"has an action of '${controllers.routes.BroughtForwardLossesController.submitBroughtForwardLosses.url}'" in {
+          form.attr("action") shouldBe controllers.routes.BroughtForwardLossesController.submitBroughtForwardLosses.url
         }
       }
 

@@ -188,7 +188,7 @@ class OtherReliefsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
       val target = setupTarget(None,
         calculationResultsModel,
         personalDetailsModel)
-      lazy val request = fakeRequestToPOSTWithSession("otherReliefs" -> "1000")
+      lazy val request = fakeRequestToPOSTWithSession("otherReliefs" -> "1000").withMethod("POST")
       lazy val result = target.submitOtherReliefs(request)
 
       "return a status of 303" in {
@@ -196,7 +196,7 @@ class OtherReliefsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
       }
 
       "redirect to the summary page" in {
-        redirectLocation(result).get shouldBe controllers.routes.SummaryController.summary().url
+        redirectLocation(result).get shouldBe controllers.routes.SummaryController.summary.url
       }
     }
 

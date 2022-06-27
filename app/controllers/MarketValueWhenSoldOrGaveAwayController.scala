@@ -61,7 +61,7 @@ class MarketValueWhenSoldOrGaveAwayController @Inject()(environment: Environment
 
     def successAction(model: DisposalValueModel) = {
       calcConnector.saveFormData(KeystoreKeys.disposalMarketValue, model)
-      Future.successful(Redirect(routes.DisposalCostsController.disposalCosts()))
+      Future.successful(Redirect(routes.DisposalCostsController.disposalCosts))
     }
 
     marketValueWhenSoldForm.bindFromRequest.fold(errorAction, successAction)
@@ -73,7 +73,7 @@ class MarketValueWhenSoldOrGaveAwayController @Inject()(environment: Environment
 
     def successAction(model: DisposalValueModel) = {
       calcConnector.saveFormData(KeystoreKeys.disposalMarketValue, model).map(_ =>
-        Redirect(routes.DisposalCostsController.disposalCosts()))
+        Redirect(routes.DisposalCostsController.disposalCosts))
     }
 
     marketValueWhenGaveAwayForm.bindFromRequest.fold(errorAction, successAction)

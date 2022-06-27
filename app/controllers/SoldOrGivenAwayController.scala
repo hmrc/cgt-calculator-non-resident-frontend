@@ -50,8 +50,8 @@ class SoldOrGivenAwayController @Inject()(http: DefaultHttpClient,calcConnector:
       success => {
         calcConnector.saveFormData[SoldOrGivenAwayModel](KeystoreKeys.soldOrGivenAway, success).map(_ =>
         success match {
-          case SoldOrGivenAwayModel(true) => Redirect(routes.SoldForLessController.soldForLess())
-          case SoldOrGivenAwayModel(false) => Redirect(routes.WhoDidYouGiveItToController.whoDidYouGiveItTo())
+          case SoldOrGivenAwayModel(true) => Redirect(routes.SoldForLessController.soldForLess)
+          case SoldOrGivenAwayModel(false) => Redirect(routes.WhoDidYouGiveItToController.whoDidYouGiveItTo)
         })
       }
     )

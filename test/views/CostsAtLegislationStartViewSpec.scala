@@ -66,8 +66,8 @@ class CostsAtLegislationStartViewSpec extends CommonPlaySpec with WithCommonFake
         }
       }
 
-      s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-        document.select("body > header > div > div > div.govuk-header__content > a").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
+      s"have a home link to '${controllers.routes.DisposalDateController.disposalDate.url}'" in {
+        document.select("body > header > div > div > div.govuk-header__content > a").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate.url
       }
 
       "have a form" which {
@@ -77,8 +77,8 @@ class CostsAtLegislationStartViewSpec extends CommonPlaySpec with WithCommonFake
           form.attr("method") shouldBe "POST"
         }
 
-        s"has an action of '${controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart().url}'" in {
-          form.attr("action") shouldBe controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart().url
+        s"has an action of '${controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart.url}'" in {
+          form.attr("action") shouldBe controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart.url
         }
       }
 

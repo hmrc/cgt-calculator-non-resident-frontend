@@ -52,12 +52,12 @@ class BroughtForwardLossesController @Inject()(http: DefaultHttpClient,calcConne
       loss <- getLoss
     } yield {
       (otherPropertiesModel, gainOrLoss) match {
-        case (Some(OtherPropertiesModel("No")), _) => controllers.routes.OtherPropertiesController.otherProperties().url
+        case (Some(OtherPropertiesModel("No")), _) => controllers.routes.OtherPropertiesController.otherProperties.url
         case (_, Some(PreviousLossOrGainModel("Gain"))) if gain.get.howMuchGain > 0 =>
-          controllers.routes.HowMuchGainController.howMuchGain().url
+          controllers.routes.HowMuchGainController.howMuchGain.url
         case (_, Some(PreviousLossOrGainModel("Loss"))) if loss.get.loss > 0 =>
-          controllers.routes.HowMuchLossController.howMuchLoss().url
-        case _ => controllers.routes.AnnualExemptAmountController.annualExemptAmount().url
+          controllers.routes.HowMuchLossController.howMuchLoss.url
+        case _ => controllers.routes.AnnualExemptAmountController.annualExemptAmount.url
       }
     }
   }
@@ -79,7 +79,7 @@ class BroughtForwardLossesController @Inject()(http: DefaultHttpClient,calcConne
 
     def successAction(model: BroughtForwardLossesModel) = {
       calcConnector.saveFormData[BroughtForwardLossesModel](KeystoreKeys.broughtForwardLosses, model).map(_ =>
-        Redirect(controllers.routes.CheckYourAnswersController.checkYourAnswers()))
+        Redirect(controllers.routes.CheckYourAnswersController.checkYourAnswers))
     }
 
     def errorAction(form: Form[BroughtForwardLossesModel]) = {

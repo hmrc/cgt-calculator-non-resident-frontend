@@ -207,7 +207,7 @@ class CalculationElectionActionSpec ()
         document.title() shouldEqual calculationElectionPageTitle
       }
 
-      s"has a back link of ${routes.ClaimingReliefsController.claimingReliefs().url}" in{
+      s"has a back link of ${routes.ClaimingReliefsController.claimingReliefs.url}" in{
         document.select("a#back-link").attr("href") shouldBe "javascript:history.back()"
       }
     }
@@ -276,14 +276,14 @@ class CalculationElectionActionSpec ()
         seq,
         finalAnswersModel
       )
-      lazy val result = target.submitCalculationElection(request)
+      lazy val result = target.submitCalculationElection(request.withMethod("POST"))
 
       "return a 303" in {
         status(result) shouldBe 303
       }
 
       "redirect to the summary page" in {
-        redirectLocation(result) shouldBe Some(s"${routes.SummaryController.summary()}")
+        redirectLocation(result) shouldBe Some(s"${routes.SummaryController.summary}")
       }
     }
 
@@ -296,14 +296,14 @@ class CalculationElectionActionSpec ()
         seq,
         finalAnswersModel
       )
-      lazy val result = target.submitCalculationElection(request)
+      lazy val result = target.submitCalculationElection(request.withMethod("POST"))
 
       "return a 303" in {
         status(result) shouldBe 303
       }
 
       "redirect to the other reliefs flat page" in {
-        redirectLocation(result) shouldBe Some(s"${routes.OtherReliefsFlatController.otherReliefsFlat()}")
+        redirectLocation(result) shouldBe Some(s"${routes.OtherReliefsFlatController.otherReliefsFlat}")
       }
     }
 
@@ -316,14 +316,14 @@ class CalculationElectionActionSpec ()
         seq,
         finalAnswersModel
       )
-      lazy val result = target.submitCalculationElection(request)
+      lazy val result = target.submitCalculationElection(request.withMethod("POST"))
 
       "return a 303" in {
         status(result) shouldBe 303
       }
 
       "redirect to the other reliefs rebased page" in {
-        redirectLocation(result) shouldBe Some(s"${routes.OtherReliefsRebasedController.otherReliefsRebased()}")
+        redirectLocation(result) shouldBe Some(s"${routes.OtherReliefsRebasedController.otherReliefsRebased}")
       }
     }
 
@@ -336,14 +336,14 @@ class CalculationElectionActionSpec ()
         seq,
         finalAnswersModel
       )
-      lazy val result = target.submitCalculationElection(request)
+      lazy val result = target.submitCalculationElection(request.withMethod("POST"))
 
       "return a 303" in {
         status(result) shouldBe 303
       }
 
       "redirect to the other reliefs flat page" in {
-        redirectLocation(result) shouldBe Some(s"${routes.OtherReliefsTAController.otherReliefsTA()}")
+        redirectLocation(result) shouldBe Some(s"${routes.OtherReliefsTAController.otherReliefsTA}")
       }
     }
 

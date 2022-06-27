@@ -56,9 +56,9 @@ class HowBecameOwnerController @Inject()(http: DefaultHttpClient,calcConnector: 
 
     def routeRequest(data: HowBecameOwnerModel): Future[Result] = {
       data.gainedBy match {
-        case "Gifted" => Future.successful(Redirect(routes.WorthWhenGiftedToController.worthWhenGiftedTo()))
-        case "Inherited" => Future.successful(Redirect(routes.WorthWhenInheritedController.worthWhenInherited()))
-        case _ => Future.successful(Redirect(routes.BoughtForLessController.boughtForLess()))
+        case "Gifted" => Future.successful(Redirect(routes.WorthWhenGiftedToController.worthWhenGiftedTo))
+        case "Inherited" => Future.successful(Redirect(routes.WorthWhenInheritedController.worthWhenInherited))
+        case _ => Future.successful(Redirect(routes.BoughtForLessController.boughtForLess))
       }
     }
 

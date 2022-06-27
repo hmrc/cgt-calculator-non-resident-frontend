@@ -49,7 +49,7 @@ class DisposalValueController @Inject()(http: DefaultHttpClient,calcConnector: C
 
     def successAction(model: DisposalValueModel) = {
       calcConnector.saveFormData(KeystoreKeys.disposalValue, model).map(_ =>
-        Redirect(routes.DisposalCostsController.disposalCosts()))
+        Redirect(routes.DisposalCostsController.disposalCosts))
     }
 
     disposalValueForm.bindFromRequest.fold(errorAction, successAction)

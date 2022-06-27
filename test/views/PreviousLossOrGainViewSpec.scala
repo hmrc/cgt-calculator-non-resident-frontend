@@ -88,8 +88,8 @@ class PreviousLossOrGainViewSpec extends CommonPlaySpec with WithCommonFakeAppli
     "has a form" which {
       lazy val form = document.getElementsByTag("form")
 
-      s"has the action '${controllers.routes.PreviousGainOrLossController.submitPreviousGainOrLoss().toString}" in {
-        form.attr("action") shouldBe controllers.routes.PreviousGainOrLossController.submitPreviousGainOrLoss().toString()
+      s"has the action '${controllers.routes.PreviousGainOrLossController.submitPreviousGainOrLoss.toString}" in {
+        form.attr("action") shouldBe controllers.routes.PreviousGainOrLossController.submitPreviousGainOrLoss.toString()
       }
 
       "has the method of POST" in {

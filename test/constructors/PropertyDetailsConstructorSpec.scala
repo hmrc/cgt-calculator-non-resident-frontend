@@ -112,7 +112,7 @@ class PropertyDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeA
       }
 
       "have a link to the improvements page" in {
-        result.link shouldBe Some(controllers.routes.ImprovementsController.improvements().url)
+        result.link shouldBe Some(controllers.routes.ImprovementsController.improvements.url)
       }
     }
 
@@ -147,7 +147,7 @@ class PropertyDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeA
       }
 
       "have a link to the improvements page" in {
-        result.get.link shouldBe Some(controllers.routes.ImprovementsController.improvements().url)
+        result.get.link shouldBe Some(controllers.routes.ImprovementsController.improvements.url)
       }
     }
 
@@ -179,7 +179,7 @@ class PropertyDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeA
       }
 
       "have a link to the improvements page" in {
-        result.get.link shouldBe Some(controllers.routes.ImprovementsController.improvements().url)
+        result.get.link shouldBe Some(controllers.routes.ImprovementsController.improvements.url)
       }
     }
   }
@@ -206,7 +206,7 @@ class PropertyDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeA
       }
 
       "have a link to the improvements page" in {
-        result.get.link shouldBe Some(controllers.routes.ImprovementsController.improvements().url)
+        result.get.link shouldBe Some(controllers.routes.ImprovementsController.improvements.url)
       }
     }
 

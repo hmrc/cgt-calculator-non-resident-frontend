@@ -50,7 +50,7 @@ class WorthBeforeLegislationStartController @Inject()(http: DefaultHttpClient,ca
 
     def successAction(model: WorthBeforeLegislationStartModel) = {
       calcConnector.saveFormData(KeystoreKeys.worthBeforeLegislationStart, model).map(_ =>
-        Redirect(routes.CostsAtLegislationStartController.costsAtLegislationStart()))
+        Redirect(routes.CostsAtLegislationStartController.costsAtLegislationStart))
     }
 
     worthBeforeLegislationStartForm.bindFromRequest.fold(errorAction, successAction)

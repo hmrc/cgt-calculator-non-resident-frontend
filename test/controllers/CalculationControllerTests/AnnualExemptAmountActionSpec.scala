@@ -24,7 +24,7 @@ import config.ApplicationConfig
 import connectors.CalculatorConnector
 import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
 import controllers.helpers.FakeRequestHelper
-import controllers.{AnnualExemptAmountController, routes}
+import controllers.{AnnualExemptAmountController}
 import models._
 import org.jsoup._
 import org.mockito.ArgumentMatchers
@@ -225,16 +225,16 @@ class AnnualExemptAmountActionSpec extends CommonPlaySpec with WithCommonFakeApp
 
       "return a 303" in {
         val target = setupTarget(None)
-        lazy val request = fakeRequestToPOSTWithSession(("annualExemptAmount", "1000"))
+        lazy val request = fakeRequestToPOSTWithSession(("annualExemptAmount", "1000")).withMethod("POST")
         lazy val result = target.submitAnnualExemptAmount(request)
         status(result) shouldBe 303
       }
 
       "should redirect to the Brought Forward Losses page" in {
         val target = setupTarget(None)
-        lazy val request = fakeRequestToPOSTWithSession(("annualExemptAmount", "1000"))
+        lazy val request = fakeRequestToPOSTWithSession(("annualExemptAmount", "1000")).withMethod("POST")
         lazy val result = target.submitAnnualExemptAmount(request)
-        redirectLocation(result) shouldBe Some(controllers.routes.BroughtForwardLossesController.broughtForwardLosses().url)
+        redirectLocation(result) shouldBe Some(controllers.routes.BroughtForwardLossesController.broughtForwardLosses.url)
       }
     }
 

@@ -126,7 +126,7 @@ class SalesDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeAppl
       }
 
       "have a link to the disposal date page" in {
-        result.link shouldBe Some(controllers.routes.DisposalDateController.disposalDate().url)
+        result.link shouldBe Some(controllers.routes.DisposalDateController.disposalDate.url)
       }
     }
 
@@ -157,7 +157,7 @@ class SalesDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeAppl
       }
 
       "have a link to the sold or given away page" in {
-        result.link shouldBe Some(controllers.routes.SoldOrGivenAwayController.soldOrGivenAway().url)
+        result.link shouldBe Some(controllers.routes.SoldOrGivenAwayController.soldOrGivenAway.url)
       }
     }
 
@@ -177,7 +177,7 @@ class SalesDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeAppl
       }
 
       "have a link to the sold or given away page" in {
-        result.link shouldBe Some(controllers.routes.SoldOrGivenAwayController.soldOrGivenAway().url)
+        result.link shouldBe Some(controllers.routes.SoldOrGivenAwayController.soldOrGivenAway.url)
       }
     }
   }
@@ -212,7 +212,7 @@ class SalesDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeAppl
       }
 
       "have a link to the sold for less page" in {
-        assertExpectedResult[QuestionAnswerModel[Boolean]](result)(_.link shouldBe Some(controllers.routes.SoldForLessController.soldForLess().url))
+        assertExpectedResult[QuestionAnswerModel[Boolean]](result)(_.link shouldBe Some(controllers.routes.SoldForLessController.soldForLess.url))
       }
     }
 
@@ -247,7 +247,7 @@ class SalesDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeAppl
       }
 
       "have a link to the market value when gave away page" in {
-        result.link shouldBe Some(controllers.routes.MarketValueWhenSoldOrGaveAwayController.marketValueWhenGaveAway().url)
+        result.link shouldBe Some(controllers.routes.MarketValueWhenSoldOrGaveAwayController.marketValueWhenGaveAway.url)
       }
     }
 
@@ -263,7 +263,7 @@ class SalesDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeAppl
       }
 
       "have a link to the disposal value page" in {
-        result.link shouldBe Some(controllers.routes.DisposalValueController.disposalValue().url)
+        result.link shouldBe Some(controllers.routes.DisposalValueController.disposalValue.url)
       }
     }
 
@@ -279,7 +279,7 @@ class SalesDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeAppl
       }
 
       "have a link to the market value sold page" in {
-        result.link shouldBe Some(controllers.routes.MarketValueWhenSoldOrGaveAwayController.marketValueWhenSold().url)
+        result.link shouldBe Some(controllers.routes.MarketValueWhenSoldOrGaveAwayController.marketValueWhenSold.url)
       }
     }
   }
@@ -302,7 +302,7 @@ class SalesDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeAppl
       }
 
       "have a link to the disposal costs page" in {
-        result.link shouldBe Some(controllers.routes.DisposalCostsController.disposalCosts().url)
+        result.link shouldBe Some(controllers.routes.DisposalCostsController.disposalCosts.url)
       }
     }
 
@@ -333,7 +333,7 @@ class SalesDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeAppl
       }
 
       "have a link to who did you give it to page" in {
-        result.link shouldBe Some(controllers.routes.WhoDidYouGiveItToController.whoDidYouGiveItTo().url)
+        result.link shouldBe Some(controllers.routes.WhoDidYouGiveItToController.whoDidYouGiveItTo.url)
       }
     }
 

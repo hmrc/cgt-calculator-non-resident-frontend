@@ -54,7 +54,7 @@ class CalculationDetailsConstructor @Inject()(implicit messagesProvider: Message
       case CalculationType.rebased => Messages("calc.summary.calculation.details.rebasedCalculation")
     }
 
-    val link = routes.CalculationElectionController.calculationElection().url
+    val link = routes.CalculationElectionController.calculationElection.url
 
     Some(QuestionAnswerModel(id, answer, question, Some(link)))
   }

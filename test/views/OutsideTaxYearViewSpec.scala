@@ -64,7 +64,7 @@ class OutsideTaxYearViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
           backLink.text shouldBe commonMessages.back
         }
 
-        s"have a link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+        s"have a link to '${controllers.routes.DisposalDateController.disposalDate.url}'" in {
           backLink.attr("href") shouldBe "javascript:history.back()"
         }
 
@@ -76,8 +76,8 @@ class OutsideTaxYearViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
           continue.text shouldBe commonMessages.continue
         }
 
-        s" have a link to ${controllers.routes.SoldOrGivenAwayController.soldOrGivenAway().url}" in {
-          continue.attr("href") shouldBe controllers.routes.SoldOrGivenAwayController.soldOrGivenAway().url
+        s" have a link to ${controllers.routes.SoldOrGivenAwayController.soldOrGivenAway.url}" in {
+          continue.attr("href") shouldBe controllers.routes.SoldOrGivenAwayController.soldOrGivenAway.url
         }
       }
 

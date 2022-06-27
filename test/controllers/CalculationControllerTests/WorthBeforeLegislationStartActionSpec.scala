@@ -127,7 +127,7 @@ class WorthBeforeLegislationStartActionSpec extends CommonPlaySpec with WithComm
       "with valid form with the answer '1000.00'" should {
 
         lazy val target = setUpTarget(None)
-        lazy val request = fakeRequestToPOSTWithSession(("worthBeforeLegislationStart", "1000.00"))
+        lazy val request = fakeRequestToPOSTWithSession(("worthBeforeLegislationStart", "1000.00")).withMethod("POST")
         lazy val result = target.submitWorthBeforeLegislationStart(request)
 
         "return a status of 303" in {
@@ -135,7 +135,7 @@ class WorthBeforeLegislationStartActionSpec extends CommonPlaySpec with WithComm
         }
 
         "redirect to the costs at legislation start page" in {
-          redirectLocation(result) shouldBe Some(controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart().url)
+          redirectLocation(result) shouldBe Some(controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart.url)
         }
       }
 

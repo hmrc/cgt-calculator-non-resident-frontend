@@ -120,7 +120,7 @@ class HowBecameOwnerActionSpec extends CommonPlaySpec with WithCommonFakeApplica
   "Calling .submitHowBecameOwner action" when {
     "a valid form with the answer 'Bought' is submitted" should {
       lazy val target = setupTarget(None)
-      lazy val result = target.submitHowBecameOwner(fakeRequestToPOSTWithSession(("gainedBy", "Bought")))
+      lazy val result = target.submitHowBecameOwner(fakeRequestToPOSTWithSession(("gainedBy", "Bought")).withMethod("POST"))
 
       "return a status of 303" in {
         status(result) shouldBe 303
@@ -134,7 +134,7 @@ class HowBecameOwnerActionSpec extends CommonPlaySpec with WithCommonFakeApplica
 
   "a valid form with the answer 'Inherited' is submitted" should {
     lazy val target = setupTarget(None)
-    lazy val result = target.submitHowBecameOwner(fakeRequestToPOSTWithSession(("gainedBy", "Inherited")))
+    lazy val result = target.submitHowBecameOwner(fakeRequestToPOSTWithSession(("gainedBy", "Inherited")).withMethod("POST"))
 
     "return a status of 303" in {
       status(result) shouldBe 303
@@ -148,7 +148,7 @@ class HowBecameOwnerActionSpec extends CommonPlaySpec with WithCommonFakeApplica
 
   "a valid form with the answer 'Gifted' is submitted" should {
     lazy val target = setupTarget(None)
-    lazy val result = target.submitHowBecameOwner(fakeRequestToPOSTWithSession(("gainedBy", "Gifted")))
+    lazy val result = target.submitHowBecameOwner(fakeRequestToPOSTWithSession(("gainedBy", "Gifted")).withMethod("POST"))
 
     "return a status of 303" in {
       status(result) shouldBe 303

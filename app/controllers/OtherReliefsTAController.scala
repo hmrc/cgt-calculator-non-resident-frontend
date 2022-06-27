@@ -91,7 +91,7 @@ class OtherReliefsTAController @Inject()(http: DefaultHttpClient,calcConnector: 
 
     def successAction(model: OtherReliefsModel) = {
       calcConnector.saveFormData(KeystoreKeys.otherReliefsTA, model).map(_ =>
-        Redirect(routes.CalculationElectionController.calculationElection()))
+        Redirect(routes.CalculationElectionController.calculationElection))
     }
 
     def errorRoute(totalGain: Option[TotalGainResultsModel], chargeableGainResult: Option[CalculationResultsWithTaxOwedModel],

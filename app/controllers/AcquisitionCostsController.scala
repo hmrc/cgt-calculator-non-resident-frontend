@@ -57,14 +57,14 @@ class AcquisitionCostsController @Inject()(http: DefaultHttpClient,
                howBecameOwnerModel: Option[HowBecameOwnerModel],
                boughtForLessModel: Option[BoughtForLessModel]) = (acquisitionDateModel, howBecameOwnerModel, boughtForLessModel) match {
       case (Some(_), _, _) if TaxDates.dateBeforeLegislationStart(acquisitionDateModel.get.get) =>
-        Future.successful(controllers.routes.WorthBeforeLegislationStartController.worthBeforeLegislationStart().url)
+        Future.successful(controllers.routes.WorthBeforeLegislationStartController.worthBeforeLegislationStart.url)
       case (_, Some(HowBecameOwnerModel("Inherited")),_) =>
-        Future.successful(controllers.routes.WorthWhenInheritedController.worthWhenInherited().url)
+        Future.successful(controllers.routes.WorthWhenInheritedController.worthWhenInherited.url)
       case (_, Some(HowBecameOwnerModel("Gifted")),_) =>
-        Future.successful(controllers.routes.WorthWhenGiftedToController.worthWhenGiftedTo().url)
+        Future.successful(controllers.routes.WorthWhenGiftedToController.worthWhenGiftedTo.url)
       case (_, _, Some(BoughtForLessModel(true))) =>
-        Future.successful(controllers.routes.WorthWhenBoughtForLessController.worthWhenBoughtForLess().url)
-      case _ => Future.successful(controllers.routes.AcquisitionValueController.acquisitionValue().url)
+        Future.successful(controllers.routes.WorthWhenBoughtForLessController.worthWhenBoughtForLess.url)
+      case _ => Future.successful(controllers.routes.AcquisitionValueController.acquisitionValue.url)
     }
 
     for {
@@ -97,8 +97,8 @@ class AcquisitionCostsController @Inject()(http: DefaultHttpClient,
 
       def result(acquisitionDateModel: Option[DateModel]) = acquisitionDateModel match {
         case Some(_) if TaxDates.dateAfterStart(acquisitionDateModel.get.get) =>
-          Future.successful(Redirect(routes.ImprovementsController.improvements()))
-        case _ => Future.successful(Redirect(routes.RebasedValueController.rebasedValue()))
+          Future.successful(Redirect(routes.ImprovementsController.improvements))
+        case _ => Future.successful(Redirect(routes.RebasedValueController.rebasedValue))
       }
 
       (for {

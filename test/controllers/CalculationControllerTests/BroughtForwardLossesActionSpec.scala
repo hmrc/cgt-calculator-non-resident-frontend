@@ -146,7 +146,7 @@ class BroughtForwardLossesActionSpec extends CommonPlaySpec with WithCommonFakeA
 
     "provided with a valid form" should {
       val target = setupTarget(None)
-      lazy val request = fakeRequestToPOSTWithSession(("isClaiming", "No"), ("broughtForwardLoss", ""))
+      lazy val request = fakeRequestToPOSTWithSession(("isClaiming", "No"), ("broughtForwardLoss", "")).withMethod("POST")
       lazy val result = target.submitBroughtForwardLosses(request)
 
       "return a status of 303" in {
@@ -154,7 +154,7 @@ class BroughtForwardLossesActionSpec extends CommonPlaySpec with WithCommonFakeA
       }
 
       "redirect to the Check Your Answers page" in {
-        redirectLocation(result) shouldBe Some(controllers.routes.CheckYourAnswersController.checkYourAnswers().url)
+        redirectLocation(result) shouldBe Some(controllers.routes.CheckYourAnswersController.checkYourAnswers.url)
       }
     }
 

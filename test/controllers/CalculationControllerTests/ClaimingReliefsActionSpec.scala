@@ -123,7 +123,7 @@ class ClaimingReliefsActionSpec extends CommonPlaySpec with WithCommonFakeApplic
 
     "a valid form with 'Yes' is selected" should {
       lazy val target = setupTarget(None)
-      lazy val request = fakeRequestToPOSTWithSession(("isClaimingReliefs", "Yes"))
+      lazy val request = fakeRequestToPOSTWithSession(("isClaimingReliefs", "Yes")).withMethod("POST")
       lazy val result = target.submitClaimingReliefs(request)
 
       "return a status of 303" in {
@@ -137,7 +137,7 @@ class ClaimingReliefsActionSpec extends CommonPlaySpec with WithCommonFakeApplic
 
     "a valid form with 'No' is selected" should {
       lazy val target = setupTarget(None)
-      lazy val request = fakeRequestToPOSTWithSession(("isClaimingReliefs", "No"))
+      lazy val request = fakeRequestToPOSTWithSession(("isClaimingReliefs", "No")).withMethod("POST")
       lazy val result = target.submitClaimingReliefs(request)
 
       "return a status of 303" in {

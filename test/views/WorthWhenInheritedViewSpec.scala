@@ -100,8 +100,8 @@ class WorthWhenInheritedViewSpec extends CommonPlaySpec with WithCommonFakeAppli
           form.attr("method") shouldBe "POST"
         }
 
-        s"has an action of '${controllers.routes.WorthWhenInheritedController.submitWorthWhenInherited().url}'" in {
-          form.attr("action") shouldBe controllers.routes.WorthWhenInheritedController.submitWorthWhenInherited().url
+        s"has an action of '${controllers.routes.WorthWhenInheritedController.submitWorthWhenInherited.url}'" in {
+          form.attr("action") shouldBe controllers.routes.WorthWhenInheritedController.submitWorthWhenInherited.url
         }
       }
 

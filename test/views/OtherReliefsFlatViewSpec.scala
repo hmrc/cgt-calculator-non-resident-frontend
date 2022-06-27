@@ -62,8 +62,8 @@ class OtherReliefsFlatViewSpec extends CommonPlaySpec with WithCommonFakeApplica
         }
       }
 
-      s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-        document.getElementsByClass("govuk-header__link govuk-header__link--service-name").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
+      s"have a home link to '${controllers.routes.DisposalDateController.disposalDate.url}'" in {
+        document.getElementsByClass("hmrc-header__service-name hmrc-header__service-name--linked").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate.url
       }
 
       "have a form" which {
@@ -73,8 +73,8 @@ class OtherReliefsFlatViewSpec extends CommonPlaySpec with WithCommonFakeApplica
           form.attr("method") shouldBe "POST"
         }
 
-        s"has an action of '${controllers.routes.OtherReliefsFlatController.otherReliefsFlat().url}'" in {
-          form.attr("action") shouldBe controllers.routes.OtherReliefsFlatController.otherReliefsFlat().url
+        s"has an action of '${controllers.routes.OtherReliefsFlatController.otherReliefsFlat.url}'" in {
+          form.attr("action") shouldBe controllers.routes.OtherReliefsFlatController.otherReliefsFlat.url
         }
       }
 

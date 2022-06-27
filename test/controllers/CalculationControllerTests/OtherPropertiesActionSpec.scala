@@ -120,7 +120,7 @@ class OtherPropertiesActionSpec extends CommonPlaySpec with WithCommonFakeApplic
     "submitting a valid form with 'Yes'" should {
 
       lazy val target = setupTarget(None)
-      lazy val request = fakeRequestToPOSTWithSession(("otherProperties", "Yes"))
+      lazy val request = fakeRequestToPOSTWithSession(("otherProperties", "Yes")).withMethod("POST")
       lazy val result = target.submitOtherProperties(request)
 
       "return a 303" in {
@@ -128,7 +128,7 @@ class OtherPropertiesActionSpec extends CommonPlaySpec with WithCommonFakeApplic
       }
 
       "should redirect to the previous gain or loss page" in {
-        redirectLocation(result) shouldBe Some(s"${routes.PreviousGainOrLossController.previousGainOrLoss()}")
+        redirectLocation(result) shouldBe Some(s"${routes.PreviousGainOrLossController.previousGainOrLoss}")
       }
     }
 
@@ -136,7 +136,7 @@ class OtherPropertiesActionSpec extends CommonPlaySpec with WithCommonFakeApplic
     "submitting a valid form with 'No'" should {
 
       lazy val target = setupTarget(None)
-      lazy val request = fakeRequestToPOSTWithSession(("otherProperties", "No"))
+      lazy val request = fakeRequestToPOSTWithSession(("otherProperties", "No")).withMethod("POST")
       lazy val result = target.submitOtherProperties(request)
 
       "return a 303" in {
@@ -144,14 +144,14 @@ class OtherPropertiesActionSpec extends CommonPlaySpec with WithCommonFakeApplic
       }
 
       "should redirect to the broughtForwardLosses page" in {
-        redirectLocation(result) shouldBe Some(s"${routes.BroughtForwardLossesController.broughtForwardLosses()}")
+        redirectLocation(result) shouldBe Some(s"${routes.BroughtForwardLossesController.broughtForwardLosses}")
       }
     }
 
     "submitting an form with no data" should {
 
       lazy val target = setupTarget(None)
-      lazy val request = fakeRequestToPOSTWithSession(("otherProperties", ""))
+      lazy val request = fakeRequestToPOSTWithSession(("otherProperties", "")).withMethod("POST")
       lazy val result = target.submitOtherProperties(request)
 
       "return a 400" in {

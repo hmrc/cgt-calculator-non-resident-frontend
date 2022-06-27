@@ -67,9 +67,9 @@ class SoldOrGivenAwayViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
         }
       }
 
-      s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+      s"have a home link to '${controllers.routes.DisposalDateController.disposalDate.url}'" in {
         document.select("body > header > div > div > div.govuk-header__content > a")
-          .attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
+          .attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate.url
       }
 
       "have a form that" should {
@@ -79,8 +79,8 @@ class SoldOrGivenAwayViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
           form.attr("method") shouldBe "POST"
         }
 
-        s"have an action of ${controllers.routes.SoldOrGivenAwayController.soldOrGivenAway().url}" in {
-          form.attr("action") shouldBe controllers.routes.SoldOrGivenAwayController.soldOrGivenAway().url
+        s"have an action of ${controllers.routes.SoldOrGivenAwayController.soldOrGivenAway.url}" in {
+          form.attr("action") shouldBe controllers.routes.SoldOrGivenAwayController.soldOrGivenAway.url
         }
       }
 

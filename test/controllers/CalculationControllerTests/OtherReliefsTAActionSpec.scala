@@ -189,7 +189,7 @@ class OtherReliefsTAActionSpec extends CommonPlaySpec with WithCommonFakeApplica
         TestModels.calculationResultsModelWithTA,
         TestModels.personalDetailsCalculationModel
       )
-      lazy val request = fakeRequestToPOSTWithSession(("isClaimingOtherReliefs", "Yes"), ("otherReliefs", "1000"))
+      lazy val request = fakeRequestToPOSTWithSession(("isClaimingOtherReliefs", "Yes"), ("otherReliefs", "1000")).withMethod("POST")
       lazy val result = target.submitOtherReliefsTA(request)
 
       "return a status of 303" in {
@@ -197,7 +197,7 @@ class OtherReliefsTAActionSpec extends CommonPlaySpec with WithCommonFakeApplica
       }
 
       "redirect to the calculation election page" in {
-        redirectLocation(result) shouldBe Some(controllers.routes.CalculationElectionController.calculationElection().url)
+        redirectLocation(result) shouldBe Some(controllers.routes.CalculationElectionController.calculationElection.url)
       }
     }
 

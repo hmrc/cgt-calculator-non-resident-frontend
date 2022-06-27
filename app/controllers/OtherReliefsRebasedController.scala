@@ -104,7 +104,7 @@ class OtherReliefsRebasedController @Inject()(http: DefaultHttpClient,
 
     def successAction(model: OtherReliefsModel) = {
       calcConnector.saveFormData(KeystoreKeys.otherReliefsRebased, model).map(_ =>
-        Redirect(routes.CalculationElectionController.calculationElection()))
+        Redirect(routes.CalculationElectionController.calculationElection))
     }
 
     otherReliefsForm.bindFromRequest.fold(errorAction, successAction)

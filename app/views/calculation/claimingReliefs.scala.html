@@ -32,7 +32,7 @@
 }
 
 @layout(pageTitle = title) {
-    @formWithCSRF(action = controllers.routes.ClaimingReliefsController.submitClaimingReliefs()) {
+    @formWithCSRF(action = controllers.routes.ClaimingReliefsController.submitClaimingReliefs) {
 
         @errorSummary(claimingReliefsForm.errors)
 

@@ -61,7 +61,7 @@ object PurchaseDetailsConstructor {
       s"${KeystoreKeys.acquisitionDate}",
       totalGainAnswersModel.acquisitionDateModel.get,
       "calc.acquisitionDate.questionTwo",
-      Some(controllers.routes.AcquisitionDateController.acquisitionDate().url)
+      Some(controllers.routes.AcquisitionDateController.acquisitionDate.url)
     ))
   }
 
@@ -78,7 +78,7 @@ object PurchaseDetailsConstructor {
         s"${KeystoreKeys.howBecameOwner}",
         answer,
         "calc.howBecameOwner.question",
-        Some(controllers.routes.HowBecameOwnerController.howBecameOwner().url)
+        Some(controllers.routes.HowBecameOwnerController.howBecameOwner.url)
       ))
       case _ => None
     }
@@ -90,7 +90,7 @@ object PurchaseDetailsConstructor {
         s"${KeystoreKeys.boughtForLess}",
         totalGainAnswersModel.boughtForLessModel.get.boughtForLess,
         "calc.boughtForLess.question",
-        Some(controllers.routes.BoughtForLessController.boughtForLess().url)
+        Some(controllers.routes.BoughtForLessController.boughtForLess.url)
       ))
       case _ => None
     }
@@ -105,7 +105,7 @@ object PurchaseDetailsConstructor {
         KeystoreKeys.costAtLegislationStart,
         answer,
         "calc.costsAtLegislationStart.title",
-        Some(controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart().url)
+        Some(controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart.url)
       ))
       case _ => None
     }
@@ -120,7 +120,7 @@ object PurchaseDetailsConstructor {
         KeystoreKeys.costAtLegislationStartValue,
         value,
         "calc.costsAtLegislationStart.howMuch",
-        Some(controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart().url)
+        Some(controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart.url)
       ))
       case _ => None
     }
@@ -139,7 +139,7 @@ object PurchaseDetailsConstructor {
       KeystoreKeys.acquisitionValue,
       totalGainAnswersModel.acquisitionValueModel.acquisitionValueAmt,
       question,
-      Some(controllers.routes.AcquisitionValueController.acquisitionValue().url)
+      Some(controllers.routes.AcquisitionValueController.acquisitionValue.url)
     ))
   }
 
@@ -153,7 +153,7 @@ object PurchaseDetailsConstructor {
       KeystoreKeys.acquisitionCosts,
       totalGainAnswersModel.acquisitionCostsModel.get.acquisitionCostsAmt,
       "calc.acquisitionCosts.question",
-      Some(controllers.routes.AcquisitionCostsController.acquisitionCosts().url)
+      Some(controllers.routes.AcquisitionCostsController.acquisitionCosts.url)
     ))
     case _ => None
   }
@@ -166,7 +166,7 @@ object PurchaseDetailsConstructor {
         KeystoreKeys.rebasedValue,
         rebasedValueModel.get.rebasedValueAmt,
         s"${"calc.nonResident.rebasedValue.questionAndDate"}",
-        Some(controllers.routes.RebasedValueController.rebasedValue().url)
+        Some(controllers.routes.RebasedValueController.rebasedValue.url)
       ))
     }
     else None
@@ -178,7 +178,7 @@ object PurchaseDetailsConstructor {
         s"${KeystoreKeys.rebasedCosts}-question",
         rebasedCostsModel.get.hasRebasedCosts,
         "calc.rebasedCosts.question",
-        Some(controllers.routes.RebasedCostsController.rebasedCosts().url)
+        Some(controllers.routes.RebasedCostsController.rebasedCosts.url)
       ))
     } else None
   }
@@ -189,7 +189,7 @@ object PurchaseDetailsConstructor {
         KeystoreKeys.rebasedCosts,
         value,
         "calc.rebasedCosts.questionTwo",
-        Some(controllers.routes.RebasedCostsController.rebasedCosts().url)
+        Some(controllers.routes.RebasedCostsController.rebasedCosts.url)
       ))
       case _ => None
     }

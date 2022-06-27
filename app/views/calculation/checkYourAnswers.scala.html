@@ -65,7 +65,7 @@
     <h1 class="govuk-heading-xl">@messages("calc.checkYourAnswers.title")</h1>
     <h2 class="govuk-heading-m">@messages("calc.checkYourAnswers.tableHeading")</h2>
     @govukSummaryList(SummaryList(rows = rows))
-    @form(action = controllers.routes.CheckYourAnswersController.submitCheckYourAnswers()) {
+    @form(action = controllers.routes.CheckYourAnswersController.submitCheckYourAnswers) {
         @submitButton()
     }
 }

@@ -53,7 +53,7 @@ class ClaimingReliefsViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
           backLink.text() shouldBe commonMessages.back
         }
 
-        s"has a link to ${controllers.routes.CheckYourAnswersController.checkYourAnswers().url}" in {
+        s"has a link to ${controllers.routes.CheckYourAnswersController.checkYourAnswers.url}" in {
           backLink.attr("href") shouldBe "javascript:history.back()"
         }
       }
@@ -72,7 +72,7 @@ class ClaimingReliefsViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
       }
 
       "render a form tag with a submit action" in {
-        document.select("form").attr("action") shouldEqual controllers.routes.ClaimingReliefsController.submitClaimingReliefs().url
+        document.select("form").attr("action") shouldEqual controllers.routes.ClaimingReliefsController.submitClaimingReliefs.url
       }
 
       s"have a hidden legend with text ${messages.title}" in {

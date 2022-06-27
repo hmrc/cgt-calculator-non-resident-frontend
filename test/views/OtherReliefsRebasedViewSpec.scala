@@ -74,8 +74,8 @@ class OtherReliefsRebasedViewSpec extends CommonPlaySpec with WithCommonFakeAppl
           form.attr("method") shouldBe "POST"
         }
 
-        s"has an action of '${controllers.routes.OtherReliefsRebasedController.otherReliefsRebased().url}'" in {
-          form.attr("action") shouldBe controllers.routes.OtherReliefsRebasedController.otherReliefsRebased().url
+        s"has an action of '${controllers.routes.OtherReliefsRebasedController.otherReliefsRebased.url}'" in {
+          form.attr("action") shouldBe controllers.routes.OtherReliefsRebasedController.otherReliefsRebased.url
         }
       }
 

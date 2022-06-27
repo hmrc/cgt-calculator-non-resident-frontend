@@ -115,7 +115,7 @@ class ImprovementsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
           }
         }
 
-        s"have a 'Back' link to ${routes.AcquisitionCostsController.acquisitionCosts().url} " in {
+        s"have a 'Back' link to ${routes.AcquisitionCostsController.acquisitionCosts.url} " in {
           document.body.getElementById("back-link").attr("href") shouldEqual "javascript:history.back()"
         }
       }
@@ -134,7 +134,7 @@ class ImprovementsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
           document.body.getElementById("back-link").text shouldEqual commonMessages.back
         }
 
-        s"have a 'Back' link to ${routes.RebasedCostsController.rebasedCosts().url} " in {
+        s"have a 'Back' link to ${routes.RebasedCostsController.rebasedCosts.url} " in {
           document.body.getElementById("back-link").attr("href") shouldEqual "javascript:history.back()"
         }
       }
@@ -147,7 +147,7 @@ class ImprovementsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
 
       lazy val gainsModel = None
       lazy val target = setupTarget(None, Some(DateModel(1, 1, 2016)), gainsModel)
-      lazy val request = fakeRequestToPOSTWithSession("isClaimingImprovements" -> "No", "improvementsAmt" -> "")
+      lazy val request = fakeRequestToPOSTWithSession("isClaimingImprovements" -> "No", "improvementsAmt" -> "").withMethod("POST")
       lazy val result = target.submitImprovements(request)
 
       "return a 303" in {
@@ -163,15 +163,15 @@ class ImprovementsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
 
       lazy val gainsModel = Some(TotalGainResultsModel(-1000, None, None))
       lazy val target = setupTarget(None, Some(DateModel(1, 1, 2014)), None, gainsModel)
-      lazy val request = fakeRequestToPOSTWithSession("isClaimingImprovements" -> "No", "improvementsAmt" -> "")
+      lazy val request = fakeRequestToPOSTWithSession("isClaimingImprovements" -> "No", "improvementsAmt" -> "").withMethod("POST")
       lazy val result = target.submitImprovements(request)
 
       "return a 303" in {
         status(result) shouldBe 303
       }
 
-      s"redirect to ${routes.CheckYourAnswersController.checkYourAnswers()}" in {
-        redirectLocation(result) shouldBe Some(s"${routes.CheckYourAnswersController.checkYourAnswers()}")
+      s"redirect to ${routes.CheckYourAnswersController.checkYourAnswers}" in {
+        redirectLocation(result) shouldBe Some(s"${routes.CheckYourAnswersController.checkYourAnswers}")
       }
     }
 
@@ -179,22 +179,22 @@ class ImprovementsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
 
       lazy val gainsModel = Some(TotalGainResultsModel(1000, Some(2000), None))
       lazy val target = setupTarget(None, Some(DateModel(1, 1, 2014)), Some(RebasedValueModel(2000)), gainsModel)
-      lazy val request = fakeRequestToPOSTWithSession("isClaimingImprovements" -> "No", "improvementsAmt" -> "")
+      lazy val request = fakeRequestToPOSTWithSession("isClaimingImprovements" -> "No", "improvementsAmt" -> "").withMethod("POST")
       lazy val result = target.submitImprovements(request)
 
       "return a 303" in {
         status(result) shouldBe 303
       }
 
-      s"redirect to ${controllers.routes.PropertyLivedInController.propertyLivedIn()}" in {
-        redirectLocation(result) shouldBe Some(s"${controllers.routes.PropertyLivedInController.propertyLivedIn()}")
+      s"redirect to ${controllers.routes.PropertyLivedInController.propertyLivedIn}" in {
+        redirectLocation(result) shouldBe Some(s"${controllers.routes.PropertyLivedInController.propertyLivedIn}")
       }
     }
 
     "submitting an invalid form with 'testData123' and a value of 'fhu39awd8'" should {
 
       val target = setupTarget(None, Some(DateModel(1, 1, 2014)))
-      lazy val request = fakeRequestToPOSTWithSession("isClaimingImprovements" -> "testData123", "improvementsAmt" -> "fhu39awd8")
+      lazy val request = fakeRequestToPOSTWithSession("isClaimingImprovements" -> "testData123", "improvementsAmt" -> "fhu39awd8").withMethod("POST")
       lazy val result = target.submitImprovements(request)
       lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 

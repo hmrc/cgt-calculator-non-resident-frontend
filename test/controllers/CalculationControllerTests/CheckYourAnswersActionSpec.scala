@@ -24,7 +24,7 @@ import config.ApplicationConfig
 import connectors.CalculatorConnector
 import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
 import controllers.helpers.FakeRequestHelper
-import controllers.{CheckYourAnswersController, routes}
+import controllers.{CheckYourAnswersController}
 import models._
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
@@ -222,7 +222,7 @@ class CheckYourAnswersActionSpec()
       }
 
       "redirect the user to the claiming other tax reliefs page" in {
-        redirectLocation(result).get shouldBe controllers.routes.ClaimingReliefsController.claimingReliefs().url
+        redirectLocation(result).get shouldBe controllers.routes.ClaimingReliefsController.claimingReliefs.url
       }
     }
 
@@ -236,7 +236,7 @@ class CheckYourAnswersActionSpec()
       }
 
       "redirect the user to the other reliefs page" in {
-        redirectLocation(result).get shouldBe controllers.routes.OtherReliefsController.otherReliefs().url
+        redirectLocation(result).get shouldBe controllers.routes.OtherReliefsController.otherReliefs.url
       }
     }
 
@@ -250,7 +250,7 @@ class CheckYourAnswersActionSpec()
       }
 
       "redirect the user to the calculation election page" in {
-        redirectLocation(result).get shouldBe controllers.routes.CalculationElectionController.calculationElection().url
+        redirectLocation(result).get shouldBe controllers.routes.CalculationElectionController.calculationElection.url
       }
     }
 
@@ -277,7 +277,7 @@ class CheckYourAnswersActionSpec()
       val target = setupTarget(modelWithMultipleGains, None)
       lazy val result = target.redirectRoute(Some(prrCalcModel), totalGainModel)
 
-      redirectLocation(result) shouldBe Some(controllers.routes.OtherReliefsController.otherReliefs().url)
+      redirectLocation(result) shouldBe Some(controllers.routes.OtherReliefsController.otherReliefs.url)
     }
 
     "route to the summary when a taxable gain of 0 or less is found" in {
@@ -286,7 +286,7 @@ class CheckYourAnswersActionSpec()
       val target = setupTarget(modelWithMultipleGains, None)
       lazy val result = target.redirectRoute(Some(prrCalcModel), totalGainModel)
 
-      redirectLocation(result) shouldBe Some(controllers.routes.SummaryController.summary().url)
+      redirectLocation(result) shouldBe Some(controllers.routes.SummaryController.summary.url)
     }
 
     "route to other reliefs when no taxable gain is found with a total gain greater than 0" in {
@@ -294,7 +294,7 @@ class CheckYourAnswersActionSpec()
       val target = setupTarget(modelWithMultipleGains, None)
       lazy val result = target.redirectRoute(None, totalGainModel)
 
-      redirectLocation(result) shouldBe Some(controllers.routes.OtherReliefsController.otherReliefs().url)
+      redirectLocation(result) shouldBe Some(controllers.routes.OtherReliefsController.otherReliefs.url)
     }
 
     "route to the summary when no taxable gain is found with a total gain of 0 or less" in {
@@ -302,7 +302,7 @@ class CheckYourAnswersActionSpec()
       val target = setupTarget(modelWithMultipleGains, None)
       lazy val result = target.redirectRoute(None, totalGainModel)
 
-      redirectLocation(result) shouldBe Some(controllers.routes.SummaryController.summary().url)
+      redirectLocation(result) shouldBe Some(controllers.routes.SummaryController.summary.url)
     }
   }
 }

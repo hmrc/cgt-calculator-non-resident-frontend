@@ -129,59 +129,59 @@ class DisposalDateActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
     "submitting a valid date 31/01/2016" should {
 
       lazy val target = setupTarget(None, Some(TaxYearModel("2015/16", true, "2015/16")))
-      lazy val request = fakeRequestToPOSTWithSession(("disposalDate.day", "31"), ("disposalDate.month", "1"), ("disposalDate.year", "2016"))
+      lazy val request = fakeRequestToPOSTWithSession(("disposalDate.day", "31"), ("disposalDate.month", "1"), ("disposalDate.year", "2016")).withMethod("POST")
       lazy val result = target.submitDisposalDate(request)
 
       "return a 303" in {
         status(result) shouldBe 303
       }
 
-      s"redirect to ${routes.SoldOrGivenAwayController.soldOrGivenAway()}" in {
-        redirectLocation(result) shouldBe Some(s"${routes.SoldOrGivenAwayController.soldOrGivenAway()}")
+      s"redirect to ${routes.SoldOrGivenAwayController.soldOrGivenAway}" in {
+        redirectLocation(result) shouldBe Some(s"${routes.SoldOrGivenAwayController.soldOrGivenAway}")
       }
     }
 
     "submitting a valid leap year date 29/02/2016" should {
 
       lazy val target = setupTarget(None, Some(TaxYearModel("2015/16", true, "2015/16")))
-      lazy val request = fakeRequestToPOSTWithSession(("disposalDate.day", "29"), ("disposalDate.month", "2"), ("disposalDate.year", "2016"))
+      lazy val request = fakeRequestToPOSTWithSession(("disposalDate.day", "29"), ("disposalDate.month", "2"), ("disposalDate.year", "2016")).withMethod("POST")
       lazy val result = target.submitDisposalDate(request)
 
       "return a 303" in {
         status(result) shouldBe 303
       }
 
-      s"redirect to ${routes.SoldOrGivenAwayController.soldOrGivenAway()}" in {
-        redirectLocation(result) shouldBe Some(s"${routes.SoldOrGivenAwayController.soldOrGivenAway()}")
+      s"redirect to ${routes.SoldOrGivenAwayController.soldOrGivenAway}" in {
+        redirectLocation(result) shouldBe Some(s"${routes.SoldOrGivenAwayController.soldOrGivenAway}")
       }
     }
 
     "submitting a valid date of 20/02/2014 before the tax start date" should {
 
       lazy val target = setupTarget(None, Some(TaxYearModel("2014/15", false, "2015/16")))
-      lazy val request = fakeRequestToPOSTWithSession(("disposalDate.day", "20"), ("disposalDate.month", "2"), ("disposalDate.year", "2014"))
+      lazy val request = fakeRequestToPOSTWithSession(("disposalDate.day", "20"), ("disposalDate.month", "2"), ("disposalDate.year", "2014")).withMethod("POST")
       lazy val result = target.submitDisposalDate(request)
 
       "return a 303" in {
         status(result) shouldBe 303
       }
 
-      s"redirect to ${routes.NoCapitalGainsTaxController.noCapitalGainsTax()}" in {
-        redirectLocation(result) shouldBe Some(s"${routes.NoCapitalGainsTaxController.noCapitalGainsTax()}")
+      s"redirect to ${routes.NoCapitalGainsTaxController.noCapitalGainsTax}" in {
+        redirectLocation(result) shouldBe Some(s"${routes.NoCapitalGainsTaxController.noCapitalGainsTax}")
       }
     }
 
     "submitting a valid date in the future" should {
       lazy val target = setupTarget(None, Some(TaxYearModel("2020/21", false, "2017/18")))
-      lazy val request = fakeRequestToPOSTWithSession(("disposalDate.day", "20"), ("disposalDate.month", "2"), ("disposalDate.year", "2021"))
+      lazy val request = fakeRequestToPOSTWithSession(("disposalDate.day", "20"), ("disposalDate.month", "2"), ("disposalDate.year", "2021")).withMethod("POST")
       lazy val result = target.submitDisposalDate(request)
 
       "return a 303" in {
         status(result) shouldBe 303
       }
 
-      s"redirect to ${routes.OutsideTaxYearController.outsideTaxYear()}" in {
-        redirectLocation(result) shouldBe Some(s"${routes.OutsideTaxYearController.outsideTaxYear()}")
+      s"redirect to ${routes.OutsideTaxYearController.outsideTaxYear}" in {
+        redirectLocation(result) shouldBe Some(s"${routes.OutsideTaxYearController.outsideTaxYear}")
       }
     }
   }

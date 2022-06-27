@@ -111,8 +111,8 @@ class AcquisitionCostsViewSpec extends CommonPlaySpec with WithCommonFakeApplica
           form.attr("method") shouldBe "POST"
         }
 
-        s"has an action of '${controllers.routes.AcquisitionCostsController.submitAcquisitionCosts().url}'" in {
-          form.attr("action") shouldBe controllers.routes.AcquisitionCostsController.submitAcquisitionCosts().url
+        s"has an action of '${controllers.routes.AcquisitionCostsController.submitAcquisitionCosts.url}'" in {
+          form.attr("action") shouldBe controllers.routes.AcquisitionCostsController.submitAcquisitionCosts.url
         }
       }
 

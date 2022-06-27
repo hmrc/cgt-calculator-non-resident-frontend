@@ -133,45 +133,45 @@ class AcquisitionDateActionSpec extends CommonPlaySpec with WithCommonFakeApplic
     "supplied with a valid model" should {
       val target = setupTarget(None)
       lazy val request = fakeRequestToPOSTWithSession(("acquisitionDate.day", "31"),
-        ("acquisitionDate.month", "03"), ("acquisitionDate.year", "2016"))
+        ("acquisitionDate.month", "03"), ("acquisitionDate.year", "2016")).withMethod("POST")
       lazy val result = target.submitAcquisitionDate(request)
 
       "return a 303" in {
         status(result) shouldBe 303
       }
 
-      s"redirect to ${controllers.routes.HowBecameOwnerController.howBecameOwner().url}" in {
-        redirectLocation(result).get shouldBe controllers.routes.HowBecameOwnerController.howBecameOwner().url
+      s"redirect to ${controllers.routes.HowBecameOwnerController.howBecameOwner.url}" in {
+        redirectLocation(result).get shouldBe controllers.routes.HowBecameOwnerController.howBecameOwner.url
       }
     }
 
     "supplied with a valid model with date before the legislation start" should {
       val target = setupTarget(None)
       lazy val request = fakeRequestToPOSTWithSession(("acquisitionDate.day", "31"),
-        ("acquisitionDate.month", "03"), ("acquisitionDate.year", "1982"))
+        ("acquisitionDate.month", "03"), ("acquisitionDate.year", "1982")).withMethod("POST")
       lazy val result = target.submitAcquisitionDate(request)
 
       "return a 303" in {
         status(result) shouldBe 303
       }
 
-      s"redirect to ${controllers.routes.WorthBeforeLegislationStartController.worthBeforeLegislationStart().url}" in {
-        redirectLocation(result).get shouldBe controllers.routes.WorthBeforeLegislationStartController.worthBeforeLegislationStart().url
+      s"redirect to ${controllers.routes.WorthBeforeLegislationStartController.worthBeforeLegislationStart.url}" in {
+        redirectLocation(result).get shouldBe controllers.routes.WorthBeforeLegislationStartController.worthBeforeLegislationStart.url
       }
     }
 
     "supplied with a valid model with date on the legislation start" should {
       val target = setupTarget(None)
       lazy val request = fakeRequestToPOSTWithSession(("acquisitionDate.day", "01"),
-        ("acquisitionDate.month", "04"), ("acquisitionDate.year", "1982"))
+        ("acquisitionDate.month", "04"), ("acquisitionDate.year", "1982")).withMethod("POST")
       lazy val result = target.submitAcquisitionDate(request)
 
       "return a 303" in {
         status(result) shouldBe 303
       }
 
-      s"redirect to ${controllers.routes.HowBecameOwnerController.howBecameOwner().url}" in {
-        redirectLocation(result).get shouldBe controllers.routes.HowBecameOwnerController.howBecameOwner().url
+      s"redirect to ${controllers.routes.HowBecameOwnerController.howBecameOwner.url}" in {
+        redirectLocation(result).get shouldBe controllers.routes.HowBecameOwnerController.howBecameOwner.url
       }
     }
   }

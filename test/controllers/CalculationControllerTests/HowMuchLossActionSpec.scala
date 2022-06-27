@@ -119,7 +119,7 @@ class HowMuchLossActionSpec extends CommonPlaySpec with WithCommonFakeApplicatio
 
     "a valid form is submitted with an non-zero value" should {
       val target = setupTarget(None)
-      lazy val request = fakeRequestToPOSTWithSession(("loss", "100"))
+      lazy val request = fakeRequestToPOSTWithSession(("loss", "100")).withMethod("POST")
       lazy val result = target.submitHowMuchLoss(request)
 
       "return a status of 303" in {
@@ -127,13 +127,13 @@ class HowMuchLossActionSpec extends CommonPlaySpec with WithCommonFakeApplicatio
       }
 
       "redirect to the Brought Forward Losses page" in {
-        redirectLocation(result) shouldBe Some(controllers.routes.BroughtForwardLossesController.broughtForwardLosses().url)
+        redirectLocation(result) shouldBe Some(controllers.routes.BroughtForwardLossesController.broughtForwardLosses.url)
       }
     }
 
     "a valid form is submitted with a zero value" should {
       val target = setupTarget(None)
-      lazy val request = fakeRequestToPOSTWithSession(("loss", "0"))
+      lazy val request = fakeRequestToPOSTWithSession(("loss", "0")).withMethod("POST")
       lazy val result = target.submitHowMuchLoss(request)
 
       "return a status of 303" in {
@@ -141,7 +141,7 @@ class HowMuchLossActionSpec extends CommonPlaySpec with WithCommonFakeApplicatio
       }
 
       "redirect to the Annual Exempt Amount page" in {
-        redirectLocation(result) shouldBe Some(controllers.routes.AnnualExemptAmountController.annualExemptAmount().url)
+        redirectLocation(result) shouldBe Some(controllers.routes.AnnualExemptAmountController.annualExemptAmount.url)
       }
     }
 

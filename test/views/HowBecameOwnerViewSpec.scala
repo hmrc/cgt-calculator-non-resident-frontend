@@ -61,9 +61,9 @@ class HowBecameOwnerViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
         }
       }
 
-      s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+      s"have a home link to '${controllers.routes.DisposalDateController.disposalDate.url}'" in {
         document.select("body > header > div > div > div.govuk-header__content > a")
-          .attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
+          .attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate.url
       }
 
       "have a heading" which {
@@ -99,8 +99,8 @@ class HowBecameOwnerViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
           form.attr("method") shouldBe "POST"
         }
 
-        s"has an action of '${controllers.routes.HowBecameOwnerController.submitHowBecameOwner().url}'" in {
-          form.attr("action") shouldBe controllers.routes.HowBecameOwnerController.submitHowBecameOwner().url
+        s"has an action of '${controllers.routes.HowBecameOwnerController.submitHowBecameOwner.url}'" in {
+          form.attr("action") shouldBe controllers.routes.HowBecameOwnerController.submitHowBecameOwner.url
         }
       }
 

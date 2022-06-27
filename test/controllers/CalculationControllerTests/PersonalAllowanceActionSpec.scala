@@ -138,15 +138,15 @@ class PersonalAllowanceActionSpec extends CommonPlaySpec with WithCommonFakeAppl
     "submitting a valid form with '1000'" should {
 
       lazy val target = setupTarget(None)
-      lazy val request = fakeRequestToPOSTWithSession(("personalAllowance", "10000"))
+      lazy val request = fakeRequestToPOSTWithSession(("personalAllowance", "10000")).withMethod("POST")
       lazy val result = target.submitPersonalAllowance(request)
 
       "return a 303" in {
         status(result) shouldBe 303
       }
 
-      s"redirect to ${routes.OtherPropertiesController.otherProperties()}" in {
-        redirectLocation(result) shouldBe Some(s"${routes.OtherPropertiesController.otherProperties()}")
+      s"redirect to ${routes.OtherPropertiesController.otherProperties}" in {
+        redirectLocation(result) shouldBe Some(s"${routes.OtherPropertiesController.otherProperties}")
       }
     }
 

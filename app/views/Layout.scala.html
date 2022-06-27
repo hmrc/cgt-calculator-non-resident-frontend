@@ -68,7 +68,7 @@
     pageTitle = Some(s"""$pageTitle - ${messages("service.name")} - GOV.UK"""),
     headBlock = Some(hmrcHead(headBlock = Some(head))),
     headerBlock = Some(hmrcStandardHeader(
-        serviceUrl = Some(controllers.routes.DisposalDateController.disposalDate().url),
+        serviceUrl = Some(controllers.routes.DisposalDateController.disposalDate.url),
         userResearchBanner = if (userResearchBannerEnabled) {Some(UserResearchBanner(url = appConfig.urBannerLink))} else None
     )),
     beforeContentBlock = Some(accountMenu),

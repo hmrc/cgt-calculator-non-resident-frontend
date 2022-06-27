@@ -58,8 +58,8 @@ class SummaryViewSpec extends CommonPlaySpec with WithCommonFakeApplication with
         }
       }
 
-      s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-        document.select("body > header > div.govuk-header.hmrc-header > div > div.govuk-header__content > a").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
+      s"have a home link to '${controllers.routes.DisposalDateController.disposalDate.url}'" in {
+        document.select("body > header > div.govuk-header.hmrc-header > div > div.govuk-header__content > a").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate.url
       }
 
       "have a heading" which {
@@ -90,7 +90,7 @@ class SummaryViewSpec extends CommonPlaySpec with WithCommonFakeApplication with
         }
 
         "which has the link to the summary report" in {
-          savePDF.attr("href") shouldBe controllers.routes.ReportController.summaryReport().url
+          savePDF.attr("href") shouldBe controllers.routes.ReportController.summaryReport.url
         }
       }
 
@@ -102,7 +102,7 @@ class SummaryViewSpec extends CommonPlaySpec with WithCommonFakeApplication with
         }
 
         "have a link to /calculate-your-capital-gains/non-resident/what-next" in {
-          continue.attr("href") shouldBe controllers.routes.WhatNextController.whatNext().url
+          continue.attr("href") shouldBe controllers.routes.WhatNextController.whatNext.url
         }
       }
 

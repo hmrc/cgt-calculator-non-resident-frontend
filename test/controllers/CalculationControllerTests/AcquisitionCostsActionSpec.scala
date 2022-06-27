@@ -100,7 +100,7 @@ class AcquisitionCostsActionSpec extends CommonPlaySpec with WithCommonFakeAppli
       val target = setupTarget(None, acquisitionDateData = Some(DateModel(10, 5, 1972)))
       val result = target.getBackLink
 
-      await(result) shouldBe controllers.routes.WorthBeforeLegislationStartController.worthBeforeLegislationStart().url
+      await(result) shouldBe controllers.routes.WorthBeforeLegislationStartController.worthBeforeLegislationStart.url
     }
 
     "return a link to WorthWhenGifted page with an acquisition date after legislation start and gifted option" in {
@@ -109,21 +109,21 @@ class AcquisitionCostsActionSpec extends CommonPlaySpec with WithCommonFakeAppli
         howBecameOwnerData = Some(HowBecameOwnerModel("Gifted")))
       val result = target.getBackLink
 
-      await(result) shouldBe controllers.routes.WorthWhenGiftedToController.worthWhenGiftedTo().url
+      await(result) shouldBe controllers.routes.WorthWhenGiftedToController.worthWhenGiftedTo.url
     }
 
     "return a link to WorthWhenInherited when property was inherited" in {
       val target = setupTarget(None, howBecameOwnerData = Some(HowBecameOwnerModel("Inherited")))
       val result = target.getBackLink
 
-      await(result) shouldBe controllers.routes.WorthWhenInheritedController.worthWhenInherited().url
+      await(result) shouldBe controllers.routes.WorthWhenInheritedController.worthWhenInherited.url
     }
 
     "return a link to BoughtForLess when property was bought for less" in {
       val target = setupTarget(None, howBecameOwnerData = Some(HowBecameOwnerModel("Bought")), boughtForLessData = Some(BoughtForLessModel(true)))
       val result = target.getBackLink
 
-      await(result) shouldBe controllers.routes.WorthWhenBoughtForLessController.worthWhenBoughtForLess().url
+      await(result) shouldBe controllers.routes.WorthWhenBoughtForLessController.worthWhenBoughtForLess.url
     }
 
     "return a link to acquisition value when not bought for less" in {
@@ -132,7 +132,7 @@ class AcquisitionCostsActionSpec extends CommonPlaySpec with WithCommonFakeAppli
         boughtForLessData = Some(BoughtForLessModel(false)))
       val result = target.getBackLink
 
-      await(result) shouldBe controllers.routes.AcquisitionValueController.acquisitionValue().url
+      await(result) shouldBe controllers.routes.AcquisitionValueController.acquisitionValue.url
     }
   }
 
@@ -201,16 +201,16 @@ class AcquisitionCostsActionSpec extends CommonPlaySpec with WithCommonFakeAppli
 
       "return a 303" in {
         val target = setupTarget(None, acquisitionDateData = Some(DateModel(10, 5, 2016)))
-        lazy val request = fakeRequestToPOSTWithSession(("acquisitionCosts", "1000"))
+        lazy val request = fakeRequestToPOSTWithSession(("acquisitionCosts", "1000")).withMethod("POST")
         lazy val result = target.submitAcquisitionCosts(request)
         status(result) shouldBe 303
       }
 
-      s"redirect to '${controllers.routes.ImprovementsController.improvements().url}'" in {
+      s"redirect to '${controllers.routes.ImprovementsController.improvements.url}'" in {
         val target = setupTarget(None, acquisitionDateData = Some(DateModel(10, 5, 2016)))
-        lazy val request = fakeRequestToPOSTWithSession(("acquisitionCosts", "1000"))
+        lazy val request = fakeRequestToPOSTWithSession(("acquisitionCosts", "1000")).withMethod("POST")
         lazy val result = target.submitAcquisitionCosts(request)
-        redirectLocation(result).get shouldBe controllers.routes.ImprovementsController.improvements().url
+        redirectLocation(result).get shouldBe controllers.routes.ImprovementsController.improvements.url
       }
     }
 
@@ -218,16 +218,16 @@ class AcquisitionCostsActionSpec extends CommonPlaySpec with WithCommonFakeAppli
 
       "return a 303" in {
         val target = setupTarget(None, acquisitionDateData = Some(DateModel(10, 5, 2000)))
-        lazy val request = fakeRequestToPOSTWithSession(("acquisitionCosts", "1000"))
+        lazy val request = fakeRequestToPOSTWithSession(("acquisitionCosts", "1000")).withMethod("POST")
         lazy val result = target.submitAcquisitionCosts(request)
         status(result) shouldBe 303
       }
 
-      s"redirect to '${controllers.routes.RebasedValueController.rebasedValue().url}'" in {
+      s"redirect to '${controllers.routes.RebasedValueController.rebasedValue.url}'" in {
         val target = setupTarget(None, acquisitionDateData = Some(DateModel(10, 5, 2000)))
-        lazy val request = fakeRequestToPOSTWithSession(("acquisitionCosts", "1000"))
+        lazy val request = fakeRequestToPOSTWithSession(("acquisitionCosts", "1000")).withMethod("POST")
         lazy val result = target.submitAcquisitionCosts(request)
-        redirectLocation(result).get shouldBe controllers.routes.RebasedValueController.rebasedValue().url
+        redirectLocation(result).get shouldBe controllers.routes.RebasedValueController.rebasedValue.url
       }
     }
 

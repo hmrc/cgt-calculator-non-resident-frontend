@@ -50,7 +50,7 @@ class ClaimingReliefsController @Inject()(http: DefaultHttpClient,calcConnector:
 
     def successAction(model: ClaimingReliefsModel) = {
       calcConnector.saveFormData(KeystoreKeys.claimingReliefs, model).map(_ =>
-        Redirect(routes.CalculationElectionController.calculationElection()))
+        Redirect(routes.CalculationElectionController.calculationElection))
     }
 
     claimingReliefsForm.bindFromRequest().fold(errorAction, successAction)

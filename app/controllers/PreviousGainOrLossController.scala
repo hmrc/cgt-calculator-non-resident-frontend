@@ -60,9 +60,9 @@ class PreviousGainOrLossController @Inject()(http: DefaultHttpClient,calcConnect
 
       def routeRequest(data: PreviousLossOrGainModel): Future[Result] = {
         data.previousLossOrGain match {
-          case "Loss" => Future.successful(Redirect(routes.HowMuchLossController.howMuchLoss()))
-          case "Gain" => Future.successful(Redirect(routes.HowMuchGainController.howMuchGain()))
-          case "Neither" => Future.successful(Redirect(routes.AnnualExemptAmountController.annualExemptAmount()))
+          case "Loss" => Future.successful(Redirect(routes.HowMuchLossController.howMuchLoss))
+          case "Gain" => Future.successful(Redirect(routes.HowMuchGainController.howMuchGain))
+          case "Neither" => Future.successful(Redirect(routes.AnnualExemptAmountController.annualExemptAmount))
         }
       }
 

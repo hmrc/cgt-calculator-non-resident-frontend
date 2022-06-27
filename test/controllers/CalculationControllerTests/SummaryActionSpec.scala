@@ -248,7 +248,7 @@ class SummaryActionSpec extends CommonPlaySpec with WithCommonFakeApplication wi
     }
 
     "redirect to the start page" in {
-      redirectLocation(result).get shouldBe controllers.routes.DisposalDateController.disposalDate().url
+      redirectLocation(result).get shouldBe controllers.routes.DisposalDateController.disposalDate.url
     }
   }
 }

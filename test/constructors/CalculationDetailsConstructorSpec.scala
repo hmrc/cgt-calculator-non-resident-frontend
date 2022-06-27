@@ -121,7 +121,7 @@ class CalculationDetailsConstructorSpec extends CommonPlaySpec with WithCommonFa
       "return correct link for the calculation election details" in {
         assertExpectedResult(result) { item =>
           assertExpectedLink(item.link) { link =>
-            link shouldBe routes.CalculationElectionController.calculationElection().url
+            link shouldBe routes.CalculationElectionController.calculationElection.url
           }
         }
       }
@@ -153,7 +153,7 @@ class CalculationDetailsConstructorSpec extends CommonPlaySpec with WithCommonFa
       "return correct link for the calculation election details" in {
         assertExpectedResult(result) { item =>
           assertExpectedLink(item.link) { link =>
-            link shouldBe routes.CalculationElectionController.calculationElection().url
+            link shouldBe routes.CalculationElectionController.calculationElection.url
           }
         }
       }
@@ -185,7 +185,7 @@ class CalculationDetailsConstructorSpec extends CommonPlaySpec with WithCommonFa
       "return correct link for the calculation election details" in {
         assertExpectedResult(result) { item =>
           assertExpectedLink(item.link) { link =>
-            link shouldBe routes.CalculationElectionController.calculationElection().url
+            link shouldBe routes.CalculationElectionController.calculationElection.url
           }
         }
       }

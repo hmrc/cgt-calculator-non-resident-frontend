@@ -124,7 +124,7 @@ class AcquisitionValueActionSpec extends CommonPlaySpec with WithCommonFakeAppli
   "In CalculationController calling the .submitAcquisitionValue action" when {
 
     "submit a valid form with a valid acquisitionValue" should {
-      lazy val request = fakeRequestToPOSTWithSession(("acquisitionValue", "1000"))
+      lazy val request = fakeRequestToPOSTWithSession(("acquisitionValue", "1000")).withMethod("POST")
       lazy val target = setupTarget(None)
       lazy val result = target.submitAcquisitionValue(request)
 
@@ -132,15 +132,15 @@ class AcquisitionValueActionSpec extends CommonPlaySpec with WithCommonFakeAppli
         status(result) shouldBe 303
       }
 
-      s"redirect to ${routes.AcquisitionCostsController.acquisitionCosts()}" in {
-        redirectLocation(result) shouldBe Some(routes.AcquisitionCostsController.acquisitionCosts().url)
+      s"redirect to ${routes.AcquisitionCostsController.acquisitionCosts}" in {
+        redirectLocation(result) shouldBe Some(routes.AcquisitionCostsController.acquisitionCosts.url)
       }
     }
 
     "submitting an invalid form with a negative value" should {
       lazy val request = fakeRequestToPOSTWithSession(("acquisitionValue", "-1000"))
       lazy val target = setupTarget(None)
-      lazy val result = target.submitAcquisitionValue(request)
+      lazy val result = target.submitAcquisitionValue(request.withMethod("POST"))
       lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       "return a 400" in {

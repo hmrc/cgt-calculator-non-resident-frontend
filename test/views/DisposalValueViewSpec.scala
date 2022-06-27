@@ -89,8 +89,8 @@ class DisposalValueViewSpec extends CommonPlaySpec with WithCommonFakeApplicatio
           form.attr("method") shouldBe "POST"
         }
 
-        s"has an action of '${controllers.routes.DisposalValueController.submitDisposalValue().url}'" in {
-          form.attr("action") shouldBe controllers.routes.DisposalValueController.submitDisposalValue().url
+        s"has an action of '${controllers.routes.DisposalValueController.submitDisposalValue.url}'" in {
+          form.attr("action") shouldBe controllers.routes.DisposalValueController.submitDisposalValue.url
         }
 
         s"has a paragraph with the text ${messages.jointOwnership}" in {

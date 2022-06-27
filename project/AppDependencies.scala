@@ -49,9 +49,9 @@ object AppDependencies {
     def apply(): Seq[ModuleID] = new TestDependencies {
       override lazy val test = Seq(
         "org.scalatestplus.play"  %% "scalatestplus-play"   % "5.0.0"             % scope,
-        "org.mockito"             % "mockito-core"          % "3.3.3"             % scope,
+        "org.mockito"             % "mockito-core"          % "3.11.2"             % scope,
         "org.pegdown"             % "pegdown"               % "1.6.0"             % scope,
-        "org.jsoup"               % "jsoup"                 % "1.13.1"            % scope,
+        "org.jsoup"               % "jsoup"                 % "1.14.3"            % scope,
         "com.typesafe.play"       %% "play-test"            % PlayVersion.current % scope
       )
     }.test

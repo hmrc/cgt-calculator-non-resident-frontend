@@ -262,7 +262,7 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
 
         "return a link to the Private Residence Relief page" in {
           assertExpectedResult[QuestionAnswerModel[String]](result)(_.link shouldBe
-            Some(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief().url))
+            Some(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief.url))
         }
       }
     }
@@ -317,7 +317,7 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
 
       "return a link to the Private Residence Relief page" in {
         assertExpectedResult[QuestionAnswerModel[String]](result)(_.link shouldBe
-          Some(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief().url))
+          Some(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief.url))
       }
     }
 
@@ -400,7 +400,7 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
 
       "return a link to the Private Residence Relief page" in {
         assertExpectedResult[QuestionAnswerModel[String]](result)(_.link shouldBe
-          Some(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief().url))
+          Some(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief.url))
       }
     }
 
@@ -427,7 +427,7 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
 
       "return a link to the Private Residence Relief page" in {
         assertExpectedResult[QuestionAnswerModel[String]](result)(_.link shouldBe
-          Some(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief().url))
+          Some(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief.url))
       }
     }
   }

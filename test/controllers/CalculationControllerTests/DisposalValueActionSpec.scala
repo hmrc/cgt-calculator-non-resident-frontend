@@ -124,7 +124,7 @@ class DisposalValueActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
 
     "submitting a valid form" should {
       val target = setupTarget(None)
-      lazy val request = fakeRequestToPOSTWithSession(("disposalValue", "1000"))
+      lazy val request = fakeRequestToPOSTWithSession(("disposalValue", "1000")).withMethod("POST")
       lazy val result = target.submitDisposalValue(request)
 
       "return a 303" in {
@@ -132,7 +132,7 @@ class DisposalValueActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
       }
 
       "redirect to the Disposal Costs page" in {
-        redirectLocation(result) shouldBe Some(controllers.routes.DisposalCostsController.disposalCosts().url)
+        redirectLocation(result) shouldBe Some(controllers.routes.DisposalCostsController.disposalCosts.url)
       }
     }
 

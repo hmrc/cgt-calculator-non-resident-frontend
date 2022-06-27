@@ -76,7 +76,7 @@ object PersonalAndPreviousDetailsConstructor {
       s"${KeystoreKeys.currentIncome}-question",
       currentIncomeModel.currentIncome,
       "calc.currentIncome.question",
-      Some(controllers.routes.CurrentIncomeController.currentIncome().url)
+      Some(controllers.routes.CurrentIncomeController.currentIncome.url)
     ))
   }
 
@@ -89,7 +89,7 @@ object PersonalAndPreviousDetailsConstructor {
           s"${KeystoreKeys.personalAllowance}-question",
           data.personalAllowanceAmt,
           "calc.personalAllowance.question",
-          Some(controllers.routes.PersonalAllowanceController.personalAllowance().url)
+          Some(controllers.routes.PersonalAllowanceController.personalAllowance.url)
         ))
       case _ => None
     }
@@ -101,7 +101,7 @@ object PersonalAndPreviousDetailsConstructor {
       s"${KeystoreKeys.otherProperties}-question",
       otherPropertiesModel.otherProperties,
       "calc.otherProperties.question",
-      Some(controllers.routes.OtherPropertiesController.otherProperties().url)
+      Some(controllers.routes.OtherPropertiesController.otherProperties.url)
     ))
   }
 
@@ -121,7 +121,7 @@ object PersonalAndPreviousDetailsConstructor {
           s"${KeystoreKeys.previousLossOrGain}-question",
           message,
           "calc.previousLossOrGain.question",
-          Some(controllers.routes.PreviousGainOrLossController.previousGainOrLoss().url)
+          Some(controllers.routes.PreviousGainOrLossController.previousGainOrLoss.url)
         ))
       case _ => None
     }
@@ -137,7 +137,7 @@ object PersonalAndPreviousDetailsConstructor {
           s"${KeystoreKeys.howMuchLoss}-question",
           howMuchLossModel.get.loss,
           "calc.howMuchLoss.question",
-          Some(controllers.routes.HowMuchLossController.howMuchLoss().url)
+          Some(controllers.routes.HowMuchLossController.howMuchLoss.url)
         ))
       case (_, _) => None
     }
@@ -153,7 +153,7 @@ object PersonalAndPreviousDetailsConstructor {
           s"${KeystoreKeys.howMuchGain}-question",
           howMuchGainModel.get.howMuchGain,
           "calc.howMuchGain.question",
-          Some(controllers.routes.HowMuchGainController.howMuchGain().url)
+          Some(controllers.routes.HowMuchGainController.howMuchGain.url)
         ))
       case (_, _) => None
     }
@@ -170,7 +170,7 @@ object PersonalAndPreviousDetailsConstructor {
         s"${KeystoreKeys.annualExemptAmount}-question",
         annualExemptAmountModel.get.annualExemptAmount,
         "calc.annualExemptAmount.question",
-        Some(controllers.routes.AnnualExemptAmountController.annualExemptAmount().url)
+        Some(controllers.routes.AnnualExemptAmountController.annualExemptAmount.url)
       ))
     }
 
@@ -192,7 +192,7 @@ object PersonalAndPreviousDetailsConstructor {
       s"${KeystoreKeys.broughtForwardLosses}-question",
       Transformers.booleanToString(broughtForwardLossesModel.isClaiming),
       "calc.broughtForwardLosses.question",
-      Some(controllers.routes.BroughtForwardLossesController.broughtForwardLosses().url)
+      Some(controllers.routes.BroughtForwardLossesController.broughtForwardLosses.url)
     ))
   }
 
@@ -203,7 +203,7 @@ object PersonalAndPreviousDetailsConstructor {
         s"${KeystoreKeys.broughtForwardLosses}-value-question",
         broughtForwardLossesModel.broughtForwardLoss.get,
         "calc.broughtForwardLosses.inputQuestion",
-        Some(controllers.routes.BroughtForwardLossesController.broughtForwardLosses().url)
+        Some(controllers.routes.BroughtForwardLossesController.broughtForwardLosses.url)
       ))
     }
     else {

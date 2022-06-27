@@ -76,8 +76,8 @@ class WhoDidYouGiveItToViewSpec extends CommonPlaySpec with WithCommonFakeApplic
     "have a form" which {
       lazy val form = doc.getElementsByTag("form")
 
-      s"has the action '${controllers.routes.WhoDidYouGiveItToController.submitWhoDidYouGiveItTo().toString}" in {
-        form.attr("action") shouldBe controllers.routes.WhoDidYouGiveItToController.submitWhoDidYouGiveItTo().toString
+      s"has the action '${controllers.routes.WhoDidYouGiveItToController.submitWhoDidYouGiveItTo.toString}" in {
+        form.attr("action") shouldBe controllers.routes.WhoDidYouGiveItToController.submitWhoDidYouGiveItTo.toString
       }
 
       "has the method of POST" in {
