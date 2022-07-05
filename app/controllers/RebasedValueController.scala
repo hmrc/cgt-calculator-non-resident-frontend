@@ -47,10 +47,10 @@ class RebasedValueController @Inject()(http: DefaultHttpClient,calcConnector: Ca
 
     localDate match {
       case Some(x) => {
-        if (TaxDates.dateBeforeLegislationStart(x)) controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart().url
-        else controllers.routes.AcquisitionCostsController.acquisitionCosts().url
+        if (TaxDates.dateBeforeLegislationStart(x)) controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart.url
+        else controllers.routes.AcquisitionCostsController.acquisitionCosts.url
       }
-      case _ => controllers.routes.AcquisitionCostsController.acquisitionCosts().url
+      case _ => controllers.routes.AcquisitionCostsController.acquisitionCosts.url
     }
   }
 
@@ -74,7 +74,7 @@ class RebasedValueController @Inject()(http: DefaultHttpClient,calcConnector: Ca
 
     def successAction(model: RebasedValueModel) = {
       calcConnector.saveFormData(KeystoreKeys.rebasedValue, model).map(_ =>
-        Redirect(routes.RebasedCostsController.rebasedCosts()))
+        Redirect(routes.RebasedCostsController.rebasedCosts))
     }
 
     rebasedValueForm.bindFromRequest.fold(errorAction, successAction)

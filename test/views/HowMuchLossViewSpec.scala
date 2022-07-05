@@ -78,8 +78,8 @@ class HowMuchLossViewSpec extends CommonPlaySpec with WithCommonFakeApplication 
           form.attr("method") shouldBe "POST"
         }
 
-        s"has an action of '${controllers.routes.HowMuchLossController.submitHowMuchLoss().url}'" in {
-          form.attr("action") shouldBe controllers.routes.HowMuchLossController.submitHowMuchLoss().url
+        s"has an action of '${controllers.routes.HowMuchLossController.submitHowMuchLoss.url}'" in {
+          form.attr("action") shouldBe controllers.routes.HowMuchLossController.submitHowMuchLoss.url
         }
       }
 

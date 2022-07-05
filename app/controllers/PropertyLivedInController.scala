@@ -53,8 +53,8 @@ class PropertyLivedInController @Inject()(http: DefaultHttpClient,calcConnector:
     )))
 
     def routeRequest(model: PropertyLivedInModel) = {
-      if (model.propertyLivedIn) Future.successful(Redirect(routes.PrivateResidenceReliefController.privateResidenceRelief()))
-      else Future.successful(Redirect(routes.CurrentIncomeController.currentIncome()))
+      if (model.propertyLivedIn) Future.successful(Redirect(routes.PrivateResidenceReliefController.privateResidenceRelief))
+      else Future.successful(Redirect(routes.CurrentIncomeController.currentIncome))
     }
 
     def successAction(model: PropertyLivedInModel) = {

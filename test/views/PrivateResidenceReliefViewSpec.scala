@@ -103,8 +103,8 @@ class PrivateResidenceReliefViewSpec extends CommonPlaySpec with WithCommonFakeA
             form.attr("method") shouldBe "POST"
           }
 
-          s"has an action of '${controllers.routes.PrivateResidenceReliefController.submitPrivateResidenceRelief().url}'" in {
-            form.attr("action") shouldBe controllers.routes.PrivateResidenceReliefController.submitPrivateResidenceRelief().url
+          s"has an action of '${controllers.routes.PrivateResidenceReliefController.submitPrivateResidenceRelief.url}'" in {
+            form.attr("action") shouldBe controllers.routes.PrivateResidenceReliefController.submitPrivateResidenceRelief.url
           }
         }
 

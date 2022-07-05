@@ -55,9 +55,9 @@ class SummaryController @Inject()(http: DefaultHttpClient,calcConnector: Calcula
 
     def summaryBackUrl(model: Option[TotalGainResultsModel]): Future[String] = model match {
       case (Some(data)) if data.rebasedGain.isDefined || data.timeApportionedGain.isDefined =>
-        Future.successful(routes.CalculationElectionController.calculationElection().url)
+        Future.successful(routes.CalculationElectionController.calculationElection.url)
       case (Some(_)) =>
-        Future.successful(routes.CheckYourAnswersController.checkYourAnswers().url)
+        Future.successful(routes.CheckYourAnswersController.checkYourAnswers.url)
       case (None) => Future.successful(common.DefaultRoutes.missingDataRoute)
     }
 

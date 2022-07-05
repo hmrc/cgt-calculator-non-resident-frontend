@@ -93,8 +93,8 @@ class WorthWhenGiftedToViewSpec extends CommonPlaySpec with WithCommonFakeApplic
           form.attr("method") shouldBe "POST"
         }
 
-        s"has an action of '${controllers.routes.WorthWhenGiftedToController.submitWorthWhenGiftedTo().url}'" in {
-          form.attr("action") shouldBe controllers.routes.WorthWhenGiftedToController.submitWorthWhenGiftedTo().url
+        s"has an action of '${controllers.routes.WorthWhenGiftedToController.submitWorthWhenGiftedTo.url}'" in {
+          form.attr("action") shouldBe controllers.routes.WorthWhenGiftedToController.submitWorthWhenGiftedTo.url
         }
       }
 

@@ -131,8 +131,8 @@ class PrivateResidenceReliefController @Inject()(http: DefaultHttpClient,calcCon
       }
 
       def routeDestination(taxableGainsZeroOrLess: Boolean) = {
-        if (taxableGainsZeroOrLess) Future.successful(Redirect(controllers.routes.CheckYourAnswersController.checkYourAnswers().url))
-        else Future.successful(Redirect(controllers.routes.CurrentIncomeController.currentIncome().url))
+        if (taxableGainsZeroOrLess) Future.successful(Redirect(controllers.routes.CheckYourAnswersController.checkYourAnswers.url))
+        else Future.successful(Redirect(controllers.routes.CurrentIncomeController.currentIncome.url))
       }
 
       def errorAction(form: Form[PrivateResidenceReliefModel]) = {

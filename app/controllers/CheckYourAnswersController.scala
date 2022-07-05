@@ -45,11 +45,11 @@ class CheckYourAnswersController @Inject()(http: DefaultHttpClient,calculatorCon
                   totalTaxOwedAnswers: Option[TotalPersonalDetailsCalculationModel]): Future[String] = totalTaxOwedAnswers match {
 
     case Some(_) =>
-      Future.successful(controllers.routes.BroughtForwardLossesController.broughtForwardLosses().url)
+      Future.successful(controllers.routes.BroughtForwardLossesController.broughtForwardLosses.url)
     case _ =>
       checkGainExists(totalGainResultsModel).map { gain =>
-        if(gain) controllers.routes.PrivateResidenceReliefController.privateResidenceRelief().url
-        else controllers.routes.ImprovementsController.improvements().url
+        if(gain) controllers.routes.PrivateResidenceReliefController.privateResidenceRelief.url
+        else controllers.routes.ImprovementsController.improvements.url
       }
   }
 
@@ -57,10 +57,10 @@ class CheckYourAnswersController @Inject()(http: DefaultHttpClient,calculatorCon
                     totalGainResultsModel: TotalGainResultsModel): Future[Result] = {
     (calculationResultsWithPRRModel, totalGainResultsModel) match {
       case (Some(CalculationResultsWithPRRModel(data, _, _)),_) if data.taxableGain > 0 =>
-        Future.successful(Redirect(routes.OtherReliefsController.otherReliefs()))
+        Future.successful(Redirect(routes.OtherReliefsController.otherReliefs))
       case (None, TotalGainResultsModel(data, _, _)) if data > 0 =>
-        Future.successful(Redirect(routes.OtherReliefsController.otherReliefs()))
-      case _ => Future.successful(Redirect(routes.SummaryController.summary()))
+        Future.successful(Redirect(routes.OtherReliefsController.otherReliefs))
+      case _ => Future.successful(Redirect(routes.SummaryController.summary))
     }
   }
 
@@ -87,8 +87,8 @@ class CheckYourAnswersController @Inject()(http: DefaultHttpClient,calculatorCon
     def routeRequest(model: Option[TotalGainResultsModel], taxableGainModel: Option[CalculationResultsWithPRRModel]) = model match {
       case (Some(data)) if data.rebasedGain.isDefined || data.timeApportionedGain.isDefined =>
         val seq = Seq(Some(data.flatGain), data.rebasedGain, data.timeApportionedGain).flatten
-        if (seq.forall(_ <= 0)) Future.successful(Redirect(routes.CalculationElectionController.calculationElection()))
-        else Future.successful(Redirect(routes.ClaimingReliefsController.claimingReliefs()))
+        if (seq.forall(_ <= 0)) Future.successful(Redirect(routes.CalculationElectionController.calculationElection))
+        else Future.successful(Redirect(routes.ClaimingReliefsController.claimingReliefs))
       case (Some(_)) =>
         calculatorConnector.saveFormData[CalculationElectionModel](KeystoreKeys.calculationElection, CalculationElectionModel(CalculationType.flat))
         redirectRoute(taxableGainModel, model.get)

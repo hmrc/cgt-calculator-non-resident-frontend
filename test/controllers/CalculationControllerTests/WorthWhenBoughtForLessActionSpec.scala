@@ -126,7 +126,7 @@ class WorthWhenBoughtForLessActionSpec extends CommonPlaySpec with WithCommonFak
     "with valid form with the answer '1000.00'" should {
 
       lazy val target = setupTarget(None)
-      lazy val request = fakeRequestToPOSTWithSession(("acquisitionMarketValue", "1000.00"))
+      lazy val request = fakeRequestToPOSTWithSession(("acquisitionMarketValue", "1000.00")).withMethod("POST")
       lazy val result = target.submitWorthWhenBoughtForLess(request)
 
       "return a status of 303" in {

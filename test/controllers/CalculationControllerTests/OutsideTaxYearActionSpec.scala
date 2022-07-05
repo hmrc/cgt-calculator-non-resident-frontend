@@ -81,7 +81,7 @@ class OutsideTaxYearActionSpec()
         Jsoup.parse(bodyOf(result)(materializer, ec)).title shouldBe pageTitle
       }
 
-      s"have a back link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
+      s"have a back link to '${controllers.routes.DisposalDateController.disposalDate.url}'" in {
         Jsoup.parse(bodyOf(result)(materializer, ec)).getElementById("back-link").attr("href") shouldBe "javascript:history.back()"
       }
     }

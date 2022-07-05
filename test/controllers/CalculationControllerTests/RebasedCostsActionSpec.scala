@@ -122,7 +122,7 @@ class RebasedCostsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
 
     "a valid form is submitted" should {
       val target = setupTarget(None)
-      lazy val request = fakeRequestToPOSTWithSession("hasRebasedCosts" -> "Yes", "rebasedCosts" -> "1000")
+      lazy val request = fakeRequestToPOSTWithSession("hasRebasedCosts" -> "Yes", "rebasedCosts" -> "1000").withMethod("POST")
       lazy val result = target.submitRebasedCosts(request)
 
       "return a 303" in {
@@ -130,7 +130,7 @@ class RebasedCostsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
       }
 
       "redirect to the improvements page" in {
-        redirectLocation(result).get shouldBe controllers.routes.ImprovementsController.improvements().url
+        redirectLocation(result).get shouldBe controllers.routes.ImprovementsController.improvements.url
       }
     }
 

@@ -115,40 +115,40 @@ class PreviousGainOrLossActionSpec extends CommonPlaySpec with WithCommonFakeApp
   "Calling .submitPreviousGainOrLoss from the PreviousGainOrLossController" when {
     "a valid form is submitted with the value 'Loss'" should {
       lazy val target = setupTarget(None)
-      lazy val result = target.submitPreviousGainOrLoss(fakeRequestToPOSTWithSession(("previousLossOrGain", "Loss")))
+      lazy val result = target.submitPreviousGainOrLoss(fakeRequestToPOSTWithSession(("previousLossOrGain", "Loss")).withMethod("POST"))
 
       "return a status of 303" in {
         status(result) shouldBe 303
       }
 
       "redirect to the how much loss page" in {
-        redirectLocation(result).get shouldBe controllers.routes.HowMuchLossController.howMuchLoss().url
+        redirectLocation(result).get shouldBe controllers.routes.HowMuchLossController.howMuchLoss.url
       }
     }
 
     "a valid form is submitted with the value 'Gain'" should {
       lazy val target = setupTarget(None)
-      lazy val result = target.submitPreviousGainOrLoss(fakeRequestToPOSTWithSession(("previousLossOrGain", "Gain")))
+      lazy val result = target.submitPreviousGainOrLoss(fakeRequestToPOSTWithSession(("previousLossOrGain", "Gain")).withMethod("POST"))
 
       "return a status of 303" in {
         status(result) shouldBe 303
       }
 
       "redirect to the how much gained page" in {
-        redirectLocation(result).get shouldBe controllers.routes.HowMuchGainController.howMuchGain().url
+        redirectLocation(result).get shouldBe controllers.routes.HowMuchGainController.howMuchGain.url
       }
     }
 
     "a valid form is submitted with the value 'Neither" should {
       lazy val target = setupTarget(None)
-      lazy val result = target.submitPreviousGainOrLoss(fakeRequestToPOSTWithSession(("previousLossOrGain","Neither")))
+      lazy val result = target.submitPreviousGainOrLoss(fakeRequestToPOSTWithSession(("previousLossOrGain","Neither")).withMethod("POST"))
 
       "return a status of 303" in {
         status(result) shouldBe 303
       }
 
       "redirect to the AEA page" in {
-        redirectLocation(result).get shouldBe controllers.routes.AnnualExemptAmountController.annualExemptAmount().url
+        redirectLocation(result).get shouldBe controllers.routes.AnnualExemptAmountController.annualExemptAmount.url
       }
     }
 

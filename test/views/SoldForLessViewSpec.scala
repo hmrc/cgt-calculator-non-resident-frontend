@@ -96,8 +96,8 @@ class SoldForLessViewSpec extends CommonPlaySpec with WithCommonFakeApplication 
           form.attr("method") shouldBe "POST"
         }
 
-        s"has an action of '${controllers.routes.SoldForLessController.submitSoldForLess().url}'" in {
-          form.attr("action") shouldBe controllers.routes.SoldForLessController.submitSoldForLess().url
+        s"has an action of '${controllers.routes.SoldForLessController.submitSoldForLess.url}'" in {
+          form.attr("action") shouldBe controllers.routes.SoldForLessController.submitSoldForLess.url
         }
       }
 

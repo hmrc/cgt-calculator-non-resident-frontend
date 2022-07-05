@@ -91,8 +91,8 @@ class HowMuchGainViewSpec extends CommonPlaySpec with WithCommonFakeApplication 
           form.attr("method") shouldBe "POST"
         }
 
-        s"has an action of '${controllers.routes.HowMuchGainController.submitHowMuchGain().url}'" in {
-          form.attr("action") shouldBe controllers.routes.HowMuchGainController.submitHowMuchGain().url
+        s"has an action of '${controllers.routes.HowMuchGainController.submitHowMuchGain.url}'" in {
+          form.attr("action") shouldBe controllers.routes.HowMuchGainController.submitHowMuchGain.url
         }
       }
 

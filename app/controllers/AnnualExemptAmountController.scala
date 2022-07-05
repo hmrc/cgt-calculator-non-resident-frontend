@@ -77,11 +77,11 @@ class AnnualExemptAmountController @Inject()(http: DefaultHttpClient,calcConnect
   private def backUrl(lossOrGain: PreviousLossOrGainModel, gainAmount: Option[HowMuchGainModel], lossAmount: Option[HowMuchLossModel]): Future[String] = {
     (lossOrGain, gainAmount, lossAmount) match {
       case (PreviousLossOrGainModel("Neither"), None, None) =>
-        Future.successful(routes.PreviousGainOrLossController.previousGainOrLoss().url)
+        Future.successful(routes.PreviousGainOrLossController.previousGainOrLoss.url)
       case (PreviousLossOrGainModel("Gain"), Some(data), None) if data.howMuchGain == 0 =>
-        Future.successful(routes.HowMuchGainController.howMuchGain().url)
+        Future.successful(routes.HowMuchGainController.howMuchGain.url)
       case (PreviousLossOrGainModel("Loss"), None, Some(data)) if data.loss == 0 =>
-        Future.successful(routes.HowMuchLossController.howMuchLoss().url)
+        Future.successful(routes.HowMuchLossController.howMuchLoss.url)
       case _ => Future.successful(missingDataRoute)
     }
   }
@@ -128,7 +128,7 @@ class AnnualExemptAmountController @Inject()(http: DefaultHttpClient,calcConnect
 
     def successAction(model: AnnualExemptAmountModel) = {
       calcConnector.saveFormData(KeystoreKeys.annualExemptAmount, model).map(_ =>
-        Redirect(routes.BroughtForwardLossesController.broughtForwardLosses()))
+        Redirect(routes.BroughtForwardLossesController.broughtForwardLosses))
     }
 
     def routeRequest(maxAEA: BigDecimal, backUrl: String): Future[Result] = {

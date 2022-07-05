@@ -53,9 +53,9 @@ class WhoDidYouGiveItToController @Inject()(http: DefaultHttpClient,
       success => {
         calcConnector.saveFormData[WhoDidYouGiveItToModel](keystoreKeys.whoDidYouGiveItTo, success).map(_ =>
         success match {
-          case WhoDidYouGiveItToModel("Spouse") => Redirect(routes.WhoDidYouGiveItToController.noTaxToPay())
-          case WhoDidYouGiveItToModel("Charity") => Redirect(routes.WhoDidYouGiveItToController.noTaxToPay())
-          case _ => Redirect(routes.MarketValueWhenSoldOrGaveAwayController.marketValueWhenGaveAway())
+          case WhoDidYouGiveItToModel("Spouse") => Redirect(routes.WhoDidYouGiveItToController.noTaxToPay)
+          case WhoDidYouGiveItToModel("Charity") => Redirect(routes.WhoDidYouGiveItToController.noTaxToPay)
+          case _ => Redirect(routes.MarketValueWhenSoldOrGaveAwayController.marketValueWhenGaveAway)
         })
       })
   }

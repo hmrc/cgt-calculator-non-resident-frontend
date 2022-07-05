@@ -49,13 +49,13 @@ class OtherPropertiesViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
         document.body.getElementsByTag("h1").text shouldEqual messages.question
       }
 
-      s"have a 'Back' link to ${controllers.routes.PersonalAllowanceController.personalAllowance().url}" which {
+      s"have a 'Back' link to ${controllers.routes.PersonalAllowanceController.personalAllowance.url}" which {
 
         "should have the text" in {
           document.body.getElementById("back-link").text shouldEqual commonMessages.back
         }
 
-        s"should have an href to '${controllers.routes.PersonalAllowanceController.personalAllowance().url}'" in {
+        s"should have an href to '${controllers.routes.PersonalAllowanceController.personalAllowance.url}'" in {
           document.body.getElementById("back-link").attr("href") shouldEqual "javascript:history.back()"
         }
       }

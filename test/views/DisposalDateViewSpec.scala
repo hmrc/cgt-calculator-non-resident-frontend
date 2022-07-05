@@ -82,8 +82,8 @@ class DisposalDateViewSpec extends CommonPlaySpec with WithCommonFakeApplication
         document.body().getElementsByClass("govuk-date-input").attr("id") should include("disposalDate")
       }
 
-      s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-        document.select("body > header > div > div > div.govuk-header__content > a").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
+      s"have a home link to '${controllers.routes.DisposalDateController.disposalDate.url}'" in {
+        document.select("body > header > div > div > div.govuk-header__content > a").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate.url
       }
 
       "have a button" which {

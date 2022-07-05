@@ -52,7 +52,7 @@ class RebasedCostsController @Inject()(http: DefaultHttpClient,calcConnector: Ca
 
     def successAction(model: RebasedCostsModel) = {
       calcConnector.saveFormData(KeystoreKeys.rebasedCosts, model).map(_ =>
-        Redirect(routes.ImprovementsController.improvements()))
+        Redirect(routes.ImprovementsController.improvements))
     }
 
     rebasedCostsForm.bindFromRequest.fold(errorAction, successAction)

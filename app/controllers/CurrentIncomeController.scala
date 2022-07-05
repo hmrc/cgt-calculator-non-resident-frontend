@@ -42,7 +42,7 @@ class CurrentIncomeController @Inject()(http: DefaultHttpClient,calcConnector: C
   def getBackLink(implicit hc: HeaderCarrier): Future[String] = {
     calcConnector.fetchAndGetFormData[PropertyLivedInModel](KeystoreKeys.propertyLivedIn).map {
       case Some(PropertyLivedInModel(true)) => routes.PrivateResidenceReliefController.privateResidenceRelief.url
-      case _ => routes.PropertyLivedInController.propertyLivedIn().url
+      case _ => routes.PropertyLivedInController.propertyLivedIn.url
     }
   }
 
@@ -64,8 +64,8 @@ class CurrentIncomeController @Inject()(http: DefaultHttpClient,calcConnector: C
   val submitCurrentIncome = ValidateSession.async { implicit request =>
 
     def routeRequest(model: CurrentIncomeModel) = {
-      if (model.currentIncome > 0) Future.successful(Redirect(routes.PersonalAllowanceController.personalAllowance()))
-      else Future.successful(Redirect(routes.OtherPropertiesController.otherProperties()))
+      if (model.currentIncome > 0) Future.successful(Redirect(routes.PersonalAllowanceController.personalAllowance))
+      else Future.successful(Redirect(routes.OtherPropertiesController.otherProperties))
     }
 
     def successAction(model: CurrentIncomeModel) = {

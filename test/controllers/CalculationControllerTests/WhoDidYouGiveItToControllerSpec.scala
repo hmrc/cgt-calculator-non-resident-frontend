@@ -104,7 +104,7 @@ class WhoDidYouGiveItToControllerSpec extends CommonPlaySpec with WithCommonFake
 
   "Calling .submitWhoDidYouGiveItTo with a Charity value" should {
       lazy val target = setupTarget(None)
-      lazy val request = fakeRequestToPOSTWithSession(("whoDidYouGiveItTo","Charity"))
+      lazy val request = fakeRequestToPOSTWithSession(("whoDidYouGiveItTo","Charity")).withMethod("POST")
       lazy val result = target.submitWhoDidYouGiveItTo(request)
 
       "when supplied with a valid form" which {
@@ -120,7 +120,7 @@ class WhoDidYouGiveItToControllerSpec extends CommonPlaySpec with WithCommonFake
 
   "Calling .submitWhoDidYouGiveItTo from the GainController with a Spouse value" should {
     lazy val target = setupTarget(None)
-    lazy val request = fakeRequestToPOSTWithSession(("whoDidYouGiveItTo", "Spouse"))
+    lazy val request = fakeRequestToPOSTWithSession(("whoDidYouGiveItTo", "Spouse")).withMethod("POST")
     lazy val result = target.submitWhoDidYouGiveItTo(request)
 
     "when supplied with a valid form" which {
@@ -136,7 +136,7 @@ class WhoDidYouGiveItToControllerSpec extends CommonPlaySpec with WithCommonFake
 
   "Calling .submitWhoDidYouGiveItTo with a Someone Else value" should {
     lazy val target = setupTarget(None)
-    lazy val request = fakeRequestToPOSTWithSession(("whoDidYouGiveItTo", "Other"))
+    lazy val request = fakeRequestToPOSTWithSession(("whoDidYouGiveItTo", "Other")).withMethod("POST")
     lazy val result = target.submitWhoDidYouGiveItTo(request)
 
     "when supplied with a valid form" which {

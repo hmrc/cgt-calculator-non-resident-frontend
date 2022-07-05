@@ -59,8 +59,8 @@ class OtherPropertiesController @Inject()(http: DefaultHttpClient,calcConnector:
 
     def routeRequest(data: OtherPropertiesModel): Future[Result] = {
       data.otherProperties match {
-        case "Yes" => Future.successful(Redirect(routes.PreviousGainOrLossController.previousGainOrLoss()))
-        case "No" => Future.successful(Redirect(routes.BroughtForwardLossesController.broughtForwardLosses()))
+        case "Yes" => Future.successful(Redirect(routes.PreviousGainOrLossController.previousGainOrLoss))
+        case "No" => Future.successful(Redirect(routes.BroughtForwardLossesController.broughtForwardLosses))
       }
     }
 

@@ -70,11 +70,11 @@ class DisposalDateController @Inject()(http: DefaultHttpClient,calcConnector: Ca
         taxYear <- calcConnector.getTaxYear(s"${model.year}-${model.month}-${model.day}")
       } yield {
         if (!TaxDates.dateAfterStart(model.day, model.month, model.year)) {
-          Redirect(routes.NoCapitalGainsTaxController.noCapitalGainsTax())
+          Redirect(routes.NoCapitalGainsTaxController.noCapitalGainsTax)
         } else if (!taxYear.get.isValidYear) {
-          Redirect(routes.OutsideTaxYearController.outsideTaxYear())
+          Redirect(routes.OutsideTaxYearController.outsideTaxYear)
         } else {
-          Redirect(routes.SoldOrGivenAwayController.soldOrGivenAway())
+          Redirect(routes.SoldOrGivenAwayController.soldOrGivenAway)
         }
       }
     }

@@ -254,7 +254,7 @@ class PurchaseDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeA
 
       "have a link to the acquisition date page" in {
         assertExpectedResult[QuestionAnswerModel[LocalDate]](result)(_.link shouldBe
-          Some(controllers.routes.AcquisitionDateController.acquisitionDate().url))
+          Some(controllers.routes.AcquisitionDateController.acquisitionDate.url))
       }
     }
   }
@@ -277,7 +277,7 @@ class PurchaseDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeA
       }
 
       "have a link to the how became owner page" in {
-        result.link shouldBe Some(controllers.routes.HowBecameOwnerController.howBecameOwner().url)
+        result.link shouldBe Some(controllers.routes.HowBecameOwnerController.howBecameOwner.url)
       }
     }
 
@@ -336,7 +336,7 @@ class PurchaseDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeA
 
       "have a link to the bought for less page" in {
         assertExpectedResult[QuestionAnswerModel[Boolean]](result)(_.link
-          shouldBe Some(controllers.routes.BoughtForLessController.boughtForLess().url))
+          shouldBe Some(controllers.routes.BoughtForLessController.boughtForLess.url))
       }
     }
 
@@ -371,7 +371,7 @@ class PurchaseDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeA
       }
 
       "have a link to the acquisition date page" in {
-        result.link shouldBe Some(controllers.routes.AcquisitionValueController.acquisitionValue().url)
+        result.link shouldBe Some(controllers.routes.AcquisitionValueController.acquisitionValue.url)
       }
     }
 
@@ -434,7 +434,7 @@ class PurchaseDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeA
       }
 
       "have a link to the acquisition date page" in {
-        result.link shouldBe Some(controllers.routes.AcquisitionCostsController.acquisitionCosts().url)
+        result.link shouldBe Some(controllers.routes.AcquisitionCostsController.acquisitionCosts.url)
       }
     }
 
@@ -479,7 +479,7 @@ class PurchaseDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeA
 
       "have a link to the rebased value page" in {
         assertExpectedResult[QuestionAnswerModel[BigDecimal]](result)(_.link
-          shouldBe Some(controllers.routes.RebasedValueController.rebasedValue().url))
+          shouldBe Some(controllers.routes.RebasedValueController.rebasedValue.url))
       }
     }
 
@@ -531,7 +531,7 @@ class PurchaseDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeA
 
       "have a link to the rebased costs page" in {
         assertExpectedResult[QuestionAnswerModel[String]](result)(_.link
-          shouldBe Some(controllers.routes.RebasedCostsController.rebasedCosts().url))
+          shouldBe Some(controllers.routes.RebasedCostsController.rebasedCosts.url))
       }
     }
 
@@ -575,7 +575,7 @@ class PurchaseDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeA
 
       "have a link to the rebased costs page" in {
         assertExpectedResult[QuestionAnswerModel[BigDecimal]](result)(_.link
-          shouldBe Some(controllers.routes.RebasedCostsController.rebasedCosts().url))
+          shouldBe Some(controllers.routes.RebasedCostsController.rebasedCosts.url))
       }
     }
 
@@ -616,8 +616,8 @@ class PurchaseDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeA
         result.question shouldBe "calc.costsAtLegislationStart.title"
       }
 
-      s"have a link to ${controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart().url}" in {
-        result.link.get shouldBe controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart().url
+      s"have a link to ${controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart.url}" in {
+        result.link.get shouldBe controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart.url
       }
     }
 
@@ -650,8 +650,8 @@ class PurchaseDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeA
         result.question shouldBe "calc.costsAtLegislationStart.howMuch"
       }
 
-      s"have a link to ${controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart().url}" in {
-        result.link.get shouldBe controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart().url
+      s"have a link to ${controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart.url}" in {
+        result.link.get shouldBe controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart.url
       }
     }
 

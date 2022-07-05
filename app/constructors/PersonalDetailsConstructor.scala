@@ -66,7 +66,7 @@ class PersonalDetailsConstructor @Inject()(implicit messagesProvider: MessagesPr
       KeystoreKeys.currentIncome,
       currentIncomeModel.currentIncome,
       Messages("calc.currentIncome.question"),
-      Some(controllers.routes.CurrentIncomeController.currentIncome().url))
+      Some(controllers.routes.CurrentIncomeController.currentIncome.url))
     )
 
   //Customer type needs to be individual
@@ -80,7 +80,7 @@ class PersonalDetailsConstructor @Inject()(implicit messagesProvider: MessagesPr
             KeystoreKeys.personalAllowance,
             value,
             Messages("calc.personalAllowance.question"),
-            Some(controllers.routes.PersonalAllowanceController.personalAllowance().url))
+            Some(controllers.routes.PersonalAllowanceController.personalAllowance.url))
           )
         }
         else None
@@ -93,7 +93,7 @@ class PersonalDetailsConstructor @Inject()(implicit messagesProvider: MessagesPr
       KeystoreKeys.otherProperties,
       otherPropertiesModel.otherProperties,
       Messages("calc.otherProperties.question"),
-      Some(controllers.routes.OtherPropertiesController.otherProperties().url)
+      Some(controllers.routes.OtherPropertiesController.otherProperties.url)
     ))
   }
 
@@ -105,7 +105,7 @@ class PersonalDetailsConstructor @Inject()(implicit messagesProvider: MessagesPr
           KeystoreKeys.previousLossOrGain,
           previousLossOrGainModel.get.previousLossOrGain,
           Messages("calc.previousLossOrGain.question"),
-          Some(controllers.routes.PreviousGainOrLossController.previousGainOrLoss().url)
+          Some(controllers.routes.PreviousGainOrLossController.previousGainOrLoss.url)
         ))
       case _ => None
     }
@@ -120,7 +120,7 @@ class PersonalDetailsConstructor @Inject()(implicit messagesProvider: MessagesPr
           KeystoreKeys.howMuchGain,
           howMuchGainModel.get.howMuchGain,
           Messages("calc.howMuchGain.question"),
-          Some(controllers.routes.HowMuchGainController.howMuchGain().url)
+          Some(controllers.routes.HowMuchGainController.howMuchGain.url)
         ))
       case _ => None
     }
@@ -135,7 +135,7 @@ class PersonalDetailsConstructor @Inject()(implicit messagesProvider: MessagesPr
           KeystoreKeys.howMuchLoss,
           howMuchLossModel.get.loss,
           Messages("calc.howMuchLoss.question"),
-          Some(controllers.routes.HowMuchLossController.howMuchLoss().url)
+          Some(controllers.routes.HowMuchLossController.howMuchLoss.url)
         ))
       case _ => None
     }
@@ -148,7 +148,7 @@ class PersonalDetailsConstructor @Inject()(implicit messagesProvider: MessagesPr
                                   howMuchLossModel: Option[HowMuchLossModel]): Option[QuestionAnswerModel[BigDecimal]] = {
     val id = KeystoreKeys.annualExemptAmount
     val question = Messages("calc.annualExemptAmount.question")
-    val route = Some(controllers.routes.AnnualExemptAmountController.annualExemptAmount().url)
+    val route = Some(controllers.routes.AnnualExemptAmountController.annualExemptAmount.url)
 
     (otherPropertiesModel, previousLossOrGainModel) match {
       case (OtherPropertiesModel("Yes"), Some(PreviousLossOrGainModel(PreviousGainOrLossKeys.neither))) =>
@@ -183,7 +183,7 @@ class PersonalDetailsConstructor @Inject()(implicit messagesProvider: MessagesPr
       s"${KeystoreKeys.broughtForwardLosses}-question",
       broughtForwardLossesModel.isClaiming,
       Messages("calc.broughtForwardLosses.question"),
-      Some(controllers.routes.BroughtForwardLossesController.broughtForwardLosses().url)
+      Some(controllers.routes.BroughtForwardLossesController.broughtForwardLosses.url)
     ))
   }
 
@@ -194,7 +194,7 @@ class PersonalDetailsConstructor @Inject()(implicit messagesProvider: MessagesPr
           KeystoreKeys.broughtForwardLosses,
           data,
           Messages("calc.broughtForwardLosses.inputQuestion"),
-          Some(controllers.routes.BroughtForwardLossesController.broughtForwardLosses().url)
+          Some(controllers.routes.BroughtForwardLossesController.broughtForwardLosses.url)
         ))
       case _ => None
     }

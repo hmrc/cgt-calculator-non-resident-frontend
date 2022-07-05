@@ -50,8 +50,8 @@ class AcquisitionValueViewSpec extends CommonPlaySpec with WithCommonFakeApplica
       }
     }
 
-    s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-      document.getElementsByClass("govuk-header__link govuk-header__link--service-name").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
+    s"have a home link to '${controllers.routes.DisposalDateController.disposalDate.url}'" in {
+      document.getElementsByClass("hmrc-header__service-name hmrc-header__service-name--linked").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate.url
     }
 
     "have a 'Back link' that" should{
@@ -62,7 +62,7 @@ class AcquisitionValueViewSpec extends CommonPlaySpec with WithCommonFakeApplica
         document.select("a#back-link").text shouldEqual commonMessages.back
       }
 
-      s"have a link to ${routes.BoughtForLessController.boughtForLess().url}" in {
+      s"have a link to ${routes.BoughtForLessController.boughtForLess.url}" in {
         document.select("a#back-link").attr("href") shouldEqual "javascript:history.back()"
       }
 

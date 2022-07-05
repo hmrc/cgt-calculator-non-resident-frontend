@@ -65,7 +65,7 @@ class CurrentIncomeViewSpec extends CommonPlaySpec with WithCommonFakeApplicatio
         }
 
         s"has a the correct action" in {
-          form.attr("action") shouldBe controllers.routes.CurrentIncomeController.submitCurrentIncome().url
+          form.attr("action") shouldBe controllers.routes.CurrentIncomeController.submitCurrentIncome.url
         }
       }
 

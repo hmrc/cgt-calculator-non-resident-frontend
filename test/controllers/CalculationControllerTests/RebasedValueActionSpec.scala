@@ -123,7 +123,7 @@ class RebasedValueActionSpec @Inject()(rebasedValueController: RebasedValueContr
 
     "submitting a valid form with amount of 100" should {
 
-      lazy val request = fakeRequestToPOSTWithSession(("rebasedValueAmt", "100"))
+      lazy val request = fakeRequestToPOSTWithSession(("rebasedValueAmt", "100")).withMethod("POST")
       lazy val result = target.submitRebasedValue(request)
 
       "return a 303" in {
@@ -131,13 +131,13 @@ class RebasedValueActionSpec @Inject()(rebasedValueController: RebasedValueContr
       }
 
       "redirect to the rebased costs page" in {
-        redirectLocation(result).get shouldEqual routes.RebasedCostsController.rebasedCosts().url
+        redirectLocation(result).get shouldEqual routes.RebasedCostsController.rebasedCosts.url
       }
     }
 
     "submitting an invalid form" should {
 
-      lazy val request = fakeRequestToPOSTWithSession(("rebasedValueAmt", ""))
+      lazy val request = fakeRequestToPOSTWithSession(("rebasedValueAmt", "")).withMethod("POST")
       lazy val result = target.submitRebasedValue(request)
       lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
@@ -152,16 +152,16 @@ class RebasedValueActionSpec @Inject()(rebasedValueController: RebasedValueContr
   }
 
   "Calling .backLink in the CalculationController" should {
-    s"return the URL ${controllers.routes.AcquisitionCostsController.acquisitionCosts().url}" when {
+    s"return the URL ${controllers.routes.AcquisitionCostsController.acquisitionCosts.url}" when {
       "supplied with an acquisitionDate post-legislation start" in {
         lazy val result = rebasedValueController.backLink(Some(DateModel(10, 10, 2015)))
-        result shouldEqual controllers.routes.AcquisitionCostsController.acquisitionCosts().url
+        result shouldEqual controllers.routes.AcquisitionCostsController.acquisitionCosts.url
       }
 
-      s"return the URL ${controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart().url}" when {
+      s"return the URL ${controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart.url}" when {
         "supplied with an acquisitionDate pre-legislation start" in {
           lazy val result = rebasedValueController.backLink(Some(DateModel(10, 10, 1970)))
-          result shouldEqual controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart().url
+          result shouldEqual controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart.url
         }
       }
     }

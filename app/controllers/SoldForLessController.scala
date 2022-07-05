@@ -50,8 +50,8 @@ class SoldForLessController @Inject()(http: DefaultHttpClient,calcConnector: Cal
     def errorAction(errors: Form[SoldForLessModel]) = Future.successful(BadRequest(soldForLessView(errors)))
 
     def routeRequest(model: SoldForLessModel) = {
-      if (model.soldForLess) Future.successful(Redirect(routes.MarketValueWhenSoldOrGaveAwayController.marketValueWhenSold()))
-      else Future.successful(Redirect(routes.DisposalValueController.disposalValue()))
+      if (model.soldForLess) Future.successful(Redirect(routes.MarketValueWhenSoldOrGaveAwayController.marketValueWhenSold))
+      else Future.successful(Redirect(routes.DisposalValueController.disposalValue))
     }
 
     def successAction(model: SoldForLessModel) = {

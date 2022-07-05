@@ -207,16 +207,16 @@ class OtherReliefsRebasedActionSpec extends CommonPlaySpec with WithCommonFakeAp
 
       "return a status of 303" in new Setup {
         setupStubs
-        lazy val request = fakeRequestToPOSTWithSession(("isClaimingOtherReliefs", "Yes"), ("otherReliefs", "1000"))
+        lazy val request = fakeRequestToPOSTWithSession(("isClaimingOtherReliefs", "Yes"), ("otherReliefs", "1000")).withMethod("POST")
         lazy val result = controller.submitOtherReliefsRebased(request)
         status(result) shouldBe 303
       }
 
       "redirect to the calculation election page" in new Setup {
         setupStubs
-        lazy val request = fakeRequestToPOSTWithSession(("isClaimingOtherReliefs", "Yes"), ("otherReliefs", "1000"))
+        lazy val request = fakeRequestToPOSTWithSession(("isClaimingOtherReliefs", "Yes"), ("otherReliefs", "1000")).withMethod("POST")
         lazy val result = controller.submitOtherReliefsRebased(request)
-        redirectLocation(result) shouldBe Some(controllers.routes.CalculationElectionController.calculationElection().url)
+        redirectLocation(result) shouldBe Some(controllers.routes.CalculationElectionController.calculationElection.url)
       }
     }
 

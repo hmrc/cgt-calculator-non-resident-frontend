@@ -50,7 +50,7 @@ class WorthWhenInheritedController @Inject()(http: DefaultHttpClient,calcConnect
 
     def successAction(model: AcquisitionValueModel) = {
       calcConnector.saveFormData(KeystoreKeys.acquisitionMarketValue, model).map(_ =>
-        Redirect(routes.AcquisitionCostsController.acquisitionCosts()))
+        Redirect(routes.AcquisitionCostsController.acquisitionCosts))
     }
 
     acquisitionMarketValueForm.bindFromRequest.fold(errorAction, successAction)

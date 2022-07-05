@@ -129,7 +129,7 @@ class WorthWhenInheritedActionSpec extends CommonPlaySpec with WithCommonFakeApp
     "with valid form with the answer '1000.00'" should {
 
       lazy val target = setupTarget(None)
-      lazy val request = fakeRequestToPOSTWithSession(("acquisitionMarketValue", "1000.00"))
+      lazy val request = fakeRequestToPOSTWithSession(("acquisitionMarketValue", "1000.00")).withMethod("POST")
       lazy val result = target.submitWorthWhenInherited(request)
 
       "return a status of 303" in {

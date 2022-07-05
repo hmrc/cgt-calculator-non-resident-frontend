@@ -39,7 +39,7 @@ object PropertyDetailsConstructor {
     Some(QuestionAnswerModel[String](s"${keys.improvements}-isClaiming",
       answers.improvementsModel.isClaimingImprovements,
       "calc.improvements.question",
-      Some(controllers.routes.ImprovementsController.improvements().url)
+      Some(controllers.routes.ImprovementsController.improvements.url)
     ))
   }
 
@@ -49,7 +49,7 @@ object PropertyDetailsConstructor {
       Some(QuestionAnswerModel[BigDecimal](s"${keys.improvements}-total",
         total,
         "calc.improvements.questionThree",
-        Some(controllers.routes.ImprovementsController.improvements().url)
+        Some(controllers.routes.ImprovementsController.improvements.url)
       ))
     }
     else if(display) {
@@ -57,7 +57,7 @@ object PropertyDetailsConstructor {
       Some(QuestionAnswerModel[BigDecimal](s"${keys.improvements}-total",
         total,
         "calc.improvements.questionTwo",
-        Some(controllers.routes.ImprovementsController.improvements().url)
+        Some(controllers.routes.ImprovementsController.improvements.url)
       ))
     }
     else None
@@ -68,7 +68,7 @@ object PropertyDetailsConstructor {
       Some(QuestionAnswerModel[BigDecimal](s"${keys.improvements}-after",
         answers.improvementsModel.improvementsAmtAfter.getOrElse(0),
         "calc.improvements.questionFour",
-        Some(controllers.routes.ImprovementsController.improvements().url)
+        Some(controllers.routes.ImprovementsController.improvements.url)
       ))
     }
     else None

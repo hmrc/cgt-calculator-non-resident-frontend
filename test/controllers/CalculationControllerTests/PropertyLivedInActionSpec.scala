@@ -125,7 +125,7 @@ class PropertyLivedInActionSpec extends CommonPlaySpec with WithCommonFakeApplic
     "a valid form with the answer 'Yes' is submitted" should {
 
       lazy val target = setupTarget(None)
-      lazy val request = fakeRequestToPOSTWithSession(("propertyLivedIn", "Yes"))
+      lazy val request = fakeRequestToPOSTWithSession(("propertyLivedIn", "Yes")).withMethod("POST")
       lazy val result = target.submitPropertyLivedIn(request)
 
       "return a status of 303" in {
@@ -140,7 +140,7 @@ class PropertyLivedInActionSpec extends CommonPlaySpec with WithCommonFakeApplic
     "a valid form with the answer 'No' is submitted" should {
 
       lazy val target = setupTarget(None)
-      lazy val request = fakeRequestToPOSTWithSession(("propertyLivedIn", "No"))
+      lazy val request = fakeRequestToPOSTWithSession(("propertyLivedIn", "No")).withMethod("POST")
       lazy val result = target.submitPropertyLivedIn(request)
 
       "return a status of 303" in {

@@ -48,7 +48,7 @@ class AcquisitionValueController @Inject()(http: DefaultHttpClient,
     acquisitionValueForm.bindFromRequest.fold(
       errors => Future.successful(BadRequest(acquisitionValueView(errors))),
       success => {
-        calcConnector.saveFormData(KeystoreKeys.acquisitionValue, success).map(_ => Redirect(routes.AcquisitionCostsController.acquisitionCosts()))
+        calcConnector.saveFormData(KeystoreKeys.acquisitionValue, success).map(_ => Redirect(routes.AcquisitionCostsController.acquisitionCosts))
       }
     )
   }

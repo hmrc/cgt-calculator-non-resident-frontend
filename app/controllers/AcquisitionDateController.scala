@@ -56,9 +56,9 @@ class  AcquisitionDateController @Inject()(http: DefaultHttpClient,
     def successAction(model: DateModel) = {
       calcConnector.saveFormData(KeystoreKeys.acquisitionDate, model).map(_ =>
         if(TaxDates.dateBeforeLegislationStart(model.day, model.month, model.year)) {
-          Redirect(routes.WorthBeforeLegislationStartController.worthBeforeLegislationStart())
+          Redirect(routes.WorthBeforeLegislationStartController.worthBeforeLegislationStart)
         } else {
-          Redirect(routes.HowBecameOwnerController.howBecameOwner())
+          Redirect(routes.HowBecameOwnerController.howBecameOwner)
         }
       )
     }

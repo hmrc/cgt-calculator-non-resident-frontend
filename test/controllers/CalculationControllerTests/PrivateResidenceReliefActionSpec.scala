@@ -301,7 +301,7 @@ class PrivateResidenceReliefActionSpec
 
       "redirect to the Check Your Answers page" in {
         try {
-          redirectLocation(result).get shouldBe controllers.routes.CheckYourAnswersController.checkYourAnswers().url
+          redirectLocation(result).get shouldBe controllers.routes.CheckYourAnswersController.checkYourAnswers.url
         } catch {
           case ex: Exception =>
         }
@@ -322,7 +322,7 @@ class PrivateResidenceReliefActionSpec
 
       "redirect to the Current Income page" in {
         try {
-          redirectLocation(result).get shouldBe controllers.routes.CurrentIncomeController.currentIncome().url
+          redirectLocation(result).get shouldBe controllers.routes.CurrentIncomeController.currentIncome.url
           fail("Failure should be thrown")
         } catch {
           case ex: Exception =>

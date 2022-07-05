@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -65,7 +65,7 @@
     <h1 class="govuk-heading-xl">@messages("calc.checkYourAnswers.title")</h1>
     <h2 class="govuk-heading-m">@messages("calc.checkYourAnswers.tableHeading")</h2>
     @govukSummaryList(SummaryList(rows = rows))
-    @form(action = controllers.routes.CheckYourAnswersController.submitCheckYourAnswers()) {
+    @form(action = controllers.routes.CheckYourAnswersController.submitCheckYourAnswers) {
         @submitButton()
     }
 }

@@ -44,8 +44,8 @@ class ImprovementsController @Inject()(http: DefaultHttpClient,calcConnector: Ca
   private def improvementsBackUrl(acquisitionDate: Option[DateModel]): Future[String] = {
     acquisitionDate match {
       case Some(data) if TaxDates.dateAfterStart(data.get) =>
-        Future.successful(routes.AcquisitionCostsController.acquisitionCosts().url)
-      case Some(_) => Future.successful(routes.RebasedCostsController.rebasedCosts().url)
+        Future.successful(routes.AcquisitionCostsController.acquisitionCosts.url)
+      case Some(_) => Future.successful(routes.RebasedCostsController.rebasedCosts.url)
       case _ => Future.successful(common.DefaultRoutes.missingDataRoute)
     }
   }
@@ -101,8 +101,8 @@ class ImprovementsController @Inject()(http: DefaultHttpClient,calcConnector: Ca
       totalGainResultsModel match {
         case Some(model) =>
           val totalGainResults: Seq[BigDecimal] = Seq(model.flatGain) ++ Seq(model.rebasedGain, model.timeApportionedGain).flatten
-          if(!totalGainResults.forall(_ <= 0)) Redirect(routes.PropertyLivedInController.propertyLivedIn())
-          else Redirect(routes.CheckYourAnswersController.checkYourAnswers())
+          if(!totalGainResults.forall(_ <= 0)) Redirect(routes.PropertyLivedInController.propertyLivedIn)
+          else Redirect(routes.CheckYourAnswersController.checkYourAnswers)
         case None => Redirect(common.DefaultRoutes.missingDataRoute)
       }
     }

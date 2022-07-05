@@ -117,10 +117,10 @@ class PersonalAndPreviousDetailsConstructorSpec extends CommonPlaySpec with With
         }
       }
 
-      s"return a link of ${routes.CurrentIncomeController.currentIncome().url}" in {
+      s"return a link of ${routes.CurrentIncomeController.currentIncome.url}" in {
         result.fold(cancel("expected result not computed")) { item =>
           item.link.fold(cancel("link not supplied when expected")) { link =>
-            link shouldBe routes.CurrentIncomeController.currentIncome().url
+            link shouldBe routes.CurrentIncomeController.currentIncome.url
           }
         }
       }
@@ -156,10 +156,10 @@ class PersonalAndPreviousDetailsConstructorSpec extends CommonPlaySpec with With
         }
       }
 
-      s"return a link of ${routes.PersonalAllowanceController.personalAllowance().url}" in {
+      s"return a link of ${routes.PersonalAllowanceController.personalAllowance.url}" in {
         result.fold(cancel("expected result not computed")) { item =>
           item.link.fold(cancel("link not supplied when expected")) { link =>
-            link shouldBe routes.PersonalAllowanceController.personalAllowance().url
+            link shouldBe routes.PersonalAllowanceController.personalAllowance.url
           }
         }
       }
@@ -204,10 +204,10 @@ class PersonalAndPreviousDetailsConstructorSpec extends CommonPlaySpec with With
         }
       }
 
-      s"return a link of ${routes.OtherPropertiesController.otherProperties().url}" in {
+      s"return a link of ${routes.OtherPropertiesController.otherProperties.url}" in {
         result.fold(cancel("expected result not computed")) { item =>
           item.link.fold(cancel("link not supplied when expected")) { link =>
-            link shouldBe routes.OtherPropertiesController.otherProperties().url
+            link shouldBe routes.OtherPropertiesController.otherProperties.url
           }
         }
       }
@@ -239,10 +239,10 @@ class PersonalAndPreviousDetailsConstructorSpec extends CommonPlaySpec with With
         }
       }
 
-      s"return a link of ${routes.OtherPropertiesController.otherProperties().url}" in {
+      s"return a link of ${routes.OtherPropertiesController.otherProperties.url}" in {
         result.fold(cancel("expected result not computed")) { item =>
           item.link.fold(cancel("link not supplied when expected")) { link =>
-            link shouldBe routes.OtherPropertiesController.otherProperties().url
+            link shouldBe routes.OtherPropertiesController.otherProperties.url
           }
         }
       }
@@ -279,10 +279,10 @@ class PersonalAndPreviousDetailsConstructorSpec extends CommonPlaySpec with With
         }
       }
 
-      s"return a link of ${routes.PreviousGainOrLossController.previousGainOrLoss().url}" in {
+      s"return a link of ${routes.PreviousGainOrLossController.previousGainOrLoss.url}" in {
         result.fold(cancel("expected result not computed")) { item =>
           item.link.fold(cancel("link not supplied when expected")) { link =>
-            link shouldBe routes.PreviousGainOrLossController.previousGainOrLoss().url
+            link shouldBe routes.PreviousGainOrLossController.previousGainOrLoss.url
           }
         }
       }
@@ -316,10 +316,10 @@ class PersonalAndPreviousDetailsConstructorSpec extends CommonPlaySpec with With
         }
       }
 
-      s"return a link of ${routes.PreviousGainOrLossController.previousGainOrLoss().url}" in {
+      s"return a link of ${routes.PreviousGainOrLossController.previousGainOrLoss.url}" in {
         result.fold(cancel("expected result not computed")) { item =>
           item.link.fold(cancel("link not supplied when expected")) { link =>
-            link shouldBe routes.PreviousGainOrLossController.previousGainOrLoss().url
+            link shouldBe routes.PreviousGainOrLossController.previousGainOrLoss.url
           }
         }
       }
@@ -353,10 +353,10 @@ class PersonalAndPreviousDetailsConstructorSpec extends CommonPlaySpec with With
         }
       }
 
-      s"return a link of ${routes.PreviousGainOrLossController.previousGainOrLoss().url}" in {
+      s"return a link of ${routes.PreviousGainOrLossController.previousGainOrLoss.url}" in {
         result.fold(cancel("expected result not computed")) { item =>
           item.link.fold(cancel("link not supplied when expected")) { link =>
-            link shouldBe routes.PreviousGainOrLossController.previousGainOrLoss().url
+            link shouldBe routes.PreviousGainOrLossController.previousGainOrLoss.url
           }
         }
       }
@@ -405,10 +405,10 @@ class PersonalAndPreviousDetailsConstructorSpec extends CommonPlaySpec with With
         }
       }
 
-      s"return a link of ${routes.HowMuchLossController.howMuchLoss().url}" in {
+      s"return a link of ${routes.HowMuchLossController.howMuchLoss.url}" in {
         result.fold(cancel("expected result not computed")) { item =>
           item.link.fold(cancel("link not supplied when expected")) { link =>
-            link shouldBe routes.HowMuchLossController.howMuchLoss().url
+            link shouldBe routes.HowMuchLossController.howMuchLoss.url
           }
         }
       }
@@ -470,10 +470,10 @@ class PersonalAndPreviousDetailsConstructorSpec extends CommonPlaySpec with With
         }
       }
 
-      s"return a link of ${routes.HowMuchGainController.howMuchGain().url}" in {
+      s"return a link of ${routes.HowMuchGainController.howMuchGain.url}" in {
         result.fold(cancel("expected result not computed")) { item =>
           item.link.fold(cancel("link not supplied when expected")) { link =>
-            link shouldBe routes.HowMuchGainController.howMuchGain().url
+            link shouldBe routes.HowMuchGainController.howMuchGain.url
           }
         }
       }
@@ -537,10 +537,10 @@ class PersonalAndPreviousDetailsConstructorSpec extends CommonPlaySpec with With
         }
       }
 
-      s"return a link of ${routes.AnnualExemptAmountController.annualExemptAmount().url}" in {
+      s"return a link of ${routes.AnnualExemptAmountController.annualExemptAmount.url}" in {
         result.fold(cancel("expected result not computed")) { item =>
           item.link.fold(cancel("link not supplied when expected")) { link =>
-            link shouldBe routes.AnnualExemptAmountController.annualExemptAmount().url
+            link shouldBe routes.AnnualExemptAmountController.annualExemptAmount.url
           }
         }
       }
@@ -577,10 +577,10 @@ class PersonalAndPreviousDetailsConstructorSpec extends CommonPlaySpec with With
         }
       }
 
-      s"return a link of ${routes.AnnualExemptAmountController.annualExemptAmount().url}" in {
+      s"return a link of ${routes.AnnualExemptAmountController.annualExemptAmount.url}" in {
         result.fold(cancel("expected result not computed")) { item =>
           item.link.fold(cancel("link not supplied when expected")) { link =>
-            link shouldBe routes.AnnualExemptAmountController.annualExemptAmount().url
+            link shouldBe routes.AnnualExemptAmountController.annualExemptAmount.url
           }
         }
       }
@@ -617,10 +617,10 @@ class PersonalAndPreviousDetailsConstructorSpec extends CommonPlaySpec with With
         }
       }
 
-      s"return a link of ${routes.AnnualExemptAmountController.annualExemptAmount().url}" in {
+      s"return a link of ${routes.AnnualExemptAmountController.annualExemptAmount.url}" in {
         result.fold(cancel("expected result not computed")) { item =>
           item.link.fold(cancel("link not supplied when expected")) { link =>
-            link shouldBe routes.AnnualExemptAmountController.annualExemptAmount().url
+            link shouldBe routes.AnnualExemptAmountController.annualExemptAmount.url
           }
         }
       }
@@ -669,10 +669,10 @@ class PersonalAndPreviousDetailsConstructorSpec extends CommonPlaySpec with With
         }
       }
 
-      s"return a link of ${routes.BroughtForwardLossesController.broughtForwardLosses().url}" in {
+      s"return a link of ${routes.BroughtForwardLossesController.broughtForwardLosses.url}" in {
         result.fold(cancel("expected result not computed")) { item =>
           item.link.fold(cancel("link not supplied when expected")) { link =>
-            link shouldBe routes.BroughtForwardLossesController.broughtForwardLosses().url
+            link shouldBe routes.BroughtForwardLossesController.broughtForwardLosses.url
           }
         }
       }
@@ -704,10 +704,10 @@ class PersonalAndPreviousDetailsConstructorSpec extends CommonPlaySpec with With
         }
       }
 
-      s"return a link of ${routes.BroughtForwardLossesController.broughtForwardLosses().url}" in {
+      s"return a link of ${routes.BroughtForwardLossesController.broughtForwardLosses.url}" in {
         result.fold(cancel("expected result not computed")) { item =>
           item.link.fold(cancel("link not supplied when expected")) { link =>
-            link shouldBe routes.BroughtForwardLossesController.broughtForwardLosses().url
+            link shouldBe routes.BroughtForwardLossesController.broughtForwardLosses.url
           }
         }
       }
@@ -742,10 +742,10 @@ class PersonalAndPreviousDetailsConstructorSpec extends CommonPlaySpec with With
         }
       }
 
-      s"return a link of ${routes.BroughtForwardLossesController.broughtForwardLosses().url}" in {
+      s"return a link of ${routes.BroughtForwardLossesController.broughtForwardLosses.url}" in {
         result.fold(cancel("expected result not computed")) { item =>
           item.link.fold(cancel("link not supplied when expected")) { link =>
-            link shouldBe routes.BroughtForwardLossesController.broughtForwardLosses().url
+            link shouldBe routes.BroughtForwardLossesController.broughtForwardLosses.url
           }
         }
       }

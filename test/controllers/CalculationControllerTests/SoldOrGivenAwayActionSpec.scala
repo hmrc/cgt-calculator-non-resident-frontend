@@ -125,7 +125,7 @@ class SoldOrGivenAwayActionSpec extends CommonPlaySpec with WithCommonFakeApplic
 
     "a valid form is submitted with Yes" should {
       val target = setUpTarget(None)
-      lazy val request = fakeRequestToPOSTWithSession("soldIt" -> "Yes")
+      lazy val request = fakeRequestToPOSTWithSession("soldIt" -> "Yes").withMethod("POST")
       lazy val result = target.submitSoldOrGivenAway(request)
 
       "return a 303 response" in {
@@ -133,13 +133,13 @@ class SoldOrGivenAwayActionSpec extends CommonPlaySpec with WithCommonFakeApplic
       }
 
       "redirect to the Sold For Less Page" in{
-        redirectLocation(result).get shouldBe controllers.routes.SoldForLessController.soldForLess().url
+        redirectLocation(result).get shouldBe controllers.routes.SoldForLessController.soldForLess.url
       }
     }
 
     "a valid form is submitted with No" should {
       val target = setUpTarget(None)
-      lazy val request = fakeRequestToPOSTWithSession("soldIt" -> "No")
+      lazy val request = fakeRequestToPOSTWithSession("soldIt" -> "No").withMethod("POST")
       lazy val result = target.submitSoldOrGivenAway(request)
 
       "return a 303 response" in {
@@ -147,7 +147,7 @@ class SoldOrGivenAwayActionSpec extends CommonPlaySpec with WithCommonFakeApplic
       }
 
       "redirect to the Who Did You Give This To Page" in{
-        redirectLocation(result).get shouldBe controllers.routes.WhoDidYouGiveItToController.whoDidYouGiveItTo().url
+        redirectLocation(result).get shouldBe controllers.routes.WhoDidYouGiveItToController.whoDidYouGiveItTo.url
       }
     }
 

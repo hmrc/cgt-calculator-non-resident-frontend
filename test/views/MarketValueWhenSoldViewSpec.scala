@@ -89,8 +89,8 @@ class MarketValueWhenSoldViewSpec extends CommonPlaySpec with WithCommonFakeAppl
           form.attr("method") shouldBe "POST"
         }
 
-        s"has an action of '${controllers.routes.MarketValueWhenSoldOrGaveAwayController.submitMarketValueWhenSold()}'" in {
-          form.attr("action") shouldBe controllers.routes.MarketValueWhenSoldOrGaveAwayController.submitMarketValueWhenSold().url
+        s"has an action of '${controllers.routes.MarketValueWhenSoldOrGaveAwayController.submitMarketValueWhenSold}'" in {
+          form.attr("action") shouldBe controllers.routes.MarketValueWhenSoldOrGaveAwayController.submitMarketValueWhenSold.url
         }
 
         s"has the hidden text ${MessageLookup.NonResident.MarketValue.disposalSoldQuestion}" in {

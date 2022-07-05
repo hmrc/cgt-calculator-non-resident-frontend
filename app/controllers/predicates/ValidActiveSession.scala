@@ -32,7 +32,7 @@ trait ValidActiveSession extends FrontendController {
     def async(action: AsyncRequest): Action[AnyContent] = {
       Action.async { implicit request =>
         if (request.session.get(SessionKeys.sessionId).isEmpty) {
-          Future.successful(Redirect(routes.TimeoutController.timeout()))
+          Future.successful(Redirect(routes.TimeoutController.timeout))
         } else {
           action(request)
         }

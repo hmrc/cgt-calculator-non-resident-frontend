@@ -124,7 +124,7 @@ class BoughtForLessActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
   "Calling .submitBoughtForLess" when {
 
     "submitting a valid form with an answer of Yes" should {
-      lazy val request = fakeRequestToPOSTWithSession(("boughtForLess", "Yes"))
+      lazy val request = fakeRequestToPOSTWithSession(("boughtForLess", "Yes")).withMethod("POST")
       lazy val target = setupTarget(None)
       lazy val result = target.submitBoughtForLess(request)
 
@@ -133,12 +133,12 @@ class BoughtForLessActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
       }
 
       "redirect to the worthWhenBoughtForLess page" in {
-        redirectLocation(result) shouldBe Some(controllers.routes.WorthWhenBoughtForLessController.worthWhenBoughtForLess().url)
+        redirectLocation(result) shouldBe Some(controllers.routes.WorthWhenBoughtForLessController.worthWhenBoughtForLess.url)
       }
     }
 
     "submitting a valid form with an answer of No" should {
-      lazy val request = fakeRequestToPOSTWithSession(("boughtForLess", "No"))
+      lazy val request = fakeRequestToPOSTWithSession(("boughtForLess", "No")).withMethod("POST")
       lazy val target = setupTarget(None)
       lazy val result = target.submitBoughtForLess(request)
 
@@ -147,7 +147,7 @@ class BoughtForLessActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
       }
 
       "redirect to the acquisitionValue page" in {
-        redirectLocation(result) shouldBe Some(controllers.routes.AcquisitionValueController.acquisitionValue().url)
+        redirectLocation(result) shouldBe Some(controllers.routes.AcquisitionValueController.acquisitionValue.url)
       }
     }
 

@@ -77,8 +77,8 @@ class ImprovementsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
           }
         }
 
-        s"have a home link to '${controllers.routes.DisposalDateController.disposalDate().url}'" in {
-          document.getElementsByClass("govuk-header__link govuk-header__link--service-name").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate().url
+        s"have a home link to '${controllers.routes.DisposalDateController.disposalDate.url}'" in {
+          document.getElementsByClass("hmrc-header__service-name hmrc-header__service-name--linked").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate.url
         }
 
         "have hint text" which {
@@ -118,8 +118,8 @@ class ImprovementsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
             form.attr("method") shouldBe "POST"
           }
 
-          s"has an action of '${routes.ImprovementsController.submitImprovements().url}'" in {
-            form.attr("action") shouldBe controllers.routes.ImprovementsController.submitImprovements().url
+          s"has an action of '${routes.ImprovementsController.submitImprovements.url}'" in {
+            form.attr("action") shouldBe controllers.routes.ImprovementsController.submitImprovements.url
           }
         }
 

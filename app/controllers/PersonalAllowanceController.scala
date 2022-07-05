@@ -74,7 +74,7 @@ class PersonalAllowanceController @Inject()(http: DefaultHttpClient,calcConnecto
 
     def successAction(model: PersonalAllowanceModel) = {
       calcConnector.saveFormData[PersonalAllowanceModel](KeystoreKeys.personalAllowance, model).map(_ =>
-        Redirect(routes.OtherPropertiesController.otherProperties()))
+        Redirect(routes.OtherPropertiesController.otherProperties))
     }
 
     (for {

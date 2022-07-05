@@ -53,7 +53,7 @@ class CostsAtLegislationStartController @Inject()(http: DefaultHttpClient,calcCo
 
     def successAction(model: CostsAtLegislationStartModel) = {
       calcConnector.saveFormData(KeystoreKeys.costAtLegislationStart, model).map { _ =>
-        Redirect(routes.RebasedValueController.rebasedValue())
+        Redirect(routes.RebasedValueController.rebasedValue)
       }
     }
 

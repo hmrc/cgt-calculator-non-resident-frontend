@@ -74,8 +74,8 @@ class OtherReliefsTAViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
           form.attr("method") shouldBe "POST"
         }
 
-        s"has an action of '${controllers.routes.OtherReliefsTAController.otherReliefsTA().url}'" in {
-          form.attr("action") shouldBe controllers.routes.OtherReliefsTAController.otherReliefsTA().url
+        s"has an action of '${controllers.routes.OtherReliefsTAController.otherReliefsTA.url}'" in {
+          form.attr("action") shouldBe controllers.routes.OtherReliefsTAController.otherReliefsTA.url
         }
       }
 

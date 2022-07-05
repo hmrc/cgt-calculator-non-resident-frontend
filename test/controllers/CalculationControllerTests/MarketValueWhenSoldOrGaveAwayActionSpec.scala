@@ -180,7 +180,7 @@ class MarketValueWhenSoldOrGaveAwayActionSpec extends CommonPlaySpec with WithCo
   "The submitMarketValueWhenSold action" when {
     "submitting a valid form" should {
       val target = setupTarget(None)
-      lazy val request = fakeRequestToPOSTWithSession(("disposalValue", "1000"))
+      lazy val request = fakeRequestToPOSTWithSession(("disposalValue", "1000")).withMethod("POST")
       lazy val result = target.submitMarketValueWhenSold(request)
 
       "return a 303" in {
@@ -188,7 +188,7 @@ class MarketValueWhenSoldOrGaveAwayActionSpec extends CommonPlaySpec with WithCo
       }
 
       "redirect to the DisposalCosts page" in {
-        redirectLocation(result) shouldBe Some(controllers.routes.DisposalCostsController.disposalCosts().url)
+        redirectLocation(result) shouldBe Some(controllers.routes.DisposalCostsController.disposalCosts.url)
       }
     }
   }
@@ -196,7 +196,7 @@ class MarketValueWhenSoldOrGaveAwayActionSpec extends CommonPlaySpec with WithCo
   "The submitMarketValueWhenGaveAway action" when {
     "submitting a valid form" should {
       val target = setupTarget(None)
-      lazy val request = fakeRequestToPOSTWithSession(("disposalValue", "1000"))
+      lazy val request = fakeRequestToPOSTWithSession(("disposalValue", "1000")).withMethod("POST")
       lazy val result = target.submitMarketValueWhenGaveAway(request)
 
       "return a 303" in {
@@ -204,14 +204,14 @@ class MarketValueWhenSoldOrGaveAwayActionSpec extends CommonPlaySpec with WithCo
       }
 
       "redirect to the DisposalCosts page" in {
-        redirectLocation(result) shouldBe Some(controllers.routes.DisposalCostsController.disposalCosts().url)
+        redirectLocation(result) shouldBe Some(controllers.routes.DisposalCostsController.disposalCosts.url)
       }
     }
 
 
     "supplied with an invalid form" should {
       lazy val target = setupTarget(None)
-      lazy val request = fakeRequestToPOSTWithSession(("disposalValue", "invalid text"))
+      lazy val request = fakeRequestToPOSTWithSession(("disposalValue", "invalid text")).withMethod("POST")
       lazy val result = target.submitMarketValueWhenGaveAway(request)
       lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 

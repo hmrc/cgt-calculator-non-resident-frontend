@@ -127,29 +127,29 @@ class CurrentIncomeActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
 
     "submitting a valid form" should {
       val target = setupTarget(None)
-      lazy val request = fakeRequestToPOSTWithSession(("currentIncome", "1000"))
+      lazy val request = fakeRequestToPOSTWithSession(("currentIncome", "1000")).withMethod("POST")
       lazy val result = target.submitCurrentIncome(request)
 
       "return a 303" in {
         status(result) shouldBe 303
       }
 
-      s"redirect to ${routes.PersonalAllowanceController.personalAllowance()}" in {
-        redirectLocation(result) shouldBe Some(s"${routes.PersonalAllowanceController.personalAllowance()}")
+      s"redirect to ${routes.PersonalAllowanceController.personalAllowance}" in {
+        redirectLocation(result) shouldBe Some(s"${routes.PersonalAllowanceController.personalAllowance}")
       }
     }
 
     "submitting a valid form with a £0 amount" should {
       val target = setupTarget(None)
-      lazy val request = fakeRequestToPOSTWithSession(("currentIncome", "0"))
+      lazy val request = fakeRequestToPOSTWithSession(("currentIncome", "0")).withMethod("POST")
       lazy val result = target.submitCurrentIncome(request)
 
       "return a 303" in {
         status(result) shouldBe 303
       }
 
-      s"redirect to ${routes.OtherPropertiesController.otherProperties()}" in {
-        redirectLocation(result) shouldBe Some(s"${routes.OtherPropertiesController.otherProperties()}")
+      s"redirect to ${routes.OtherPropertiesController.otherProperties}" in {
+        redirectLocation(result) shouldBe Some(s"${routes.OtherPropertiesController.otherProperties}")
       }
     }
 
