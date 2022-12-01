@@ -24,7 +24,6 @@ object AppDependencies {
   val playPartialsVersion      = "8.3.0-play-28"
   val httpCachingClientVersion = "9.6.0-play-28"
   val play2PdfVersion          = "1.10.0"
-  val mongoCachingVersion      = "7.1.0-play-28"
   val playLanguageVersion      = "5.3.0-play-28"
   val playFrontendVersion      = "3.21.0-play-28"
 
@@ -34,7 +33,6 @@ object AppDependencies {
     "uk.gov.hmrc"     %% "play-frontend-hmrc"           % playFrontendVersion,
     "uk.gov.hmrc"     %% "play-partials"                % playPartialsVersion,
     "uk.gov.hmrc"     %% "http-caching-client"          % httpCachingClientVersion,
-    "uk.gov.hmrc"     %% "mongo-caching"                % mongoCachingVersion,
     "uk.gov.hmrc"     %% "play-language"                % playLanguageVersion,
     "it.innove"       % "play2-pdf"                     % play2PdfVersion exclude("com.typesafe.play","*"),
     nettyServer
