@@ -18,7 +18,6 @@ package forms
 
 import assets.KeyLookup.NonResident.{AcquisitionValue => messages}
 import common.{Constants, CommonPlaySpec, WithCommonFakeApplication}
-import assets.KeyLookup.{NonResident => common}
 import forms.AcquisitionValueForm._
 import models.AcquisitionValueModel
 
@@ -57,14 +56,14 @@ class AcquisitionValueFormSpec extends CommonPlaySpec with WithCommonFakeApplica
 
   "Creating a form using an invalid map" when {
     "supplied with no data" should {
-      val message = common.errorRealNumber
+      val message = messages.errorReal
       val data = ""
 
       checkMessageAndError(message, data)
     }
 
     "supplied with data of the wrong format (incorrect value for acquisitionValue...)" should {
-      val message = common.errorRealNumber
+      val message = messages.errorReal
       val data = "junk text"
 
       checkMessageAndError(message, data)
@@ -94,8 +93,7 @@ class AcquisitionValueFormSpec extends CommonPlaySpec with WithCommonFakeApplica
         form.errors.size shouldBe 1
       }
       "return the correct error" in {
-        form.error("acquisitionValue").get.message shouldBe "calc.common.error.maxNumericExceeded"
-        form.error("acquisitionValue").get.args shouldBe Array("1,000,000,000")
+        form.error("acquisitionValue").get.message shouldBe messages.errorMax
       }
     }
   }

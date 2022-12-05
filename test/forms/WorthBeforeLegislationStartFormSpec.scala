@@ -16,8 +16,7 @@
 
 package forms
 
-import assets.KeyLookup.NonResident.{AcquisitionMarketValue => messages}
-import assets.KeyLookup.{NonResident => commonMessages}
+import assets.KeyLookup.NonResident.{WorthBeforeLegislationStart => messages}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import models.WorthBeforeLegislationStartModel
 import forms.WorthBeforeLegislationStartForm._
@@ -58,8 +57,8 @@ class WorthBeforeLegislationStartFormSpec extends CommonPlaySpec with WithCommon
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of ${commonMessages.errorRealNumber}" in {
-        form.error("worthBeforeLegislationStart").get.message shouldBe commonMessages.errorRealNumber
+      s"return an error message of ${messages.errorReal}" in {
+        form.error("worthBeforeLegislationStart").get.message shouldBe messages.errorReal
       }
     }
 
@@ -71,8 +70,7 @@ class WorthBeforeLegislationStartFormSpec extends CommonPlaySpec with WithCommon
       }
 
       s"return the correct error message" in {
-        form.error("worthBeforeLegislationStart").get.message shouldBe "calc.common.error.maxNumericExceeded"
-        form.error("worthBeforeLegislationStart").get.args shouldBe Array("1,000,000,000")
+        form.error("worthBeforeLegislationStart").get.message shouldBe messages.errorMax
       }
     }
 

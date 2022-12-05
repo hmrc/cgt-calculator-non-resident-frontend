@@ -19,7 +19,7 @@ package controllers
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
-import forms.AcquisitionMarketValueForm._
+import forms.WorthWhenInherited.worthWhenInheritedForm
 import javax.inject.Inject
 import models.AcquisitionValueModel
 import play.api.data.Form
@@ -39,8 +39,8 @@ class WorthWhenInheritedController @Inject()(http: DefaultHttpClient,calcConnect
 
   val worthWhenInherited = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[AcquisitionValueModel](KeystoreKeys.acquisitionMarketValue).map {
-      case Some(data) => Ok(worthWhenInheritedView(acquisitionMarketValueForm.fill(data)))
-      case None => Ok(worthWhenInheritedView(acquisitionMarketValueForm))
+      case Some(data) => Ok(worthWhenInheritedView(worthWhenInheritedForm.fill(data)))
+      case None => Ok(worthWhenInheritedView(worthWhenInheritedForm))
     }
   }
 
@@ -53,6 +53,6 @@ class WorthWhenInheritedController @Inject()(http: DefaultHttpClient,calcConnect
         Redirect(routes.AcquisitionCostsController.acquisitionCosts))
     }
 
-    acquisitionMarketValueForm.bindFromRequest.fold(errorAction, successAction)
+    worthWhenInheritedForm.bindFromRequest.fold(errorAction, successAction)
   }
 }

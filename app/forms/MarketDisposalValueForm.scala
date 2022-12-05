@@ -16,7 +16,6 @@
 
 package forms
 
-import common.Constants
 import common.Transformers._
 import common.Validation._
 import models.DisposalValueModel
@@ -24,18 +23,20 @@ import play.api.data.Form
 import play.api.data.Forms._
 
 trait MarketDisposalValueForm {
+  val errorReal: String
+  val errorMax: String
   val errorNegative: String
   val errorDecimalPlaces: String
 
   val marketValueForm = Form(
     mapping(
       "disposalValue" -> text
-        .verifying("error.real", mandatoryCheck)
-        .verifying("error.real", bigDecimalCheck)
+        .verifying(errorReal, mandatoryCheck)
+        .verifying(errorReal, bigDecimalCheck)
         .transform(stringToBigDecimal, bigDecimalToString)
         .verifying(errorNegative, isPositive)
         .verifying(errorDecimalPlaces, decimalPlacesCheck)
-        .verifying(maxMonetaryValueConstraint(Constants.maxNumeric))
+        .verifying(errorMax, maxCheck)
     )(DisposalValueModel.apply)(DisposalValueModel.unapply)
     )
 }

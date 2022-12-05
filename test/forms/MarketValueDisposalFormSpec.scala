@@ -57,7 +57,7 @@ class MarketValueDisposalFormSpec extends CommonPlaySpec with WithCommonFakeAppl
       }
 
       "associate the correct error message to the error" in {
-        form.error("disposalValue").get.message shouldBe messages.errorRealNumber
+        form.error("disposalValue").get.message shouldBe marketValueMessages.disposalErrorRealPlacesGaveAway
       }
     }
 
@@ -75,7 +75,7 @@ class MarketValueDisposalFormSpec extends CommonPlaySpec with WithCommonFakeAppl
       }
 
       "associate the correct error message to the error" in {
-        form.error("disposalValue").get.message shouldBe messages.errorRealNumber
+        form.error("disposalValue").get.message shouldBe marketValueMessages.disposalErrorRealPlacesGaveAway
       }
     }
 
@@ -92,7 +92,7 @@ class MarketValueDisposalFormSpec extends CommonPlaySpec with WithCommonFakeAppl
       }
 
       "associate the correct error message to the error" in {
-        form.error("disposalValue").get.message shouldBe messages.errorRealNumber
+        form.error("disposalValue").get.message shouldBe marketValueMessages.disposalErrorRealPlacesGaveAway
       }
     }
 
@@ -144,8 +144,7 @@ class MarketValueDisposalFormSpec extends CommonPlaySpec with WithCommonFakeAppl
       }
 
       "associate the correct error message to the error" in {
-        form.error("disposalValue").get.message shouldBe "calc.common.error.maxNumericExceeded"
-        form.error("disposalValue").get.args shouldBe Array("1,000,000,000")
+        form.error("disposalValue").get.message shouldBe marketValueMessages.disposalErrorMaxPlacesGaveAway
       }
     }
 

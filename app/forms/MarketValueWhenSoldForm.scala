@@ -17,6 +17,8 @@
 package forms
 
 object MarketValueWhenSoldForm extends MarketDisposalValueForm {
+  override val errorReal: String = "calc.marketValue.error.sold.errorReal"
+  override val errorMax: String = "calc.marketValue.error.sold.errorMax"
   override val errorNegative = "calc.marketValue.error.sold.negative"
   override val errorDecimalPlaces = "calc.marketValue.error.sold.decimalPlaces"
 

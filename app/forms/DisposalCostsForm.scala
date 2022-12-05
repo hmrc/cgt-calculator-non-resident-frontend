@@ -16,7 +16,6 @@
 
 package forms
 
-import common.Constants
 import common.Transformers._
 import common.Validation._
 import models.DisposalCostsModel
@@ -27,12 +26,12 @@ object DisposalCostsForm {
   val disposalCostsForm = Form(
     mapping(
       "disposalCosts" -> text
-        .verifying("error.real", mandatoryCheck)
-        .verifying("error.real", bigDecimalCheck)
+        .verifying("calc.disposalCosts.errorReal", mandatoryCheck)
+        .verifying("calc.disposalCosts.errorReal", bigDecimalCheck)
         .transform(stringToBigDecimal, bigDecimalToString)
         .verifying("calc.disposalCosts.errorNegativeNumber", costs => isPositive(costs))
         .verifying("calc.disposalCosts.errorDecimalPlaces", costs => decimalPlacesCheck(costs))
-        .verifying(maxMonetaryValueConstraint(Constants.maxNumeric))
+        .verifying("calc.disposalCosts.errorMax", maxCheck)
     )(DisposalCostsModel.apply)(DisposalCostsModel.unapply)
   )
 }

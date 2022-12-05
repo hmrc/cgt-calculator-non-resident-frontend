@@ -80,8 +80,8 @@ class OtherReliefsFormSpec extends CommonPlaySpec with WithCommonFakeApplication
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of ${messages.errorRealNumber}" in {
-        form.error("otherReliefs").get.message shouldBe messages.errorRealNumber
+      s"return an error message of ${messages.OtherReliefs.errorReal}" in {
+        form.error("otherReliefs").get.message shouldBe messages.OtherReliefs.errorReal
       }
     }
 
@@ -95,8 +95,8 @@ class OtherReliefsFormSpec extends CommonPlaySpec with WithCommonFakeApplication
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of ${messages.errorRealNumber}" in {
-        form.error("otherReliefs").get.message shouldBe messages.errorRealNumber
+      s"return an error message of ${messages.OtherReliefs.errorReal}" in {
+        form.error("otherReliefs").get.message shouldBe messages.OtherReliefs.errorReal
       }
     }
 
@@ -141,8 +141,7 @@ class OtherReliefsFormSpec extends CommonPlaySpec with WithCommonFakeApplication
       }
 
       s"return the correct error message" in {
-        form.error("otherReliefs").get.message shouldBe "calc.common.error.maxNumericExceeded"
-        form.error("otherReliefs").get.args shouldBe Array("1,000,000,000")
+        form.error("otherReliefs").get.message shouldBe messages.OtherReliefs.errorMax
       }
     }
 

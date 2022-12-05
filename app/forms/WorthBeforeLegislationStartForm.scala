@@ -16,7 +16,6 @@
 
 package forms
 
-import common.Constants
 import common.Transformers._
 import common.Validation._
 import models.WorthBeforeLegislationStartModel
@@ -28,12 +27,12 @@ object WorthBeforeLegislationStartForm {
   val worthBeforeLegislationStartForm: Form[WorthBeforeLegislationStartModel] = Form(
     mapping(
       "worthBeforeLegislationStart" -> text
-        .verifying("error.real", mandatoryCheck)
-        .verifying("error.real", bigDecimalCheck)
+        .verifying("calc.worthBeforeLegislationStart.errorReal", mandatoryCheck)
+        .verifying("calc.worthBeforeLegislationStart.errorReal", bigDecimalCheck)
         .transform[BigDecimal](stringToBigDecimal, bigDecimalToString)
-        .verifying("calc.acquisitionMarketValue.errorNegative", isPositive)
-        .verifying("calc.acquisitionMarketValue.errorDecimalPlaces", decimalPlacesCheck)
-        .verifying(maxMonetaryValueConstraint(Constants.maxNumeric))
+        .verifying("calc.worthBeforeLegislationStart.errorNegative", isPositive)
+        .verifying("calc.worthBeforeLegislationStart.errorDecimalPlaces", decimalPlacesCheck)
+        .verifying("calc.worthBeforeLegislationStart.errorMax", maxCheck)
     )(WorthBeforeLegislationStartModel.apply)(WorthBeforeLegislationStartModel.unapply)
   )
 

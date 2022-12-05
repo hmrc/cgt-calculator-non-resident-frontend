@@ -16,7 +16,6 @@
 
 package forms
 
-import common.Constants
 import common.Transformers._
 import common.Validation._
 import models.HowMuchLossModel
@@ -28,12 +27,12 @@ object HowMuchLossForm {
   val howMuchLossForm: Form[HowMuchLossModel] = Form(
     mapping(
       "loss" -> text
-        .verifying("calc.common.error.mandatoryAmount", mandatoryCheck)
-        .verifying("calc.common.error.mandatoryAmount", bigDecimalCheck)
+        .verifying("calc.howMuchLoss.errorReal", mandatoryCheck)
+        .verifying("calc.howMuchLoss.errorReal", bigDecimalCheck)
         .transform(stringToBigDecimal, bigDecimalToString)
-        .verifying("calc.howMuchLoss.errorMinimum", isPositive)
+        .verifying("calc.howMuchLoss.errorNegative", isPositive)
         .verifying("calc.howMuchLoss.errorDecimal", decimalPlacesCheck)
-        .verifying(maxMonetaryValueConstraint(Constants.maxNumeric))
+        .verifying("calc.howMuchLoss.errorMax", maxCheck)
     )(HowMuchLossModel.apply)(HowMuchLossModel.unapply)
   )
 }

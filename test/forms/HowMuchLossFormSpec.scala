@@ -55,8 +55,8 @@ class HowMuchLossFormSpec extends CommonPlaySpec with WithCommonFakeApplication 
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.mandatoryAmount}" in {
-        form.error("loss").get.message shouldBe messages.mandatoryAmount
+      s"return an error message of '${messages.HowMuchLoss.errorReal}" in {
+        form.error("loss").get.message shouldBe messages.HowMuchLoss.errorReal
       }
     }
 
@@ -68,8 +68,8 @@ class HowMuchLossFormSpec extends CommonPlaySpec with WithCommonFakeApplication 
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.mandatoryAmount}" in {
-        form.error("loss").get.message shouldBe messages.mandatoryAmount
+      s"return an error message of '${messages.HowMuchLoss.errorReal}" in {
+        form.error("loss").get.message shouldBe messages.HowMuchLoss.errorReal
       }
     }
 
@@ -108,8 +108,7 @@ class HowMuchLossFormSpec extends CommonPlaySpec with WithCommonFakeApplication 
       }
 
       s"return the correct error message" in {
-        form.error("loss").get.message shouldBe "calc.common.error.maxNumericExceeded"
-        form.error("loss").get.args shouldBe Array("1,000,000,000")
+        form.error("loss").get.message shouldBe messages.HowMuchLoss.errorMax
       }
     }
   }

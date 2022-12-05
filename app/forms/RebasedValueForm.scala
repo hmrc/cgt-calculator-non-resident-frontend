@@ -16,7 +16,6 @@
 
 package forms
 
-import common.Constants
 import common.Transformers._
 import common.Validation._
 import models.RebasedValueModel
@@ -29,11 +28,11 @@ object RebasedValueForm {
     mapping(
       "rebasedValueAmt" -> text
         .verifying("calc.nonResident.rebasedValue.error.no.value.supplied", mandatoryCheck)
-        .verifying("error.number", bigDecimalCheck)
+        .verifying("calc.nonResident.rebasedValue.error.no.value.supplied", bigDecimalCheck)
         .transform[BigDecimal](stringToBigDecimal, bigDecimalToString)
         .verifying("calc.nonResident.rebasedValue.errorNegative", data => isPositive(data))
         .verifying("calc.nonResident.rebasedValue.errorDecimalPlaces", data => decimalPlacesCheck(data))
-        .verifying(maxMonetaryValueConstraint(Constants.maxNumeric))
+        .verifying("calc.nonResident.rebasedValue.errorMax", maxCheck)
     )(RebasedValueModel.apply)(RebasedValueModel.unapply)
   )
 }
