@@ -16,7 +16,6 @@
 
 package forms
 
-import common.Constants
 import common.Transformers._
 import common.Validation._
 import models.CurrentIncomeModel
@@ -28,12 +27,12 @@ object CurrentIncomeForm {
   val currentIncomeForm = Form(
     mapping(
       "currentIncome" -> text
-        .verifying("error.real", mandatoryCheck)
-        .verifying("error.real", bigDecimalCheck)
+        .verifying("calc.currentIncome.errorReal", mandatoryCheck)
+        .verifying("calc.currentIncome.errorReal", bigDecimalCheck)
         .transform(stringToBigDecimal, bigDecimalToString)
         .verifying("calc.currentIncome.errorNegative", isPositive)
         .verifying("calc.currentIncome.errorDecimalPlaces", decimalPlacesCheck)
-        .verifying(maxMonetaryValueConstraint(Constants.maxNumeric))
+        .verifying("calc.currentIncome.errorMax", maxCheck)
     )(CurrentIncomeModel.apply)(CurrentIncomeModel.unapply)
   )
 }

@@ -98,8 +98,8 @@ class HowMuchGainFormSpec extends CommonPlaySpec with WithCommonFakeApplication 
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of ${messages.errorRealNumber}" in {
-        form.error("howMuchGain").get.message shouldBe messages.errorRealNumber
+      s"return an error message of ${messages.HowMuchGain.errorReal}" in {
+        form.error("howMuchGain").get.message shouldBe messages.HowMuchGain.errorReal
       }
     }
 
@@ -124,8 +124,8 @@ class HowMuchGainFormSpec extends CommonPlaySpec with WithCommonFakeApplication 
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of ${messages.errorRealNumber}" in {
-        form.error("howMuchGain").get.message shouldBe messages.errorRealNumber
+      s"return an error message of ${messages.HowMuchGain.errorReal}" in {
+        form.error("howMuchGain").get.message shouldBe messages.HowMuchGain.errorReal
       }
     }
   }

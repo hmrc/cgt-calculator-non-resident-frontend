@@ -16,7 +16,6 @@
 
 package forms
 
-import common.Constants
 import common.Transformers._
 import common.Validation._
 import models.HowMuchGainModel
@@ -28,12 +27,12 @@ object HowMuchGainForm {
   val howMuchGainForm = Form(
     mapping(
       "howMuchGain" -> text
-        .verifying("error.real", mandatoryCheck)
-        .verifying("error.real", bigDecimalCheck)
+        .verifying("calc.howMuchGain.errorReal", mandatoryCheck)
+        .verifying("calc.howMuchGain.errorReal", bigDecimalCheck)
         .transform(stringToBigDecimal, bigDecimalToString)
         .verifying("calc.howMuchGain.errorNegative", isPositive)
         .verifying("calc.howMuchGain.errorDecimalPlaces", decimalPlacesCheck)
-        .verifying(maxMonetaryValueConstraint(Constants.maxNumeric))
+        .verifying("calc.howMuchGain.errorMax", maxCheck)
     )(HowMuchGainModel.apply)(HowMuchGainModel.unapply)
   )
 }

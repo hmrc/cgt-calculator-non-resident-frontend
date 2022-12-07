@@ -18,23 +18,19 @@ package forms
 
 import common.Transformers._
 import common.Validation._
-import common.nonresident.MoneyPounds
 import models.AnnualExemptAmountModel
 import play.api.data.Forms._
 import play.api.data._
 
 object AnnualExemptAmountForm {
 
-  def errorMaxMessage(maxAEA: BigDecimal): String =
-    "calc.annualExemptAmount.errorMax" + MoneyPounds(maxAEA, 0).quantity + " " + "calc.annualExemptAmount.errorMaxEnd"
-
   def annualExemptAmountForm(maxAEA: BigDecimal = BigDecimal(0)): Form[AnnualExemptAmountModel] = Form(
     mapping(
       "annualExemptAmount" -> text
-        .verifying("error.real", mandatoryCheck)
-        .verifying("error.real", bigDecimalCheck)
+        .verifying("calc.annualExemptAmount.errorReal", mandatoryCheck)
+        .verifying("calc.annualExemptAmount.errorReal", bigDecimalCheck)
         .transform(stringToBigDecimal, bigDecimalToString)
-        .verifying(maxMonetaryValueConstraint(maxAEA))
+        .verifying(maxMonetaryValueConstraint(maxAEA, "calc.annualExemptAmount.errorMax"))
         .verifying("calc.annualExemptAmount.errorNegative", annualExemptAmount => isPositive(annualExemptAmount))
         .verifying("calc.annualExemptAmount.errorDecimalPlaces", annualExemptAmount => decimalPlacesCheck(annualExemptAmount))
     )(AnnualExemptAmountModel.apply)(AnnualExemptAmountModel.unapply)

@@ -112,8 +112,8 @@ class AnnualExemptAmountFormSpec extends CommonPlaySpec with WithCommonFakeAppli
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.maximumError("maxAEA")}'" in {
-        form.error("annualExemptAmount").get.message shouldBe "calc.common.error.maxNumericExceeded"
+      s"return an error message of '${messages.AnnualExemptAmount.errorMax}'" in {
+        form.error("annualExemptAmount").get.message shouldBe messages.AnnualExemptAmount.errorMax
       }
     }
 
@@ -125,8 +125,8 @@ class AnnualExemptAmountFormSpec extends CommonPlaySpec with WithCommonFakeAppli
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.maximumError("maxAEA")}'"in {
-        form.error("annualExemptAmount").get.message shouldBe "calc.common.error.maxNumericExceeded"
+      s"return an error message of '${messages.AnnualExemptAmount.errorMax}'"in {
+        form.error("annualExemptAmount").get.message shouldBe messages.AnnualExemptAmount.errorMax
       }
     }
 
@@ -138,8 +138,8 @@ class AnnualExemptAmountFormSpec extends CommonPlaySpec with WithCommonFakeAppli
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.errorRealNumber}" in {
-        form.error("annualExemptAmount").get.message shouldBe messages.errorRealNumber
+      s"return an error message of '${messages.AnnualExemptAmount.errorReal}" in {
+        form.error("annualExemptAmount").get.message shouldBe messages.AnnualExemptAmount.errorReal
       }
     }
 
@@ -151,8 +151,8 @@ class AnnualExemptAmountFormSpec extends CommonPlaySpec with WithCommonFakeAppli
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.errorRealNumber}" in {
-        form.error("annualExemptAmount").get.message shouldBe messages.errorRealNumber
+      s"return an error message of '${messages.AnnualExemptAmount.errorReal}" in {
+        form.error("annualExemptAmount").get.message shouldBe messages.AnnualExemptAmount.errorReal
       }
     }
   }

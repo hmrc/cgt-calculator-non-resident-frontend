@@ -95,7 +95,7 @@ object MessageLookup {
       val bulletFour = "bought it for less than it's worth because the seller wanted to help you"
       val bulletFive = "became the owner before 1 April 1982"
       val bulletLink = "someone else you're connected to"
-      val errorNegative = "Enter a positive number for the amount you paid"
+      val errorNegative = "How much you paid for the property must be £0 or more"
       val errorDecimalPlaces = "The amount you paid has too many numbers after the decimal point"
 
       def errorMaximum(value: String): String = s"Enter an amount that's £$value or less"

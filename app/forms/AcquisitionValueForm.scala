@@ -16,7 +16,6 @@
 
 package forms
 
-import common.Constants
 import common.Transformers._
 import common.Validation._
 import models.AcquisitionValueModel
@@ -28,12 +27,12 @@ object AcquisitionValueForm {
   val acquisitionValueForm = Form(
     mapping(
       "acquisitionValue" -> text
-        .verifying("error.real", mandatoryCheck)
-        .verifying("error.real", bigDecimalCheck)
+        .verifying("calc.acquisitionValue.errorReal", mandatoryCheck)
+        .verifying("calc.acquisitionValue.errorReal", bigDecimalCheck)
         .transform(stringToBigDecimal, bigDecimalToString)
         .verifying("calc.acquisitionValue.errorNegative", isPositive)
         .verifying("calc.acquisitionValue.errorDecimalPlaces", decimalPlacesCheck)
-        .verifying(maxMonetaryValueConstraint(Constants.maxNumeric))
+        .verifying("calc.acquisitionValue.errorMax", maxCheck)
     )(AcquisitionValueModel.apply)(AcquisitionValueModel.unapply)
   )
 }

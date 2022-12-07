@@ -21,7 +21,7 @@ import assets.MessageLookup.{NonResident => commonMessages}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
-import forms.AcquisitionMarketValueForm._
+import forms.WorthWhenInherited.worthWhenInheritedForm
 import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
@@ -38,7 +38,7 @@ class WorthWhenInheritedViewSpec extends CommonPlaySpec with WithCommonFakeAppli
 
     "supplied with no errors" should {
 
-      lazy val view = worthWhenInheritedView(acquisitionMarketValueForm)(fakeRequest, mockMessage)
+      lazy val view = worthWhenInheritedView(worthWhenInheritedForm)(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '$pageTitle'" in {
@@ -118,13 +118,13 @@ class WorthWhenInheritedViewSpec extends CommonPlaySpec with WithCommonFakeAppli
       }
 
       "should produce the same output when render and f are called" in {
-        worthWhenInheritedView.f(acquisitionMarketValueForm)(fakeRequest, mockMessage) shouldBe worthWhenInheritedView.render(acquisitionMarketValueForm, fakeRequest, mockMessage)
+        worthWhenInheritedView.f(worthWhenInheritedForm)(fakeRequest, mockMessage) shouldBe worthWhenInheritedView.render(worthWhenInheritedForm, fakeRequest, mockMessage)
       }
     }
 
     "supplied with a form with errors" should {
 
-      lazy val form = acquisitionMarketValueForm.bind(Map("acquisitionMarketValue" -> "a"))
+      lazy val form = worthWhenInheritedForm.bind(Map("acquisitionMarketValue" -> "a"))
       lazy val view = worthWhenInheritedView(form)(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 

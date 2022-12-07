@@ -16,7 +16,6 @@
 
 package forms
 
-import common.Constants
 import common.Validation._
 import common.Transformers._
 import models.OtherReliefsModel
@@ -29,12 +28,12 @@ object OtherReliefsForm {
     Form(
       mapping(
         "otherReliefs" -> text
-          .verifying("error.real", mandatoryCheck)
-          .verifying("error.real", bigDecimalCheck)
+          .verifying("calc.otherReliefs.errorReal", mandatoryCheck)
+          .verifying("calc.otherReliefs.errorReal", bigDecimalCheck)
           .transform(stringToBigDecimal, bigDecimalToString)
-          .verifying("calc.otherReliefs.errorMinimum", isPositive)
+          .verifying("calc.otherReliefs.errorNegative", isPositive)
           .verifying("calc.otherReliefs.errorDecimal", decimalPlacesCheck)
-          .verifying(maxMonetaryValueConstraint(Constants.maxNumeric))
+          .verifying("calc.otherReliefs.errorMax", maxCheck)
       )(OtherReliefsModel.apply)(OtherReliefsModel.unapply)
     )
 }

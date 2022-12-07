@@ -16,11 +16,11 @@
 
 package forms
 
-object MarketValueGaveAwayForm extends MarketDisposalValueForm {
-  override val errorReal: String = "calc.marketValue.error.gaveItAway.errorReal"
-  override val errorMax: String = "calc.marketValue.error.gaveItAway.errorMax"
-  override val errorNegative = "calc.marketValue.error.gaveItAway.negative"
-  override val errorDecimalPlaces = "calc.marketValue.error.gaveItAway.decimalPlaces"
+object WorthWhenBoughtForLess extends AcquisitionMarketValueForm {
+  override val errorReal: String = "calc.worthWhenBoughtForLess.errorReal"
+  override val errorMax: String = "calc.worthWhenBoughtForLess.errorMax"
+  override val errorNegative = "calc.worthWhenBoughtForLess.errorNegative"
+  override val errorDecimalPlaces = "calc.worthWhenBoughtForLess.errorDecimalPlaces"
 
-  val marketValueWhenGaveAwayForm = marketValueForm
+  val worthWhenBoughtForLessForm = acquisitionMarketValueForm
 }

@@ -62,8 +62,8 @@ class PersonalAllowanceFormSpec extends CommonPlaySpec with WithCommonFakeApplic
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.errorRealNumber}" in {
-        form.error("personalAllowance").get.message shouldBe messages.errorRealNumber
+      s"return an error message of '${messages.PersonalAllowance.errorReal}" in {
+        form.error("personalAllowance").get.message shouldBe messages.PersonalAllowance.errorReal
       }
     }
 
@@ -76,8 +76,8 @@ class PersonalAllowanceFormSpec extends CommonPlaySpec with WithCommonFakeApplic
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.errorRealNumber}" in {
-        form.error("personalAllowance").get.message shouldBe messages.errorRealNumber
+      s"return an error message of '${messages.PersonalAllowance.errorReal}" in {
+        form.error("personalAllowance").get.message shouldBe messages.PersonalAllowance.errorReal
       }
     }
 
@@ -119,8 +119,7 @@ class PersonalAllowanceFormSpec extends CommonPlaySpec with WithCommonFakeApplic
       }
 
       s"return the correct error message" in {
-        form.error("personalAllowance").get.message shouldBe "calc.personalAllowance.errorMaxLimit"
-        form.error("personalAllowance").get.args shouldBe Array("11,000")
+        form.error("personalAllowance").get.message shouldBe messages.PersonalAllowance.errorMax
       }
     }
   }

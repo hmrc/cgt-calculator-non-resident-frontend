@@ -112,8 +112,7 @@ class CurrentIncomeFormSpec extends CommonPlaySpec with WithCommonFakeApplicatio
       }
 
       s"return the correct error message" in {
-        form.error("currentIncome").get.message shouldBe "calc.common.error.maxNumericExceeded"
-        form.error("currentIncome").get.args shouldBe Array("1,000,000,000")
+        form.error("currentIncome").get.message shouldBe messages.CurrentIncome.errorMax
       }
     }
 
@@ -125,8 +124,8 @@ class CurrentIncomeFormSpec extends CommonPlaySpec with WithCommonFakeApplicatio
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.errorRealNumber}" in {
-        form.error("currentIncome").get.message shouldBe messages.errorRealNumber
+      s"return an error message of '${messages.CurrentIncome.errorReal}" in {
+        form.error("currentIncome").get.message shouldBe messages.CurrentIncome.errorReal
       }
     }
 
@@ -138,8 +137,8 @@ class CurrentIncomeFormSpec extends CommonPlaySpec with WithCommonFakeApplicatio
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.errorRealNumber}" in {
-        form.error("currentIncome").get.message shouldBe messages.errorRealNumber
+      s"return an error message of '${messages.CurrentIncome.errorReal}" in {
+        form.error("currentIncome").get.message shouldBe messages.CurrentIncome.errorReal
       }
     }
   }

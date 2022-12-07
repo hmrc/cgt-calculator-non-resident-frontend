@@ -81,8 +81,8 @@ class RebasedValueFormSpec extends CommonPlaySpec with WithCommonFakeApplication
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of ${commonMessages.numericPlayErrorOverride}" in {
-        form.error("rebasedValueAmt").get.message shouldBe commonMessages.numericPlayErrorOverride
+      s"return an error message of ${messages.errorNoValue}" in {
+        form.error("rebasedValueAmt").get.message shouldBe messages.errorNoValue
       }
     }
 
@@ -127,8 +127,7 @@ class RebasedValueFormSpec extends CommonPlaySpec with WithCommonFakeApplication
       }
 
       s"return the correct error message" in {
-        form.error("rebasedValueAmt").get.message shouldBe "calc.common.error.maxNumericExceeded"
-        form.error("rebasedValueAmt").get.args shouldBe Array("1,000,000,000")
+        form.error("rebasedValueAmt").get.message shouldBe messages.errorMax
       }
     }
 

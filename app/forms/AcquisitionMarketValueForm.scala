@@ -16,24 +16,28 @@
 
 package forms
 
-import common.Constants
 import common.Transformers._
 import common.Validation._
 import models.AcquisitionValueModel
 import play.api.data.Forms._
 import play.api.data.Form
 
-object AcquisitionMarketValueForm {
+trait AcquisitionMarketValueForm {
+
+  val errorReal: String
+  val errorMax: String
+  val errorNegative: String
+  val errorDecimalPlaces: String
 
   def acquisitionMarketValueForm(): Form[AcquisitionValueModel] = Form(
     mapping {
       "acquisitionMarketValue" -> text
-        .verifying("error.real", mandatoryCheck)
-        .verifying("error.real", bigDecimalCheck)
+        .verifying(errorReal, mandatoryCheck)
+        .verifying(errorReal, bigDecimalCheck)
         .transform(stringToBigDecimal, bigDecimalToString)
-        .verifying("calc.acquisitionMarketValue.errorNegative", isPositive)
-        .verifying("calc.acquisitionMarketValue.errorDecimalPlaces", decimalPlacesCheck)
-        .verifying(maxMonetaryValueConstraint(Constants.maxNumeric))
+        .verifying(errorNegative, isPositive)
+        .verifying(errorDecimalPlaces, decimalPlacesCheck)
+        .verifying(errorMax, maxCheck)
     }(AcquisitionValueModel.apply)(AcquisitionValueModel.unapply)
   )
 }

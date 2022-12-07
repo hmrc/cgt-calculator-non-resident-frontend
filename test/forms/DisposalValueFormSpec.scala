@@ -112,8 +112,7 @@ class DisposalValueFormSpec extends CommonPlaySpec with WithCommonFakeApplicatio
       }
 
       s"return the correct error message" in {
-        form.error("disposalValue").get.message shouldBe "calc.common.error.maxNumericExceeded"
-        form.error("disposalValue").get.args shouldBe Array("1,000,000,000")
+        form.error("disposalValue").get.message shouldBe commonMessages.DisposalValue.errorMax
       }
     }
 
@@ -125,8 +124,8 @@ class DisposalValueFormSpec extends CommonPlaySpec with WithCommonFakeApplicatio
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${commonMessages.errorRealNumber}" in {
-        form.error("disposalValue").get.message shouldBe commonMessages.errorRealNumber
+      s"return an error message of '${commonMessages.DisposalValue.errorReal}" in {
+        form.error("disposalValue").get.message shouldBe commonMessages.DisposalValue.errorReal
       }
     }
 
@@ -138,8 +137,8 @@ class DisposalValueFormSpec extends CommonPlaySpec with WithCommonFakeApplicatio
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${commonMessages.errorRealNumber}" in {
-        form.error("disposalValue").get.message shouldBe commonMessages.errorRealNumber
+      s"return an error message of '${commonMessages.DisposalValue.errorReal}" in {
+        form.error("disposalValue").get.message shouldBe commonMessages.DisposalValue.errorReal
       }
     }
   }

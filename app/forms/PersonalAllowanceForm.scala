@@ -27,8 +27,8 @@ object PersonalAllowanceForm {
   def personalAllowanceForm (maxPA: BigDecimal = BigDecimal(0)): Form[PersonalAllowanceModel] = Form (
     mapping(
       "personalAllowance" -> text
-        .verifying("error.real", mandatoryCheck)
-        .verifying("error.real", bigDecimalCheck)
+        .verifying("calc.personalAllowance.errorReal", mandatoryCheck)
+        .verifying("calc.personalAllowance.errorReal", bigDecimalCheck)
         .transform(stringToBigDecimal, bigDecimalToString)
         .verifying("calc.personalAllowance.errorNegative", isPositive)
         .verifying("calc.personalAllowance.errorDecimalPlaces", decimalPlacesCheckNoDecimal)

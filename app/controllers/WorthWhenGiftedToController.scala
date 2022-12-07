@@ -19,7 +19,7 @@ package controllers
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
-import forms.AcquisitionMarketValueForm._
+import forms.WorthWhenGiftedTo.worthWhenGiftedToForm
 import javax.inject.Inject
 import models.AcquisitionValueModel
 import play.api.data.Form
@@ -38,8 +38,8 @@ class WorthWhenGiftedToController @Inject()(http: DefaultHttpClient,calcConnecto
 
   val worthWhenGiftedTo = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[AcquisitionValueModel](KeystoreKeys.acquisitionMarketValue).map {
-      case Some(data) => Ok(worthWhenGiftedToView(acquisitionMarketValueForm.fill(data)))
-      case None => Ok(worthWhenGiftedToView(acquisitionMarketValueForm))
+      case Some(data) => Ok(worthWhenGiftedToView(worthWhenGiftedToForm.fill(data)))
+      case None => Ok(worthWhenGiftedToView(worthWhenGiftedToForm))
     }
   }
 
@@ -52,6 +52,6 @@ class WorthWhenGiftedToController @Inject()(http: DefaultHttpClient,calcConnecto
         Redirect(routes.AcquisitionCostsController.acquisitionCosts))
     }
 
-    acquisitionMarketValueForm.bindFromRequest.fold(errorAction, successAction)
+    worthWhenGiftedToForm.bindFromRequest.fold(errorAction, successAction)
   }
 }
