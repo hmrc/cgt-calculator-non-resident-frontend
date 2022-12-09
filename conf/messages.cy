@@ -266,7 +266,7 @@ calc.personalAllowance.question = Faint oedd eich Lwfans Personol yn y DU yn y f
 calc.previousLossOrGain.errors.required = Rhowch wybod i ni a wnaethoch enillion neu golledion
 calc.previousLossOrGain.gain = Enillion
 calc.previousLossOrGain.hintOne = Dyma''r colledion neu''r enillion cyfunol ar yr eiddo hyn ar ôl cyfrif am gostau, rhyddhad a''r lwfans Enillion Cyfalaf (Swm Blynyddol sydd wedi''i Eithrio rhag Treth) rydych wedi''i ddefnyddio.
-calc.previousLossOrGain.hintTwo = Dylech eisoes fod wedi rhoi gwybod i CThEM am yr eiddo hyn.
+calc.previousLossOrGain.hintTwo = Dylech eisoes fod wedi rhoi gwybod i CThEF am yr eiddo hyn.
 calc.previousLossOrGain.loss = Colledion
 calc.previousLossOrGain.neither = Dim un (''dim enillion'')
 calc.previousLossOrGain.question = A wnaeth y gwarediadau hyn arwain at golledion neu enillion Treth Enillion Cyfalaf yn gyffredinol?
@@ -287,7 +287,7 @@ calc.privateResidenceRelief.helpTextJustBefore = Pam y dyddiad hwn?
 calc.privateResidenceRelief.helpTextSubTitle = Mae''r dyddiadau hyn yn bwysig oherwydd:
 calc.privateResidenceRelief.intro1 = Gallech gael rhyddhad treth llawn am 365 diwrnod ar gyfer unrhyw flwyddyn dreth pan wnaethoch chi neu''ch priod neu bartner sifil dreulio o leiaf 90 diwrnod yn eich cartref yn y DU.
 calc.privateResidenceRelief.intro2 = Gallech gael rhyddhad treth llawn am 365 diwrnod ar gyfer unrhyw flwyddyn dreth ar ôl 6 Ebrill 2015 pan wnaethoch chi neu''ch priod neu bartner sifil dreulio o leiaf 90 diwrnod yn eich cartref yn y DU.
-calc.privateResidenceRelief.qualify = Er mwyn bod yn gymwys, rhaid i chi enwebu''r cartref yr ydych yn ei werthu fel eich unig gartref, neu''ch prif gartref, i CThEM.
+calc.privateResidenceRelief.qualify = Er mwyn bod yn gymwys, rhaid i chi enwebu''r cartref yr ydych yn ei werthu fel eich unig gartref, neu''ch prif gartref, i CThEF.
 calc.privateResidenceRelief.question = Ydych chi''n hawlio Rhyddhad Preswylfan Preifat?
 calc.privateResidenceRelief.questionBetween = Am sawl diwrnod rhwng 6 Ebrill 2015 a {0} yr oedd yr eiddo hwn yn gymwys am ryddhad?
 calc.privateResidenceRelief.questionFlat = AAm sawl diwrnod cyn {0} yr oedd yr eiddo hwn yn gymwys am ryddhad?
@@ -303,7 +303,7 @@ calc.rebasedCosts.jointOwnership = Os oeddech yn berchen ar yr eiddo gyda rhywun
 calc.rebasedCosts.question = A wnaethoch dalu i gael prisio''r eiddo ar 5 Ebrill 2015?
 calc.rebasedCosts.questionTwo = Beth oedd y gost o brisio''r eiddo?
 
-calc.report.logoText = Cyllid a Thollau EM
+calc.report.logoText = Cyllid a Thollau EF
 calc.report.title = Cyfrifo''ch Treth Enillion Cyfalaf
 
 calc.resident.properties.improvements.additionalContent.one = Fel rheol, mae gosod cegin neu ystafell ymolchi foethus yn lle un sylfaenol yn cael ei ystyried fel gwelliant.
