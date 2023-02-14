@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,8 @@ class ImprovementsConstructor @Inject()(formHiddenYesNoRadioView: formHiddenYesN
           conditionalInputQuestionText = messages("calc.improvements.questionThree"),
           hasSecondField = true,
           secondConditionalInputQuestionText = Some(messages("calc.improvements.questionFour")),
-          secondConditionalInputFieldName = Some("improvementsAmtAfter")
+          secondConditionalInputFieldName = Some("improvementsAmtAfter"),
+          yesNoQuestionTextIsHeading = false
         )(messages)
     } else {
         formHiddenYesNoRadioView(
@@ -44,7 +45,8 @@ class ImprovementsConstructor @Inject()(formHiddenYesNoRadioView: formHiddenYesN
           yesNoFieldName = "isClaimingImprovements",
           conditionalInputFieldName = "improvementsAmt",
           yesNoQuestionText = question,
-          conditionalInputQuestionText = messages("calc.improvements.questionTwo")
+          conditionalInputQuestionText = messages("calc.improvements.questionTwo"),
+          yesNoQuestionTextIsHeading = false
       )(messages)
     }
   }

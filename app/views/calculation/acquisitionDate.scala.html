@@ -1,5 +1,5 @@
 @*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@
 
     @errorSummary(acquisitionDateForm.errors, Some("acquisitionDateDay"))
 
-    <h1 class="govuk-fieldset__legend govuk-label--xl ">@Messages("calc.acquisitionDate.question")</h1>
+    <h1 class="govuk-heading-xl">@Messages("calc.acquisitionDate.question")</h1>
 
     <p class="govuk-body">@Messages("calc.acquisitionDate.hintText")</p>
 
@@ -46,7 +46,7 @@
             content = Messages("calc.acquisitionDate.question"),
             hintContent = Some(Messages("calc.common.date.hint")),
             field = acquisitionDateForm("acquisitionDate"),
-            pageHeading = true,
+            pageHeading = false,
             labelClass = Some("govuk-visually-hidden"),
         )
 
