@@ -59,12 +59,8 @@ class AcquisitionDateViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
         document.getElementsByClass("hmrc-header__service-name hmrc-header__service-name--linked").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate.url
       }
 
-      "have a heading" which {
-        lazy val heading = document.body().getElementsByClass("govuk-fieldset__legend govuk-label--xl ")
-
-        s"has the text '${messages.AcquisitionDate.question}'" in {
-          heading.text shouldBe messages.AcquisitionDate.question
-        }
+      s"have a heading of '${messages.AcquisitionDate.question}'" in {
+        document.select("h1").text() shouldBe messages.AcquisitionDate.question
       }
 
       "have a legend that" should {

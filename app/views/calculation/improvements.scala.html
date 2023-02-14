@@ -16,6 +16,7 @@
 
 @import models.ImprovementsModel
 @import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
+@import constructors.ImprovementsConstructor
 
 @this(
     layout: Layout,
@@ -23,7 +24,8 @@
     form: FormWithCSRF,
     formHiddenYesNoRadioCurrencyInput: playComponents.formHiddenYesNoRadioCurrencyInput,
     govukDetails: playComponents.govukDetails,
-    submitButton: playComponents.submitButton
+    submitButton: playComponents.submitButton,
+        improvementsConstructor: ImprovementsConstructor
 )
 
 @(improvementsForm: Form[ImprovementsModel], improvementsOptions: Boolean, backUrl: String, ownerBeforeLegislationStart: Boolean)(implicit request: Request[_], messages: Messages, messagesApi: MessagesApi)
@@ -65,17 +67,7 @@
 
     @form(action = controllers.routes.ImprovementsController.submitImprovements) {
 
-        @formHiddenYesNoRadioCurrencyInput(
-            form = improvementsForm,
-            yesNoFieldName = "isClaimingImprovements",
-            conditionalInputFieldName = "improvementsAmt",
-            yesNoQuestionText = titleText,
-            yesNoQuestionTextIsHeading = false,
-            conditionalInputQuestionText = messages("calc.improvements.questionThree"),
-            hasSecondField = if(improvementsOptions) true else false,
-            secondConditionalInputQuestionText = Some(messages("calc.improvements.questionFour")),
-            secondConditionalInputFieldName = Some("improvementsAmtAfter")
-        )
+        @improvementsConstructor.generateImprovements(improvementsForm, improvementsOptions, titleText)
 
         @submitButton()
     }
