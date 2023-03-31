@@ -31,6 +31,7 @@ trait CommonPlaySpec extends WordSpecLike with Matchers with OptionValues {
 
   import scala.concurrent.duration._
   import scala.concurrent.{Await, Future}
+  import scala.language.postfixOps
 
   implicit val defaultTimeout: FiniteDuration = 5 seconds
 
