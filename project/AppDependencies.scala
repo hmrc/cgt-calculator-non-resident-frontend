@@ -24,8 +24,8 @@ object AppDependencies {
   val playPartialsVersion      = "8.4.0-play-28"
   val httpCachingClientVersion = "10.0.0-play-28"
   val play2PdfVersion          = "1.11.0"
-  val playLanguageVersion      = "5.3.0-play-28"
-  val playFrontendVersion      = "7.3.0-play-28"
+  val playLanguageVersion      = "6.2.0-play-28"
+  val playFrontendVersion      = "7.5.0-play-28"
 
   val compile = Seq(
     ws,
@@ -46,11 +46,13 @@ object AppDependencies {
   object Test {
     def apply(): Seq[ModuleID] = new TestDependencies {
       override lazy val test = Seq(
-        "org.scalatestplus.play"  %% "scalatestplus-play"   % "5.0.0"             % scope,
-        "org.mockito"             % "mockito-core"          % "3.11.2"             % scope,
-        "org.pegdown"             % "pegdown"               % "1.6.0"             % scope,
-        "org.jsoup"               % "jsoup"                 % "1.14.3"            % scope,
-        "com.typesafe.play"       %% "play-test"            % PlayVersion.current % scope
+        "uk.gov.hmrc"             %% "bootstrap-test-play-28"   % bootstrapVersion    % scope,
+        "org.scalatestplus.play"  %% "scalatestplus-play"       % "5.1.0"             % scope,
+        "org.scalatestplus"       %% "scalatestplus-mockito"    % "1.0.0-M2"          % scope,
+        "org.mockito"             %  "mockito-core"              % "4.11.0"            % scope,
+        "org.pegdown"             %  "pegdown"                   % "1.6.0"             % scope,
+        "org.jsoup"               %  "jsoup"                     % "1.14.3"            % scope,
+        "com.typesafe.play"       %% "play-test"                % PlayVersion.current % scope
       )
     }.test
   }

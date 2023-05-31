@@ -75,7 +75,7 @@ class CurrentIncomeController @Inject()(http: DefaultHttpClient,calcConnector: C
       } yield route).recoverToStart
     }
 
-    currentIncomeForm.bindFromRequest.fold(
+    currentIncomeForm.bindFromRequest().fold(
       errors => Future.successful(BadRequest(currentIncomeView(errors))),
       success => successAction(success)
     )

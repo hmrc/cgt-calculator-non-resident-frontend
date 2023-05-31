@@ -77,6 +77,6 @@ class RebasedValueController @Inject()(http: DefaultHttpClient,calcConnector: Ca
         Redirect(routes.RebasedCostsController.rebasedCosts))
     }
 
-    rebasedValueForm.bindFromRequest.fold(errorAction, successAction)
+    rebasedValueForm.bindFromRequest().fold(errorAction, successAction)
   }
 }

@@ -52,6 +52,6 @@ class WorthWhenGiftedToController @Inject()(http: DefaultHttpClient,calcConnecto
         Redirect(routes.AcquisitionCostsController.acquisitionCosts))
     }
 
-    worthWhenGiftedToForm.bindFromRequest.fold(errorAction, successAction)
+    worthWhenGiftedToForm.bindFromRequest().fold(errorAction, successAction)
   }
 }

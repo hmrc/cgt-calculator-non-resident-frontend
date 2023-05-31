@@ -193,6 +193,6 @@ class CalculationElectionController @Inject()(http: DefaultHttpClient,calcConnec
       }).recoverToStart
     }
 
-    calculationElectionForm.bindFromRequest.fold(errorAction, successAction)
+    calculationElectionForm.bindFromRequest().fold(errorAction, successAction)
   }
 }

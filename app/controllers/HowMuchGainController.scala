@@ -57,6 +57,6 @@ class HowMuchGainController @Inject()(http: DefaultHttpClient,calcConnector: Cal
       )
     }
 
-    howMuchGainForm.bindFromRequest.fold(errorAction, successAction)
+    howMuchGainForm.bindFromRequest().fold(errorAction, successAction)
   }
 }

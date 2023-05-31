@@ -123,7 +123,7 @@ class ImprovementsController @Inject()(http: DefaultHttpClient,calcConnector: Ca
     def routeRequest(backUrl: String,
                      improvementsOptions: Boolean,
                      ownerBeforeLegislationStart: Boolean): Future[Result] = {
-      improvementsForm(improvementsOptions).bindFromRequest.fold(
+      improvementsForm(improvementsOptions).bindFromRequest().fold(
         errors => errorAction(errors, backUrl, improvementsOptions, ownerBeforeLegislationStart),
         success => successAction(success)
       )

@@ -45,7 +45,7 @@ class SoldOrGivenAwayController @Inject()(http: DefaultHttpClient,calcConnector:
 
   val submitSoldOrGivenAway = ValidateSession.async { implicit request =>
 
-    soldOrGivenAwayForm.bindFromRequest.fold(
+    soldOrGivenAwayForm.bindFromRequest().fold(
       errors => Future.successful(BadRequest(soldOrGivenAwayView(errors))),
       success => {
         calcConnector.saveFormData[SoldOrGivenAwayModel](KeystoreKeys.soldOrGivenAway, success).map(_ =>

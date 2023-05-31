@@ -79,7 +79,7 @@ class PersonalAllowanceController @Inject()(http: DefaultHttpClient,calcConnecto
 
     (for {
       allowance <- getPersonalAllowanceForYear
-      action <- personalAllowanceForm(allowance).bindFromRequest.fold(errorAction, successAction)
+      action <- personalAllowanceForm(allowance).bindFromRequest().fold(errorAction, successAction)
     } yield action).recoverToStart
   }
 }

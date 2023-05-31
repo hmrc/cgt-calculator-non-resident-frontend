@@ -55,6 +55,6 @@ class RebasedCostsController @Inject()(http: DefaultHttpClient,calcConnector: Ca
         Redirect(routes.ImprovementsController.improvements))
     }
 
-    rebasedCostsForm.bindFromRequest.fold(errorAction, successAction)
+    rebasedCostsForm.bindFromRequest().fold(errorAction, successAction)
   }
 }

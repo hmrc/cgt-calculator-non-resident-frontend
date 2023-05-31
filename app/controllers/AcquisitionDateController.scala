@@ -63,6 +63,6 @@ class  AcquisitionDateController @Inject()(http: DefaultHttpClient,
       )
     }
 
-    acquisitionDateForm.bindFromRequest.fold(errorAction, successAction)
+    acquisitionDateForm.bindFromRequest().fold(errorAction, successAction)
   }
 }

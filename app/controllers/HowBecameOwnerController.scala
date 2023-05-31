@@ -62,6 +62,6 @@ class HowBecameOwnerController @Inject()(http: DefaultHttpClient,calcConnector: 
       }
     }
 
-    howBecameOwnerForm.bindFromRequest.fold(errorAction, successAction)
+    howBecameOwnerForm.bindFromRequest().fold(errorAction, successAction)
   }
 }

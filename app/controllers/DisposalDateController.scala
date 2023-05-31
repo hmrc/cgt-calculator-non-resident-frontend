@@ -78,6 +78,6 @@ class DisposalDateController @Inject()(http: DefaultHttpClient,calcConnector: Ca
         }
       }
     }
-    disposalDateForm.bindFromRequest.fold(errorAction, successAction)
+    disposalDateForm.bindFromRequest().fold(errorAction, successAction)
   }
 }

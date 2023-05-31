@@ -102,7 +102,7 @@ class OtherReliefsController @Inject()(http: DefaultHttpClient,calcConnector: Ca
         Redirect(routes.SummaryController.summary))
     }
 
-    otherReliefsForm.bindFromRequest.fold(
+    otherReliefsForm.bindFromRequest().fold(
       errors => errorAction(errors),
       success => successAction(success))
   }

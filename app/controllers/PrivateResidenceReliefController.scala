@@ -154,7 +154,7 @@ class PrivateResidenceReliefController @Inject()(http: DefaultHttpClient,calcCon
         } yield route).recoverToStart
       }
 
-      privateResidenceReliefForm(showFirstQuestion, showBetweenQuestion).bindFromRequest.fold(errorAction, successAction)
+      privateResidenceReliefForm(showFirstQuestion, showBetweenQuestion).bindFromRequest().fold(errorAction, successAction)
     }
 
     (for {

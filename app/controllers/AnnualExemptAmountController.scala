@@ -132,7 +132,7 @@ class AnnualExemptAmountController @Inject()(http: DefaultHttpClient,calcConnect
     }
 
     def routeRequest(maxAEA: BigDecimal, backUrl: String): Future[Result] = {
-      annualExemptAmountForm(maxAEA).bindFromRequest.fold(
+      annualExemptAmountForm(maxAEA).bindFromRequest().fold(
         errors => errorAction(errors, maxAEA, backUrl),
         success => successAction(success))
     }

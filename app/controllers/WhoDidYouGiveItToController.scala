@@ -48,7 +48,7 @@ class WhoDidYouGiveItToController @Inject()(http: DefaultHttpClient,
   }
 
   val submitWhoDidYouGiveItTo: Action[AnyContent] = ValidateSession.async { implicit request =>
-    whoDidYouGiveItToForm.bindFromRequest.fold(
+    whoDidYouGiveItToForm.bindFromRequest().fold(
       errors => Future.successful(BadRequest(whoDidYouGiveItToView(errors))),
       success => {
         calcConnector.saveFormData[WhoDidYouGiveItToModel](keystoreKeys.whoDidYouGiveItTo, success).map(_ =>

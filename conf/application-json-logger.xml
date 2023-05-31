@@ -6,7 +6,6 @@
     </appender>
 
     <logger name="uk.gov" level="INFO"/>
-    <logger name="application" level="${logger.application:-INFO}"/>
 
     <root level="${logger.root:-ERROR}">
         <appender-ref ref="STDOUT"/>
