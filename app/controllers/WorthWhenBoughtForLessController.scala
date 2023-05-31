@@ -52,6 +52,6 @@ class WorthWhenBoughtForLessController @Inject()(http: DefaultHttpClient,calcCon
         Redirect(routes.AcquisitionCostsController.acquisitionCosts))
     }
 
-    worthWhenBoughtForLessForm.bindFromRequest.fold(errorAction, successAction)
+    worthWhenBoughtForLessForm.bindFromRequest().fold(errorAction, successAction)
   }
 }

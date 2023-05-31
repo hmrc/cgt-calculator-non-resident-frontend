@@ -57,6 +57,6 @@ class CostsAtLegislationStartController @Inject()(http: DefaultHttpClient,calcCo
       }
     }
 
-    costsAtLegislationStartForm.bindFromRequest.fold(errorAction, successAction)
+    costsAtLegislationStartForm.bindFromRequest().fold(errorAction, successAction)
   }
 }

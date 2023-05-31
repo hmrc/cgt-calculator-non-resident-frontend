@@ -53,6 +53,6 @@ class WorthBeforeLegislationStartController @Inject()(http: DefaultHttpClient,ca
         Redirect(routes.CostsAtLegislationStartController.costsAtLegislationStart))
     }
 
-    worthBeforeLegislationStartForm.bindFromRequest.fold(errorAction, successAction)
+    worthBeforeLegislationStartForm.bindFromRequest().fold(errorAction, successAction)
   }
 }

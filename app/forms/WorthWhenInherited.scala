@@ -22,5 +22,5 @@ object WorthWhenInherited extends AcquisitionMarketValueForm {
   override val errorNegative = "calc.worthWhenInherited.errorNegative"
   override val errorDecimalPlaces = "calc.worthWhenInherited.errorDecimalPlaces"
 
-  val worthWhenInheritedForm = acquisitionMarketValueForm
+  val worthWhenInheritedForm = acquisitionMarketValueForm()
 }

@@ -64,7 +64,7 @@ class MarketValueWhenSoldOrGaveAwayController @Inject()(environment: Environment
       Future.successful(Redirect(routes.DisposalCostsController.disposalCosts))
     }
 
-    marketValueWhenSoldForm.bindFromRequest.fold(errorAction, successAction)
+    marketValueWhenSoldForm.bindFromRequest().fold(errorAction, successAction)
   }
 
   val submitMarketValueWhenGaveAway = ValidateSession.async { implicit request =>
@@ -76,6 +76,6 @@ class MarketValueWhenSoldOrGaveAwayController @Inject()(environment: Environment
         Redirect(routes.DisposalCostsController.disposalCosts))
     }
 
-    marketValueWhenGaveAwayForm.bindFromRequest.fold(errorAction, successAction)
+    marketValueWhenGaveAwayForm.bindFromRequest().fold(errorAction, successAction)
   }
 }

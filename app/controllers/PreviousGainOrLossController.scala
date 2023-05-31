@@ -40,8 +40,8 @@ class PreviousGainOrLossController @Inject()(http: DefaultHttpClient,calcConnect
 
   val previousGainOrLoss = ValidateSession.async { implicit request =>
     calcConnector.fetchAndGetFormData[PreviousLossOrGainModel](KeystoreKeys.previousLossOrGain) map {
-      case Some(data) => Ok(previousLossOrGainView(previousLossOrGainForm.fill(data)))
-      case None => Ok(previousLossOrGainView(previousLossOrGainForm))
+      case Some(data) => Ok(previousLossOrGainView(previousLossOrGainForm().fill(data)))
+      case None => Ok(previousLossOrGainView(previousLossOrGainForm()))
     }
   }
 
@@ -66,6 +66,6 @@ class PreviousGainOrLossController @Inject()(http: DefaultHttpClient,calcConnect
         }
       }
 
-      previousLossOrGainForm.bindFromRequest.fold(errorAction, successAction)
+      previousLossOrGainForm().bindFromRequest().fold(errorAction, successAction)
   }
 }

@@ -88,7 +88,7 @@ class BroughtForwardLossesController @Inject()(http: DefaultHttpClient,calcConne
       } yield BadRequest(broughtForwardLossesView(form, backLink))).recoverToStart
     }
 
-    broughtForwardLossesForm.bindFromRequest.fold(
+    broughtForwardLossesForm.bindFromRequest().fold(
       errorAction,
       successAction
     )

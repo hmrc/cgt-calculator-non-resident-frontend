@@ -124,6 +124,6 @@ class AcquisitionCostsController @Inject()(http: DefaultHttpClient,
       } yield result).recoverToStart
     }
 
-    acquisitionCostsForm.bindFromRequest.fold(errorAction, successAction)
+    acquisitionCostsForm.bindFromRequest().fold(errorAction, successAction)
   }
 }

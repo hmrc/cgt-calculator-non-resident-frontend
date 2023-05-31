@@ -22,5 +22,5 @@ object WorthWhenBoughtForLess extends AcquisitionMarketValueForm {
   override val errorNegative = "calc.worthWhenBoughtForLess.errorNegative"
   override val errorDecimalPlaces = "calc.worthWhenBoughtForLess.errorDecimalPlaces"
 
-  val worthWhenBoughtForLessForm = acquisitionMarketValueForm
+  val worthWhenBoughtForLessForm = acquisitionMarketValueForm()
 }

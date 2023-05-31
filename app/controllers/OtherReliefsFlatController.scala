@@ -106,6 +106,6 @@ class OtherReliefsFlatController @Inject()(http: DefaultHttpClient,calcConnector
       }
     }
 
-    otherReliefsForm.bindFromRequest.fold(errorAction, successAction)
+    otherReliefsForm.bindFromRequest().fold(errorAction, successAction)
   }
 }

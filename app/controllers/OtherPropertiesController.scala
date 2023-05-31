@@ -64,6 +64,6 @@ class OtherPropertiesController @Inject()(http: DefaultHttpClient,calcConnector:
       }
     }
 
-    otherPropertiesForm.bindFromRequest.fold(errorAction, successAction)
+    otherPropertiesForm.bindFromRequest().fold(errorAction, successAction)
   }
 }

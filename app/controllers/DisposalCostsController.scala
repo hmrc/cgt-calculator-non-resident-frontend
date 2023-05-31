@@ -87,7 +87,7 @@ class DisposalCostsController @Inject()(http: DefaultHttpClient,calcConnector: C
     }
 
     def routeRequest(backLink: String) = {
-      disposalCostsForm.bindFromRequest.fold(
+      disposalCostsForm.bindFromRequest().fold(
         errors => errorAction(errors, backLink),
         success => successAction(success)
       )

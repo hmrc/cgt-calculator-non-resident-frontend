@@ -53,6 +53,6 @@ class WorthWhenInheritedController @Inject()(http: DefaultHttpClient,calcConnect
         Redirect(routes.AcquisitionCostsController.acquisitionCosts))
     }
 
-    worthWhenInheritedForm.bindFromRequest.fold(errorAction, successAction)
+    worthWhenInheritedForm.bindFromRequest().fold(errorAction, successAction)
   }
 }

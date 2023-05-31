@@ -107,6 +107,6 @@ class OtherReliefsRebasedController @Inject()(http: DefaultHttpClient,
         Redirect(routes.CalculationElectionController.calculationElection))
     }
 
-    otherReliefsForm.bindFromRequest.fold(errorAction, successAction)
+    otherReliefsForm.bindFromRequest().fold(errorAction, successAction)
   }
 }

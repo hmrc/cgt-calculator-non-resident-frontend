@@ -52,6 +52,6 @@ class DisposalValueController @Inject()(http: DefaultHttpClient,calcConnector: C
         Redirect(routes.DisposalCostsController.disposalCosts))
     }
 
-    disposalValueForm.bindFromRequest.fold(errorAction, successAction)
+    disposalValueForm.bindFromRequest().fold(errorAction, successAction)
   }
 }
