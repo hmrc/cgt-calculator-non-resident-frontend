@@ -31,8 +31,8 @@ import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers.{contentType, _}
+import services.SessionCacheService
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
-import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.propertyLivedIn
 
@@ -46,15 +46,15 @@ class PropertyLivedInActionSpec extends CommonPlaySpec with WithCommonFakeApplic
   val ec = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
-  val defaultCache = mock[CacheMap]
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val propertyLivedInView = fakeApplication.injector.instanceOf[propertyLivedIn]
+  val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
 
   class Setup {
     val controller = new PropertyLivedInController(
       mockHttp,
-      mockCalcConnector,
+      mockSessionCacheService,
       mockMessagesControllerComponents,
       propertyLivedInView
     )(ec)
@@ -63,14 +63,14 @@ class PropertyLivedInActionSpec extends CommonPlaySpec with WithCommonFakeApplic
 
   def setupTarget(getData: Option[PropertyLivedInModel]): PropertyLivedInController= {
 
-    when(mockCalcConnector.fetchAndGetFormData[PropertyLivedInModel](ArgumentMatchers.eq(keyStoreKeys.propertyLivedIn))
+    when(mockSessionCacheService.fetchAndGetFormData[PropertyLivedInModel](ArgumentMatchers.eq(keyStoreKeys.propertyLivedIn))
       (ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    when(mockCalcConnector.saveFormData[PropertyLivedInModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(mock[CacheMap]))
+    when(mockSessionCacheService.saveFormData[PropertyLivedInModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      .thenReturn(Future.successful(("", "")))
 
-    new PropertyLivedInController(mockHttp, mockCalcConnector, mockMessagesControllerComponents, propertyLivedInView)(ec)
+    new PropertyLivedInController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, propertyLivedInView)(ec)
   }
 
   "Calling .propertyLivedIn from the resident PropertyLivedInController" when {

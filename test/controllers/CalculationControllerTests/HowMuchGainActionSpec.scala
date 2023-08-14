@@ -31,8 +31,8 @@ import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
+import services.SessionCacheService
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
-import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.howMuchGain
 
@@ -46,15 +46,15 @@ class HowMuchGainActionSpec extends CommonPlaySpec with WithCommonFakeApplicatio
   val ec = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
-  val defaultCache = mock[CacheMap]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val howMuchGainView = fakeApplication.injector.instanceOf[howMuchGain]
   val pageTitle = s"""${messages.question} - ${commonMessages.pageHeading} - GOV.UK"""
+  val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
 
   class Setup {
     val controller = new HowMuchGainController(
       mockHttp,
-      mockCalcConnector,
+      mockSessionCacheService,
       mockMessagesControllerComponents,
       howMuchGainView
     )(ec)
@@ -62,13 +62,13 @@ class HowMuchGainActionSpec extends CommonPlaySpec with WithCommonFakeApplicatio
 
   def setupTarget(getData: Option[HowMuchGainModel]): HowMuchGainController = {
 
-    when(mockCalcConnector.fetchAndGetFormData[HowMuchGainModel](ArgumentMatchers.anyString())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.fetchAndGetFormData[HowMuchGainModel](ArgumentMatchers.anyString())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(CacheMap("", Map.empty)))
+    when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      .thenReturn(Future.successful(("", "")))
 
-    new HowMuchGainController(mockHttp, mockCalcConnector, mockMessagesControllerComponents, howMuchGainView)(ec)
+    new HowMuchGainController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, howMuchGainView)(ec)
   }
 
   //GET Tests

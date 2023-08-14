@@ -31,8 +31,8 @@ import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
+import services.SessionCacheService
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
-import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.worthWhenBoughtForLess
 
@@ -47,16 +47,15 @@ class WorthWhenBoughtForLessActionSpec extends CommonPlaySpec with WithCommonFak
   val ec = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
-  val defaultCache = mock[CacheMap]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val worthWhenBoughtForLessView = fakeApplication.injector.instanceOf[worthWhenBoughtForLess]
-
+  val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
   lazy val pageTitle = s"""${messages.question} - ${messages.pageHeading} - GOV.UK"""
 
   class Setup {
     val controller = new WorthWhenBoughtForLessController(
       mockHttp,
-      mockCalcConnector,
+      mockSessionCacheService,
       mockMessagesControllerComponents,
       worthWhenBoughtForLessView
     )(ec)
@@ -64,14 +63,14 @@ class WorthWhenBoughtForLessActionSpec extends CommonPlaySpec with WithCommonFak
 
   def setupTarget(getData: Option[AcquisitionValueModel]): WorthWhenBoughtForLessController = {
 
-    when(mockCalcConnector.fetchAndGetFormData[AcquisitionValueModel](
+    when(mockSessionCacheService.fetchAndGetFormData[AcquisitionValueModel](
       ArgumentMatchers.eq(KeystoreKeys.acquisitionMarketValue))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    when(mockCalcConnector.saveFormData[AcquisitionValueModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(mock[CacheMap]))
+    when(mockSessionCacheService.saveFormData[AcquisitionValueModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      .thenReturn(Future.successful(("", "")))
 
-    new WorthWhenBoughtForLessController(mockHttp, mockCalcConnector, mockMessagesControllerComponents, worthWhenBoughtForLessView)(ec)
+    new WorthWhenBoughtForLessController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, worthWhenBoughtForLessView)(ec)
   }
 
   "Calling .worthWhenBoughtForLess" when {

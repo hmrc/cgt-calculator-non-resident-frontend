@@ -32,8 +32,8 @@ import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
+import services.SessionCacheService
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
-import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.broughtForwardLosses
 
@@ -46,8 +46,8 @@ class BroughtForwardLossesActionSpec extends CommonPlaySpec with WithCommonFakeA
   val materializer = mock[Materializer]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
+  val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
   val mockAnswerConstuctor = mock[AnswersConstructor]
-  val defaultCache = mock[CacheMap]
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val broughtForwardLossesView = fakeApplication.injector.instanceOf[broughtForwardLosses]
@@ -55,8 +55,8 @@ class BroughtForwardLossesActionSpec extends CommonPlaySpec with WithCommonFakeA
 
   class Setup {
     val controller = new BroughtForwardLossesController(
-      mockHttp,
       mockCalcConnector,
+      mockSessionCacheService,
       mockMessagesControllerComponents,
       broughtForwardLossesView
     )(ec)
@@ -69,28 +69,28 @@ class BroughtForwardLossesActionSpec extends CommonPlaySpec with WithCommonFakeA
                   howMuchGainModel: Option[HowMuchGainModel] = None,
                   howMuchLossModel: Option[HowMuchLossModel] = None): BroughtForwardLossesController = {
 
-    when(mockCalcConnector.fetchAndGetFormData[BroughtForwardLossesModel](
+    when(mockSessionCacheService.fetchAndGetFormData[BroughtForwardLossesModel](
       ArgumentMatchers.eq(KeystoreKeys.broughtForwardLosses))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(getData)
 
-    when(mockCalcConnector.fetchAndGetFormData[OtherPropertiesModel](
+    when(mockSessionCacheService.fetchAndGetFormData[OtherPropertiesModel](
       ArgumentMatchers.eq(KeystoreKeys.otherProperties))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(otherPropertiesModel))
 
-    when(mockCalcConnector.fetchAndGetFormData[PreviousLossOrGainModel]
+    when(mockSessionCacheService.fetchAndGetFormData[PreviousLossOrGainModel]
       (ArgumentMatchers.eq(KeystoreKeys.previousLossOrGain))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(previousLossOrGainModel))
 
-    when(mockCalcConnector.fetchAndGetFormData[HowMuchGainModel](ArgumentMatchers.eq(KeystoreKeys.howMuchGain))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.fetchAndGetFormData[HowMuchGainModel](ArgumentMatchers.eq(KeystoreKeys.howMuchGain))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(howMuchGainModel))
 
-    when(mockCalcConnector.fetchAndGetFormData[HowMuchLossModel](ArgumentMatchers.eq(KeystoreKeys.howMuchLoss))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.fetchAndGetFormData[HowMuchLossModel](ArgumentMatchers.eq(KeystoreKeys.howMuchLoss))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(howMuchLossModel))
 
-    when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(CacheMap("", Map.empty)))
+    when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      .thenReturn(Future.successful(("", "")))
 
-    new BroughtForwardLossesController(mockHttp, mockCalcConnector, mockMessagesControllerComponents, broughtForwardLossesView)(ec) {
+    new BroughtForwardLossesController(mockCalcConnector, mockSessionCacheService, mockMessagesControllerComponents, broughtForwardLossesView)(ec) {
     }
   }
 

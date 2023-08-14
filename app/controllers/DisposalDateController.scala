@@ -16,28 +16,30 @@
 
 package controllers
 
-import java.util.UUID
-
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.TaxDates
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import forms.DisposalDateForm._
-import javax.inject.Inject
 import models.DateModel
 import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.MessagesControllerComponents
+import services.SessionCacheService
 import uk.gov.hmrc.http.SessionKeys
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.disposalDate
 
+import java.util.UUID
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 
-class DisposalDateController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
+class DisposalDateController @Inject()(http: DefaultHttpClient,
+                                       calcConnector: CalculatorConnector,
+                                       sessionCacheService: SessionCacheService,
                                        mcc: MessagesControllerComponents,
                                        disposalDateView: disposalDate)
                                       (implicit ec: ExecutionContext)
@@ -51,7 +53,7 @@ class DisposalDateController @Inject()(http: DefaultHttpClient,calcConnector: Ca
         (SessionKeys.sessionId -> s"session-$sessionId")))
     }
     else {
-      calcConnector.fetchAndGetFormData[DateModel](KeystoreKeys.disposalDate).map {
+      sessionCacheService.fetchAndGetFormData[DateModel](KeystoreKeys.disposalDate).map {
         case Some(data) => Ok(disposalDateView(disposalDateForm.fill(data)))
         case None => Ok(disposalDateView(disposalDateForm))
       }
@@ -66,7 +68,7 @@ class DisposalDateController @Inject()(http: DefaultHttpClient,calcConnector: Ca
     def successAction(model: DateModel) = {
       logger.info("Saving disposalDate as : " + model)
       for {
-        _ <- calcConnector.saveFormData(KeystoreKeys.disposalDate, model)
+        _ <- sessionCacheService.saveFormData(KeystoreKeys.disposalDate, model)
         taxYear <- calcConnector.getTaxYear(s"${model.year}-${model.month}-${model.day}")
       } yield {
         if (!TaxDates.dateAfterStart(model.day, model.month, model.year)) {

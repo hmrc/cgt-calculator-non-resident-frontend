@@ -20,25 +20,27 @@ import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import forms.RebasedCostsForm._
-import javax.inject.Inject
 import models.RebasedCostsModel
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import services.SessionCacheService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.rebasedCosts
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class RebasedCostsController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
+class RebasedCostsController @Inject()(http: DefaultHttpClient,
+                                       sessionCacheService: SessionCacheService,
                                        mcc: MessagesControllerComponents,
                                        rebasedCostsView: rebasedCosts)
                                       (implicit ec: ExecutionContext)
                                          extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   val rebasedCosts: Action[AnyContent] = ValidateSession.async { implicit request =>
-    calcConnector.fetchAndGetFormData[RebasedCostsModel](KeystoreKeys.rebasedCosts).map {
+    sessionCacheService.fetchAndGetFormData[RebasedCostsModel](KeystoreKeys.rebasedCosts).map {
       case Some(data) => Ok(rebasedCostsView(rebasedCostsForm.fill(data)))
       case None => Ok(rebasedCostsView(rebasedCostsForm))
     }
@@ -51,7 +53,7 @@ class RebasedCostsController @Inject()(http: DefaultHttpClient,calcConnector: Ca
     }
 
     def successAction(model: RebasedCostsModel) = {
-      calcConnector.saveFormData(KeystoreKeys.rebasedCosts, model).map(_ =>
+      sessionCacheService.saveFormData(KeystoreKeys.rebasedCosts, model).map(_ =>
         Redirect(routes.ImprovementsController.improvements))
     }
 

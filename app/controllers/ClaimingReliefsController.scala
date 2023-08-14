@@ -17,27 +17,28 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import forms.ClaimingReliefsForm.claimingReliefsForm
-import javax.inject.Inject
 import models.ClaimingReliefsModel
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import services.SessionCacheService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.claimingReliefs
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class ClaimingReliefsController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
+class ClaimingReliefsController @Inject()(http: DefaultHttpClient,
+                                          sessionCacheService: SessionCacheService,
                                           mcc: MessagesControllerComponents,
                                           claimingReliefsView: claimingReliefs)(implicit ec: ExecutionContext)
                                             extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   val claimingReliefs: Action[AnyContent] = ValidateSession.async { implicit request =>
-    calcConnector.fetchAndGetFormData[ClaimingReliefsModel](KeystoreKeys.claimingReliefs).map {
+    sessionCacheService.fetchAndGetFormData[ClaimingReliefsModel](KeystoreKeys.claimingReliefs).map {
       case Some(data) => Ok(claimingReliefsView(claimingReliefsForm.fill(data)))
       case None => Ok(claimingReliefsView(claimingReliefsForm))
     }
@@ -49,7 +50,7 @@ class ClaimingReliefsController @Inject()(http: DefaultHttpClient,calcConnector:
       Future.successful(BadRequest(claimingReliefsView(errors)))
 
     def successAction(model: ClaimingReliefsModel) = {
-      calcConnector.saveFormData(KeystoreKeys.claimingReliefs, model).map(_ =>
+      sessionCacheService.saveFormData(KeystoreKeys.claimingReliefs, model).map(_ =>
         Redirect(routes.CalculationElectionController.calculationElection))
     }
 

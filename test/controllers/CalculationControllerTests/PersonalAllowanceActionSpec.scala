@@ -32,8 +32,8 @@ import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
+import services.SessionCacheService
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
-import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.personalAllowance
 
@@ -47,16 +47,17 @@ class PersonalAllowanceActionSpec extends CommonPlaySpec with WithCommonFakeAppl
   val ec = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
-  val defaultCache = mock[CacheMap]
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val personalAllowanceView = fakeApplication.injector.instanceOf[personalAllowance]
+  val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
   lazy val pageTitle = s"""${messages.question} - ${commonMessages.pageHeading} - GOV.UK"""
 
   class Setup {
     val controller = new PersonalAllowanceController(
       mockHttp,
       mockCalcConnector,
+      mockSessionCacheService,
       mockMessagesControllerComponents,
       personalAllowanceView
     )(ec)
@@ -65,11 +66,11 @@ class PersonalAllowanceActionSpec extends CommonPlaySpec with WithCommonFakeAppl
 
   def setupTarget(getData: Option[PersonalAllowanceModel]): PersonalAllowanceController = {
 
-    when(mockCalcConnector.fetchAndGetFormData[PersonalAllowanceModel](
+    when(mockSessionCacheService.fetchAndGetFormData[PersonalAllowanceModel](
       ArgumentMatchers.eq(KeystoreKeys.personalAllowance))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    when(mockCalcConnector.fetchAndGetFormData[DateModel](
+    when(mockSessionCacheService.fetchAndGetFormData[DateModel](
       ArgumentMatchers.eq(KeystoreKeys.disposalDate))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(DateModel(6, 5, 2016))))
 
@@ -79,10 +80,10 @@ class PersonalAllowanceActionSpec extends CommonPlaySpec with WithCommonFakeAppl
     when(mockCalcConnector.getPA(ArgumentMatchers.anyInt(), ArgumentMatchers.anyBoolean())(ArgumentMatchers.any()))
       .thenReturn(Some(BigDecimal(11000)))
 
-    when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(CacheMap("", Map.empty)))
+    when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      .thenReturn(Future.successful(("", "")))
 
-    new PersonalAllowanceController(mockHttp, mockCalcConnector, mockMessagesControllerComponents, personalAllowanceView)(ec)
+    new PersonalAllowanceController(mockHttp, mockCalcConnector, mockSessionCacheService, mockMessagesControllerComponents, personalAllowanceView)(ec)
   }
 
   // GET Tests

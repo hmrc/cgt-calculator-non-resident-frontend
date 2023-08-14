@@ -16,61 +16,31 @@
 
 package connectors
 
-import java.util.UUID
-
-import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import common.{CommonPlaySpec, WithCommonFakeApplication}
 import config.ApplicationConfig
 import models._
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.libs.json.Json
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
-import uk.gov.hmrc.http.cache.client.{CacheMap, SessionCache}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-import common.{CommonPlaySpec, WithCommonFakeApplication}
 
+import java.util.UUID
 import scala.concurrent.{ExecutionContext, Future}
 
 class CalculatorConnectorSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar {
 
   val mockHttp         = mock[DefaultHttpClient]
-  val mockSessionCache = mock[SessionCache]
   val mockServiceConf  = mock[ServicesConfig]
   val mockConfig       = fakeApplication.injector.instanceOf[ApplicationConfig]
   val sessionId        = UUID.randomUUID.toString
 
-  implicit val hc: HeaderCarrier = HeaderCarrier(sessionId = Some(SessionId(sessionId.toString)))
+  implicit val hc: HeaderCarrier = HeaderCarrier(sessionId = Some(SessionId(sessionId)))
   implicit val ec = fakeApplication.injector.instanceOf[ExecutionContext]
+
   class Setup {
     val connector = new CalculatorConnector(mockHttp, mockConfig, mockServiceConf)
-  }
-
-  "Calculator Connector" should {
-
-    "fetch and get from keystore" in new Setup {
-      val validCacheMap = CacheMap("id", Map(KeystoreKeys.disposalValue -> Json.toJson(DisposalValueModel(1000))))
-
-      when(mockHttp.GET[CacheMap](ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any()))
-        .thenReturn(Future.successful(validCacheMap))
-
-      val result = connector.fetchAndGetFormData[DisposalValueModel](KeystoreKeys.disposalValue)
-      await(result) shouldBe Some(DisposalValueModel(1000))
-    }
-
-    "save data to keystore" in new Setup {
-      val testModel = DisposalValueModel(1000)
-      val returnedCacheMap = CacheMap(KeystoreKeys.disposalValue, Map("data" -> Json.toJson(testModel)))
-
-      when(mockHttp.PUT[DisposalValueModel, CacheMap](
-        ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any())
-        (ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any()))
-        .thenReturn(Future.successful(returnedCacheMap))
-
-      lazy val result = connector.saveFormData(KeystoreKeys.disposalValue, testModel)
-      await(result) shouldBe returnedCacheMap
-    }
   }
 
   "Calling calculateTotalGain" should {

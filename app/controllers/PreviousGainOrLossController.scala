@@ -17,29 +17,30 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import controllers.utils.RecoverableFuture
 import forms.PreviousLossOrGainForm._
-import javax.inject.Inject
 import models.PreviousLossOrGainModel
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{MessagesControllerComponents, Result}
+import services.SessionCacheService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.previousLossOrGain
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class PreviousGainOrLossController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
+class PreviousGainOrLossController @Inject()(http: DefaultHttpClient,
+                                             sessionCacheService: SessionCacheService,
                                              mcc: MessagesControllerComponents,
                                              previousLossOrGainView: previousLossOrGain)
                                             (implicit ec: ExecutionContext)
                                               extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   val previousGainOrLoss = ValidateSession.async { implicit request =>
-    calcConnector.fetchAndGetFormData[PreviousLossOrGainModel](KeystoreKeys.previousLossOrGain) map {
+    sessionCacheService.fetchAndGetFormData[PreviousLossOrGainModel](KeystoreKeys.previousLossOrGain) map {
       case Some(data) => Ok(previousLossOrGainView(previousLossOrGainForm().fill(data)))
       case None => Ok(previousLossOrGainView(previousLossOrGainForm()))
     }
@@ -53,7 +54,7 @@ class PreviousGainOrLossController @Inject()(http: DefaultHttpClient,calcConnect
       }
       def successAction(model: PreviousLossOrGainModel) = {
         (for {
-          save <- calcConnector.saveFormData[PreviousLossOrGainModel](KeystoreKeys.previousLossOrGain, model)
+          save <- sessionCacheService.saveFormData[PreviousLossOrGainModel](KeystoreKeys.previousLossOrGain, model)
           route <- routeRequest(model)
         } yield route).recoverToStart
       }

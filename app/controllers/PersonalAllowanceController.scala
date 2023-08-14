@@ -22,25 +22,29 @@ import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import controllers.utils.RecoverableFuture
 import forms.PersonalAllowanceForm._
+
 import javax.inject.Inject
 import models.{DateModel, PersonalAllowanceModel, TaxYearModel}
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import services.SessionCacheService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.personalAllowance
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class PersonalAllowanceController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
+class PersonalAllowanceController @Inject()(http: DefaultHttpClient,
+                                            calcConnector: CalculatorConnector,
+                                            sessionCacheService: SessionCacheService,
                                             mcc: MessagesControllerComponents,
                                             personalAllowanceView: personalAllowance)
                                            (implicit ec: ExecutionContext)
                                               extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   val personalAllowance: Action[AnyContent] = ValidateSession.async { implicit request =>
-    calcConnector.fetchAndGetFormData[PersonalAllowanceModel](KeystoreKeys.personalAllowance).map {
+    sessionCacheService.fetchAndGetFormData[PersonalAllowanceModel](KeystoreKeys.personalAllowance).map {
       case Some(data) => Ok(personalAllowanceView(personalAllowanceForm().fill(data)))
       case None => Ok(personalAllowanceView(personalAllowanceForm()))
     }
@@ -60,7 +64,7 @@ class PersonalAllowanceController @Inject()(http: DefaultHttpClient,calcConnecto
 
     def getPersonalAllowanceForYear: Future[BigDecimal] = {
       for {
-        disposalDate <- calcConnector.fetchAndGetFormData[DateModel](KeystoreKeys.disposalDate)
+        disposalDate <- sessionCacheService.fetchAndGetFormData[DateModel](KeystoreKeys.disposalDate)
         date <- formatDisposalDate(disposalDate)
         taxYearDetails <- calcConnector.getTaxYear(date)
         taxYear <- getTaxYear(taxYearDetails)
@@ -73,7 +77,7 @@ class PersonalAllowanceController @Inject()(http: DefaultHttpClient,calcConnecto
     }
 
     def successAction(model: PersonalAllowanceModel) = {
-      calcConnector.saveFormData[PersonalAllowanceModel](KeystoreKeys.personalAllowance, model).map(_ =>
+      sessionCacheService.saveFormData[PersonalAllowanceModel](KeystoreKeys.personalAllowance, model).map(_ =>
         Redirect(routes.OtherPropertiesController.otherProperties))
     }
 

@@ -21,29 +21,29 @@ import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import controllers.utils.RecoverableFuture
 import forms.BroughtForwardLossesForm._
-import javax.inject.Inject
 import models._
 import play.api.data.Form
 import play.api.i18n.I18nSupport
-import play.api.mvc.MessagesControllerComponents
-import uk.gov.hmrc.http.HeaderCarrier
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request}
+import services.SessionCacheService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.broughtForwardLosses
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class BroughtForwardLossesController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
+class BroughtForwardLossesController @Inject()(calcConnector: CalculatorConnector,
+                                               sessionCacheService: SessionCacheService,
                                                mcc: MessagesControllerComponents,
                                                broughtForwardLossesView: broughtForwardLosses)(implicit ec: ExecutionContext)
                                               extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
 
-  def generateBackLink(implicit hc: HeaderCarrier): Future[String] = {
-    val getOtherProperties = calcConnector.fetchAndGetFormData[OtherPropertiesModel](KeystoreKeys.otherProperties)
-    val getGainOrLoss = calcConnector.fetchAndGetFormData[PreviousLossOrGainModel](KeystoreKeys.previousLossOrGain)
-    val getGain = calcConnector.fetchAndGetFormData[HowMuchGainModel](KeystoreKeys.howMuchGain)
-    val getLoss = calcConnector.fetchAndGetFormData[HowMuchLossModel](KeystoreKeys.howMuchLoss)
+  def generateBackLink(implicit request: Request[_]): Future[String] = {
+    val getOtherProperties = sessionCacheService.fetchAndGetFormData[OtherPropertiesModel](KeystoreKeys.otherProperties)
+    val getGainOrLoss = sessionCacheService.fetchAndGetFormData[PreviousLossOrGainModel](KeystoreKeys.previousLossOrGain)
+    val getGain = sessionCacheService.fetchAndGetFormData[HowMuchGainModel](KeystoreKeys.howMuchGain)
+    val getLoss = sessionCacheService.fetchAndGetFormData[HowMuchLossModel](KeystoreKeys.howMuchLoss)
 
     for {
       otherPropertiesModel <- getOtherProperties
@@ -62,29 +62,29 @@ class BroughtForwardLossesController @Inject()(http: DefaultHttpClient,calcConne
     }
   }
 
-  val broughtForwardLosses = ValidateSession.async { implicit request =>
+  val broughtForwardLosses: Action[AnyContent] = ValidateSession.async { implicit request =>
 
-    val generateForm = calcConnector.fetchAndGetFormData[BroughtForwardLossesModel](KeystoreKeys.broughtForwardLosses).map {
+    val generateForm = sessionCacheService.fetchAndGetFormData[BroughtForwardLossesModel](KeystoreKeys.broughtForwardLosses).map {
       case Some(data) => broughtForwardLossesForm.fill(data)
       case _ => broughtForwardLossesForm
     }
 
     (for {
-      backLink <- generateBackLink(hc)
+      backLink <- generateBackLink(request)
       form <- generateForm
     } yield Ok(broughtForwardLossesView(form, backLink))).recoverToStart
   }
 
-  val submitBroughtForwardLosses = ValidateSession.async { implicit request =>
+  val submitBroughtForwardLosses: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     def successAction(model: BroughtForwardLossesModel) = {
-      calcConnector.saveFormData[BroughtForwardLossesModel](KeystoreKeys.broughtForwardLosses, model).map(_ =>
+      sessionCacheService.saveFormData[BroughtForwardLossesModel](KeystoreKeys.broughtForwardLosses, model).map(_ =>
         Redirect(controllers.routes.CheckYourAnswersController.checkYourAnswers))
     }
 
     def errorAction(form: Form[BroughtForwardLossesModel]) = {
       (for {
-        backLink <- generateBackLink(hc)
+        backLink <- generateBackLink(request)
       } yield BadRequest(broughtForwardLossesView(form, backLink))).recoverToStart
     }
 

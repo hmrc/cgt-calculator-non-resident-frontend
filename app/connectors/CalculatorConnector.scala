@@ -20,36 +20,21 @@ import common.nonresident.CalculationType
 import common.{TaxDates, YesNoKeys}
 import config.ApplicationConfig
 import constructors._
-import javax.inject.Inject
 import models._
-import play.api.libs.json.Format
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.http.cache.client.{CacheMap, SessionCache}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class CalculatorConnector @Inject()(val http: DefaultHttpClient,
                                     val appConfig: ApplicationConfig,
                                     val servicesConfig: ServicesConfig)
-                                   (implicit ec: ExecutionContext)
-                                    extends SessionCache {
-
-  override lazy val domain: String = servicesConfig.getConfString("cachable.session-cache.domain", throw new Exception(s"Could not find config 'cachable.session-cache.domain'"))
-  override lazy val baseUri: String = servicesConfig.baseUrl("cachable.session-cache")
-  override lazy val defaultSource: String = "cgt-calculator-non-resident-frontend"
+                                   (implicit ec: ExecutionContext) {
 
   val serviceUrl: String = servicesConfig.baseUrl("capital-gains-calculator")
-
-  def saveFormData[T](key: String, data: T)(implicit hc: HeaderCarrier, formats: Format[T]): Future[CacheMap] = {
-    cache(key, data)
-  }
-
-  def fetchAndGetFormData[T](key: String)(implicit hc: HeaderCarrier, formats: Format[T]): Future[Option[T]] = {
-    fetchAndGetEntry(key)
-  }
 
   def calculateTotalGain(totalGainAnswersModel: TotalGainAnswersModel)
                         (implicit hc: HeaderCarrier): Future[Option[TotalGainResultsModel]] = {
@@ -134,9 +119,5 @@ class CalculatorConnector @Inject()(val http: DefaultHttpClient,
 
   def getTaxYear(taxYear: String)(implicit hc: HeaderCarrier): Future[Option[TaxYearModel]] = {
     http.GET[Option[TaxYearModel]](s"$serviceUrl/capital-gains-calculator/tax-year?date=$taxYear")
-  }
-
-  def clearKeystore(implicit hc: HeaderCarrier): Future[HttpResponse] = {
-    remove()
   }
 }

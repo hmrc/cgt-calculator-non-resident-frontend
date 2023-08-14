@@ -27,6 +27,7 @@ import constructors.AnswersConstructor
 import controllers.ReportController
 import controllers.helpers.FakeRequestHelper
 import it.innove.play.pdf.PdfGenerator
+
 import javax.inject.Inject
 import models.{TaxYearModel, _}
 import org.mockito.ArgumentMatchers
@@ -34,8 +35,8 @@ import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
+import services.SessionCacheService
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
-import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.summaryReport
 
@@ -50,15 +51,15 @@ class ReportActionSpec @Inject()(pdfGenerator: PdfGenerator) extends CommonPlayS
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
   val mockAnswersConstructor = mock[AnswersConstructor]
-  val defaultCache = mock[CacheMap]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val summaryReportView = fakeApplication.injector.instanceOf[summaryReport]
+  val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
 
   class Setup {
     val controller = new ReportController(
       fakeApplication.configuration,
-      mockHttp,
       mockCalcConnector,
+      mockSessionCacheService,
       mockAnswersConstructor,
       mockMessagesControllerComponents,
       pdfGenerator,
@@ -85,7 +86,7 @@ class ReportActionSpec @Inject()(pdfGenerator: PdfGenerator) extends CommonPlayS
     when(mockAnswersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers(ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(finalSummaryModel)))
 
-    when(mockCalcConnector.fetchAndGetFormData[CalculationElectionModel](
+    when(mockSessionCacheService.fetchAndGetFormData[CalculationElectionModel](
       ArgumentMatchers.eq(KeystoreKeys.calculationElection))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Some(calculationElectionModel))
 
@@ -98,11 +99,11 @@ class ReportActionSpec @Inject()(pdfGenerator: PdfGenerator) extends CommonPlayS
     when(mockCalcConnector.calculateTaxableGainAfterPRR(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(Future.successful(calculationResultsWithPRRModel))
 
-    when(mockCalcConnector.fetchAndGetFormData[PrivateResidenceReliefModel](ArgumentMatchers.eq(KeystoreKeys.privateResidenceRelief))
+    when(mockSessionCacheService.fetchAndGetFormData[PrivateResidenceReliefModel](ArgumentMatchers.eq(KeystoreKeys.privateResidenceRelief))
       (ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(prrModel))
 
-    when(mockCalcConnector.fetchAndGetFormData[PropertyLivedInModel](ArgumentMatchers.eq(KeystoreKeys.propertyLivedIn))
+    when(mockSessionCacheService.fetchAndGetFormData[PropertyLivedInModel](ArgumentMatchers.eq(KeystoreKeys.propertyLivedIn))
     (ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(PropertyLivedInModel(true))))
 
@@ -116,22 +117,22 @@ class ReportActionSpec @Inject()(pdfGenerator: PdfGenerator) extends CommonPlayS
     when(mockCalcConnector.getTaxYear(ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(TaxYearModel("2015/16", isValidYear = true, "2015/16"))))
 
-    when(mockCalcConnector.fetchAndGetFormData[OtherReliefsModel](
+    when(mockSessionCacheService.fetchAndGetFormData[OtherReliefsModel](
       ArgumentMatchers.eq(KeystoreKeys.otherReliefsFlat))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(None))
 
-    when(mockCalcConnector.fetchAndGetFormData[OtherReliefsModel](
+    when(mockSessionCacheService.fetchAndGetFormData[OtherReliefsModel](
       ArgumentMatchers.eq(KeystoreKeys.otherReliefsRebased))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(None))
 
-    when(mockCalcConnector.fetchAndGetFormData[OtherReliefsModel](
+    when(mockSessionCacheService.fetchAndGetFormData[OtherReliefsModel](
       ArgumentMatchers.eq(KeystoreKeys.otherReliefsTA))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(None))
 
     when(mockCalcConnector.calculateTotalCosts(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(BigDecimal(1000.00)))
 
-    new ReportController(fakeApplication.configuration, mockHttp, mockCalcConnector, mockAnswersConstructor, mockMessagesControllerComponents, pdfGenerator, summaryReportView)(ec)
+    new ReportController(fakeApplication.configuration, mockCalcConnector, mockSessionCacheService, mockAnswersConstructor, mockMessagesControllerComponents, pdfGenerator, summaryReportView)(ec)
   }
 
   val model = TotalGainAnswersModel(DateModel(5, 10, 2016),

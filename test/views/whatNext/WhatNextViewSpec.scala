@@ -102,7 +102,7 @@ class WhatNextViewSpec extends CommonPlaySpec with WithCommonFakeApplication wit
       }
 
       "has an href linking to gov uk" in {
-        link.attr("href") shouldBe "http://www.gov.uk"
+        link.attr("href") shouldBe "https://www.gov.uk"
       }
     }
 

@@ -20,18 +20,21 @@ import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import forms.CostsAtLegislationStartForm._
+
 import javax.inject.Inject
 import models.CostsAtLegislationStartModel
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import services.SessionCacheService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.costsAtLegislationStart
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class CostsAtLegislationStartController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
+class CostsAtLegislationStartController @Inject()(http: DefaultHttpClient,
+                                                  sessionCacheService: SessionCacheService,
                                                   mcc: MessagesControllerComponents,
                                                   costsAtLegislationStartView: costsAtLegislationStart)
                                                  (implicit ec: ExecutionContext)
@@ -39,7 +42,7 @@ class CostsAtLegislationStartController @Inject()(http: DefaultHttpClient,calcCo
 
 
   val costsAtLegislationStart: Action[AnyContent] = ValidateSession.async { implicit request =>
-    calcConnector.fetchAndGetFormData[CostsAtLegislationStartModel](KeystoreKeys.costAtLegislationStart).map {
+    sessionCacheService.fetchAndGetFormData[CostsAtLegislationStartModel](KeystoreKeys.costAtLegislationStart).map {
       case Some(data) => Ok(costsAtLegislationStartView(costsAtLegislationStartForm.fill(data)))
       case None => Ok(costsAtLegislationStartView(costsAtLegislationStartForm))
     }
@@ -52,7 +55,7 @@ class CostsAtLegislationStartController @Inject()(http: DefaultHttpClient,calcCo
     }
 
     def successAction(model: CostsAtLegislationStartModel) = {
-      calcConnector.saveFormData(KeystoreKeys.costAtLegislationStart, model).map { _ =>
+      sessionCacheService.saveFormData(KeystoreKeys.costAtLegislationStart, model).map { _ =>
         Redirect(routes.RebasedValueController.rebasedValue)
       }
     }

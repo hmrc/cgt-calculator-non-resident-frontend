@@ -17,21 +17,21 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import controllers.utils.RecoverableFuture
-import javax.inject.Inject
 import models.DateModel
 import play.api.i18n.{I18nSupport, Lang}
 import play.api.mvc.MessagesControllerComponents
+import services.SessionCacheService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.noCapitalGainsTax
 
+import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
 class NoCapitalGainsTaxController @Inject()(http: DefaultHttpClient,
-                                            calcConnector: CalculatorConnector,
+                                            sessionCacheService: SessionCacheService,
                                             mcc: MessagesControllerComponents,
                                             noCapitalGainsTaxView: noCapitalGainsTax)
                                            (implicit ec: ExecutionContext)
@@ -39,7 +39,7 @@ class NoCapitalGainsTaxController @Inject()(http: DefaultHttpClient,
 
   val noCapitalGainsTax = ValidateSession.async { implicit request =>
     implicit val lang: Lang = mcc.messagesApi.preferred(request).lang
-    calcConnector.fetchAndGetFormData[DateModel](KeystoreKeys.disposalDate).map {
+    sessionCacheService.fetchAndGetFormData[DateModel](KeystoreKeys.disposalDate).map {
       result => Ok(noCapitalGainsTaxView(result.get))
     }.recoverToStart
   }

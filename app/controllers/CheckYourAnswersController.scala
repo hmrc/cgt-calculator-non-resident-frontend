@@ -20,22 +20,24 @@ import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.nonresident.CalculationType
 import common.nonresident.TaxableGainCalculation._
 import connectors.CalculatorConnector
-import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor, YourAnswersConstructor}
+import constructors.{AnswersConstructor, YourAnswersConstructor}
 import controllers.predicates.ValidActiveSession
 import controllers.utils.RecoverableFuture
-import javax.inject.Inject
 import models._
-import play.api.i18n.I18nSupport
+import play.api.i18n.{I18nSupport, Lang}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
+import services.SessionCacheService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.checkYourAnswers
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class CheckYourAnswersController @Inject()(http: DefaultHttpClient,calculatorConnector: CalculatorConnector,
+class CheckYourAnswersController @Inject()(http: DefaultHttpClient,
+                                           calculatorConnector: CalculatorConnector,
+                                           sessionCacheService: SessionCacheService,
                                            answersConstructor: AnswersConstructor,
-                                           calcElectionConstructor: DefaultCalculationElectionConstructor,
                                            mcc: MessagesControllerComponents,
                                            checkYourAnswersView: checkYourAnswers)(implicit ec: ExecutionContext)
                                               extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
@@ -65,16 +67,16 @@ class CheckYourAnswersController @Inject()(http: DefaultHttpClient,calculatorCon
   }
 
   val checkYourAnswers: Action[AnyContent] = ValidateSession.async { implicit request =>
-    implicit val lang = mcc.messagesApi.preferred(request).lang
+    implicit val lang: Lang = mcc.messagesApi.preferred(request).lang
 
     (for {
       model <- answersConstructor.getNRTotalGainAnswers
       totalGainResult <- calculatorConnector.calculateTotalGain(model)
       gainExists <- checkGainExists(totalGainResult.get)
-      propertyLivedIn <- getPropertyLivedInResponse(gainExists, calculatorConnector)
-      prrModel <- getPrrResponse(propertyLivedIn, calculatorConnector)
+      propertyLivedIn <- getPropertyLivedInResponse(gainExists, sessionCacheService)
+      prrModel <- getPrrResponse(propertyLivedIn, sessionCacheService)
       totalGainWithPRRResult <- getPrrIfApplicable(model, prrModel, propertyLivedIn, calculatorConnector)
-      finalAnswers <- getFinalSectionsAnswers(totalGainResult.get, totalGainWithPRRResult, calculatorConnector, answersConstructor)
+      finalAnswers <- getFinalSectionsAnswers(totalGainResult.get, totalGainWithPRRResult, answersConstructor)
       answers <- Future.successful(YourAnswersConstructor.fetchYourAnswers(model, prrModel, finalAnswers, propertyLivedIn))
       backLink <- getBackLink(totalGainResult.get, model.acquisitionDateModel, finalAnswers)
     } yield {
@@ -85,12 +87,12 @@ class CheckYourAnswersController @Inject()(http: DefaultHttpClient,calculatorCon
   val submitCheckYourAnswers: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     def routeRequest(model: Option[TotalGainResultsModel], taxableGainModel: Option[CalculationResultsWithPRRModel]) = model match {
-      case (Some(data)) if data.rebasedGain.isDefined || data.timeApportionedGain.isDefined =>
+      case Some(data) if data.rebasedGain.isDefined || data.timeApportionedGain.isDefined =>
         val seq = Seq(Some(data.flatGain), data.rebasedGain, data.timeApportionedGain).flatten
         if (seq.forall(_ <= 0)) Future.successful(Redirect(routes.CalculationElectionController.calculationElection))
         else Future.successful(Redirect(routes.ClaimingReliefsController.claimingReliefs))
-      case (Some(_)) =>
-        calculatorConnector.saveFormData[CalculationElectionModel](KeystoreKeys.calculationElection, CalculationElectionModel(CalculationType.flat))
+      case Some(_) =>
+        sessionCacheService.saveFormData[CalculationElectionModel](KeystoreKeys.calculationElection, CalculationElectionModel(CalculationType.flat))
         redirectRoute(taxableGainModel, model.get)
     }
 
@@ -98,8 +100,8 @@ class CheckYourAnswersController @Inject()(http: DefaultHttpClient,calculatorCon
       allAnswersModel <- answersConstructor.getNRTotalGainAnswers
       totalGains <- calculatorConnector.calculateTotalGain(allAnswersModel)
       gainExists <- checkGainExists(totalGains.get)
-      propertyLivedIn <- getPropertyLivedInResponse(gainExists, calculatorConnector)
-      prrModel <- getPrrResponse(propertyLivedIn, calculatorConnector)
+      propertyLivedIn <- getPropertyLivedInResponse(gainExists, sessionCacheService)
+      prrModel <- getPrrResponse(propertyLivedIn, sessionCacheService)
       taxableGainWithPrr <- getPrrIfApplicable(allAnswersModel, prrModel, propertyLivedIn, calculatorConnector)
       route <- routeRequest(totalGains, taxableGainWithPrr)
     } yield route).recoverToStart

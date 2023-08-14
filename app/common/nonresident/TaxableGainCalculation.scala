@@ -21,6 +21,8 @@ import common.TaxDates
 import connectors.CalculatorConnector
 import constructors.AnswersConstructor
 import models._
+import play.api.mvc.Request
+import services.SessionCacheService
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -34,19 +36,19 @@ object TaxableGainCalculation {
     Future.successful(finalSeq.exists(_ > 0))
   }
 
-  def getPropertyLivedInResponse(gainExists: Boolean, calcConnector: CalculatorConnector)
-                                (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[PropertyLivedInModel]] = {
+  def getPropertyLivedInResponse(gainExists: Boolean, sessionCacheService: SessionCacheService)
+                                (implicit request: Request[_], ec: ExecutionContext): Future[Option[PropertyLivedInModel]] = {
     if (gainExists) {
-      calcConnector.fetchAndGetFormData[PropertyLivedInModel](KeystoreKeys.propertyLivedIn)
+      sessionCacheService.fetchAndGetFormData[PropertyLivedInModel](KeystoreKeys.propertyLivedIn)
     } else Future(None)
   }
 
   def getPrrResponse(propertyLivedInResponse: Option[PropertyLivedInModel],
-                     calcConnector: CalculatorConnector)(implicit hc: HeaderCarrier, ec: ExecutionContext):
+                     sessionCacheService: SessionCacheService)(implicit request: Request[_], ec: ExecutionContext):
   Future[Option[PrivateResidenceReliefModel]] = {
     propertyLivedInResponse match {
       case Some(data) if data.propertyLivedIn =>
-        calcConnector.fetchAndGetFormData[PrivateResidenceReliefModel](KeystoreKeys.privateResidenceRelief)
+        sessionCacheService.fetchAndGetFormData[PrivateResidenceReliefModel](KeystoreKeys.privateResidenceRelief)
       case _ => Future(None)
     }
   }
@@ -54,7 +56,7 @@ object TaxableGainCalculation {
   def getPrrIfApplicable(totalGainAnswersModel: TotalGainAnswersModel,
                          privateResidenceReliefModel: Option[PrivateResidenceReliefModel],
                          propertyLivedInModel: Option[PropertyLivedInModel],
-                         calcConnector: CalculatorConnector)(implicit hc: HeaderCarrier):
+                         calcConnector: CalculatorConnector)(implicit headerCarrier: HeaderCarrier):
   Future[Option[CalculationResultsWithPRRModel]] = {
 
     (propertyLivedInModel, privateResidenceReliefModel) match {
@@ -68,24 +70,22 @@ object TaxableGainCalculation {
 
   def getFinalSectionsAnswers(totalGainResultsModel: TotalGainResultsModel,
                               calculationResultsWithPRRModel: Option[CalculationResultsWithPRRModel],
-                              calcConnector: CalculatorConnector,
-                              answersConstructor: AnswersConstructor)(implicit hc: HeaderCarrier, ec: ExecutionContext):
+                              answersConstructor: AnswersConstructor)(implicit request: Request[_], ec: ExecutionContext):
   Future[Option[TotalPersonalDetailsCalculationModel]] = {
-
     calculationResultsWithPRRModel match {
 
       case Some(data) =>
         val results = data.flatResult :: List(data.rebasedResult, data.timeApportionedResult).flatten
 
         if (results.exists(_.taxableGain > 0)) {
-          answersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers(hc)
+          answersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers
         } else Future(None)
 
       case None =>
         val gains = totalGainResultsModel.flatGain :: List(totalGainResultsModel.rebasedGain, totalGainResultsModel.timeApportionedGain).flatten
 
         if (gains.exists(_ > 0)) {
-          answersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers(hc)
+          answersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers
         } else Future(None)
     }
   }

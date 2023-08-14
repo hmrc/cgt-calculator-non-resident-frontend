@@ -32,8 +32,8 @@ import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
+import services.SessionCacheService
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
-import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.acquisitionDate
 import views.html.warnings.sessionTimeout
@@ -47,18 +47,17 @@ class AcquisitionDateActionSpec extends CommonPlaySpec with WithCommonFakeApplic
   val materializer = mock[Materializer]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
-  val defaultCache = mock[CacheMap]
   val mockDefaultCalcElecConstructor = mock[DefaultCalculationElectionConstructor]
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val acquisitionCostsView = fakeApplication.injector.instanceOf[acquisitionDate]
   val sessionTimeoutView = fakeApplication.injector.instanceOf[sessionTimeout]
-
+  val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
 
   class Setup {
     val controller = new AcquisitionDateController(
       mockHttp,
-      mockCalcConnector,
+      mockSessionCacheService,
       mockDefaultCalcElecConstructor,
       mockMessagesControllerComponents,
       acquisitionCostsView
@@ -68,13 +67,13 @@ class AcquisitionDateActionSpec extends CommonPlaySpec with WithCommonFakeApplic
   def setupTarget(getData: Option[DateModel]
                  ): AcquisitionDateController = {
 
-    when(mockCalcConnector.fetchAndGetFormData[DateModel](ArgumentMatchers.anyString())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.fetchAndGetFormData[DateModel](ArgumentMatchers.anyString())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(CacheMap("", Map.empty)))
+    when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      .thenReturn(Future.successful(("", "")))
 
-    new AcquisitionDateController(mockHttp, mockCalcConnector, mockDefaultCalcElecConstructor, mockMessagesControllerComponents, acquisitionCostsView)(ec) {
+    new AcquisitionDateController(mockHttp, mockSessionCacheService, mockDefaultCalcElecConstructor, mockMessagesControllerComponents, acquisitionCostsView)(ec) {
     }
   }
 

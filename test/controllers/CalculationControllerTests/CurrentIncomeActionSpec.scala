@@ -31,8 +31,8 @@ import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
+import services.SessionCacheService
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
-import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.currentIncome
 
@@ -46,16 +46,14 @@ class CurrentIncomeActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
   val ec = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
-  val defaultCache = mock[CacheMap]
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val currentIncomeView = fakeApplication.injector.instanceOf[currentIncome]
   val pageTitle = s"${messages.question} - ${commonMessages.pageHeading} - GOV.UK"
-
+  val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
   class Setup {
     val controller = new CurrentIncomeController(
-      mockHttp,
-      mockCalcConnector,
+      mockSessionCacheService,
       mockMessagesControllerComponents,
       currentIncomeView
     )(ec)
@@ -63,16 +61,16 @@ class CurrentIncomeActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
 
   def setupTarget(getData: Option[CurrentIncomeModel], getPropertyLivedIn: Option[PropertyLivedInModel] = None): CurrentIncomeController = {
 
-    when(mockCalcConnector.fetchAndGetFormData[CurrentIncomeModel](ArgumentMatchers.anyString())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.fetchAndGetFormData[CurrentIncomeModel](ArgumentMatchers.anyString())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    when(mockCalcConnector.fetchAndGetFormData[PropertyLivedInModel](ArgumentMatchers.anyString())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.fetchAndGetFormData[PropertyLivedInModel](ArgumentMatchers.anyString())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getPropertyLivedIn))
 
-    when(mockCalcConnector.saveFormData[CurrentIncomeModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(mock[CacheMap])
+    when(mockSessionCacheService.saveFormData[CurrentIncomeModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      .thenReturn(("", ""))
 
-    new CurrentIncomeController(mockHttp, mockCalcConnector, mockMessagesControllerComponents, currentIncomeView)(ec)
+    new CurrentIncomeController(mockSessionCacheService, mockMessagesControllerComponents, currentIncomeView)(ec)
   }
 
   //GET Tests

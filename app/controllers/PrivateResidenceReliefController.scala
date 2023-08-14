@@ -16,8 +16,6 @@
 
 package controllers
 
-import java.time.LocalDate
-
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.nonresident.TaxableGainCalculation.{checkGainExists, getPropertyLivedInResponse}
 import common.{Dates, TaxDates}
@@ -26,33 +24,34 @@ import constructors.AnswersConstructor
 import controllers.predicates.ValidActiveSession
 import controllers.utils.RecoverableFuture
 import forms.PrivateResidenceReliefForm._
-import javax.inject.Inject
 import models._
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, Lang}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
-import uk.gov.hmrc.http.HeaderCarrier
+import play.api.mvc._
+import services.SessionCacheService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.privateResidenceRelief
 
+import java.time.LocalDate
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class PrivateResidenceReliefController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
+class PrivateResidenceReliefController @Inject()(calcConnector: CalculatorConnector,
+                                                 sessionCacheService: SessionCacheService,
                                                  answersConstructor: AnswersConstructor,
                                                  mcc: MessagesControllerComponents,
                                                  privateResidenceReliefView: privateResidenceRelief)
                                                 (implicit ec: ExecutionContext)
                                                   extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
-  def getAcquisitionDate(implicit hc: HeaderCarrier): Future[Option[LocalDate]] =
-    calcConnector.fetchAndGetFormData[DateModel](KeystoreKeys.acquisitionDate).map {
+  def getAcquisitionDate(implicit request: Request[_]): Future[Option[LocalDate]] =
+    sessionCacheService.fetchAndGetFormData[DateModel](KeystoreKeys.acquisitionDate).map {
       case Some(DateModel(day, month, year)) => Some(Dates.constructDate(day, month, year))
       case _ => None
     }
 
-  def getDisposalDate(implicit hc: HeaderCarrier): Future[Option[LocalDate]] =
-    calcConnector.fetchAndGetFormData[DateModel](KeystoreKeys.disposalDate).map {
+  def getDisposalDate(implicit request: Request[_]): Future[Option[LocalDate]] =
+    sessionCacheService.fetchAndGetFormData[DateModel](KeystoreKeys.disposalDate).map {
       case Some(data) => Some(Dates.constructDate(data.day, data.month, data.year))
       case _ => None
     }
@@ -96,7 +95,7 @@ class PrivateResidenceReliefController @Inject()(http: DefaultHttpClient,calcCon
       val showBetweenQuestion = displayAfterQuestion(disposalDate, acquisitionDate)
       val disposalDateLessMonths = Dates.dateMinusMonths(disposalDate, pRRDateDetails.months)
 
-      calcConnector.fetchAndGetFormData[PrivateResidenceReliefModel](KeystoreKeys.privateResidenceRelief).map {
+      sessionCacheService.fetchAndGetFormData[PrivateResidenceReliefModel](KeystoreKeys.privateResidenceRelief).map {
         case Some(data) => Ok(privateResidenceReliefView(privateResidenceReliefForm(showFirstQuestion,
           showBetweenQuestion).fill(data), showBetweenQuestion, showFirstQuestion, disposalDateLessMonths, pRRDateDetails.months, showOnlyFlatQuestion))
         case None => Ok(privateResidenceReliefView(privateResidenceReliefForm(showFirstQuestion, showBetweenQuestion),
@@ -143,11 +142,11 @@ class PrivateResidenceReliefController @Inject()(http: DefaultHttpClient,calcCon
 
       def successAction(model: PrivateResidenceReliefModel) = {
         (for {
-          _ <- calcConnector.saveFormData(KeystoreKeys.privateResidenceRelief, model)
+          _ <- sessionCacheService.saveFormData(KeystoreKeys.privateResidenceRelief, model)
           answers <- answersConstructor.getNRTotalGainAnswers
           totalGainResultsModel <- calcConnector.calculateTotalGain(answers)
           gainExists <- checkGainExists(totalGainResultsModel.get)
-          propertyLivedIn <- getPropertyLivedInResponse(gainExists, calcConnector)
+          propertyLivedIn <- getPropertyLivedInResponse(gainExists, sessionCacheService)
           results <- calcConnector.calculateTaxableGainAfterPRR(answers, model, propertyLivedIn.get)
           taxableGainsZeroOrLess <- checkTaxableGainsZeroOrLess(results.get)
           route <- routeDestination(taxableGainsZeroOrLess)

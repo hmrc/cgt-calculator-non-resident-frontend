@@ -33,8 +33,8 @@ import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
+import services.SessionCacheService
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
-import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.improvements
 
@@ -48,17 +48,17 @@ class ImprovementsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
   val ec = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
-  val defaultCache = mock[CacheMap]
   val mockAnswersConstructor = mock[AnswersConstructor]
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val improvementsView = fakeApplication.injector.instanceOf[improvements]
   lazy val pageTitle = s"""${messages.question} - ${commonMessages.pageHeading} - GOV.UK"""
+  val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
 
   class Setup {
     val controller = new ImprovementsController(
-      mockHttp,
       mockCalcConnector,
+      mockSessionCacheService,
       mockAnswersConstructor,
       mockMessagesControllerComponents,
       improvementsView
@@ -71,14 +71,14 @@ class ImprovementsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
                   totalGainResultsModel: Option[TotalGainResultsModel] = None
                  ): ImprovementsController = {
 
-    when(mockCalcConnector.fetchAndGetFormData[ImprovementsModel](ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.fetchAndGetFormData[ImprovementsModel](ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    when(mockCalcConnector.fetchAndGetFormData[RebasedValueModel](
+    when(mockSessionCacheService.fetchAndGetFormData[RebasedValueModel](
       ArgumentMatchers.eq(KeystoreKeys.rebasedValue))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(rebasedValueData))
 
-    when(mockCalcConnector.fetchAndGetFormData[DateModel](
+    when(mockSessionCacheService.fetchAndGetFormData[DateModel](
       ArgumentMatchers.eq(KeystoreKeys.acquisitionDate))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(acquisitionDateData))
 
@@ -88,10 +88,10 @@ class ImprovementsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
     when(mockCalcConnector.calculateTotalGain(ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(Future.successful(totalGainResultsModel))
 
-    when(mockCalcConnector.saveFormData[ImprovementsModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(mock[CacheMap]))
+    when(mockSessionCacheService.saveFormData[ImprovementsModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      .thenReturn(Future.successful(("", "")))
 
-    new ImprovementsController(mockHttp, mockCalcConnector, mockAnswersConstructor, mockMessagesControllerComponents, improvementsView)(ec)
+    new ImprovementsController(mockCalcConnector, mockSessionCacheService, mockAnswersConstructor, mockMessagesControllerComponents, improvementsView)(ec)
   }
 
   "In CalculationController calling the .improvements action " when {

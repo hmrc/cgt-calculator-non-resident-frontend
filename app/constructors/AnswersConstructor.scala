@@ -16,44 +16,45 @@
 
 package constructors
 
-import common.{TaxDates, YesNoKeys}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import common.{TaxDates, YesNoKeys}
 import connectors.CalculatorConnector
-import javax.inject.Inject
 import models._
 import play.api.Logging
+import play.api.mvc.Request
+import services.SessionCacheService
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
-import uk.gov.hmrc.http.HeaderCarrier
 
-class AnswersConstructor @Inject()(calculatorConnector: CalculatorConnector)(implicit ec: ExecutionContext) extends Logging {
+class AnswersConstructor @Inject()(sessionCacheService: SessionCacheService)(implicit ec: ExecutionContext) extends Logging {
 
-  def getNRTotalGainAnswers(implicit hc: HeaderCarrier): Future[TotalGainAnswersModel] = {
-    val disposalDate = calculatorConnector.fetchAndGetFormData[DateModel](KeystoreKeys.disposalDate).map(data => {
+  def getNRTotalGainAnswers(implicit request: Request[_]): Future[TotalGainAnswersModel] = {
+    val disposalDate = sessionCacheService.fetchAndGetFormData[DateModel](KeystoreKeys.disposalDate).map(data => {
       logger.info("Getting disposalDate as : " + data)
       data.get
     })
-    val soldOrGivenAway = calculatorConnector.fetchAndGetFormData[SoldOrGivenAwayModel](KeystoreKeys.soldOrGivenAway).map(data => data.get)
-    val soldForLess = calculatorConnector.fetchAndGetFormData[SoldForLessModel](KeystoreKeys.soldForLess)
-    val disposalCosts = calculatorConnector.fetchAndGetFormData[DisposalCostsModel](KeystoreKeys.disposalCosts).map(data => data.get)
-    val howBecameOwner = calculatorConnector.fetchAndGetFormData[HowBecameOwnerModel](KeystoreKeys.howBecameOwner)
-    val boughtForLess = calculatorConnector.fetchAndGetFormData[BoughtForLessModel](KeystoreKeys.boughtForLess)
-    val acquisitionCosts = calculatorConnector.fetchAndGetFormData[AcquisitionCostsModel](KeystoreKeys.acquisitionCosts)
-    val acquisitionDate = calculatorConnector.fetchAndGetFormData[DateModel](KeystoreKeys.acquisitionDate).map(data => data.get)
-    val rebasedValue = calculatorConnector.fetchAndGetFormData[RebasedValueModel](KeystoreKeys.rebasedValue)
-    val rebasedCosts = calculatorConnector.fetchAndGetFormData[RebasedCostsModel](KeystoreKeys.rebasedCosts)
-    val improvements = calculatorConnector.fetchAndGetFormData[ImprovementsModel](KeystoreKeys.improvements).map(data => data.get)
-    val otherReliefsFlat = calculatorConnector.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsFlat)
-    val costsBeforeLegislationStart = calculatorConnector.fetchAndGetFormData[CostsAtLegislationStartModel](KeystoreKeys.costAtLegislationStart)
+    val soldOrGivenAway = sessionCacheService.fetchAndGetFormData[SoldOrGivenAwayModel](KeystoreKeys.soldOrGivenAway).map(data => data.get)
+    val soldForLess = sessionCacheService.fetchAndGetFormData[SoldForLessModel](KeystoreKeys.soldForLess)
+    val disposalCosts = sessionCacheService.fetchAndGetFormData[DisposalCostsModel](KeystoreKeys.disposalCosts).map(data => data.get)
+    val howBecameOwner = sessionCacheService.fetchAndGetFormData[HowBecameOwnerModel](KeystoreKeys.howBecameOwner)
+    val boughtForLess = sessionCacheService.fetchAndGetFormData[BoughtForLessModel](KeystoreKeys.boughtForLess)
+    val acquisitionCosts = sessionCacheService.fetchAndGetFormData[AcquisitionCostsModel](KeystoreKeys.acquisitionCosts)
+    val acquisitionDate = sessionCacheService.fetchAndGetFormData[DateModel](KeystoreKeys.acquisitionDate).map(data => data.get)
+    val rebasedValue = sessionCacheService.fetchAndGetFormData[RebasedValueModel](KeystoreKeys.rebasedValue)
+    val rebasedCosts = sessionCacheService.fetchAndGetFormData[RebasedCostsModel](KeystoreKeys.rebasedCosts)
+    val improvements = sessionCacheService.fetchAndGetFormData[ImprovementsModel](KeystoreKeys.improvements).map(data => data.get)
+    val otherReliefsFlat = sessionCacheService.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsFlat)
+    val costsBeforeLegislationStart = sessionCacheService.fetchAndGetFormData[CostsAtLegislationStartModel](KeystoreKeys.costAtLegislationStart)
 
     def disposalValue(soldOrGivenAwayModel: SoldOrGivenAwayModel,
                       soldForLessModel: Option[SoldForLessModel]): Future[DisposalValueModel] = (soldOrGivenAwayModel, soldForLessModel) match {
       case (SoldOrGivenAwayModel(true), Some(SoldForLessModel(true))) =>
-        calculatorConnector.fetchAndGetFormData[DisposalValueModel](KeystoreKeys.disposalMarketValue).map(data => data.get)
+        sessionCacheService.fetchAndGetFormData[DisposalValueModel](KeystoreKeys.disposalMarketValue).map(data => data.get)
       case (SoldOrGivenAwayModel(true), Some(_)) =>
-        calculatorConnector.fetchAndGetFormData[DisposalValueModel](KeystoreKeys.disposalValue).map(data => data.get)
+        sessionCacheService.fetchAndGetFormData[DisposalValueModel](KeystoreKeys.disposalValue).map(data => data.get)
       case _ =>
-        calculatorConnector.fetchAndGetFormData[DisposalValueModel](KeystoreKeys.disposalMarketValue).map(data => data.get)
+        sessionCacheService.fetchAndGetFormData[DisposalValueModel](KeystoreKeys.disposalMarketValue).map(data => data.get)
     }
 
     def acquisitionValue(acquisitionDateModel: DateModel,
@@ -61,16 +62,16 @@ class AnswersConstructor @Inject()(calculatorConnector: CalculatorConnector)(imp
                          boughtForLessModel: Option[BoughtForLessModel]): Future[AcquisitionValueModel] =
       (acquisitionDateModel, howBecameOwnerModel, boughtForLessModel) match {
         case _ if TaxDates.dateBeforeLegislationStart(acquisitionDateModel.get) =>
-          calculatorConnector.fetchAndGetFormData[WorthBeforeLegislationStartModel](KeystoreKeys.worthBeforeLegislationStart).map(data =>
+          sessionCacheService.fetchAndGetFormData[WorthBeforeLegislationStartModel](KeystoreKeys.worthBeforeLegislationStart).map(data =>
             AcquisitionValueModel(data.get.worthBeforeLegislationStart)
           )
         case (_, Some(HowBecameOwnerModel(value)), _) if !value.equals("Bought") =>
-          calculatorConnector.fetchAndGetFormData[AcquisitionValueModel](KeystoreKeys.acquisitionMarketValue)
+          sessionCacheService.fetchAndGetFormData[AcquisitionValueModel](KeystoreKeys.acquisitionMarketValue)
             .map(data => data.get)
         case (_, _, Some(BoughtForLessModel(true))) =>
-          calculatorConnector.fetchAndGetFormData[AcquisitionValueModel](KeystoreKeys.acquisitionMarketValue)
+          sessionCacheService.fetchAndGetFormData[AcquisitionValueModel](KeystoreKeys.acquisitionMarketValue)
             .map(data => data.get)
-        case _ => calculatorConnector.fetchAndGetFormData[AcquisitionValueModel](KeystoreKeys.acquisitionValue).map(data => data.get)
+        case _ => sessionCacheService.fetchAndGetFormData[AcquisitionValueModel](KeystoreKeys.acquisitionValue).map(data => data.get)
       }
 
     for {
@@ -94,17 +95,17 @@ class AnswersConstructor @Inject()(calculatorConnector: CalculatorConnector)(imp
       rebasedValue, rebasedCosts, improvements, otherReliefsFlat, costsBeforeLegislationStart)
   }
 
-  def getPersonalDetailsAndPreviousCapitalGainsAnswers(implicit hc: HeaderCarrier): Future[Option[TotalPersonalDetailsCalculationModel]] = {
-    val currentIncome = calculatorConnector.fetchAndGetFormData[CurrentIncomeModel](KeystoreKeys.currentIncome)
+  def getPersonalDetailsAndPreviousCapitalGainsAnswers(implicit request: Request[_]): Future[Option[TotalPersonalDetailsCalculationModel]] = {
+    val currentIncome = sessionCacheService.fetchAndGetFormData[CurrentIncomeModel](KeystoreKeys.currentIncome)
       .map(_.getOrElse(throw new Exception("No value for current income found")))
-    val personalAllowance = calculatorConnector.fetchAndGetFormData[PersonalAllowanceModel](KeystoreKeys.personalAllowance)
-    val otherProperties = calculatorConnector.fetchAndGetFormData[OtherPropertiesModel](KeystoreKeys.otherProperties)
+    val personalAllowance = sessionCacheService.fetchAndGetFormData[PersonalAllowanceModel](KeystoreKeys.personalAllowance)
+    val otherProperties = sessionCacheService.fetchAndGetFormData[OtherPropertiesModel](KeystoreKeys.otherProperties)
       .map(data => data.getOrElse(OtherPropertiesModel(YesNoKeys.no)))
-    val previousLossOrGain = calculatorConnector.fetchAndGetFormData[PreviousLossOrGainModel](KeystoreKeys.previousLossOrGain)
-    val howMuchLoss = calculatorConnector.fetchAndGetFormData[HowMuchLossModel](KeystoreKeys.howMuchLoss)
-    val howMuchGain = calculatorConnector.fetchAndGetFormData[HowMuchGainModel](KeystoreKeys.howMuchGain)
-    val annualExemptAmount = calculatorConnector.fetchAndGetFormData[AnnualExemptAmountModel](KeystoreKeys.annualExemptAmount)
-    val broughtForwardLosses = calculatorConnector.fetchAndGetFormData[BroughtForwardLossesModel](KeystoreKeys.broughtForwardLosses)
+    val previousLossOrGain = sessionCacheService.fetchAndGetFormData[PreviousLossOrGainModel](KeystoreKeys.previousLossOrGain)
+    val howMuchLoss = sessionCacheService.fetchAndGetFormData[HowMuchLossModel](KeystoreKeys.howMuchLoss)
+    val howMuchGain = sessionCacheService.fetchAndGetFormData[HowMuchGainModel](KeystoreKeys.howMuchGain)
+    val annualExemptAmount = sessionCacheService.fetchAndGetFormData[AnnualExemptAmountModel](KeystoreKeys.annualExemptAmount)
+    val broughtForwardLosses = sessionCacheService.fetchAndGetFormData[BroughtForwardLossesModel](KeystoreKeys.broughtForwardLosses)
       .map(data => data.getOrElse(BroughtForwardLossesModel(isClaiming = false, None)))
 
     for {

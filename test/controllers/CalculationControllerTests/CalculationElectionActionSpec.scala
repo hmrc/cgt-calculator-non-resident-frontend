@@ -33,8 +33,8 @@ import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
+import services.SessionCacheService
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
-import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.{calculationElection, calculationElectionNoReliefs}
 
@@ -49,7 +49,7 @@ class CalculationElectionActionSpec ()
   val ec = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
-  val defaultCache = mock[CacheMap]
+  val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
   val mockAnswersConstructor = mock[AnswersConstructor]
   val mockDefaultCalElecConstructor = mock[DefaultCalculationElectionConstructor]
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
@@ -61,8 +61,8 @@ class CalculationElectionActionSpec ()
 
   class Setup {
     val controller = new CalculationElectionController(
-      mockHttp,
       mockCalcConnector,
+      mockSessionCacheService,
       mockAnswersConstructor,
       mockDefaultCalElecConstructor,
       mockMessagesControllerComponents,
@@ -81,10 +81,10 @@ class CalculationElectionActionSpec ()
                   claimingReliefs: Boolean = true
                  ): CalculationElectionController = {
 
-    when(mockCalcConnector.fetchAndGetFormData[OtherReliefsModel](ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.fetchAndGetFormData[OtherReliefsModel](ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(OtherReliefsModel(1000))))
 
-    when(mockCalcConnector.fetchAndGetFormData[CalculationElectionModel](
+    when(mockSessionCacheService.fetchAndGetFormData[CalculationElectionModel](
       ArgumentMatchers.eq(KeystoreKeys.calculationElection))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
@@ -111,22 +111,22 @@ class CalculationElectionActionSpec ()
     when(mockCalcConnector.getTaxYear(ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(TaxYearModel("2015/16", isValidYear = true, "2015/16"))))
 
-    when(mockCalcConnector.fetchAndGetFormData[ClaimingReliefsModel](
+    when(mockSessionCacheService.fetchAndGetFormData[ClaimingReliefsModel](
       ArgumentMatchers.eq(KeystoreKeys.claimingReliefs))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(ClaimingReliefsModel(claimingReliefs))))
 
-    when(mockCalcConnector.fetchAndGetFormData[PrivateResidenceReliefModel](
+    when(mockSessionCacheService.fetchAndGetFormData[PrivateResidenceReliefModel](
       ArgumentMatchers.eq(KeystoreKeys.privateResidenceRelief))(ArgumentMatchers.any(), ArgumentMatchers.any()))
     .thenReturn(Future.successful(Some(PrivateResidenceReliefModel("Yes", Some(0), Some(0)))))
 
     when(mockCalcConnector.calculateTaxableGainAfterPRR(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any()))
     .thenReturn(Future.successful(Some(CalculationResultsWithPRRModel(GainsAfterPRRModel(0, 0, 0), None, None))))
 
-    when(mockCalcConnector.fetchAndGetFormData[PropertyLivedInModel](ArgumentMatchers.eq(KeystoreKeys.propertyLivedIn))
+    when(mockSessionCacheService.fetchAndGetFormData[PropertyLivedInModel](ArgumentMatchers.eq(KeystoreKeys.propertyLivedIn))
       (ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(PropertyLivedInModel(true))))
 
-    new CalculationElectionController(mockHttp, mockCalcConnector, mockAnswersConstructor, mockDefaultCalElecConstructor, mockMessagesControllerComponents,
+    new CalculationElectionController(mockCalcConnector, mockSessionCacheService, mockAnswersConstructor, mockDefaultCalElecConstructor, mockMessagesControllerComponents,
       calculationElectionView,
       calculationElectionNoReliefsView)(ec)
   }

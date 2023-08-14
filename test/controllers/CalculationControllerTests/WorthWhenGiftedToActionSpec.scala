@@ -32,10 +32,11 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
-import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.worthWhenGiftedTo
 import assets.MessageLookup.{NonResident => commonMessages}
+import services.SessionCacheService
+
 import scala.concurrent.{ExecutionContext, Future}
 
 class WorthWhenGiftedToActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
@@ -46,15 +47,14 @@ class WorthWhenGiftedToActionSpec extends CommonPlaySpec with WithCommonFakeAppl
   val ec = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
-  val defaultCache = mock[CacheMap]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val worthWhenGiftedToView = fakeApplication.injector.instanceOf[worthWhenGiftedTo]
   val pageTitle = s"""${messages.question} - ${commonMessages.pageHeading} - GOV.UK"""
-
+  val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
   class Setup {
     val controller = new WorthWhenGiftedToController(
       mockHttp,
-      mockCalcConnector,
+      mockSessionCacheService,
       mockMessagesControllerComponents,
       worthWhenGiftedToView
     )(ec)
@@ -62,14 +62,14 @@ class WorthWhenGiftedToActionSpec extends CommonPlaySpec with WithCommonFakeAppl
 
   def setupTarget(getData: Option[AcquisitionValueModel]): WorthWhenGiftedToController = {
 
-    when(mockCalcConnector.fetchAndGetFormData[AcquisitionValueModel](
+    when(mockSessionCacheService.fetchAndGetFormData[AcquisitionValueModel](
       ArgumentMatchers.eq(KeystoreKeys.acquisitionMarketValue))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    when(mockCalcConnector.saveFormData[AcquisitionValueModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(mock[CacheMap]))
+    when(mockSessionCacheService.saveFormData[AcquisitionValueModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      .thenReturn(Future.successful(("", "")))
 
-    new WorthWhenGiftedToController(mockHttp, mockCalcConnector, mockMessagesControllerComponents, worthWhenGiftedToView)(ec)
+    new WorthWhenGiftedToController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, worthWhenGiftedToView)(ec)
   }
 
   "Calling .worthWhenGiftedTo" when {

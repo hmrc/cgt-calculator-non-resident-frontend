@@ -18,41 +18,36 @@ package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.TaxDates
-import connectors.CalculatorConnector
-import constructors.DefaultCalculationElectionConstructor
 import controllers.predicates.ValidActiveSession
 import controllers.utils.RecoverableFuture
 import forms.AcquisitionCostsForm._
-import javax.inject.Inject
 import models.{AcquisitionCostsModel, BoughtForLessModel, DateModel, HowBecameOwnerModel}
 import play.api.data.Form
 import play.api.i18n.I18nSupport
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
-import uk.gov.hmrc.http.HeaderCarrier
+import play.api.mvc._
+import services.SessionCacheService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.acquisitionCosts
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class AcquisitionCostsController @Inject()(http: DefaultHttpClient,
-                                           calcConnector: CalculatorConnector,
-                                           calcElectionConstructor: DefaultCalculationElectionConstructor,
+class AcquisitionCostsController @Inject()(sessionCacheService: SessionCacheService,
                                            mcc: MessagesControllerComponents,
                                            acquisitionCostsView: acquisitionCosts
                                            )(implicit ec: ExecutionContext)
   extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
-  private def isOwnerBeforeLegislationStart(implicit hc: HeaderCarrier): Future[Boolean] = {
-    calcConnector.fetchAndGetFormData[DateModel](KeystoreKeys.acquisitionDate).map { date =>
+  private def isOwnerBeforeLegislationStart(implicit request: Request[_]): Future[Boolean] = {
+    sessionCacheService.fetchAndGetFormData[DateModel](KeystoreKeys.acquisitionDate).map { date =>
       TaxDates.dateBeforeLegislationStart(date.get.get)
     }
   }
 
-  def getBackLink(implicit hc:HeaderCarrier): Future[String] = {
-    val getAcquisitionDate = calcConnector.fetchAndGetFormData[DateModel](KeystoreKeys.acquisitionDate)
-    val getHowBecameOwner = calcConnector.fetchAndGetFormData[HowBecameOwnerModel](KeystoreKeys.howBecameOwner)
-    val getBoughtForLess = calcConnector.fetchAndGetFormData[BoughtForLessModel](KeystoreKeys.boughtForLess)
+  def getBackLink(implicit request: Request[_]): Future[String] = {
+    val getAcquisitionDate = sessionCacheService.fetchAndGetFormData[DateModel](KeystoreKeys.acquisitionDate)
+    val getHowBecameOwner = sessionCacheService.fetchAndGetFormData[HowBecameOwnerModel](KeystoreKeys.howBecameOwner)
+    val getBoughtForLess = sessionCacheService.fetchAndGetFormData[BoughtForLessModel](KeystoreKeys.boughtForLess)
     def result(acquisitionDateModel: Option[DateModel],
                howBecameOwnerModel: Option[HowBecameOwnerModel],
                boughtForLessModel: Option[BoughtForLessModel]) = (acquisitionDateModel, howBecameOwnerModel, boughtForLessModel) match {
@@ -77,7 +72,7 @@ class AcquisitionCostsController @Inject()(http: DefaultHttpClient,
 
   val acquisitionCosts: Action[AnyContent] = ValidateSession.async { implicit request =>
     def result(backLink: String, isOwnerBeforeLegislationStart: Boolean) = {
-      calcConnector.fetchAndGetFormData[AcquisitionCostsModel](KeystoreKeys.acquisitionCosts).map {
+      sessionCacheService.fetchAndGetFormData[AcquisitionCostsModel](KeystoreKeys.acquisitionCosts).map {
         case Some(data) => Ok(acquisitionCostsView(acquisitionCostsForm.fill(data), backLink, isOwnerBeforeLegislationStart))
         case None => Ok(acquisitionCostsView(acquisitionCostsForm, backLink, isOwnerBeforeLegislationStart))
       }
@@ -93,7 +88,7 @@ class AcquisitionCostsController @Inject()(http: DefaultHttpClient,
   val submitAcquisitionCosts: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     val getRedirectRoute: Future[Result] = {
-      val getAcquisitionDate = calcConnector.fetchAndGetFormData[DateModel](KeystoreKeys.acquisitionDate)
+      val getAcquisitionDate = sessionCacheService.fetchAndGetFormData[DateModel](KeystoreKeys.acquisitionDate)
 
       def result(acquisitionDateModel: Option[DateModel]) = acquisitionDateModel match {
         case Some(_) if TaxDates.dateAfterStart(acquisitionDateModel.get.get) =>
@@ -108,7 +103,7 @@ class AcquisitionCostsController @Inject()(http: DefaultHttpClient,
     }
 
     def successAction(model: AcquisitionCostsModel): Future[Result] = {
-      calcConnector.saveFormData(KeystoreKeys.acquisitionCosts, model).flatMap {
+      sessionCacheService.saveFormData(KeystoreKeys.acquisitionCosts, model).flatMap {
         _ => getRedirectRoute
       }
     }

@@ -33,8 +33,8 @@ import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
+import services.SessionCacheService
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
-import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.worthWhenInherited
 
@@ -48,8 +48,8 @@ class WorthWhenInheritedActionSpec extends CommonPlaySpec with WithCommonFakeApp
   val ec = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
+  val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
   val mockAnswerConstuctor = mock[AnswersConstructor]
-  val defaultCache = mock[CacheMap]
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val worthWhenInheritedView = fakeApplication.injector.instanceOf[worthWhenInherited]
@@ -58,7 +58,7 @@ class WorthWhenInheritedActionSpec extends CommonPlaySpec with WithCommonFakeApp
   class Setup {
     val controller = new WorthWhenInheritedController(
       mockHttp,
-      mockCalcConnector,
+      mockSessionCacheService,
       mockMessagesControllerComponents,
       worthWhenInheritedView
     )(ec)
@@ -67,14 +67,14 @@ class WorthWhenInheritedActionSpec extends CommonPlaySpec with WithCommonFakeApp
   def setupTarget(getData: Option[AcquisitionValueModel]): WorthWhenInheritedController = {
 
 
-    when(mockCalcConnector.fetchAndGetFormData[AcquisitionValueModel](
+    when(mockSessionCacheService.fetchAndGetFormData[AcquisitionValueModel](
       ArgumentMatchers.eq(KeystoreKeys.acquisitionMarketValue))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    when(mockCalcConnector.saveFormData[AcquisitionValueModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(mock[CacheMap]))
+    when(mockSessionCacheService.saveFormData[AcquisitionValueModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      .thenReturn(Future.successful(("", "")))
 
-    new WorthWhenInheritedController(mockHttp, mockCalcConnector, mockMessagesControllerComponents, worthWhenInheritedView)(ec)
+    new WorthWhenInheritedController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, worthWhenInheritedView)(ec)
   }
 
   "Calling .worthWhenInherited" when {

@@ -23,19 +23,20 @@ import connectors.CalculatorConnector
 import constructors.AnswersConstructor
 import controllers.predicates.ValidActiveSession
 import controllers.utils.RecoverableFuture
-import javax.inject.Inject
 import models._
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import services.SessionCacheService
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.summary
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Random
 
-class SummaryController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
+class SummaryController @Inject()(calcConnector: CalculatorConnector,
+                                  sessionCacheService: SessionCacheService,
                                   answersConstructor: AnswersConstructor,
                                   mcc: MessagesControllerComponents,
                                   summaryView: summary)(implicit ec: ExecutionContext)
@@ -54,11 +55,11 @@ class SummaryController @Inject()(http: DefaultHttpClient,calcConnector: Calcula
     }
 
     def summaryBackUrl(model: Option[TotalGainResultsModel]): Future[String] = model match {
-      case (Some(data)) if data.rebasedGain.isDefined || data.timeApportionedGain.isDefined =>
+      case Some(data) if data.rebasedGain.isDefined || data.timeApportionedGain.isDefined =>
         Future.successful(routes.CalculationElectionController.calculationElection.url)
-      case (Some(_)) =>
+      case Some(_) =>
         Future.successful(routes.CheckYourAnswersController.checkYourAnswers.url)
-      case (None) => Future.successful(common.DefaultRoutes.missingDataRoute)
+      case None => Future.successful(common.DefaultRoutes.missingDataRoute)
     }
 
     def calculateTaxOwed(totalGainAnswersModel: TotalGainAnswersModel,
@@ -75,13 +76,12 @@ class SummaryController @Inject()(http: DefaultHttpClient,calcConnector: Calcula
         otherReliefs)
     }
 
-    def getAllOtherReliefs(totalPersonalDetailsCalculationModel: Option[TotalPersonalDetailsCalculationModel])
-                          (implicit hc: HeaderCarrier): Future[Option[AllOtherReliefsModel]] = {
+    def getAllOtherReliefs(totalPersonalDetailsCalculationModel: Option[TotalPersonalDetailsCalculationModel]): Future[Option[AllOtherReliefsModel]] = {
       totalPersonalDetailsCalculationModel match {
         case Some(_) =>
-          val flat = calcConnector.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsFlat)
-          val rebased = calcConnector.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsRebased)
-          val time = calcConnector.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsTA)
+          val flat = sessionCacheService.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsFlat)
+          val rebased = sessionCacheService.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsRebased)
+          val time = sessionCacheService.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsTA)
 
           for {
             flatReliefs <- flat
@@ -95,19 +95,19 @@ class SummaryController @Inject()(http: DefaultHttpClient,calcConnector: Calcula
     val showUserResearchPanel = setURPanelFlag
 
     (for {
-      answers <- answersConstructor.getNRTotalGainAnswers(hc)
+      answers <- answersConstructor.getNRTotalGainAnswers(request)
       totalGainResultsModel <- calcConnector.calculateTotalGain(answers)
       gainExists <- checkGainExists(totalGainResultsModel.get)
-      propertyLivedIn <- getPropertyLivedInResponse(gainExists, calcConnector)
-      prrModel <- getPrrResponse(propertyLivedIn, calcConnector)
+      propertyLivedIn <- getPropertyLivedInResponse(gainExists, sessionCacheService)
+      prrModel <- getPrrResponse(propertyLivedIn, sessionCacheService)
       totalGainWithPRR <- getPrrIfApplicable(answers, prrModel, propertyLivedIn, calcConnector)
-      finalAnswers <- getFinalSectionsAnswers(totalGainResultsModel.get, totalGainWithPRR, calcConnector, answersConstructor)
+      finalAnswers <- getFinalSectionsAnswers(totalGainResultsModel.get, totalGainWithPRR, answersConstructor)
       otherReliefsModel <- getAllOtherReliefs(finalAnswers)
       taxYearModel <- getTaxYear(answers, calcConnector)
       maxAEA <- getMaxAEA(taxYearModel, calcConnector)
       finalResult <- calculateTaxOwed(answers, prrModel, propertyLivedIn, finalAnswers, maxAEA.get, otherReliefsModel)
       backUrl <- summaryBackUrl(totalGainResultsModel)
-      calculationType <- calcConnector.fetchAndGetFormData[CalculationElectionModel](KeystoreKeys.calculationElection)
+      calculationType <- sessionCacheService.fetchAndGetFormData[CalculationElectionModel](KeystoreKeys.calculationElection)
       totalCosts <- calcConnector.calculateTotalCosts(answers, calculationType)
       calculationResult <- getCalculationResult(finalResult, calculationType.get.calculationType)
     } yield {
@@ -160,7 +160,7 @@ class SummaryController @Inject()(http: DefaultHttpClient,calcConnector: Calcula
   }
 
   def restart(): Action[AnyContent] = Action.async { implicit request =>
-    calcConnector.clearKeystore(hc)
+    sessionCacheService.clearSession
     Future.successful(Redirect(common.DefaultRoutes.homeUrl))
   }
 }

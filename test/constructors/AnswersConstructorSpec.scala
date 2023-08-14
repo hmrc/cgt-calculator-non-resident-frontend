@@ -24,6 +24,8 @@ import models._
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.test.FakeRequest
+import services.SessionCacheService
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -34,11 +36,11 @@ class AnswersConstructorSpec extends CommonPlaySpec with MockitoSugar with WithC
   implicit val ec = fakeApplication.injector.instanceOf[ExecutionContext]
   val materializer = mock[Materializer]
   val mockCalcConnector =mock[CalculatorConnector]
-
+  val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
 
   class Setup {
     val controller = new AnswersConstructor(
-      mockCalcConnector
+      mockSessionCacheService
     )
   }
 
@@ -48,104 +50,104 @@ class AnswersConstructorSpec extends CommonPlaySpec with MockitoSugar with WithC
                                     marketDisposalValue: Option[DisposalValueModel] = None): AnswersConstructor = {
 
 
-    when(mockCalcConnector.fetchAndGetFormData[DateModel](ArgumentMatchers.eq(KeystoreKeys.disposalDate))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.fetchAndGetFormData[DateModel](ArgumentMatchers.eq(KeystoreKeys.disposalDate))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(totalGainAnswersModel.disposalDateModel)))
 
-    when(mockCalcConnector.fetchAndGetFormData[SoldOrGivenAwayModel](
+    when(mockSessionCacheService.fetchAndGetFormData[SoldOrGivenAwayModel](
       ArgumentMatchers.eq(KeystoreKeys.soldOrGivenAway))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(totalGainAnswersModel.soldOrGivenAwayModel)))
 
-    when(mockCalcConnector.fetchAndGetFormData[SoldForLessModel](ArgumentMatchers.eq(KeystoreKeys.soldForLess))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.fetchAndGetFormData[SoldForLessModel](ArgumentMatchers.eq(KeystoreKeys.soldForLess))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(totalGainAnswersModel.soldForLessModel))
 
-    when(mockCalcConnector.fetchAndGetFormData[DisposalValueModel](ArgumentMatchers.eq(KeystoreKeys.disposalValue))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.fetchAndGetFormData[DisposalValueModel](ArgumentMatchers.eq(KeystoreKeys.disposalValue))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(totalGainAnswersModel.disposalValueModel)))
 
-    when(mockCalcConnector.fetchAndGetFormData[DisposalValueModel](
+    when(mockSessionCacheService.fetchAndGetFormData[DisposalValueModel](
       ArgumentMatchers.eq(KeystoreKeys.disposalMarketValue))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(marketDisposalValue))
 
-    when(mockCalcConnector.fetchAndGetFormData[DisposalCostsModel](ArgumentMatchers.eq(KeystoreKeys.disposalCosts))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.fetchAndGetFormData[DisposalCostsModel](ArgumentMatchers.eq(KeystoreKeys.disposalCosts))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(totalGainAnswersModel.disposalCostsModel)))
 
-    when(mockCalcConnector.fetchAndGetFormData[HowBecameOwnerModel](
+    when(mockSessionCacheService.fetchAndGetFormData[HowBecameOwnerModel](
       ArgumentMatchers.eq(KeystoreKeys.howBecameOwner))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(totalGainAnswersModel.howBecameOwnerModel))
 
-    when(mockCalcConnector.fetchAndGetFormData[BoughtForLessModel](ArgumentMatchers.eq(KeystoreKeys.boughtForLess))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.fetchAndGetFormData[BoughtForLessModel](ArgumentMatchers.eq(KeystoreKeys.boughtForLess))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(totalGainAnswersModel.boughtForLessModel))
 
-    when(mockCalcConnector.fetchAndGetFormData[BigDecimal]
+    when(mockSessionCacheService.fetchAndGetFormData[BigDecimal]
       (ArgumentMatchers.eq(KeystoreKeys.costAtLegislationStart))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(None))
 
-    when(mockCalcConnector.fetchAndGetFormData[WorthBeforeLegislationStartModel](ArgumentMatchers.eq(KeystoreKeys.worthBeforeLegislationStart))
+    when(mockSessionCacheService.fetchAndGetFormData[WorthBeforeLegislationStartModel](ArgumentMatchers.eq(KeystoreKeys.worthBeforeLegislationStart))
       (ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(worthBeforeLegislationStartModel))
-    when(mockCalcConnector.fetchAndGetFormData[AcquisitionValueModel](
+    when(mockSessionCacheService.fetchAndGetFormData[AcquisitionValueModel](
       ArgumentMatchers.eq(KeystoreKeys.acquisitionMarketValue))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(marketValueAcquisition))
 
-    when(mockCalcConnector.fetchAndGetFormData[AcquisitionValueModel](
+    when(mockSessionCacheService.fetchAndGetFormData[AcquisitionValueModel](
       ArgumentMatchers.eq(KeystoreKeys.acquisitionValue))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(totalGainAnswersModel.acquisitionValueModel)))
 
-    when(mockCalcConnector.fetchAndGetFormData[AcquisitionCostsModel](
+    when(mockSessionCacheService.fetchAndGetFormData[AcquisitionCostsModel](
       ArgumentMatchers.eq(KeystoreKeys.acquisitionCosts))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(totalGainAnswersModel.acquisitionCostsModel.get)))
 
-    when(mockCalcConnector.fetchAndGetFormData[DateModel](
+    when(mockSessionCacheService.fetchAndGetFormData[DateModel](
       ArgumentMatchers.eq(KeystoreKeys.acquisitionDate))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(totalGainAnswersModel.acquisitionDateModel)))
 
-    when(mockCalcConnector.fetchAndGetFormData[RebasedValueModel](ArgumentMatchers.eq(KeystoreKeys.rebasedValue))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.fetchAndGetFormData[RebasedValueModel](ArgumentMatchers.eq(KeystoreKeys.rebasedValue))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(totalGainAnswersModel.rebasedValueModel))
 
-    when(mockCalcConnector.fetchAndGetFormData[RebasedCostsModel](ArgumentMatchers.eq(KeystoreKeys.rebasedCosts))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.fetchAndGetFormData[RebasedCostsModel](ArgumentMatchers.eq(KeystoreKeys.rebasedCosts))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(totalGainAnswersModel.rebasedCostsModel))
 
-    when(mockCalcConnector.fetchAndGetFormData[ImprovementsModel](ArgumentMatchers.eq(KeystoreKeys.improvements))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.fetchAndGetFormData[ImprovementsModel](ArgumentMatchers.eq(KeystoreKeys.improvements))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(totalGainAnswersModel.improvementsModel)))
 
-    when(mockCalcConnector.fetchAndGetFormData[OtherReliefsModel](
+    when(mockSessionCacheService.fetchAndGetFormData[OtherReliefsModel](
       ArgumentMatchers.eq(KeystoreKeys.otherReliefsFlat))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(totalGainAnswersModel.otherReliefsFlat))
 
-    new AnswersConstructor(mockCalcConnector)
+    new AnswersConstructor(mockSessionCacheService)
   }
 
   def setupMockedFinalAnswersConstructor(totalPersonalDetailsCalculationModel: TotalPersonalDetailsCalculationModel): AnswersConstructor = {
 
-    when(mockCalcConnector.fetchAndGetFormData[CurrentIncomeModel](ArgumentMatchers.eq(KeystoreKeys.currentIncome))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.fetchAndGetFormData[CurrentIncomeModel](ArgumentMatchers.eq(KeystoreKeys.currentIncome))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(totalPersonalDetailsCalculationModel.currentIncomeModel)))
 
-    when(mockCalcConnector.fetchAndGetFormData[PersonalAllowanceModel](
+    when(mockSessionCacheService.fetchAndGetFormData[PersonalAllowanceModel](
       ArgumentMatchers.eq(KeystoreKeys.personalAllowance))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(totalPersonalDetailsCalculationModel.personalAllowanceModel))
 
-    when(mockCalcConnector.fetchAndGetFormData[OtherPropertiesModel](
+    when(mockSessionCacheService.fetchAndGetFormData[OtherPropertiesModel](
       ArgumentMatchers.eq(KeystoreKeys.otherProperties))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(totalPersonalDetailsCalculationModel.otherPropertiesModel)))
 
-    when(mockCalcConnector.fetchAndGetFormData[PreviousLossOrGainModel](ArgumentMatchers.eq(KeystoreKeys.previousLossOrGain))
+    when(mockSessionCacheService.fetchAndGetFormData[PreviousLossOrGainModel](ArgumentMatchers.eq(KeystoreKeys.previousLossOrGain))
       (ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(totalPersonalDetailsCalculationModel.previousGainOrLoss))
 
-    when(mockCalcConnector.fetchAndGetFormData[HowMuchLossModel](ArgumentMatchers.eq(KeystoreKeys.howMuchLoss))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.fetchAndGetFormData[HowMuchLossModel](ArgumentMatchers.eq(KeystoreKeys.howMuchLoss))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(totalPersonalDetailsCalculationModel.howMuchLossModel))
 
-    when(mockCalcConnector.fetchAndGetFormData[HowMuchGainModel](ArgumentMatchers.eq(KeystoreKeys.howMuchGain))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.fetchAndGetFormData[HowMuchGainModel](ArgumentMatchers.eq(KeystoreKeys.howMuchGain))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(totalPersonalDetailsCalculationModel.howMuchGainModel))
 
-    when(mockCalcConnector.fetchAndGetFormData[AnnualExemptAmountModel](
+    when(mockSessionCacheService.fetchAndGetFormData[AnnualExemptAmountModel](
       ArgumentMatchers.eq(KeystoreKeys.annualExemptAmount))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(totalPersonalDetailsCalculationModel.annualExemptAmountModel))
 
-    when(mockCalcConnector.fetchAndGetFormData[BroughtForwardLossesModel](
+    when(mockSessionCacheService.fetchAndGetFormData[BroughtForwardLossesModel](
       ArgumentMatchers.eq(KeystoreKeys.broughtForwardLosses))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(totalPersonalDetailsCalculationModel.broughtForwardLossesModel)))
 
-    new AnswersConstructor(mockCalcConnector)
+    new AnswersConstructor(mockSessionCacheService)
   }
 
   val totalGainNoOptionalModel = TotalGainAnswersModel(
@@ -236,10 +238,9 @@ class AnswersConstructorSpec extends CommonPlaySpec with MockitoSugar with WithC
   "Calling getNRTotalGainAnswers" should {
 
     "return a valid TotalGainAnswersModel with no optional values" in {
-      val hc = mock[HeaderCarrier]
       val constructor = setupMockedAnswersConstructor(totalGainNoOptionalModel, marketValueAcquisition = Some(AcquisitionValueModel(5000)),
         marketDisposalValue = Some(DisposalValueModel(10000)))
-      val result = constructor.getNRTotalGainAnswers(hc)
+      val result = constructor.getNRTotalGainAnswers(FakeRequest())
 
       await(result) shouldBe totalGainNoOptionalModel
     }
@@ -247,59 +248,53 @@ class AnswersConstructorSpec extends CommonPlaySpec with MockitoSugar with WithC
     "return a valid TotalGainAnswersModel with all optional values" in {
       val hc = mock[HeaderCarrier]
       val constructor = setupMockedAnswersConstructor(totalGainAllOptionalModel)
-      val result = constructor.getNRTotalGainAnswers(hc)
+      val result = constructor.getNRTotalGainAnswers(FakeRequest())
 
       await(result) shouldBe totalGainAllOptionalModel
     }
 
     "return a valid acquisition value of 4000 with an acquisition date before legislation start" in {
-      val hc = mock[HeaderCarrier]
       val constructor = setupMockedAnswersConstructor(modelDateBeforeLegislationStart,
         worthBeforeLegislationStartModel = Some(WorthBeforeLegislationStartModel(4000)))
-      val result = constructor.getNRTotalGainAnswers(hc)
+      val result = constructor.getNRTotalGainAnswers(FakeRequest())
 
       await(result).acquisitionValueModel.acquisitionValueAmt shouldBe 4000
     }
 
     "return a valid acquisition value of 3000 with an property acquired without purchasing" in {
-      val hc = mock[HeaderCarrier]
       val constructor = setupMockedAnswersConstructor(totalGainNoOptionalModel, marketValueAcquisition = Some(AcquisitionValueModel(3000)),
         marketDisposalValue = Some(DisposalValueModel(10000)))
-      val result = constructor.getNRTotalGainAnswers(hc)
+      val result = constructor.getNRTotalGainAnswers(FakeRequest())
 
       await(result).acquisitionValueModel.acquisitionValueAmt shouldBe 3000
     }
 
     "return a valid acquisition value of 2000 with a property bought for less" in {
-      val hc = mock[HeaderCarrier]
       val constructor = setupMockedAnswersConstructor(totalGainBoughtForLess, marketValueAcquisition = Some(AcquisitionValueModel(2000)))
-      val result = constructor.getNRTotalGainAnswers(hc)
+      val result = constructor.getNRTotalGainAnswers(FakeRequest())
 
       await(result).acquisitionValueModel.acquisitionValueAmt shouldBe 2000
     }
 
     "return a valid disposal value of 10000 when sold and not sold for less" in {
-      val hc = mock[HeaderCarrier]
       val constructor = setupMockedAnswersConstructor(totalGainAllOptionalModel)
-      val result = constructor.getNRTotalGainAnswers(hc)
+      val result = constructor.getNRTotalGainAnswers(FakeRequest())
 
       await(result).disposalValueModel.disposalValue shouldBe 10000
     }
 
     "return a valid disposal value of 11000 when sold and sold for less" in {
-      val hc = mock[HeaderCarrier]
       val constructor = setupMockedAnswersConstructor(totalGainSoldForLess, marketValueAcquisition = Some(AcquisitionValueModel(5000)),
         marketDisposalValue = Some(DisposalValueModel(11000)))
-      val result = constructor.getNRTotalGainAnswers(hc)
+      val result = constructor.getNRTotalGainAnswers(FakeRequest())
 
       await(result).disposalValueModel.disposalValue shouldBe 11000
     }
 
     "return a valid disposal value of 10000 when given away" in {
-      val hc = mock[HeaderCarrier]
       val constructor = setupMockedAnswersConstructor(totalGainNoOptionalModel, marketValueAcquisition = Some(AcquisitionValueModel(5000)),
         marketDisposalValue = Some(DisposalValueModel(10000)))
-      val result = constructor.getNRTotalGainAnswers(hc)
+      val result = constructor.getNRTotalGainAnswers(FakeRequest())
 
       await(result).disposalValueModel.disposalValue shouldBe 10000
     }
@@ -318,11 +313,10 @@ class AnswersConstructorSpec extends CommonPlaySpec with MockitoSugar with WithC
       BroughtForwardLossesModel(isClaiming = true, Some(1000))
     )
 
-    val hc = mock[HeaderCarrier]
     val constructor = setupMockedFinalAnswersConstructor(model)
 
     "when called with the model with all options return all options" in {
-      await(constructor.getPersonalDetailsAndPreviousCapitalGainsAnswers(hc)) shouldEqual Some(model)
+      await(constructor.getPersonalDetailsAndPreviousCapitalGainsAnswers(FakeRequest())) shouldEqual Some(model)
     }
   }
 }

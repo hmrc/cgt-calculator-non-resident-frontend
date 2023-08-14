@@ -23,19 +23,19 @@ import constructors.AnswersConstructor
 import controllers.predicates.ValidActiveSession
 import controllers.utils.RecoverableFuture
 import forms.ImprovementsForm._
-import javax.inject.Inject
 import models._
 import play.api.data.Form
 import play.api.i18n.I18nSupport
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
-import uk.gov.hmrc.http.HeaderCarrier
+import play.api.mvc._
+import services.SessionCacheService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.improvements
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class ImprovementsController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
+class ImprovementsController @Inject()(calcConnector: CalculatorConnector,
+                                       sessionCacheService: SessionCacheService,
                                        answersConstructor: AnswersConstructor,
                                        mcc: MessagesControllerComponents,
                                        improvementsView: improvements)(implicit ec: ExecutionContext)
@@ -50,12 +50,12 @@ class ImprovementsController @Inject()(http: DefaultHttpClient,calcConnector: Ca
     }
   }
 
-  private def fetchAcquisitionDate(implicit headerCarrier: HeaderCarrier): Future[Option[DateModel]] = {
-    calcConnector.fetchAndGetFormData[DateModel](KeystoreKeys.acquisitionDate)
+  private def fetchAcquisitionDate(implicit request: Request[_]): Future[Option[DateModel]] = {
+    sessionCacheService.fetchAndGetFormData[DateModel](KeystoreKeys.acquisitionDate)
   }
 
-  private def fetchImprovements(implicit headerCarrier: HeaderCarrier): Future[Option[ImprovementsModel]] = {
-    calcConnector.fetchAndGetFormData[ImprovementsModel](KeystoreKeys.improvements)
+  private def fetchImprovements(implicit request: Request[_]): Future[Option[ImprovementsModel]] = {
+    sessionCacheService.fetchAndGetFormData[ImprovementsModel](KeystoreKeys.improvements)
   }
 
   private def displayImprovementsSectionCheck(acquisitionDateModel: Option[DateModel]): Future[Boolean] = {
@@ -86,8 +86,8 @@ class ImprovementsController @Inject()(http: DefaultHttpClient,calcConnector: Ca
     }
 
     (for {
-      acquisitionDate <- fetchAcquisitionDate(hc)
-      improvements <- fetchImprovements(hc)
+      acquisitionDate <- fetchAcquisitionDate(request)
+      improvements <- fetchImprovements(request)
       improvementsOptions <- displayImprovementsSectionCheck(acquisitionDate)
       backUrl <- improvementsBackUrl(acquisitionDate)
       ownerBeforeLegislationStart <- ownerBeforeLegislationStartCheck(acquisitionDate)
@@ -114,7 +114,7 @@ class ImprovementsController @Inject()(http: DefaultHttpClient,calcConnector: Ca
 
     def successAction(improvements: ImprovementsModel): Future[Result] = {
       (for {
-        _ <- calcConnector.saveFormData(KeystoreKeys.improvements, improvements)
+        _ <- sessionCacheService.saveFormData(KeystoreKeys.improvements, improvements)
         allAnswersModel <- answersConstructor.getNRTotalGainAnswers
         gains <- calcConnector.calculateTotalGain(allAnswersModel)
       } yield successRouteRequest(gains)).recoverToStart
@@ -130,7 +130,7 @@ class ImprovementsController @Inject()(http: DefaultHttpClient,calcConnector: Ca
     }
 
     (for {
-      acquisitionDate <- fetchAcquisitionDate(hc)
+      acquisitionDate <- fetchAcquisitionDate(request)
       improvementsOptions <- displayImprovementsSectionCheck(acquisitionDate)
       backUrl <- improvementsBackUrl(acquisitionDate)
       ownerBeforeLegislationStart <- ownerBeforeLegislationStartCheck(acquisitionDate)

@@ -17,28 +17,29 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import forms.WorthBeforeLegislationStartForm._
-import javax.inject.Inject
 import models.WorthBeforeLegislationStartModel
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import services.SessionCacheService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.worthBeforeLegislationStart
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class WorthBeforeLegislationStartController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
+class WorthBeforeLegislationStartController @Inject()(http: DefaultHttpClient,
+                                                      sessionCacheService: SessionCacheService,
                                                       mcc: MessagesControllerComponents,
                                                       worthBeforeLegislationStartView: worthBeforeLegislationStart)
                                                      (implicit ec: ExecutionContext)
                                                         extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   val worthBeforeLegislationStart: Action[AnyContent] = ValidateSession.async { implicit request =>
-    calcConnector.fetchAndGetFormData[WorthBeforeLegislationStartModel](KeystoreKeys.worthBeforeLegislationStart).map {
+    sessionCacheService.fetchAndGetFormData[WorthBeforeLegislationStartModel](KeystoreKeys.worthBeforeLegislationStart).map {
       case Some(data) => Ok(worthBeforeLegislationStartView(worthBeforeLegislationStartForm.fill(data)))
       case None => Ok(worthBeforeLegislationStartView(worthBeforeLegislationStartForm))
     }
@@ -49,7 +50,7 @@ class WorthBeforeLegislationStartController @Inject()(http: DefaultHttpClient,ca
     def errorAction(form: Form[WorthBeforeLegislationStartModel]) = Future.successful(BadRequest(worthBeforeLegislationStartView(form)))
 
     def successAction(model: WorthBeforeLegislationStartModel) = {
-      calcConnector.saveFormData(KeystoreKeys.worthBeforeLegislationStart, model).map(_ =>
+      sessionCacheService.saveFormData(KeystoreKeys.worthBeforeLegislationStart, model).map(_ =>
         Redirect(routes.CostsAtLegislationStartController.costsAtLegislationStart))
     }
 

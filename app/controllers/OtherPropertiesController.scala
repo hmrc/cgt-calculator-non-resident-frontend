@@ -17,21 +17,22 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import forms.OtherPropertiesForm._
-import javax.inject.Inject
 import models.OtherPropertiesModel
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{MessagesControllerComponents, Result}
+import services.SessionCacheService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.otherProperties
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class OtherPropertiesController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
+class OtherPropertiesController @Inject()(http: DefaultHttpClient,
+                                          sessionCacheService: SessionCacheService,
                                           mcc: MessagesControllerComponents,
                                           otherPropertiesView: otherProperties)
                                          (implicit ec: ExecutionContext)
@@ -39,7 +40,7 @@ class OtherPropertiesController @Inject()(http: DefaultHttpClient,calcConnector:
 
   val otherProperties = ValidateSession.async { implicit request =>
 
-    calcConnector.fetchAndGetFormData[OtherPropertiesModel](KeystoreKeys.otherProperties).map {
+    sessionCacheService.fetchAndGetFormData[OtherPropertiesModel](KeystoreKeys.otherProperties).map {
       case Some(data) => Ok(otherPropertiesView(otherPropertiesForm.fill(data)))
       case _ => Ok(otherPropertiesView(otherPropertiesForm))
     }
@@ -52,7 +53,7 @@ class OtherPropertiesController @Inject()(http: DefaultHttpClient,calcConnector:
 
     def successAction(model: OtherPropertiesModel) = {
       for {
-        save <- calcConnector.saveFormData[OtherPropertiesModel](KeystoreKeys.otherProperties, model)
+        save <- sessionCacheService.saveFormData[OtherPropertiesModel](KeystoreKeys.otherProperties, model)
         route <- routeRequest(model)
       } yield route
     }

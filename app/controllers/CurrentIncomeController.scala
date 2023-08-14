@@ -17,30 +17,28 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import controllers.utils.RecoverableFuture
 import forms.CurrentIncomeForm._
-import javax.inject.Inject
 import models.{CurrentIncomeModel, PropertyLivedInModel}
 import play.api.data.Form
 import play.api.i18n.I18nSupport
-import play.api.mvc.MessagesControllerComponents
-import uk.gov.hmrc.http.HeaderCarrier
+import play.api.mvc.{MessagesControllerComponents, Request}
+import services.SessionCacheService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.currentIncome
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class CurrentIncomeController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
+class CurrentIncomeController @Inject()(sessionCacheService: SessionCacheService,
                                         mcc: MessagesControllerComponents,
                                         currentIncomeView: currentIncome)
                                        (implicit ec: ExecutionContext)
                                           extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
-  def getBackLink(implicit hc: HeaderCarrier): Future[String] = {
-    calcConnector.fetchAndGetFormData[PropertyLivedInModel](KeystoreKeys.propertyLivedIn).map {
+  def getBackLink(implicit request: Request[_]): Future[String] = {
+    sessionCacheService.fetchAndGetFormData[PropertyLivedInModel](KeystoreKeys.propertyLivedIn).map {
       case Some(PropertyLivedInModel(true)) => routes.PrivateResidenceReliefController.privateResidenceRelief.url
       case _ => routes.PropertyLivedInController.propertyLivedIn.url
     }
@@ -49,7 +47,7 @@ class CurrentIncomeController @Inject()(http: DefaultHttpClient,calcConnector: C
   val currentIncome = ValidateSession.async { implicit request =>
 
     def getForm: Future[Form[CurrentIncomeModel]] = {
-      calcConnector.fetchAndGetFormData[CurrentIncomeModel](KeystoreKeys.currentIncome).map {
+      sessionCacheService.fetchAndGetFormData[CurrentIncomeModel](KeystoreKeys.currentIncome).map {
         case(Some(data)) => currentIncomeForm.fill(data)
         case _ => currentIncomeForm
       }
@@ -70,7 +68,7 @@ class CurrentIncomeController @Inject()(http: DefaultHttpClient,calcConnector: C
 
     def successAction(model: CurrentIncomeModel) = {
       (for {
-        _ <- calcConnector.saveFormData(KeystoreKeys.currentIncome, model)
+        _ <- sessionCacheService.saveFormData(KeystoreKeys.currentIncome, model)
         route <- routeRequest(model)
       } yield route).recoverToStart
     }

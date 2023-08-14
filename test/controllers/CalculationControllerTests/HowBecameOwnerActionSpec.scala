@@ -31,8 +31,8 @@ import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
+import services.SessionCacheService
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
-import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.howBecameOwner
 
@@ -46,16 +46,16 @@ class HowBecameOwnerActionSpec extends CommonPlaySpec with WithCommonFakeApplica
   val ec = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
-  val defaultCache = mock[CacheMap]
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val howBecameOwnerView = fakeApplication.injector.instanceOf[howBecameOwner]
   val pageTitle = s"""${messages.question} - ${commonMessages.pageHeading} - GOV.UK"""
+  val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
 
   class Setup {
     val controller = new HowBecameOwnerController(
       mockHttp,
-      mockCalcConnector,
+      mockSessionCacheService,
       mockMessagesControllerComponents,
       howBecameOwnerView
     )(ec)
@@ -63,14 +63,14 @@ class HowBecameOwnerActionSpec extends CommonPlaySpec with WithCommonFakeApplica
 
   def setupTarget(getData: Option[HowBecameOwnerModel]): HowBecameOwnerController = {
 
-    when(mockCalcConnector.fetchAndGetFormData[HowBecameOwnerModel](ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.fetchAndGetFormData[HowBecameOwnerModel](ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(getData)
 
-    when(mockCalcConnector.saveFormData[HowBecameOwnerModel](
+    when(mockSessionCacheService.saveFormData[HowBecameOwnerModel](
       ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(mock[CacheMap])
+      .thenReturn(("", ""))
 
-    new HowBecameOwnerController(mockHttp, mockCalcConnector, mockMessagesControllerComponents, howBecameOwnerView)(ec)
+    new HowBecameOwnerController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, howBecameOwnerView)(ec)
   }
 
   "Calling .howBecameOwner action" when {

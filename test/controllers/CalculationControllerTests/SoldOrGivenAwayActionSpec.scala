@@ -33,8 +33,8 @@ import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
+import services.SessionCacheService
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
-import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.soldOrGivenAway
 
@@ -49,15 +49,15 @@ class SoldOrGivenAwayActionSpec extends CommonPlaySpec with WithCommonFakeApplic
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
   val mockAnswersConstructor = mock[AnswersConstructor]
-  val defaultCache = mock[CacheMap]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val soldOrGivenAwayView = fakeApplication.injector.instanceOf[soldOrGivenAway]
   lazy val pageTitle = s"""${messages.question} - ${commonMessages.pageHeading} - GOV.UK"""
+  val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
 
   class Setup {
     val controller = new SoldOrGivenAwayController(
       mockHttp,
-      mockCalcConnector,
+      mockSessionCacheService,
       mockMessagesControllerComponents,
       soldOrGivenAwayView
     )(ec)
@@ -65,14 +65,14 @@ class SoldOrGivenAwayActionSpec extends CommonPlaySpec with WithCommonFakeApplic
 
   def setUpTarget(getData: Option[SoldOrGivenAwayModel]): SoldOrGivenAwayController = {
 
-    when(mockCalcConnector.fetchAndGetFormData[SoldOrGivenAwayModel](
+    when(mockSessionCacheService.fetchAndGetFormData[SoldOrGivenAwayModel](
       ArgumentMatchers.eq(KeystoreKeys.soldOrGivenAway))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(CacheMap("", Map.empty)))
+    when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      .thenReturn(Future.successful(("", "")))
 
-    new SoldOrGivenAwayController(mockHttp, mockCalcConnector, mockMessagesControllerComponents, soldOrGivenAwayView)(ec)
+    new SoldOrGivenAwayController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, soldOrGivenAwayView)(ec)
   }
 
   //GET Tests

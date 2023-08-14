@@ -17,29 +17,30 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import controllers.utils.RecoverableFuture
 import forms.SoldForLessForm._
-import javax.inject.Inject
 import models.SoldForLessModel
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.MessagesControllerComponents
+import services.SessionCacheService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.soldForLess
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class SoldForLessController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
+class SoldForLessController @Inject()(http: DefaultHttpClient,
+                                      sessionCacheService: SessionCacheService,
                                       mcc: MessagesControllerComponents,
                                       soldForLessView: soldForLess)
                                      (implicit ec: ExecutionContext)
                                         extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   val soldForLess = ValidateSession.async { implicit request =>
-    calcConnector.fetchAndGetFormData[SoldForLessModel](KeystoreKeys.soldForLess).map {
+    sessionCacheService.fetchAndGetFormData[SoldForLessModel](KeystoreKeys.soldForLess).map {
       case Some(data) => Ok(soldForLessView(soldForLessForm.fill(data)))
       case None => Ok(soldForLessView(soldForLessForm))
     }
@@ -56,7 +57,7 @@ class SoldForLessController @Inject()(http: DefaultHttpClient,calcConnector: Cal
 
     def successAction(model: SoldForLessModel) = {
       (for {
-        save <- calcConnector.saveFormData(KeystoreKeys.soldForLess, model)
+        save <- sessionCacheService.saveFormData(KeystoreKeys.soldForLess, model)
         route <- routeRequest(model)
       } yield route).recoverToStart
     }

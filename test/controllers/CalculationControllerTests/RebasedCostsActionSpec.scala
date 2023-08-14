@@ -31,8 +31,8 @@ import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
+import services.SessionCacheService
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
-import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.rebasedCosts
 
@@ -46,15 +46,14 @@ class RebasedCostsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
   val ec = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
-  val defaultCache = mock[CacheMap]
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val rebasedCostsView = fakeApplication.injector.instanceOf[rebasedCosts]
-
+  val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
   class Setup {
     val controller = new RebasedCostsController(
       mockHttp,
-      mockCalcConnector,
+      mockSessionCacheService,
       mockMessagesControllerComponents,
       rebasedCostsView
     )(ec)
@@ -62,14 +61,14 @@ class RebasedCostsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
 
   def setupTarget(getData: Option[RebasedCostsModel]): RebasedCostsController = {
 
-    when(mockCalcConnector.fetchAndGetFormData[RebasedCostsModel](
+    when(mockSessionCacheService.fetchAndGetFormData[RebasedCostsModel](
       ArgumentMatchers.eq(KeystoreKeys.rebasedCosts))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(CacheMap("", Map.empty)))
+    when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      .thenReturn(Future.successful(("", "")))
 
-    new RebasedCostsController(mockHttp, mockCalcConnector,mockMessagesControllerComponents, rebasedCostsView)(ec)
+    new RebasedCostsController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, rebasedCostsView)(ec)
   }
 
   // GET Tests
