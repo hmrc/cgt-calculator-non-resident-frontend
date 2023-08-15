@@ -23,20 +23,21 @@ import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
 import controllers.predicates.ValidActiveSession
 import controllers.utils.RecoverableFuture
 import forms.CalculationElectionForm._
-import javax.inject.Inject
 import models._
 import play.api.data.Form
 import play.api.i18n.I18nSupport
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request}
+import services.SessionCacheService
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.{calculationElection, calculationElectionNoReliefs}
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 
-class CalculationElectionController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
+class CalculationElectionController @Inject()(calcConnector: CalculatorConnector,
+                                              sessionCacheService: SessionCacheService,
                                               calcAnswersConstructor: AnswersConstructor,
                                               calcElectionConstructor: DefaultCalculationElectionConstructor,
                                               mcc: MessagesControllerComponents,
@@ -61,10 +62,10 @@ class CalculationElectionController @Inject()(http: DefaultHttpClient,calcConnec
     }
   }
 
-  def determineClaimingReliefs(totalGainResultsModel: TotalGainResultsModel)(implicit hc: HeaderCarrier): Future[Boolean] = {
+  def determineClaimingReliefs(totalGainResultsModel: TotalGainResultsModel)(implicit request: Request[_]): Future[Boolean] = {
     val optionSeq = Seq(totalGainResultsModel.rebasedGain, totalGainResultsModel.timeApportionedGain).flatten
     val finalSeq = Seq(totalGainResultsModel.flatGain) ++ optionSeq
-    if (finalSeq.exists(_ > 0)) calcConnector.fetchAndGetFormData[ClaimingReliefsModel](KeystoreKeys.claimingReliefs).map {
+    if (finalSeq.exists(_ > 0)) sessionCacheService.fetchAndGetFormData[ClaimingReliefsModel](KeystoreKeys.claimingReliefs).map {
       case Some(model) => model.isClaimingReliefs
       case _ => throw new Exception("Claiming reliefs model not found.")
     }
@@ -106,13 +107,13 @@ class CalculationElectionController @Inject()(http: DefaultHttpClient,calcConnec
   }
 
   private def getAllOtherReliefs(totalGainResultsModel: TotalGainResultsModel)
-                                (implicit hc: HeaderCarrier): Future[Option[AllOtherReliefsModel]] = {
+                                (implicit request: Request[_]): Future[Option[AllOtherReliefsModel]] = {
     val results = Seq(totalGainResultsModel.flatGain) ++ Seq(totalGainResultsModel.rebasedGain, totalGainResultsModel.timeApportionedGain).flatten
 
     if (results.exists(_ > 0)) {
-      val flat = calcConnector.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsFlat)
-      val rebased = calcConnector.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsRebased)
-      val time = calcConnector.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsTA)
+      val flat = sessionCacheService.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsFlat)
+      val rebased = sessionCacheService.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsRebased)
+      val time = sessionCacheService.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsTA)
 
       for {
         flatReliefs <- flat
@@ -124,8 +125,8 @@ class CalculationElectionController @Inject()(http: DefaultHttpClient,calcConnec
 
   val calculationElection: Action[AnyContent] = ValidateSession.async { implicit request =>
 
-    def action(content: Seq[(String, String, String, String, Option[String], Option[BigDecimal])], isClaimingReliefs: Boolean, backLink: String) =
-      calcConnector.fetchAndGetFormData[CalculationElectionModel](KeystoreKeys.calculationElection).map { result =>
+    def action(content: Seq[(String, String, String, String, Option[String], Option[BigDecimal])], isClaimingReliefs: Boolean) =
+      sessionCacheService.fetchAndGetFormData[CalculationElectionModel](KeystoreKeys.calculationElection).map { result =>
         val form = result match {
           case Some(data) => calculationElectionForm.fill(data)
           case _ => calculationElectionForm
@@ -139,25 +140,24 @@ class CalculationElectionController @Inject()(http: DefaultHttpClient,calcConnec
       totalGainAnswers <- calcAnswersConstructor.getNRTotalGainAnswers
       totalGain <- calcConnector.calculateTotalGain(totalGainAnswers)
       gainExists <- checkGainExists(totalGain.get)
-      propertyLivedIn <- getPropertyLivedInResponse(gainExists, calcConnector)
-      prrAnswers <- getPrrResponse(propertyLivedIn, calcConnector)
+      propertyLivedIn <- getPropertyLivedInResponse(gainExists, sessionCacheService)
+      prrAnswers <- getPrrResponse(propertyLivedIn, sessionCacheService)
       isClaimingReliefs <- determineClaimingReliefs(totalGain.get)
       totalGainWithPRR <- getPrrIfApplicable(totalGainAnswers, prrAnswers, propertyLivedIn, calcConnector)
-      allAnswers <- getFinalSectionsAnswers(totalGain.get, totalGainWithPRR, calcConnector, calcAnswersConstructor)
-      backLink <- getBackLink(totalGain.get)
+      allAnswers <- getFinalSectionsAnswers(totalGain.get, totalGainWithPRR, calcAnswersConstructor)
       otherReliefs <- getAllOtherReliefs(totalGain.get)
       taxYear <- getTaxYear(totalGainAnswers, calcConnector)
       maxAEA <- getMaxAEA(taxYear, calcConnector)
       taxOwed <- getTaxOwedIfApplicable(totalGainAnswers, prrAnswers, allAnswers, maxAEA.get, otherReliefs, propertyLivedIn)
       content <- calcElectionConstructor.generateElection(totalGain.get, totalGainWithPRR, taxOwed, otherReliefs)
-      finalResult <- action(orderElements(content, isClaimingReliefs), isClaimingReliefs, backLink)
+      finalResult <- action(orderElements(content, isClaimingReliefs), isClaimingReliefs)
     } yield finalResult).recoverToStart
   }
 
   val submitCalculationElection: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     def successAction(model: CalculationElectionModel) = {
-      calcConnector.saveFormData(KeystoreKeys.calculationElection, model)
+      sessionCacheService.saveFormData(KeystoreKeys.calculationElection, model)
       request.body.asFormUrlEncoded.flatMap(_.get("action").map(_.head)) match {
         case Some("flat") => Future.successful(Redirect(routes.OtherReliefsFlatController.otherReliefsFlat))
         case Some("time") => Future.successful(Redirect(routes.OtherReliefsTAController.otherReliefsTA))
@@ -168,7 +168,7 @@ class CalculationElectionController @Inject()(http: DefaultHttpClient,calcConnec
 
     def errorAction(form: Form[CalculationElectionModel]) = {
 
-      def action(content: Seq[(String, String, String, String, Option[String], Option[BigDecimal])], isClaimingReliefs: Boolean, backLink: String) = {
+      def action(content: Seq[(String, String, String, String, Option[String], Option[BigDecimal])], isClaimingReliefs: Boolean) = {
         if (isClaimingReliefs) BadRequest(calculationElectionView(form, content))
         else BadRequest(calculationElectionNoReliefsView(form, content))
       }
@@ -177,19 +177,18 @@ class CalculationElectionController @Inject()(http: DefaultHttpClient,calcConnec
         totalGainAnswers <- calcAnswersConstructor.getNRTotalGainAnswers
         totalGain <- calcConnector.calculateTotalGain(totalGainAnswers)
         gainExists <- checkGainExists(totalGain.get)
-        propertyLivedIn <- getPropertyLivedInResponse(gainExists, calcConnector)
-        prrAnswers <- getPrrResponse(propertyLivedIn, calcConnector)
+        propertyLivedIn <- getPropertyLivedInResponse(gainExists, sessionCacheService)
+        prrAnswers <- getPrrResponse(propertyLivedIn, sessionCacheService)
         isClaimingReliefs <- determineClaimingReliefs(totalGain.get)
         totalGainWithPRR <- getPrrIfApplicable(totalGainAnswers, prrAnswers, propertyLivedIn, calcConnector)
-        allAnswers <- getFinalSectionsAnswers(totalGain.get, totalGainWithPRR, calcConnector, calcAnswersConstructor)
-        backLink <- getBackLink(totalGain.get)
+        allAnswers <- getFinalSectionsAnswers(totalGain.get, totalGainWithPRR, calcAnswersConstructor)
         otherReliefs <- getAllOtherReliefs(totalGain.get)
         taxYear <- getTaxYear(totalGainAnswers, calcConnector)
         maxAEA <- getMaxAEA(taxYear, calcConnector)
         taxOwed <- getTaxOwedIfApplicable(totalGainAnswers, prrAnswers, allAnswers, maxAEA.get, otherReliefs, propertyLivedIn)
         content <- calcElectionConstructor.generateElection(totalGain.get, totalGainWithPRR, taxOwed, otherReliefs)
       } yield {
-        action(orderElements(content, isClaimingReliefs), isClaimingReliefs, backLink)
+        action(orderElements(content, isClaimingReliefs), isClaimingReliefs)
       }).recoverToStart
     }
 

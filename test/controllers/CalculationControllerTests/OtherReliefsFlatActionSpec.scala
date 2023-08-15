@@ -32,8 +32,8 @@ import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
+import services.SessionCacheService
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
-import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.otherReliefsFlat
 
@@ -47,15 +47,15 @@ class OtherReliefsFlatActionSpec extends CommonPlaySpec with WithCommonFakeAppli
   val ec = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
-  val defaultCache = mock[CacheMap]
   val mockAnswersConstructor = mock[AnswersConstructor]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val otherReliefsFlatView = fakeApplication.injector.instanceOf[otherReliefsFlat]
+  val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
 
   class Setup {
     val controller = new OtherReliefsFlatController(
-      mockHttp,
       mockCalcConnector,
+      mockSessionCacheService,
       mockAnswersConstructor,
       mockMessagesControllerComponents,
       otherReliefsFlatView
@@ -71,11 +71,11 @@ class OtherReliefsFlatActionSpec extends CommonPlaySpec with WithCommonFakeAppli
                    calculationResultsWithPRRModel: Option[CalculationResultsWithPRRModel] = None
                  ): OtherReliefsFlatController = {
 
-    when(mockCalcConnector.fetchAndGetFormData[OtherReliefsModel](
+    when(mockSessionCacheService.fetchAndGetFormData[OtherReliefsModel](
       ArgumentMatchers.eq(KeystoreKeys.otherReliefsFlat))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    when(mockCalcConnector.fetchAndGetFormData[PrivateResidenceReliefModel](
+    when(mockSessionCacheService.fetchAndGetFormData[PrivateResidenceReliefModel](
       ArgumentMatchers.eq(KeystoreKeys.privateResidenceRelief))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(PrivateResidenceReliefModel("No", None))))
 
@@ -102,14 +102,14 @@ class OtherReliefsFlatActionSpec extends CommonPlaySpec with WithCommonFakeAppli
     when(mockCalcConnector.getTaxYear(ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(TaxYearModel("2015/16", isValidYear = true, "2015/16"))))
 
-    when(mockCalcConnector.fetchAndGetFormData[PropertyLivedInModel](ArgumentMatchers.eq(KeystoreKeys.propertyLivedIn))
+    when(mockSessionCacheService.fetchAndGetFormData[PropertyLivedInModel](ArgumentMatchers.eq(KeystoreKeys.propertyLivedIn))
       (ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(PropertyLivedInModel(true))))
 
-    when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(CacheMap("", Map.empty)))
+    when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      .thenReturn(Future.successful(("", "")))
 
-    new OtherReliefsFlatController(mockHttp, mockCalcConnector, mockAnswersConstructor, mockMessagesControllerComponents, otherReliefsFlatView)(ec)
+    new OtherReliefsFlatController(mockCalcConnector, mockSessionCacheService, mockAnswersConstructor, mockMessagesControllerComponents, otherReliefsFlatView)(ec)
   }
 
   "Calling the .otherReliefsFlat action " when {

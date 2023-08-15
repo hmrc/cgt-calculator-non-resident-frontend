@@ -20,10 +20,12 @@ import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import forms.AcquisitionValueForm._
+
 import javax.inject.Inject
 import models.AcquisitionValueModel
 import play.api.i18n.I18nSupport
 import play.api.mvc.MessagesControllerComponents
+import services.SessionCacheService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.acquisitionValue
@@ -31,14 +33,14 @@ import views.html.calculation.acquisitionValue
 import scala.concurrent.{ExecutionContext, Future}
 
 class AcquisitionValueController @Inject()(http: DefaultHttpClient,
-                                           calcConnector: CalculatorConnector,
+                                           sessionCacheService: SessionCacheService,
                                            mcc: MessagesControllerComponents,
                                            acquisitionValueView: acquisitionValue
                                           )(implicit ec: ExecutionContext) extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
 
   val acquisitionValue = ValidateSession.async { implicit request =>
-    calcConnector.fetchAndGetFormData[AcquisitionValueModel](KeystoreKeys.acquisitionValue).map {
+    sessionCacheService.fetchAndGetFormData[AcquisitionValueModel](KeystoreKeys.acquisitionValue).map {
       case Some(data) => Ok(acquisitionValueView(acquisitionValueForm.fill(data)))
       case None => Ok(acquisitionValueView(acquisitionValueForm))
     }
@@ -48,7 +50,7 @@ class AcquisitionValueController @Inject()(http: DefaultHttpClient,
     acquisitionValueForm.bindFromRequest().fold(
       errors => Future.successful(BadRequest(acquisitionValueView(errors))),
       success => {
-        calcConnector.saveFormData(KeystoreKeys.acquisitionValue, success).map(_ => Redirect(routes.AcquisitionCostsController.acquisitionCosts))
+        sessionCacheService.saveFormData(KeystoreKeys.acquisitionValue, success).map(_ => Redirect(routes.AcquisitionCostsController.acquisitionCosts))
       }
     )
   }

@@ -33,8 +33,8 @@ import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
+import services.SessionCacheService
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
-import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.otherProperties
 import views.html.warnings.sessionTimeout
@@ -49,17 +49,17 @@ class OtherPropertiesActionSpec extends CommonPlaySpec with WithCommonFakeApplic
   val ec = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
-  val defaultCache = mock[CacheMap]
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val otherPropertiesView = fakeApplication.injector.instanceOf[otherProperties]
   val sessionTimeoutView = fakeApplication.injector.instanceOf[sessionTimeout]
   lazy val pageTitle = s"""${messages.question} - ${commonMessages.pageHeading} - GOV.UK"""
+  val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
 
   class Setup {
     val controller = new OtherPropertiesController(
       mockHttp,
-      mockCalcConnector,
+      mockSessionCacheService,
       mockMessagesControllerComponents,
       otherPropertiesView
     )(ec)
@@ -68,13 +68,13 @@ class OtherPropertiesActionSpec extends CommonPlaySpec with WithCommonFakeApplic
   def setupTarget(getData: Option[OtherPropertiesModel]): OtherPropertiesController = {
     SharedMetricRegistries.clear()
 
-    when(mockCalcConnector.fetchAndGetFormData[OtherPropertiesModel](ArgumentMatchers.anyString())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.fetchAndGetFormData[OtherPropertiesModel](ArgumentMatchers.anyString())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    when(mockCalcConnector.saveFormData[OtherPropertiesModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(mock[CacheMap])
+    when(mockSessionCacheService.saveFormData[OtherPropertiesModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      .thenReturn(("", ""))
 
-    new OtherPropertiesController(mockHttp, mockCalcConnector, mockMessagesControllerComponents, otherPropertiesView)(ec)
+    new OtherPropertiesController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, otherPropertiesView)(ec)
   }
 
   val controller = new TimeoutController(mockMessagesControllerComponents, sessionTimeoutView)

@@ -17,27 +17,28 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import forms.HowMuchGainForm._
-import javax.inject.Inject
 import models.HowMuchGainModel
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.MessagesControllerComponents
+import services.SessionCacheService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.howMuchGain
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class HowMuchGainController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
+class HowMuchGainController @Inject()(http: DefaultHttpClient,
+                                      sessionCacheService: SessionCacheService,
                                       mcc: MessagesControllerComponents,
                                       howMuchGainView: howMuchGain)(implicit ec: ExecutionContext)
                                         extends FrontendController(mcc) with ValidActiveSession with I18nSupport{
 
   val howMuchGain = ValidateSession.async { implicit request =>
-    calcConnector.fetchAndGetFormData[HowMuchGainModel](KeystoreKeys.howMuchGain).map {
+    sessionCacheService.fetchAndGetFormData[HowMuchGainModel](KeystoreKeys.howMuchGain).map {
       case Some(data) => Ok(howMuchGainView(howMuchGainForm.fill(data)))
       case None => Ok(howMuchGainView(howMuchGainForm))
     }
@@ -48,7 +49,7 @@ class HowMuchGainController @Inject()(http: DefaultHttpClient,calcConnector: Cal
     def errorAction(form: Form[HowMuchGainModel]) = Future.successful(BadRequest(howMuchGainView(form)))
 
     def successAction(model: HowMuchGainModel) = {
-      calcConnector.saveFormData(KeystoreKeys.howMuchGain, model).map(_ =>
+      sessionCacheService.saveFormData(KeystoreKeys.howMuchGain, model).map(_ =>
         if (model.howMuchGain > 0) {
           Redirect(routes.BroughtForwardLossesController.broughtForwardLosses)
         } else {

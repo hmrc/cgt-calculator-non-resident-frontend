@@ -18,23 +18,23 @@ package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.TaxDates
-import connectors.CalculatorConnector
 import constructors.DefaultCalculationElectionConstructor
 import controllers.predicates.ValidActiveSession
 import forms.AcquisitionDateForm._
-import javax.inject.Inject
 import models.DateModel
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import services.SessionCacheService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.acquisitionDate
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class  AcquisitionDateController @Inject()(http: DefaultHttpClient,
-                                           calcConnector: CalculatorConnector,
+                                           sessionCacheService: SessionCacheService,
                                            calcElectionConstructor: DefaultCalculationElectionConstructor,
                                            mcc: MessagesControllerComponents,
                                            acquisitionDateView: acquisitionDate)
@@ -43,7 +43,7 @@ class  AcquisitionDateController @Inject()(http: DefaultHttpClient,
 
 
   val acquisitionDate: Action[AnyContent] = ValidateSession.async { implicit request =>
-    calcConnector.fetchAndGetFormData[DateModel](KeystoreKeys.acquisitionDate).map {
+    sessionCacheService.fetchAndGetFormData[DateModel](KeystoreKeys.acquisitionDate).map {
       case Some(data) => Ok(acquisitionDateView(acquisitionDateForm.fill(data)))
       case None => Ok(acquisitionDateView(acquisitionDateForm))
     }
@@ -54,7 +54,7 @@ class  AcquisitionDateController @Inject()(http: DefaultHttpClient,
     def errorAction(form: Form[DateModel]) = Future.successful(BadRequest(acquisitionDateView(form)))
 
     def successAction(model: DateModel) = {
-      calcConnector.saveFormData(KeystoreKeys.acquisitionDate, model).map(_ =>
+      sessionCacheService.saveFormData(KeystoreKeys.acquisitionDate, model).map(_ =>
         if(TaxDates.dateBeforeLegislationStart(model.day, model.month, model.year)) {
           Redirect(routes.WorthBeforeLegislationStartController.worthBeforeLegislationStart)
         } else {

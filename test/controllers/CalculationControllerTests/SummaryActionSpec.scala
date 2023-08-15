@@ -33,8 +33,8 @@ import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
+import services.SessionCacheService
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
-import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.summary
 
@@ -48,16 +48,15 @@ class SummaryActionSpec extends CommonPlaySpec with WithCommonFakeApplication wi
   val ec = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
-  val defaultCache = mock[CacheMap]
   val mockAnswersConstructor = mock[AnswersConstructor]
   val mockDefaultCalElecConstructor = mock[DefaultCalculationElectionConstructor]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val summaryView = fakeApplication.injector.instanceOf[summary]
-
+  val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
   class Setup {
     val controller = new SummaryController(
-      mockHttp,
       mockCalcConnector,
+      mockSessionCacheService,
       mockAnswersConstructor,
       mockMessagesControllerComponents,
       summaryView
@@ -79,7 +78,7 @@ class SummaryActionSpec extends CommonPlaySpec with WithCommonFakeApplication wi
     when(mockAnswersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers(ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(finalSummaryModel)))
 
-    when(mockCalcConnector.fetchAndGetFormData[CalculationElectionModel](
+    when(mockSessionCacheService.fetchAndGetFormData[CalculationElectionModel](
       ArgumentMatchers.eq(KeystoreKeys.calculationElection))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(calculationElectionModel)))
 
@@ -92,7 +91,7 @@ class SummaryActionSpec extends CommonPlaySpec with WithCommonFakeApplication wi
     when(mockCalcConnector.calculateTaxableGainAfterPRR(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(Future.successful(calculationResultsWithPRRModel))
 
-    when(mockCalcConnector.fetchAndGetFormData[PrivateResidenceReliefModel](
+    when(mockSessionCacheService.fetchAndGetFormData[PrivateResidenceReliefModel](
       ArgumentMatchers.eq(KeystoreKeys.privateResidenceRelief))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(privateResidenceReliefModel)
 
@@ -107,23 +106,23 @@ class SummaryActionSpec extends CommonPlaySpec with WithCommonFakeApplication wi
     when(mockCalcConnector.getTaxYear(ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(TaxYearModel("2015/16", isValidYear = true, "2015/16"))))
 
-    when(mockCalcConnector.fetchAndGetFormData[OtherReliefsModel](
+    when(mockSessionCacheService.fetchAndGetFormData[OtherReliefsModel](
       ArgumentMatchers.eq(KeystoreKeys.otherReliefsFlat))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(None))
 
-    when(mockCalcConnector.fetchAndGetFormData[OtherReliefsModel](
+    when(mockSessionCacheService.fetchAndGetFormData[OtherReliefsModel](
       ArgumentMatchers.eq(KeystoreKeys.otherReliefsRebased))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(None))
 
-    when(mockCalcConnector.fetchAndGetFormData[OtherReliefsModel](
+    when(mockSessionCacheService.fetchAndGetFormData[OtherReliefsModel](
       ArgumentMatchers.eq(KeystoreKeys.otherReliefsTA))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(None))
 
-    when(mockCalcConnector.fetchAndGetFormData[PropertyLivedInModel](ArgumentMatchers.eq(KeystoreKeys.propertyLivedIn))
+    when(mockSessionCacheService.fetchAndGetFormData[PropertyLivedInModel](ArgumentMatchers.eq(KeystoreKeys.propertyLivedIn))
       (ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(PropertyLivedInModel(true))))
 
-    new SummaryController(mockHttp, mockCalcConnector, mockAnswersConstructor, mockMessagesControllerComponents, summaryView)(ec)
+    new SummaryController(mockCalcConnector, mockSessionCacheService, mockAnswersConstructor, mockMessagesControllerComponents, summaryView)(ec)
   }
 
   lazy val answerModel = TotalGainAnswersModel(

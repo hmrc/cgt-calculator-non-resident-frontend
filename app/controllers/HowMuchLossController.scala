@@ -17,27 +17,28 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import forms.HowMuchLossForm._
-import javax.inject.Inject
 import models.HowMuchLossModel
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.MessagesControllerComponents
+import services.SessionCacheService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.howMuchLoss
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class HowMuchLossController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
+class HowMuchLossController @Inject()(http: DefaultHttpClient,
+                                      sessionCacheService: SessionCacheService,
                                       mcc: MessagesControllerComponents,
                                       howMuchLossView: howMuchLoss)(implicit ec: ExecutionContext)
                                         extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   val howMuchLoss = ValidateSession.async { implicit request =>
-    calcConnector.fetchAndGetFormData[HowMuchLossModel](KeystoreKeys.howMuchLoss).map {
+    sessionCacheService.fetchAndGetFormData[HowMuchLossModel](KeystoreKeys.howMuchLoss).map {
       case Some(data) => Ok(howMuchLossView(howMuchLossForm.fill(data)))
       case _ => Ok(howMuchLossView(howMuchLossForm))
     }
@@ -50,7 +51,7 @@ class HowMuchLossController @Inject()(http: DefaultHttpClient,calcConnector: Cal
     }
 
     def successAction(model: HowMuchLossModel) = {
-      calcConnector.saveFormData[HowMuchLossModel](KeystoreKeys.howMuchLoss, model).map(_ =>
+      sessionCacheService.saveFormData[HowMuchLossModel](KeystoreKeys.howMuchLoss, model).map(_ =>
         if (model.loss > 0) {
           Redirect(routes.BroughtForwardLossesController.broughtForwardLosses)
         } else {

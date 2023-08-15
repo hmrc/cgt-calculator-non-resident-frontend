@@ -1,5 +1,4 @@
-import uk.gov.hmrc.DefaultBuildSettings.{defaultSettings, integrationTestSettings, scalaSettings, targetJvm}
-import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin.publishingSettings
+import uk.gov.hmrc.DefaultBuildSettings.{defaultSettings, integrationTestSettings, scalaSettings}
 
 lazy val appName = "cgt-calculator-non-resident-frontend"
 lazy val appDependencies : Seq[ModuleID] = Seq.empty
@@ -26,14 +25,13 @@ lazy val microservice = Project(appName, file("."))
   .settings(playSettings : _*)
   .settings(PlayKeys.playDefaultPort := 9902)
   .settings(scalaSettings: _*)
-  .settings(publishingSettings: _*)
   .settings(defaultSettings(): _*)
   .settings(
     scalaVersion := "2.13.8",
     libraryDependencies ++= AppDependencies(),
     retrieveManaged := true,
     //evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
-    pipelineStages in Assets := Seq(digest),
+    Assets / pipelineStages := Seq(digest),
     scalacOptions += "-P:silencer:pathFilters=views;routes",
     libraryDependencies ++= Seq(
       compilerPlugin("com.github.ghik" % "silencer-plugin" % silencerVersion cross CrossVersion.full),
@@ -51,4 +49,4 @@ lazy val microservice = Project(appName, file("."))
     "uk.gov.hmrc.govukfrontend.views.html.components.implicits._"
   ))
 
-fork in run := true
+run / fork := true

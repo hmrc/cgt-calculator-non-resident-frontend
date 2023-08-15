@@ -31,8 +31,8 @@ import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
+import services.SessionCacheService
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
-import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.disposalValue
 
@@ -47,16 +47,15 @@ class DisposalValueActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
   val ec = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
-  val defaultCache = mock[CacheMap]
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val disposalValueView = fakeApplication.injector.instanceOf[disposalValue]
   val pageTitle = s"${messages.question} - ${commonMessages.pageHeading} - GOV.UK"
-
+  val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
   class Setup {
     val controller = new DisposalValueController(
       mockHttp,
-      mockCalcConnector,
+      mockSessionCacheService,
       mockMessagesControllerComponents,
       disposalValueView
     )(ec)
@@ -66,13 +65,13 @@ class DisposalValueActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
   def setupTarget(getData: Option[DisposalValueModel]): DisposalValueController = {
 
 
-    when(mockCalcConnector.fetchAndGetFormData[DisposalValueModel](ArgumentMatchers.anyString())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.fetchAndGetFormData[DisposalValueModel](ArgumentMatchers.anyString())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(CacheMap("", Map.empty)))
+    when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      .thenReturn(Future.successful(("", "")))
 
-    new DisposalValueController(mockHttp,mockCalcConnector, mockMessagesControllerComponents, disposalValueView)(ec)
+    new DisposalValueController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, disposalValueView)(ec)
   }
 
   //GET Tests

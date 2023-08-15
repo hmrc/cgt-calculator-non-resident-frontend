@@ -17,27 +17,28 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import forms.SoldOrGivenAwayForm._
-import javax.inject.Inject
 import models.SoldOrGivenAwayModel
 import play.api.i18n.I18nSupport
 import play.api.mvc.MessagesControllerComponents
+import services.SessionCacheService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.soldOrGivenAway
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class SoldOrGivenAwayController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
+class SoldOrGivenAwayController @Inject()(http: DefaultHttpClient,
+                                          sessionCacheService: SessionCacheService,
                                           mcc: MessagesControllerComponents,
                                           soldOrGivenAwayView: soldOrGivenAway)
                                          (implicit ec: ExecutionContext)
                                             extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   val soldOrGivenAway = ValidateSession.async { implicit request =>
-    calcConnector.fetchAndGetFormData[SoldOrGivenAwayModel](KeystoreKeys.soldOrGivenAway).map {
+    sessionCacheService.fetchAndGetFormData[SoldOrGivenAwayModel](KeystoreKeys.soldOrGivenAway).map {
       case Some(data) => Ok(soldOrGivenAwayView(soldOrGivenAwayForm.fill(data)))
       case None => Ok(soldOrGivenAwayView(soldOrGivenAwayForm))
     }
@@ -48,7 +49,7 @@ class SoldOrGivenAwayController @Inject()(http: DefaultHttpClient,calcConnector:
     soldOrGivenAwayForm.bindFromRequest().fold(
       errors => Future.successful(BadRequest(soldOrGivenAwayView(errors))),
       success => {
-        calcConnector.saveFormData[SoldOrGivenAwayModel](KeystoreKeys.soldOrGivenAway, success).map(_ =>
+        sessionCacheService.saveFormData[SoldOrGivenAwayModel](KeystoreKeys.soldOrGivenAway, success).map(_ =>
         success match {
           case SoldOrGivenAwayModel(true) => Redirect(routes.SoldForLessController.soldForLess)
           case SoldOrGivenAwayModel(false) => Redirect(routes.WhoDidYouGiveItToController.whoDidYouGiveItTo)

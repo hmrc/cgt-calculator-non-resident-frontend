@@ -17,7 +17,6 @@
 package controllers.CalculationControllerTests
 
 import java.time.LocalDate
-
 import akka.stream.Materializer
 import assets.MessageLookup.NonResident.{PrivateResidenceRelief => messages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
@@ -33,9 +32,10 @@ import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
+import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import services.SessionCacheService
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
-import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.privateResidenceRelief
 
@@ -50,15 +50,15 @@ class PrivateResidenceReliefActionSpec
   val mockMaterializer = mock[Materializer]
   val mockHttp = mock[DefaultHttpClient]
   val mockCalcConnector = mock[CalculatorConnector]
-  val mockDefaultCache = mock[CacheMap]
   val mockAnswersConstructor = mock[AnswersConstructor]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val privateResidenceReliefView = fakeApplication.injector.instanceOf[privateResidenceRelief]
+  val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
 
   class Setup {
     val controller = new PrivateResidenceReliefController(
-      mockHttp,
       mockCalcConnector,
+      mockSessionCacheService,
       mockAnswersConstructor,
       mockMessagesControllerComponents,
       privateResidenceReliefView
@@ -76,23 +76,23 @@ class PrivateResidenceReliefActionSpec
 
     val totalGainResultsModel = TotalGainResultsModel(1, Some(0), Some(0))
 
-    when(mockCalcConnector.saveFormData[PrivateResidenceReliefModel](
+    when(mockSessionCacheService.saveFormData[PrivateResidenceReliefModel](
       ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(mock[CacheMap])
+      .thenReturn(("", ""))
 
-    when(mockCalcConnector.fetchAndGetFormData[PrivateResidenceReliefModel](
+    when(mockSessionCacheService.fetchAndGetFormData[PrivateResidenceReliefModel](
       ArgumentMatchers.eq(KeystoreKeys.privateResidenceRelief))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    when(mockCalcConnector.fetchAndGetFormData[DateModel](
+    when(mockSessionCacheService.fetchAndGetFormData[DateModel](
       ArgumentMatchers.eq(KeystoreKeys.disposalDate))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(disposalDateData))
 
-    when(mockCalcConnector.fetchAndGetFormData[DateModel]
+    when(mockSessionCacheService.fetchAndGetFormData[DateModel]
       (ArgumentMatchers.eq(KeystoreKeys.acquisitionDate))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(acquisitionDateData))
 
-    when(mockCalcConnector.fetchAndGetFormData[RebasedValueModel](
+    when(mockSessionCacheService.fetchAndGetFormData[RebasedValueModel](
       ArgumentMatchers.eq(KeystoreKeys.rebasedValue))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(rebasedValueData))
 
@@ -102,7 +102,7 @@ class PrivateResidenceReliefActionSpec
     when(mockAnswersConstructor.getNRTotalGainAnswers(ArgumentMatchers.any()))
       .thenReturn(mock[TotalGainAnswersModel])
 
-    when(mockCalcConnector.fetchAndGetFormData[PropertyLivedInModel](ArgumentMatchers.eq(KeystoreKeys.propertyLivedIn))
+    when(mockSessionCacheService.fetchAndGetFormData[PropertyLivedInModel](ArgumentMatchers.eq(KeystoreKeys.propertyLivedIn))
       (ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(PropertyLivedInModel(true))))
 
@@ -110,21 +110,21 @@ class PrivateResidenceReliefActionSpec
       .thenReturn(Future.successful(Some(totalGainResultsModel)))
 
 
-    new PrivateResidenceReliefController(mockHttp, mockCalcConnector, mockAnswersConstructor, mockMessagesControllerComponents, privateResidenceReliefView)(ec)
+    new PrivateResidenceReliefController(mockCalcConnector, mockSessionCacheService, mockAnswersConstructor, mockMessagesControllerComponents, privateResidenceReliefView)(ec)
   }
 
   "Calling the .getAcquisitionDate method" should {
 
     "return a valid date when one is found with an answer of yes" in {
       val target = setupTarget(None, acquisitionDateData = Some(DateModel(10, 5, 2015)))
-      val result = target.getAcquisitionDate(implicitHeaderCarrier: HeaderCarrier)
+      val result = target.getAcquisitionDate(FakeRequest())
 
       await(result) shouldBe Some(LocalDate.parse("2015-05-10"))
     }
 
     "return a None when no date is found" in {
       val target = setupTarget(None)
-      val result = target.getAcquisitionDate(implicitHeaderCarrier: HeaderCarrier)
+      val result = target.getAcquisitionDate(FakeRequest())
 
       await(result) shouldBe None
     }
@@ -134,14 +134,14 @@ class PrivateResidenceReliefActionSpec
 
     "return a valid date when one is found" in {
       val target = setupTarget(None, disposalDateData = Some(DateModel(10, 5, 2015)))
-      val result = target.getDisposalDate(implicitHeaderCarrier: HeaderCarrier)
+      val result = target.getDisposalDate(FakeRequest())
 
       await(result) shouldBe Some(LocalDate.parse("2015-05-10"))
     }
 
     "return a None when no date is found" in {
       val target = setupTarget(None)
-      val result = target.getDisposalDate(implicitHeaderCarrier: HeaderCarrier)
+      val result = target.getDisposalDate(FakeRequest())
 
       await(result) shouldBe None
     }

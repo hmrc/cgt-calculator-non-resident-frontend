@@ -17,27 +17,28 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import forms.WorthWhenBoughtForLess.worthWhenBoughtForLessForm
-import javax.inject.Inject
 import models.AcquisitionValueModel
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.MessagesControllerComponents
+import services.SessionCacheService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.worthWhenBoughtForLess
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class WorthWhenBoughtForLessController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
+class WorthWhenBoughtForLessController @Inject()(http: DefaultHttpClient,
+                                                 sessionCacheService: SessionCacheService,
                                                  mcc: MessagesControllerComponents,
                                                  worthWhenBoughtForLessView: worthWhenBoughtForLess)(implicit ec: ExecutionContext)
                                                   extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   val worthWhenBoughtForLess = ValidateSession.async { implicit request =>
-    calcConnector.fetchAndGetFormData[AcquisitionValueModel](KeystoreKeys.acquisitionMarketValue).map {
+    sessionCacheService.fetchAndGetFormData[AcquisitionValueModel](KeystoreKeys.acquisitionMarketValue).map {
       case Some(data) => Ok(worthWhenBoughtForLessView(worthWhenBoughtForLessForm.fill(data)))
       case None => Ok(worthWhenBoughtForLessView(worthWhenBoughtForLessForm))
     }
@@ -48,7 +49,7 @@ class WorthWhenBoughtForLessController @Inject()(http: DefaultHttpClient,calcCon
     def errorAction(form: Form[AcquisitionValueModel]) = Future.successful(BadRequest(worthWhenBoughtForLessView(form)))
 
     def successAction(model: AcquisitionValueModel) = {
-      calcConnector.saveFormData(KeystoreKeys.acquisitionMarketValue, model).map(_ =>
+      sessionCacheService.saveFormData(KeystoreKeys.acquisitionMarketValue, model).map(_ =>
         Redirect(routes.AcquisitionCostsController.acquisitionCosts))
     }
 

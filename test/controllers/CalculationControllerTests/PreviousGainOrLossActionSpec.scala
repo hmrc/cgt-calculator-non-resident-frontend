@@ -31,8 +31,8 @@ import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
+import services.SessionCacheService
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
-import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.previousLossOrGain
 
@@ -46,29 +46,28 @@ class PreviousGainOrLossActionSpec extends CommonPlaySpec with WithCommonFakeApp
   val ec = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
-  val defaultCache = mock[CacheMap]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val previousLossOrGainView = fakeApplication.injector.instanceOf[previousLossOrGain]
-
+  val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
   class Setup {
     val controller = new PreviousGainOrLossController(
       mockHttp,
-      mockCalcConnector,
+      mockSessionCacheService,
       mockMessagesControllerComponents,
       previousLossOrGainView
     )(ec)
   }
 
   def setupTarget(getData: Option[PreviousLossOrGainModel]): PreviousGainOrLossController = {
-    when(mockCalcConnector.fetchAndGetFormData[PreviousLossOrGainModel](
+    when(mockSessionCacheService.fetchAndGetFormData[PreviousLossOrGainModel](
       ArgumentMatchers.eq(keystoreKeys.previousLossOrGain))(ArgumentMatchers.any(), ArgumentMatchers.any())).
       thenReturn(Future.successful(getData))
 
-    when(mockCalcConnector.saveFormData[PreviousLossOrGainModel](
+    when(mockSessionCacheService.saveFormData[PreviousLossOrGainModel](
       ArgumentMatchers.eq(keystoreKeys.previousLossOrGain), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any())).
-      thenReturn(mock[CacheMap])
+      thenReturn(("", ""))
 
-    new PreviousGainOrLossController(mockHttp, mockCalcConnector, mockMessagesControllerComponents, previousLossOrGainView)(ec)
+    new PreviousGainOrLossController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, previousLossOrGainView)(ec)
   }
 
   "Calling .previousGainOrLoss from the PreviousGainOrLossController" when {

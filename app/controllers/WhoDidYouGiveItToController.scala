@@ -17,23 +17,23 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => keystoreKeys}
-import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import controllers.utils.RecoverableFuture
 import forms.WhoDidYouGiveItToForm._
-import javax.inject.Inject
 import models.WhoDidYouGiveItToModel
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
+import services.SessionCacheService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.{noTaxToPay, whoDidYouGiveItTo}
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 
 class WhoDidYouGiveItToController @Inject()(http: DefaultHttpClient,
-                                            calcConnector: CalculatorConnector,
+                                            sessionCacheService: SessionCacheService,
                                             mcc: MessagesControllerComponents,
                                             noTaxToPayView: noTaxToPay,
                                             whoDidYouGiveItToView: whoDidYouGiveItTo)
@@ -41,7 +41,7 @@ class WhoDidYouGiveItToController @Inject()(http: DefaultHttpClient,
 
   val whoDidYouGiveItTo = ValidateSession.async { implicit request =>
 
-    calcConnector.fetchAndGetFormData[WhoDidYouGiveItToModel](keystoreKeys.whoDidYouGiveItTo).map {
+    sessionCacheService.fetchAndGetFormData[WhoDidYouGiveItToModel](keystoreKeys.whoDidYouGiveItTo).map {
       case Some(data) => Ok(whoDidYouGiveItToView(whoDidYouGiveItToForm.fill(data)))
       case _ => Ok(whoDidYouGiveItToView(whoDidYouGiveItToForm))
     }
@@ -51,7 +51,7 @@ class WhoDidYouGiveItToController @Inject()(http: DefaultHttpClient,
     whoDidYouGiveItToForm.bindFromRequest().fold(
       errors => Future.successful(BadRequest(whoDidYouGiveItToView(errors))),
       success => {
-        calcConnector.saveFormData[WhoDidYouGiveItToModel](keystoreKeys.whoDidYouGiveItTo, success).map(_ =>
+        sessionCacheService.saveFormData[WhoDidYouGiveItToModel](keystoreKeys.whoDidYouGiveItTo, success).map(_ =>
         success match {
           case WhoDidYouGiveItToModel("Spouse") => Redirect(routes.WhoDidYouGiveItToController.noTaxToPay)
           case WhoDidYouGiveItToModel("Charity") => Redirect(routes.WhoDidYouGiveItToController.noTaxToPay)
@@ -63,7 +63,7 @@ class WhoDidYouGiveItToController @Inject()(http: DefaultHttpClient,
   val noTaxToPay = ValidateSession.async { implicit request =>
 
     def isGivenToCharity: Future[Boolean] = {
-      calcConnector.fetchAndGetFormData[WhoDidYouGiveItToModel](keystoreKeys.whoDidYouGiveItTo).map {
+      sessionCacheService.fetchAndGetFormData[WhoDidYouGiveItToModel](keystoreKeys.whoDidYouGiveItTo).map {
         case Some(WhoDidYouGiveItToModel("Charity")) => true
         case _ => false
       }

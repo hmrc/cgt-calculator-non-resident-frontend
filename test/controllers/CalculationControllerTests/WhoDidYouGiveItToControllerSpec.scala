@@ -33,8 +33,8 @@ import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
+import services.SessionCacheService
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
-import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.{noTaxToPay, whoDidYouGiveItTo}
 
@@ -49,28 +49,27 @@ class WhoDidYouGiveItToControllerSpec extends CommonPlaySpec with WithCommonFake
   val ec = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
-  val defaultCache = mock[CacheMap]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val noTaxToPayView = fakeApplication.injector.instanceOf[noTaxToPay]
   val whoDidYouGiveItToView = fakeApplication.injector.instanceOf[whoDidYouGiveItTo]
-
+  val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
   class Setup {
     val controller = new WhoDidYouGiveItToController(
       mockHttp,
-      mockCalcConnector,
+      mockSessionCacheService,
       mockMessagesControllerComponents,
        noTaxToPayView, whoDidYouGiveItToView)(ec)
   }
 
   def setupTarget(getData: Option[WhoDidYouGiveItToModel]): WhoDidYouGiveItToController = {
 
-    when(mockCalcConnector.fetchAndGetFormData[WhoDidYouGiveItToModel](ArgumentMatchers.eq(keystoreKeys.whoDidYouGiveItTo))
+    when(mockSessionCacheService.fetchAndGetFormData[WhoDidYouGiveItToModel](ArgumentMatchers.eq(keystoreKeys.whoDidYouGiveItTo))
     (ArgumentMatchers.any(), ArgumentMatchers.any())).thenReturn(Future.successful(getData))
 
-    when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(CacheMap("", Map.empty)))
+    when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      .thenReturn(Future.successful(("", "")))
 
-    new WhoDidYouGiveItToController(mockHttp, mockCalcConnector, mockMessagesControllerComponents, noTaxToPayView, whoDidYouGiveItToView)(ec)
+    new WhoDidYouGiveItToController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, noTaxToPayView, whoDidYouGiveItToView)(ec)
   }
 
 

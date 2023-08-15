@@ -17,23 +17,24 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import connectors.CalculatorConnector
 import constructors.DefaultCalculationElectionConstructor
 import controllers.predicates.ValidActiveSession
 import controllers.utils.RecoverableFuture
 import forms.BoughtForLessForm._
-import javax.inject.Inject
 import models.BoughtForLessModel
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.MessagesControllerComponents
+import services.SessionCacheService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.boughtForLess
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class BoughtForLessController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
+class BoughtForLessController @Inject()(http: DefaultHttpClient,
+                                        sessionCacheService: SessionCacheService,
                                         calcElectionConstructor: DefaultCalculationElectionConstructor,
                                         mcc: MessagesControllerComponents,
                                         boughtForLessView: boughtForLess)(implicit ec: ExecutionContext)
@@ -41,7 +42,7 @@ class BoughtForLessController @Inject()(http: DefaultHttpClient,calcConnector: C
 
 
   val boughtForLess = ValidateSession.async { implicit request =>
-    calcConnector.fetchAndGetFormData[BoughtForLessModel](KeystoreKeys.boughtForLess).map {
+    sessionCacheService.fetchAndGetFormData[BoughtForLessModel](KeystoreKeys.boughtForLess).map {
       case Some(data) => Ok(boughtForLessView(boughtForLessForm.fill(data)))
       case None => Ok(boughtForLessView(boughtForLessForm))
     }
@@ -58,7 +59,7 @@ class BoughtForLessController @Inject()(http: DefaultHttpClient,calcConnector: C
 
     def successAction(model: BoughtForLessModel) = {
       (for {
-        save <- calcConnector.saveFormData(KeystoreKeys.boughtForLess, model)
+        save <- sessionCacheService.saveFormData(KeystoreKeys.boughtForLess, model)
         route <- routeRequest(model)
       } yield route).recoverToStart
     }

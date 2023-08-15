@@ -26,15 +26,16 @@ object AppDependencies {
   val play2PdfVersion          = "1.11.0"
   val playLanguageVersion      = "6.2.0-play-28"
   val playFrontendVersion      = "7.5.0-play-28"
+  val hmrcMongoVersion         = "1.3.0"
 
   val compile = Seq(
     ws,
-    "uk.gov.hmrc"     %% "bootstrap-frontend-play-28"   % bootstrapVersion,
-    "uk.gov.hmrc"     %% "play-frontend-hmrc"           % playFrontendVersion,
-    "uk.gov.hmrc"     %% "play-partials"                % playPartialsVersion,
-    "uk.gov.hmrc"     %% "http-caching-client"          % httpCachingClientVersion,
-    "uk.gov.hmrc"     %% "play-language"                % playLanguageVersion,
-    "it.innove"       % "play2-pdf"                     % play2PdfVersion exclude("com.typesafe.play","*"),
+    "uk.gov.hmrc"       %% "bootstrap-frontend-play-28"   % bootstrapVersion,
+    "uk.gov.hmrc"       %% "play-frontend-hmrc"           % playFrontendVersion,
+    "uk.gov.hmrc.mongo" %% "hmrc-mongo-play-28"           % hmrcMongoVersion,
+    "uk.gov.hmrc"       %% "play-partials"                % playPartialsVersion,
+    "uk.gov.hmrc"       %% "play-language"                % playLanguageVersion,
+    "it.innove"         % "play2-pdf"                     % play2PdfVersion exclude("com.typesafe.play","*"),
     nettyServer
   )
 
@@ -52,7 +53,8 @@ object AppDependencies {
         "org.mockito"             %  "mockito-core"              % "4.11.0"            % scope,
         "org.pegdown"             %  "pegdown"                   % "1.6.0"             % scope,
         "org.jsoup"               %  "jsoup"                     % "1.14.3"            % scope,
-        "com.typesafe.play"       %% "play-test"                % PlayVersion.current % scope
+        "com.typesafe.play"       %% "play-test"                % PlayVersion.current % scope,
+        "uk.gov.hmrc.mongo"       %%  "hmrc-mongo-test-play-28" % hmrcMongoVersion      % scope
       )
     }.test
   }

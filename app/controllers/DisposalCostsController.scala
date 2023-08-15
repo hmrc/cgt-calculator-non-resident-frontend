@@ -18,23 +18,21 @@ package controllers
 
 import common.DefaultRoutes._
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import controllers.utils.RecoverableFuture
 import forms.DisposalCostsForm._
-import javax.inject.Inject
 import models.{DisposalCostsModel, SoldForLessModel, SoldOrGivenAwayModel}
 import play.api.data.Form
 import play.api.i18n.I18nSupport
-import play.api.mvc.{MessagesControllerComponents, Result}
-import uk.gov.hmrc.http.HeaderCarrier
+import play.api.mvc._
+import services.SessionCacheService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.disposalCosts
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class DisposalCostsController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
+class DisposalCostsController @Inject()(sessionCacheService: SessionCacheService,
                                         mcc: MessagesControllerComponents,
                                         disposalCostsView: disposalCosts)
                                        (implicit ec: ExecutionContext)
@@ -50,18 +48,18 @@ class DisposalCostsController @Inject()(http: DefaultHttpClient,calcConnector: C
     case (_, _) => Future.successful(missingDataRoute)
   }
 
-  private def fetchSoldOrGivenAway(implicit headerCarrier: HeaderCarrier): Future[Option[SoldOrGivenAwayModel]] = {
-    calcConnector.fetchAndGetFormData[SoldOrGivenAwayModel](KeystoreKeys.soldOrGivenAway)
+  private def fetchSoldOrGivenAway(implicit request: Request[_]): Future[Option[SoldOrGivenAwayModel]] = {
+    sessionCacheService.fetchAndGetFormData[SoldOrGivenAwayModel](KeystoreKeys.soldOrGivenAway)
   }
 
-  private def fetchSoldForLess(implicit headerCarrier: HeaderCarrier): Future[Option[SoldForLessModel]] = {
-    calcConnector.fetchAndGetFormData[SoldForLessModel](KeystoreKeys.soldForLess)
+  private def fetchSoldForLess(implicit request: Request[_]): Future[Option[SoldForLessModel]] = {
+    sessionCacheService.fetchAndGetFormData[SoldForLessModel](KeystoreKeys.soldForLess)
   }
 
-  val disposalCosts = ValidateSession.async { implicit request =>
+  val disposalCosts: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     def routeRequest(backLink: String): Future[Result] = {
-      calcConnector.fetchAndGetFormData[DisposalCostsModel](KeystoreKeys.disposalCosts).map {
+      sessionCacheService.fetchAndGetFormData[DisposalCostsModel](KeystoreKeys.disposalCosts).map {
         case Some(data) => Ok(disposalCostsView(disposalCostsForm.fill(data), backLink))
         case None => Ok(disposalCostsView(disposalCostsForm, backLink))
       }
@@ -75,14 +73,14 @@ class DisposalCostsController @Inject()(http: DefaultHttpClient,calcConnector: C
     } yield route).recoverToStart
   }
 
-  val submitDisposalCosts = ValidateSession.async { implicit request =>
+  val submitDisposalCosts: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     def errorAction(errors: Form[DisposalCostsModel], backLink: String) = {
       Future.successful(BadRequest(disposalCostsView(errors, backLink)))
     }
 
     def successAction(model: DisposalCostsModel) = {
-      calcConnector.saveFormData(KeystoreKeys.disposalCosts, model).map(_ =>
+      sessionCacheService.saveFormData(KeystoreKeys.disposalCosts, model).map(_ =>
         Redirect(routes.AcquisitionDateController.acquisitionDate))
     }
 

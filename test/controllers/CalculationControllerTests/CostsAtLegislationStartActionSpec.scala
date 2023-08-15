@@ -31,8 +31,8 @@ import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
+import services.SessionCacheService
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
-import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.costsAtLegislationStart
 
@@ -46,15 +46,14 @@ class CostsAtLegislationStartActionSpec extends CommonPlaySpec with WithCommonFa
   val ec = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
-  val defaultCache = mock[CacheMap]
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val costsAtLegislationStartView = fakeApplication.injector.instanceOf[costsAtLegislationStart]
-
+  val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
   class Setup {
     val controller = new CostsAtLegislationStartController(
       mockHttp,
-      mockCalcConnector,
+      mockSessionCacheService,
       mockMessagesControllerComponents,
       costsAtLegislationStartView
     )(ec)
@@ -62,16 +61,16 @@ class CostsAtLegislationStartActionSpec extends CommonPlaySpec with WithCommonFa
 
   def setupTarget(getData: Option[CostsAtLegislationStartModel]): CostsAtLegislationStartController = {
 
-    when(mockCalcConnector.fetchAndGetFormData[CostsAtLegislationStartModel](
+    when(mockSessionCacheService.fetchAndGetFormData[CostsAtLegislationStartModel](
       ArgumentMatchers.eq(KeystoreKeys.costAtLegislationStart))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    val successfulSave = Future.successful(CacheMap("", Map()))
-    when(mockCalcConnector.saveFormData[CostsAtLegislationStartModel](
+    val successfulSave = Future.successful(("", ""))
+    when(mockSessionCacheService.saveFormData[CostsAtLegislationStartModel](
       ArgumentMatchers.eq(KeystoreKeys.costAtLegislationStart), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(successfulSave)
 
-    new CostsAtLegislationStartController(mockHttp, mockCalcConnector, mockMessagesControllerComponents, costsAtLegislationStartView)(ec)
+    new CostsAtLegislationStartController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, costsAtLegislationStartView)(ec)
   }
 
   // GET Tests

@@ -17,27 +17,28 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import forms.DisposalValueForm._
-import javax.inject.Inject
 import models.DisposalValueModel
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.MessagesControllerComponents
+import services.SessionCacheService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.disposalValue
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class DisposalValueController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
+class DisposalValueController @Inject()(http: DefaultHttpClient,
+                                        sessionCacheService: SessionCacheService,
                                         mcc: MessagesControllerComponents,
                                         disposalValueView: disposalValue)(implicit ec: ExecutionContext)
                                           extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   val disposalValue = ValidateSession.async { implicit request =>
-    calcConnector.fetchAndGetFormData[DisposalValueModel](KeystoreKeys.disposalValue).map {
+    sessionCacheService.fetchAndGetFormData[DisposalValueModel](KeystoreKeys.disposalValue).map {
       case Some(data) => Ok(disposalValueView(disposalValueForm.fill(data)))
       case None => Ok(disposalValueView(disposalValueForm))
     }
@@ -48,7 +49,7 @@ class DisposalValueController @Inject()(http: DefaultHttpClient,calcConnector: C
     def errorAction(form: Form[DisposalValueModel]) = Future.successful(BadRequest(disposalValueView(form)))
 
     def successAction(model: DisposalValueModel) = {
-      calcConnector.saveFormData(KeystoreKeys.disposalValue, model).map(_ =>
+      sessionCacheService.saveFormData(KeystoreKeys.disposalValue, model).map(_ =>
         Redirect(routes.DisposalCostsController.disposalCosts))
     }
 

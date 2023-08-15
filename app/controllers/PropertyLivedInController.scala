@@ -17,22 +17,23 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => keystoreKeys}
-import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import controllers.utils.RecoverableFuture
 import forms.PropertyLivedInForm._
-import javax.inject.Inject
 import models.PropertyLivedInModel
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import services.SessionCacheService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.propertyLivedIn
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class PropertyLivedInController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
+class PropertyLivedInController @Inject()(http: DefaultHttpClient,
+                                          sessionCacheService: SessionCacheService,
                                           mcc: MessagesControllerComponents,
                                           propertyLivedInView: propertyLivedIn)
                                          (implicit ec: ExecutionContext)
@@ -40,7 +41,7 @@ class PropertyLivedInController @Inject()(http: DefaultHttpClient,calcConnector:
 
   val propertyLivedIn: Action[AnyContent] = ValidateSession.async { implicit request =>
 
-    calcConnector.fetchAndGetFormData[PropertyLivedInModel](keystoreKeys.propertyLivedIn).map {
+    sessionCacheService.fetchAndGetFormData[PropertyLivedInModel](keystoreKeys.propertyLivedIn).map {
       case Some(data) => Ok(propertyLivedInView(propertyLivedInForm.fill(data)))
       case _ => Ok(propertyLivedInView(propertyLivedInForm))
     }
@@ -59,7 +60,7 @@ class PropertyLivedInController @Inject()(http: DefaultHttpClient,calcConnector:
 
     def successAction(model: PropertyLivedInModel) = {
       (for {
-        save <- calcConnector.saveFormData(keystoreKeys.propertyLivedIn, model)
+        save <- sessionCacheService.saveFormData(keystoreKeys.propertyLivedIn, model)
         route <- routeRequest(model)
       } yield route).recoverToStart
     }

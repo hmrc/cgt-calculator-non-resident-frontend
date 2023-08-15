@@ -24,6 +24,7 @@ import config.ApplicationConfig
 import connectors.CalculatorConnector
 import controllers.helpers.FakeRequestHelper
 import controllers.{RebasedValueController, routes}
+
 import javax.inject.Inject
 import models.{DateModel, RebasedValueModel}
 import org.jsoup._
@@ -32,8 +33,8 @@ import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
+import services.SessionCacheService
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.rebasedValue
 
@@ -48,26 +49,26 @@ class RebasedValueActionSpec @Inject()(rebasedValueController: RebasedValueContr
   val ec = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val rebasedValueView = fakeApplication.injector.instanceOf[rebasedValue]
-
+  val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
   def setupTarget(getData: Option[RebasedValueModel],
                   acquisitionDateModel: Option[DateModel] = Some(DateModel(10, 10, 2015))): RebasedValueController = {
 
     val mockCalcConnector = mock[CalculatorConnector]
 
-    when(mockCalcConnector.fetchAndGetFormData[RebasedValueModel](
+    when(mockSessionCacheService.fetchAndGetFormData[RebasedValueModel](
       ArgumentMatchers.eq(KeystoreKeys.rebasedValue))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    when(mockCalcConnector.fetchAndGetFormData[DateModel](
+    when(mockSessionCacheService.fetchAndGetFormData[DateModel](
       ArgumentMatchers.eq(KeystoreKeys.acquisitionDate))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(acquisitionDateModel))
 
-    when(mockCalcConnector.saveFormData[RebasedValueModel](
+    when(mockSessionCacheService.saveFormData[RebasedValueModel](
       ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(mock[CacheMap]))
+      .thenReturn(Future.successful(("", "")))
 
     new RebasedValueController(http = mock[DefaultHttpClient],
-      calcConnector = mock[CalculatorConnector], mockMessagesControllerComponents, rebasedValueView)(ec)
+      mockSessionCacheService, mockMessagesControllerComponents, rebasedValueView)(ec)
   }
 
   //GET tests

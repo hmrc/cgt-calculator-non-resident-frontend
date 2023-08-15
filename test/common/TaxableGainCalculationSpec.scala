@@ -25,15 +25,17 @@ import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import services.SessionCacheService
+import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
-import uk.gov.hmrc.http.HeaderCarrier
 
 class TaxableGainCalculationSpec extends CommonPlaySpec with GuiceOneAppPerSuite with MockitoSugar with FakeRequestHelper {
 
   implicit val hc = new HeaderCarrier()
   implicit val ec = app.injector.instanceOf[ExecutionContext]
   val mockCalcConnector: CalculatorConnector = mock[CalculatorConnector]
+  val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
   val mockAnswersConstructor: AnswersConstructor = mock[AnswersConstructor]
 
   val calculationResultsWithPRRModel = CalculationResultsWithPRRModel(GainsAfterPRRModel(1000, 1500, 2000), None, None)
@@ -72,7 +74,7 @@ class TaxableGainCalculationSpec extends CommonPlaySpec with GuiceOneAppPerSuite
   )
   val propertyLivedIn = PropertyLivedInModel(true)
 
-  when(mockCalcConnector.fetchAndGetFormData[PrivateResidenceReliefModel](ArgumentMatchers.eq(KeystoreKeys.NonResidentKeys.privateResidenceRelief))
+  when(mockSessionCacheService.fetchAndGetFormData[PrivateResidenceReliefModel](ArgumentMatchers.eq(KeystoreKeys.NonResidentKeys.privateResidenceRelief))
     (ArgumentMatchers.any(), ArgumentMatchers.any()))
     .thenReturn(Future.successful(Some(prrModel)))
 
@@ -97,7 +99,7 @@ class TaxableGainCalculationSpec extends CommonPlaySpec with GuiceOneAppPerSuite
 
     "when supplied with a property lived in model with true" should {
 
-      val result = TaxableGainCalculation.getPrrResponse(Some(propertyLivedIn), mockCalcConnector)
+      val result = TaxableGainCalculation.getPrrResponse(Some(propertyLivedIn), mockSessionCacheService)
 
       "return a PRR model" in {
         await(result) shouldBe Some(prrModel)
@@ -107,7 +109,7 @@ class TaxableGainCalculationSpec extends CommonPlaySpec with GuiceOneAppPerSuite
     "when supplied with a property lived in model with false" should {
 
       val propertyLivedIn = PropertyLivedInModel(false)
-      val result = TaxableGainCalculation.getPrrResponse(Some(propertyLivedIn), mockCalcConnector)
+      val result = TaxableGainCalculation.getPrrResponse(Some(propertyLivedIn), mockSessionCacheService)
 
       "return a None" in {
         await(result) shouldBe None
@@ -143,7 +145,7 @@ class TaxableGainCalculationSpec extends CommonPlaySpec with GuiceOneAppPerSuite
         val calculationResultsWithPRRModel = CalculationResultsWithPRRModel(GainsAfterPRRModel(1000, taxableGain = 1000, 0), None, None)
 
         val result = TaxableGainCalculation.getFinalSectionsAnswers(totalGainModel, Some(calculationResultsWithPRRModel),
-          mockCalcConnector, mockAnswersConstructor)
+          mockAnswersConstructor)
 
         "return a TotalPersonalDetailsCalculationModel" in {
           await(result) shouldBe Some(personalDetailsModel)
@@ -155,7 +157,7 @@ class TaxableGainCalculationSpec extends CommonPlaySpec with GuiceOneAppPerSuite
         val calculationResultsWithPRRModel = CalculationResultsWithPRRModel(GainsAfterPRRModel(1000, taxableGain = -1000, 0), None, None)
 
         val result = TaxableGainCalculation.getFinalSectionsAnswers(totalGainModel, Some(calculationResultsWithPRRModel),
-          mockCalcConnector, mockAnswersConstructor)
+          mockAnswersConstructor)
 
         "return a value of None" in {
           await(result) shouldBe None
@@ -166,7 +168,7 @@ class TaxableGainCalculationSpec extends CommonPlaySpec with GuiceOneAppPerSuite
     "not supplied with a calculationResultsWithPrrModel" when {
       "with at least one positive gain" should {
         val totalGainModel = TotalGainResultsModel(BigDecimal(200), None, None)
-        val result = TaxableGainCalculation.getFinalSectionsAnswers(totalGainModel, None, mockCalcConnector, mockAnswersConstructor)
+        val result = TaxableGainCalculation.getFinalSectionsAnswers(totalGainModel, None, mockAnswersConstructor)
 
         "return a TotalPersonalDetailsCalculationModel" in {
           await(result) shouldBe Some(personalDetailsModel)
@@ -175,7 +177,7 @@ class TaxableGainCalculationSpec extends CommonPlaySpec with GuiceOneAppPerSuite
 
       "with no positive gains" should {
         val totalGainModel = TotalGainResultsModel(BigDecimal(-200), None, None)
-        val result = TaxableGainCalculation.getFinalSectionsAnswers(totalGainModel, None, mockCalcConnector, mockAnswersConstructor)
+        val result = TaxableGainCalculation.getFinalSectionsAnswers(totalGainModel, None, mockAnswersConstructor)
 
         "return a value of None" in {
           await(result) shouldBe None
@@ -227,7 +229,7 @@ class TaxableGainCalculationSpec extends CommonPlaySpec with GuiceOneAppPerSuite
   "Calling .getPropertyLivedInResponse" when {
 
     "when no gain exists" should {
-      val result = TaxableGainCalculation.getPropertyLivedInResponse(false, mockCalcConnector)
+      val result = TaxableGainCalculation.getPropertyLivedInResponse(false, mockSessionCacheService)
 
       "return None" in {
         await(result) shouldBe None

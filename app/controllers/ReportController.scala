@@ -24,22 +24,21 @@ import constructors.{AnswersConstructor, YourAnswersConstructor}
 import controllers.predicates.ValidActiveSession
 import controllers.utils.RecoverableFuture
 import it.innove.play.pdf.PdfGenerator
-import javax.inject.Inject
 import models._
 import play.api.Configuration
 import play.api.i18n.{I18nSupport, Lang, Messages}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, RequestHeader}
-import uk.gov.hmrc.http.HeaderCarrier
+import services.SessionCacheService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.summaryReport
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 
 class ReportController @Inject()(config: Configuration,
-                                 http: DefaultHttpClient,
                                  calcConnector: CalculatorConnector,
+                                 sessionCacheService: SessionCacheService,
                                  answersConstructor: AnswersConstructor,
                                  mcc: MessagesControllerComponents,
                                  pdfGenerator: PdfGenerator,
@@ -77,13 +76,12 @@ class ReportController @Inject()(config: Configuration,
         otherReliefs)
     }
 
-    def getAllOtherReliefs(totalPersonalDetailsCalculationModel: Option[TotalPersonalDetailsCalculationModel])
-                          (implicit hc: HeaderCarrier): Future[Option[AllOtherReliefsModel]] = {
+    def getAllOtherReliefs(totalPersonalDetailsCalculationModel: Option[TotalPersonalDetailsCalculationModel]): Future[Option[AllOtherReliefsModel]] = {
       totalPersonalDetailsCalculationModel match {
         case Some(_) =>
-          val flat = calcConnector.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsFlat)
-          val rebased = calcConnector.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsRebased)
-          val time = calcConnector.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsTA)
+          val flat = sessionCacheService.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsFlat)
+          val rebased = sessionCacheService.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsRebased)
+          val time = sessionCacheService.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsTA)
 
           for {
             flatReliefs <- flat
@@ -110,19 +108,19 @@ class ReportController @Inject()(config: Configuration,
     }
 
     (for {
-      answers <- answersConstructor.getNRTotalGainAnswers(hc)
+      answers <- answersConstructor.getNRTotalGainAnswers
       totalGainResultsModel <- calcConnector.calculateTotalGain(answers)
       gainExists <- checkGainExists(totalGainResultsModel.get)
-      propertyLivedIn <- getPropertyLivedInResponse(gainExists, calcConnector)
-      prrModel <- getPrrResponse(propertyLivedIn, calcConnector)
+      propertyLivedIn <- getPropertyLivedInResponse(gainExists, sessionCacheService)
+      prrModel <- getPrrResponse(propertyLivedIn, sessionCacheService)
       totalGainWithPRR <- getPrrIfApplicable(answers, prrModel, propertyLivedIn, calcConnector)
-      finalAnswers <- getFinalSectionsAnswers(totalGainResultsModel.get, totalGainWithPRR, calcConnector, answersConstructor)
+      finalAnswers <- getFinalSectionsAnswers(totalGainResultsModel.get, totalGainWithPRR, answersConstructor)
       otherReliefsModel <- getAllOtherReliefs(finalAnswers)
       taxYearModel <- getTaxYear(answers, calcConnector)
       maxAEA <- getMaxAEA(taxYearModel, calcConnector)
       finalResult <- calculateTaxOwed(answers, prrModel, propertyLivedIn, finalAnswers, maxAEA.get, otherReliefsModel)
       questionAnswerRows <- questionAnswerRows(answers, totalGainResultsModel.get, prrModel, finalAnswers, propertyLivedIn)
-      calculationType <- calcConnector.fetchAndGetFormData[CalculationElectionModel](KeystoreKeys.calculationElection)
+      calculationType <- sessionCacheService.fetchAndGetFormData[CalculationElectionModel](KeystoreKeys.calculationElection)
       totalCosts <- calcConnector.calculateTotalCosts(answers, calculationType)
       calculationResult <- getCalculationResult(finalResult, calculationType.get.calculationType)
     } yield {

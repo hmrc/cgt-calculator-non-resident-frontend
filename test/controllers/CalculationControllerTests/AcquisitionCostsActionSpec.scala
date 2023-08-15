@@ -19,8 +19,8 @@ package controllers.CalculationControllerTests
 import akka.stream.Materializer
 import assets.MessageLookup.NonResident.{AcquisitionCosts => messages}
 import assets.MessageLookup.{NonResident => commonMessages}
-import common.{CommonPlaySpec, WithCommonFakeApplication}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import common.{CommonPlaySpec, WithCommonFakeApplication}
 import config.ApplicationConfig
 import connectors.CalculatorConnector
 import constructors.DefaultCalculationElectionConstructor
@@ -34,9 +34,8 @@ import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
+import services.SessionCacheService
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
-import uk.gov.hmrc.http.cache.client.CacheMap
-import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.acquisitionCosts
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -48,9 +47,8 @@ class AcquisitionCostsActionSpec extends CommonPlaySpec with WithCommonFakeAppli
   val ec = fakeApplication.injector.instanceOf[ExecutionContext]
 
   val materializer = mock[Materializer]
-  val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
-  val defaultCache = mock[CacheMap]
+  val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
   val mockDefaultCalcElecConstructor = mock[DefaultCalculationElectionConstructor]
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
@@ -59,9 +57,7 @@ class AcquisitionCostsActionSpec extends CommonPlaySpec with WithCommonFakeAppli
 
   class Setup {
     val controller = new AcquisitionCostsController(
-      mockHttp,
-      mockCalcConnector,
-      mockDefaultCalcElecConstructor,
+      mockSessionCacheService,
       mockMessagesControllerComponents,
       acquisitionCostsView
     )(ec)
@@ -72,26 +68,26 @@ class AcquisitionCostsActionSpec extends CommonPlaySpec with WithCommonFakeAppli
                   howBecameOwnerData: Option[HowBecameOwnerModel] = None,
                   boughtForLessData: Option[BoughtForLessModel] = None): AcquisitionCostsController = {
 
-    when(mockCalcConnector.fetchAndGetFormData[AcquisitionCostsModel](
+    when(mockSessionCacheService.fetchAndGetFormData[AcquisitionCostsModel](
       ArgumentMatchers.eq(KeystoreKeys.acquisitionCosts))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    when(mockCalcConnector.fetchAndGetFormData[DateModel](
+    when(mockSessionCacheService.fetchAndGetFormData[DateModel](
       ArgumentMatchers.eq(KeystoreKeys.acquisitionDate))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(acquisitionDateData)
 
-    when(mockCalcConnector.fetchAndGetFormData[HowBecameOwnerModel](
+    when(mockSessionCacheService.fetchAndGetFormData[HowBecameOwnerModel](
       ArgumentMatchers.eq(KeystoreKeys.howBecameOwner))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(howBecameOwnerData)
 
-    when(mockCalcConnector.fetchAndGetFormData[BoughtForLessModel](
+    when(mockSessionCacheService.fetchAndGetFormData[BoughtForLessModel](
       ArgumentMatchers.eq(KeystoreKeys.boughtForLess))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(boughtForLessData)
 
-    when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(CacheMap("", Map.empty)))
+    when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      .thenReturn(Future.successful(("", "")))
 
-    new AcquisitionCostsController(mockHttp, mockCalcConnector, mockDefaultCalcElecConstructor, mockMessagesControllerComponents, acquisitionCostsView)(ec)
+    new AcquisitionCostsController(mockSessionCacheService, mockMessagesControllerComponents, acquisitionCostsView)(ec)
   }
 
   "Calling the .backLink method" should {

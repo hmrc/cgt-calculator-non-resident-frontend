@@ -20,25 +20,23 @@ import common.DefaultRoutes._
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.TaxDates
 import connectors.CalculatorConnector
-import constructors.DefaultCalculationElectionConstructor
 import controllers.predicates.ValidActiveSession
 import controllers.utils.RecoverableFuture
 import forms.AnnualExemptAmountForm._
-import javax.inject.Inject
 import models._
 import play.api.data.Form
 import play.api.i18n.I18nSupport
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
+import play.api.mvc._
+import services.SessionCacheService
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.annualExemptAmount
 
-import scala.concurrent.ExecutionContext
-import scala.concurrent.Future
+import javax.inject.Inject
+import scala.concurrent.{ExecutionContext, Future}
 
-class AnnualExemptAmountController @Inject()(http: DefaultHttpClient,calcConnector: CalculatorConnector,
-                                             calcElectionConstructor: DefaultCalculationElectionConstructor,
+class AnnualExemptAmountController @Inject()(calcConnector: CalculatorConnector,
+                                             sessionCacheService: SessionCacheService,
                                              mcc: MessagesControllerComponents,
                                              annualExemptAmountView: annualExemptAmount)(implicit ec: ExecutionContext)
                                               extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
@@ -48,30 +46,30 @@ class AnnualExemptAmountController @Inject()(http: DefaultHttpClient,calcConnect
     calcConnector.getFullAEA(taxYear)
   }
 
-  private def fetchAnnualExemptAmount(implicit headerCarrier: HeaderCarrier): Future[Option[AnnualExemptAmountModel]] = {
-    calcConnector.fetchAndGetFormData[AnnualExemptAmountModel](KeystoreKeys.annualExemptAmount)
+  private def fetchAnnualExemptAmount(implicit request: Request[_]): Future[Option[AnnualExemptAmountModel]] = {
+    sessionCacheService.fetchAndGetFormData[AnnualExemptAmountModel](KeystoreKeys.annualExemptAmount)
   }
 
-  private def fetchPreviousGainOrLoss(implicit hc: HeaderCarrier): Future[Option[PreviousLossOrGainModel]] = {
-    calcConnector.fetchAndGetFormData[PreviousLossOrGainModel](KeystoreKeys.previousLossOrGain)
+  private def fetchPreviousGainOrLoss(implicit request: Request[_]): Future[Option[PreviousLossOrGainModel]] = {
+    sessionCacheService.fetchAndGetFormData[PreviousLossOrGainModel](KeystoreKeys.previousLossOrGain)
   }
 
-  private def fetchPreviousLossAmount(gainOrLoss: String)(implicit hc: HeaderCarrier): Future[Option[HowMuchLossModel]] = {
+  private def fetchPreviousLossAmount(gainOrLoss: String)(implicit request: Request[_]): Future[Option[HowMuchLossModel]] = {
     gainOrLoss match {
-      case "Loss" => calcConnector.fetchAndGetFormData[HowMuchLossModel](KeystoreKeys.howMuchLoss)
+      case "Loss" => sessionCacheService.fetchAndGetFormData[HowMuchLossModel](KeystoreKeys.howMuchLoss)
       case _ => Future.successful(None)
     }
   }
 
-  private def fetchPreviousGainAmount(gainOrLoss: String)(implicit hc: HeaderCarrier): Future[Option[HowMuchGainModel]] = {
+  private def fetchPreviousGainAmount(gainOrLoss: String)(implicit request: Request[_]): Future[Option[HowMuchGainModel]] = {
     gainOrLoss match {
-      case "Gain" => calcConnector.fetchAndGetFormData[HowMuchGainModel](KeystoreKeys.howMuchGain)
+      case "Gain" => sessionCacheService.fetchAndGetFormData[HowMuchGainModel](KeystoreKeys.howMuchGain)
       case _ => Future.successful(None)
     }
   }
 
-  private def fetchDisposalDate(implicit hc: HeaderCarrier): Future[Option[DateModel]] = {
-    calcConnector.fetchAndGetFormData[DateModel](KeystoreKeys.disposalDate)
+  private def fetchDisposalDate(implicit request: Request[_]): Future[Option[DateModel]] = {
+    sessionCacheService.fetchAndGetFormData[DateModel](KeystoreKeys.disposalDate)
   }
 
   private def backUrl(lossOrGain: PreviousLossOrGainModel, gainAmount: Option[HowMuchGainModel], lossAmount: Option[HowMuchLossModel]): Future[String] = {
@@ -99,20 +97,20 @@ class AnnualExemptAmountController @Inject()(http: DefaultHttpClient,calcConnect
   val annualExemptAmount: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     def routeRequest(model: Option[AnnualExemptAmountModel], maxAEA: BigDecimal, backUrl: String): Future[Result] = {
-      calcConnector.fetchAndGetFormData[AnnualExemptAmountModel](KeystoreKeys.annualExemptAmount).map {
+      sessionCacheService.fetchAndGetFormData[AnnualExemptAmountModel](KeystoreKeys.annualExemptAmount).map {
         case Some(data) => Ok(annualExemptAmountView(annualExemptAmountForm().fill(data), maxAEA, backUrl))
         case None => Ok(annualExemptAmountView(annualExemptAmountForm(), maxAEA, backUrl))
       }
     }
 
     (for {
-      disposalDate <- fetchDisposalDate(hc)
+      disposalDate <- fetchDisposalDate(request)
       date <- formatDisposalDate(disposalDate)
       closestTaxYear <- calcConnector.getTaxYear(date)
       taxYear <- getTaxYear(closestTaxYear)
       maxAEA <- fetchAEA(taxYear)
-      annualExemptAmount <- fetchAnnualExemptAmount(hc)
-      previousLossOrGain <- fetchPreviousGainOrLoss(hc)
+      annualExemptAmount <- fetchAnnualExemptAmount(request)
+      previousLossOrGain <- fetchPreviousGainOrLoss(request)
       gainAmount <- fetchPreviousGainAmount(previousLossOrGain.get.previousLossOrGain)
       lossAmount <- fetchPreviousLossAmount(previousLossOrGain.get.previousLossOrGain)
       backUrl <- backUrl(previousLossOrGain.get, gainAmount, lossAmount)
@@ -127,7 +125,7 @@ class AnnualExemptAmountController @Inject()(http: DefaultHttpClient,calcConnect
     }
 
     def successAction(model: AnnualExemptAmountModel) = {
-      calcConnector.saveFormData(KeystoreKeys.annualExemptAmount, model).map(_ =>
+      sessionCacheService.saveFormData(KeystoreKeys.annualExemptAmount, model).map(_ =>
         Redirect(routes.BroughtForwardLossesController.broughtForwardLosses))
     }
 
@@ -138,12 +136,12 @@ class AnnualExemptAmountController @Inject()(http: DefaultHttpClient,calcConnect
     }
 
     (for {
-      disposalDate <- fetchDisposalDate(hc)
+      disposalDate <- fetchDisposalDate(request)
       date <- formatDisposalDate(disposalDate)
       closestTaxYear <- calcConnector.getTaxYear(date)
       taxYear <- getTaxYear(closestTaxYear)
       maxAEA <- fetchAEA(taxYear)
-      previousLossOrGain <- fetchPreviousGainOrLoss(hc)
+      previousLossOrGain <- fetchPreviousGainOrLoss(request)
       gainAmount <- fetchPreviousGainAmount(previousLossOrGain.get.previousLossOrGain)
       lossAmount <- fetchPreviousLossAmount(previousLossOrGain.get.previousLossOrGain)
       backUrl <- backUrl(previousLossOrGain.get, gainAmount, lossAmount)

@@ -31,8 +31,8 @@ import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
+import services.SessionCacheService
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
-import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.acquisitionValue
 
@@ -46,30 +46,29 @@ class AcquisitionValueActionSpec extends CommonPlaySpec with WithCommonFakeAppli
   val materializer = mock[Materializer]
   val mockHttp =mock[DefaultHttpClient]
   val mockCalcConnector =mock[CalculatorConnector]
-  val defaultCache = mock[CacheMap]
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val acquisitionValueView =  fakeApplication.injector.instanceOf[acquisitionValue]
-
+  val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
 
   class Setup {
     val controller = new AcquisitionValueController(
       mockHttp,
-      mockCalcConnector,
+      mockSessionCacheService,
       mockMessagesControllerComponents,
       acquisitionValueView
     )(ec)
   }
   def setupTarget(getData: Option[AcquisitionValueModel]): AcquisitionValueController = {
 
-    when(mockCalcConnector.fetchAndGetFormData[AcquisitionValueModel](
+    when(mockSessionCacheService.fetchAndGetFormData[AcquisitionValueModel](
       ArgumentMatchers.eq(KeystoreKeys.acquisitionValue))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    when(mockCalcConnector.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(CacheMap("", Map.empty)))
+    when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      .thenReturn(Future.successful(("", "")))
 
-    new AcquisitionValueController(mockHttp, mockCalcConnector, mockMessagesControllerComponents, acquisitionValueView)(ec) {
+    new AcquisitionValueController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, acquisitionValueView)(ec) {
     }
   }
 
