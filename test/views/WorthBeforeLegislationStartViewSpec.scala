@@ -45,7 +45,7 @@ class WorthBeforeLegislationStartViewSpec extends CommonPlaySpec with WithCommon
       }
 
       "have a back link" which {
-        lazy val backLink = document.body().select("#back-link")
+        lazy val backLink = document.body().select(".govuk-back-link")
 
         "has a class of 'back-link'" in {
           backLink.attr("class") shouldBe "govuk-back-link"
@@ -56,7 +56,7 @@ class WorthBeforeLegislationStartViewSpec extends CommonPlaySpec with WithCommon
         }
 
         s"has a route to 'acquisition-date'" in {
-          backLink.attr("href") shouldBe "javascript:history.back()"
+          backLink.attr("href") shouldBe "#"
         }
       }
 

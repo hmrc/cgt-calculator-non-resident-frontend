@@ -4,7 +4,7 @@ lazy val appName = "cgt-calculator-non-resident-frontend"
 lazy val appDependencies : Seq[ModuleID] = Seq.empty
 lazy val plugins : Seq[Plugins] = Seq(play.sbt.PlayScala)
 lazy val playSettings : Seq[Setting[_]] = Seq.empty
-val silencerVersion = "1.7.12"
+val silencerVersion = "1.17.13"
 
 lazy val scoverageSettings = {
   import scoverage.ScoverageKeys

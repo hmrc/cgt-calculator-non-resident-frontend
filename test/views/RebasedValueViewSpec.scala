@@ -58,7 +58,7 @@ class RebasedValueViewSpec extends CommonPlaySpec with WithCommonFakeApplication
       }
 
       "have a dynamic back link" which {
-        lazy val backLink = document.body().select("#back-link")
+        lazy val backLink = document.body().select(".govuk-back-link")
 
         "has a class of 'back-link'" in {
           backLink.attr("class") shouldBe "govuk-back-link"
@@ -69,7 +69,7 @@ class RebasedValueViewSpec extends CommonPlaySpec with WithCommonFakeApplication
         }
 
         s"has a route to 'google.com'" in {
-          backLink.attr("href") shouldBe "javascript:history.back()"
+          backLink.attr("href") shouldBe "#"
         }
       }
 

@@ -62,7 +62,7 @@ class ImprovementsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
 
         "have a back link" which {
 
-          lazy val backLink = document.body().select("#back-link")
+          lazy val backLink = document.body().select(".govuk-back-link")
 
           s"has the text ${messages.back}" in {
             backLink.text shouldEqual messages.back
@@ -73,7 +73,7 @@ class ImprovementsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
           }
 
           s"has a route to 'back-link'" in {
-            backLink.attr("href") shouldBe "javascript:history.back()"
+            backLink.attr("href") shouldBe "#"
           }
         }
 

@@ -59,7 +59,7 @@ class PersonalAllowanceViewSpec extends CommonPlaySpec with WithCommonFakeApplic
       }
 
       "have a back link" which {
-        lazy val backLink = document.body().select("#back-link")
+        lazy val backLink = document.body().select(".govuk-back-link")
 
         "has a class of 'back-link'" in {
           backLink.attr("class") shouldBe "govuk-back-link"
@@ -70,7 +70,7 @@ class PersonalAllowanceViewSpec extends CommonPlaySpec with WithCommonFakeApplic
         }
 
         s"has a route to 'customer-type'" in {
-          backLink.attr("href") shouldBe "javascript:history.back()"
+          backLink.attr("href") shouldBe "#"
         }
       }
 

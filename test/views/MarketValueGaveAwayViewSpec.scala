@@ -58,8 +58,8 @@ class MarketValueGaveAwayViewSpec extends CommonPlaySpec with WithCommonFakeAppl
       s"have a paragraph" which {
         lazy val helpText = document.getElementsByClass("govuk-hint")
         s"has the help text'${MarketValueMessages.disposalHelpText}'" in {
-          helpText.html() shouldBe MarketValueMessages.disposalHelpText +
-            " <br> " + MarketValueMessages.disposalHelpTextAdditional
+          helpText.text should include(MarketValueMessages.disposalHelpText)
+          helpText.text should include(MarketValueMessages.disposalHelpTextAdditional)
         }
         s"has the class 'form-hint'" in {
           helpText.attr("class") shouldBe "govuk-hint"
@@ -67,7 +67,7 @@ class MarketValueGaveAwayViewSpec extends CommonPlaySpec with WithCommonFakeAppl
       }
 
       "have a back link" which {
-        lazy val backLink = document.select("#back-link")
+        lazy val backLink = document.select(".govuk-back-link")
 
         "has a class of 'back-link'" in {
           backLink.attr("class") shouldBe "govuk-back-link"
@@ -78,7 +78,7 @@ class MarketValueGaveAwayViewSpec extends CommonPlaySpec with WithCommonFakeAppl
         }
 
         s"has a route to 'who-did-you-give-it-to'" in {
-          backLink.attr("href") shouldBe "javascript:history.back()"
+          backLink.attr("href") shouldBe "#"
         }
       }
 

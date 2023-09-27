@@ -82,7 +82,7 @@ class OutsideTaxYearActionSpec()
       }
 
       s"have a back link to '${controllers.routes.DisposalDateController.disposalDate.url}'" in {
-        Jsoup.parse(bodyOf(result)(materializer, ec)).getElementById("back-link").attr("href") shouldBe "javascript:history.back()"
+        Jsoup.parse(bodyOf(result)(materializer, ec)).getElementsByClass("govuk-back-link").attr("href") shouldBe "#"
       }
     }
 

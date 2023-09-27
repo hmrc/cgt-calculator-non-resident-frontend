@@ -20,12 +20,11 @@ import play.core.PlayVersion
 
 object AppDependencies {
 
-  val bootstrapVersion         = "7.15.0"
+  val bootstrapVersion         = "7.22.0"
   val playPartialsVersion      = "8.4.0-play-28"
   val httpCachingClientVersion = "10.0.0-play-28"
   val play2PdfVersion          = "1.11.0"
-  val playLanguageVersion      = "6.2.0-play-28"
-  val playFrontendVersion      = "7.5.0-play-28"
+  val playFrontendVersion      = "7.20.0-play-28"
   val hmrcMongoVersion         = "1.3.0"
 
   val compile = Seq(
@@ -34,7 +33,6 @@ object AppDependencies {
     "uk.gov.hmrc"       %% "play-frontend-hmrc"           % playFrontendVersion,
     "uk.gov.hmrc.mongo" %% "hmrc-mongo-play-28"           % hmrcMongoVersion,
     "uk.gov.hmrc"       %% "play-partials"                % playPartialsVersion,
-    "uk.gov.hmrc"       %% "play-language"                % playLanguageVersion,
     "it.innove"         % "play2-pdf"                     % play2PdfVersion exclude("com.typesafe.play","*"),
     nettyServer
   )
@@ -50,9 +48,9 @@ object AppDependencies {
         "uk.gov.hmrc"             %% "bootstrap-test-play-28"   % bootstrapVersion    % scope,
         "org.scalatestplus.play"  %% "scalatestplus-play"       % "5.1.0"             % scope,
         "org.scalatestplus"       %% "scalatestplus-mockito"    % "1.0.0-M2"          % scope,
-        "org.mockito"             %  "mockito-core"              % "4.11.0"            % scope,
+        "org.mockito"             %  "mockito-core"              % "5.5.0"            % scope,
         "org.pegdown"             %  "pegdown"                   % "1.6.0"             % scope,
-        "org.jsoup"               %  "jsoup"                     % "1.14.3"            % scope,
+        "org.jsoup"               %  "jsoup"                     % "1.16.1"            % scope,
         "com.typesafe.play"       %% "play-test"                % PlayVersion.current % scope,
         "uk.gov.hmrc.mongo"       %%  "hmrc-mongo-test-play-28" % hmrcMongoVersion      % scope
       )

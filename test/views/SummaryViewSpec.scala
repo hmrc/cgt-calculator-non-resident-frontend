@@ -47,14 +47,14 @@ class SummaryViewSpec extends CommonPlaySpec with WithCommonFakeApplication with
       }
 
       "have a back link" which {
-        lazy val backLink = document.body().select("#back-link")
+        lazy val backLink = document.body().select(".govuk-back-link")
 
         "has the text" in {
           backLink.text shouldBe messages.back
         }
 
         s"has a route to 'back-link'" in {
-          backLink.attr("href") shouldBe "javascript:history.back()"
+          backLink.attr("href") shouldBe "#"
         }
       }
 

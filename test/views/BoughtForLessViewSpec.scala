@@ -47,7 +47,7 @@ class BoughtForLessViewSpec extends CommonPlaySpec with WithCommonFakeApplicatio
       }
 
       "have a back link" which {
-        lazy val backLink = document.select("#back-link")
+        lazy val backLink = document.select(".govuk-back-link")
 
         "has only a single back link" in {
           backLink.size() shouldBe 1
@@ -62,7 +62,7 @@ class BoughtForLessViewSpec extends CommonPlaySpec with WithCommonFakeApplicatio
         }
 
         "has an href to the how became owner page" in {
-          assertHTML(backLink)(_.attr("href") shouldBe "javascript:history.back()")
+          assertHTML(backLink)(_.attr("href") shouldBe "#")
         }
       }
 

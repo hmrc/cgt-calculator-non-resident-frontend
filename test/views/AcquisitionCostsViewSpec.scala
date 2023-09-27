@@ -45,14 +45,14 @@ class AcquisitionCostsViewSpec extends CommonPlaySpec with WithCommonFakeApplica
       }
 
       "have a back link" which {
-        lazy val backLink = document.body().select("#back-link")
+        lazy val backLink = document.body().select(".govuk-back-link")
 
         "has the text" in {
           backLink.text shouldBe MessageLookup.NonResident.back
         }
 
         s"has a route to 'back-link'" in {
-          backLink.attr("href") shouldBe "javascript:history.back()"
+          backLink.attr("href") shouldBe "#"
         }
 
         "has the class 'back-link'" in {

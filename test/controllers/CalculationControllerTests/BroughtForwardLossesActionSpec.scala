@@ -110,7 +110,7 @@ class BroughtForwardLossesActionSpec extends CommonPlaySpec with WithCommonFakeA
       }
 
       "have a back link to Annual Exempt Amount page" in {
-        document.select("#back-link").attr("href") shouldBe "javascript:history.back()"
+        document.select(".govuk-back-link").attr("href") shouldBe "#"
       }
     }
 
@@ -194,7 +194,7 @@ class BroughtForwardLossesActionSpec extends CommonPlaySpec with WithCommonFakeA
       lazy val result = target.broughtForwardLosses(fakeRequestWithSession)
       lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
-      document.select("#back-link").attr("href") shouldBe "javascript:history.back()"
+      document.select(".govuk-back-link").attr("href") shouldBe "#"
     }
 
     "return a back link to the HowMuchGain page when there is a previous positive gain" in {
@@ -202,7 +202,7 @@ class BroughtForwardLossesActionSpec extends CommonPlaySpec with WithCommonFakeA
       lazy val result = target.broughtForwardLosses(fakeRequestWithSession)
       lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
-      document.select("#back-link").attr("href") shouldBe "javascript:history.back()"
+      document.select(".govuk-back-link").attr("href") shouldBe "#"
     }
 
     "return a back link to the AnnualExemptAmount page when there is a previous gain of 0" in {
@@ -210,7 +210,7 @@ class BroughtForwardLossesActionSpec extends CommonPlaySpec with WithCommonFakeA
       lazy val result = target.broughtForwardLosses(fakeRequestWithSession)
       lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
-      document.select("#back-link").attr("href") shouldBe "javascript:history.back()"
+      document.select(".govuk-back-link").attr("href") shouldBe "#"
     }
 
     "return a back link to the HowMuchLoss page when there is a previous positive loss" in {
@@ -218,7 +218,7 @@ class BroughtForwardLossesActionSpec extends CommonPlaySpec with WithCommonFakeA
       lazy val result = target.broughtForwardLosses(fakeRequestWithSession)
       lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
-      document.select("#back-link").attr("href") shouldBe "javascript:history.back()"
+      document.select(".govuk-back-link").attr("href") shouldBe "#"
     }
 
     "return a back link to the AnnualExemptAmount page when there is a previous loss of 0" in {
@@ -226,7 +226,7 @@ class BroughtForwardLossesActionSpec extends CommonPlaySpec with WithCommonFakeA
       lazy val result = target.broughtForwardLosses(fakeRequestWithSession)
       lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
-      document.select("#back-link").attr("href") shouldBe "javascript:history.back()"
+      document.select(".govuk-back-link").attr("href") shouldBe "#"
     }
 
     "return a back link to the AnnualExemptAmount page when there is a previous disposal that breaks even" in {
@@ -234,7 +234,7 @@ class BroughtForwardLossesActionSpec extends CommonPlaySpec with WithCommonFakeA
       lazy val result = target.broughtForwardLosses(fakeRequestWithSession)
       lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
-      document.select("#back-link").attr("href") shouldBe "javascript:history.back()"
+      document.select(".govuk-back-link").attr("href") shouldBe "#"
     }
   }
 }

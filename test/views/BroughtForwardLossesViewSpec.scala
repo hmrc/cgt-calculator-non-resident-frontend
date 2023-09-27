@@ -45,7 +45,7 @@ class BroughtForwardLossesViewSpec extends CommonPlaySpec with WithCommonFakeApp
       }
 
       "have a back link" which {
-        lazy val backLink = document.select("#back-link")
+        lazy val backLink = document.select(".govuk-back-link")
 
         "has only a single back link" in {
           backLink.size() shouldBe 1
@@ -60,7 +60,7 @@ class BroughtForwardLossesViewSpec extends CommonPlaySpec with WithCommonFakeApp
         }
 
         "has a link to back-link" in {
-          assertHTML(backLink)(_.attr("href") shouldBe "javascript:history.back()")
+          assertHTML(backLink)(_.attr("href") shouldBe "#")
         }
       }
 

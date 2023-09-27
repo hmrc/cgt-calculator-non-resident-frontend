@@ -153,7 +153,7 @@ class AcquisitionCostsActionSpec extends CommonPlaySpec with WithCommonFakeAppli
         val target = setupTarget(None, acquisitionDateData = Some(DateModel(1, 1, 2016)), Some(HowBecameOwnerModel("Gifted")))
         lazy val result = target.acquisitionCosts(fakeRequestWithSession)
         lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
-        document.select("#back-link").attr("href") shouldBe "javascript:history.back()"
+        document.select(".govuk-back-link").attr("href") shouldBe "#"
       }
     }
 
@@ -249,7 +249,7 @@ class AcquisitionCostsActionSpec extends CommonPlaySpec with WithCommonFakeAppli
         lazy val request = fakeRequestToPOSTWithSession(("acquisitionCosts", "a"))
         lazy val result = target.submitAcquisitionCosts(request)
         lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
-        document.select("#back-link").attr("href") shouldBe "javascript:history.back()"
+        document.select(".govuk-back-link").attr("href") shouldBe "#"
       }
     }
   }

@@ -58,14 +58,14 @@ class OutsideTaxYearViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
       }
 
       "have a back link that" should {
-        lazy val backLink = doc.select("a#back-link")
+        lazy val backLink = doc.select("a.govuk-back-link")
 
         "have the correct back link text" in {
           backLink.text shouldBe commonMessages.back
         }
 
         s"have a link to '${controllers.routes.DisposalDateController.disposalDate.url}'" in {
-          backLink.attr("href") shouldBe "javascript:history.back()"
+          backLink.attr("href") shouldBe "#"
         }
 
       }

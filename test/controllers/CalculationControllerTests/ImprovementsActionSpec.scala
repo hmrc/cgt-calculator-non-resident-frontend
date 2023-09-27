@@ -116,7 +116,7 @@ class ImprovementsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
         }
 
         s"have a 'Back' link to ${routes.AcquisitionCostsController.acquisitionCosts.url} " in {
-          document.body.getElementById("back-link").attr("href") shouldEqual "javascript:history.back()"
+          document.body.getElementsByClass("govuk-back-link").attr("href") shouldEqual "#"
         }
       }
 
@@ -131,11 +131,11 @@ class ImprovementsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
         lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
         s"have a back link that contains ${commonMessages.back}" in {
-          document.body.getElementById("back-link").text shouldEqual commonMessages.back
+          document.body.getElementsByClass("govuk-back-link").text shouldEqual commonMessages.back
         }
 
         s"have a 'Back' link to ${routes.RebasedCostsController.rebasedCosts.url} " in {
-          document.body.getElementById("back-link").attr("href") shouldEqual "javascript:history.back()"
+          document.body.getElementsByClass("govuk-back-link").attr("href") shouldEqual "#"
         }
       }
     }

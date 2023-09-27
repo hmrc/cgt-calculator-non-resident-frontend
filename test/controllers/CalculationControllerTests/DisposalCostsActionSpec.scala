@@ -105,7 +105,7 @@ class DisposalCostsActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
         val target = setupTarget(None, None, None)
         lazy val result = target.disposalCosts(fakeRequestWithSession)
         lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
-        document.select("#back-link").attr("href") shouldEqual "javascript:history.back()"
+        document.select(".govuk-back-link").attr("href") shouldEqual "#"
       }
     }
 
@@ -160,7 +160,7 @@ class DisposalCostsActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
         val target = setupTarget(None, Some(SoldOrGivenAwayModel(false)), Some(SoldForLessModel(true)))
         lazy val result = target.disposalCosts(fakeRequestWithSession)
         lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
-        document.select("#back-link").attr("href") shouldEqual "javascript:history.back()"
+        document.select(".govuk-back-link").attr("href") shouldEqual "#"
       }
     }
 
@@ -183,7 +183,7 @@ class DisposalCostsActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
         val target = setupTarget(None, Some(SoldOrGivenAwayModel(true)), Some(SoldForLessModel(true)))
         lazy val result = target.disposalCosts(fakeRequestWithSession)
         lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
-        document.select("#back-link").attr("href") shouldEqual "javascript:history.back()"
+        document.select(".govuk-back-link").attr("href") shouldEqual "#"
       }
     }
 
@@ -206,7 +206,7 @@ class DisposalCostsActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
         val target = setupTarget(None, Some(SoldOrGivenAwayModel(true)), Some(SoldForLessModel(false)))
         lazy val result = target.disposalCosts(fakeRequestWithSession)
         lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
-        document.select("#back-link").attr("href") shouldEqual "javascript:history.back()"
+        document.select(".govuk-back-link").attr("href") shouldEqual "#"
       }
     }
   }

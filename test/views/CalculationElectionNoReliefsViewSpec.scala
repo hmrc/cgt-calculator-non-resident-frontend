@@ -65,14 +65,14 @@ class CalculationElectionNoReliefsViewSpec extends CommonPlaySpec with WithCommo
       }
 
       "have a back link" which {
-        lazy val back = doc.select("#back-link")
+        lazy val back = doc.select(".govuk-back-link")
 
         s"has the text ${commonMessages.back}" in {
           back.text() shouldBe commonMessages.back
         }
 
-        s"has a link to 'javascript:history.back()'" in {
-          back.attr("href") shouldBe "javascript:history.back()"
+        s"has a link to '#'" in {
+          back.attr("href") shouldBe "#"
         }
       }
 

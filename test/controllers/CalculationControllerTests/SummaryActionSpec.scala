@@ -178,7 +178,7 @@ class SummaryActionSpec extends CommonPlaySpec with WithCommonFakeApplication wi
       }
 
       "has a back-link to the calculation election page" in {
-        document.select("#back-link").attr("href") shouldEqual "javascript:history.back()"
+        document.select(".govuk-back-link").attr("href") shouldEqual "#"
       }
     }
 
@@ -204,7 +204,7 @@ class SummaryActionSpec extends CommonPlaySpec with WithCommonFakeApplication wi
       }
 
       "has a back-link to the check your answers page" in {
-        document.select("#back-link").attr("href") shouldEqual "javascript:history.back()"
+        document.select(".govuk-back-link").attr("href") shouldEqual "#"
       }
     }
 

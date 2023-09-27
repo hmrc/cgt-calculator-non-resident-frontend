@@ -26,7 +26,7 @@
     hmrcLanguageSelectHelper: HmrcLanguageSelectHelper,
     hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper,
     hmrcTimeoutDialogHelper: HmrcTimeoutDialogHelper,
-    backLink: playComponents.back_link,
+    govukBackLink: GovukBackLink,
     appConfig: ApplicationConfig,
 )
 
@@ -47,7 +47,7 @@
 
     @hmrcLanguageSelectHelper()
 
-    @if(backLinkEnabled) { @backLink() }
+    @if(backLinkEnabled) { @govukBackLink(BackLink.mimicsBrowserBackButtonViaJavaScript) }
 }
 
 @head = {

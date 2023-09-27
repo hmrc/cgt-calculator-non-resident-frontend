@@ -60,7 +60,7 @@ class PropertyLivedInViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
 
       "have a back button" which {
 
-        lazy val backLink = document.select("a#back-link")
+        lazy val backLink = document.select("a.govuk-back-link")
 
         "has the correct back link text" in {
           backLink.text shouldBe commonMessages.back
@@ -71,7 +71,7 @@ class PropertyLivedInViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
         }
 
         "has a back link to 'back'" in {
-          backLink.attr("href") shouldBe "javascript:history.back()"
+          backLink.attr("href") shouldBe "#"
         }
       }
 

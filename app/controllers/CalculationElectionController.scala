@@ -79,14 +79,6 @@ class CalculationElectionController @Inject()(calcConnector: CalculatorConnector
     Future.successful(finalSeq.exists(_ > 0))
   }
 
-  private def getBackLink(totalGainResultsModel: TotalGainResultsModel): Future[String] = {
-    val results = Seq(totalGainResultsModel.flatGain) ++ Seq(totalGainResultsModel.rebasedGain, totalGainResultsModel.timeApportionedGain).flatten
-
-    if (results.exists(_ > 0)) {
-      Future.successful(routes.ClaimingReliefsController.claimingReliefs.url)
-    } else Future.successful(routes.CheckYourAnswersController.checkYourAnswers.url)
-  }
-
   private def getTaxOwedIfApplicable(totalGainAnswersModel: TotalGainAnswersModel,
                                      prrModel: Option[PrivateResidenceReliefModel],
                                      totalTaxOwedModel: Option[TotalPersonalDetailsCalculationModel],

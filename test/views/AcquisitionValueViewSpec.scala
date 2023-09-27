@@ -59,15 +59,15 @@ class AcquisitionValueViewSpec extends CommonPlaySpec with WithCommonFakeApplica
       lazy val helpText = document.getElementsByClass("govuk-inset-text")
 
       s"have the text of ${commonMessages.back}" in {
-        document.select("a#back-link").text shouldEqual commonMessages.back
+        document.select("a.govuk-back-link").text shouldEqual commonMessages.back
       }
 
       s"have a link to ${routes.BoughtForLessController.boughtForLess.url}" in {
-        document.select("a#back-link").attr("href") shouldEqual "javascript:history.back()"
+        document.select("a.govuk-back-link").attr("href") shouldEqual "#"
       }
 
       "has the back-link class" in {
-        document.select("#back-link").attr("href") shouldBe "javascript:history.back()"
+        document.select(".govuk-back-link").attr("href") shouldBe "#"
       }
 
       s"contains help text '${messages.helpText}'" in {

@@ -61,15 +61,15 @@ class CalculationElectionViewSpec extends CommonPlaySpec with WithCommonFakeAppl
     "have a dynamic back button" which {
 
       "has the correct back link text" in {
-        doc.select("a#back-link").text shouldBe commonMessages.back
+        doc.select("a.govuk-back-link").text shouldBe commonMessages.back
       }
 
       "has the govuk-back-link class" in {
-        doc.select("a#back-link").hasClass("govuk-back-link") shouldBe true
+        doc.select("a.govuk-back-link").hasClass("govuk-back-link") shouldBe true
       }
 
       "has a back link to 'claiming-reliefs'" in {
-        doc.select("a#back-link").attr("href") shouldBe "javascript:history.back()"
+        doc.select("a.govuk-back-link").attr("href") shouldBe "#"
       }
     }
 

@@ -47,14 +47,14 @@ class AnnualExemptAmountViewSpec extends CommonPlaySpec with WithCommonFakeAppli
       }
 
       "have a back link" which {
-        lazy val backLink = document.body().select("#back-link")
+        lazy val backLink = document.body().select(".govuk-back-link")
 
         s"has the text '${commonMessages.back}'" in {
           backLink.text shouldBe commonMessages.back
         }
 
         s"has a link to 'back-url'" in {
-          backLink.attr("href") shouldBe "javascript:history.back()"
+          backLink.attr("href") shouldBe "#"
         }
       }
 

@@ -17,7 +17,6 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import forms.RebasedCostsForm._
 import models.RebasedCostsModel

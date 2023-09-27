@@ -191,7 +191,7 @@ class AnnualExemptAmountActionSpec extends CommonPlaySpec with WithCommonFakeApp
         val target = setupTarget(None, previousLossOrGain = Some(PreviousLossOrGainModel("Neither")))
         lazy val result = target.annualExemptAmount(fakeRequestWithSession)
         lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
-        document.select("#back-link").attr("href") shouldEqual "javascript:history.back()"
+        document.select(".govuk-back-link").attr("href") shouldEqual "#"
       }
     }
 
@@ -201,7 +201,7 @@ class AnnualExemptAmountActionSpec extends CommonPlaySpec with WithCommonFakeApp
         val target = setupTarget(None, previousLossOrGain = Some(PreviousLossOrGainModel("Loss")), howMuchLoss = Some(HowMuchLossModel(0)))
         lazy val result = target.annualExemptAmount(fakeRequestWithSession)
         lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
-        document.select("#back-link").attr("href") shouldEqual "javascript:history.back()"
+        document.select(".govuk-back-link").attr("href") shouldEqual "#"
       }
     }
 
@@ -211,7 +211,7 @@ class AnnualExemptAmountActionSpec extends CommonPlaySpec with WithCommonFakeApp
         val target = setupTarget(None, previousLossOrGain = Some(PreviousLossOrGainModel("Gain")), howMuchGain = Some(HowMuchGainModel(0)))
         lazy val result = target.annualExemptAmount(fakeRequestWithSession)
         lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
-        document.select("#back-link").attr("href") shouldEqual "javascript:history.back()"
+        document.select(".govuk-back-link").attr("href") shouldEqual "#"
       }
     }
   }
