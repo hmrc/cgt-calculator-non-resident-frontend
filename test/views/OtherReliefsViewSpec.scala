@@ -45,7 +45,7 @@ class OtherReliefsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
       }
 
       "have a back link" which {
-        lazy val backLink = document.select("#back-link")
+        lazy val backLink = document.select(".govuk-back-link")
 
         "should have the text" in {
           backLink.text shouldEqual messages.back
@@ -56,7 +56,7 @@ class OtherReliefsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
         }
 
         s"should have a route to 'check-your-answers'" in {
-          backLink.attr("href") shouldEqual "javascript:history.back()"
+          backLink.attr("href") shouldEqual "#"
         }
       }
 

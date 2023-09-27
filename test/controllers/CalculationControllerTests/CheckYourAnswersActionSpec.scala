@@ -152,7 +152,7 @@ class CheckYourAnswersActionSpec()
       }
 
       "have a back link to the improvements page" in {
-        document.select("#back-link").attr("href") shouldBe "javascript:history.back()"
+        document.select(".govuk-back-link").attr("href") shouldBe "#"
       }
     }
 
@@ -184,7 +184,7 @@ class CheckYourAnswersActionSpec()
       }
 
       "have a back link to the private residence relief page" in {
-        document.select("#back-link").attr("href") shouldBe "javascript:history.back()"
+        document.select(".govuk-back-link").attr("href") shouldBe "#"
       }
     }
 
@@ -203,7 +203,7 @@ class CheckYourAnswersActionSpec()
       }
 
       "have a back link to the brought forward losses page" in {
-        document.select("#back-link").attr("href") shouldBe "javascript:history.back()"
+        document.select(".govuk-back-link").attr("href") shouldBe "#"
       }
     }
   }

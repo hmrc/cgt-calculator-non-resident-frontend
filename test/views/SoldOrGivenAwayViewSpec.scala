@@ -40,7 +40,7 @@ class SoldOrGivenAwayViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
       lazy val document = Jsoup.parse(view.body)
 
       "have a 'back-link' that" should {
-        lazy val backLink = document.body().select("#back-link")
+        lazy val backLink = document.body().select(".govuk-back-link")
 
         "have the class of 'govuk-back-link'" in {
           backLink.attr("class") shouldBe "govuk-back-link"
@@ -51,7 +51,7 @@ class SoldOrGivenAwayViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
         }
 
         "have the route to Disposal Date" in {
-          backLink.attr("href") shouldBe "javascript:history.back()"
+          backLink.attr("href") shouldBe "#"
         }
       }
 

@@ -44,7 +44,7 @@ class HowMuchLossViewSpec extends CommonPlaySpec with WithCommonFakeApplication 
       }
 
       "have a back link" which {
-        lazy val backLink = document.body().select("#back-link")
+        lazy val backLink = document.body().select(".govuk-back-link")
 
         "has the text" in {
           backLink.text shouldBe messages.back
@@ -55,7 +55,7 @@ class HowMuchLossViewSpec extends CommonPlaySpec with WithCommonFakeApplication 
         }
 
         s"has a route to 'Previous Gain Or Loss'" in {
-          backLink.attr("href") shouldBe "javascript:history.back()"
+          backLink.attr("href") shouldBe "#"
         }
       }
 

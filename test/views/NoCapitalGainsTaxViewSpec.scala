@@ -45,14 +45,14 @@ class NoCapitalGainsTaxViewSpec extends CommonPlaySpec with WithCommonFakeApplic
       }
 
       "have a back link" which {
-        lazy val backLink = document.body().select("#back-link")
+        lazy val backLink = document.body().select(".govuk-back-link")
 
         "has the text" in {
           backLink.text shouldBe messages.back
         }
 
         s"has a route to 'disposal-costs'" in {
-          backLink.attr("href") shouldBe "javascript:history.back()"
+          backLink.attr("href") shouldBe "#"
         }
       }
 

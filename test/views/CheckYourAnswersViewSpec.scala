@@ -57,15 +57,15 @@ class CheckYourAnswersViewSpec extends CommonPlaySpec with WithCommonFakeApplica
       "have a back link" which {
 
         "should have the text" in {
-          document.body.getElementById("back-link").text shouldEqual MessageLookup.NonResident.back
+          document.body.getElementsByClass("govuk-back-link").text shouldEqual MessageLookup.NonResident.back
         }
 
         "has the govuk-back-link class" in {
-          document.select("a#back-link").hasClass("govuk-back-link") shouldBe true
+          document.select("a.govuk-back-link").hasClass("govuk-back-link") shouldBe true
         }
 
         s"should have a route too 'back-link'" in {
-          document.body.getElementById("back-link").attr("href") shouldEqual "javascript:history.back()"
+          document.body.getElementsByClass("govuk-back-link").attr("href") shouldEqual "#"
         }
       }
 

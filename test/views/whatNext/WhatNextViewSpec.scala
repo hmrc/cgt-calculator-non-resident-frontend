@@ -43,14 +43,14 @@ class WhatNextViewSpec extends CommonPlaySpec with WithCommonFakeApplication wit
     }
 
     "have a back link" which {
-      lazy val backLink = doc.select("#back-link")
+      lazy val backLink = doc.select(".govuk-back-link")
 
       s"should have the text ${messages.back}" in {
         backLink.text() shouldBe messages.back
       }
 
       "should have a link to the summary page" in {
-        backLink.attr("href") shouldBe "javascript:history.back()"
+        backLink.attr("href") shouldBe "#"
       }
     }
 

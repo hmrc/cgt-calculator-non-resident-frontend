@@ -45,7 +45,7 @@ class NoTaxToPayViewSpec extends CommonPlaySpec with WithCommonFakeApplication w
     }
 
     "have a back link to back-link" in {
-      doc.body().select("a#back-link").attr("href") shouldBe "javascript:history.back()"
+      doc.body().select("a.govuk-back-link").attr("href") shouldBe "#"
     }
 
     s"have a header of ${messages.title}" in {

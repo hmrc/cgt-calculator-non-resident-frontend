@@ -47,14 +47,14 @@ class ClaimingReliefsViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
       }
 
       "have a back link" which {
-        lazy val backLink = document.select("#back-link")
+        lazy val backLink = document.select(".govuk-back-link")
 
         s"has text ${commonMessages.back}" in {
           backLink.text() shouldBe commonMessages.back
         }
 
         s"has a link to ${controllers.routes.CheckYourAnswersController.checkYourAnswers.url}" in {
-          backLink.attr("href") shouldBe "javascript:history.back()"
+          backLink.attr("href") shouldBe "#"
         }
       }
 

@@ -18,7 +18,6 @@ package constructors
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.{TaxDates, YesNoKeys}
-import connectors.CalculatorConnector
 import models._
 import play.api.Logging
 import play.api.mvc.Request

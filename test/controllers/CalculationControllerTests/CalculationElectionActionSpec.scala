@@ -208,7 +208,7 @@ class CalculationElectionActionSpec ()
       }
 
       s"has a back link of ${routes.ClaimingReliefsController.claimingReliefs.url}" in{
-        document.select("a#back-link").attr("href") shouldBe "javascript:history.back()"
+        document.select("a.govuk-back-link").attr("href") shouldBe "#"
       }
     }
 
@@ -231,8 +231,8 @@ class CalculationElectionActionSpec ()
         document.title() shouldEqual calculationElectionNoReliefsPageTitle
       }
 
-      s"has a back link of 'javascript:history.back()'" in{
-        document.select("a#back-link").attr("href") shouldBe "javascript:history.back()"
+      s"has a back link of '#'" in{
+        document.select("a.govuk-back-link").attr("href") shouldBe "#"
       }
     }
 
@@ -256,8 +256,8 @@ class CalculationElectionActionSpec ()
         document.title() shouldEqual calculationElectionNoReliefsPageTitle
       }
 
-      s"has a back link of 'javascript:history.back()'" in{
-        document.select("a#back-link").attr("href") shouldBe "javascript:history.back()"
+      s"has a back link of '#'" in{
+        document.select("a.govuk-back-link").attr("href") shouldBe "#"
       }
     }
   }

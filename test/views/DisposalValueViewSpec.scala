@@ -45,14 +45,14 @@ class DisposalValueViewSpec extends CommonPlaySpec with WithCommonFakeApplicatio
       }
 
       "have a back link" which {
-        lazy val backLink = document.body().select("#back-link")
+        lazy val backLink = document.body().select(".govuk-back-link")
 
         "has the text" in {
           backLink.text shouldBe commonMessages.back
         }
 
         s"has a route to 'sold-for-less'" in {
-          backLink.attr("href") shouldBe "javascript:history.back()"
+          backLink.attr("href") shouldBe "#"
         }
       }
 

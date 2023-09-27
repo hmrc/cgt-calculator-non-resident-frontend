@@ -43,14 +43,14 @@ class CostsAtLegislationStartViewSpec extends CommonPlaySpec with WithCommonFake
       }
 
       "have a back link" which {
-        lazy val backLink = document.select("#back-link")
+        lazy val backLink = document.select(".govuk-back-link")
 
         "has the correct text" in {
           backLink.text shouldBe messages.back
         }
 
         s"has a route to 'worth-before-legislation-start'" in {
-          backLink.attr("href") shouldBe "javascript:history.back()"
+          backLink.attr("href") shouldBe "#"
         }
       }
 

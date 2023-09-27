@@ -70,7 +70,7 @@ class PreviousLossOrGainViewSpec extends CommonPlaySpec with WithCommonFakeAppli
     }
 
     "have a back button that" should {
-      lazy val backLink = document.select("a#back-link")
+      lazy val backLink = document.select("a.govuk-back-link")
 
       "have the correct back link text" in {
         backLink.text shouldBe commonMessages.back
@@ -81,7 +81,7 @@ class PreviousLossOrGainViewSpec extends CommonPlaySpec with WithCommonFakeAppli
       }
 
       "have a link to Other Properties" in {
-        backLink.attr("href") shouldBe "javascript:history.back()"
+        backLink.attr("href") shouldBe "#"
       }
     }
 

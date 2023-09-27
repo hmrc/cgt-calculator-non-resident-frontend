@@ -47,7 +47,7 @@ class WhoDidYouGiveItToViewSpec extends CommonPlaySpec with WithCommonFakeApplic
     }
 
     "have a back button that" should {
-      lazy val backLink = doc.select("a#back-link")
+      lazy val backLink = doc.select("a.govuk-back-link")
 
       "have the correct back link text" in {
         backLink.text shouldBe commonMessages.back
@@ -58,7 +58,7 @@ class WhoDidYouGiveItToViewSpec extends CommonPlaySpec with WithCommonFakeApplic
       }
 
       "have a link to Did You Sell or Give Away" in {
-        backLink.attr("href") shouldBe "javascript:history.back()"
+        backLink.attr("href") shouldBe "#"
       }
     }
 

@@ -40,7 +40,7 @@ class OtherReliefsRebasedViewSpec extends CommonPlaySpec with WithCommonFakeAppl
       lazy val document = Jsoup.parse(view.body)
 
       "have a back link" which {
-        lazy val backLink = document.select("#back-link")
+        lazy val backLink = document.select(".govuk-back-link")
 
         "should have the text" in {
           backLink.text shouldEqual messages.back
@@ -51,7 +51,7 @@ class OtherReliefsRebasedViewSpec extends CommonPlaySpec with WithCommonFakeAppl
         }
 
         s"should have a route to 'calculation-election'" in {
-          backLink.attr("href") shouldEqual "javascript:history.back()"
+          backLink.attr("href") shouldEqual "#"
         }
       }
 

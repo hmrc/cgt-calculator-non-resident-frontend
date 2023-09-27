@@ -47,11 +47,11 @@ class AcquisitionDateViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
       "have a back link" which {
 
         "should have the text" in {
-          document.body.getElementById("back-link").text shouldEqual messages.back
+          document.body.getElementsByClass("govuk-back-link").text shouldEqual messages.back
         }
 
         s"should have a route to 'back-link'" in {
-          document.body.getElementById("back-link").attr("href") shouldEqual "javascript:history.back()"
+          document.body.getElementsByClass("govuk-back-link").attr("href") shouldEqual "#"
         }
       }
 
