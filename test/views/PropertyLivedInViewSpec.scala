@@ -50,7 +50,7 @@ class PropertyLivedInViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
         lazy val h1Tag = document.select("h1")
 
         s"have the page heading '${messages.title}'" in {
-          h1Tag.text shouldBe s"${messages.title} Have you ever lived in the property since you became the owner?"
+          h1Tag.text shouldBe s"${messages.title}"
         }
 
         "have the heading-large class" in {

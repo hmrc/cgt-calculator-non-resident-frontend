@@ -87,11 +87,16 @@
 
 <div class="@errorClassOne">
     <fieldset class="govuk-fieldset">
-        <legend class="@legendClass">
-            <h1 class="govuk-fieldset__heading">
-                @yesNoQuestionText
-            </h1>
-        </legend>
+            <legend class="@legendClass">
+                @if(yesNoQuestionTextIsHeading){
+                    <h1 class="govuk-fieldset__heading">
+                        @yesNoQuestionText
+                    </h1>
+                } else {
+                    @yesNoQuestionText
+                }
+            </legend>
+
         @if(inputHint != None){
         <div id=@{yesNoFieldName}-hint class="govuk-hint">
             @inputHint

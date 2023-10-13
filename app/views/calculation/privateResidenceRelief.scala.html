@@ -94,7 +94,8 @@
             @inputYesNo(
                 legend = messages("calc.privateResidenceRelief.question"),
                 legendClass = Some("govuk-visually-hidden"),
-                field = privateResidenceReliefForm("isClaimingPRR")
+                field = privateResidenceReliefForm("isClaimingPRR"),
+                isPageHeading = false
             )
         }
         @if(showFirstQuestion && daysBetweenShow){
