@@ -15,18 +15,13 @@
  *@
 
 @import config.ApplicationConfig
+@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.hmrcstandardpage._
 
 @this(
-    govukLayout: GovukLayout,
-    hmrcAccountMenu: HmrcAccountMenu,
-    hmrcHead: HmrcHead,
-    hmrcStandardHeader: HmrcStandardHeader,
-    hmrcStandardFooter: HmrcStandardFooter,
-    hmrcScripts: HmrcScripts,
-    hmrcLanguageSelectHelper: HmrcLanguageSelectHelper,
+    hmrcStandardPage: HmrcStandardPage,
+    twoThirdsMainContent: TwoThirdsMainContent,
     hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper,
     hmrcTimeoutDialogHelper: HmrcTimeoutDialogHelper,
-    govukBackLink: GovukBackLink,
     appConfig: ApplicationConfig,
 )
 
@@ -43,13 +38,6 @@
     messages: Messages
 )
 
-@accountMenu = {
-
-    @hmrcLanguageSelectHelper()
-
-    @if(backLinkEnabled) { @govukBackLink(BackLink.mimicsBrowserBackButtonViaJavaScript) }
-}
-
 @head = {
     @if(timeoutEnabled) {
         @hmrcTimeoutDialogHelper(
@@ -64,15 +52,20 @@
     @hmrcReportTechnicalIssueHelper()
 }
 
-@govukLayout(
-    pageTitle = Some(s"""$pageTitle - ${messages("service.name")} - GOV.UK"""),
-    headBlock = Some(hmrcHead(headBlock = Some(head))),
-    headerBlock = Some(hmrcStandardHeader(
-        serviceUrl = Some(controllers.routes.DisposalDateController.disposalDate.url),
-        userResearchBanner = if (userResearchBannerEnabled) {Some(UserResearchBanner(url = appConfig.urBannerLink))} else None
-    )),
-    beforeContentBlock = Some(accountMenu),
-    mainContentLayout = if (fullGrid) Some(_ => Html(s"<div class='govuk-grid-row'><div class='govuk-grid-column-full'>$mainContent</div></div>")) else Some(_ => Html(s"<div class='govuk-grid-row'><div class='govuk-grid-column-two-thirds'>$mainContent</div></div>")),
-    scriptsBlock = Some(hmrcScripts()),
-    footerBlock = Some(hmrcStandardFooter())
-)(mainContent)
+@hmrcStandardPage(
+    HmrcStandardPageParams(
+        serviceURLs = ServiceURLs(
+            serviceUrl = Some(controllers.routes.DisposalDateController.disposalDate.url)
+        ),
+        banners = Banners(
+            userResearchBanner = Option.when(userResearchBannerEnabled){ UserResearchBanner(url = appConfig.urBannerLink) }
+        ),
+        serviceName = Some(messages("service.name")),
+        pageTitle = Some(s"""$pageTitle - ${messages("service.name")} - GOV.UK"""),
+        isWelshTranslationAvailable = appConfig.isWelshTranslationAvailable,
+        backLink = Option.when(backLinkEnabled) { BackLink.mimicsBrowserBackButtonViaJavaScript },
+        templateOverrides = TemplateOverrides(
+            additionalHeadBlock = Some(head),
+            mainContentLayout = if (fullGrid) Some(content => Html(s"<div class='govuk-grid-row'><div class='govuk-grid-column-full'>$content</div></div>")) else Some(twoThirdsMainContent(_))
+        )
+))(mainContent)
