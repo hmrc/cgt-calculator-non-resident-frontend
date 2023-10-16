@@ -36,7 +36,7 @@
 
     @errorSummary(acquisitionMarketValueForm.errors)
     <h1 class="govuk-heading-xl" for="disposal-value">@Messages("calc.worthWhenGiftedTo.question")</h1>
-    <p class="govuk-hint">@Messages("calc.worthWhenGiftedTo.help")</p>
+    <p class="govuk-body">@Messages("calc.worthWhenGiftedTo.help")</p>
 
     @form(action = controllers.routes.WorthWhenGiftedToController.submitWorthWhenGiftedTo) {
         <p class="govuk-inset-text">@Messages("calc.worthWhenGiftedTo.jointOwnership")</p>
