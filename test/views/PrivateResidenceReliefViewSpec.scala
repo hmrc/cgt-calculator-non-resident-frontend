@@ -110,10 +110,10 @@ class PrivateResidenceReliefViewSpec extends CommonPlaySpec with WithCommonFakeA
 
         "have some hidden content" which {
 
-          lazy val hiddenContent = document.body().select("#conditional-daysClaimed")
+          lazy val hiddenContent = document.body().select(".govuk-radios__conditional")
 
-          "which has a two divs for the two questions" in {
-            hiddenContent.select(".govuk-input__wrapper").size() shouldBe 2
+          "which has a two div for the two questions" in {
+            hiddenContent.select(".govuk-form-group").size() shouldBe 2
           }
 
           "contains an input with the id 'daysClaimed'" in {
@@ -208,10 +208,10 @@ class PrivateResidenceReliefViewSpec extends CommonPlaySpec with WithCommonFakeA
 
         "have some hidden content" which {
 
-          lazy val hiddenContent = document.body().select("#conditional-daysClaimed")
+          lazy val hiddenContent = document.body().select(".govuk-radios__conditional")
 
           "has a two divs with a class of form-group for one question" in {
-            hiddenContent.select(".govuk-input__wrapper").size() shouldBe 1
+            hiddenContent.select(".govuk-form-group").size() shouldBe 1
           }
 
           "contains an input with the id 'daysClaimed'" in {

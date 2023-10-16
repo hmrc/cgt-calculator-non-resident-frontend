@@ -20,14 +20,16 @@ import java.nio.charset.Charset
 
 import akka.stream.Materializer
 import akka.util.ByteString
-import org.scalatest.{Matchers, OptionValues, WordSpecLike}
+import org.scalatest.wordspec.AnyWordSpecLike
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.OptionValues
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 
 import scala.concurrent.ExecutionContext
 import scala.language.implicitConversions
 
-trait CommonPlaySpec extends WordSpecLike with Matchers with OptionValues {
+trait CommonPlaySpec extends AnyWordSpecLike with Matchers with OptionValues {
 
   import scala.concurrent.duration._
   import scala.concurrent.{Await, Future}

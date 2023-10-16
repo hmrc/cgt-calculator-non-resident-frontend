@@ -66,7 +66,7 @@ class RebasedCostsFormSpec extends CommonPlaySpec with WithCommonFakeApplication
       }
 
       "return a form containing the data" in {
-        form.value shouldBe Some(RebasedCostsModel("No", Some(50.234)))
+        form.value shouldBe Some(RebasedCostsModel("No", None))
       }
     }
 
@@ -111,7 +111,7 @@ class RebasedCostsFormSpec extends CommonPlaySpec with WithCommonFakeApplication
       }
 
       s"return an error message of '${messages.RebasedCosts.errorNoValue}" in {
-        form.error("").get.message shouldBe messages.RebasedCosts.errorNoValue
+        form.error("rebasedCosts").get.message shouldBe messages.RebasedCosts.errorNoValue
       }
     }
 
@@ -125,8 +125,8 @@ class RebasedCostsFormSpec extends CommonPlaySpec with WithCommonFakeApplication
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.RebasedCosts.errorNoValue}" in {
-        form.error("").get.message shouldBe messages.RebasedCosts.errorNoValue
+      s"return an error message of error.number" in {
+        form.error("rebasedCosts").get.message shouldBe "error.number"
       }
     }
 
@@ -156,7 +156,7 @@ class RebasedCostsFormSpec extends CommonPlaySpec with WithCommonFakeApplication
       }
 
       s"return an error message of '${messages.RebasedCosts.errorDecimalPlaces}" in {
-        form.error("").get.message shouldBe messages.RebasedCosts.errorDecimalPlaces
+        form.error("rebasedCosts").get.message shouldBe messages.RebasedCosts.errorDecimalPlaces
       }
     }
 
@@ -186,7 +186,7 @@ class RebasedCostsFormSpec extends CommonPlaySpec with WithCommonFakeApplication
       }
 
       s"return an error message of '${messages.RebasedCosts.errorNegative}" in {
-        form.error("").get.message shouldBe messages.RebasedCosts.errorNegative
+        form.error("rebasedCosts").get.message shouldBe messages.RebasedCosts.errorNegative
       }
     }
 
@@ -216,8 +216,8 @@ class RebasedCostsFormSpec extends CommonPlaySpec with WithCommonFakeApplication
       }
 
       s"return the correct error message" in {
-        form.error("").get.message shouldBe "calc.common.error.maxNumericExceeded"
-        form.error("").get.args shouldBe Array("1,000,000,000")
+        form.error("rebasedCosts").get.message shouldBe "calc.common.error.maxNumericExceeded"
+        form.error("rebasedCosts").get.args shouldBe Array("1,000,000,000")
       }
     }
 
@@ -227,8 +227,8 @@ class RebasedCostsFormSpec extends CommonPlaySpec with WithCommonFakeApplication
         "rebasedCosts" -> "-1.011")
       lazy val form = rebasedCostsForm.bind(map)
 
-      "return an invalid form with two errors" in {
-        form.errors.size shouldBe 2
+      "return an invalid form with one error" in {
+        form.errors.size shouldBe 1
       }
     }
   }

@@ -17,7 +17,7 @@
 package config
 
 import common.{CommonPlaySpec, WithCommonFakeApplication}
-import org.scalatest.MustMatchers._
+import org.scalatest.matchers.must.Matchers._
 import play.api.Application
 import play.api.http.Writeable
 import play.api.inject.guice.GuiceApplicationBuilder

@@ -66,7 +66,7 @@ class CostsAtLegislationStartFormSpec extends CommonPlaySpec with WithCommonFake
       }
 
       "return a form containing the data" in {
-        form.value shouldBe Some(CostsAtLegislationStartModel("No", Some(50.234)))
+        form.value shouldBe Some(CostsAtLegislationStartModel("No", None))
       }
     }
 
@@ -111,7 +111,7 @@ class CostsAtLegislationStartFormSpec extends CommonPlaySpec with WithCommonFake
       }
 
       s"return an error message of '${messages.CostsAtLegislationStart.errorNoValue}" in {
-        form.error("").get.message shouldBe messages.CostsAtLegislationStart.errorNoValue
+        form.error("costs").get.message shouldBe messages.CostsAtLegislationStart.errorNoValue
       }
     }
 
@@ -125,8 +125,8 @@ class CostsAtLegislationStartFormSpec extends CommonPlaySpec with WithCommonFake
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.CostsAtLegislationStart.errorNoValue}" in {
-        form.error("").get.message shouldBe messages.CostsAtLegislationStart.errorNoValue
+      s"return an error message of error.number" in {
+        form.error("costs").get.message shouldBe "error.number"
       }
     }
 
@@ -156,7 +156,7 @@ class CostsAtLegislationStartFormSpec extends CommonPlaySpec with WithCommonFake
       }
 
       s"return an error message of '${messages.CostsAtLegislationStart.errorDecimalPlaces}" in {
-        form.error("").get.message shouldBe messages.CostsAtLegislationStart.errorDecimalPlaces
+        form.error("costs").get.message shouldBe messages.CostsAtLegislationStart.errorDecimalPlaces
       }
     }
 
@@ -186,7 +186,7 @@ class CostsAtLegislationStartFormSpec extends CommonPlaySpec with WithCommonFake
       }
 
       s"return an error message of '${messages.CostsAtLegislationStart.errorNegative}" in {
-        form.error("").get.message shouldBe messages.CostsAtLegislationStart.errorNegative
+        form.error("costs").get.message shouldBe messages.CostsAtLegislationStart.errorNegative
       }
     }
 
@@ -216,8 +216,8 @@ class CostsAtLegislationStartFormSpec extends CommonPlaySpec with WithCommonFake
       }
 
       s"return the correct error message" in {
-        form.error("").get.message shouldBe "calc.common.error.maxNumericExceeded"
-        form.error("").get.args shouldBe Array("1,000,000,000")
+        form.error("costs").get.message shouldBe "calc.common.error.maxNumericExceeded"
+        form.error("costs").get.args shouldBe Array("1,000,000,000")
       }
     }
 
@@ -227,8 +227,8 @@ class CostsAtLegislationStartFormSpec extends CommonPlaySpec with WithCommonFake
         "costs" -> "-1.011")
       lazy val form = costsAtLegislationStartForm.bind(map)
 
-      "return an invalid form with two errors" in {
-        form.errors.size shouldBe 2
+      "return an invalid form with one error" in {
+        form.errors.size shouldBe 1
       }
     }
   }

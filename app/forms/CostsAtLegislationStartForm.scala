@@ -16,57 +16,33 @@
 
 package forms
 
-import common.Constants
 import common.Transformers._
 import common.Validation._
 import models.CostsAtLegislationStartModel
 import play.api.data.Forms._
 import play.api.data._
+import uk.gov.voa.play.form.ConditionalMappings.{isEqual, mandatoryIf}
 
 object CostsAtLegislationStartForm {
-
-  def verifyAmountSupplied(data: CostsAtLegislationStartModel): Boolean = {
-    data.hasCosts match {
-      case "Yes" => data.costs.isDefined
-      case "No" => true
-    }
-  }
-
-  def verifyPositive(data: CostsAtLegislationStartModel): Boolean = {
-    data.hasCosts match {
-      case "Yes" => isPositive(data.costs.getOrElse(0))
-      case "No" => true
-    }
-  }
-
-  def verifyTwoDecimalPlaces(data: CostsAtLegislationStartModel): Boolean = {
-    data.hasCosts match {
-      case "Yes" => decimalPlacesCheck(data.costs.getOrElse(0))
-      case "No" => true
-    }
-  }
-
-  private def getLossesAmount(model: CostsAtLegislationStartModel): Option[BigDecimal] = {
-    model match {
-      case CostsAtLegislationStartModel("Yes", costs) => costs
-      case _ => None
-    }
-  }
 
   val costsAtLegislationStartForm = Form(
     mapping(
       "hasCosts" -> common.Formatters.text("calc.costsAtLegislationStart.errors.required")
         .verifying("calc.costsAtLegislationStart.errors.required", mandatoryCheck)
         .verifying("calc.costsAtLegislationStart.errors.required", yesNoCheck),
-      "costs" -> text
-        .transform(stringToOptionalBigDecimal, optionalBigDecimalToString)
+      "costs" -> mandatoryIf(
+        isEqual("hasCosts", "Yes"),
+        common.Formatters.text("calc.costsAtLegislationStart.error.no.value.supplied")
+          .verifying("error.number", bigDecimalCheck)
+          .transform(stringToBigDecimal, bigDecimalToString)
+          .verifying(
+            stopOnFirstFail(
+              negativeConstraint("calc.costsAtLegislationStart.errorNegative"),
+              decimalPlaceConstraint("calc.costsAtLegislationStart.errorDecimalPlaces"),
+              maxMonetaryValueConstraint()
+            )
+          )
+      )
     )(CostsAtLegislationStartModel.apply)(CostsAtLegislationStartModel.unapply)
-      .verifying("calc.costsAtLegislationStart.error.no.value.supplied",
-        form => verifyAmountSupplied(CostsAtLegislationStartModel(form.hasCosts, form.costs)))
-      .verifying("calc.costsAtLegislationStart.errorNegative",
-        form => verifyPositive(form))
-      .verifying("calc.costsAtLegislationStart.errorDecimalPlaces",
-        form => verifyTwoDecimalPlaces(form))
-      .verifying(maxMonetaryValueConstraint[CostsAtLegislationStartModel](Constants.maxNumeric, getLossesAmount))
   )
 }

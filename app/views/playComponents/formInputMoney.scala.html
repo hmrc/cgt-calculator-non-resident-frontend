@@ -23,19 +23,21 @@
         field: Field,
         question: String,
         hideLabel: Boolean,
-        hintText: Option[String] = None
+        hintText: Option[String] = None,
+        isHiddenQuestion: Boolean = false,
+        showCurrency: Boolean = true
 )(implicit messages: Messages)
 
 @govukInput(Input(
     label = Label(
-        isPageHeading = !hideLabel,
-        classes = if(hideLabel) "govuk-visually-hidden" else "govuk-label--xl",
+        isPageHeading = !(hideLabel || isHiddenQuestion),
+        classes = if(hideLabel) "govuk-visually-hidden" else if(isHiddenQuestion) "govuk-label--m" else "govuk-label--xl",
         content = Text(question)
     ),
     hint = hintText.map(text => (Hint(content = Text(text)))),
     classes = "govuk-input--width-10",
     spellcheck = Some(false),
-    prefix = Some(PrefixOrSuffix(
+    prefix = if(showCurrency) Some(PrefixOrSuffix(
         content = Text("£")
-    ))
+    )) else None
 ).withFormField(field))

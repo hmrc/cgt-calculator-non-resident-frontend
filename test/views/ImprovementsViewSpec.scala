@@ -161,8 +161,8 @@ class ImprovementsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
         }
 
         "have some hidden content" which {
-          "which has a single div with a class of form-group" in {
-            document.getElementsByClass("govuk-form-group").size() shouldBe 1
+          "which has a single div with a class of govuk-radios__conditional" in {
+            document.getElementsByClass("govuk-radios__conditional").size() shouldBe 1
           }
 
           s"contains the question ${messages.Improvements.questionThree}" in {
