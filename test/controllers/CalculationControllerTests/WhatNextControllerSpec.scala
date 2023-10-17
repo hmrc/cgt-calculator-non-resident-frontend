@@ -51,7 +51,7 @@ class WhatNextControllerSpec extends CommonPlaySpec with WithCommonFakeApplicati
     when(mockAnswersConstructor.getNRTotalGainAnswers(ArgumentMatchers.any()))
       .thenReturn(Future.successful(summary))
 
-    new WhatNextController(http = mock[DefaultHttpClient], mockAnswersConstructor, mockMessagesControllerComponents, whatNextView)(ec)
+    new WhatNextController(mockAnswersConstructor, mockMessagesControllerComponents, whatNextView)(ec)
   }
 
   lazy val answerModel = TotalGainAnswersModel(
