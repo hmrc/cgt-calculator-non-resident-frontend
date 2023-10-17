@@ -74,8 +74,8 @@ class WorthWhenGiftedToViewSpec extends CommonPlaySpec with WithCommonFakeApplic
         }
       }
 
-      s"has the hint text ${WorthWhenGiftedTo.hintText}" in {
-        document.getElementsByClass("govuk-hint").text() shouldEqual WorthWhenGiftedTo.hintText
+      s"has the hint text ${WorthWhenGiftedTo.estimate}" in {
+        document.getElementsByClass("govuk-body").text() shouldEqual WorthWhenGiftedTo.estimate
       }
 
       s"has the joint ownership text ${WorthWhenGiftedTo.jointOwnership}" in {
