@@ -18,29 +18,29 @@ package controllers
 
 import constructors.AnswersConstructor
 import controllers.predicates.ValidActiveSession
-import javax.inject.Inject
+import controllers.utils.RecoverableFuture
 import models.DateModel
 import play.api.i18n.I18nSupport
 import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.whatNext.whatNext
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class WhatNextController @Inject()(http: DefaultHttpClient,
-                                   answersConstructor: AnswersConstructor,
+class WhatNextController @Inject()(answersConstructor: AnswersConstructor,
                                    mcc: MessagesControllerComponents,
                                    whatNextView: whatNext)
                                   (implicit ec: ExecutionContext) extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
-  val referenceDate: DateModel = DateModel(5,4,2020)
+  val referenceDate: DateModel = DateModel(5, 4, 2020)
 
   val whatNext = ValidateSession.async { implicit request => {
     answersConstructor.getNRTotalGainAnswers.flatMap(answerModel => {
       val isDateAfter: Boolean = answerModel.disposalDateModel.isDateAfter(referenceDate)
       Future.successful(Ok(whatNextView(isDateAfter)))
-    })
-  }}
+    }).recoverToStart
+  }
+  }
 
 }
