@@ -35,11 +35,10 @@
     pageTitle = title
 ) {
     @errorSummary(otherPropertiesForm.errors)
-    <h1 class="govuk-heading-xl" for="other-properties">@Messages("calc.otherProperties.question")</h1>
     @form(action = controllers.routes.OtherPropertiesController.submitOtherProperties) {
 
         @inputYesNo(
-            legend = Messages(""),
+            legend = Messages("calc.otherProperties.question"),
             field = otherPropertiesForm("otherProperties"),
         )
         @submitButton()

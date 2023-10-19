@@ -43,13 +43,15 @@
     </div>
     @form(action = controllers.routes.PreviousGainOrLossController.submitPreviousGainOrLoss) {
         @inputRadio(
-            legend = Messages(""),
+            legend = Messages("calc.previousLossOrGain.question"),
+            legendClass = Some("govuk-visually-hidden"),
             items = Seq(
                 RadioItem(content = Text(Messages("calc.previousLossOrGain.loss")), value = Option("Loss")),
                 RadioItem(content = Text(Messages("calc.previousLossOrGain.gain")), value = Option("Gain")),
                 RadioItem(content = Text(Messages("calc.previousLossOrGain.neither")), value = Option("Neither"))
             ),
-            field = previousLossOrGainForm("previousLossOrGain")
+            field = previousLossOrGainForm("previousLossOrGain"),
+            isPageHeading = false
         )
         @submitButton()
     }

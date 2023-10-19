@@ -56,13 +56,13 @@ class MarketValueGaveAwayViewSpec extends CommonPlaySpec with WithCommonFakeAppl
       }
 
       s"have a paragraph" which {
-        lazy val helpText = document.getElementsByClass("govuk-hint")
+        lazy val helpText = document.getElementsByClass("govuk-body")
         s"has the help text'${MarketValueMessages.disposalHelpText}'" in {
           helpText.text should include(MarketValueMessages.disposalHelpText)
           helpText.text should include(MarketValueMessages.disposalHelpTextAdditional)
         }
-        s"has the class 'form-hint'" in {
-          helpText.attr("class") shouldBe "govuk-hint"
+        s"has the class 'govuk-body'" in {
+          helpText.attr("class") shouldBe "govuk-body"
         }
       }
 
