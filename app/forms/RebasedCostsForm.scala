@@ -16,54 +16,33 @@
 
 package forms
 
-import common.Constants
 import common.Validation._
 import models.RebasedCostsModel
 import play.api.data.Forms._
 import play.api.data._
 import common.Transformers._
+import uk.gov.voa.play.form.ConditionalMappings._
 
 object RebasedCostsForm {
-
-  def verifyAmountSupplied(data: RebasedCostsModel): Boolean = {
-    data.hasRebasedCosts match {
-      case "Yes" => data.rebasedCosts.isDefined
-      case "No" => true
-    }
-  }
-
-  def verifyPositive(data: RebasedCostsModel): Boolean = {
-    data.hasRebasedCosts match {
-      case "Yes" => isPositive(data.rebasedCosts.getOrElse(0))
-      case "No" => true
-    }
-  }
-
-  def verifyTwoDecimalPlaces(data: RebasedCostsModel): Boolean = {
-    data.hasRebasedCosts match {
-      case "Yes" => decimalPlacesCheck(data.rebasedCosts.getOrElse(0))
-      case "No" => true
-    }
-  }
-
-  private def extractRebasedCosts(model: RebasedCostsModel): Option[BigDecimal] = {
-    if(model.hasRebasedCosts == "Yes") model.rebasedCosts else None
-  }
 
   val rebasedCostsForm = Form(
     mapping(
       "hasRebasedCosts" -> common.Formatters.text("calc.rebasedCosts.errors.required")
         .verifying("calc.rebasedCosts.errors.required", mandatoryCheck)
         .verifying("calc.rebasedCosts.errors.required", yesNoCheck),
-      "rebasedCosts" -> text
-        .transform(stringToOptionalBigDecimal, optionalBigDecimalToString)
+      "rebasedCosts" -> mandatoryIf(
+        isEqual("hasRebasedCosts", "Yes"),
+        common.Formatters.text("calc.rebasedCosts.error.no.value.supplied")
+          .verifying("error.number", bigDecimalCheck)
+          .transform(stringToBigDecimal, bigDecimalToString)
+          .verifying(
+            stopOnFirstFail(
+              negativeConstraint("calc.rebasedCosts.errorNegative"),
+              decimalPlaceConstraint("calc.rebasedCosts.errorDecimalPlaces"),
+              maxMonetaryValueConstraint()
+            )
+          )
+      )
     )(RebasedCostsModel.apply)(RebasedCostsModel.unapply)
-      .verifying("calc.rebasedCosts.error.no.value.supplied",
-        rebasedCostsForm => verifyAmountSupplied(RebasedCostsModel(rebasedCostsForm.hasRebasedCosts, rebasedCostsForm.rebasedCosts)))
-      .verifying("calc.rebasedCosts.errorNegative",
-        rebasedCostsForm => verifyPositive(rebasedCostsForm))
-      .verifying("calc.rebasedCosts.errorDecimalPlaces",
-        rebasedCostsForm => verifyTwoDecimalPlaces(rebasedCostsForm))
-      .verifying(maxMonetaryValueConstraint[RebasedCostsModel](Constants.maxNumeric, extractRebasedCosts))
   )
 }

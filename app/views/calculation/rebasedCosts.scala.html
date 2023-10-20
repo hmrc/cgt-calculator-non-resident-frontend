@@ -21,7 +21,8 @@
     layout: Layout,
     errorSummary: playComponents.errorSummary,
     form: FormWithCSRF,
-    formHiddenYesNoRadioCurrencyInput: playComponents.formHiddenYesNoRadioCurrencyInput,
+    inputYesNo: playComponents.input_yes_no,
+    formInputMoney: playComponents.formInputMoney,
     submitButton: playComponents.submitButton
 )
 
@@ -29,6 +30,16 @@
 
 @title = @{
     if(rebasedCosts.errors.nonEmpty) messages("site.title.error", Messages("calc.rebasedCosts.question")) else Messages("calc.rebasedCosts.question")
+}
+
+@hiddenHtml = {
+    @formInputMoney(
+        field = rebasedCosts("rebasedCosts"),
+        question = Messages("calc.rebasedCosts.questionTwo"),
+        hideLabel = false,
+        hintText = Some(Messages("calc.rebasedCosts.jointOwnership")),
+        isHiddenQuestion = true
+    )
 }
 
 @layout(
@@ -39,13 +50,10 @@
 
     @form(action = controllers.routes.RebasedCostsController.submitRebasedCosts) {
 
-        @formHiddenYesNoRadioCurrencyInput(
-            form = rebasedCosts,
-            yesNoFieldName = "hasRebasedCosts",
-            conditionalInputFieldName = "rebasedCosts",
-            yesNoQuestionText = Messages("calc.rebasedCosts.question"),
-            conditionalInputQuestionText = Messages("calc.rebasedCosts.questionTwo"),
-            conditionalInputHint = Some(Messages("calc.rebasedCosts.jointOwnership"))
+        @inputYesNo(
+            legend = Messages("calc.rebasedCosts.question"),
+            field = rebasedCosts("hasRebasedCosts"),
+            conditionalYesHtml = Some(hiddenHtml)
         )
 
         @submitButton()

@@ -34,6 +34,7 @@ object AppDependencies {
     "uk.gov.hmrc.mongo" %% "hmrc-mongo-play-28"           % hmrcMongoVersion,
     "uk.gov.hmrc"       %% "play-partials"                % playPartialsVersion,
     "it.innove"         % "play2-pdf"                     % play2PdfVersion exclude("com.typesafe.play","*"),
+    "uk.gov.hmrc"       %% "play-conditional-form-mapping" % "1.13.0-play-28",
     nettyServer
   )
 

@@ -16,66 +16,68 @@
 
 package forms
 
-import common.Constants
 import common.Transformers._
 import common.Validation._
 import models.ImprovementsModel
 import play.api.data.Forms._
 import play.api.data._
+import uk.gov.voa.play.form.ConditionalMappings.{isEqual, mandatoryIf}
 
 object ImprovementsForm {
 
-  private def verifyAmountSupplied(data: ImprovementsModel, showHiddenQuestion: Boolean): Boolean = {
-    data.isClaimingImprovements match {
-      case "Yes" if showHiddenQuestion => data.improvementsAmt.isDefined || data.improvementsAmtAfter.isDefined
-      case "Yes" => data.improvementsAmt.isDefined
-      case _ => true
+  def improvementsForm(showHiddenQuestion: Boolean): Form[ImprovementsModel] =
+    if (showHiddenQuestion) {
+      Form(mapping(
+          "isClaimingImprovements" -> common.Formatters.text("calc.improvements.errors.required")
+            .verifying("calc.improvements.errors.required", mandatoryCheck)
+            .verifying("calc.calc.improvements.errors.required", yesNoCheck),
+          "improvementsAmt" -> mandatoryIf(
+            isEqual("isClaimingImprovements", "Yes"),
+            common.Formatters.text("calc.improvements.error.no.value.supplied")
+              .verifying("error.number", bigDecimalCheck)
+              .transform(stringToBigDecimal, bigDecimalToString)
+              .verifying(
+                stopOnFirstFail(
+                  negativeConstraint("calc.improvements.errorNegative"),
+                  decimalPlaceConstraint("calc.improvements.errorDecimalPlaces"),
+                  maxMonetaryValueConstraint()
+                )
+              )
+          ),
+          "improvementsAmtAfter" -> mandatoryIf(
+            isEqual("isClaimingImprovements", "Yes"),
+            common.Formatters.text("calc.improvements.error.no.value.supplied")
+              .verifying("error.number", bigDecimalCheck)
+              .transform(stringToBigDecimal, bigDecimalToString)
+              .verifying(
+                stopOnFirstFail(
+                  negativeConstraint("calc.improvements.errorNegative"),
+                  decimalPlaceConstraint("calc.improvements.errorDecimalPlaces"),
+                  maxMonetaryValueConstraint()
+                )
+              )
+          )
+        )(ImprovementsModel.apply)(ImprovementsModel.unapply))
+    } else {
+      Form(mapping(
+          "isClaimingImprovements" -> common.Formatters.text("calc.improvements.errors.required")
+            .verifying("calc.improvements.errors.required", mandatoryCheck)
+            .verifying("calc.calc.improvements.errors.required", yesNoCheck),
+          "improvementsAmt" -> mandatoryIf(
+            isEqual("isClaimingImprovements", "Yes"),
+            common.Formatters.text("calc.improvements.error.no.value.supplied")
+              .verifying("error.number", bigDecimalCheck)
+              .transform(stringToBigDecimal, bigDecimalToString)
+              .verifying(
+                stopOnFirstFail(
+                  negativeConstraint("calc.improvements.errorNegative"),
+                  decimalPlaceConstraint("calc.improvements.errorDecimalPlaces"),
+                  maxMonetaryValueConstraint()
+                )
+              )
+          ),
+        "improvementsAmtAfter" -> optional(text)
+          .transform(optionalStringToOptionalBigDecimal, optionalBigDecimalToOptionalString)
+        )(ImprovementsModel.apply)(ImprovementsModel.unapply))
     }
-  }
-
-  private def verifyPositive(data: ImprovementsModel, showHiddenQuestion: Boolean): Boolean = {
-    data.isClaimingImprovements match {
-      case "Yes" if showHiddenQuestion => isPositive(data.improvementsAmt.getOrElse(0)) && isPositive(data.improvementsAmtAfter.getOrElse(0))
-      case "Yes" => isPositive(data.improvementsAmt.getOrElse(0))
-      case "No" => true
-    }
-  }
-
-  private def verifyTwoDecimalPlaces(data: ImprovementsModel, showHiddenQuestion: Boolean): Boolean = {
-    data.isClaimingImprovements match {
-      case "Yes" if showHiddenQuestion => decimalPlacesCheck(data.improvementsAmt.getOrElse(0)) && decimalPlacesCheck(data.improvementsAmtAfter.getOrElse(0))
-      case "Yes" => decimalPlacesCheck(data.improvementsAmt.getOrElse(0))
-      case "No" => true
-    }
-  }
-
-  private def extractImprovementsAmount(model: ImprovementsModel): Option[BigDecimal] = {
-    if(model.isClaimingImprovements == "Yes") model.improvementsAmt else None
-  }
-
-  private def extractImprovementsAfterAmount(model: ImprovementsModel, showHiddenQuestion: Boolean): Option[BigDecimal] = {
-    if(showHiddenQuestion && model.isClaimingImprovements == "Yes") model.improvementsAmtAfter else None
-  }
-
-  def improvementsForm(showHiddenQuestion: Boolean): Form[ImprovementsModel] = Form(
-    mapping(
-      "isClaimingImprovements" -> common.Formatters.text("calc.improvements.errors.required")
-      .verifying("calc.improvements.errors.required", mandatoryCheck)
-      .verifying("calc.calc.improvements.errors.required", yesNoCheck),
-      "improvementsAmt" -> optional(text)
-        .transform(optionalStringToOptionalBigDecimal, optionalBigDecimalToOptionalString),
-      "improvementsAmtAfter" -> optional(text)
-        .transform(optionalStringToOptionalBigDecimal, optionalBigDecimalToOptionalString)
-    )(ImprovementsModel.apply)(ImprovementsModel.unapply)
-      .verifying("calc.improvements.error.no.value.supplied",
-        improvementsForm => verifyAmountSupplied(improvementsForm, showHiddenQuestion))
-      .verifying("calc.improvements.errorNegative",
-        improvementsForm => verifyPositive(improvementsForm, showHiddenQuestion))
-      .verifying("calc.improvements.errorDecimalPlaces",
-        improvementsForm => verifyTwoDecimalPlaces(improvementsForm, showHiddenQuestion))
-      .verifying(maxMonetaryValueConstraint[ImprovementsModel](Constants.maxNumeric, extractImprovementsAmount))
-      .verifying(maxMonetaryValueConstraint[ImprovementsModel](
-        Constants.maxNumeric, model => extractImprovementsAfterAmount(model, showHiddenQuestion)
-      ))
-  )
 }

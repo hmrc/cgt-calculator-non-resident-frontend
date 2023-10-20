@@ -94,7 +94,7 @@ class RebasedCostsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
       }
 
       s"have the input question '${messages.RebasedCosts.inputQuestion}'" in {
-        document.body().select("#conditional-rebasedCosts > div > label").first().text() shouldBe messages.RebasedCosts.inputQuestion
+        document.body().select("#conditional-hasRebasedCosts > div > label").first().text() shouldBe messages.RebasedCosts.inputQuestion
       }
 
       s"have joint ownership text of ${messages.RebasedCosts.jointOwnership}" in {

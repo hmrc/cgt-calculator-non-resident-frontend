@@ -21,7 +21,9 @@
     legendClass: Option[String] = None,
     hint: Option[String] = None,
     isPageHeading: Boolean = true,
-    field: Field)(implicit messages: Messages)
+    field: Field,
+    conditionalYesHtml: Option[Html] = None
+)(implicit messages: Messages)
 
 @govukRadios(
     Radios(
@@ -34,9 +36,9 @@
         )),
         hint = hint.map(hintString => Hint(content = Text(hintString))),
         items = Seq(
-            RadioItem(content = Text(Messages("calc.base.yes")), value = Option("Yes")),
+            RadioItem(content = Text(Messages("calc.base.yes")), value = Option("Yes"), conditionalHtml = conditionalYesHtml),
             RadioItem(content = Text(Messages("calc.base.no")), value = Option("No"))
         ),
-        classes = "govuk-radios--inline"
+        classes = if(conditionalYesHtml.isEmpty) "govuk-radios--inline" else ""
     ).withFormField(field)
 )

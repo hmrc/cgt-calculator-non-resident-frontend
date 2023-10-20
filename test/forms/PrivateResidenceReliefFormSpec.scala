@@ -125,7 +125,7 @@ class PrivateResidenceReliefFormSpec extends CommonPlaySpec with WithCommonFakeA
         }
 
         s"return an error message of '${messages.PrivateResidenceRelief.errorDecimalPlaces}" in {
-          form.error("").get.message shouldBe messages.PrivateResidenceRelief.errorDecimalPlaces
+          form.error("daysClaimed").get.message shouldBe messages.PrivateResidenceRelief.errorDecimalPlaces
         }
       }
 
@@ -140,7 +140,7 @@ class PrivateResidenceReliefFormSpec extends CommonPlaySpec with WithCommonFakeA
         }
 
         s"return an error message of '${messages.PrivateResidenceRelief.errorNegative}" in {
-          form.error("").get.message shouldBe messages.PrivateResidenceRelief.errorNegative
+          form.error("daysClaimed").get.message shouldBe messages.PrivateResidenceRelief.errorNegative
         }
       }
 
@@ -155,8 +155,8 @@ class PrivateResidenceReliefFormSpec extends CommonPlaySpec with WithCommonFakeA
         }
 
         s"return the correct error message" in {
-          form.error("").get.message shouldBe "calc.privateResidenceRelief.error.maxNumericExceeded"
-          form.error("").get.args shouldBe Array("1,000,000,000")
+          form.error("daysClaimed").get.message shouldBe "calc.privateResidenceRelief.error.maxNumericExceeded"
+          form.error("daysClaimed").get.args shouldBe Array("1,000,000,000")
         }
       }
 
@@ -166,8 +166,8 @@ class PrivateResidenceReliefFormSpec extends CommonPlaySpec with WithCommonFakeA
           "daysClaimed" -> "-1000.5")
         lazy val form = baseForm.bind(map)
 
-        "return an invalid form with two errors" in {
-          form.errors.size shouldBe 2
+        "return an invalid form with one error" in {
+          form.errors.size shouldBe 1
         }
       }
     }
@@ -216,7 +216,7 @@ class PrivateResidenceReliefFormSpec extends CommonPlaySpec with WithCommonFakeA
         }
 
         s"return an error message of '${messages.PrivateResidenceRelief.errorDecimalPlaces}" in {
-          form.error("").get.message shouldBe messages.PrivateResidenceRelief.errorDecimalPlaces
+          form.error("daysClaimedAfter").get.message shouldBe messages.PrivateResidenceRelief.errorDecimalPlaces
         }
       }
 
@@ -231,7 +231,7 @@ class PrivateResidenceReliefFormSpec extends CommonPlaySpec with WithCommonFakeA
         }
 
         s"return an error message of '${messages.PrivateResidenceRelief.errorNegative}" in {
-          form.error("").get.message shouldBe messages.PrivateResidenceRelief.errorNegative
+          form.error("daysClaimedAfter").get.message shouldBe messages.PrivateResidenceRelief.errorNegative
         }
       }
 
@@ -246,8 +246,8 @@ class PrivateResidenceReliefFormSpec extends CommonPlaySpec with WithCommonFakeA
         }
 
         s"return the correct error message" in {
-          form.error("").get.message shouldBe "calc.privateResidenceRelief.error.maxNumericExceeded"
-          form.error("").get.args shouldBe Array("1,000,000,000")
+          form.error("daysClaimedAfter").get.message shouldBe "calc.privateResidenceRelief.error.maxNumericExceeded"
+          form.error("daysClaimedAfter").get.args shouldBe Array("1,000,000,000")
         }
       }
 
@@ -257,8 +257,8 @@ class PrivateResidenceReliefFormSpec extends CommonPlaySpec with WithCommonFakeA
           "daysClaimedAfter" -> "-1000.5")
         lazy val form = baseForm.bind(map)
 
-        "return an invalid form with two errors" in {
-          form.errors.size shouldBe 2
+        "return an invalid form with one error" in {
+          form.errors.size shouldBe 1
         }
       }
     }
@@ -310,7 +310,7 @@ class PrivateResidenceReliefFormSpec extends CommonPlaySpec with WithCommonFakeA
         }
 
         s"return an error message of '${messages.PrivateResidenceRelief.errorDecimalPlaces}" in {
-          form.error("").get.message shouldBe messages.PrivateResidenceRelief.errorDecimalPlaces
+          form.error("daysClaimed").get.message shouldBe messages.PrivateResidenceRelief.errorDecimalPlaces
         }
       }
 
@@ -326,7 +326,7 @@ class PrivateResidenceReliefFormSpec extends CommonPlaySpec with WithCommonFakeA
         }
 
         s"return an error message of '${messages.PrivateResidenceRelief.errorNegative}" in {
-          form.error("").get.message shouldBe messages.PrivateResidenceRelief.errorNegative
+          form.error("daysClaimedAfter").get.message shouldBe messages.PrivateResidenceRelief.errorNegative
         }
       }
 

@@ -16,31 +16,44 @@
 
 @import models.ImprovementsModel
 @import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
-@import constructors.ImprovementsConstructor
 
 @this(
     layout: Layout,
     errorSummary: playComponents.errorSummary,
     form: FormWithCSRF,
-    formHiddenYesNoRadioCurrencyInput: playComponents.formHiddenYesNoRadioCurrencyInput,
-    govukDetails: playComponents.govukDetails,
-    submitButton: playComponents.submitButton,
-        improvementsConstructor: ImprovementsConstructor
+    inputYesNo: playComponents.input_yes_no,
+    formInputMoney: playComponents.formInputMoney,
+    submitButton: playComponents.submitButton
 )
 
 @(improvementsForm: Form[ImprovementsModel], improvementsOptions: Boolean, backUrl: String, ownerBeforeLegislationStart: Boolean)(implicit request: Request[_], messages: Messages, messagesApi: MessagesApi)
 
-@exampleContent = {
-    @messages("calc.improvements.exampleOne") +
-    @messages("calc.improvements.exampleTwo")
-}
-
-@jointOwnershipText = {
-    <p id="jointOwner">@messages("calc.improvements.jointOwnership")</p>
-}
-
 @titleText = @{
     if(ownerBeforeLegislationStart) messages("calc.improvements.ownerBeforeLegislationStartQuestion") else messages("calc.improvements.question")
+}
+
+@beforeAndAfterInput = {
+    @formInputMoney(
+        field = improvementsForm("improvementsAmt"),
+        question = messages("calc.improvements.questionThree"),
+        hideLabel = false,
+        isHiddenQuestion = true
+    )
+    @formInputMoney(
+        field = improvementsForm("improvementsAmtAfter"),
+        question = messages("calc.improvements.questionFour"),
+        hideLabel = false,
+        isHiddenQuestion = true
+    )
+}
+
+@amountInput = {
+    @formInputMoney(
+        field = improvementsForm("improvementsAmt"),
+        question = messages("calc.improvements.questionTwo"),
+        hideLabel = false,
+        isHiddenQuestion = true
+    )
 }
 
 @layout(
@@ -67,7 +80,13 @@
 
     @form(action = controllers.routes.ImprovementsController.submitImprovements) {
 
-        @improvementsConstructor.generateImprovements(improvementsForm, improvementsOptions, titleText)
+        @inputYesNo(
+            legend = titleText,
+            legendClass = Some("govuk-visually-hidden"),
+            isPageHeading = false,
+            field = improvementsForm("isClaimingImprovements"),
+            conditionalYesHtml = if(improvementsOptions) Some(beforeAndAfterInput) else Some(amountInput)
+        )
 
         @submitButton()
     }

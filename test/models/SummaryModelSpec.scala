@@ -46,7 +46,7 @@ class SummaryModelSpec extends CommonPlaySpec{
           otherReliefsModelRebased = reliefs,
           privateResidenceReliefModel = None)
 
-        model.reliefApplied shouldBe CalculationType.flat
+        model.reliefApplied() shouldBe CalculationType.flat
       }
     }
 
@@ -74,7 +74,7 @@ class SummaryModelSpec extends CommonPlaySpec{
           otherReliefsModelRebased = reliefs,
           privateResidenceReliefModel = None)
 
-        model.reliefApplied shouldBe CalculationType.rebased
+        model.reliefApplied() shouldBe CalculationType.rebased
       }
     }
 
@@ -102,7 +102,7 @@ class SummaryModelSpec extends CommonPlaySpec{
           otherReliefsModelRebased = reliefs,
           privateResidenceReliefModel = None)
 
-        model.reliefApplied shouldBe CalculationType.timeApportioned
+        model.reliefApplied() shouldBe CalculationType.timeApportioned
       }
     }
 
@@ -130,7 +130,7 @@ class SummaryModelSpec extends CommonPlaySpec{
           otherReliefsModelRebased = reliefs,
           privateResidenceReliefModel = None)
 
-        model.reliefApplied shouldBe "none"
+        model.reliefApplied() shouldBe "none"
       }
 
       "Calculation Type is rebased and relief amount is equal to or less than zero" in {
@@ -156,7 +156,7 @@ class SummaryModelSpec extends CommonPlaySpec{
           otherReliefsModelRebased = reliefs,
           privateResidenceReliefModel = None)
 
-        model.reliefApplied shouldBe "none"
+        model.reliefApplied() shouldBe "none"
       }
 
       "Calculation Type is timeApportioned and relief amount is equal to or less than zero" in {
@@ -182,7 +182,7 @@ class SummaryModelSpec extends CommonPlaySpec{
           otherReliefsModelRebased = reliefs,
           privateResidenceReliefModel = None)
 
-        model.reliefApplied shouldBe "none"
+        model.reliefApplied() shouldBe "none"
       }
 
       "Calculation Type is unknown" in {
@@ -208,7 +208,7 @@ class SummaryModelSpec extends CommonPlaySpec{
           otherReliefsModelRebased = reliefs,
           privateResidenceReliefModel = None)
 
-        model.reliefApplied shouldBe "none"
+        model.reliefApplied() shouldBe "none"
       }
     }
   }

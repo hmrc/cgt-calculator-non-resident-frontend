@@ -87,7 +87,7 @@ class CostsAtLegislationStartViewSpec extends CommonPlaySpec with WithCommonFake
       }
 
       s"have a secondary question with the correct text" in {
-        document.select("#conditional-costs > div > label").text() shouldBe messages.CostsAtLegislationStart.howMuch
+        document.select("#conditional-hasCosts > div > label").text() shouldBe messages.CostsAtLegislationStart.howMuch
       }
 
       s"have help text for the secondary question" in {

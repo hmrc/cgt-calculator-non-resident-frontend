@@ -20,7 +20,8 @@
 @this(
     layout: Layout,
     errorSummary: playComponents.errorSummary,
-    formHiddenYesNoRadioCurrencyInput: playComponents.formHiddenYesNoRadioCurrencyInput,
+    inputYesNo: playComponents.input_yes_no,
+    formInputMoney: playComponents.formInputMoney,
     submitButton: playComponents.submitButton,
     form: FormWithCSRF
 )
@@ -31,6 +32,16 @@
     if(data.errors.nonEmpty) messages("site.title.error", Messages("calc.costsAtLegislationStart.title")) else Messages("calc.costsAtLegislationStart.title")
 }
 
+@hiddenCurrencyInput = {
+    @formInputMoney(
+        field = data("costs"),
+        question = Messages("calc.costsAtLegislationStart.howMuch"),
+        hideLabel = false,
+        hintText = Some(Messages("calc.costsAtLegislationStart.helpText")),
+        isHiddenQuestion = true
+    )
+}
+
 @layout(
     pageTitle = title
 ) {
@@ -39,13 +50,10 @@
 
     @form(action = controllers.routes.CostsAtLegislationStartController.submitCostsAtLegislationStart) {
 
-        @formHiddenYesNoRadioCurrencyInput(
-            form = data,
-            yesNoFieldName = "hasCosts",
-            conditionalInputFieldName = "costs",
-            yesNoQuestionText = Messages("calc.costsAtLegislationStart.title"),
-            conditionalInputQuestionText = Messages("calc.costsAtLegislationStart.howMuch"),
-            conditionalInputHint = Some(Messages("calc.costsAtLegislationStart.helpText"))
+        @inputYesNo(
+            legend = Messages("calc.costsAtLegislationStart.title"),
+            field = data("hasCosts"),
+            conditionalYesHtml = Some(hiddenCurrencyInput)
         )
 
         @submitButton()

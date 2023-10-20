@@ -17,8 +17,9 @@
 package controllers.utils
 
 import common.WithCommonFakeApplication
-import org.scalatest.{Matchers, WordSpec}
+import org.scalatest.matchers.should.Matchers
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.wordspec.AnyWordSpec
 import play.api.http.Status
 import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.FakeRequest
@@ -26,7 +27,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.http.ApplicationException
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class RecoverableFutureSpec extends WordSpec with ScalaFutures with Matchers with IntegrationPatience with Status with WithCommonFakeApplication {
+class RecoverableFutureSpec extends AnyWordSpec with ScalaFutures with Matchers with IntegrationPatience with Status with WithCommonFakeApplication {
 
   ".recoverToStart" should {
     implicit val ec = fakeApplication.injector.instanceOf[ExecutionContext]

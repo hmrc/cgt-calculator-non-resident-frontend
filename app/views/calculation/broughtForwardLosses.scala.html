@@ -21,7 +21,8 @@
     layout: Layout,
     errorSummary: playComponents.errorSummary,
     form: FormWithCSRF,
-    formHiddenYesNoRadioCurrencyInput: playComponents.formHiddenYesNoRadioCurrencyInput,
+    inputYesNo: playComponents.input_yes_no,
+    formInputMoney: playComponents.formInputMoney,
     submitButton: playComponents.submitButton
 )
 
@@ -29,6 +30,15 @@
 
 @title = @{
     if(broughtForwardLossesForm.errors.nonEmpty) messages("site.title.error", Messages("calc.broughtForwardLosses.question")) else Messages("calc.broughtForwardLosses.question")
+}
+
+@hiddenYesInput = {
+    @formInputMoney(
+        field = broughtForwardLossesForm("broughtForwardLoss"),
+        question = Messages("calc.broughtForwardLosses.inputQuestion"),
+        hideLabel = false,
+        isHiddenQuestion = true
+    )
 }
 
 @layout(
@@ -39,13 +49,11 @@
 
     @form(action = controllers.routes.BroughtForwardLossesController.submitBroughtForwardLosses) {
 
-        @formHiddenYesNoRadioCurrencyInput(
-            form = broughtForwardLossesForm,
-            yesNoFieldName = "isClaiming",
-            conditionalInputFieldName = "broughtForwardLoss",
-            yesNoQuestionText = Messages("calc.broughtForwardLosses.question"),
-            inputHint = Some(Messages("calc.broughtForwardLosses.helpText")),
-            conditionalInputQuestionText = ""
+        @inputYesNo(
+            legend = Messages("calc.broughtForwardLosses.question"),
+            hint = Some(Messages("calc.broughtForwardLosses.helpText")),
+            field = broughtForwardLossesForm("isClaiming"),
+            conditionalYesHtml = Some(hiddenYesInput)
         )
 
         @submitButton()
