@@ -35,15 +35,15 @@ object TotalGainRequestConstructor {
   }
 
   def disposalValue(disposalValueModel: DisposalValueModel): String = {
-    s"disposalValue=${disposalValueModel.disposalValue}"
+    s"disposalValue=${disposalValueModel.disposalValue.toDouble}"
   }
 
   def disposalCosts(disposalCostsModel: DisposalCostsModel): String = {
-    s"&disposalCosts=${disposalCostsModel.disposalCosts}"
+    s"&disposalCosts=${disposalCostsModel.disposalCosts.toDouble}"
   }
 
   def acquisitionValue(acquisitionValueModel: AcquisitionValueModel): String = {
-    s"&acquisitionValue=${acquisitionValueModel.acquisitionValueAmt}"
+    s"&acquisitionValue=${acquisitionValueModel.acquisitionValueAmt.toDouble}"
   }
 
   def acquisitionCosts(acquisitionCostsModel: Option[AcquisitionCostsModel],
@@ -56,11 +56,11 @@ object TotalGainRequestConstructor {
           model.costs.get
         case (Some(model), _) if !TaxDates.dateBeforeLegislationStart(acquisitionDateModel.get) =>
           model.acquisitionCostsAmt
-        case _ => 0
+        case _ => BigDecimal(0)
       }
     }
 
-    s"&acquisitionCosts=$selectAcquisitionCosts"
+    s"&acquisitionCosts=${selectAcquisitionCosts.toDouble}"
   }
 
   def includeLegislationCosts(costsAtLegislationStartModel: CostsAtLegislationStartModel, acquisitionDateModel: DateModel): Boolean = {
@@ -75,7 +75,7 @@ object TotalGainRequestConstructor {
   def improvements(improvementsModel: ImprovementsModel): String = {
     improvementsModel match {
       case ImprovementsModel("Yes", Some(value), _) =>
-        s"&improvements=$value"
+        s"&improvements=${value.toDouble}"
       case _ => ""
     }
   }
@@ -87,21 +87,21 @@ object TotalGainRequestConstructor {
     rebasedValueModel match {
       case Some(RebasedValueModel(value))
         if !TaxDates.dateAfterStart(acquisitionDateModel.get) =>
-        s"&rebasedValue=$value${rebasedCosts(rebasedCostsModel.get)}${improvementsAfterTaxStarted(improvementsModel)}"
+        s"&rebasedValue=${value.toDouble}${rebasedCosts(rebasedCostsModel.get)}${improvementsAfterTaxStarted(improvementsModel)}"
       case _ => ""
     }
   }
 
   def rebasedCosts(rebasedCostsModel: RebasedCostsModel): String = {
     rebasedCostsModel match {
-      case RebasedCostsModel("Yes", Some(value)) => s"&rebasedCosts=$value"
+      case RebasedCostsModel("Yes", Some(value)) => s"&rebasedCosts=${value.toDouble}"
       case _ => ""
     }
   }
 
   def improvementsAfterTaxStarted(improvementsModel: ImprovementsModel): String = {
     improvementsModel match {
-      case ImprovementsModel("Yes", _, Some(value)) => s"&improvementsAfterTaxStarted=$value"
+      case ImprovementsModel("Yes", _, Some(value)) => s"&improvementsAfterTaxStarted=${value.toDouble}"
       case _ => ""
     }
   }

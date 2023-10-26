@@ -91,7 +91,7 @@ class CalculatorConnector @Inject()(val http: DefaultHttpClient,
         model.costs.get
       case (Some(model), _) if !TaxDates.dateBeforeLegislationStart(answers.acquisitionDateModel.get) =>
         model.acquisitionCostsAmt
-      case _ => 0
+      case _ => BigDecimal(0)
     }
   }
 
@@ -99,13 +99,13 @@ class CalculatorConnector @Inject()(val http: DefaultHttpClient,
     case Some(calculationElection) =>
       if(calculationElection.calculationType == CalculationType.rebased) {
         http.GET[BigDecimal](s"$serviceUrl/capital-gains-calculator/non-resident/calculate-total-costs?" +
-          s"disposalCosts=${answers.disposalCostsModel.disposalCosts}" +
-          s"&acquisitionCosts=${answers.rebasedCostsModel.get.rebasedCosts.getOrElse(0)}" +
-          improvementsQueryParameter(answers.improvementsModel, answers.improvementsModel.improvementsAmtAfter.getOrElse(0)))
+          s"disposalCosts=${answers.disposalCostsModel.disposalCosts.toDouble}" +
+          s"&acquisitionCosts=${answers.rebasedCostsModel.get.rebasedCosts.getOrElse(BigDecimal(0)).toDouble}" +
+          improvementsQueryParameter(answers.improvementsModel, answers.improvementsModel.improvementsAmtAfter.getOrElse(BigDecimal(0)).toDouble))
       } else {
         http.GET[BigDecimal](s"$serviceUrl/capital-gains-calculator/non-resident/calculate-total-costs?" +
-          s"disposalCosts=${answers.disposalCostsModel.disposalCosts}" +
-          s"&acquisitionCosts=${selectAcquisitionCosts(answers)}" +
+          s"disposalCosts=${answers.disposalCostsModel.disposalCosts.toDouble}" +
+          s"&acquisitionCosts=${selectAcquisitionCosts(answers).toDouble}" +
           improvementsQueryParameter(answers.improvementsModel,
             answers.improvementsModel.improvementsAmt.getOrElse(BigDecimal(0)) + answers.improvementsModel.improvementsAmtAfter.getOrElse(BigDecimal(0))))
       }
@@ -113,7 +113,7 @@ class CalculatorConnector @Inject()(val http: DefaultHttpClient,
   }
 
   private def improvementsQueryParameter(improvementsModel: ImprovementsModel, value: BigDecimal): String = {
-    if(improvementsModel.isClaimingImprovements == YesNoKeys.yes) s"&improvements=$value"
+    if(improvementsModel.isClaimingImprovements == YesNoKeys.yes) s"&improvements=${value.toDouble}"
     else "&improvements=0"
   }
 

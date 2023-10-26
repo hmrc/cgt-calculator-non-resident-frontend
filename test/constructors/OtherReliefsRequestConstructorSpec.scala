@@ -45,7 +45,7 @@ class OtherReliefsRequestConstructorSpec extends CommonPlaySpec {
     }
 
     "when called with some data" in {
-      OtherReliefsRequestConstructor.flatReliefsQuery(allReliefs.otherReliefsFlat) shouldEqual "&otherReliefsFlat=1"
+      OtherReliefsRequestConstructor.flatReliefsQuery(allReliefs.otherReliefsFlat) shouldEqual "&otherReliefsFlat=1.0"
     }
   }
 
@@ -56,7 +56,7 @@ class OtherReliefsRequestConstructorSpec extends CommonPlaySpec {
     }
 
     "when called with some data" in {
-      OtherReliefsRequestConstructor.rebasedReliefsQuery(allReliefs.otherReliefsRebased) shouldEqual "&otherReliefsRebased=2"
+      OtherReliefsRequestConstructor.rebasedReliefsQuery(allReliefs.otherReliefsRebased) shouldEqual "&otherReliefsRebased=2.0"
     }
   }
 
@@ -67,7 +67,7 @@ class OtherReliefsRequestConstructorSpec extends CommonPlaySpec {
     }
 
     "when called with some data" in {
-      OtherReliefsRequestConstructor.timeApportionedReliefsQuery(allReliefs.otherReliefsTime) shouldEqual "&otherReliefsTimeApportioned=3"
+      OtherReliefsRequestConstructor.timeApportionedReliefsQuery(allReliefs.otherReliefsTime) shouldEqual "&otherReliefsTimeApportioned=3.0"
     }
   }
 }

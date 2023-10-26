@@ -26,7 +26,7 @@ class TotalGainRequestConstructorSpec extends CommonPlaySpec {
     "produce a valid query string" in {
       val result = TotalGainRequestConstructor.disposalValue(DisposalValueModel(1000))
 
-      result shouldBe "disposalValue=1000"
+      result shouldBe "disposalValue=1000.0"
     }
   }
 
@@ -35,7 +35,7 @@ class TotalGainRequestConstructorSpec extends CommonPlaySpec {
     "produce a valid query string" in {
       val result = TotalGainRequestConstructor.disposalCosts(DisposalCostsModel(100))
 
-      result shouldBe "&disposalCosts=100"
+      result shouldBe "&disposalCosts=100.0"
     }
   }
 
@@ -44,7 +44,7 @@ class TotalGainRequestConstructorSpec extends CommonPlaySpec {
     "produce a valid query string" in {
       val result = TotalGainRequestConstructor.acquisitionValue(AcquisitionValueModel(2000))
 
-      result shouldBe "&acquisitionValue=2000"
+      result shouldBe "&acquisitionValue=2000.0"
     }
   }
 
@@ -53,21 +53,21 @@ class TotalGainRequestConstructorSpec extends CommonPlaySpec {
     "use the acquisition costs for a post 31 March 1982 date" in {
       val result = TotalGainRequestConstructor.acquisitionCosts(Some(AcquisitionCostsModel(200)), None, DateModel(1, 4, 1990))
 
-      result shouldBe "&acquisitionCosts=200"
+      result shouldBe "&acquisitionCosts=200.0"
     }
 
     "use the cost of valuation from the 31 March 1982 for a prior date" in {
       val result = TotalGainRequestConstructor.acquisitionCosts(None,
         Some(CostsAtLegislationStartModel("Yes", Some(100))), DateModel(1, 4, 1980))
 
-      result shouldBe "&acquisitionCosts=100"
+      result shouldBe "&acquisitionCosts=100.0"
     }
 
     "return 0 costs for a prior date when not given" in {
       val result = TotalGainRequestConstructor.acquisitionCosts(Some(AcquisitionCostsModel(200)),
         Some(CostsAtLegislationStartModel("No", Some(100))), DateModel(1, 4, 1980))
 
-      result shouldBe "&acquisitionCosts=0"
+      result shouldBe "&acquisitionCosts=0.0"
     }
   }
 
@@ -76,7 +76,7 @@ class TotalGainRequestConstructorSpec extends CommonPlaySpec {
     "produce a valid query string with a provided value" in {
       val result = TotalGainRequestConstructor.improvements(ImprovementsModel("Yes", Some(300), None))
 
-      result shouldBe "&improvements=300"
+      result shouldBe "&improvements=300.0"
     }
 
     "produce a valid query string with no provided value" in {
@@ -97,7 +97,7 @@ class TotalGainRequestConstructorSpec extends CommonPlaySpec {
     "produce a valid query string with a provided value" in {
       val result = TotalGainRequestConstructor.rebasedCosts(RebasedCostsModel("Yes", Some(300)))
 
-      result shouldBe "&rebasedCosts=300"
+      result shouldBe "&rebasedCosts=300.0"
     }
 
     "produce a valid query string with no provided value" in {
@@ -118,7 +118,7 @@ class TotalGainRequestConstructorSpec extends CommonPlaySpec {
     "produce a valid query string with a provided value" in {
       val result = TotalGainRequestConstructor.improvementsAfterTaxStarted(ImprovementsModel("Yes", None, Some(300)))
 
-      result shouldBe "&improvementsAfterTaxStarted=300"
+      result shouldBe "&improvementsAfterTaxStarted=300.0"
     }
 
     "produce a valid query string with no provided value" in {
@@ -160,7 +160,7 @@ class TotalGainRequestConstructorSpec extends CommonPlaySpec {
         ImprovementsModel("Yes", None, Some(30)),
         DateModel(5, 4, 2015))
 
-      result shouldBe "&rebasedValue=3000&rebasedCosts=300&improvementsAfterTaxStarted=30"
+      result shouldBe "&rebasedValue=3000.0&rebasedCosts=300.0&improvementsAfterTaxStarted=30.0"
     }
 
     "produce an empty query string with an acquisition date after tax start" in {
@@ -193,7 +193,7 @@ class TotalGainRequestConstructorSpec extends CommonPlaySpec {
 
       val result = TotalGainRequestConstructor.totalGainQuery(model)
 
-      result shouldBe "disposalValue=1000&disposalCosts=100&acquisitionValue=2000&acquisitionCosts=200&improvements=10" +
+      result shouldBe "disposalValue=1000.0&disposalCosts=100.0&acquisitionValue=2000.0&acquisitionCosts=200.0&improvements=10.0" +
         "&disposalDate=2016-10-5&acquisitionDate=2015-4-6"
     }
 
@@ -215,8 +215,8 @@ class TotalGainRequestConstructorSpec extends CommonPlaySpec {
 
       val result = TotalGainRequestConstructor.totalGainQuery(model)
 
-      result shouldBe "disposalValue=1000&disposalCosts=100&acquisitionValue=2000&acquisitionCosts=200&improvements=10" +
-      "&rebasedValue=3000&rebasedCosts=300&improvementsAfterTaxStarted=20&disposalDate=2016-10-5&acquisitionDate=2013-10-4"
+      result shouldBe "disposalValue=1000.0&disposalCosts=100.0&acquisitionValue=2000.0&acquisitionCosts=200.0&improvements=10.0" +
+      "&rebasedValue=3000.0&rebasedCosts=300.0&improvementsAfterTaxStarted=20.0&disposalDate=2016-10-5&acquisitionDate=2013-10-4"
     }
 
     "calling afterLegislation" should {

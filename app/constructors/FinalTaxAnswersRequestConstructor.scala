@@ -37,14 +37,14 @@ object FinalTaxAnswersRequestConstructor {
 
   def currentIncome(currentIncomeModel: Option[CurrentIncomeModel]): String = {
     currentIncomeModel match {
-      case Some(data) => s"&currentIncome=${data.currentIncome}"
+      case Some(data) => s"&currentIncome=${data.currentIncome.toDouble}"
       case _ => ""
     }
   }
 
   def personalAllowanceAmt(personalAllowanceModel: Option[PersonalAllowanceModel]): String =
     personalAllowanceModel match {
-      case Some(data) => s"&personalAllowanceAmt=${data.personalAllowanceAmt}"
+      case Some(data) => s"&personalAllowanceAmt=${data.personalAllowanceAmt.toDouble}"
       case _ => ""
     }
 
@@ -53,7 +53,7 @@ object FinalTaxAnswersRequestConstructor {
                     howMuchLossModel: Option[HowMuchLossModel]): String = {
     (otherPropertiesModel, previousLossOrGainModel) match {
       case (Some(OtherPropertiesModel(YesNoKeys.yes)), Some(PreviousLossOrGainModel(PreviousGainOrLossKeys.loss))) =>
-        s"&allowableLoss=${howMuchLossModel.get.loss}"
+        s"&allowableLoss=${howMuchLossModel.get.loss.toDouble}"
       case _ => ""
     }
   }
@@ -63,7 +63,7 @@ object FinalTaxAnswersRequestConstructor {
                    howMuchGainModel: Option[HowMuchGainModel]): String = {
     (otherPropertiesModel, previousLossOrGainModel) match {
       case (Some(OtherPropertiesModel(YesNoKeys.yes)),Some(PreviousLossOrGainModel(PreviousGainOrLossKeys.gain))) =>
-        s"&previousGain=${howMuchGainModel.get.howMuchGain}"
+        s"&previousGain=${howMuchGainModel.get.howMuchGain.toDouble}"
       case _ => ""
     }
   }
@@ -78,21 +78,21 @@ object FinalTaxAnswersRequestConstructor {
     (otherPropertiesModel, previousLossOrGainModel, howMuchLossModel, howMuchGainModel) match {
 
       case (Some(OtherPropertiesModel(YesNoKeys.yes)), Some(PreviousLossOrGainModel(PreviousGainOrLossKeys.loss)),
-      Some(HowMuchLossModel(loss)), _) if loss == 0.0 => s"&annualExemptAmount=${annualExemptAmountModel.get.annualExemptAmount}"
+      Some(HowMuchLossModel(loss)), _) if loss == 0.0 => s"&annualExemptAmount=${annualExemptAmountModel.get.annualExemptAmount.toDouble}"
       case (Some(OtherPropertiesModel(YesNoKeys.yes)), Some(PreviousLossOrGainModel(PreviousGainOrLossKeys.gain)), _,
-      Some(HowMuchGainModel(gain))) if gain == 0.0 => s"&annualExemptAmount=${annualExemptAmountModel.get.annualExemptAmount}"
+      Some(HowMuchGainModel(gain))) if gain == 0.0 => s"&annualExemptAmount=${annualExemptAmountModel.get.annualExemptAmount.toDouble}"
       case (Some(OtherPropertiesModel(YesNoKeys.yes)), Some(PreviousLossOrGainModel(PreviousGainOrLossKeys.gain)), _,
       Some(HowMuchGainModel(_))) => "&annualExemptAmount=0"
       case (Some(OtherPropertiesModel(YesNoKeys.yes)), Some(PreviousLossOrGainModel(PreviousGainOrLossKeys.neither)), _, _) =>
-        s"&annualExemptAmount=${annualExemptAmountModel.get.annualExemptAmount}"
+        s"&annualExemptAmount=${annualExemptAmountModel.get.annualExemptAmount.toDouble}"
       case (_, _, _, _) =>
-        s"&annualExemptAmount=$maxAnnualExemptAmount"
+        s"&annualExemptAmount=${maxAnnualExemptAmount.toDouble}"
     }
   }
 
   def broughtForwardLosses(model: Option[BroughtForwardLossesModel]): String = {
     if (model.isDefined && model.get.isClaiming) {
-      s"&broughtForwardLoss=${model.get.broughtForwardLoss.get}"
+      s"&broughtForwardLoss=${model.get.broughtForwardLoss.get.toDouble}"
     } else {
       ""
     }
