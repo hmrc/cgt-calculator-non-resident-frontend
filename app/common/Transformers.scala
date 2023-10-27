@@ -38,22 +38,18 @@ object Transformers {
   }
 
   val optionalBigDecimalToOptionalString: Option[BigDecimal] => Option[String] = {
-    case Some(data) => Some(data.toString())
+    case Some(data) => Some(bigDecimalToString(data))
     case None => None
   }
 
   val bigDecimalToString: BigDecimal => String = (input) => input.scale match {
-    case 1 => input.setScale(2).toString()
+    case scale if scale < 2 && scale != 0 => input.setScale(2).toString()
     case _ => input.toString
   }
 
-  val optionalBigDecimalToString: Option[BigDecimal] => String = (input) =>
-    if (input.isEmpty) ""
-    else {
-    input.get.scale match {
-      case 1 => input.getOrElse(BigDecimal(0.0)).setScale(2).toString()
-      case _ => input.getOrElse(BigDecimal(0.0)).toString
-    }
+  val optionalBigDecimalToString: Option[BigDecimal] => String = {
+    case Some(data) => bigDecimalToString(data)
+    case None => ""
   }
 
   val stringToInteger: String => Int = (input) => Try(input.trim.toInt) match {

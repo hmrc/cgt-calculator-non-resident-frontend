@@ -24,7 +24,7 @@ class FinalTaxAnswersRequestConstructorSpec extends CommonPlaySpec {
   "Calling .currentIncome" should {
     "produce a valid query string for current income" in {
       FinalTaxAnswersRequestConstructor.currentIncome(Some(CurrentIncomeModel(10000))) shouldEqual
-      "&currentIncome=10000"
+      "&currentIncome=10000.0"
     }
 
     "produce an empty query string for current income if not provided" in {
@@ -35,7 +35,7 @@ class FinalTaxAnswersRequestConstructorSpec extends CommonPlaySpec {
   "Calling .personalAllowanceAmt" should {
     "produce a valid query string when a personal allowance is supplied" in {
       FinalTaxAnswersRequestConstructor.personalAllowanceAmt(Some(PersonalAllowanceModel(10000))) shouldEqual
-      "&personalAllowanceAmt=10000"
+      "&personalAllowanceAmt=10000.0"
     }
 
     "produce a blank query string when no personal allowance is present is anything else" in {
@@ -48,7 +48,7 @@ class FinalTaxAnswersRequestConstructorSpec extends CommonPlaySpec {
       FinalTaxAnswersRequestConstructor.allowableLoss(
         Some(OtherPropertiesModel("Yes")),
         Some(PreviousLossOrGainModel("Loss")),
-        Some(HowMuchLossModel(100))) shouldEqual "&allowableLoss=100"
+        Some(HowMuchLossModel(100))) shouldEqual "&allowableLoss=100.0"
     }
 
     "produce a blank query string when the user claims other properties and that was a gain" in {
@@ -75,7 +75,7 @@ class FinalTaxAnswersRequestConstructorSpec extends CommonPlaySpec {
       FinalTaxAnswersRequestConstructor.previousGain(
         Some(OtherPropertiesModel("Yes")),
         Some(PreviousLossOrGainModel("Gain")),
-        Some(HowMuchGainModel(100))) shouldEqual "&previousGain=100"
+        Some(HowMuchGainModel(100))) shouldEqual "&previousGain=100.0"
     }
 
     "produce a blank query string when the user claims other properties and that was a loss" in {
@@ -107,7 +107,7 @@ class FinalTaxAnswersRequestConstructorSpec extends CommonPlaySpec {
         None,
         Some(AnnualExemptAmountModel(2000)),
         1000.0
-      ) shouldEqual "&annualExemptAmount=2000"
+      ) shouldEqual "&annualExemptAmount=2000.0"
     }
 
     "produce the entered amount for aea if otherProperties = Yes, previousLossOrGain = Gain, howMuchGain == 0.0" in {
@@ -118,7 +118,7 @@ class FinalTaxAnswersRequestConstructorSpec extends CommonPlaySpec {
         Some(HowMuchGainModel(0.0)),
         Some(AnnualExemptAmountModel(2000)),
         1000.0
-      ) shouldEqual "&annualExemptAmount=2000"
+      ) shouldEqual "&annualExemptAmount=2000.0"
     }
 
     "produce the entered amount for aea if otherProperties = Yes, previousLossOrGain = Gain, howMuchGain == 10000.0" in {
@@ -140,7 +140,7 @@ class FinalTaxAnswersRequestConstructorSpec extends CommonPlaySpec {
         None,
         Some(AnnualExemptAmountModel(2000)),
         1000.0
-      ) shouldEqual "&annualExemptAmount=2000"
+      ) shouldEqual "&annualExemptAmount=2000.0"
     }
 
     "otherwise produce the maximum annual exempt amount supplied" in {
@@ -151,11 +151,12 @@ class FinalTaxAnswersRequestConstructorSpec extends CommonPlaySpec {
         None,
         Some(AnnualExemptAmountModel(2000)),
         1000
-      ) shouldEqual "&annualExemptAmount=1000"
+      ) shouldEqual "&annualExemptAmount=1000.0"
     }
 
     "produce the maximum AEA value if no data is provided" in {
-      FinalTaxAnswersRequestConstructor.annualExemptAmount(None, None, None, None, None, 1000) shouldEqual "&annualExemptAmount=1000"
+      FinalTaxAnswersRequestConstructor.annualExemptAmount(None, None, None, None, None, 1000) shouldEqual
+        "&annualExemptAmount=1000.0"
     }
   }
 
@@ -163,7 +164,7 @@ class FinalTaxAnswersRequestConstructorSpec extends CommonPlaySpec {
 
     "produce a valid query string when claiming" in {
       FinalTaxAnswersRequestConstructor.broughtForwardLosses(Some(BroughtForwardLossesModel(isClaiming = true,
-        Some(10000)))) shouldEqual "&broughtForwardLoss=10000"
+        Some(10000)))) shouldEqual "&broughtForwardLoss=10000.0"
     }
 
     "produce a blank query string when not claiming" in {
@@ -178,7 +179,8 @@ class FinalTaxAnswersRequestConstructorSpec extends CommonPlaySpec {
   "Calling .additionalParametersQuery" should {
     "Return a String only containing the annualExemptAmount" when {
       "No TotalPersonalDetailsCalculationModel is passed" in {
-        FinalTaxAnswersRequestConstructor.additionalParametersQuery(None, BigDecimal(100)) shouldBe "&annualExemptAmount=100"
+        FinalTaxAnswersRequestConstructor.additionalParametersQuery(None, BigDecimal(100)) shouldBe
+          "&annualExemptAmount=100.0"
       }
     }
 
@@ -193,7 +195,8 @@ class FinalTaxAnswersRequestConstructorSpec extends CommonPlaySpec {
           annualExemptAmountModel = None,
           broughtForwardLossesModel = BroughtForwardLossesModel(false, None))
 
-        FinalTaxAnswersRequestConstructor.additionalParametersQuery(Some(model), BigDecimal(100)) shouldBe "&currentIncome=100&annualExemptAmount=100"
+        FinalTaxAnswersRequestConstructor.additionalParametersQuery(Some(model), BigDecimal(100)) shouldBe
+          "&currentIncome=100.0&annualExemptAmount=100.0"
       }
     }
 
@@ -208,7 +211,8 @@ class FinalTaxAnswersRequestConstructorSpec extends CommonPlaySpec {
           annualExemptAmountModel = Some(AnnualExemptAmountModel(BigDecimal(500))),
           broughtForwardLossesModel = BroughtForwardLossesModel(false, None))
 
-        FinalTaxAnswersRequestConstructor.additionalParametersQuery(Some(model), model.annualExemptAmountModel.get.annualExemptAmount) shouldBe "&currentIncome=100&personalAllowanceAmt=200&annualExemptAmount=500"
+        FinalTaxAnswersRequestConstructor.additionalParametersQuery(Some(model), model.annualExemptAmountModel.get.annualExemptAmount) shouldBe
+          "&currentIncome=100.0&personalAllowanceAmt=200.0&annualExemptAmount=500.0"
       }
     }
 

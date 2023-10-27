@@ -27,17 +27,17 @@ object OtherReliefsRequestConstructor {
   }
 
   def flatReliefsQuery(reliefs: Option[OtherReliefsModel]): String = reliefs match {
-    case Some(data) => s"&otherReliefsFlat=${data.otherReliefs}"
+    case Some(data) => s"&otherReliefsFlat=${data.otherReliefs.toDouble}"
     case _ => ""
   }
 
   def rebasedReliefsQuery(reliefs: Option[OtherReliefsModel]): String = reliefs match {
-    case Some(data) => s"&otherReliefsRebased=${data.otherReliefs}"
+    case Some(data) => s"&otherReliefsRebased=${data.otherReliefs.toDouble}"
     case _ => ""
   }
 
   def timeApportionedReliefsQuery(reliefs: Option[OtherReliefsModel]): String = reliefs match {
-    case Some(data) => s"&otherReliefsTimeApportioned=${data.otherReliefs}"
+    case Some(data) => s"&otherReliefsTimeApportioned=${data.otherReliefs.toDouble}"
     case _ => ""
   }
 }
