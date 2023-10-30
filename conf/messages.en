@@ -281,7 +281,7 @@ calc.howMuchLoss.errorDecimal = How much loss you reported has too many numbers 
 
 ## Brought Forward Loss ##
 calc.broughtForwardLosses.question = Do you have losses you want to bring forward from previous tax years?
-calc.broughtForwardLosses.inputQuestion = How much would you like to bring forward?
+calc.broughtForwardLosses.inputQuestion = Enter the loss, in pounds, you want to bring forward from previous tax years
 calc.broughtForwardLosses.helpText = These are unused losses that are covered by Non-Resident Capital Gains Tax.
 calc.broughtForwardLosses.errors.required = Select yes if you have losses to bring forward from previous tax years
 calc.broughtForwardLosses.errorDecimal = There are too many numbers after the decimal point in your brought forward loss

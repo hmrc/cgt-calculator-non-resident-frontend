@@ -24,7 +24,7 @@ object AppDependencies {
   val playPartialsVersion      = "8.4.0-play-28"
   val httpCachingClientVersion = "10.0.0-play-28"
   val play2PdfVersion          = "1.11.0"
-  val playFrontendVersion      = "7.20.0-play-28"
+  val playFrontendVersion      = "7.24.0-play-28"
   val hmrcMongoVersion         = "1.3.0"
 
   val compile = Seq(
