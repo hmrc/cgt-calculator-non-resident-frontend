@@ -78,7 +78,7 @@ calc.broughtForwardLosses.errorDecimal = Mae gormod o rifau ar ôl y pwynt degol
 calc.broughtForwardLosses.errorNegative = Nodwch rif positif ar gyfer eich colled a ddygwyd ymlaen
 calc.broughtForwardLosses.errors.required = Dewiswch ''Iawn'' os oes gennych golledion i''w dwyn ymlaen o flynyddoedd treth blaenorol
 calc.broughtForwardLosses.helpText = Colledion nas defnyddiwyd yw''r rhain, a gwmpesir gan Dreth Enillion Cyfalaf ar gyfer pobl nad ydynt yn breswyl yn y DU.
-calc.broughtForwardLosses.inputQuestion = Faint yr hoffech ei ddwyn ymlaen?
+calc.broughtForwardLosses.inputQuestion = Nodwch y golled yr ydych am ei dwyn ymlaen o flynyddoedd treth blaenorol mewn punnoedd
 calc.broughtForwardLosses.question = A oes gennych golledion yr ydych am eu dwyn ymlaen o flynyddoedd treth blaenorol?
 
 calc.calculationElection.description.flat = Dull enillion dros gyfnod cyfan y berchnogaeth

@@ -442,7 +442,7 @@ object MessageLookup {
 
     object BroughtForwardLosses {
       val question = "Do you have losses you want to bring forward from previous tax years?"
-      val inputQuestion = "How much would you like to bring forward?"
+      val inputQuestion = "Enter the loss, in pounds, you want to bring forward from previous tax years"
       val helpText = "These are unused losses that are covered by Non-Resident Capital Gains Tax."
       val linkOne = "Capital Gains Tax"
       val linkTwo = "Previous tax years"
