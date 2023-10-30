@@ -16,30 +16,23 @@
 
 package forms
 
-import common.Transformers._
-import common.Validation._
+import forms.formatters.DateFormatter
 import models.DateModel
 import play.api.data.Forms._
 import play.api.data._
+import play.api.i18n.Messages
+
+import java.time.LocalDate
 
 object DisposalDateForm {
 
-  val disposalDateForm = Form(
+  val key = "disposalDate"
+
+  def disposalDateForm(implicit messages: Messages): Form[DateModel] = Form(
     mapping(
-      "disposalDate.day" -> text
-        .verifying("calc.common.date.invalidDayError", mandatoryCheck)
-        .verifying("calc.common.date.error.invalidDate", integerCheck)
-        .transform[Int](stringToInteger, _.toString),
-      "disposalDate.month" -> text
-        .verifying("calc.common.date.invalidMonthError", mandatoryCheck)
-        .verifying("calc.common.date.error.invalidDate", integerCheck)
-        .transform[Int](stringToInteger, _.toString),
-      "disposalDate.year" -> text
-        .verifying("calc.common.date.invalidYearError", mandatoryCheck)
-        .verifying("calc.common.date.error.invalidDate", integerCheck)
-        .transform[Int](stringToInteger, _.toString)
-    )(DateModel.apply)(DateModel.unapply)
-      .verifying("calc.common.date.error.invalidDate", fields =>
-        isValidDate(fields.day, fields.month, fields.year))
+      key -> of(DateFormatter(
+        key
+      ))
+    )(date => DateModel(date.getDayOfMonth, date.getMonthValue, date.getYear))(model => Some(LocalDate.of(model.year, model.month, model.day)))
   )
 }

@@ -18,11 +18,11 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
-    errorSummary: playComponents.errorSummary,
-    layout: Layout,
-    form: FormWithCSRF,
-    formInlineDateInput: playComponents.formInlineDateInput,
-    submitButton: playComponents.submitButton
+        errorSummary: playComponents.errorSummary,
+        layout: Layout,
+        form: FormWithCSRF,
+        formInlineDateInput: playComponents.formInlineDateInput,
+        submitButton: playComponents.submitButton
 )
 
 @(acquisitionDateForm: Form[DateModel])(implicit request: Request[_], messages: Messages)
@@ -34,7 +34,7 @@
     pageTitle = title
 ) {
 
-    @errorSummary(acquisitionDateForm.errors, Some("acquisitionDateDay"))
+    @errorSummary(acquisitionDateForm.errors.headOption.toList, errorSuffixes = Some(Map("acquisitionDate" -> "day")))
 
     <h1 class="govuk-heading-xl">@Messages("calc.acquisitionDate.question")</h1>
 

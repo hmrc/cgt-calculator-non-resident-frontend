@@ -96,10 +96,28 @@ calc.annualExemptAmount.errorNegative = How much Capital Gains Tax allowance you
 calc.annualExemptAmount.errorDecimalPlaces = How much Capital Gains Tax allowance you have left has too many numbers after the decimal point
 
 ## Acquisition Date ##
-calc.acquisitionDate.question = What date did you sign the contract to become the owner?
-calc.acquisitionDate.questionTwo = What was the date you signed the contract that made you the owner?
-calc.acquisitionDate.hintText = If you inherited the property, it''s the date that the previous owner died.
-calc.acquisitionDate.errorFutureDateGuidance = Enter a date from the past
+calc.acquisitionDate.question            = What date did you sign the contract to become the owner?
+calc.acquisitionDate.questionTwo         = What was the date you signed the contract that made you the owner?
+calc.acquisitionDate.hintText            = If you inherited the property, it''s the date that the previous owner died.
+acquisitionDate.error.required           = Enter the day, month and year you signed the contract to become the owner
+acquisitionDate.error.required.day       = Enter the day you signed the contract to become the owner
+acquisitionDate.error.required.dayMonth  = Enter the day and month you signed the contract to become the owner
+acquisitionDate.error.required.dayYear   = Enter the day and year you signed the contract to become the owner
+acquisitionDate.error.required.month     = Enter the month you signed the contract to become the owner
+acquisitionDate.error.required.monthYear = Enter the month and year you signed the contract to become the owner
+acquisitionDate.error.required.year      = Enter the year you signed the contract to become the owner
+acquisitionDate.error.invalid            = Enter a number, in digits, for the day, month and year you signed the contract to become the owner
+acquisitionDate.error.invalid.day        = Enter a number, in digits, for the day you signed the contract to become the owner
+acquisitionDate.error.invalid.dayMonth   = Enter a number, in digits, for the day and month you signed the contract to become the owner
+acquisitionDate.error.invalid.dayYear    = Enter a number, in digits, for the day and year you signed the contract to become the owner
+acquisitionDate.error.invalid.month      = Enter a number, in digits, for the month you signed the contract to become the owner
+acquisitionDate.error.invalid.monthYear  = Enter a number, in digits, for the month and year you signed the contract to become the owner
+acquisitionDate.error.invalid.year       = Enter a number, in digits, for the year you signed the contract to become the owner
+acquisitionDate.error.notReal            = Enter a real date for when you signed the contract to become the owner
+acquisitionDate.error.notReal.day        = Enter a real day for when you signed the contract to become the owner
+acquisitionDate.error.notReal.month      = Enter a real month for when you signed the contract to become the owner
+acquisitionDate.error.notReal.year       = Enter a real year for when you signed the contract to become the owner
+acquisitionDate.error.range.max          = The date you signed the contract to become the owner must be in the past, before today
 
 ## Acquisition Value ##
 calc.acquisitionValue.question = How much did you pay for the property?
@@ -153,7 +171,25 @@ calc.improvements.errorDecimalPlaces = The cost of your improvements has too man
 calc.improvements.jointOwnership = If you owned the property with someone else, only enter your share of the improvement costs, as agreed with your co-owner.
 
 ## Disposal Date ##
-calc.disposalDate.question = When did you sign the contract that made someone else the owner?
+calc.disposalDate.question            = When did you sign the contract that made someone else the owner?
+disposalDate.error.required           = Enter the day, month and year you signed the contract that made someone else the owner
+disposalDate.error.required.day       = Enter the day you signed the contract that made someone else the owner
+disposalDate.error.required.dayMonth  = Enter the day and month you signed the contract that made someone else the owner
+disposalDate.error.required.dayYear   = Enter the day and year you signed the contract that made someone else the owner
+disposalDate.error.required.month     = Enter the month you signed the contract that made someone else the owner
+disposalDate.error.required.monthYear = Enter the month and year you signed the contract that made someone else the owner
+disposalDate.error.required.year      = Enter the year you signed the contract that made someone else the owner
+disposalDate.error.invalid            = Enter a number, in digits, for the day, month and year you signed the contract that made someone else the owner
+disposalDate.error.invalid.day        = Enter a number, in digits, for the day you signed the contract that made someone else the owner
+disposalDate.error.invalid.dayMonth   = Enter a number, in digits, for the day and month you signed the contract that made someone else the owner
+disposalDate.error.invalid.dayYear    = Enter a number, in digits, for the day and year you signed the contract that made someone else the owner
+disposalDate.error.invalid.month      = Enter a number, in digits, for the month you signed the contract that made someone else the owner
+disposalDate.error.invalid.monthYear  = Enter a number, in digits, for the month and year you signed the contract that made someone else the owner
+disposalDate.error.invalid.year       = Enter a number, in digits, for the year you signed the contract that made someone else the owner
+disposalDate.error.notReal            = Enter a real date for when you signed the contract that made someone else the owner
+disposalDate.error.notReal.day        = Enter a real day for when you signed the contract that made someone else the owner
+disposalDate.error.notReal.month      = Enter a real month for when you signed the contract that made someone else the owner
+disposalDate.error.notReal.year       = Enter a real year for when you signed the contract that made someone else the owner
 
 ## No Capital Gains Tax ##
 nocgt.invaliddate.title = You have no tax to pay

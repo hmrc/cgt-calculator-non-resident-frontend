@@ -16,39 +16,24 @@
 
 package forms
 
-import java.time.{ZoneId, ZonedDateTime}
-
-import common.Validation._
+import forms.formatters.DateFormatter
 import models.DateModel
 import play.api.data.Forms._
 import play.api.data._
-import common.Transformers._
+import play.api.i18n.Messages
+
+import java.time.LocalDate
 
 object AcquisitionDateForm {
 
-  val acquisitionDateForm = Form(
-    mapping(
-      "acquisitionDate.day" -> text
-        .verifying("calc.common.date.invalidDayError", mandatoryCheck)
-        .verifying("calc.common.date.error.invalidDate", integerCheck)
-        .transform[Int](stringToInteger, _.toString),
-      "acquisitionDate.month" -> text
-        .verifying("calc.common.date.invalidMonthError", mandatoryCheck)
-        .verifying("calc.common.date.error.invalidDate", integerCheck)
-        .transform[Int](stringToInteger, _.toString),
-      "acquisitionDate.year" -> text
-        .verifying("calc.common.date.invalidYearError", mandatoryCheck)
-        .verifying("calc.common.date.error.invalidDate", integerCheck)
-        .transform[Int](stringToInteger, _.toString)
-    )(DateModel.apply)(DateModel.unapply)
-      .verifying("calc.common.date.error.invalidDate", fields =>
-        isValidDate(fields.day, fields.month, fields.year))
-      .verifying("calc.acquisitionDate.errorFutureDateGuidance", fields =>
-        verifyDateInPast(fields))
-  )
+  val key = "acquisitionDate"
 
-  def verifyDateInPast(data: DateModel): Boolean = {
-    if(isValidDate(data.day, data.month, data.year)) data.get.isBefore(ZonedDateTime.now(ZoneId.of("Europe/London")).toLocalDate)
-    else true
-  }
+  def acquisitionDateForm(implicit messages: Messages): Form[DateModel] = Form(
+    mapping(
+      key -> of(DateFormatter(
+        key,
+        optMaxDate = Some(LocalDate.now)
+      ))
+    )(date => DateModel(date.getDayOfMonth, date.getMonthValue, date.getYear))(model => Some(LocalDate.of(model.year, model.month, model.day)))
+  )
 }

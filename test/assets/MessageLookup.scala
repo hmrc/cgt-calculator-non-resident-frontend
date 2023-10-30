@@ -57,10 +57,6 @@ object MessageLookup {
   object NonResident extends Common {
 
     val pageHeading = "Calculate your Non-Resident Capital Gains Tax"
-    val errorInvalidDate = "Enter a real date"
-    val errorInvalidDay = "Enter a day"
-    val errorInvalidMonth = "Enter a month"
-    val errorInvalidYear = "Enter a year"
     val errorRealNumber = "Enter a number without commas, for example 10000.00"
 
     object AcquisitionCosts {
@@ -80,9 +76,10 @@ object MessageLookup {
     object AcquisitionDate {
       val question = "What date did you sign the contract to become the owner?"
       val hintText = "If you inherited the property, it's the date that the previous owner died."
-      val errorIncompleteDate = "Date is not valid"
-      val errorFutureDate = "Enter a date from the past"
-      val errorFutureDateGuidance = "Date must be in the past"
+      val errorFutureDate = "The date you signed the contract to become the owner must be in the past, before today"
+      val errorRequiredDay = "Enter the day you signed the contract to become the owner"
+      val errorRequiredMonth = "Enter the month you signed the contract to become the owner"
+      val errorRequiredYear = "Enter the year you signed the contract to become the owner"
     }
 
     object AcquisitionValue {
