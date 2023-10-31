@@ -451,7 +451,7 @@ object MessageLookup {
 
     object Summary {
 
-      val title = "Summary - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
+      def title(taxYear: String) = s"Capital Gains Tax to pay for $taxYear tax year - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
       val secondaryHeading = "You owe"
       val amountOwed = "Amount you owe"
       val calculationDetailsTitle = "Calculation details"

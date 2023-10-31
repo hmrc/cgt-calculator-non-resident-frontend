@@ -25,7 +25,7 @@
 @(calculationResult: TotalTaxOwedModel, taxYearModel: TaxYearModel, calculationType: String, disposalValue: BigDecimal, acquisitionValue: BigDecimal, totalCosts: BigDecimal, backUrl: String, flatGain: Option[BigDecimal] = None, reliefsUsed: BigDecimal = 0, showUserResearchPanel: Boolean)(implicit request: Request[_], messages: Messages)
 
 @layout(
-    Messages("calc.summary.title"),
+    Messages("calc.summaryPartial.cgtToPay", TaxYearModel.convertToSummaryFormat(taxYearModel.taxYearSupplied)),
     userResearchBannerEnabled = showUserResearchPanel
 ){
 

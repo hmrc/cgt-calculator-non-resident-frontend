@@ -17,7 +17,6 @@
 package forms
 
 import assets.KeyLookup.NonResident.{RebasedValue => messages}
-import assets.KeyLookup.{NonResident => commonMessages}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import models.RebasedValueModel
 import forms.RebasedValueForm._

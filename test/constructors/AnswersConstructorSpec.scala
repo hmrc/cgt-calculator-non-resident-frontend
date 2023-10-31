@@ -246,7 +246,6 @@ class AnswersConstructorSpec extends CommonPlaySpec with MockitoSugar with WithC
     }
 
     "return a valid TotalGainAnswersModel with all optional values" in {
-      val hc = mock[HeaderCarrier]
       val constructor = setupMockedAnswersConstructor(totalGainAllOptionalModel)
       val result = constructor.getNRTotalGainAnswers(FakeRequest())
 

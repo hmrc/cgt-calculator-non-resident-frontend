@@ -25,25 +25,25 @@ class PreviousLossOrGainFormSpec extends CommonPlaySpec with WithCommonFakeAppli
   "Creating the form from a model" should {
 
     "create an empty form when the model is empty" in {
-      val form = previousLossOrGainForm
+      val form = previousLossOrGainForm()
       form.data.isEmpty shouldBe true
     }
 
     "create a map with the option 'Loss' when the model contains a 'Loss'" in {
       val model = PreviousLossOrGainModel("Loss")
-      val form = previousLossOrGainForm.fill(model)
+      val form = previousLossOrGainForm().fill(model)
       form.data.get("previousLossOrGain") shouldBe Some("Loss")
     }
 
     "create a map with the option 'Gain' when the model contains a 'Gain'" in {
       val model = PreviousLossOrGainModel("Gain")
-      val form = previousLossOrGainForm.fill(model)
+      val form = previousLossOrGainForm().fill(model)
       form.data.get("previousLossOrGain") shouldBe Some("Gain")
     }
 
     "create a map with the option 'Neither' when the model contains a 'Neither'" in {
       val model = PreviousLossOrGainModel("Neither")
-      val form = previousLossOrGainForm.fill(model)
+      val form = previousLossOrGainForm().fill(model)
       form.data.get("previousLossOrGain") shouldBe Some("Neither")
     }
 
@@ -53,7 +53,7 @@ class PreviousLossOrGainFormSpec extends CommonPlaySpec with WithCommonFakeAppli
   "Creating the form from an invalid map" when {
     "no data is provided" should {
       lazy val map = Map(("previousLossOrGain", ""))
-      lazy val form = previousLossOrGainForm.bind(map)
+      lazy val form = previousLossOrGainForm().bind(map)
 
       "produce a form with errors" in {
         form.hasErrors shouldBe true
@@ -70,7 +70,7 @@ class PreviousLossOrGainFormSpec extends CommonPlaySpec with WithCommonFakeAppli
 
     "an invalid string is provided" should {
       lazy val map = Map(("previousLossOrGain", "invalid text"))
-      lazy val form = previousLossOrGainForm.bind(map)
+      lazy val form = previousLossOrGainForm().bind(map)
 
       "produce a  form with errors" in {
         form.hasErrors shouldBe true

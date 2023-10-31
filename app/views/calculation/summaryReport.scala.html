@@ -37,7 +37,7 @@ disposalValue: BigDecimal, acquisitionValue: BigDecimal, totalCosts: BigDecimal,
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" type="text/css" href="@routes.Assets.versioned("stylesheets/cgt.css")">
     <link href="/calculate-your-capital-gains/non-resident/hmrc-frontend/assets/hmrc-frontend-ie8-2.0.0.min.css" media="all" rel="stylesheet" type="text/css" />
-    <title>@messages("calc.summary.title")</title>
+    <title>@messages("calc.summaryPartial.cgtToPay", TaxYearModel.convertToSummaryFormat(taxYearModel.taxYearSupplied))</title>
 </head>
 
 <div class="pdf pdf-non-resident">
