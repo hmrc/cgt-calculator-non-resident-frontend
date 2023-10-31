@@ -21,7 +21,6 @@ import assets.MessageLookup.NonResident.{RebasedValue => messages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import config.ApplicationConfig
-import connectors.CalculatorConnector
 import controllers.helpers.FakeRequestHelper
 import controllers.{RebasedValueController, routes}
 
@@ -52,8 +51,6 @@ class RebasedValueActionSpec @Inject()(rebasedValueController: RebasedValueContr
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
   def setupTarget(getData: Option[RebasedValueModel],
                   acquisitionDateModel: Option[DateModel] = Some(DateModel(10, 10, 2015))): RebasedValueController = {
-
-    val mockCalcConnector = mock[CalculatorConnector]
 
     when(mockSessionCacheService.fetchAndGetFormData[RebasedValueModel](
       ArgumentMatchers.eq(KeystoreKeys.rebasedValue))(ArgumentMatchers.any(), ArgumentMatchers.any()))

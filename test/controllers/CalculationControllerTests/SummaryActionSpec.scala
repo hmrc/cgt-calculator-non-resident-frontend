@@ -174,7 +174,7 @@ class SummaryActionSpec extends CommonPlaySpec with WithCommonFakeApplication wi
       }
 
       "load the summary page" in {
-        document.title() shouldBe messages.title
+        document.title() shouldBe messages.title("2015 to 2016")
       }
 
       "has a back-link to the calculation election page" in {
@@ -200,7 +200,7 @@ class SummaryActionSpec extends CommonPlaySpec with WithCommonFakeApplication wi
       }
 
       "load the summary page" in {
-        document.title() shouldBe messages.title
+        document.title() shouldBe messages.title("2015 to 2016")
       }
 
       "has a back-link to the check your answers page" in {

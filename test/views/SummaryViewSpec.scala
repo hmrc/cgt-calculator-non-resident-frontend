@@ -42,8 +42,8 @@ class SummaryViewSpec extends CommonPlaySpec with WithCommonFakeApplication with
       lazy val view = summaryView(totalTaxOwedModel, taxYearModel, "flat", 1000.0, 100, 100, "back-link", showUserResearchPanel = false)(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
-      s"have a title of '${messages.Summary.title}'" in {
-        document.title() shouldBe messages.Summary.title
+      s"have a title of '${messages.Summary.title("2016 to 2017")}'" in {
+        document.title() shouldBe messages.Summary.title("2016 to 2017")
       }
 
       "have a back link" which {

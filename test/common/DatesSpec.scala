@@ -28,8 +28,8 @@ import play.api.mvc.MessagesControllerComponents
 import scala.concurrent.ExecutionContext
 
 class DatesSpec extends CommonPlaySpec with GuiceOneAppPerSuite with MockitoSugar with FakeRequestHelper {
-  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
-  implicit val ec = fakeApplication.injector.instanceOf[ExecutionContext]
+  implicit lazy val mockMessage = fakeApplication().injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  implicit val ec = fakeApplication().injector.instanceOf[ExecutionContext]
   lazy val cyMockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(Seq(
     Lang("cy")
   ))

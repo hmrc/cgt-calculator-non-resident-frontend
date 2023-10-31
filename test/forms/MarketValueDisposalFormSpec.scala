@@ -17,7 +17,6 @@
 package forms
 
 import assets.KeyLookup.NonResident.{MarketValue => marketValueMessages}
-import assets.KeyLookup.{NonResident => messages}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import forms.MarketValueGaveAwayForm._
 import forms.MarketValueWhenSoldForm._
