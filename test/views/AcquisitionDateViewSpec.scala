@@ -104,7 +104,7 @@ class AcquisitionDateViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
 
       "produce the same output when render and f are called" in {
         acquisitionCostsView.render(acquisitionDateForm, fakeRequest,mockMessage) shouldBe
-          acquisitionCostsView.f(acquisitionDateForm)(fakeRequest,mockMessage)
+          acquisitionCostsView(acquisitionDateForm)(fakeRequest,mockMessage)
       }
     }
 
@@ -121,8 +121,8 @@ class AcquisitionDateViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
           document.getElementsByClass("govuk-error-summary").size() shouldBe 1
         }
 
-        s"has the text ${messages.errorInvalidDay}" in {
-          document.getElementById("acquisitionDate-error").text() shouldBe s"Error: ${messages.errorInvalidDay}"
+        s"has the text ${messages.AcquisitionDate.errorRequiredDay}" in {
+          document.getElementById("acquisitionDate-error").text() shouldBe s"Error: ${messages.AcquisitionDate.errorRequiredDay}"
         }
       }
     }
@@ -140,8 +140,8 @@ class AcquisitionDateViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
           document.getElementsByClass("govuk-error-summary").size() shouldBe 1
         }
 
-        s"has the text ${messages.errorInvalidMonth}" in {
-          document.getElementById("acquisitionDate-error").text() shouldBe s"Error: ${messages.errorInvalidMonth}"
+        s"has the text ${messages.AcquisitionDate.errorRequiredMonth}" in {
+          document.getElementById("acquisitionDate-error").text() shouldBe s"Error: ${messages.AcquisitionDate.errorRequiredMonth}"
         }
       }
     }
@@ -159,8 +159,8 @@ class AcquisitionDateViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
           document.getElementsByClass("govuk-error-summary").size() shouldBe 1
         }
 
-        s"has the text ${messages.errorInvalidYear}" in {
-          document.getElementById("acquisitionDate-error").text() shouldBe s"Error: ${messages.errorInvalidYear}"
+        s"has the text ${messages.AcquisitionDate.errorRequiredYear}" in {
+          document.getElementById("acquisitionDate-error").text() shouldBe s"Error: ${messages.AcquisitionDate.errorRequiredYear}"
         }
       }
     }

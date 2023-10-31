@@ -16,14 +16,19 @@
 
 package forms
 
-import java.time.LocalDate
-
 import assets.KeyLookup.{NonResident => messages}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
+import controllers.helpers.FakeRequestHelper
 import forms.AcquisitionDateForm._
 import models.DateModel
+import play.api.i18n.{Messages, MessagesApi}
 
-class AcquisitionDateFormSpec extends CommonPlaySpec with WithCommonFakeApplication {
+import java.time.LocalDate
+
+class AcquisitionDateFormSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper {
+
+  val messagesApi: MessagesApi = fakeApplication.injector.instanceOf[MessagesApi]
+  implicit val testMessages: Messages = messagesApi.preferred(fakeRequest)
 
   "Creating a form" when {
 
@@ -58,8 +63,8 @@ class AcquisitionDateFormSpec extends CommonPlaySpec with WithCommonFakeApplicat
 
     "passing in an invalid map with an invalid date" should {
       val map = Map(
-        "acquisitionDate.day" -> "100",
-        "acquisitionDate.month" -> "5",
+        "acquisitionDate.day" -> "29",
+        "acquisitionDate.month" -> "2",
         "acquisitionDate.year" -> "2015")
       lazy val form = acquisitionDateForm.bind(map)
 
@@ -67,8 +72,8 @@ class AcquisitionDateFormSpec extends CommonPlaySpec with WithCommonFakeApplicat
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.errorInvalidDate}" in {
-        form.error("").get.message shouldBe messages.errorInvalidDate
+      s"return an error message of '${messages.AcquisitionDate.errorNotRealDate}" in {
+        form.error("acquisitionDate").get.message shouldBe messages.AcquisitionDate.errorNotRealDate
       }
     }
 
@@ -83,8 +88,8 @@ class AcquisitionDateFormSpec extends CommonPlaySpec with WithCommonFakeApplicat
         form.hasErrors shouldBe true
       }
 
-      s"return an error message of '${messages.errorInvalidDate}" in {
-        form.errors.head.message shouldBe messages.errorInvalidDate
+      s"return an error message of '${messages.AcquisitionDate.errorInvalidDate}" in {
+        form.errors.head.message shouldBe messages.AcquisitionDate.errorInvalidDate
       }
     }
 
@@ -99,8 +104,8 @@ class AcquisitionDateFormSpec extends CommonPlaySpec with WithCommonFakeApplicat
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.errorInvalidDay}" in {
-        form.error("acquisitionDate.day").get.message shouldBe messages.errorInvalidDay
+      s"return an error message of '${messages.AcquisitionDate.errorRequiredDay}" in {
+        form.error("acquisitionDate.day").get.message shouldBe messages.AcquisitionDate.errorRequiredDay
       }
     }
 
@@ -115,8 +120,8 @@ class AcquisitionDateFormSpec extends CommonPlaySpec with WithCommonFakeApplicat
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.errorInvalidMonth}" in {
-        form.error("acquisitionDate.month").get.message shouldBe messages.errorInvalidMonth
+      s"return an error message of '${messages.AcquisitionDate.errorRequiredMonth}" in {
+        form.error("acquisitionDate.month").get.message shouldBe messages.AcquisitionDate.errorRequiredMonth
       }
     }
 
@@ -131,13 +136,13 @@ class AcquisitionDateFormSpec extends CommonPlaySpec with WithCommonFakeApplicat
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.errorInvalidYear}" in {
-        form.error("acquisitionDate.year").get.message shouldBe messages.errorInvalidYear
+      s"return an error message of '${messages.AcquisitionDate.errorRequiredYear}" in {
+        form.error("acquisitionDate.year").get.message shouldBe messages.AcquisitionDate.errorRequiredYear
       }
     }
 
-    "passing in an invalid map with a future date" should {
-      val date: LocalDate = LocalDate.now().plusDays(1)
+    "passing in an invalid map with today's date" should {
+      val date: LocalDate = LocalDate.now()
       lazy val map = Map(
         "acquisitionDate.day" -> date.getDayOfMonth.toString,
         "acquisitionDate.month" -> date.getMonthValue.toString,
@@ -149,37 +154,7 @@ class AcquisitionDateFormSpec extends CommonPlaySpec with WithCommonFakeApplicat
       }
 
       s"return an error message of '${messages.AcquisitionDate.errorFutureDateGuidance}" in {
-        form.error("").get.message shouldBe messages.AcquisitionDate.errorFutureDateGuidance
-      }
-    }
-  }
-
-  "Calling .verifyDateInPast" when {
-    
-    "date is yesterday" should {
-      val today = LocalDate.now().minusDays(1)
-      val date = DateModel(today.getDayOfMonth, today.getMonthValue, today.getYear)
-
-      "return true" in {
-        AcquisitionDateForm.verifyDateInPast(date) shouldBe true
-      }
-    }
-
-    "date is today" should {
-      val today = LocalDate.now()
-      val date = DateModel(today.getDayOfMonth, today.getMonthValue, today.getYear)
-
-      "return false" in {
-        AcquisitionDateForm.verifyDateInPast(date) shouldBe false
-      }
-    }
-
-    "date is tomorrow" should {
-      val today = LocalDate.now().plusDays(1)
-      val date = DateModel(today.getDayOfMonth, today.getMonthValue, today.getYear)
-
-      "return false" in {
-        AcquisitionDateForm.verifyDateInPast(date) shouldBe false
+        form.error("acquisitionDate").get.message shouldBe messages.AcquisitionDate.errorFutureDateGuidance
       }
     }
   }

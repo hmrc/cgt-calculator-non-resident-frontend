@@ -18,11 +18,11 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
-    errorSummary: playComponents.errorSummary,
-    layout: Layout,
-    form: FormWithCSRF,
-    formInlineDateInput: playComponents.formInlineDateInput,
-    submitButton: playComponents.submitButton
+        errorSummary: playComponents.errorSummary,
+        layout: Layout,
+        form: FormWithCSRF,
+        formInlineDateInput: playComponents.formInlineDateInput,
+        submitButton: playComponents.submitButton
 )
 
 @(disposalDateForm: Form[DateModel])(implicit request: Request[_], messages: Messages, lang: Lang)
@@ -36,7 +36,8 @@
     backLinkEnabled = false,
     timeoutEnabled = false
 ) {
-    @errorSummary(disposalDateForm.errors)
+
+    @errorSummary(disposalDateForm.errors.headOption.toList, errorSuffixes = Some(Map("disposalDate" -> "day")))
 
     @form(action = controllers.routes.DisposalDateController.submitDisposalDate) {
 
@@ -47,8 +48,6 @@
             pageHeading = true
         )
 
-
         @submitButton()
-
     }
 }

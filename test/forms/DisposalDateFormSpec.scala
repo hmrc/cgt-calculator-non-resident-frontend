@@ -18,10 +18,15 @@ package forms
 
 import assets.KeyLookup.{NonResident => messages}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
+import controllers.helpers.FakeRequestHelper
 import forms.DisposalDateForm._
 import models.DateModel
+import play.api.i18n.{Messages, MessagesApi}
 
-class DisposalDateFormSpec extends CommonPlaySpec with WithCommonFakeApplication {
+class DisposalDateFormSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper {
+
+  val messagesApi: MessagesApi = fakeApplication.injector.instanceOf[MessagesApi]
+  implicit val testMessages: Messages = messagesApi.preferred(fakeRequest)
 
   "Creating a form" when {
 
@@ -62,8 +67,8 @@ class DisposalDateFormSpec extends CommonPlaySpec with WithCommonFakeApplication
         form.hasErrors shouldBe true
       }
 
-      s"return an error message of '${messages.errorInvalidDate}" in {
-        form.errors.head.message shouldBe messages.errorInvalidDate
+      s"return an error message of '${messages.DisposalDate.errorInvalidDate}" in {
+        form.errors.head.message shouldBe messages.DisposalDate.errorInvalidDate
       }
     }
 
@@ -76,8 +81,8 @@ class DisposalDateFormSpec extends CommonPlaySpec with WithCommonFakeApplication
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.errorInvalidDay}" in {
-        form.error("disposalDate.day").get.message shouldBe messages.errorInvalidDay
+      s"return an error message of '${messages.DisposalDate.errorRequiredDay}" in {
+        form.error("disposalDate.day").get.message shouldBe messages.DisposalDate.errorRequiredDay
       }
     }
 
@@ -90,8 +95,8 @@ class DisposalDateFormSpec extends CommonPlaySpec with WithCommonFakeApplication
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.errorInvalidMonth}" in {
-        form.error("disposalDate.month").get.message shouldBe messages.errorInvalidMonth
+      s"return an error message of '${messages.DisposalDate.errorRequiredMonth}" in {
+        form.error("disposalDate.month").get.message shouldBe messages.DisposalDate.errorRequiredMonth
       }
     }
 
@@ -104,8 +109,8 @@ class DisposalDateFormSpec extends CommonPlaySpec with WithCommonFakeApplication
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.errorInvalidYear}" in {
-        form.error("disposalDate.year").get.message shouldBe messages.errorInvalidYear
+      s"return an error message of '${messages.DisposalDate.errorRequiredYear}" in {
+        form.error("disposalDate.year").get.message shouldBe messages.DisposalDate.errorRequiredYear
       }
     }
 
@@ -118,8 +123,8 @@ class DisposalDateFormSpec extends CommonPlaySpec with WithCommonFakeApplication
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.errorInvalidDate}" in {
-        form.error("").get.message shouldBe messages.errorInvalidDate
+      s"return an error message of '${messages.DisposalDate.errorNotRealDay}" in {
+        form.error("disposalDate.day").get.message shouldBe messages.DisposalDate.errorNotRealDay
       }
     }
 
@@ -132,8 +137,8 @@ class DisposalDateFormSpec extends CommonPlaySpec with WithCommonFakeApplication
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.errorInvalidDate}" in {
-        form.error("").get.message shouldBe messages.errorInvalidDate
+      s"return an error message of '${messages.DisposalDate.errorNotRealDay}" in {
+        form.error("disposalDate.day").get.message shouldBe messages.DisposalDate.errorNotRealDay
       }
     }
 
@@ -146,12 +151,12 @@ class DisposalDateFormSpec extends CommonPlaySpec with WithCommonFakeApplication
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.errorInvalidDate}" in {
-        form.error("").get.message shouldBe messages.errorInvalidDate
+      s"return an error message of '${messages.DisposalDate.errorNotRealMonth}" in {
+        form.error("disposalDate.month").get.message shouldBe messages.DisposalDate.errorNotRealMonth
       }
     }
 
-    "passing in a date with a months value over 1" should {
+    "passing in a date with a months value less than 1" should {
 
       lazy val map = Map("disposalDate.day" -> "1", "disposalDate.month" -> "0", "disposalDate.year" -> "2009")
       lazy val form = disposalDateForm.bind(map)
@@ -160,8 +165,8 @@ class DisposalDateFormSpec extends CommonPlaySpec with WithCommonFakeApplication
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.errorInvalidDate}" in {
-        form.error("").get.message shouldBe messages.errorInvalidDate
+      s"return an error message of '${messages.DisposalDate.errorNotRealMonth}" in {
+        form.error("disposalDate.month").get.message shouldBe messages.DisposalDate.errorNotRealMonth
       }
     }
   }

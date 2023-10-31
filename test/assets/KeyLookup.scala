@@ -41,11 +41,18 @@ object KeyLookup {
       s"calc.$formName.errors.required"
     }
 
-    val errorInvalidDate = "calc.common.date.error.invalidDate"
-    val errorInvalidDay = "calc.common.date.invalidDayError"
-    val errorInvalidMonth = "calc.common.date.invalidMonthError"
-    val errorInvalidYear = "calc.common.date.invalidYearError"
     val errorRealNumber = "error.real"
+
+    object DisposalDate {
+      val errorNotRealDate = "disposalDate.error.notReal"
+      val errorNotRealDay = "disposalDate.error.notReal.day"
+      val errorNotRealMonth = "disposalDate.error.notReal.month"
+      val errorNotRealYear = "disposalDate.error.notReal.year"
+      val errorInvalidDate = "disposalDate.error.invalid"
+      val errorRequiredDay = "disposalDate.error.required.day"
+      val errorRequiredMonth = "disposalDate.error.required.month"
+      val errorRequiredYear = "disposalDate.error.required.year"
+    }
 
     object AcquisitionCosts {
       val errorNegative = "calc.acquisitionCosts.errorNegative"
@@ -53,7 +60,12 @@ object KeyLookup {
     }
 
     object AcquisitionDate {
-      val errorFutureDateGuidance = "calc.acquisitionDate.errorFutureDateGuidance"
+      val errorRequiredDay = "acquisitionDate.error.required.day"
+      val errorRequiredMonth = "acquisitionDate.error.required.month"
+      val errorRequiredYear = "acquisitionDate.error.required.year"
+      val errorInvalidDate = "acquisitionDate.error.invalid"
+      val errorNotRealDate = "acquisitionDate.error.notReal"
+      val errorFutureDateGuidance = "acquisitionDate.error.range.max"
     }
 
     object AcquisitionValue {
