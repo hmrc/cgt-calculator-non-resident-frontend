@@ -21,7 +21,6 @@ import play.core.PlayVersion
 object AppDependencies {
 
   val bootstrapVersion         = "7.22.0"
-  val play2PdfVersion          = "1.11.0"
   val playFrontendVersion      = "7.24.0-play-28"
   val hmrcMongoVersion         = "1.3.0"
 
@@ -29,7 +28,6 @@ object AppDependencies {
     "uk.gov.hmrc"       %% "bootstrap-frontend-play-28"   % bootstrapVersion,
     "uk.gov.hmrc"       %% "play-frontend-hmrc"           % playFrontendVersion,
     "uk.gov.hmrc.mongo" %% "hmrc-mongo-play-28"           % hmrcMongoVersion,
-    "it.innove"         % "play2-pdf"                     % play2PdfVersion exclude("com.typesafe.play","*"),
     "uk.gov.hmrc"       %% "play-conditional-form-mapping" % "1.13.0-play-28"
   )
 

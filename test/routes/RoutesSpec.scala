@@ -590,14 +590,6 @@ class RoutesSpec extends CommonPlaySpec with WithCommonFakeApplication with Matc
     }
   }
 
-  /* Report route*/
-  "The URL for the save as pdf Action" should {
-    "be equal to /calculate-your-capital-gains/non-resident/summary-report" in {
-      val path = controllers.routes.ReportController.summaryReport.url
-      path shouldEqual "/calculate-your-capital-gains/non-resident/summary-report"
-    }
-  }
-
   "The URL for the claimingReliefs Action" should {
     "be equal to /calculate-your-capital-gains/non-resident/claiming-reliefs" in {
       val path = controllers.routes.ClaimingReliefsController.claimingReliefs.url

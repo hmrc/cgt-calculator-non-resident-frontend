@@ -21,7 +21,7 @@ import assets.MessageLookup.{NonResident => messages}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
-import models.{TaxYearModel, TotalTaxOwedModel}
+import models.{QuestionAnswerModel, TaxYearModel, TotalTaxOwedModel}
 import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.i18n.Lang
@@ -34,12 +34,14 @@ class SummaryViewSpec extends CommonPlaySpec with WithCommonFakeApplication with
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   implicit val mockLang = mock[Lang]
   lazy val summaryView = fakeApplication.injector.instanceOf[summary]
+  val questionAnswer = QuestionAnswerModel[String]("text", "1000", "test-question", None)
+  val seqQuestionAnswers = Seq(questionAnswer, questionAnswer)
 
   "Summary view" when {
     "supplied with a disposal date within the valid tax years" should {
       val totalTaxOwedModel = TotalTaxOwedModel(100000, 500, 20, None, None, 500, 500, None, None, None, None, 0, None, None, None, None, None, None, None)
       val taxYearModel: TaxYearModel = TaxYearModel("2016/17", isValidYear = true, "2016/17")
-      lazy val view = summaryView(totalTaxOwedModel, taxYearModel, "flat", 1000.0, 100, 100, "back-link", showUserResearchPanel = false)(fakeRequest, mockMessage)
+      lazy val view = summaryView(totalTaxOwedModel, taxYearModel, "flat", 1000.0, 100, 100, "back-link", showUserResearchPanel = false, questionsForPrint = seqQuestionAnswers)(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${messages.Summary.title("2016 to 2017")}'" in {
@@ -82,15 +84,20 @@ class SummaryViewSpec extends CommonPlaySpec with WithCommonFakeApplication with
         }
       }
 
-      "have a save pdf button" which {
-        lazy val savePDF = document.select("#pdfSave")
+      "has a print Button" which {
+        lazy val printSection = document.select("#print")
+        lazy val link = printSection.select("a")
 
-        "which has the text 'Save as PDF'" in {
-          savePDF.text() shouldBe messages.Summary.saveAsPdf
+        "has the class bold-small" in {
+          link.hasClass("govuk-link") shouldBe true
         }
 
-        "which has the link to the summary report" in {
-          savePDF.attr("href") shouldBe controllers.routes.ReportController.summaryReport.url
+        s"links to #" in {
+          link.attr("href") shouldBe "#"
+        }
+
+        s"has the text ${messages.Summary.print}" in {
+          link.text shouldBe messages.Summary.print
         }
       }
 
@@ -110,15 +117,20 @@ class SummaryViewSpec extends CommonPlaySpec with WithCommonFakeApplication with
         document.select("div#ur-panel").size() shouldBe 0
       }
 
-      "should produce the same output when render and f are called" in {
-        summaryView.f(totalTaxOwedModel, taxYearModel, "flat", 1000.0, 100, 100, "back-link", Some(BigDecimal(100.1)), BigDecimal(10000.0), false)(fakeRequest, mockMessage) shouldBe summaryView.render(totalTaxOwedModel, taxYearModel, "flat", 1000.0, 100, 100, "back-link", Some(BigDecimal(100.1)), BigDecimal(10000.0), false, fakeRequest, mockMessage)
+      "have a 'You've told us' section that" in {
+        document.select("caption").text should include(messages.Summary.yourAnswers)
+      }
+
+      "should produce the same output when render and apply are called" in {
+        summaryView(totalTaxOwedModel, taxYearModel, "flat", 1000.0, 100, 100, "back-link", Some(BigDecimal(100.1)), BigDecimal(10000.0), false, questionsForPrint = seqQuestionAnswers)(fakeRequest, mockMessage) shouldBe
+          summaryView.render(totalTaxOwedModel, taxYearModel, "flat", 1000.0, 100, 100, "back-link", Some(BigDecimal(100.1)), BigDecimal(10000.0), false, questionsForPrint = seqQuestionAnswers, fakeRequest, mockMessage)
       }
     }
 
     "supplied with a disposal date not within the valid tax years" should {
       val totalTaxOwedModel = TotalTaxOwedModel(500, 500, 20, None, None, 500, 500, None, None, None, None, 0, None, None, None, None, None, None, None)
       val taxYearModel: TaxYearModel = TaxYearModel("2018/19", isValidYear = false, "2017/18")
-      lazy val view = summaryView(totalTaxOwedModel, taxYearModel, "flat", 1000.0, 100, 100, "back-url", showUserResearchPanel = true)(fakeRequest, mockMessage)
+      lazy val view = summaryView(totalTaxOwedModel, taxYearModel, "flat", 1000.0, 100, 100, "back-url", showUserResearchPanel = true, questionsForPrint = seqQuestionAnswers)(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "display a tax year warning" in {

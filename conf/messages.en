@@ -477,7 +477,7 @@ calc.resident.properties.improvements.additionalContent.two = But replacing them
 
 
 ## Summary messages
-calc.resident.summary.saveAsPdf = Download your Capital Gains Tax calculation (PDF, under 25kB)
+calc.resident.summary.print = Print your Capital Gains Tax calculation
 calc.resident.summary.download = Download
 
 ## Summary Partial messages

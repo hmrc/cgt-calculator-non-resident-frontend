@@ -15,37 +15,86 @@
  *@
 
 @import models._
-
+@import views.html.helper.CSPNonce
+@import common.Transformers.{booleanToMessageString, checkIfBooleanAsString}
+@import common.Dates.TemplateImplicits._
+@import common.nonresident.MoneyPounds
+@import java.time.LocalDate
 
 @this(
-    layout: Layout,
-    summaryPartial: playComponents.summaryPartial
+        layout: Layout,
+        summaryPartial: playComponents.summaryPartial,
+        link: playComponents.link
 )
 
-@(calculationResult: TotalTaxOwedModel, taxYearModel: TaxYearModel, calculationType: String, disposalValue: BigDecimal, acquisitionValue: BigDecimal, totalCosts: BigDecimal, backUrl: String, flatGain: Option[BigDecimal] = None, reliefsUsed: BigDecimal = 0, showUserResearchPanel: Boolean)(implicit request: Request[_], messages: Messages)
+@(
+        calculationResult: TotalTaxOwedModel,
+        taxYearModel: TaxYearModel,
+        calculationType: String,
+        disposalValue: BigDecimal,
+        acquisitionValue: BigDecimal,
+        totalCosts: BigDecimal,
+        backUrl: String,
+        flatGain: Option[BigDecimal] = None,
+        reliefsUsed: BigDecimal = 0,
+        showUserResearchPanel: Boolean,
+        questionsForPrint: Seq[QuestionAnswerModel[Any]],
+)(implicit request: Request[_], messages: Messages)
+
+@scripts = {
+    <script @CSPNonce.attr src='@controllers.routes.Assets.versioned("javascripts/print.js")'></script>
+}
 
 @layout(
     Messages("calc.summaryPartial.cgtToPay", TaxYearModel.convertToSummaryFormat(taxYearModel.taxYearSupplied)),
-    userResearchBannerEnabled = showUserResearchPanel
+    userResearchBannerEnabled = showUserResearchPanel,
+    scripts = Some(scripts)
 ){
+
+    <link href='@routes.Assets.versioned("stylesheets/cgt-print.css")' media="print" rel="stylesheet" type="text/css" />
 
     @summaryPartial(calculationResult, taxYearModel, calculationType, disposalValue, acquisitionValue, totalCosts, flatGain, reliefsUsed)
 
-        <div id="whatToDoNext">
-            <h2 class="govuk-heading-m">@Messages("calc.common.next.actions.heading")</h2>
-            <p class="govuk-body">
-                @Messages("calc.summary.next.actions.text")
-            </p>
-        </div>
+    <hr class="govuk-section-break govuk-section-break--l cgt-for-print">
 
-        <div id="save-as-a-pdf" class="notice download-pdf">
-            <div class="icon-file-download">
-                <span class="govuk-visually-hidden">@Messages("calc.resident.summary.download")</span>
-            </div>
+    <!--Print only CYA-->
+    <table class="govuk-table cgt-for-print">
+        <caption class="govuk-table__caption govuk-table__caption--m">@messages("calc.checkYourAnswers.tableHeading")</caption>
+        <tbody class="govuk-table__body">
+        @questionsForPrint.map { question =>
+            <tr id="@question.id" class="govuk-table__row">
+                <th id="@{question.id}-question" scope="row" class="govuk-table__header">@messages(question.question, question.oDate.map(_.localFormat("d MMMM yyyy")).getOrElse(""))</th>
+                <td id="@{question.id}-amount" class="govuk-table__cell">
+                @{question.data match {
+                    case string: String => messages(checkIfBooleanAsString(string))
+                    case int: Int => int.toString
+                    case bigDecimal: BigDecimal => s"£${MoneyPounds(bigDecimal, 2).quantity}"
+                    case date: LocalDate => date.localFormat("d MMMM yyyy")
+                    case boolean: Boolean => messages(booleanToMessageString(boolean))
+                    case _ => ""
+                }}
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
 
-            <strong><a id="pdfSave" class="govuk-link" href="@controllers.routes.ReportController.summaryReport.toString" data-journey-click="nr-summary:pdf:save">@Messages("calc.resident.summary.saveAsPdf")</a></strong>
-        </div>
+    <div id="whatToDoNext" class="govuk-!-display-none-print">
+        <h2 class="govuk-heading-m">@Messages("calc.common.next.actions.heading")</h2>
+        <p class="govuk-body">
+            @Messages("calc.summary.next.actions.text")
+        </p>
+    </div>
 
+    <div id="print" class="govuk-body govuk-!-display-none-print cgt-print-button">
+        <a class="govuk-link govuk-body" href="#" id="printLink">@Messages("calc.resident.summary.print")</a>
+    </div>
 
-    <p><a id="continue-button" class="govuk-button" href="@controllers.routes.WhatNextController.whatNext" data-journey-click="nav:calc:restart">@Messages("calc.base.continue")</a></p>
+    @link(
+        href = controllers.routes.WhatNextController.whatNext.url,
+        messageKey = "calc.base.continue",
+        isButton = true,
+        id = Some("continue-button"),
+        classes = Some("govuk-!-display-none-print")
+    )
 }

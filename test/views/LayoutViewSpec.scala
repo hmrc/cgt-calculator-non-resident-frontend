@@ -34,8 +34,8 @@ class LayoutViewSpec extends CommonPlaySpec with WithCommonFakeApplication with 
 
   "Main Template" should {
     "produce the same output when render and f are called" in {
-      LayoutView.f("Title", false, false, false, false)(Html(""))(FakeRequest("GET", ""), mockMessage) shouldBe
-        LayoutView.render("Title", false, false, false, false, Html(""), FakeRequest("GET", ""), mockMessage)
+      LayoutView("Title", false, false, false, false)(Html(""))(FakeRequest("GET", ""), mockMessage) shouldBe
+        LayoutView.render("Title", false, false, false, false, None, Html(""), FakeRequest("GET", ""), mockMessage)
     }
   }
 }

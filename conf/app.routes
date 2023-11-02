@@ -175,11 +175,6 @@ POST        /claiming-reliefs                   @controllers.ClaimingReliefsCont
 GET         /costs-at-legislation-start         @controllers.CostsAtLegislationStartController.costsAtLegislationStart
 POST        /costs-at-legislation-start         @controllers.CostsAtLegislationStartController.submitCostsAtLegislationStart
 
-########################################################
-
-#Report screen route
-GET         /summary-report                     @controllers.ReportController.summaryReport
-
 #Summary screen route
 ########################################################
 GET         /summary                            @controllers.SummaryController.summary
