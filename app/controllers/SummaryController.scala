@@ -20,7 +20,7 @@ import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.nonresident.CalculationType
 import common.nonresident.TaxableGainCalculation._
 import connectors.CalculatorConnector
-import constructors.AnswersConstructor
+import constructors.{AnswersConstructor, YourAnswersConstructor}
 import controllers.predicates.ValidActiveSession
 import controllers.utils.RecoverableFuture
 import models._
@@ -110,6 +110,7 @@ class SummaryController @Inject()(calcConnector: CalculatorConnector,
       calculationType <- sessionCacheService.fetchAndGetFormData[CalculationElectionModel](KeystoreKeys.calculationElection)
       totalCosts <- calcConnector.calculateTotalCosts(answers, calculationType)
       calculationResult <- getCalculationResult(finalResult, calculationType.get.calculationType)
+      questionAnswerRows = YourAnswersConstructor.fetchYourAnswers(answers, prrModel, finalAnswers, propertyLivedIn)
     } yield {
       calculationType.get.calculationType match {
         case CalculationType.flat =>
@@ -119,8 +120,9 @@ class SummaryController @Inject()(calcConnector: CalculatorConnector,
             totalCosts,
             backUrl,
             reliefsUsed = calculationResult.prrUsed.getOrElse(BigDecimal(0)) + calculationResult.otherReliefsUsed.getOrElse(BigDecimal(0)),
-            showUserResearchPanel = showUserResearchPanel)
-          )
+            showUserResearchPanel = showUserResearchPanel,
+            questionsForPrint = questionAnswerRows
+          ))
         case CalculationType.timeApportioned =>
           Ok(summaryView(calculationResult, taxYearModel.get, calculationType.get.calculationType,
             answers.disposalValueModel.disposalValue,
@@ -128,8 +130,9 @@ class SummaryController @Inject()(calcConnector: CalculatorConnector,
             totalCosts,
             backUrl, Some(finalResult.get.flatResult.totalGain),
             reliefsUsed = calculationResult.prrUsed.getOrElse(BigDecimal(0)) + calculationResult.otherReliefsUsed.getOrElse(BigDecimal(0)),
-            showUserResearchPanel = showUserResearchPanel)
-          )
+            showUserResearchPanel = showUserResearchPanel,
+            questionsForPrint = questionAnswerRows
+          ))
         case CalculationType.rebased =>
           Ok(summaryView(calculationResult, taxYearModel.get, calculationType.get.calculationType,
             answers.disposalValueModel.disposalValue,
@@ -137,8 +140,9 @@ class SummaryController @Inject()(calcConnector: CalculatorConnector,
             totalCosts,
             backUrl, None,
             reliefsUsed = calculationResult.prrUsed.getOrElse(BigDecimal(0)) + calculationResult.otherReliefsUsed.getOrElse(BigDecimal(0)),
-            showUserResearchPanel = showUserResearchPanel)
-          )
+            showUserResearchPanel = showUserResearchPanel,
+            questionsForPrint = questionAnswerRows
+          ))
       }
     }).recoverToStart
   }

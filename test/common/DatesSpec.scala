@@ -16,21 +16,20 @@
 
 package common
 
-import java.time.LocalDate
-
 import common.Dates.{TemplateImplicits, formatter}
 import controllers.helpers.FakeRequestHelper
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import play.api.i18n.Lang
-import play.api.mvc.MessagesControllerComponents
+import play.api.i18n.{Lang, MessagesApi}
 
+import java.time.LocalDate
 import scala.concurrent.ExecutionContext
 
 class DatesSpec extends CommonPlaySpec with GuiceOneAppPerSuite with MockitoSugar with FakeRequestHelper {
-  implicit lazy val mockMessage = fakeApplication().injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
-  implicit val ec = fakeApplication().injector.instanceOf[ExecutionContext]
-  lazy val cyMockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(Seq(
+  lazy val messagesApi = fakeApplication.injector.instanceOf[MessagesApi]
+  implicit lazy val mockMessages = messagesApi.preferred(fakeRequest)
+  implicit val ec = fakeApplication.injector.instanceOf[ExecutionContext]
+  lazy val cyMockMessages = messagesApi.preferred(Seq(
     Lang("cy")
   ))
 
@@ -112,13 +111,7 @@ class DatesSpec extends CommonPlaySpec with GuiceOneAppPerSuite with MockitoSuga
     }
     "format a Welsh date" in {
       val date = LocalDate.of(2014, 11, 22)
-      implicit val lang: Lang = Lang("cy")
-      date.localFormat("d MMMM yyyy")(lang, cyMockMessage) shouldBe "22 Tachwedd 2014"
-    }
-    "format a Spanish date" in {
-      val date = LocalDate.of(1999, 1, 12)
-      implicit val lang: Lang = Lang("es")
-      date.localFormat("d MMMM yyyy") shouldBe "12 enero 1999"
+      date.localFormat("d MMMM yyyy")(cyMockMessages) shouldBe "22 Tachwedd 2014"
     }
   }
 }
