@@ -18,6 +18,24 @@ package common
 
 class TransformersSpec extends CommonPlaySpec {
 
+  "stripCurrencyCharacters" should {
+    "return a cleaned currency amount" when {
+      "the transform is applied to an amount with commas and pound signs" in {
+        val result = Transformers.stripCurrencyCharacters("£1,999")
+        result shouldBe "1999"
+      }
+    }
+  }
+
+  "stripOptionalCurrencyCharacters" should {
+    "return a cleaned currency amount" when {
+      "the transform is applied to an optional amount with commas and pound signs" in {
+        val result = Transformers.stripOptionalCurrencyCharacters(Some("£1,999"))
+        result shouldBe Some("1999")
+      }
+    }
+  }
+
   "stringToBigDecimal" should {
     "return a BigDecimal" when {
       "the transformation fails" in {

@@ -34,6 +34,7 @@ object ImprovementsForm {
           "improvementsAmt" -> mandatoryIf(
             isEqual("isClaimingImprovements", "Yes"),
             common.Formatters.text("calc.improvements.error.no.value.supplied")
+              .transform(stripCurrencyCharacters, stripCurrencyCharacters)
               .verifying("error.number", bigDecimalCheck)
               .transform(stringToBigDecimal, bigDecimalToString)
               .verifying(
@@ -47,6 +48,7 @@ object ImprovementsForm {
           "improvementsAmtAfter" -> mandatoryIf(
             isEqual("isClaimingImprovements", "Yes"),
             common.Formatters.text("calc.improvements.error.no.value.supplied")
+              .transform(stripCurrencyCharacters, stripCurrencyCharacters)
               .verifying("error.number", bigDecimalCheck)
               .transform(stringToBigDecimal, bigDecimalToString)
               .verifying(
@@ -66,6 +68,7 @@ object ImprovementsForm {
           "improvementsAmt" -> mandatoryIf(
             isEqual("isClaimingImprovements", "Yes"),
             common.Formatters.text("calc.improvements.error.no.value.supplied")
+              .transform(stripCurrencyCharacters, stripCurrencyCharacters)
               .verifying("error.number", bigDecimalCheck)
               .transform(stringToBigDecimal, bigDecimalToString)
               .verifying(
@@ -77,6 +80,7 @@ object ImprovementsForm {
               )
           ),
         "improvementsAmtAfter" -> optional(text)
+          .transform(stripOptionalCurrencyCharacters, stripOptionalCurrencyCharacters)
           .transform(optionalStringToOptionalBigDecimal, optionalBigDecimalToOptionalString)
         )(ImprovementsModel.apply)(ImprovementsModel.unapply))
     }

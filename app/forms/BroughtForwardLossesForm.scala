@@ -54,6 +54,7 @@ object BroughtForwardLossesForm {
         .verifying("calc.broughtForwardLosses.errors.required", yesNoCheck)
         .transform(stringToBoolean, booleanToString),
       "broughtForwardLoss" -> text
+        .transform(stripCurrencyCharacters, stripCurrencyCharacters)
         .transform(stringToOptionalBigDecimal, optionalBigDecimalToString)
     )(BroughtForwardLossesModel.apply)(BroughtForwardLossesModel.unapply)
       .verifying("error.real", verifyMandatory)

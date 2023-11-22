@@ -31,6 +31,7 @@ trait MarketDisposalValueForm {
   val marketValueForm = Form(
     mapping(
       "disposalValue" -> text
+        .transform(stripCurrencyCharacters, stripCurrencyCharacters)
         .verifying(errorReal, mandatoryCheck)
         .verifying(errorReal, bigDecimalCheck)
         .transform(stringToBigDecimal, bigDecimalToString)

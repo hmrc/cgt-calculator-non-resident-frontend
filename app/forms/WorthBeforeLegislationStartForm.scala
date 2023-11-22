@@ -27,6 +27,7 @@ object WorthBeforeLegislationStartForm {
   val worthBeforeLegislationStartForm: Form[WorthBeforeLegislationStartModel] = Form(
     mapping(
       "worthBeforeLegislationStart" -> text
+        .transform(stripCurrencyCharacters, stripCurrencyCharacters)
         .verifying("calc.worthBeforeLegislationStart.errorReal", mandatoryCheck)
         .verifying("calc.worthBeforeLegislationStart.errorReal", bigDecimalCheck)
         .transform[BigDecimal](stringToBigDecimal, bigDecimalToString)

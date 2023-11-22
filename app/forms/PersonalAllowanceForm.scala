@@ -27,6 +27,7 @@ object PersonalAllowanceForm {
   def personalAllowanceForm (maxPA: BigDecimal = BigDecimal(0)): Form[PersonalAllowanceModel] = Form (
     mapping(
       "personalAllowance" -> text
+        .transform(stripCurrencyCharacters, stripCurrencyCharacters)
         .verifying("calc.personalAllowance.errorReal", mandatoryCheck)
         .verifying("calc.personalAllowance.errorReal", bigDecimalCheck)
         .transform(stringToBigDecimal, bigDecimalToString)

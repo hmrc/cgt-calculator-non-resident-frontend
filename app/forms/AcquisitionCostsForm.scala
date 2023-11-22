@@ -28,6 +28,7 @@ object AcquisitionCostsForm {
   val acquisitionCostsForm = Form(
     mapping(
       "acquisitionCosts" -> text
+        .transform(stripCurrencyCharacters, stripCurrencyCharacters)
         .verifying("error.real", mandatoryCheck)
         .verifying("error.real", bigDecimalCheck)
         .transform(stringToBigDecimal, bigDecimalToString)

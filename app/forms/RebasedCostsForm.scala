@@ -33,6 +33,7 @@ object RebasedCostsForm {
       "rebasedCosts" -> mandatoryIf(
         isEqual("hasRebasedCosts", "Yes"),
         common.Formatters.text("calc.rebasedCosts.error.no.value.supplied")
+          .transform(stripCurrencyCharacters, stripCurrencyCharacters)
           .verifying("error.number", bigDecimalCheck)
           .transform(stringToBigDecimal, bigDecimalToString)
           .verifying(
