@@ -27,6 +27,7 @@ object AnnualExemptAmountForm {
   def annualExemptAmountForm(maxAEA: BigDecimal = BigDecimal(0)): Form[AnnualExemptAmountModel] = Form(
     mapping(
       "annualExemptAmount" -> text
+        .transform(stripCurrencyCharacters, stripCurrencyCharacters)
         .verifying("calc.annualExemptAmount.errorReal", mandatoryCheck)
         .verifying("calc.annualExemptAmount.errorReal", bigDecimalCheck)
         .transform(stringToBigDecimal, bigDecimalToString)

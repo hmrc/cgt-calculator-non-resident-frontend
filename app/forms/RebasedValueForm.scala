@@ -27,6 +27,7 @@ object RebasedValueForm {
   val rebasedValueForm: Form[RebasedValueModel] = Form(
     mapping(
       "rebasedValueAmt" -> text
+        .transform(stripCurrencyCharacters, stripCurrencyCharacters)
         .verifying("calc.nonResident.rebasedValue.error.no.value.supplied", mandatoryCheck)
         .verifying("calc.nonResident.rebasedValue.error.no.value.supplied", bigDecimalCheck)
         .transform[BigDecimal](stringToBigDecimal, bigDecimalToString)

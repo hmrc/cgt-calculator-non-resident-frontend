@@ -43,8 +43,8 @@ calc.error.summary.heading = This page has errors
 session.timeout.message = Your session has ended
 
 ## PLAY! Error Overrides ##
-error.number = Enter a number without commas, for example 10000.00
-error.real = Enter a number without commas, for example 10000.00
+error.number = Enter a number, for example 10000.00
+error.real = Enter a real number, for example 10000
 
 ## Common date Messages ##
 ## Use common messages if some but not all pages use these messages. ##

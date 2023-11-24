@@ -27,6 +27,7 @@ object DisposalValueForm {
   val disposalValueForm = Form(
     mapping(
       "disposalValue" -> text
+        .transform(stripCurrencyCharacters, stripCurrencyCharacters)
         .verifying("calc.disposalValue.errorReal", mandatoryCheck)
         .verifying("calc.disposalValue.errorReal", bigDecimalCheck)
         .transform(stringToBigDecimal, bigDecimalToString)

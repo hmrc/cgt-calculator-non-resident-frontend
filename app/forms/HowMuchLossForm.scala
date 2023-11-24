@@ -27,6 +27,7 @@ object HowMuchLossForm {
   val howMuchLossForm: Form[HowMuchLossModel] = Form(
     mapping(
       "loss" -> text
+        .transform(stripCurrencyCharacters, stripCurrencyCharacters)
         .verifying("calc.howMuchLoss.errorReal", mandatoryCheck)
         .verifying("calc.howMuchLoss.errorReal", bigDecimalCheck)
         .transform(stringToBigDecimal, bigDecimalToString)

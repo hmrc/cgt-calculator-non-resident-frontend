@@ -28,6 +28,7 @@ object OtherReliefsForm {
     Form(
       mapping(
         "otherReliefs" -> text
+          .transform(stripCurrencyCharacters, stripCurrencyCharacters)
           .verifying("calc.otherReliefs.errorReal", mandatoryCheck)
           .verifying("calc.otherReliefs.errorReal", bigDecimalCheck)
           .transform(stringToBigDecimal, bigDecimalToString)

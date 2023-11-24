@@ -27,6 +27,7 @@ object HowMuchGainForm {
   val howMuchGainForm = Form(
     mapping(
       "howMuchGain" -> text
+        .transform(stripCurrencyCharacters, stripCurrencyCharacters)
         .verifying("calc.howMuchGain.errorReal", mandatoryCheck)
         .verifying("calc.howMuchGain.errorReal", bigDecimalCheck)
         .transform(stringToBigDecimal, bigDecimalToString)

@@ -27,6 +27,7 @@ object CurrentIncomeForm {
   val currentIncomeForm = Form(
     mapping(
       "currentIncome" -> text
+        .transform(stripCurrencyCharacters, stripCurrencyCharacters)
         .verifying("calc.currentIncome.errorReal", mandatoryCheck)
         .verifying("calc.currentIncome.errorReal", bigDecimalCheck)
         .transform(stringToBigDecimal, bigDecimalToString)
