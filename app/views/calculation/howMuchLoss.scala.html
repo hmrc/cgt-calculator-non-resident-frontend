@@ -36,9 +36,8 @@
 ) {
 
     @errorSummary(howMuchLossForm.errors)
-    <h1 class="govuk-heading-xl">@Messages("calc.howMuchLoss.question")</h1>
     @form(action = controllers.routes.HowMuchLossController.submitHowMuchLoss) {
-        @formInputMoney(howMuchLossForm("loss"), Messages("calc.howMuchLoss.question"), hideLabel = true)
+        @formInputMoney(howMuchLossForm("loss"), Messages("calc.howMuchLoss.question"), hideLabel = false)
         @submitButton()
     }
 }

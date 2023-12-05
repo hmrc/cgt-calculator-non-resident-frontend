@@ -35,9 +35,8 @@
 ) {
 
     @errorSummary(howMuchGainForm.errors)
-    <h1 class="govuk-heading-xl">@Messages("calc.howMuchGain.question")</h1>
     @form(action = controllers.routes.HowMuchGainController.submitHowMuchGain) {
-        @formInputMoney(howMuchGainForm("howMuchGain"), Messages("calc.howMuchGain.question"), hideLabel = true)
+        @formInputMoney(howMuchGainForm("howMuchGain"), Messages("calc.howMuchGain.question"), hideLabel = false)
         @submitButton()
     }
 }
