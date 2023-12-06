@@ -53,8 +53,8 @@ class PropertyLivedInViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
           h1Tag.text shouldBe s"${messages.title}"
         }
 
-        "have the heading-large class" in {
-          h1Tag.hasClass("govuk-heading-xl") shouldBe true
+        "has a class of govuk-fieldset__heading" in {
+          h1Tag.attr("class") shouldBe "govuk-fieldset__heading"
         }
       }
 
