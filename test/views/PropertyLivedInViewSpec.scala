@@ -47,14 +47,14 @@ class PropertyLivedInViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
 
       "have a H1 tag that" should {
 
-        lazy val h1Tag = document.select("h1")
+        lazy val heading = document.select("legend")
 
         s"have the page heading '${messages.title}'" in {
-          h1Tag.text shouldBe s"${messages.title}"
+          heading.text shouldBe s"${messages.title}"
         }
 
-        "have the heading-large class" in {
-          h1Tag.hasClass("govuk-heading-xl") shouldBe true
+        "have the govuk-label--xl class" in {
+          heading.hasClass("govuk-fieldset__legend govuk-label--xl") shouldBe true
         }
       }
 

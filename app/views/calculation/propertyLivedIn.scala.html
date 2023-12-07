@@ -34,15 +34,13 @@
 
     @errorSummary(propertyLivedInForm.errors)
 
-  <h1 class="govuk-heading-xl">@Messages("calc.propertyLivedIn.title")</h1>
-
   @form(action = controllers.routes.PropertyLivedInController.submitPropertyLivedIn) {
 
      @inputYesNo(
        field = propertyLivedInForm("propertyLivedIn"),
        legend = Messages("calc.propertyLivedIn.title"),
-       legendClass = Some("govuk-visually-hidden"),
-       isPageHeading = false
+       legendClass = None,
+       isPageHeading = true
      )
 
     @submitButton()
