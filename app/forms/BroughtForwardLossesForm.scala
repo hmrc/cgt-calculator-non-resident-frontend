@@ -58,8 +58,8 @@ object BroughtForwardLossesForm {
       "broughtForwardLoss" -> mandatoryIf(
         isEqual("isClaiming", "Yes"),
         common.Formatters.text("error.real")
-          .verifying("error.real", bigDecimalCheck)
           .transform(stripCurrencyCharacters, stripCurrencyCharacters)
+          .verifying("error.real", bigDecimalCheck)
           .transform(stringToBigDecimal, bigDecimalToString)
       )
     )(BroughtForwardLossesModel.apply)(BroughtForwardLossesModel.unapply)
