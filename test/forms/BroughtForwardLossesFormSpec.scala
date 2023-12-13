@@ -105,7 +105,7 @@ class BroughtForwardLossesFormSpec extends CommonPlaySpec with WithCommonFakeApp
       }
 
       s"return the error message ${messages.errorRealNumber}" in {
-        form.error("").get.message shouldBe messages.errorRealNumber
+        form.error("broughtForwardLoss").get.message shouldBe messages.errorRealNumber
       }
     }
 
@@ -119,7 +119,7 @@ class BroughtForwardLossesFormSpec extends CommonPlaySpec with WithCommonFakeApp
       }
 
       s"return the error message ${messages.errorRealNumber}" in {
-        form.error("").get.message shouldBe messages.errorRealNumber
+        form.error("broughtForwardLoss").get.message shouldBe messages.errorRealNumber
       }
     }
 

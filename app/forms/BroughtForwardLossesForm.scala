@@ -19,9 +19,11 @@ package forms
 import common.Constants
 import common.Transformers._
 import common.Validation._
+import forms.BroughtForwardLossesForm.verifyMandatory
 import models.BroughtForwardLossesModel
 import play.api.data.Forms._
 import play.api.data._
+import uk.gov.voa.play.form.ConditionalMappings._
 
 object BroughtForwardLossesForm {
 
@@ -53,9 +55,13 @@ object BroughtForwardLossesForm {
         .verifying("calc.broughtForwardLosses.errors.required", mandatoryCheck)
         .verifying("calc.broughtForwardLosses.errors.required", yesNoCheck)
         .transform(stringToBoolean, booleanToString),
-      "broughtForwardLoss" -> text
-        .transform(stripCurrencyCharacters, stripCurrencyCharacters)
-        .transform(stringToOptionalBigDecimal, optionalBigDecimalToString)
+      "broughtForwardLoss" -> mandatoryIf(
+        isEqual("isClaiming", "Yes"),
+        common.Formatters.text("error.real")
+          .transform(stripCurrencyCharacters, stripCurrencyCharacters)
+          .verifying("error.real", bigDecimalCheck)
+          .transform(stringToBigDecimal, bigDecimalToString)
+      )
     )(BroughtForwardLossesModel.apply)(BroughtForwardLossesModel.unapply)
       .verifying("error.real", verifyMandatory)
       .verifying("calc.broughtForwardLosses.errorDecimal", verifyDecimal)
