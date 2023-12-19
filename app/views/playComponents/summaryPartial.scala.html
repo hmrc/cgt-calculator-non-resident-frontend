@@ -33,10 +33,12 @@ disposalValue: BigDecimal, acquisitionValue: BigDecimal, totalCosts: BigDecimal,
 
     <div id="tax-owed-banner" class="govuk-panel govuk-panel--confirmation">
         <h1 class="govuk-panel__title">
-            &pound;@MoneyPounds(calculationResult.taxOwed, 2).quantity
+            @Messages("calc.summaryPartial.cgtToPay", TaxYearModel.convertToSummaryFormat(taxYearModel.taxYearSupplied))
         </h1>
         <div class="govuk-panel__body">
-            <strong>@Messages("calc.summaryPartial.cgtToPay", TaxYearModel.convertToSummaryFormat(taxYearModel.taxYearSupplied))</strong>
+            <strong>
+              &pound;@MoneyPounds(calculationResult.taxOwed, 2).quantity
+            </strong>
         </div>
     </div>
 
