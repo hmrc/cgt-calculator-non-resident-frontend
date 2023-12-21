@@ -65,7 +65,7 @@ class SummaryViewSpec extends CommonPlaySpec with WithCommonFakeApplication with
       }
 
       "have a heading" which {
-        lazy val heading = document.body().select("h1")
+        lazy val heading = document.body().select("#tax-owed-banner > div > strong")
 
         s"has a span with the text '£100,000.00'" in {
           heading.text() shouldBe "£100,000.00"

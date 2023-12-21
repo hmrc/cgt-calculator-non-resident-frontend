@@ -70,13 +70,14 @@ class SummaryPartialViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
 
       "the header" should {
 
-        "contain the title text £0" in {
-          doc.select("h1").text shouldEqual "£0.00"
+        s"contain the title text ${messages.headingTwo("2016 to 2017")}" in {
+          doc.select("h1").text shouldEqual messages.headingTwo("2016 to 2017")
         }
 
-        s"contain the second heading text ${messages.headingTwo("2016 to 2017")}" in {
-          doc.select("#tax-owed-banner > div > strong").text shouldEqual messages.headingTwo("2016 to 2017")
+        "contain the second heading text £0" in {
+          doc.select("#tax-owed-banner > div > strong").text shouldEqual "£0.00"
         }
+
       }
 
       "not display the out of tax years message" in {
@@ -169,12 +170,12 @@ class SummaryPartialViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
 
       "the header" should {
 
-        "contain the title text £400.00" in {
-          doc.select("h1").text shouldEqual "£400.00"
+        s"contain the title text ${messages.headingTwo("2018 to 2019")}" in {
+          doc.select("h1").text shouldEqual messages.headingTwo("2018 to 2019")
         }
 
-        s"contain the second heading text ${messages.headingTwo("2018 to 2019")}" in {
-          doc.select("#tax-owed-banner > div > strong").text shouldEqual messages.headingTwo("2018 to 2019")
+        "contain the second heading text £400.00" in {
+          doc.select("#tax-owed-banner > div > strong").text shouldEqual "£400.00"
         }
       }
 
