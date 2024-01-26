@@ -71,7 +71,9 @@
         @formInputMoney(
             field = otherReliefsForm("otherReliefs"),
             question = Messages("calc.otherReliefs.question"),
-            hideLabel = true
+            hideLabel = false,
+            isHiddenQuestion = true,
+            hintText = Some(messages("calc.currencyHint", "£1,000"))
         )
 
         @submitButton()

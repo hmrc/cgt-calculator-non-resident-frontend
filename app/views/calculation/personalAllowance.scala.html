@@ -36,13 +36,13 @@
 @helpLink = {
     <a id="helpLink2" class="govuk-link" rel="external" href="https://www.gov.uk/income-tax-rates/current-rates-and-allowances"
        target="_blank" data-journey-click="help:govUK:personalAllowancesCurrentAndPast">
-        @Messages("calc.personalAllowance.link")
-        <span>@Messages("calc.base.externalLink")</span>
+        @messages("calc.personalAllowance.link")
+        <span>@messages("calc.base.externalLink")</span>
     </a>
 }
 
 @helpAndLink = {
-    <p>@Messages("calc.personalAllowance.help") @helpLink</p>
+    <p class="govuk-body">@messages("calc.personalAllowance.help") @helpLink</p>
 }
 
 @layout(
@@ -50,12 +50,16 @@
 ) {
 
     @errorSummary(personalAllowanceForm.errors)
-    <h1 class="govuk-heading-xl" for="disposal-value">@Messages("calc.personalAllowance.question")</h1>
-
+    <h1 class="govuk-heading-xl">@messages("calc.personalAllowance.question")</h1>
 
     @form(action = controllers.routes.PersonalAllowanceController.submitPersonalAllowance) {
-        <span class="govuk-body">@helpAndLink</span>
-        @formInputMoney(personalAllowanceForm("personalAllowance"), Messages("calc.personalAllowance.question"), hideLabel = true)
+        @helpAndLink
+        @formInputMoney(
+            field = personalAllowanceForm("personalAllowance"),
+            question = messages("calc.personalAllowance.question"),
+            hideLabel = true,
+            hintText = Some(messages("calc.currencyHint", "£10,000"))
+        )
         @submitButton()
     }
 }

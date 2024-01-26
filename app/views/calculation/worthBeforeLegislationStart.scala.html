@@ -50,13 +50,13 @@
     </div>
 
     @form(action = controllers.routes.WorthBeforeLegislationStartController.submitWorthBeforeLegislationStart) {
-
         @formInputMoney(
             field = worthBeforeLegislationStart("worthBeforeLegislationStart"),
-            question = Messages("calc.worthBeforeLegislationStart.question"),
-            hideLabel = true
+            question = messages("calc.worthBeforeLegislationStart.question"),
+            hideLabel = false,
+            hintText = Some(messages("calc.currencyHint", "£150,000")),
+            isHiddenQuestion = true
         )
-
         @submitButton()
     }
 }

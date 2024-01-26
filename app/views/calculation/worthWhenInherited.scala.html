@@ -44,7 +44,13 @@
 
     @form(action = controllers.routes.WorthWhenInheritedController.submitWorthWhenInherited) {
 
-        @formInputMoney(acquisitionMarketValue("acquisitionMarketValue"), Messages("calc.worthWhenInherited.question"), hideLabel = true)
+        @formInputMoney(
+            field = acquisitionMarketValue("acquisitionMarketValue"),
+            question = messages("calc.worthWhenInherited.question"),
+            hideLabel = false,
+            hintText = Some(messages("calc.currencyHint", "£150,000")),
+            isHiddenQuestion = true
+        )
 
         @submitButton()
     }

@@ -40,8 +40,13 @@
 
     @form(action = controllers.routes.WorthWhenGiftedToController.submitWorthWhenGiftedTo) {
         <p class="govuk-inset-text">@Messages("calc.worthWhenGiftedTo.jointOwnership")</p>
-
-        @formInputMoney(acquisitionMarketValueForm("acquisitionMarketValue"), Messages("calc.worthWhenGiftedTo.question"), hideLabel = true)
+        @formInputMoney(
+            field = acquisitionMarketValueForm("acquisitionMarketValue"),
+            question = messages("calc.worthWhenGiftedTo.question"),
+            hideLabel = false,
+            hintText = Some(messages("calc.currencyHint", "£150,000")),
+            isHiddenQuestion = true
+        )
         @submitButton()
     }
 }

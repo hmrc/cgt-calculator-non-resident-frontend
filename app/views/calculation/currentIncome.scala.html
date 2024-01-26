@@ -45,8 +45,13 @@
 
         <p class="govuk-body">@Messages("calc.currentIncome.helpText.line2")</p>
 
-
-        @formInputMoney(currentIncomeForm("currentIncome"), Messages("calc.currentIncome.question"), hideLabel = true)
+        @formInputMoney(
+            field = currentIncomeForm("currentIncome"),
+            question = messages("calc.currentIncome.question"),
+            hideLabel = false,
+            isHiddenQuestion = true,
+            hintText = Some(messages("calc.currencyHint", "£25,000"))
+        )
 
         @submitButton()
 

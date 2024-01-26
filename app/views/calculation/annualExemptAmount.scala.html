@@ -43,7 +43,12 @@
 
     @form(action = controllers.routes.AnnualExemptAmountController.submitAnnualExemptAmount) {
 
-        @formInputMoney(annualExemptAmountForm("annualExemptAmount"), Messages("calc.annualExemptAmount.question"), true)
+        @formInputMoney(
+            field = annualExemptAmountForm("annualExemptAmount"),
+            question = messages("calc.annualExemptAmount.question"),
+            hideLabel = true,
+            hintText = Some(messages("calc.currencyHint", "£10,000"))
+        )
 
         @submitButton()
 

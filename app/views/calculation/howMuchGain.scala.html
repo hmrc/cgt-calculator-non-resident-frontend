@@ -36,7 +36,12 @@
 
     @errorSummary(howMuchGainForm.errors)
     @form(action = controllers.routes.HowMuchGainController.submitHowMuchGain) {
-        @formInputMoney(howMuchGainForm("howMuchGain"), Messages("calc.howMuchGain.question"), hideLabel = false)
+        @formInputMoney(
+            field = howMuchGainForm("howMuchGain"),
+            question = messages("calc.howMuchGain.question"),
+            hideLabel = false,
+            hintText = Some(messages("calc.currencyHint", "£10,000"))
+        )
         @submitButton()
     }
 }

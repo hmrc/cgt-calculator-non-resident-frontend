@@ -103,7 +103,7 @@ class PersonalAllowanceViewSpec extends CommonPlaySpec with WithCommonFakeApplic
 
       s"should have help text that" should {
 
-        lazy val helpParagraph = document.select("span > p")
+        lazy val helpParagraph = document.select("p.govuk-body")
 
         s"have the text ${messages.help}" in {
 

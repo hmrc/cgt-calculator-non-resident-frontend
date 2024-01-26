@@ -66,7 +66,13 @@
             </ul>
         </div>
 
-        @formInputMoney(otherReliefsForm("otherReliefs"), Messages("calc.otherReliefs.question"), true)
+        @formInputMoney(
+            field = otherReliefsForm("otherReliefs"),
+            question = messages("calc.otherReliefs.question"),
+            hideLabel = false,
+            isHiddenQuestion = true,
+            hintText = Some(messages("calc.currencyHint", "£1,000"))
+        )
 
         @if(hasExistingReliefAmount) {
             <button id="add-relief-button" class="govuk-button">@Messages("calc.otherReliefs.button.updateRelief")</button>

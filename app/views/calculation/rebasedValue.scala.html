@@ -51,7 +51,13 @@
                 @Messages("calc.nonResident.rebasedValue.helpText")
             </p>
         </details>
-        @formInputMoney(rebasedValueForm("rebasedValueAmt"), Messages("calc.nonResident.rebasedValue.question"), hideLabel = true)
+        @formInputMoney(
+            field = rebasedValueForm("rebasedValueAmt"),
+            question = messages("calc.nonResident.rebasedValue.question") + " " + messages("calc.nonResident.rebasedValue.date"),
+            hideLabel = false,
+            hintText = Some(messages("calc.currencyHint", "£250,000")),
+            isHiddenQuestion = true
+        )
         @submitButton()
     }
 }

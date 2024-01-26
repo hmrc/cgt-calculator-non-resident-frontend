@@ -35,13 +35,14 @@
 
     @errorSummary(acquisitionValueForm.errors)
 
-    <h1 class="govuk-heading-xl">@Messages("calc.acquisitionValue.question")</h1>
-
-    <p class="govuk-inset-text">@Messages("calc.acquisitionValue.helpText")</p>
-
     @form(action = controllers.routes.AcquisitionValueController.submitAcquisitionValue) {
 
-        @formInputMoney(acquisitionValueForm("acquisitionValue"), Messages("calc.acquisitionValue.question"), true)
+        @formInputMoney(
+            field = acquisitionValueForm("acquisitionValue"),
+            question = messages("calc.acquisitionValue.question"),
+            hideLabel = false,
+            hintText = Some(messages("calc.acquisitionValue.helpText"))
+        )
 
         @submitButton()
     }

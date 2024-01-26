@@ -109,7 +109,7 @@ class OtherReliefsFlatViewSpec
       s"have the help text '${messages.OtherReliefs.help}'" in {
         document.body
           .getElementsByClass("govuk-hint")
-          .text() shouldBe messages.OtherReliefs.help
+          .text() should include(messages.OtherReliefs.help)
       }
 
       "have additional content" which {
