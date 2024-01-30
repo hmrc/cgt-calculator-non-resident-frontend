@@ -16,6 +16,8 @@ calc.month.10 = Hydref
 calc.month.11 = Tachwedd
 calc.month.12 = Rhagfyr
 
+calc.currencyHint = Er enghraifft, {0}
+
 calc.common.date.invalidDayError = Nodwch ddiwrnod
 calc.common.date.invalidMonthError = Nodwch fis
 calc.common.date.invalidYearError = Nodwch flwyddyn
@@ -55,14 +57,14 @@ acquisitionDate.error.range.max          = Mae’n rhaid i’r dyddiad y gwnaeth
 calc.acquisitionMarketValue.errorDecimalPlaces = Mae gormod o rifau ar ôl y pwynt degol ar gyfer gwerth marchnadol yr eiddo
 calc.acquisitionMarketValue.errorNegative = Nodwch rif positif ar gyfer gwerth marchnadol yr eiddo
 
-calc.acquisitionValue.errorReal = Mae''n rhaid i ''Faint y gwnaethoch ei dalu am yr eiddo?'' fod yn y fformat cywir, megis 150000
+calc.acquisitionValue.errorReal = Mae''n rhaid i ''Faint y gwnaethoch ei dalu am yr eiddo?'' fod yn y fformat cywir
 calc.acquisitionValue.errorMax = Mae''n rhaid i ''Faint y gwnaethoch ei dalu am yr eiddo?'' fod yn £1,000,000,000 neu lai
 calc.acquisitionValue.errorDecimalPlaces = Mae ''Faint y gwnaethoch ei dalu am yr eiddo?'' yn cynnwys gormod o rifau ar ôl y pwynt degol
 calc.acquisitionValue.errorNegative = Mae''n rhaid i ''Faint y gwnaethoch ei dalu am yr eiddo?'' fod yn £0 neu fwy
-calc.acquisitionValue.helpText = Os oeddech yn berchen ar yr eiddo gyda rhywun arall, dylech ond nodi''ch cyfran chi o''r pryniant.
+calc.acquisitionValue.helpText = Os oeddech yn berchen ar yr eiddo gyda rhywun arall, dylech ond nodi''ch cyfran chi o''r pryniant. Er enghraifft, £150,000
 calc.acquisitionValue.question = Faint y gwnaethoch ei dalu am yr eiddo?
 
-calc.annualExemptAmount.errorReal = Mae''n rhaid i ''Faint o''ch lwfans Treth Enillion Cyfalaf sy''n weddill gennych?'' fod yn y fformat cywir, megis 10000
+calc.annualExemptAmount.errorReal = Mae''n rhaid i ''Faint o''ch lwfans Treth Enillion Cyfalaf sy''n weddill gennych?'' fod yn y fformat cywir
 calc.annualExemptAmount.errorDecimalPlaces = Mae ''Faint o''ch lwfans Treth Enillion Cyfalaf sy''n weddill gennych?'' yn cynnwys gormod o rifau ar ôl y pwynt degol
 calc.annualExemptAmount.errorMax = Mae''n rhaid i ''Faint o''ch lwfans Treth Enillion Cyfalaf sy''n weddill gennych?'' fod yn £{0} neu lai
 calc.annualExemptAmount.errorNegative = Mae''n rhaid i ''Faint o''ch lwfans Treth Enillion Cyfalaf sy''n weddill gennych?'' fod yn £0 neu fwy
@@ -146,11 +148,11 @@ calc.costsAtLegislationStart.error.no.value.supplied = Nodwch y swm ar gyfer eic
 calc.costsAtLegislationStart.errorDecimalPlaces = Mae gormod o rifau ar ôl y pwynt degol yn eich costau
 calc.costsAtLegislationStart.errorNegative = Nodwch rif positif ar gyfer eich costau
 calc.costsAtLegislationStart.errors.required = Dewiswch ''Iawn'' os gwnaethoch dalu i gael yr eiddo wedi''i brisio ar 31 Mawrth 1982
-calc.costsAtLegislationStart.helpText = Os oeddech yn berchen ar yr eiddo gyda rhywun arall, dylech ond nodi''ch cyfran chi o''r costau, fel y cytunwyd gyda''ch cydberchennog.
+calc.costsAtLegislationStart.helpText = Os oeddech yn berchen ar yr eiddo gyda rhywun arall, dylech ond nodi''ch cyfran chi o''r costau, fel y cytunwyd gyda''ch cydberchennog. Er enghraifft, £10,000.50
 calc.costsAtLegislationStart.howMuch = Beth oedd y gost o brisio''r eiddo?
 calc.costsAtLegislationStart.title = A wnaethoch dalu i gael prisio''r eiddo ar 31 Mawrth 1982?
 
-calc.currentIncome.errorReal = Mae''n rhaid i ''Beth oedd cyfanswm eich incwm yn y DU yn y flwyddyn dreth pan wnaethoch beidio â bod yn berchen ar yr eiddo?'' fod yn y fformat cywir, megis 25000
+calc.currentIncome.errorReal = Mae''n rhaid i ''Beth oedd cyfanswm eich incwm yn y DU yn y flwyddyn dreth pan wnaethoch beidio â bod yn berchen ar yr eiddo?'' fod yn y fformat cywir
 calc.currentIncome.errorMax = Mae''n rhaid i ''Beth oedd cyfanswm eich incwm yn y DU yn y flwyddyn dreth pan wnaethoch beidio â bod yn berchen ar yr eiddo?'' fod yn £1,000,000,000 neu lai
 calc.currentIncome.errorDecimalPlaces = Mae ''Beth oedd cyfanswm eich incwm yn y DU yn y flwyddyn dreth pan wnaethoch beidio â bod yn berchen ar yr eiddo?'' yn cynnwys gormod o rifau ar ôl y pwynt degol
 calc.currentIncome.errorNegative = Mae''n rhaid i ''Beth oedd cyfanswm eich incwm yn y DU yn y flwyddyn dreth pan wnaethoch beidio â bod yn berchen ar yr eiddo?'' fod yn £0 neu fwy
@@ -158,7 +160,7 @@ calc.currentIncome.helpText.line1 = Rhowch amcangyfrif realistig os oedd hyn yn 
 calc.currentIncome.helpText.line2 = Dylech gynnwys eich cyflog yn y DU cyn treth, ac unrhyw beth arall rydych yn talu treth incwm y DU arno. Peidiwch â chynnwys yr arian a wnaethoch wrth werthu''r eiddo.
 calc.currentIncome.question = Beth oedd cyfanswm eich incwm yn y DU yn y flwyddyn dreth pan wnaethoch beidio â bod yn berchen ar yr eiddo?
 
-calc.disposalCosts.errorReal = Mae''n rhaid i ''Faint y gwnaethoch ei dalu o ran costau pan wnaethoch beidio â bod yn berchen ar yr eiddo?'' fod yn y fformat cywir, megis 10000.00
+calc.disposalCosts.errorReal = Mae''n rhaid i ''Faint y gwnaethoch ei dalu o ran costau pan wnaethoch beidio â bod yn berchen ar yr eiddo?'' fod yn y fformat cywir
 calc.disposalCosts.errorMax = Mae''n rhaid i ''Faint y gwnaethoch ei dalu o ran costau pan wnaethoch beidio â bod yn berchen ar yr eiddo?'' fod yn £1,000,000,000 neu lai
 calc.disposalCosts.errorDecimalPlaces = Mae ''Faint y gwnaethoch ei dalu o ran costau pan wnaethoch beidio â bod yn berchen ar yr eiddo?'' yn cynnwys gormod o rifau ar ôl y pwynt degol
 calc.disposalCosts.errorNegativeNumber = Mae''n rhaid i ''Faint y gwnaethoch ei dalu o ran costau pan wnaethoch beidio â bod yn berchen ar yr eiddo?'' fod yn £0 neu lai
@@ -169,7 +171,6 @@ calc.disposalCosts.helpBulletTwo = cyfreithwyr neu drawsgludwyr
 calc.disposalCosts.helpTitle = Dyma''r hyn yr ydych wedi talu amdano:
 calc.disposalCosts.jointOwnership = Os oeddech yn berchen ar yr eiddo gyda rhywun arall, dylech ond nodi''ch cyfran chi o''r costau, fel y cytunwyd gyda''ch cydberchennog.
 calc.disposalCosts.question = Faint y gwnaethoch ei dalu o ran costau pan wnaethoch beidio â bod yn berchen ar yr eiddo?
-
 calc.disposalDate.question            = Pryd y gwnaethoch lofnodi''r contract a wnaeth rywun arall yn berchennog?
 disposalDate.error.required           = Nodwch y diwrnod, y mis, a’r flwyddyn y gwnaethoch lofnodi’r contract a wnaeth rywun arall yn berchennog
 disposalDate.error.required.day       = Nodwch y diwrnod y gwnaethoch lofnodi’r contract a wnaeth rywun arall yn berchennog
@@ -192,7 +193,7 @@ disposalDate.error.notReal.year       = Nodwch flwyddyn go iawn ar gyfer y dyddi
 
 calc.disposalValue.errorDecimalPlaces = Mae ''Am faint y gwnaethoch werthu''r eiddo?'' yn cynnwys gormod o rifau ar ôl y pwynt degol
 calc.disposalValue.errorNegative = Mae''n rhaid i ''Am faint y gwnaethoch werthu''r eiddo?'' fod yn £0 neu fwy
-calc.disposalValue.errorReal = Mae''n rhaid i ''Am faint y gwnaethoch werthu''r eiddo?'' fod yn y fformat cywir, megis 250000
+calc.disposalValue.errorReal = Mae''n rhaid i ''Am faint y gwnaethoch werthu''r eiddo?'' fod yn y fformat cywir
 calc.disposalValue.errorMax = Mae''n rhaid i ''Am faint y gwnaethoch werthu''r eiddo?'' fod yn £1,000,000,000 neu lai
 calc.disposalValue.jointOwnership = Os oeddech yn berchen ar yr eiddo gyda rhywun arall, dylech ond nodi''ch cyfran chi o''r pris gwerthu
 calc.disposalValue.question = Am faint y gwnaethoch werthu''r eiddo?
@@ -205,13 +206,13 @@ calc.howBecameOwner.gifted = ei gael fel anrheg
 calc.howBecameOwner.inherited = ei etifeddu
 calc.howBecameOwner.question = Sut y daethoch yn berchennog?
 
-calc.howMuchGain.errorReal = Mae''n rhaid i ''Faint oedd eich enillion trethadwy?'' fod yn y fformat cywir, megis 10000
+calc.howMuchGain.errorReal = Mae''n rhaid i ''Faint oedd eich enillion trethadwy?'' fod yn y fformat cywir
 calc.howMuchGain.errorMax = Mae''n rhaid i ''Faint oedd eich enillion trethadwy?'' fod yn £1,000,000,000 neu lai
 calc.howMuchGain.errorNegative = Mae''n rhaid i ''Faint oedd eich enillion trethadwy?'' fod yn £0 neu fwy
 calc.howMuchGain.errorDecimalPlaces = Mae ''Faint oedd eich enillion trethadwy?'' yn cynnwys gormod o rifau ar ôl y pwynt degol
 calc.howMuchGain.question = Faint oedd eich enillion trethadwy?
 
-calc.howMuchLoss.errorReal = Mae''n rhaid i ''Faint o golled wnaethoch roi gwybod amdani?'' fod yn y fformat cywir, megis 10000
+calc.howMuchLoss.errorReal = Mae''n rhaid i ''Faint o golled wnaethoch roi gwybod amdani?'' fod yn y fformat cywir
 calc.howMuchLoss.errorMax = Mae''n rhaid i ''Faint o golled wnaethoch roi gwybod amdani?'' fod yn £1,000,000,000 neu''n llai
 calc.howMuchLoss.errorNegative = Mae''n rhaid i ''Faint o golled wnaethoch roi gwybod amdani?'' fod yn £0 neu fwy
 calc.howMuchLoss.errorDecimal = Mae ''Faint o golled wnaethoch roi gwybod amdani?'' yn cynnwys gormod o rifau ar ôl y pwynt degol
@@ -233,12 +234,12 @@ calc.improvements.questionFour = Faint ydych wedi''i wario ar welliannau ers 6 E
 calc.improvements.questionThree = Faint y gwnaethoch ei wario ar welliannau cyn 6 Ebrill 2015?
 calc.improvements.questionTwo = Beth oedd cost y gwelliannau?
 
-calc.marketValue.error.gaveItAway.errorReal = Mae''n rhaid i ''Beth oedd gwerth yr eiddo pan wnaethoch ei roi i ffwrdd?'' fod yn y fformat cywir, megis 250000
+calc.marketValue.error.gaveItAway.errorReal = Mae''n rhaid i ''Beth oedd gwerth yr eiddo pan wnaethoch ei roi i ffwrdd?'' fod yn y fformat cywir
 calc.marketValue.error.gaveItAway.errorMax = Mae''n rhaid i ''Beth oedd gwerth yr eiddo pan wnaethoch ei roi i ffwrdd?'' fod yn £1,000,000,000 neu lai
 calc.marketValue.error.gaveItAway.decimalPlaces = Mae ''Beth oedd gwerth yr eiddo pan wnaethoch ei roi i ffwrdd?'' yn cynnwys gormod o rifau ar ôl y pwynt degol
 calc.marketValue.error.gaveItAway.negative = Mae''n rhaid i ''Beth oedd gwerth yr eiddo pan wnaethoch ei roi i ffwrdd?'' fod yn £0 neu fwy
 
-calc.marketValue.error.sold.errorReal = Mae''n rhaid i ''Beth oedd gwerth marchnadol yr eiddo pan wnaethoch ei werthu?'' fod yn y fformat cywir, megis 250000
+calc.marketValue.error.sold.errorReal = Mae''n rhaid i ''Beth oedd gwerth marchnadol yr eiddo pan wnaethoch ei werthu?'' fod yn y fformat cywir
 calc.marketValue.error.sold.errorMax = Mae''r rhaid i ''Beth oedd gwerth marchnadol yr eiddo pan wnaethoch ei werthu?'' fod yn £1,000,000,000 neu lai
 calc.marketValue.error.sold.decimalPlaces = Mae ''Beth oedd gwerth marchnadol yr eiddo pan wnaethoch ei werthu?'' yn cynnwys gormod o rifau ar ôl y pwynt degol
 calc.marketValue.error.sold.negative = Mae''n rhaid i ''Beth oedd gwerth marchnadol yr eiddo pan wnaethoch ei werthu?'' fod yn £0 neu fwy
@@ -251,7 +252,7 @@ calc.marketValue.sold.question = Beth oedd gwerth marchnadol yr eiddo pan wnaeth
 calc.nonresident.outsideTaxYears.message = Gallwch barhau i''w defnyddio, ond byddwn yn defnyddio''r cyfraddau treth o''r flwyddyn dreth {0}.
 calc.nonresident.outsideTaxYears.title = Nid yw''r gyfrifiannell hon yn cefnogi''r dyddiad rydych wedi''i nodi
 calc.nonResident.rebasedValue.date = 5 Ebrill 2015?
-calc.nonResident.rebasedValue.error.no.value.supplied = Mae''n rhaid i ‘Beth oedd gwerth marchnadol yr eiddo ar 5 Ebrill 2015?'' fod yn y fformat cywir, megis 250000
+calc.nonResident.rebasedValue.error.no.value.supplied = Mae''n rhaid i ‘Beth oedd gwerth marchnadol yr eiddo ar 5 Ebrill 2015?'' fod yn y fformat cywir
 calc.nonResident.rebasedValue.errorDecimalPlaces = Mae ‘Beth oedd gwerth marchnadol yr eiddo ar 5 Ebrill 2015?'' yn cynnwys gormod o rifau ar ôl y pwynt degol
 calc.nonResident.rebasedValue.errorNegative = Mae''n rhaid i ‘Beth oedd gwerth marchnadol yr eiddo ar 5 Ebrill 2015?'' fod yn £0 neu fwy
 calc.nonResident.rebasedValue.errorMax = Mae''n rhaid i ‘Beth oedd gwerth marchnadol yr eiddo ar 5 Ebrill 2015?'' fod yn £1,000,000,000 neu lai
@@ -275,7 +276,7 @@ calc.otherProperties.errors.required = Dewiswch ''Iawn'' os gwnaethoch werthu ne
 
 calc.otherReliefs.button.addRelief = Ychwanegu rhyddhad
 calc.otherReliefs.button.updateRelief = Diweddaru rhyddhad
-calc.otherReliefs.errorReal = Mae''n rhaid i ''Faint o ryddhad treth ychwanegol rydych yn ei hawlio?'' fod yn y fformat cywir, megis 10000
+calc.otherReliefs.errorReal = Mae''n rhaid i ''Faint o ryddhad treth ychwanegol rydych yn ei hawlio?'' fod yn y fformat cywir
 calc.otherReliefs.errorMax = Mae''n rhaid i ''Faint o ryddhad treth ychwanegol rydych yn ei hawlio?'' fod yn £1,000,000,000 neu lai
 calc.otherReliefs.errorNegative = Mae''n rhaid i ''Faint o ryddhad treth ychwanegol rydych yn ei hawlio?'' fod yn £0 neu fwy
 calc.otherReliefs.errorDecimal = Mae ''Faint o ryddhad treth ychwanegol rydych yn ei hawlio?'' yn cynnwys gormod o rifau ar ôl y pwynt degol
@@ -291,7 +292,7 @@ calc.otherReliefs.taxableGain = Enillion trethadwy
 calc.otherReliefs.totalGain = Cyfanswm enillion
 calc.otherReliefs.totalLoss = Cyfanswm colledion
 
-calc.personalAllowance.errorReal = Mae''n rhaid i ''Faint oedd eich Lwfans Personol yn y DU yn y flwyddyn dreth pan wnaethoch beidio â bod yn berchen ar yr eiddo?'' fod yn y fformat cywir, megis 10000
+calc.personalAllowance.errorReal = Mae''n rhaid i ''Faint oedd eich Lwfans Personol yn y DU yn y flwyddyn dreth pan wnaethoch beidio â bod yn berchen ar yr eiddo?'' fod yn y fformat cywir
 calc.personalAllowance.errorDecimalPlaces = Mae ''Faint oedd eich Lwfans Personol yn y DU yn y flwyddyn dreth pan wnaethoch beidio â bod yn berchen ar yr eiddo?'' yn cynnwys gormod o rifau ar ôl y pwynt degol
 calc.personalAllowance.errorMaxLimit = Mae''n rhaid i ''Faint oedd eich Lwfans Personol yn y DU yn y flwyddyn dreth pan wnaethoch beidio â bod yn berchen ar yr eiddo?'' fod yn £{0} neu lai
 calc.personalAllowance.errorNegative = Mae''n rhaid i ''Faint oedd eich Lwfans Personol yn y DU yn y flwyddyn dreth pan wnaethoch beidio â bod yn berchen ar yr eiddo?'' fod yn £0 neu fwy
@@ -335,7 +336,7 @@ calc.rebasedCosts.errors.required =  Dewiswch ''Iawn'' os gwnaethoch dalu i gael
 calc.rebasedCosts.error.no.value.supplied = Nodwch y swm ar gyfer eich costau
 calc.rebasedCosts.errorDecimalPlaces = Mae gormod o rifau ar ôl y pwynt degol yn eich costau
 calc.rebasedCosts.errorNegative = Nodwch rif positif ar gyfer eich costau
-calc.rebasedCosts.jointOwnership = Os oeddech yn berchen ar yr eiddo gyda rhywun arall, dylech ond nodi''ch cyfran chi o''r gost, fel y cytunwyd gyda''ch cydberchennog.
+calc.rebasedCosts.jointOwnership = Os oeddech yn berchen ar yr eiddo gyda rhywun arall, dylech ond nodi''ch cyfran chi o''r gost, fel y cytunwyd gyda''ch cydberchennog. Er enghraifft, £10,000.50
 calc.rebasedCosts.question = A wnaethoch dalu i gael prisio''r eiddo ar 5 Ebrill 2015?
 calc.rebasedCosts.questionTwo = Beth oedd y gost o brisio''r eiddo?
 
@@ -440,7 +441,7 @@ calc.worthBeforeLegislationStart.help = Os nad ydych yn gwybod yr union werth, m
 calc.worthBeforeLegislationStart.information = Os cawsoch eich eiddo cyn 31 Mawrth 1982, defnyddiwch y gwerth marchnadol ar 31 Mawrth 1982 i gyfrifo''ch Treth Enillion Cyfalaf. Ar ôl y dyddiad hwn, defnyddiwch y gost wreiddiol.
 calc.worthBeforeLegislationStart.jointOwnership = Os oeddech yn berchen ar yr eiddo gyda rhywun arall, dylech ond nodi''ch cyfran chi o werth yr eiddo.
 calc.worthBeforeLegislationStart.question = Beth oedd gwerth marchnadol yr eiddo ar 31 Mawrth 1982?
-calc.worthBeforeLegislationStart.errorReal = Mae''n rhaid i ‘Beth oedd gwerth marchnadol yr eiddo ar 31 Mawrth 1982?'' fod yn y fformat cywir, megis 150000
+calc.worthBeforeLegislationStart.errorReal = Mae''n rhaid i ‘Beth oedd gwerth marchnadol yr eiddo ar 31 Mawrth 1982?'' fod yn y fformat cywir
 calc.worthBeforeLegislationStart.errorMax = Mae''n rhaid i ‘Beth oedd gwerth marchnadol yr eiddo ar 31 Mawrth 1982?'' fod yn £1,000,000,000 neu lai
 calc.worthBeforeLegislationStart.errorNegative = Mae''n rhaid i ‘Beth oedd gwerth marchnadol yr eiddo ar 31 Mawrth 1982?'' fod yn £0 neu fwy
 calc.worthBeforeLegislationStart.errorDecimalPlaces = Mae ‘Beth oedd gwerth marchnadol yr eiddo ar 31 Mawrth 1982?'' yn cynnwys gormod o rifau ar ôl y pwynt degol
@@ -448,7 +449,7 @@ calc.worthBeforeLegislationStart.errorDecimalPlaces = Mae ‘Beth oedd gwerth ma
 calc.worthWhenBoughtForLess.helpText = Os oeddech yn berchen ar yr eiddo gyda rhywun arall, dylech ond nodi''ch cyfran chi o werth yr eiddo.
 calc.worthWhenBoughtForLess.hint = Gallwch ddefnyddio prisiad gan syrfëwr. Os nad ydych yn gwybod yr union werth, mae''n rhaid i chi roi amcangyfrif realistig. Efallai y bydd yn rhaid i chi dalu rhagor os ydym o''r farn nad yw''ch amcangyfrif yn realistig.
 calc.worthWhenBoughtForLess.question = Beth oedd gwerth marchnadol yr eiddo pan wnaethoch ei brynu?
-calc.worthWhenBoughtForLess.errorReal = Mae''n rhaid i ''Beth oedd gwerth marchnadol yr eiddo pan wnaethoch ei brynu?'' fod yn y fformat cywir, megis 150000
+calc.worthWhenBoughtForLess.errorReal = Mae''n rhaid i ''Beth oedd gwerth marchnadol yr eiddo pan wnaethoch ei brynu?'' fod yn y fformat cywir
 calc.worthWhenBoughtForLess.errorMax = Mae''n rhaid i ''Beth oedd gwerth marchnadol yr eiddo pan wnaethoch ei brynu?'' fod yn £1,000,000,000 neu lai
 calc.worthWhenBoughtForLess.errorNegative = Mae''n rhaid i ''Beth oedd gwerth marchnadol yr eiddo pan wnaethoch ei brynu?'' fod yn £0 neu fwy
 calc.worthWhenBoughtForLess.errorDecimalPlaces = Mae ''Beth oedd gwerth marchnadol yr eiddo pan wnaethoch ei brynu?'' yn cynnwys gormod o rifau ar ôl y pwynt degol
@@ -456,20 +457,20 @@ calc.worthWhenBoughtForLess.errorDecimalPlaces = Mae ''Beth oedd gwerth marchnad
 calc.worthWhenGiftedTo.help = Os nad ydych yn gwybod yr union werth, mae''n rhaid i chi roi amcangyfrif realistig. Efallai y bydd yn rhaid i chi dalu rhagor os ydym o''r farn nad yw''ch amcangyfrif yn realistig.
 calc.worthWhenGiftedTo.jointOwnership = Os oeddech yn berchen ar yr eiddo gyda rhywun arall, dylech ond nodi''ch cyfran chi o werth yr eiddo.
 calc.worthWhenGiftedTo.question = Beth oedd gwerth marchnadol yr eiddo pan gawsoch e fel rhodd?
-calc.worthWhenGiftedTo.errorReal = Mae''n rhaid i ''Beth oedd gwerth marchnadol yr eiddo pan gawsoch ef fel rhodd?'' fod yn y fformat cywir, megis 150000
+calc.worthWhenGiftedTo.errorReal = Mae''n rhaid i ''Beth oedd gwerth marchnadol yr eiddo pan gawsoch ef fel rhodd?'' fod yn y fformat cywir
 calc.worthWhenGiftedTo.errorMax = Mae''n rhaid i ''Beth oedd gwerth marchnadol yr eiddo pan gawsoch ef fel rhodd?'' fod yn £1,000,000,000 neu lai
 calc.worthWhenGiftedTo.errorNegative = Mae''n rhaid i ''Beth oedd gwerth marchnadol yr eiddo pan gawsoch ef fel rhodd?'' fod yn £0 neu fwy
 calc.worthWhenGiftedTo.errorDecimalPlaces = Mae ''Beth oedd gwerth marchnadol yr eiddo pan gawsoch ef fel rhodd?'' yn cynnwys gormod o rifau ar ôl y pwynt degol
 
 calc.worthWhenInherited.hint = Dyma werth yr eiddo ar y dyddiad y bu''r perchennog blaenorol farw.
 calc.worthWhenInherited.question = Beth oedd gwerth marchnadol yr eiddo pan wnaethoch ei etifeddu?
-calc.worthWhenInherited.errorReal = Mae''n rhaid i ''Beth oedd gwerth marchnadol yr eiddo pan wnaethoch ei etifeddu?'' fod yn y fformat cywir, megis 150000
+calc.worthWhenInherited.errorReal = Mae''n rhaid i ''Beth oedd gwerth marchnadol yr eiddo pan wnaethoch ei etifeddu?'' fod yn y fformat cywir
 calc.worthWhenInherited.errorMax = Mae''n rhaid i ''Beth oedd gwerth marchnadol yr eiddo pan wnaethoch ei etifeddu?'' fod yn £1,000,000,000 neu lai
 calc.worthWhenInherited.errorNegative = Mae''n rhaid i ''Beth oedd gwerth marchnadol yr eiddo pan wnaethoch ei etifeddu?'' fod yn £0 neu fwy
 calc.worthWhenInherited.errorDecimalPlaces = Mae ''Beth oedd gwerth marchnadol yr eiddo pan wnaethoch ei etifeddu?'' yn cynnwys gormod o rifau ar ôl y pwynt degol
 
 error.number = Nodwch rif heb atalnodau, er enghraifft 10000.00
-error.real = Nodwch rif heb atalnodau, er enghraifft 10000.00
+error.real = Nodwch rif heb atalnodau
 
 error.required = Mae angen llenwi''r blwch hwn
 

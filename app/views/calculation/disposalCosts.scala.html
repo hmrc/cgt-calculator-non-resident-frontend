@@ -35,20 +35,24 @@
 ) {
 
     @errorSummary(disposalCostsForm.errors)
-    <h1 class="govuk-heading-xl" for="disposal-value">@Messages("calc.disposalCosts.question")</h1>
-        <span id="input-hint" class="govuk-body">
-            <p id="bullet-list-title">@Messages("calc.disposalCosts.helpTitle") </p>
-            <ul class="govuk-list govuk-list--bullet govuk-body">
-                <li >@Messages("calc.disposalCosts.helpBulletOne")</li>
-                <li>@Messages("calc.disposalCosts.helpBulletTwo")</li>
-                <li>@Messages("calc.disposalCosts.helpBulletThree")</li>
-                <li>@Messages("calc.disposalCosts.helpBulletFour")</li>
-            </ul>
-        </span>
+    <h1 class="govuk-heading-xl">@messages("calc.disposalCosts.question")</h1>
+    <div id="input-hint">
+        <p id="bullet-list-title" class="govuk-body">@messages("calc.disposalCosts.helpTitle")</p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li >@messages("calc.disposalCosts.helpBulletOne")</li>
+            <li>@messages("calc.disposalCosts.helpBulletTwo")</li>
+            <li>@messages("calc.disposalCosts.helpBulletThree")</li>
+            <li>@messages("calc.disposalCosts.helpBulletFour")</li>
+        </ul>
+    </div>
+    <p class="govuk-inset-text">@messages("calc.disposalCosts.jointOwnership")</p>
     @form(action = controllers.routes.DisposalCostsController.submitDisposalCosts) {
-    <p class="govuk-inset-text">@Messages("calc.disposalCosts.jointOwnership")</p>
-
-        @formInputMoney(disposalCostsForm("disposalCosts"), Messages("calc.disposalCosts.question"), hideLabel = true)
+        @formInputMoney(
+            field = disposalCostsForm("disposalCosts"),
+            question = messages("calc.disposalCosts.question"),
+            labelClass = "govuk-label--m",
+            hintText = Some(messages("calc.currencyHint", "£10,000.50"))
+        )
         @submitButton()
     }
 }

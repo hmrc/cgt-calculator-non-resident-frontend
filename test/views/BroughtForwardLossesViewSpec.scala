@@ -86,12 +86,12 @@ class BroughtForwardLossesViewSpec extends CommonPlaySpec with WithCommonFakeApp
 
       "have body text" which {
         lazy val bodyText = document.body().select(".govuk-hint")
-        "has only a single div with a class of govuk-hint" in {
-          bodyText.size() shouldBe 1
+        "has 2 form hints with a class of govuk-hint" in {
+          bodyText.size() shouldBe 2
         }
 
         s"has a paragraph with the text ${messages.BroughtForwardLosses.helpText}" in {
-          bodyText.text shouldBe messages.BroughtForwardLosses.helpText
+          bodyText.text should include(messages.BroughtForwardLosses.helpText)
         }
       }
 

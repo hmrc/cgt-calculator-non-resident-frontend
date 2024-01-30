@@ -37,7 +37,7 @@ class AcquisitionCostsViewSpec extends CommonPlaySpec with WithCommonFakeApplica
   "Acquisition costs view" when {
 
     "supplied with no errors and is owner before legislation start" should {
-      lazy val view = acquisitionCostsView(acquisitionCostsForm, "back-link", ownerBeforeLegislation = true)(fakeRequest,mockMessage)
+      lazy val view = acquisitionCostsView(acquisitionCostsForm, "back-link", ownerBeforeLegislation = true)(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${pageTitle}'" in {

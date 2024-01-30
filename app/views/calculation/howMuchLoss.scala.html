@@ -37,7 +37,12 @@
 
     @errorSummary(howMuchLossForm.errors)
     @form(action = controllers.routes.HowMuchLossController.submitHowMuchLoss) {
-        @formInputMoney(howMuchLossForm("loss"), Messages("calc.howMuchLoss.question"), hideLabel = false)
+        @formInputMoney(
+            field = howMuchLossForm("loss"),
+            question = messages("calc.howMuchLoss.question"),
+            labelClass = "govuk-label--xl",
+            hintText = Some(messages("calc.currencyHint", "£10,000"))
+        )
         @submitButton()
     }
 }

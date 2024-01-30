@@ -42,9 +42,9 @@
     @form(action = controllers.routes.DisposalValueController.submitDisposalValue) {
 
         @formInputMoney(
-            disposalValueForm("disposalValue"),
-            Messages("calc.disposalValue.question"),
-            hideLabel = false,
+            field = disposalValueForm("disposalValue"),
+            question = messages("calc.disposalValue.question"),
+            labelClass = "govuk-label--xl",
             hintText = Some(Messages("calc.disposalValue.jointOwnership"))
         )
 

@@ -42,11 +42,15 @@ class AcquisitionValueViewSpec extends CommonPlaySpec with WithCommonFakeApplica
     "have a h1 tag that" should {
 
       s"have the heading ${messages.question}" in {
-        document.select("h1").text shouldEqual messages.question
+        document.select("h1 > label").text shouldEqual messages.question
       }
 
-      "have the heading-large class" in {
-        document.select("h1").hasClass("govuk-heading-xl") shouldBe true
+      "wraps the form label" in {
+        document.select("h1").hasClass("govuk-label-wrapper") shouldBe true
+      }
+
+      "contains an extra large label" in {
+        document.select("h1 > label").hasClass("govuk-label--xl")
       }
     }
 
@@ -56,7 +60,7 @@ class AcquisitionValueViewSpec extends CommonPlaySpec with WithCommonFakeApplica
 
     "have a 'Back link' that" should{
 
-      lazy val helpText = document.getElementsByClass("govuk-inset-text")
+      lazy val helpText = document.getElementsByClass("govuk-hint")
 
       s"have the text of ${commonMessages.back}" in {
         document.select("a.govuk-back-link").text shouldEqual commonMessages.back

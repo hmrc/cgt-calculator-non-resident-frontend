@@ -71,8 +71,7 @@
         @formInputNumber(
             field = privateResidenceReliefForm("daysClaimed"),
             question = {if(showOnlyFlatQuestion){messages("calc.privateResidenceRelief.questionFlat", disposalDateLess18MonthsString)}else{messages("calc.privateResidenceRelief.firstQuestion")}},
-            hideLabel = false,
-            isHiddenQuestion = true,
+            labelClass = "govuk-label--m",
             showCurrency = false
         )
     }
@@ -80,8 +79,7 @@
         @formInputNumber(
             field = privateResidenceReliefForm("daysClaimedAfter"),
             question = messages("calc.privateResidenceRelief.questionBetween", disposalDateLess18MonthsString),
-            hideLabel = false,
-            isHiddenQuestion = true,
+            labelClass = "govuk-label--m",
             showCurrency = false
         )
     }

@@ -53,7 +53,12 @@
         </ul>
     </div>
     @form(action = controllers.routes.OtherReliefsTAController.submitOtherReliefsTA) {
-        @formInputMoney(otherReliefsForm("otherReliefs"), messages("calc.otherReliefs.question"), hideLabel = true)
+        @formInputMoney(
+            field = otherReliefsForm("otherReliefs"),
+            question = messages("calc.otherReliefs.question"),
+            labelClass = "govuk-label--m",
+            hintText = Some(messages("calc.currencyHint", "£10,000"))
+        )
         @govukButton(Button(
             content = Text(messages(if(hasExistingReliefAmount) "calc.otherReliefs.button.updateRelief" else "calc.otherReliefs.button.addRelief")),
             attributes = Map("id" -> "add-relief-button")

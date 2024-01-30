@@ -22,16 +22,15 @@
 @(
         field: Field,
         question: String,
-        hideLabel: Boolean,
+        labelClass: String = "govuk-label--xl",
         hintText: Option[String] = None,
-        isHiddenQuestion: Boolean = false,
         showCurrency: Boolean = true
 )(implicit messages: Messages)
 
 @govukInput(Input(
     label = Label(
-        isPageHeading = !(hideLabel || isHiddenQuestion),
-        classes = if(hideLabel) "govuk-visually-hidden" else if(isHiddenQuestion) "govuk-label--m" else "govuk-label--xl",
+        isPageHeading = labelClass.matches("govuk-label--xl"),
+        classes = labelClass,
         content = Text(question)
     ),
     hint = hintText.map(text => (Hint(content = Text(text)))),
