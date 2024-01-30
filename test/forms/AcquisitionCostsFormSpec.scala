@@ -112,8 +112,7 @@ class AcquisitionCostsFormSpec extends CommonPlaySpec with WithCommonFakeApplica
       }
 
       s"return the correct error message" in {
-        form.error("acquisitionCosts").get.message shouldBe "calc.common.error.maxNumericExceeded"
-        form.error("acquisitionCosts").get.args shouldBe Array("1,000,000,000")
+        form.error("acquisitionCosts").get.message shouldBe messages.AcquisitionCosts.errorTooHigh
       }
     }
 
@@ -125,8 +124,8 @@ class AcquisitionCostsFormSpec extends CommonPlaySpec with WithCommonFakeApplica
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.errorRealNumber}" in {
-        form.error("acquisitionCosts").get.message shouldBe messages.errorRealNumber
+      s"return an error message of '${messages.AcquisitionCosts.errorRequired}" in {
+        form.error("acquisitionCosts").get.message shouldBe messages.AcquisitionCosts.errorRequired
       }
     }
 
@@ -138,8 +137,8 @@ class AcquisitionCostsFormSpec extends CommonPlaySpec with WithCommonFakeApplica
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.errorRealNumber}" in {
-        form.error("acquisitionCosts").get.message shouldBe messages.errorRealNumber
+      s"return an error message of '${messages.AcquisitionCosts.errorInvalid}" in {
+        form.error("acquisitionCosts").get.message shouldBe messages.AcquisitionCosts.errorInvalid
       }
     }
   }

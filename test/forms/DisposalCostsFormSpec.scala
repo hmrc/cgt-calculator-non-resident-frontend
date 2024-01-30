@@ -98,8 +98,8 @@ class DisposalCostsFormSpec extends CommonPlaySpec with WithCommonFakeApplicatio
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of ${messages.DisposalCosts.errorReal}" in {
-        form.error("disposalCosts").get.message shouldBe messages.DisposalCosts.errorReal
+      s"return an error message of ${messages.DisposalCosts.errorRequired}" in {
+        form.error("disposalCosts").get.message shouldBe messages.DisposalCosts.errorRequired
       }
     }
 

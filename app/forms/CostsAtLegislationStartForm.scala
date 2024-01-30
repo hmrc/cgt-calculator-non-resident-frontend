@@ -32,14 +32,15 @@ object CostsAtLegislationStartForm {
         .verifying("calc.costsAtLegislationStart.errors.required", yesNoCheck),
       "costs" -> mandatoryIf(
         isEqual("hasCosts", "Yes"),
-        common.Formatters.text("calc.costsAtLegislationStart.error.no.value.supplied")
-          .verifying("error.number", bigDecimalCheck)
+        common.Formatters.text("calc.costsAtLegislationStart.error.required")
+          .transform(stripCurrencyCharacters, stripCurrencyCharacters)
+          .verifying("calc.costsAtLegislationStart.error.invalid", bigDecimalCheck)
           .transform(stringToBigDecimal, bigDecimalToString)
           .verifying(
             stopOnFirstFail(
               negativeConstraint("calc.costsAtLegislationStart.errorNegative"),
               decimalPlaceConstraint("calc.costsAtLegislationStart.errorDecimalPlaces"),
-              maxMonetaryValueConstraint()
+              maxMonetaryValueConstraint(errMsgKey = "calc.costsAtLegislationStart.error.tooHigh")
             )
           )
       )

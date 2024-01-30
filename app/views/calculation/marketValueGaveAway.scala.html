@@ -35,15 +35,15 @@
 
     @errorSummary(marketValueForm.errors)
 
-    <h1 class="govuk-heading-xl" for="disposal-value">@Messages("calc.marketValue.gaveItAway.question")</h1>
+    <h1 class="govuk-heading-xl">@messages("calc.marketValue.gaveItAway.question")</h1>
 
-    <p class="govuk-body">@Messages("calc.marketValue.helpText") <br/>
-        @Messages("calc.marketValue.helpTextAdditional")
+    <p class="govuk-body">@messages("calc.marketValue.helpText") <br/>
+        @messages("calc.marketValue.helpTextAdditional")
     </p>
 
     @form(action = controllers.routes.MarketValueWhenSoldOrGaveAwayController.submitMarketValueWhenGaveAway) {
 
-        <p class="govuk-inset-text">@Messages("calc.marketValue.jointOwnership")</p>
+        <p class="govuk-inset-text">@messages("calc.marketValue.jointOwnership")</p>
 
         @formInputMoney(
             field = marketValueForm("disposalValue"),

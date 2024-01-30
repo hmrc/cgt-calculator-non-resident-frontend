@@ -126,8 +126,8 @@ class AcquisitionMarketValueFormSpec extends CommonPlaySpec with WithCommonFakeA
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${commonMessages.WorthWhenBoughtForLess.errorReal}" in {
-        form.error("acquisitionMarketValue").get.message shouldBe commonMessages.WorthWhenBoughtForLess.errorReal
+      s"return an error message of '${commonMessages.WorthWhenBoughtForLess.errorRequired}" in {
+        form.error("acquisitionMarketValue").get.message shouldBe commonMessages.WorthWhenBoughtForLess.errorRequired
       }
     }
 
@@ -246,8 +246,8 @@ class AcquisitionMarketValueFormSpec extends CommonPlaySpec with WithCommonFakeA
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${commonMessages.WorthWhenInherited.errorReal}" in {
-        form.error("acquisitionMarketValue").get.message shouldBe commonMessages.WorthWhenInherited.errorReal
+      s"return an error message of '${commonMessages.WorthWhenInherited.errorRequired}" in {
+        form.error("acquisitionMarketValue").get.message shouldBe commonMessages.WorthWhenInherited.errorRequired
       }
     }
 
@@ -366,8 +366,8 @@ class AcquisitionMarketValueFormSpec extends CommonPlaySpec with WithCommonFakeA
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${commonMessages.WorthWhenGiftedTo.errorReal}" in {
-        form.error("acquisitionMarketValue").get.message shouldBe commonMessages.WorthWhenGiftedTo.errorReal
+      s"return an error message of '${commonMessages.WorthWhenGiftedTo.errorRequired}" in {
+        form.error("acquisitionMarketValue").get.message shouldBe commonMessages.WorthWhenGiftedTo.errorRequired
       }
     }
 

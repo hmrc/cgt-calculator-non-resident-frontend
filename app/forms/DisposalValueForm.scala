@@ -28,7 +28,7 @@ object DisposalValueForm {
     mapping(
       "disposalValue" -> text
         .transform(stripCurrencyCharacters, stripCurrencyCharacters)
-        .verifying("calc.disposalValue.errorReal", mandatoryCheck)
+        .verifying("calc.disposalValue.error.required", mandatoryCheck)
         .verifying("calc.disposalValue.errorReal", bigDecimalCheck)
         .transform(stringToBigDecimal, bigDecimalToString)
         .verifying("calc.disposalValue.errorNegative", isPositive)

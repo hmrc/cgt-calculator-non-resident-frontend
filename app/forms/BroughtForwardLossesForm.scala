@@ -57,15 +57,16 @@ object BroughtForwardLossesForm {
         .transform(stringToBoolean, booleanToString),
       "broughtForwardLoss" -> mandatoryIf(
         isEqual("isClaiming", "Yes"),
-        common.Formatters.text("error.real")
+        common.Formatters.text("calc.broughtForwardLosses.error.required")
           .transform(stripCurrencyCharacters, stripCurrencyCharacters)
-          .verifying("error.real", bigDecimalCheck)
-          .transform(stringToBigDecimal, bigDecimalToString)
+          .verifying("calc.broughtForwardLosses.error.required", mandatoryCheck)
+          .verifying("calc.broughtForwardLosses.error.invalid", bigDecimalCheck)
+          .transform(stringToBigDecimal, bigDecimalToString).verifying()
+          .verifying("calc.broughtForwardLosses.errorDecimal", decimalPlacesCheck)
+          .verifying("calc.broughtForwardLosses.errorNegative", isPositive)
+          .verifying(maxMonetaryValueConstraint(Constants.maxNumeric, "calc.broughtForwardLosses.error.tooHigh"))
       )
     )(BroughtForwardLossesModel.apply)(BroughtForwardLossesModel.unapply)
-      .verifying("error.real", verifyMandatory)
-      .verifying("calc.broughtForwardLosses.errorDecimal", verifyDecimal)
-      .verifying("calc.broughtForwardLosses.errorNegative", verifyPositive)
-      .verifying(maxMonetaryValueConstraint[BroughtForwardLossesModel](Constants.maxNumeric, getLossesAmount))
+
   )
 }

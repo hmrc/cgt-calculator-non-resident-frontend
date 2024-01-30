@@ -29,7 +29,7 @@ object OtherReliefsForm {
       mapping(
         "otherReliefs" -> text
           .transform(stripCurrencyCharacters, stripCurrencyCharacters)
-          .verifying("calc.otherReliefs.errorReal", mandatoryCheck)
+          .verifying("calc.otherReliefs.error.required", mandatoryCheck)
           .verifying("calc.otherReliefs.errorReal", bigDecimalCheck)
           .transform(stringToBigDecimal, bigDecimalToString)
           .verifying("calc.otherReliefs.errorNegative", isPositive)

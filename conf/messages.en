@@ -70,7 +70,8 @@ error.required = This field is required
 calc.currentIncome.question = What was your total UK income in the tax year when you stopped owning the property?
 calc.currentIncome.helpText.line1 = Give a realistic estimate if this was in the current tax year.
 calc.currentIncome.helpText.line2 = Include your UK salary before tax, and anything else you pay UK income tax on. Do not include the money you made from selling the property.
-calc.currentIncome.errorReal = Your total UK income in the tax year when you stopped owning the property must be in the correct format
+calc.currentIncome.error.required = Enter your total income in the tax year when you stopped owning the property
+calc.currentIncome.errorReal = Your total UK income in the tax year when you stopped owning the property must be an amount of money in pounds
 calc.currentIncome.errorMax = Your total UK income in the tax year when you stopped owning the property must be  £1,000,000,000 or less
 calc.currentIncome.errorNegative = Your total UK income in the tax year when you stopped owning the property must be £0 or more
 calc.currentIncome.errorDecimalPlaces = Your total UK income in the tax year when you stopped owning the property has too many numbers after the decimal point
@@ -79,7 +80,8 @@ calc.currentIncome.errorDecimalPlaces = Your total UK income in the tax year whe
 calc.personalAllowance.question = What was your UK Personal Allowance in the tax year when you stopped owning the property?
 calc.personalAllowance.help = This is the amount of your income that you don''t pay tax on. Find out more about
 calc.personalAllowance.link = Personal Allowances
-calc.personalAllowance.errorReal = Your UK Personal Allowance in the tax year when you stopped owning the property must be in the correct format
+calc.personalAllowance.error.required = Enter your UK Personal Allowance in the tax year when you stopped owning the property
+calc.personalAllowance.errorReal = Your UK Personal Allowance in the tax year when you stopped owning the property must be an amount of money in pounds
 calc.personalAllowance.errorNegative = Your UK Personal Allowance in the tax year when you stopped owning the property must be £0 or more
 calc.personalAllowance.errorDecimalPlaces = Enter your UK Personal Allowance in the tax year when you stopped owning the property without any numbers after the decimal point
 calc.personalAllowance.errorMaxLimit = Your UK Personal Allowance in the tax year when you stopped owning the property must be £{0} or less
@@ -92,7 +94,8 @@ calc.otherProperties.errors.required = Select yes if you sold or gave away other
 calc.annualExemptAmount.question = How much of your Capital Gains Tax allowance have you got left?
 calc.annualExemptAmount.helpOne = Your Capital Gains Tax allowance is
 calc.annualExemptAmount.helpTwo = a year. It''s the amount of capital gains you can make before you have to pay tax.
-calc.annualExemptAmount.errorReal = How much Capital Gains Tax allowance you have left must be in the correct format
+calc.annualExemptAmount.error.required = Enter how much of your Capital Gains Tax allowance that you have left
+calc.annualExemptAmount.errorReal = How much Capital Gains Tax allowance you have left must be an amount of money in pounds
 calc.annualExemptAmount.errorMax = How much Capital Gains Tax allowance you have left must be £{0} or less
 calc.annualExemptAmount.errorNegative = How much Capital Gains Tax allowance you have left must be £0 or more
 calc.annualExemptAmount.errorDecimalPlaces = How much Capital Gains Tax allowance you have left has too many numbers after the decimal point
@@ -124,7 +127,8 @@ acquisitionDate.error.range.max          = The date you signed the contract to b
 ## Acquisition Value ##
 calc.acquisitionValue.question = How much did you pay for the property?
 calc.acquisitionValue.helpText = If you owned the property with someone else, only enter your share of the purchase. For example, £150,000
-calc.acquisitionValue.errorReal = How much you paid for the property must be in the correct format
+calc.acquisitionValue.error.required = Enter how much you paid for the property
+calc.acquisitionValue.errorReal = How much you paid for the property must be an amount of money in pounds
 calc.acquisitionValue.errorMax = How much you paid for the property must be £1,000,000,000 or less
 calc.acquisitionValue.errorNegative = How much you paid for the property must be £0 or more
 calc.acquisitionValue.errorDecimalPlaces = How much you paid for the property has too many numbers after the decimal point
@@ -142,7 +146,8 @@ calc.nonResident.rebasedValue.helpHidden.title = Why we''re asking for this
 calc.nonResident.rebasedValue.hintText = If you don''t know the exact value, you must provide a realistic estimate. You might have to pay more if we think your estimate is unrealistic.
 calc.nonResident.rebasedValue.jointOwnership = If you owned the property with someone else, only enter your share of the property value.
 calc.nonResident.rebasedValue.errorNegative = The market value of the property on 5 April 2015 must be £0 or more
-calc.nonResident.rebasedValue.error.no.value.supplied = The market value of the property on 5 April 2015 must be in the correct format
+calc.nonResident.rebasedValue.error.required = Enter the market value of the property on 5 April 2015
+calc.nonResident.rebasedValue.error.invalid = The market value of the property on 5 April 2015 must be an amount of money in pounds
 calc.nonResident.rebasedValue.errorDecimalPlaces = The market value of the property on 5 April 2015 has too many numbers after the decimal point
 calc.nonResident.rebasedValue.errorMax = The market value of the property on 5 April 2015 must be £1,000,000,000 or less
 
@@ -151,9 +156,11 @@ calc.rebasedCosts.question = Did you pay to have the property valued at 5 April 
 calc.rebasedCosts.questionTwo = How much did it cost to get the property valued?
 calc.rebasedCosts.jointOwnership = If you owned the property with someone else, only enter your share of the cost, as agreed with your co-owner. For example, £10,000.50
 calc.rebasedCosts.errors.required = Select yes if you paid to have the property valued at 5 April 2015
-calc.rebasedCosts.errorNegative = Enter a positive number for your costs
-calc.rebasedCosts.error.no.value.supplied = Enter the value for your costs
-calc.rebasedCosts.errorDecimalPlaces = There are too many numbers after the decimal point in your costs
+calc.rebasedCosts.errorNegative = How much it cost to get the property valued must be £0 or more
+calc.rebasedCosts.error.required = Enter how much it cost to get the property valued
+calc.rebasedCosts.error.invalid = How much it cost to get the property valued must be an amount of money in pounds
+calc.rebasedCosts.error.tooHigh = How much it cost to get the property valued must be £1,000,000,000 or less
+calc.rebasedCosts.errorDecimalPlaces = How much it cost to get the property valued has too many numbers after the decimal point
 
 ## Improvements ##
 calc.improvements.question = Did you make any improvements to the property?
@@ -167,8 +174,21 @@ calc.improvements.questionTwo = How much did the improvements cost?
 calc.improvements.questionThree = How much did you spend on improvements before 6 April 2015?
 calc.improvements.questionFour = How much have you spent on improvements since 6 April 2015?
 calc.improvements.errors.required = Select yes if you made any improvements to the property
-calc.improvements.error.no.value.supplied = Enter the value of your improvements
-calc.improvements.errorNegative = Enter a positive number for the cost of your improvements
+
+calc.improvements.before.error.required = Enter how much you spent on improvements before 6 April 2015
+calc.improvements.before.error.invalid = How much you spent on improvements before 6 April 2015 must be an amount of money in pounds
+calc.improvements.before.error.tooHigh = How much you spent on improvements before 6 April 2015 must be £1,000,000,000 or less
+calc.improvements.before.error.tooLow = How much you spent on improvements before 6 April 2015 must be £0 or more
+calc.improvements.before.error.decimalPlaces = How much you spent on improvements before 6 April 2015 has too many numbers after the decimal point
+calc.improvements.after.error.required = Enter how much you spent on improvements since 6 April 2015
+calc.improvements.after.error.invalid = How much you spent on improvements since 6 April 2015 must be an amount of money in pounds
+calc.improvements.after.error.tooHigh = How much you spent on improvements since 6 April 2015 must be £1,000,000,000 or less
+calc.improvements.after.error.tooLow = How much you spent on improvements since 6 April 2015 must be £0 or more
+calc.improvements.after.error.decimalPlaces = How much you spent on improvements since 6 April 2015 has too many numbers after the decimal point
+calc.improvements.error.required = Enter how much the improvements cost
+calc.improvements.error.tooHigh = How much the improvements cost must be £1,000,000,000 or less
+calc.improvements.error.invalid = How much the improvements cost must be an amount of money in pounds
+calc.improvements.errorNegative = How much the improvements cost must be £0 or more
 calc.improvements.errorDecimalPlaces = The cost of your improvements has too many numbers after the decimal point
 calc.improvements.jointOwnership = If you owned the property with someone else, only enter your share of the improvement costs, as agreed with your co-owner.
 
@@ -208,15 +228,17 @@ calc.noTaxToPay.returnToGov = Return to GOV.UK
 
 ## Disposal Value ##
 calc.disposalValue.question = How much did you sell the property for?
+calc.disposalValue.error.required = Enter how much you sold the property for
 calc.disposalValue.errorNegative = How much you sold the property for must be £0 or more
 calc.disposalValue.errorDecimalPlaces = How much you sold the property for has too many numbers after the decimal point
-calc.disposalValue.errorReal = How much you sold the property for must be in the correct format
+calc.disposalValue.errorReal = How much you sold the property for must be an amount of money in pounds
 calc.disposalValue.errorMax = How much you sold the property for must be £1,000,000,000 or less
 calc.disposalValue.jointOwnership = If you owned the property with someone else, only enter your share of the sale value. For example, £250,000
 
 ## How Much Gain ##
 calc.howMuchGain.question = What was your taxable gain?
-calc.howMuchGain.errorReal = Your taxable gain must be in the correct format
+calc.howMuchGain.error.required = Enter your taxable gain
+calc.howMuchGain.errorReal = Your taxable gain must be an amount of money in pounds
 calc.howMuchGain.errorMax = Your taxable gain must be £1,000,000,000 or less
 calc.howMuchGain.errorNegative = Your taxable gain must be £0 or more
 calc.howMuchGain.errorDecimalPlaces = Your taxable gain has too many numbers after the decimal point
@@ -227,8 +249,11 @@ calc.nonResident.soldForLess.errors.required = Select yes if you sold the proper
 
 ## Acquisition Costs ##
 calc.acquisitionCosts.question = How much did you pay in costs when you became the property owner?
-calc.acquisitionCosts.errorNegative = Enter a positive number for your costs
-calc.acquisitionCosts.errorDecimalPlaces = There are too many numbers after the decimal point in your costs
+calc.acquisitionCosts.error.required = Enter how much you paid in costs when you became the property owner
+calc.acquisitionCosts.error.invalid = How much you paid in costs when you became the owner must be an amount of money in pounds
+calc.acquisitionCosts.error.tooHigh = How much you paid in costs when you became the owner must be £1,000,000,000 or less
+calc.acquisitionCosts.errorNegative = How much you paid in costs when you became the owner must be £0 or more
+calc.acquisitionCosts.errorDecimalPlaces = How much you paid in costs when you became the owner has too many numbers after the decimal point
 calc.acquisitionCosts.bulletTitle = This is what you paid for:
 calc.acquisitionCosts.bulletOne = estate agents or auctioneers
 calc.acquisitionCosts.bulletTwo = solicitors or conveyancers, including Stamp Duty Land Tax
@@ -242,22 +267,24 @@ calc.disposalCosts.helpBulletOne = estate agents or auctioneers
 calc.disposalCosts.helpBulletTwo = solicitors or conveyancers
 calc.disposalCosts.helpBulletThree = any professional help to value your property, eg surveyor or valuer
 calc.disposalCosts.helpBulletFour = advertising to find a buyer
-calc.disposalCosts.errorReal = How much did you pay in costs when you stopped owning the property must be in the correct format
+calc.disposalCosts.error.required = Enter how much you paid in costs when you stopped owning the property
+calc.disposalCosts.errorReal = How much you paid in costs when you stopped owning the property must be an amount of money in pounds
 calc.disposalCosts.errorMax = How much you paid in costs when you stopped owning the property must be £1,000,000,000 or less
 calc.disposalCosts.errorNegativeNumber = How much you paid in costs when you stopped owning the property must be £0 or more
-calc.disposalCosts.errorDecimalPlaces = How much did you pay in costs when you stopped owning the property has too many numbers after the decimal point
+calc.disposalCosts.errorDecimalPlaces = How much you paid in costs when you stopped owning the property has too many numbers after the decimal point
 
 calc.disposalCosts.jointOwnership = If you owned the property with someone else, only enter your share of the costs, as agreed with your co-owner.
 
 ## Market Value ##
 calc.marketValue.gaveItAway.question = What was the property worth when you gave it away?
 calc.marketValue.sold.question = What was the market value of the property when you sold it?
-calc.marketValue.error.gaveItAway.errorReal = What the property was worth when you gave it away must be in the correct format
+calc.marketValue.error.gaveItAway.required = Enter what the property was worth when you gave it away
+calc.marketValue.error.gaveItAway.errorReal = What the property was worth when you gave it away must be an amount of money in pounds
 calc.marketValue.error.gaveItAway.errorMax = What the property was worth when you gave it away must be £1,000,000,000 or less
 calc.marketValue.error.gaveItAway.decimalPlaces = What the property was worth when you gave it away has too many numbers after the decimal point
 calc.marketValue.error.gaveItAway.negative = What the property was worth when you gave it away must be £0 or more
-
-calc.marketValue.error.sold.errorReal = The market value of the property when you sold it must be in the correct format
+calc.marketValue.error.sold.required = Enter the market value of the property when you sold it
+calc.marketValue.error.sold.errorReal = The market value of the property must be an amount of money in pounds
 calc.marketValue.error.sold.errorMax = The market value of the property when you sold it must be £1,000,000,000 or less
 calc.marketValue.error.sold.decimalPlaces = The market value of the property when you sold it has too many numbers after the decimal point
 calc.marketValue.error.sold.negative  = The market value of the property when you sold it must be £0 or more
@@ -310,7 +337,8 @@ calc.boughtForLess.errors.required = Select yes if you bought the property for l
 
 ## Previous Loss ##
 calc.howMuchLoss.question = How much loss did you report?
-calc.howMuchLoss.errorReal = How much loss you reported must be in the correct format
+calc.howMuchLoss.error.required = Enter how much loss you reported
+calc.howMuchLoss.errorReal = How much loss you reported must be an amount of money in pounds
 calc.howMuchLoss.errorMax = How much loss you reported must be £1,000,000,000 or less
 calc.howMuchLoss.errorNegative = How much loss you reported must be £0 or more
 calc.howMuchLoss.errorDecimal = How much loss you reported has too many numbers after the decimal point
@@ -320,8 +348,11 @@ calc.broughtForwardLosses.question = Do you have losses you want to bring forwar
 calc.broughtForwardLosses.inputQuestion = Enter the loss, in pounds, you want to bring forward from previous tax years
 calc.broughtForwardLosses.helpText = These are unused losses that are covered by Non-Resident Capital Gains Tax.
 calc.broughtForwardLosses.errors.required = Select yes if you have losses to bring forward from previous tax years
-calc.broughtForwardLosses.errorDecimal = There are too many numbers after the decimal point in your brought forward loss
-calc.broughtForwardLosses.errorNegative = Enter a positive number for your brought forward loss
+calc.broughtForwardLosses.error.required = Enter the loss in pounds that you want to bring forward from previous tax years
+calc.broughtForwardLosses.error.invalid = The loss you want to bring forward from previous tax years must be an amount of money in pounds
+calc.broughtForwardLosses.error.tooHigh = The loss you want to bring forward from previous tax years must be £1,000,000,000 or less
+calc.broughtForwardLosses.errorDecimal = The loss you want to bring forward from previous years has too many numbers after the decimal point
+calc.broughtForwardLosses.errorNegative = The loss you want to bring forward from previous years must be £0 or more
 
 ## Calculation Election ##
 calc.calculationElection.pageHeading = Choose your calculation method
@@ -354,7 +385,8 @@ calc.otherReliefs.totalLoss = Total loss
 calc.otherReliefs.taxableGain = Taxable gain
 calc.otherReliefs.button.addRelief = Add relief
 calc.otherReliefs.button.updateRelief = Update relief
-calc.otherReliefs.errorReal = How much extra tax relief you are claiming must be in the correct format
+calc.otherReliefs.error.required = Enter how much extra tax relief you are claiming
+calc.otherReliefs.errorReal = The extra tax relief you are claiming must be an amount of money in pounds
 calc.otherReliefs.errorMax = How much extra tax relief you are claiming must be £1,000,000,000 or less
 calc.otherReliefs.errorNegative = How much extra tax relief you are claiming must be £0 or more
 calc.otherReliefs.errorDecimal = How much extra tax relief you are claiming has too many numbers after the decimal point
@@ -380,7 +412,8 @@ calc.acquisitionMarketValue.errorNegative = Enter a positive number for the mark
 calc.worthWhenGiftedTo.question = What was the market value of the property when you got it as a gift?
 calc.worthWhenGiftedTo.help = If you don''t know the exact value, you must provide a realistic estimate. You might have to pay more if we think your estimate is unrealistic.
 calc.worthWhenGiftedTo.jointOwnership = If you owned the property with someone else, only enter your share of the property value.
-calc.worthWhenGiftedTo.errorReal = The market value of the property when you got it as a gift must be in the correct format
+calc.worthWhenGiftedTo.error.required = Enter the market value of the property when you got it as a gift
+calc.worthWhenGiftedTo.errorReal = The market value of the property when you got it as a gift must be an amount of money in pounds
 calc.worthWhenGiftedTo.errorMax = The market value of the property when you got it as a gift must be £1,000,000,000 or less
 calc.worthWhenGiftedTo.errorNegative = The market value of the property when you got it as a gift must be £0 or more
 calc.worthWhenGiftedTo.errorDecimalPlaces = The market value of the property when you got it as a gift has too many numbers after the decimial point
@@ -388,8 +421,9 @@ calc.worthWhenGiftedTo.errorDecimalPlaces = The market value of the property whe
 ## Worth When Inherited ##
 calc.worthWhenInherited.question = What was the market value of the property when you inherited it?
 calc.worthWhenInherited.hint = This is the value of the property on the date the previous owner died.
-calc.worthWhenInherited.errorReal = The market value of the property when you inherited it must be in the correct format
-calc.worthWhenInherited.errorMax = Enter a market value of the property when you inherited it must be £1,000,000,000 or less
+calc.worthWhenInherited.error.required = Enter the market value of the property when you inherited it
+calc.worthWhenInherited.errorReal = The market value of the property when you inherited it must be an amount of money in pounds
+calc.worthWhenInherited.errorMax = The market value of the property when you inherited it must be £1,000,000,000 or less
 calc.worthWhenInherited.errorNegative = The market value of the property when you inherited it must be £0 or more
 calc.worthWhenInherited.errorDecimalPlaces = The market value of the property when you inherited it has too many numbers after the decimal point
 
@@ -397,8 +431,8 @@ calc.worthWhenInherited.errorDecimalPlaces = The market value of the property wh
 calc.worthWhenBoughtForLess.question = What was the market value of the property when you bought it?
 calc.worthWhenBoughtForLess.hint = You can use a valuation from a surveyor. If you don''t know the exact value, you must provide a realistic estimate. You might have to pay more if we think your estimate is unrealistic.
 calc.worthWhenBoughtForLess.helpText = If you owned the property with someone else, only enter your share of the property value.
-
-calc.worthWhenBoughtForLess.errorReal = The market value of the property when you bought it must be in the correct format
+calc.worthWhenBoughtForLess.error.required = Enter the market value of the property when you bought it
+calc.worthWhenBoughtForLess.errorReal = The market value of the property when you bought it must be an amount of money in pounds
 calc.worthWhenBoughtForLess.errorMax = The market value of the property when you bought it must be £1,000,000,000 or less
 calc.worthWhenBoughtForLess.errorNegative = The market value of the property when you bought it must be £0 or more
 calc.worthWhenBoughtForLess.errorDecimalPlaces = The market value of the property when you bought it has too many numbers after the decimal point
@@ -409,7 +443,8 @@ calc.worthBeforeLegislationStart.question = What was the market value of the pro
 calc.worthBeforeLegislationStart.information = If you had your property before 31 March 1982, use the market value on 31 March 1982 to work out your Capital Gains Tax. After this date, use the original cost.
 calc.worthBeforeLegislationStart.help = If you don''t know the exact value, you must provide a realistic estimate. You might have to pay more if we think your estimate is unrealistic.
 calc.worthBeforeLegislationStart.jointOwnership = If you owned the property with someone else, only enter your share of the property value.
-calc.worthBeforeLegislationStart.errorReal = The market value of the property on 31 March 1982 must be in the correct format
+calc.worthBeforeLegislationStart.error.required = Enter the market value of the property on 31 March 1982
+calc.worthBeforeLegislationStart.errorReal = The market value of the property on 31 March 1982 must be an amount of money in pounds
 calc.worthBeforeLegislationStart.errorMax = The market value of the property on 31 March 1982 must be £1,000,000,000 or less
 calc.worthBeforeLegislationStart.errorNegative = The market value of the property on 31 March 1982 must be £0 or more
 calc.worthBeforeLegislationStart.errorDecimalPlaces = The market value of the property on 31 March 1982 has too many numbers after the decimal point
@@ -423,9 +458,11 @@ calc.costsAtLegislationStart.title = Did you pay to have the property valued at 
 calc.costsAtLegislationStart.howMuch = How much did it cost to get the property valued?
 calc.costsAtLegislationStart.helpText = If you owned the property with someone else, only enter your share of the costs, as agreed with your co-owner. For example, £10,000.50
 calc.costsAtLegislationStart.errors.required = Select yes if you paid to have the property valued at 31 March 1982
-calc.costsAtLegislationStart.errorNegative = Enter a positive number for your costs
-calc.costsAtLegislationStart.error.no.value.supplied = Enter the value for your costs
-calc.costsAtLegislationStart.errorDecimalPlaces = There are too many numbers after the decimal point in your costs
+calc.costsAtLegislationStart.errorNegative = How much it cost to get the property valued must be £0 or more
+calc.costsAtLegislationStart.error.required = Enter how much it cost to get the property valued
+calc.costsAtLegislationStart.error.invalid = How much it cost to get the property valued must be an amount of money in pounds
+calc.costsAtLegislationStart.error.tooHigh = How much it cost to get the property valued must be £1,000,000,000 or less
+calc.costsAtLegislationStart.errorDecimalPlaces = How much it cost to get the property valued has too many numbers after the decimal point
 
 ## Summary ##
 calc.summary.title = Summary

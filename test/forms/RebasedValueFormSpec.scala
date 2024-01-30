@@ -65,8 +65,8 @@ class RebasedValueFormSpec extends CommonPlaySpec with WithCommonFakeApplication
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of ${messages.errorNoValue}" in {
-        form.error("rebasedValueAmt").get.message shouldBe messages.errorNoValue
+      s"return an error message of ${messages.errorRequired}" in {
+        form.error("rebasedValueAmt").get.message shouldBe messages.errorRequired
       }
     }
 
@@ -80,8 +80,8 @@ class RebasedValueFormSpec extends CommonPlaySpec with WithCommonFakeApplication
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of ${messages.errorNoValue}" in {
-        form.error("rebasedValueAmt").get.message shouldBe messages.errorNoValue
+      s"return an error message of ${messages.errorInvalid}" in {
+        form.error("rebasedValueAmt").get.message shouldBe messages.errorInvalid
       }
     }
 

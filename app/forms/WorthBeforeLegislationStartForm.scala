@@ -28,7 +28,7 @@ object WorthBeforeLegislationStartForm {
     mapping(
       "worthBeforeLegislationStart" -> text
         .transform(stripCurrencyCharacters, stripCurrencyCharacters)
-        .verifying("calc.worthBeforeLegislationStart.errorReal", mandatoryCheck)
+        .verifying("calc.worthBeforeLegislationStart.error.required", mandatoryCheck)
         .verifying("calc.worthBeforeLegislationStart.errorReal", bigDecimalCheck)
         .transform[BigDecimal](stringToBigDecimal, bigDecimalToString)
         .verifying("calc.worthBeforeLegislationStart.errorNegative", isPositive)

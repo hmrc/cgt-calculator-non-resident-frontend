@@ -32,15 +32,15 @@ object RebasedCostsForm {
         .verifying("calc.rebasedCosts.errors.required", yesNoCheck),
       "rebasedCosts" -> mandatoryIf(
         isEqual("hasRebasedCosts", "Yes"),
-        common.Formatters.text("calc.rebasedCosts.error.no.value.supplied")
+        common.Formatters.text("calc.rebasedCosts.error.required")
           .transform(stripCurrencyCharacters, stripCurrencyCharacters)
-          .verifying("error.number", bigDecimalCheck)
+          .verifying("calc.rebasedCosts.error.invalid", bigDecimalCheck)
           .transform(stringToBigDecimal, bigDecimalToString)
           .verifying(
             stopOnFirstFail(
               negativeConstraint("calc.rebasedCosts.errorNegative"),
               decimalPlaceConstraint("calc.rebasedCosts.errorDecimalPlaces"),
-              maxMonetaryValueConstraint()
+              maxMonetaryValueConstraint(errMsgKey = "calc.rebasedCosts.error.tooHigh")
             )
           )
       )

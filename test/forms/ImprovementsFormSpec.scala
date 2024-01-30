@@ -166,13 +166,16 @@ class ImprovementsFormSpec extends CommonPlaySpec with WithCommonFakeApplication
         form.hasErrors shouldBe true
       }
 
-      "return a valid form with one error" in {
+      "return a valid form with two errors" in {
         form.errors.size shouldBe 2
       }
 
-      s"return an error message of ${messages.Improvements.excessDecimalPlacesError} containing the data" in {
-        form.error("improvementsAmt").get.message shouldBe messages.Improvements.noValueSuppliedError
-        form.error("improvementsAmtAfter").get.message shouldBe messages.Improvements.noValueSuppliedError
+      s"return an error message for the first currency input of ${messages.ImprovementsBefore.errorRequired}" in {
+        form.error("improvementsAmt").get.message shouldBe messages.ImprovementsBefore.errorRequired
+      }
+
+      s"return an error message for the second currency input of ${messages.ImprovementsAfter.errorRequired}" in {
+        form.error("improvementsAmtAfter").get.message shouldBe messages.ImprovementsAfter.errorRequired
       }
     }
 
@@ -188,8 +191,8 @@ class ImprovementsFormSpec extends CommonPlaySpec with WithCommonFakeApplication
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of ${messages.Improvements.excessDecimalPlacesError} containing the data" in {
-        form.error("improvementsAmt").get.message shouldBe messages.Improvements.noValueSuppliedError
+      s"return an error message of ${messages.Improvements.errorRequired} containing the data" in {
+        form.error("improvementsAmt").get.message shouldBe messages.Improvements.errorRequired
       }
     }
 
@@ -205,8 +208,8 @@ class ImprovementsFormSpec extends CommonPlaySpec with WithCommonFakeApplication
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of ${messages.Improvements.excessDecimalPlacesError} containing the data" in {
-        form.error("improvementsAmt").get.message shouldBe messages.Improvements.excessDecimalPlacesError
+      s"return an error message of ${messages.ImprovementsBefore.excessDecimalPlacesError} containing the data" in {
+        form.error("improvementsAmt").get.message shouldBe messages.ImprovementsBefore.excessDecimalPlacesError
       }
     }
 
@@ -222,8 +225,8 @@ class ImprovementsFormSpec extends CommonPlaySpec with WithCommonFakeApplication
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of ${messages.Improvements.excessDecimalPlacesError} containing the data" in {
-        form.error("improvementsAmtAfter").get.message shouldBe messages.Improvements.excessDecimalPlacesError
+      s"return an error message of ${messages.ImprovementsAfter.excessDecimalPlacesError} containing the data" in {
+        form.error("improvementsAmtAfter").get.message shouldBe messages.ImprovementsAfter.excessDecimalPlacesError
       }
     }
 
@@ -239,8 +242,8 @@ class ImprovementsFormSpec extends CommonPlaySpec with WithCommonFakeApplication
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of ${messages.Improvements.negativeValueError} containing the data" in {
-        form.error("improvementsAmt").get.message shouldBe messages.Improvements.negativeValueError
+      s"return an error message of ${messages.ImprovementsBefore.negativeValueError} containing the data" in {
+        form.error("improvementsAmt").get.message shouldBe messages.ImprovementsBefore.negativeValueError
       }
     }
 
@@ -256,8 +259,8 @@ class ImprovementsFormSpec extends CommonPlaySpec with WithCommonFakeApplication
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of ${messages.Improvements.negativeValueError} containing the data" in {
-        form.error("improvementsAmtAfter").get.message shouldBe messages.Improvements.negativeValueError
+      s"return an error message of ${messages.ImprovementsAfter.negativeValueError} containing the data" in {
+        form.error("improvementsAmtAfter").get.message shouldBe messages.ImprovementsAfter.negativeValueError
       }
     }
 
@@ -274,8 +277,7 @@ class ImprovementsFormSpec extends CommonPlaySpec with WithCommonFakeApplication
       }
 
       s"return the correct error message" in {
-        form.error("improvementsAmt").get.message shouldBe "calc.common.error.maxNumericExceeded"
-        form.error("improvementsAmt").get.args shouldBe Array("1,000,000,000")
+        form.error("improvementsAmt").get.message shouldBe "calc.improvements.before.error.tooHigh"
       }
     }
 
@@ -292,8 +294,7 @@ class ImprovementsFormSpec extends CommonPlaySpec with WithCommonFakeApplication
       }
 
       s"return the correct error message" in {
-        form.error("improvementsAmtAfter").get.message shouldBe "calc.common.error.maxNumericExceeded"
-        form.error("improvementsAmtAfter").get.args shouldBe Array("1,000,000,000")
+        form.error("improvementsAmtAfter").get.message shouldBe "calc.improvements.after.error.tooHigh"
       }
     }
 
@@ -309,8 +310,8 @@ class ImprovementsFormSpec extends CommonPlaySpec with WithCommonFakeApplication
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of ${messages.Improvements.excessDecimalPlacesError} containing the data" in {
-        form.error("improvementsAmtAfter").get.message shouldBe messages.Improvements.excessDecimalPlacesError
+      s"return an error message of ${messages.ImprovementsAfter.excessDecimalPlacesError} containing the data" in {
+        form.error("improvementsAmtAfter").get.message shouldBe messages.ImprovementsAfter.excessDecimalPlacesError
       }
     }
 
@@ -322,13 +323,16 @@ class ImprovementsFormSpec extends CommonPlaySpec with WithCommonFakeApplication
         form.hasErrors shouldBe true
       }
 
-      "return a valid form with two error" in {
+      "return a valid form with two errors" in {
         form.errors.size shouldBe 2
       }
 
-      s"return an error message of ${messages.Improvements.noValueSuppliedError} containing the data" in {
-        form.error("improvementsAmt").get.message shouldBe messages.Improvements.noValueSuppliedError
-        form.error("improvementsAmtAfter").get.message shouldBe messages.Improvements.noValueSuppliedError
+      s"return error message for first field of ${messages.ImprovementsBefore.errorRequired}" in {
+        form.error("improvementsAmt").get.message shouldBe messages.ImprovementsBefore.errorRequired
+      }
+
+      s"return error message for second field of ${messages.ImprovementsAfter.errorRequired}" in {
+        form.error("improvementsAmtAfter").get.message shouldBe messages.ImprovementsAfter.errorRequired
       }
     }
 
@@ -344,9 +348,10 @@ class ImprovementsFormSpec extends CommonPlaySpec with WithCommonFakeApplication
         form.errors.size shouldBe 2
       }
 
-      s"return an error message of ${messages.Improvements.noValueSuppliedError} containing the data" in {
-        form.error("improvementsAmt").get.message shouldBe "error.number"
-        form.error("improvementsAmtAfter").get.message shouldBe messages.Improvements.noValueSuppliedError
+      s"return an error message of ${messages.ImprovementsBefore.errorReal} containing the data" in {
+        form.error("improvementsAmt").get.message shouldBe messages.ImprovementsBefore.errorReal
+        form.error("improvementsAmtAfter").get.message shouldBe messages.ImprovementsAfter.errorRequired
+        form.errors.head.message shouldBe messages.ImprovementsBefore.errorReal
       }
     }
 
@@ -362,10 +367,10 @@ class ImprovementsFormSpec extends CommonPlaySpec with WithCommonFakeApplication
         form.errors.size shouldBe 2
       }
 
-      s"return an error message of ${messages.Improvements.noValueSuppliedError} containing the data" in {
-        form.error("improvementsAmt").get.message shouldBe messages.Improvements.noValueSuppliedError
-        form.error("improvementsAmtAfter").get.message shouldBe "error.number"
-        form.errors.head.message shouldBe messages.Improvements.noValueSuppliedError
+      s"return an error message of ${messages.ImprovementsAfter.errorReal} containing the data" in {
+        form.error("improvementsAmt").get.message shouldBe messages.ImprovementsBefore.errorRequired
+        form.error("improvementsAmtAfter").get.message shouldBe messages.ImprovementsAfter.errorReal
+        form.errors.head.message shouldBe messages.ImprovementsBefore.errorRequired
       }
     }
   }

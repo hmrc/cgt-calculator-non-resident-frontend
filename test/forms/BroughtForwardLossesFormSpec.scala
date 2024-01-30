@@ -104,8 +104,8 @@ class BroughtForwardLossesFormSpec extends CommonPlaySpec with WithCommonFakeApp
         form.errors.size shouldBe 1
       }
 
-      s"return the error message ${messages.errorRealNumber}" in {
-        form.error("broughtForwardLoss").get.message shouldBe messages.errorRealNumber
+      s"return the error message ${messages.BroughtForwardLosses.errorRequired}" in {
+        form.error("broughtForwardLoss").get.message shouldBe messages.BroughtForwardLosses.errorRequired
       }
     }
 
@@ -118,8 +118,8 @@ class BroughtForwardLossesFormSpec extends CommonPlaySpec with WithCommonFakeApp
         form.errors.size shouldBe 1
       }
 
-      s"return the error message ${messages.errorRealNumber}" in {
-        form.error("broughtForwardLoss").get.message shouldBe messages.errorRealNumber
+      s"return the error message ${messages.BroughtForwardLosses.errorInvalid}" in {
+        form.error("broughtForwardLoss").get.message shouldBe messages.BroughtForwardLosses.errorInvalid
       }
     }
 
@@ -133,7 +133,7 @@ class BroughtForwardLossesFormSpec extends CommonPlaySpec with WithCommonFakeApp
       }
 
       s"return the error message ${messages.BroughtForwardLosses.errorDecimalPlaces}" in {
-        form.error("").get.message shouldBe messages.BroughtForwardLosses.errorDecimalPlaces
+        form.error("broughtForwardLoss").get.message shouldBe messages.BroughtForwardLosses.errorDecimalPlaces
       }
     }
 
@@ -147,7 +147,7 @@ class BroughtForwardLossesFormSpec extends CommonPlaySpec with WithCommonFakeApp
       }
 
       s"return the error message ${messages.BroughtForwardLosses.errorNegative}" in {
-        form.error("").get.message shouldBe messages.BroughtForwardLosses.errorNegative
+        form.error("broughtForwardLoss").get.message shouldBe messages.BroughtForwardLosses.errorNegative
       }
     }
 
@@ -161,8 +161,7 @@ class BroughtForwardLossesFormSpec extends CommonPlaySpec with WithCommonFakeApp
       }
 
       s"return the correct error message" in {
-        form.error("").get.message shouldBe "calc.common.error.maxNumericExceeded"
-        form.error("").get.args shouldBe Array("1,000,000,000")
+        form.error("broughtForwardLoss").get.message shouldBe messages.BroughtForwardLosses.errorTooHigh
       }
     }
   }

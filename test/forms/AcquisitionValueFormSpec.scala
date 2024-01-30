@@ -56,7 +56,7 @@ class AcquisitionValueFormSpec extends CommonPlaySpec with WithCommonFakeApplica
 
   "Creating a form using an invalid map" when {
     "supplied with no data" should {
-      val message = messages.errorReal
+      val message = messages.errorRequired
       val data = ""
 
       checkMessageAndError(message, data)

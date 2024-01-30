@@ -28,7 +28,7 @@ object PersonalAllowanceForm {
     mapping(
       "personalAllowance" -> text
         .transform(stripCurrencyCharacters, stripCurrencyCharacters)
-        .verifying("calc.personalAllowance.errorReal", mandatoryCheck)
+        .verifying("calc.personalAllowance.error.required", mandatoryCheck)
         .verifying("calc.personalAllowance.errorReal", bigDecimalCheck)
         .transform(stringToBigDecimal, bigDecimalToString)
         .verifying("calc.personalAllowance.errorNegative", isPositive)

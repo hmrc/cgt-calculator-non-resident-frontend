@@ -56,7 +56,7 @@ class MarketValueDisposalFormSpec extends CommonPlaySpec with WithCommonFakeAppl
       }
 
       "associate the correct error message to the error" in {
-        form.error("disposalValue").get.message shouldBe marketValueMessages.disposalErrorRealPlacesGaveAway
+        form.error("disposalValue").get.message shouldBe marketValueMessages.gaveAwayErrorRequired
       }
     }
 
@@ -74,7 +74,7 @@ class MarketValueDisposalFormSpec extends CommonPlaySpec with WithCommonFakeAppl
       }
 
       "associate the correct error message to the error" in {
-        form.error("disposalValue").get.message shouldBe marketValueMessages.disposalErrorRealPlacesGaveAway
+        form.error("disposalValue").get.message shouldBe marketValueMessages.gaveAwayErrorRequired
       }
     }
 

@@ -80,8 +80,8 @@ class OtherReliefsFormSpec extends CommonPlaySpec with WithCommonFakeApplication
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of ${messages.OtherReliefs.errorReal}" in {
-        form.error("otherReliefs").get.message shouldBe messages.OtherReliefs.errorReal
+      s"return an error message of ${messages.OtherReliefs.errorRequired}" in {
+        form.error("otherReliefs").get.message shouldBe messages.OtherReliefs.errorRequired
       }
     }
 

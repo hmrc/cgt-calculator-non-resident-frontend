@@ -62,8 +62,8 @@ class PersonalAllowanceFormSpec extends CommonPlaySpec with WithCommonFakeApplic
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.PersonalAllowance.errorReal}" in {
-        form.error("personalAllowance").get.message shouldBe messages.PersonalAllowance.errorReal
+      s"return an error message of '${messages.PersonalAllowance.errorRequired}" in {
+        form.error("personalAllowance").get.message shouldBe messages.PersonalAllowance.errorRequired
       }
     }
 

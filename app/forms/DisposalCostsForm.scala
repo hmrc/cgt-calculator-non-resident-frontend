@@ -27,7 +27,7 @@ object DisposalCostsForm {
     mapping(
       "disposalCosts" -> text
         .transform(stripCurrencyCharacters, stripCurrencyCharacters)
-        .verifying("calc.disposalCosts.errorReal", mandatoryCheck)
+        .verifying("calc.disposalCosts.error.required", mandatoryCheck)
         .verifying("calc.disposalCosts.errorReal", bigDecimalCheck)
         .transform(stringToBigDecimal, bigDecimalToString)
         .verifying("calc.disposalCosts.errorNegativeNumber", costs => isPositive(costs))

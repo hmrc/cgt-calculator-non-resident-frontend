@@ -41,6 +41,10 @@ object KeyLookup {
       s"calc.$formName.errors.required"
     }
 
+    def fieldErrorRequired(field: String): String = {
+      s"calc.$field.error.required"
+    }
+
     val errorRealNumber = "error.real"
 
     object DisposalDate {
@@ -55,8 +59,11 @@ object KeyLookup {
     }
 
     object AcquisitionCosts {
+      val errorRequired = "calc.acquisitionCosts.error.required"
       val errorNegative = "calc.acquisitionCosts.errorNegative"
       val errorDecimalPlaces = "calc.acquisitionCosts.errorDecimalPlaces"
+      val errorTooHigh = "calc.acquisitionCosts.error.tooHigh"
+      val errorInvalid = "calc.acquisitionCosts.error.invalid"
     }
 
     object AcquisitionDate {
@@ -69,6 +76,7 @@ object KeyLookup {
     }
 
     object AcquisitionValue {
+      val errorRequired = "calc.acquisitionValue.error.required"
       val errorReal = "calc.acquisitionValue.errorReal"
       val errorMax = "calc.acquisitionValue.errorMax"
       val errorNegative = "calc.acquisitionValue.errorNegative"
@@ -76,6 +84,7 @@ object KeyLookup {
     }
 
     object AnnualExemptAmount {
+      val errorRequired = "calc.annualExemptAmount.error.required"
       val errorReal = "calc.annualExemptAmount.errorReal"
       val errorMax = "calc.annualExemptAmount.errorMax"
       val errorNegative = "calc.annualExemptAmount.errorNegative"
@@ -83,6 +92,7 @@ object KeyLookup {
     }
 
     object CurrentIncome {
+      val errorRequired = "calc.currentIncome.error.required"
       val errorReal = "calc.currentIncome.errorReal"
       val errorMax = "calc.currentIncome.errorMax"
       val errorNegative = "calc.currentIncome.errorNegative"
@@ -90,12 +100,14 @@ object KeyLookup {
     }
 
     object DisposalCosts {
+      val errorRequired = "calc.disposalCosts.error.required"
       val errorReal = "calc.disposalCosts.errorReal"
       val errorNegativeNumber = "calc.disposalCosts.errorNegativeNumber"
       val errorDecimalPlaces = "calc.disposalCosts.errorDecimalPlaces"
     }
 
     object DisposalValue {
+      val errorRequired = "calc.disposalValue.error.required"
       val errorReal = "calc.disposalValue.errorReal"
       val errorMax = "calc.disposalValue.errorMax"
       val errorDecimalPlaces = "calc.disposalValue.errorDecimalPlaces"
@@ -104,15 +116,34 @@ object KeyLookup {
     }
 
     object HowMuchGain {
+      val errorRequired = "calc.howMuchGain.error.required"
       val errorReal = "calc.howMuchGain.errorReal"
       val errorNegativeNumber = "calc.howMuchGain.errorNegative"
       val errorDecimalPlaces = "calc.howMuchGain.errorDecimalPlaces"
       }
 
     object Improvements extends Common {
-      val noValueSuppliedError = "calc.improvements.error.no.value.supplied"
+      val errorRequired = "calc.improvements.error.required"
+      val errorReal = "calc.improvements.error.invalid"
       val negativeValueError = "calc.improvements.errorNegative"
       val excessDecimalPlacesError = "calc.improvements.errorDecimalPlaces"
+      val tooHigh = "calc.improvements.error.tooHigh"
+    }
+
+    object ImprovementsBefore extends Common {
+      val errorRequired = "calc.improvements.before.error.required"
+      val errorReal = "calc.improvements.before.error.invalid"
+      val negativeValueError = "calc.improvements.before.error.tooLow"
+      val excessDecimalPlacesError = "calc.improvements.before.error.decimalPlaces"
+      val tooHigh = "calc.improvements.before.error.tooHigh"
+    }
+
+    object ImprovementsAfter extends Common {
+      val errorRequired = "calc.improvements.after.error.required"
+      val errorReal = "calc.improvements.after.error.invalid"
+      val negativeValueError = "calc.improvements.after.error.tooLow"
+      val excessDecimalPlacesError = "calc.improvements.after.error.decimalPlaces"
+      val tooHigh = "calc.improvements.after.error.tooHigh"
     }
 
     object OtherProperties {
@@ -126,6 +157,7 @@ object KeyLookup {
     }
 
     object OtherReliefs {
+      val errorRequired = "calc.otherReliefs.error.required"
       val errorReal = "calc.otherReliefs.errorReal"
       val errorMax = "calc.otherReliefs.errorMax"
       val errorDecimal = "calc.otherReliefs.errorDecimal"
@@ -133,6 +165,7 @@ object KeyLookup {
     }
 
     object MarketValue {
+      val gaveAwayErrorRequired = "calc.marketValue.error.gaveItAway.required"
       val disposalErrorRealPlacesGaveAway = "calc.marketValue.error.gaveItAway.errorReal"
       val disposalErrorRealPlacesSold = "calc.marketValue.error.sold.errorReal"
 
@@ -147,6 +180,7 @@ object KeyLookup {
     }
 
     object PersonalAllowance {
+      val errorRequired = "calc.personalAllowance.error.required"
       val errorReal = "calc.personalAllowance.errorReal"
       val errorNegative = "calc.personalAllowance.errorNegative"
       val errorDecimalPlaces = "calc.personalAllowance.errorDecimalPlaces"
@@ -154,19 +188,23 @@ object KeyLookup {
     }
 
     object PrivateResidenceRelief {
+      val errorRequired = "calc.privateResidenceRelief.error.required"
       val errorNoValue = "calc.privateResidenceRelief.error.noValueProvided"
       val errorNegative = "calc.privateResidenceRelief.error.errorNegative"
       val errorDecimalPlaces = "calc.privateResidenceRelief.error.errorDecimalPlaces"
     }
 
     object RebasedCosts {
+      val errorRequired = "calc.rebasedCosts.error.required"
       val errorNegative = "calc.rebasedCosts.errorNegative"
-      val errorNoValue = "calc.rebasedCosts.error.no.value.supplied"
+      val errorTooHigh = "calc.rebasedCosts.error.tooHigh"
       val errorDecimalPlaces = "calc.rebasedCosts.errorDecimalPlaces"
+      val errorInvalid = "calc.rebasedCosts.error.invalid"
     }
 
     object RebasedValue {
-      val errorNoValue = "calc.nonResident.rebasedValue.error.no.value.supplied"
+      val errorRequired = "calc.nonResident.rebasedValue.error.required"
+      val errorInvalid = "calc.nonResident.rebasedValue.error.invalid"
       val errorMax = "calc.nonResident.rebasedValue.errorMax"
       val errorNegative = "calc.nonResident.rebasedValue.errorNegative"
       val errorDecimalPlaces = "calc.nonResident.rebasedValue.errorDecimalPlaces"
@@ -177,6 +215,7 @@ object KeyLookup {
     }
 
     object AcquisitionMarketValue {
+      val errorRequired = "calc.acquisitionMarketValue.error.required"
       val errorReal = "calc.acquisitionMarketValue.errorReal"
       val errorMax = "calc.acquisitionMarketValue.errorMax"
       val errorNegativeNumber = "calc.acquisitionMarketValue.errorNegative"
@@ -184,6 +223,7 @@ object KeyLookup {
     }
 
     object WorthWhenBoughtForLess {
+      val errorRequired = "calc.worthWhenBoughtForLess.error.required"
       val errorReal = "calc.worthWhenBoughtForLess.errorReal"
       val errorMax = "calc.worthWhenBoughtForLess.errorMax"
       val errorNegativeNumber = "calc.worthWhenBoughtForLess.errorNegative"
@@ -191,6 +231,7 @@ object KeyLookup {
     }
 
     object WorthWhenInherited {
+      val errorRequired = "calc.worthWhenInherited.error.required"
       val errorReal = "calc.worthWhenInherited.errorReal"
       val errorMax = "calc.worthWhenInherited.errorMax"
       val errorNegativeNumber = "calc.worthWhenInherited.errorNegative"
@@ -198,6 +239,7 @@ object KeyLookup {
     }
 
     object WorthWhenGiftedTo {
+      val errorRequired = "calc.worthWhenGiftedTo.error.required"
       val errorReal = "calc.worthWhenGiftedTo.errorReal"
       val errorMax = "calc.worthWhenGiftedTo.errorMax"
       val errorNegativeNumber = "calc.worthWhenGiftedTo.errorNegative"
@@ -205,6 +247,7 @@ object KeyLookup {
     }
 
     object WorthBeforeLegislationStart {
+      val errorRequired = "calc.worthBeforeLegislationStart.error.required"
       val errorReal = "calc.worthBeforeLegislationStart.errorReal"
       val errorMax = "calc.worthBeforeLegislationStart.errorMax"
       val errorNegativeNumber = "calc.worthBeforeLegislationStart.errorNegative"
@@ -212,6 +255,7 @@ object KeyLookup {
     }
 
     object HowMuchLoss {
+      val errorRequired = "calc.howMuchLoss.error.required"
       val errorReal = "calc.howMuchLoss.errorReal"
       val errorMax = "calc.howMuchLoss.errorMax"
       val errorNegative = "calc.howMuchLoss.errorNegative"
@@ -219,8 +263,11 @@ object KeyLookup {
     }
 
     object BroughtForwardLosses {
+      val errorRequired = "calc.broughtForwardLosses.error.required"
+      val errorInvalid = "calc.broughtForwardLosses.error.invalid"
       val errorDecimalPlaces = "calc.broughtForwardLosses.errorDecimal"
       val errorNegative = "calc.broughtForwardLosses.errorNegative"
+      val errorTooHigh = "calc.broughtForwardLosses.error.tooHigh"
     }
 
     object ClaimingReliefs {
@@ -228,9 +275,11 @@ object KeyLookup {
     }
 
     object CostsAtLegislationStart {
+      val errorRequired = "calc.costsAtLegislationStart.error.required"
+      val errorInvalid = "calc.costsAtLegislationStart.error.invalid"
       val errorNegative = "calc.costsAtLegislationStart.errorNegative"
-      val errorNoValue = "calc.costsAtLegislationStart.error.no.value.supplied"
       val errorDecimalPlaces = "calc.costsAtLegislationStart.errorDecimalPlaces"
+      val errorTooHigh = "calc.costsAtLegislationStart.error.tooHigh"
     }
 
   }

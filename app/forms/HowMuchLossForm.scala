@@ -28,7 +28,7 @@ object HowMuchLossForm {
     mapping(
       "loss" -> text
         .transform(stripCurrencyCharacters, stripCurrencyCharacters)
-        .verifying("calc.howMuchLoss.errorReal", mandatoryCheck)
+        .verifying("calc.howMuchLoss.error.required", mandatoryCheck)
         .verifying("calc.howMuchLoss.errorReal", bigDecimalCheck)
         .transform(stringToBigDecimal, bigDecimalToString)
         .verifying("calc.howMuchLoss.errorNegative", isPositive)

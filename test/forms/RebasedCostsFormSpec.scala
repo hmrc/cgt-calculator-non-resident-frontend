@@ -110,8 +110,8 @@ class RebasedCostsFormSpec extends CommonPlaySpec with WithCommonFakeApplication
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.RebasedCosts.errorNoValue}" in {
-        form.error("rebasedCosts").get.message shouldBe messages.RebasedCosts.errorNoValue
+      s"return an error message of '${messages.RebasedCosts.errorRequired}" in {
+        form.error("rebasedCosts").get.message shouldBe messages.RebasedCosts.errorRequired
       }
     }
 
@@ -126,7 +126,7 @@ class RebasedCostsFormSpec extends CommonPlaySpec with WithCommonFakeApplication
       }
 
       s"return an error message of error.number" in {
-        form.error("rebasedCosts").get.message shouldBe "error.number"
+        form.error("rebasedCosts").get.message shouldBe messages.RebasedCosts.errorInvalid
       }
     }
 
@@ -216,8 +216,7 @@ class RebasedCostsFormSpec extends CommonPlaySpec with WithCommonFakeApplication
       }
 
       s"return the correct error message" in {
-        form.error("rebasedCosts").get.message shouldBe "calc.common.error.maxNumericExceeded"
-        form.error("rebasedCosts").get.args shouldBe Array("1,000,000,000")
+        form.error("rebasedCosts").get.message shouldBe messages.RebasedCosts.errorTooHigh
       }
     }
 

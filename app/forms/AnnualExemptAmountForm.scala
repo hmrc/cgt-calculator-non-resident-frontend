@@ -28,7 +28,7 @@ object AnnualExemptAmountForm {
     mapping(
       "annualExemptAmount" -> text
         .transform(stripCurrencyCharacters, stripCurrencyCharacters)
-        .verifying("calc.annualExemptAmount.errorReal", mandatoryCheck)
+        .verifying("calc.annualExemptAmount.error.required", mandatoryCheck)
         .verifying("calc.annualExemptAmount.errorReal", bigDecimalCheck)
         .transform(stringToBigDecimal, bigDecimalToString)
         .verifying(maxMonetaryValueConstraint(maxAEA, "calc.annualExemptAmount.errorMax"))

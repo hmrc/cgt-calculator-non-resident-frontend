@@ -28,7 +28,7 @@ object CurrentIncomeForm {
     mapping(
       "currentIncome" -> text
         .transform(stripCurrencyCharacters, stripCurrencyCharacters)
-        .verifying("calc.currentIncome.errorReal", mandatoryCheck)
+        .verifying("calc.currentIncome.error.required", mandatoryCheck)
         .verifying("calc.currentIncome.errorReal", bigDecimalCheck)
         .transform(stringToBigDecimal, bigDecimalToString)
         .verifying("calc.currentIncome.errorNegative", isPositive)
