@@ -47,9 +47,8 @@
         @formInputMoney(
             field = acquisitionMarketValue("acquisitionMarketValue"),
             question = messages("calc.worthWhenInherited.question"),
-            hideLabel = false,
-            hintText = Some(messages("calc.currencyHint", "£150,000")),
-            isHiddenQuestion = true
+            labelClass = "govuk-label--m",
+            hintText = Some(messages("calc.currencyHint", "£150,000"))
         )
 
         @submitButton()

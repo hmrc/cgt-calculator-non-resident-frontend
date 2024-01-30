@@ -54,9 +54,8 @@
         @formInputMoney(
             field = rebasedValueForm("rebasedValueAmt"),
             question = messages("calc.nonResident.rebasedValue.question") + " " + messages("calc.nonResident.rebasedValue.date"),
-            hideLabel = false,
-            hintText = Some(messages("calc.currencyHint", "£250,000")),
-            isHiddenQuestion = true
+            labelClass = "govuk-label--m",
+            hintText = Some(messages("calc.currencyHint", "£250,000"))
         )
         @submitButton()
     }

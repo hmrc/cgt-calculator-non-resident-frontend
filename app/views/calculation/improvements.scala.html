@@ -36,16 +36,14 @@
     @formInputMoney(
         field = improvementsForm("improvementsAmt"),
         question = messages("calc.improvements.questionThree"),
-        hideLabel = false,
-        isHiddenQuestion = true,
-        hintText = Some(messages("calc.currencyHint", "£10,000"))
+        labelClass = "govuk-label--m",
+        hintText = Some(messages("calc.currencyHint", "£10,000.50"))
     )
     @formInputMoney(
         field = improvementsForm("improvementsAmtAfter"),
         question = messages("calc.improvements.questionFour"),
-        hideLabel = false,
-        isHiddenQuestion = true,
-        hintText = Some(messages("calc.currencyHint", "£10,000"))
+        labelClass = "govuk-label--m",
+        hintText = Some(messages("calc.currencyHint", "£10,000.50"))
     )
 }
 
@@ -53,9 +51,8 @@
     @formInputMoney(
         field = improvementsForm("improvementsAmt"),
         question = messages("calc.improvements.questionTwo"),
-        hideLabel = false,
-        isHiddenQuestion = true,
-        hintText = Some(messages("calc.currencyHint", "£10,000"))
+        labelClass = "govuk-label--m",
+        hintText = Some(messages("calc.currencyHint", "£10,000.50"))
     )
 }
 

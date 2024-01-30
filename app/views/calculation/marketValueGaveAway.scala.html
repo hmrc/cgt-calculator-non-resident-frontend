@@ -48,9 +48,8 @@
         @formInputMoney(
             field = marketValueForm("disposalValue"),
             question = messages("calc.marketValue.gaveItAway.question"),
-            hideLabel = false,
-            hintText = Some(messages("calc.currencyHint", "£250,000")),
-            isHiddenQuestion = true
+            labelClass = "govuk-label--m",
+            hintText = Some(messages("calc.currencyHint", "£250,000"))
         )
         @submitButton()
     }

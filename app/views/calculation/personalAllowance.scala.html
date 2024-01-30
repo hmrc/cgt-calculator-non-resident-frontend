@@ -57,7 +57,7 @@
         @formInputMoney(
             field = personalAllowanceForm("personalAllowance"),
             question = messages("calc.personalAllowance.question"),
-            hideLabel = true,
+            labelClass = "govuk-label--m",
             hintText = Some(messages("calc.currencyHint", "£10,000"))
         )
         @submitButton()

@@ -148,7 +148,7 @@ calc.costsAtLegislationStart.error.no.value.supplied = Nodwch y swm ar gyfer eic
 calc.costsAtLegislationStart.errorDecimalPlaces = Mae gormod o rifau ar ôl y pwynt degol yn eich costau
 calc.costsAtLegislationStart.errorNegative = Nodwch rif positif ar gyfer eich costau
 calc.costsAtLegislationStart.errors.required = Dewiswch ''Iawn'' os gwnaethoch dalu i gael yr eiddo wedi''i brisio ar 31 Mawrth 1982
-calc.costsAtLegislationStart.helpText = Os oeddech yn berchen ar yr eiddo gyda rhywun arall, dylech ond nodi''ch cyfran chi o''r costau, fel y cytunwyd gyda''ch cydberchennog. Er enghraifft, £1,000
+calc.costsAtLegislationStart.helpText = Os oeddech yn berchen ar yr eiddo gyda rhywun arall, dylech ond nodi''ch cyfran chi o''r costau, fel y cytunwyd gyda''ch cydberchennog. Er enghraifft, £10,000.50
 calc.costsAtLegislationStart.howMuch = Beth oedd y gost o brisio''r eiddo?
 calc.costsAtLegislationStart.title = A wnaethoch dalu i gael prisio''r eiddo ar 31 Mawrth 1982?
 
@@ -336,7 +336,7 @@ calc.rebasedCosts.errors.required =  Dewiswch ''Iawn'' os gwnaethoch dalu i gael
 calc.rebasedCosts.error.no.value.supplied = Nodwch y swm ar gyfer eich costau
 calc.rebasedCosts.errorDecimalPlaces = Mae gormod o rifau ar ôl y pwynt degol yn eich costau
 calc.rebasedCosts.errorNegative = Nodwch rif positif ar gyfer eich costau
-calc.rebasedCosts.jointOwnership = Os oeddech yn berchen ar yr eiddo gyda rhywun arall, dylech ond nodi''ch cyfran chi o''r gost, fel y cytunwyd gyda''ch cydberchennog. Er enghraifft, £1,000
+calc.rebasedCosts.jointOwnership = Os oeddech yn berchen ar yr eiddo gyda rhywun arall, dylech ond nodi''ch cyfran chi o''r gost, fel y cytunwyd gyda''ch cydberchennog. Er enghraifft, £10,000.50
 calc.rebasedCosts.question = A wnaethoch dalu i gael prisio''r eiddo ar 5 Ebrill 2015?
 calc.rebasedCosts.questionTwo = Beth oedd y gost o brisio''r eiddo?
 
