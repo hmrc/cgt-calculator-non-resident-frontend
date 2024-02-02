@@ -69,7 +69,7 @@ object ImprovementsForm {
             isEqual("isClaimingImprovements", "Yes"),
             common.Formatters.text("calc.improvements.error.required")
               .transform(stripCurrencyCharacters, stripCurrencyCharacters)
-              .verifying("error.number", bigDecimalCheck)
+              .verifying("calc.improvements.error.invalid", bigDecimalCheck)
               .transform(stringToBigDecimal, bigDecimalToString)
               .verifying(
                 stopOnFirstFail(
