@@ -17,6 +17,7 @@
 package forms
 
 object WorthWhenInherited extends AcquisitionMarketValueForm {
+  override val errorRequired: String = "calc.worthWhenInherited.error.required"
   override val errorReal: String = "calc.worthWhenInherited.errorReal"
   override val errorMax: String = "calc.worthWhenInherited.errorMax"
   override val errorNegative = "calc.worthWhenInherited.errorNegative"

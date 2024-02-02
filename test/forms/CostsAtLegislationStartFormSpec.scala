@@ -110,8 +110,8 @@ class CostsAtLegislationStartFormSpec extends CommonPlaySpec with WithCommonFake
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.CostsAtLegislationStart.errorNoValue}" in {
-        form.error("costs").get.message shouldBe messages.CostsAtLegislationStart.errorNoValue
+      s"return an error message of '${messages.CostsAtLegislationStart.errorRequired}" in {
+        form.error("costs").get.message shouldBe messages.CostsAtLegislationStart.errorRequired
       }
     }
 
@@ -126,7 +126,7 @@ class CostsAtLegislationStartFormSpec extends CommonPlaySpec with WithCommonFake
       }
 
       s"return an error message of error.number" in {
-        form.error("costs").get.message shouldBe "error.number"
+        form.error("costs").get.message shouldBe messages.CostsAtLegislationStart.errorInvalid
       }
     }
 
@@ -216,8 +216,7 @@ class CostsAtLegislationStartFormSpec extends CommonPlaySpec with WithCommonFake
       }
 
       s"return the correct error message" in {
-        form.error("costs").get.message shouldBe "calc.common.error.maxNumericExceeded"
-        form.error("costs").get.args shouldBe Array("1,000,000,000")
+        form.error("costs").get.message shouldBe messages.CostsAtLegislationStart.errorTooHigh
       }
     }
 

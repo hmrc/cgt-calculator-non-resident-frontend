@@ -138,8 +138,8 @@ class AnnualExemptAmountFormSpec extends CommonPlaySpec with WithCommonFakeAppli
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.AnnualExemptAmount.errorReal}" in {
-        form.error("annualExemptAmount").get.message shouldBe messages.AnnualExemptAmount.errorReal
+      s"return an error message of '${messages.AnnualExemptAmount.errorRequired}" in {
+        form.error("annualExemptAmount").get.message shouldBe messages.AnnualExemptAmount.errorRequired
       }
     }
 

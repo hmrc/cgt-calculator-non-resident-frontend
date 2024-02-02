@@ -23,7 +23,7 @@ import play.api.data.Forms._
 import play.api.data.Form
 
 trait AcquisitionMarketValueForm {
-
+  val errorRequired: String
   val errorReal: String
   val errorMax: String
   val errorNegative: String
@@ -32,7 +32,7 @@ trait AcquisitionMarketValueForm {
   def acquisitionMarketValueForm(): Form[AcquisitionValueModel] = Form(
     mapping {
       "acquisitionMarketValue" -> text
-        .verifying(errorReal, mandatoryCheck)
+        .verifying(errorRequired, mandatoryCheck)
         .verifying(errorReal, bigDecimalCheck)
         .transform(stringToBigDecimal, bigDecimalToString)
         .verifying(errorNegative, isPositive)

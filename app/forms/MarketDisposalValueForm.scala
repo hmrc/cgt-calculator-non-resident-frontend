@@ -23,6 +23,7 @@ import play.api.data.Form
 import play.api.data.Forms._
 
 trait MarketDisposalValueForm {
+  val errorRequired: String
   val errorReal: String
   val errorMax: String
   val errorNegative: String
@@ -32,7 +33,7 @@ trait MarketDisposalValueForm {
     mapping(
       "disposalValue" -> text
         .transform(stripCurrencyCharacters, stripCurrencyCharacters)
-        .verifying(errorReal, mandatoryCheck)
+        .verifying(errorRequired, mandatoryCheck)
         .verifying(errorReal, bigDecimalCheck)
         .transform(stringToBigDecimal, bigDecimalToString)
         .verifying(errorNegative, isPositive)

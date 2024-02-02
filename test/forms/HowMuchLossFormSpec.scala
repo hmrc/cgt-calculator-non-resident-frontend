@@ -55,8 +55,8 @@ class HowMuchLossFormSpec extends CommonPlaySpec with WithCommonFakeApplication 
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.HowMuchLoss.errorReal}" in {
-        form.error("loss").get.message shouldBe messages.HowMuchLoss.errorReal
+      s"return an error message of '${messages.HowMuchLoss.errorRequired}" in {
+        form.error("loss").get.message shouldBe messages.HowMuchLoss.errorRequired
       }
     }
 

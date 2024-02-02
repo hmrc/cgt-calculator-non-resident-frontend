@@ -17,6 +17,7 @@
 package forms
 
 object MarketValueGaveAwayForm extends MarketDisposalValueForm {
+  override val errorRequired: String = "calc.marketValue.error.gaveItAway.required"
   override val errorReal: String = "calc.marketValue.error.gaveItAway.errorReal"
   override val errorMax: String = "calc.marketValue.error.gaveItAway.errorMax"
   override val errorNegative = "calc.marketValue.error.gaveItAway.negative"

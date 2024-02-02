@@ -33,29 +33,29 @@ object ImprovementsForm {
             .verifying("calc.calc.improvements.errors.required", yesNoCheck),
           "improvementsAmt" -> mandatoryIf(
             isEqual("isClaimingImprovements", "Yes"),
-            common.Formatters.text("calc.improvements.error.no.value.supplied")
+            common.Formatters.text("calc.improvements.before.error.required")
               .transform(stripCurrencyCharacters, stripCurrencyCharacters)
-              .verifying("error.number", bigDecimalCheck)
+              .verifying("calc.improvements.before.error.invalid", bigDecimalCheck)
               .transform(stringToBigDecimal, bigDecimalToString)
               .verifying(
                 stopOnFirstFail(
-                  negativeConstraint("calc.improvements.errorNegative"),
-                  decimalPlaceConstraint("calc.improvements.errorDecimalPlaces"),
-                  maxMonetaryValueConstraint()
+                  negativeConstraint("calc.improvements.before.error.tooLow"),
+                  decimalPlaceConstraint("calc.improvements.before.error.decimalPlaces"),
+                  maxMonetaryValueConstraint(errMsgKey = "calc.improvements.before.error.tooHigh")
                 )
               )
           ),
           "improvementsAmtAfter" -> mandatoryIf(
             isEqual("isClaimingImprovements", "Yes"),
-            common.Formatters.text("calc.improvements.error.no.value.supplied")
+            common.Formatters.text("calc.improvements.after.error.required")
               .transform(stripCurrencyCharacters, stripCurrencyCharacters)
-              .verifying("error.number", bigDecimalCheck)
+              .verifying("calc.improvements.after.error.invalid", bigDecimalCheck)
               .transform(stringToBigDecimal, bigDecimalToString)
               .verifying(
                 stopOnFirstFail(
-                  negativeConstraint("calc.improvements.errorNegative"),
-                  decimalPlaceConstraint("calc.improvements.errorDecimalPlaces"),
-                  maxMonetaryValueConstraint()
+                  negativeConstraint("calc.improvements.after.error.tooLow"),
+                  decimalPlaceConstraint("calc.improvements.after.error.decimalPlaces"),
+                  maxMonetaryValueConstraint(errMsgKey = "calc.improvements.after.error.tooHigh")
                 )
               )
           )
@@ -67,9 +67,9 @@ object ImprovementsForm {
             .verifying("calc.calc.improvements.errors.required", yesNoCheck),
           "improvementsAmt" -> mandatoryIf(
             isEqual("isClaimingImprovements", "Yes"),
-            common.Formatters.text("calc.improvements.error.no.value.supplied")
+            common.Formatters.text("calc.improvements.error.required")
               .transform(stripCurrencyCharacters, stripCurrencyCharacters)
-              .verifying("error.number", bigDecimalCheck)
+              .verifying("calc.improvements.error.invalid", bigDecimalCheck)
               .transform(stringToBigDecimal, bigDecimalToString)
               .verifying(
                 stopOnFirstFail(

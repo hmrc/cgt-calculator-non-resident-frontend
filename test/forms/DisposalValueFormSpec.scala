@@ -124,8 +124,8 @@ class DisposalValueFormSpec extends CommonPlaySpec with WithCommonFakeApplicatio
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${commonMessages.DisposalValue.errorReal}" in {
-        form.error("disposalValue").get.message shouldBe commonMessages.DisposalValue.errorReal
+      s"return an error message of '${commonMessages.DisposalValue.errorRequired}" in {
+        form.error("disposalValue").get.message shouldBe commonMessages.DisposalValue.errorRequired
       }
     }
 

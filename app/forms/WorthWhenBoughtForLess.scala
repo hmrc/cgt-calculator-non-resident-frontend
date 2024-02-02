@@ -17,6 +17,7 @@
 package forms
 
 object WorthWhenBoughtForLess extends AcquisitionMarketValueForm {
+  override val errorRequired: String = "calc.worthWhenBoughtForLess.error.required"
   override val errorReal: String = "calc.worthWhenBoughtForLess.errorReal"
   override val errorMax: String = "calc.worthWhenBoughtForLess.errorMax"
   override val errorNegative = "calc.worthWhenBoughtForLess.errorNegative"

@@ -82,10 +82,10 @@ object Validation {
     value => maxMoneyCheck(value, maxValue, errMsgKey)
   })
 
-  def maxMonetaryValueConstraint[T](maxValue: BigDecimal, extractMoney: T => Option[BigDecimal]): Constraint[T] = {
+  def maxMonetaryValueConstraint[T](maxValue: BigDecimal, extractMoney: T => Option[BigDecimal], errMsgKey: Option[String]): Constraint[T] = {
     Constraint("constraints.maxValueCustom")({
       data => extractMoney(data).map {
-        maxMoneyCheck(_, maxValue, "calc.common.error.maxNumericExceeded")
+        maxMoneyCheck(_, maxValue, errMsgKey.getOrElse("calc.common.error.maxNumericExceeded"))
       }.getOrElse(Valid)
     })
   }

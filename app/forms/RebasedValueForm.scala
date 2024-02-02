@@ -28,8 +28,8 @@ object RebasedValueForm {
     mapping(
       "rebasedValueAmt" -> text
         .transform(stripCurrencyCharacters, stripCurrencyCharacters)
-        .verifying("calc.nonResident.rebasedValue.error.no.value.supplied", mandatoryCheck)
-        .verifying("calc.nonResident.rebasedValue.error.no.value.supplied", bigDecimalCheck)
+        .verifying("calc.nonResident.rebasedValue.error.required", mandatoryCheck)
+        .verifying("calc.nonResident.rebasedValue.error.invalid", bigDecimalCheck)
         .transform[BigDecimal](stringToBigDecimal, bigDecimalToString)
         .verifying("calc.nonResident.rebasedValue.errorNegative", data => isPositive(data))
         .verifying("calc.nonResident.rebasedValue.errorDecimalPlaces", data => decimalPlacesCheck(data))

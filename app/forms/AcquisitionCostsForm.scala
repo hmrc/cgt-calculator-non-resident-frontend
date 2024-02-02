@@ -29,12 +29,12 @@ object AcquisitionCostsForm {
     mapping(
       "acquisitionCosts" -> text
         .transform(stripCurrencyCharacters, stripCurrencyCharacters)
-        .verifying("error.real", mandatoryCheck)
-        .verifying("error.real", bigDecimalCheck)
+        .verifying("calc.acquisitionCosts.error.required", mandatoryCheck)
+        .verifying("calc.acquisitionCosts.error.invalid", bigDecimalCheck)
         .transform(stringToBigDecimal, bigDecimalToString)
         .verifying("calc.acquisitionCosts.errorNegative", isPositive)
         .verifying("calc.acquisitionCosts.errorDecimalPlaces", decimalPlacesCheck)
-        .verifying(maxMonetaryValueConstraint(Constants.maxNumeric))
+        .verifying(maxMonetaryValueConstraint(Constants.maxNumeric, "calc.acquisitionCosts.error.tooHigh"))
     )(AcquisitionCostsModel.apply)(AcquisitionCostsModel.unapply)
   )
 

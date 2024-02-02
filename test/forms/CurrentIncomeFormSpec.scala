@@ -124,8 +124,8 @@ class CurrentIncomeFormSpec extends CommonPlaySpec with WithCommonFakeApplicatio
         form.errors.size shouldBe 1
       }
 
-      s"return an error message of '${messages.CurrentIncome.errorReal}" in {
-        form.error("currentIncome").get.message shouldBe messages.CurrentIncome.errorReal
+      s"return an error message of '${messages.CurrentIncome.errorRequired}" in {
+        form.error("currentIncome").get.message shouldBe messages.CurrentIncome.errorRequired
       }
     }
 
