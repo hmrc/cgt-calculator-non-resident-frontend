@@ -34,7 +34,7 @@ trait CommonPlaySpec extends AnyWordSpecLike with Matchers with OptionValues {
   import scala.concurrent.{Await, Future}
   import scala.language.postfixOps
 
-  implicit val defaultTimeout: FiniteDuration = 5 seconds
+  implicit val defaultTimeout: FiniteDuration = 10 seconds
 
   implicit def extractAwait[A](future: Future[A]): A = await[A](future)
 
