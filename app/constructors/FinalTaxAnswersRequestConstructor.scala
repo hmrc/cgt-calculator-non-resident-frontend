@@ -20,8 +20,6 @@ import common.YesNoKeys
 import common.nonresident._
 import models._
 
-import scala.math.BigDecimal
-
 object FinalTaxAnswersRequestConstructor {
 
   def additionalParametersQuery(model: Option[TotalPersonalDetailsCalculationModel],

@@ -16,10 +16,10 @@
 
 package forms
 
+import common.Formatters.text
 import models.CalculationElectionModel
 import play.api.data.Forms._
 import play.api.data._
-import common.Formatters.text
 
 object CalculationElectionForm {
 

@@ -26,7 +26,7 @@ import connectors.CalculatorConnector
 import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
 import controllers.helpers.FakeRequestHelper
 import controllers.{CalculationElectionController, routes}
-import models.{TaxYearModel, _}
+import models._
 import org.jsoup._
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._

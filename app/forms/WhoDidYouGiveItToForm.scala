@@ -17,9 +17,9 @@
 package forms
 
 import common.Validation._
+import models.WhoDidYouGiveItToModel
 import play.api.data.Form
 import play.api.data.Forms._
-import models.WhoDidYouGiveItToModel
 
 object WhoDidYouGiveItToForm {
   val whoDidYouGiveItToForm = Form(

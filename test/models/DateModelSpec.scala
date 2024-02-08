@@ -16,10 +16,10 @@
 
 package models
 
-import java.time.LocalDate
-
 import common.CommonPlaySpec
 import play.api.libs.json.Json
+
+import java.time.LocalDate
 
 class DateModelSpec extends CommonPlaySpec {
 

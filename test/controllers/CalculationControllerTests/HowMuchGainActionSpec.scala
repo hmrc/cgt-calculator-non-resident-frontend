@@ -17,8 +17,8 @@
 package controllers.CalculationControllerTests
 
 import akka.stream.Materializer
-import assets.MessageLookup.{NonResident => commonMessages}
 import assets.MessageLookup.NonResident.{HowMuchGain => messages}
+import assets.MessageLookup.{NonResident => commonMessages}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import config.ApplicationConfig
 import connectors.CalculatorConnector

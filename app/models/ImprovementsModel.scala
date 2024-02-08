@@ -17,8 +17,8 @@
 package models
 
 import constructors.TotalGainRequestConstructor
+import constructors.TotalGainRequestConstructor.includeRebasedValuesInCalculation
 import play.api.libs.json.{JsObject, JsValue, Json, Writes}
-import TotalGainRequestConstructor.includeRebasedValuesInCalculation
 
 case class ImprovementsModel (isClaimingImprovements: String, improvementsAmt: Option[BigDecimal], improvementsAmtAfter: Option[BigDecimal] = None)
 

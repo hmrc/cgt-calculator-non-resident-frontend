@@ -18,8 +18,8 @@ package forms
 
 import assets.KeyLookup.{NonResident => messages}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
-import models.HowMuchGainModel
 import forms.HowMuchGainForm._
+import models.HowMuchGainModel
 
 class HowMuchGainFormSpec extends CommonPlaySpec with WithCommonFakeApplication {
 

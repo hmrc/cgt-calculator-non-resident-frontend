@@ -21,7 +21,7 @@ import common.{CommonPlaySpec, WithCommonFakeApplication}
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.i18n.{Lang, Messages}
+import play.api.i18n.Lang
 import play.api.mvc.MessagesControllerComponents
 import views.html.playComponents.summaryPartialTaxToPay
 

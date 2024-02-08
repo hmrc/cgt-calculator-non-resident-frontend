@@ -18,11 +18,10 @@ package constructors
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.nonresident.PreviousGainOrLossKeys
-import javax.inject.Inject
 import models._
 import play.api.i18n.{Messages, MessagesProvider}
 
-import scala.math.BigDecimal
+import javax.inject.Inject
 
 class PersonalDetailsConstructor @Inject()(implicit messagesProvider: MessagesProvider) {
 

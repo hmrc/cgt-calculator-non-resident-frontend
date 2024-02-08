@@ -17,8 +17,8 @@
 package views.helpers
 
 import assets.MessageLookup.{SummaryPartialMessages => messages}
-import common.{CommonPlaySpec, WithCommonFakeApplication}
 import common.nonresident.CalculationType
+import common.{CommonPlaySpec, WithCommonFakeApplication}
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar

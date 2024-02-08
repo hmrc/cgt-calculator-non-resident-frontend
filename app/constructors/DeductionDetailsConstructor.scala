@@ -16,9 +16,9 @@
 
 package constructors
 
-import models._
-import common.{Dates, TaxDates}
 import common.KeystoreKeys.{NonResidentKeys => keys}
+import common.{Dates, TaxDates}
+import models._
 
 object DeductionDetailsConstructor {
 

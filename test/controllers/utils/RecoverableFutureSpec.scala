@@ -17,8 +17,8 @@
 package controllers.utils
 
 import common.WithCommonFakeApplication
-import org.scalatest.matchers.should.Matchers
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import play.api.http.Status
 import play.api.mvc.{AnyContent, Request, Result}

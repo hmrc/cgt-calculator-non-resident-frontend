@@ -16,6 +16,7 @@
 
 package services
 
+import common.KeystoreKeys.{NonResidentKeys => Key}
 import common.{CommonPlaySpec, KeystoreKeys, WithCommonFakeApplication}
 import models.DisposalValueModel
 import org.scalatestplus.mockito.MockitoSugar
@@ -25,7 +26,6 @@ import repositories.SessionRepository
 import uk.gov.hmrc.http.SessionKeys
 import uk.gov.hmrc.mongo.CurrentTimestampSupport
 import uk.gov.hmrc.mongo.test.MongoSupport
-import KeystoreKeys.{NonResidentKeys => Key}
 
 import java.util.UUID
 import scala.concurrent.{ExecutionContext, Future}

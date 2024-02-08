@@ -19,8 +19,8 @@ package forms
 import common.Transformers._
 import common.Validation._
 import models.AcquisitionValueModel
-import play.api.data.Forms._
 import play.api.data.Form
+import play.api.data.Forms._
 
 trait AcquisitionMarketValueForm {
   val errorRequired: String

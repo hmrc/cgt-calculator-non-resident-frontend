@@ -16,11 +16,11 @@
 
 package forms
 
+import common.Formatters.text
 import common.Validation.{mandatoryCheck, previousLossOrGainCheck}
 import models.PreviousLossOrGainModel
 import play.api.data.Form
 import play.api.data.Forms._
-import common.Formatters.text
 
 
 object PreviousLossOrGainForm {

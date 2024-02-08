@@ -16,8 +16,9 @@
 
 package constructors
 
-import javax.inject.Singleton
 import models._
+
+import javax.inject.Singleton
 import scala.concurrent.Future
 
 

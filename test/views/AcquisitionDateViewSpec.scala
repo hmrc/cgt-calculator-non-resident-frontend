@@ -16,8 +16,6 @@
 
 package views
 
-import java.time.LocalDate
-
 import assets.MessageLookup.{NonResident => messages}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import config.ApplicationConfig
@@ -27,6 +25,8 @@ import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import views.html.calculation.acquisitionDate
+
+import java.time.LocalDate
 
 class AcquisitionDateViewSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 

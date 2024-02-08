@@ -16,11 +16,10 @@
 
 package models
 
-import java.time.LocalDate
-
 import common.Dates
 import play.api.libs.json.{JsValue, Json, Writes}
 
+import java.time.LocalDate
 import scala.util.{Success, Try}
 
 case class DateModel(day: Int, month: Int, year: Int) {

@@ -16,12 +16,12 @@
 
 package forms
 
+import common.Formatters.text
 import common.Transformers._
 import common.Validation._
 import models.PropertyLivedInModel
 import play.api.data.Forms._
 import play.api.data._
-import common.Formatters.text
 
 object PropertyLivedInForm {
 

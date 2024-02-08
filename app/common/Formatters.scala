@@ -15,9 +15,9 @@
  */
 
 package common
-import play.api.data.{FieldMapping, FormError}
 import play.api.data.Forms.of
 import play.api.data.format.Formatter
+import play.api.data.{FieldMapping, FormError}
 
 object Formatters {
 

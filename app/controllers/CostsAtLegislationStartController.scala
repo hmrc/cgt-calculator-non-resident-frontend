@@ -19,8 +19,6 @@ package controllers
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import controllers.predicates.ValidActiveSession
 import forms.CostsAtLegislationStartForm._
-
-import javax.inject.Inject
 import models.CostsAtLegislationStartModel
 import play.api.data.Form
 import play.api.i18n.I18nSupport
@@ -30,6 +28,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.costsAtLegislationStart
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class CostsAtLegislationStartController @Inject()(http: DefaultHttpClient,

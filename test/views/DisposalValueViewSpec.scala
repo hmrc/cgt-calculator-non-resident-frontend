@@ -16,8 +16,8 @@
 
 package views
 
-import assets.MessageLookup.{NonResident => commonMessages}
 import assets.MessageLookup.NonResident.{DisposalValue => messages}
+import assets.MessageLookup.{NonResident => commonMessages}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper

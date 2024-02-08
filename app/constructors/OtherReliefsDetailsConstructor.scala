@@ -18,9 +18,10 @@ package constructors
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.nonresident.CalculationType
-import javax.inject.Inject
 import models.{OtherReliefsModel, QuestionAnswerModel}
 import play.api.i18n.{Messages, MessagesProvider}
+
+import javax.inject.Inject
 
 class OtherReliefsDetailsConstructor @Inject()(implicit messagesProvider: MessagesProvider) {
 

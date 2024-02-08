@@ -22,8 +22,6 @@ import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import controllers.utils.RecoverableFuture
 import forms.PersonalAllowanceForm._
-
-import javax.inject.Inject
 import models.{DateModel, PersonalAllowanceModel, TaxYearModel}
 import play.api.data.Form
 import play.api.i18n.I18nSupport
@@ -33,6 +31,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.personalAllowance
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class PersonalAllowanceController @Inject()(http: DefaultHttpClient,

@@ -18,8 +18,8 @@ package forms
 
 import assets.KeyLookup.{NonResident => messages}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
-import models.CurrentIncomeModel
 import forms.CurrentIncomeForm._
+import models.CurrentIncomeModel
 
 class CurrentIncomeFormSpec extends CommonPlaySpec with WithCommonFakeApplication {
 

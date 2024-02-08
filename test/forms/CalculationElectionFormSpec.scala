@@ -18,8 +18,8 @@ package forms
 
 import assets.KeyLookup.{NonResident => messages}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
-import models.CalculationElectionModel
 import forms.CalculationElectionForm._
+import models.CalculationElectionModel
 
 class CalculationElectionFormSpec extends CommonPlaySpec with WithCommonFakeApplication {
 

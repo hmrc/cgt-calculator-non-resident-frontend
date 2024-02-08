@@ -16,15 +16,14 @@
 
 package views
 
+import _root_.views.html.calculation.noTaxToPay
 import assets.MessageLookup.{NoTaxToPay => messages}
+import common.{CommonPlaySpec, WithCommonFakeApplication}
 import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
-import views.html.{calculation => views}
-import _root_.views.html.calculation.noTaxToPay
-import common.{CommonPlaySpec, WithCommonFakeApplication}
 
 class NoTaxToPayViewSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with MockitoSugar {
 

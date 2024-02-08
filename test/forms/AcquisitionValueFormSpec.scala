@@ -17,7 +17,7 @@
 package forms
 
 import assets.KeyLookup.NonResident.{AcquisitionValue => messages}
-import common.{Constants, CommonPlaySpec, WithCommonFakeApplication}
+import common.{CommonPlaySpec, Constants, WithCommonFakeApplication}
 import forms.AcquisitionValueForm._
 import models.AcquisitionValueModel
 

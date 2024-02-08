@@ -18,10 +18,10 @@ package forms
 
 import assets.KeyLookup.{NonResident => commonMessages}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
-import models.AcquisitionValueModel
 import forms.WorthWhenBoughtForLess.worthWhenBoughtForLessForm
-import forms.WorthWhenInherited.worthWhenInheritedForm
 import forms.WorthWhenGiftedTo.worthWhenGiftedToForm
+import forms.WorthWhenInherited.worthWhenInheritedForm
+import models.AcquisitionValueModel
 
 class AcquisitionMarketValueFormSpec extends CommonPlaySpec with WithCommonFakeApplication {
 

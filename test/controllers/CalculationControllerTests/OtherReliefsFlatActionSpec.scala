@@ -25,7 +25,7 @@ import connectors.CalculatorConnector
 import constructors.AnswersConstructor
 import controllers.OtherReliefsFlatController
 import controllers.helpers.FakeRequestHelper
-import models.{TaxYearModel, _}
+import models._
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._

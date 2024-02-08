@@ -16,8 +16,6 @@
 
 package views
 
-import java.time.LocalDate
-
 import assets.MessageLookup.{NonResident => messages}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import config.ApplicationConfig
@@ -28,6 +26,8 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.i18n.Lang
 import play.api.mvc.MessagesControllerComponents
 import views.html.calculation.privateResidenceRelief
+
+import java.time.LocalDate
 
 class PrivateResidenceReliefViewSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 

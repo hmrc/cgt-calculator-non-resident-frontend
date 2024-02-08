@@ -25,8 +25,8 @@ import uk.gov.hmrc.play.http.logging.Mdc.preservingMdc
 
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration.Duration
+import scala.concurrent.{ExecutionContext, Future}
 
 class SessionRepository @Inject()(
                                    mongoComponent  : MongoComponent,

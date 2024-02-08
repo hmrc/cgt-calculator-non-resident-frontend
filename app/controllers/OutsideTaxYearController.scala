@@ -20,8 +20,6 @@ import common.KeystoreKeys.{NonResidentKeys => keystoreKeys}
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import controllers.utils.RecoverableFuture
-
-import javax.inject.Inject
 import models.DateModel
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -30,6 +28,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.outsideTaxYear
 
+import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
 class OutsideTaxYearController @Inject()(http: DefaultHttpClient,

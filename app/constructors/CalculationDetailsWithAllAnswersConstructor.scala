@@ -17,10 +17,10 @@
 package constructors
 
 import common.nonresident.{CalculationType, MoneyPounds}
-
-import javax.inject.Inject
 import models.{CalculationResultsWithTaxOwedModel, QuestionAnswerModel}
 import play.api.i18n.{Messages, MessagesProvider}
+
+import javax.inject.Inject
 
 
 class CalculationDetailsWithAllAnswersConstructor @Inject()(val calculationDetailsConstructor: CalculationDetailsConstructor,

@@ -18,8 +18,8 @@ package forms
 
 import assets.KeyLookup.{NonResident => messages}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
-import models.PrivateResidenceReliefModel
 import forms.PrivateResidenceReliefForm._
+import models.PrivateResidenceReliefModel
 
 class PrivateResidenceReliefFormSpec extends CommonPlaySpec with WithCommonFakeApplication {
 

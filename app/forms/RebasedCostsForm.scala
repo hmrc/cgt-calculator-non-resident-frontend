@@ -16,11 +16,11 @@
 
 package forms
 
+import common.Transformers._
 import common.Validation._
 import models.RebasedCostsModel
 import play.api.data.Forms._
 import play.api.data._
-import common.Transformers._
 import uk.gov.voa.play.form.ConditionalMappings._
 
 object RebasedCostsForm {

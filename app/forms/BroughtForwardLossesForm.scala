@@ -19,7 +19,6 @@ package forms
 import common.Constants
 import common.Transformers._
 import common.Validation._
-import forms.BroughtForwardLossesForm.verifyMandatory
 import models.BroughtForwardLossesModel
 import play.api.data.Forms._
 import play.api.data._

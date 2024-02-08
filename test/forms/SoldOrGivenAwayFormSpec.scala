@@ -18,8 +18,8 @@ package forms
 
 import assets.KeyLookup.{NonResident => commonMessages}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
-import models.SoldOrGivenAwayModel
 import forms.SoldOrGivenAwayForm._
+import models.SoldOrGivenAwayModel
 
 class SoldOrGivenAwayFormSpec extends CommonPlaySpec with WithCommonFakeApplication{
 

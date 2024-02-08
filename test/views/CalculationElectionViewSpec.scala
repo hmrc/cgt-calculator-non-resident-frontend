@@ -18,6 +18,7 @@ package views
 
 import assets.MessageLookup.NonResident.{CalculationElection => messages}
 import assets.MessageLookup.{NonResident => commonMessages}
+import common.{CommonPlaySpec, WithCommonFakeApplication}
 import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import forms.CalculationElectionForm._
@@ -26,7 +27,6 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.i18n.Messages
 import play.api.mvc.MessagesControllerComponents
 import views.html.calculation.calculationElection
-import common.{CommonPlaySpec, WithCommonFakeApplication}
 
 class CalculationElectionViewSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with MockitoSugar {
 

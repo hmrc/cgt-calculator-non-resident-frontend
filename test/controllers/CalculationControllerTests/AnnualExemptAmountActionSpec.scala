@@ -18,13 +18,13 @@ package controllers.CalculationControllerTests
 
 import akka.stream.Materializer
 import assets.MessageLookup.NonResident.{AnnualExemptAmount => messages}
-import common.{CommonPlaySpec, WithCommonFakeApplication}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import common.{CommonPlaySpec, WithCommonFakeApplication}
 import config.ApplicationConfig
 import connectors.CalculatorConnector
 import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
-import controllers.helpers.FakeRequestHelper
 import controllers.AnnualExemptAmountController
+import controllers.helpers.FakeRequestHelper
 import models._
 import org.jsoup._
 import org.mockito.ArgumentMatchers

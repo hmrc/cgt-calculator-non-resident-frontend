@@ -16,11 +16,11 @@
 
 package forms
 
+import common.Formatters.text
+import common.Validation._
 import models.HowBecameOwnerModel
 import play.api.data.Form
 import play.api.data.Forms._
-import common.Validation._
-import common.Formatters.text
 
 object HowBecameOwnerForm {
 

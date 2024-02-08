@@ -16,8 +16,8 @@
 
 package assets
 
-import common.nonresident.MoneyPounds
 import common.Constants
+import common.nonresident.MoneyPounds
 
 object MessageLookup {
 

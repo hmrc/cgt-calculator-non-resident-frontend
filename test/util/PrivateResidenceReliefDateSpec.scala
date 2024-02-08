@@ -16,9 +16,9 @@
 
 package util
 
-import java.time.LocalDate
-
 import common.{CommonPlaySpec, TaxDates}
+
+import java.time.LocalDate
 
 class PrivateResidenceReliefDateSpec extends CommonPlaySpec {
 

@@ -16,12 +16,12 @@
 
 package forms
 
+import common.Formatters.text
 import common.Transformers.{booleanToString, stringToBoolean}
 import common.Validation.{mandatoryCheck, yesNoCheck}
 import models.ClaimingReliefsModel
 import play.api.data.Form
 import play.api.data.Forms._
-import common.Formatters.text
 
 object ClaimingReliefsForm {
 

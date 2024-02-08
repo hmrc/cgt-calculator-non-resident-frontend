@@ -19,8 +19,8 @@ package forms
 
 import assets.KeyLookup.NonResident.{HowBecameOwner => messages}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
-import models.HowBecameOwnerModel
 import forms.HowBecameOwnerForm._
+import models.HowBecameOwnerModel
 
 class HowBecameOwnerFormSpec extends CommonPlaySpec with WithCommonFakeApplication {
 

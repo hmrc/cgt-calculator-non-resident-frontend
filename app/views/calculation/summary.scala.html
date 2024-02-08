@@ -14,11 +14,12 @@
  * limitations under the License.
  *@
 
+@import common.Dates.TemplateImplicits._
+@import common.Transformers.{booleanToMessageString, checkIfBooleanAsString}
+@import common.nonresident.MoneyPounds
 @import models._
 @import views.html.helper.CSPNonce
-@import common.Transformers.{booleanToMessageString, checkIfBooleanAsString}
-@import common.Dates.TemplateImplicits._
-@import common.nonresident.MoneyPounds
+
 @import java.time.LocalDate
 
 @this(

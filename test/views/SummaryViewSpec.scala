@@ -16,7 +16,6 @@
 
 package views
 
-import assets.MessageLookup.NonResident.Summary
 import assets.MessageLookup.{NonResident => messages}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import config.ApplicationConfig

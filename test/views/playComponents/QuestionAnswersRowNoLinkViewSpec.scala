@@ -16,8 +16,6 @@
 
 package views.helpers
 
-import java.time.LocalDate
-
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import controllers.helpers.FakeRequestHelper
 import models.QuestionAnswerModel
@@ -25,6 +23,8 @@ import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import views.html.playComponents.questionAnswerRowNoLink
+
+import java.time.LocalDate
 
 class QuestionAnswersRowNoLinkViewSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)

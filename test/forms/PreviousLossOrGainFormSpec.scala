@@ -18,8 +18,8 @@ package forms
 
 import assets.KeyLookup.NonResident.{PreviousLossOrGain => messages}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
-import models.PreviousLossOrGainModel
 import forms.PreviousLossOrGainForm._
+import models.PreviousLossOrGainModel
 
 class PreviousLossOrGainFormSpec extends CommonPlaySpec with WithCommonFakeApplication{
   "Creating the form from a model" should {

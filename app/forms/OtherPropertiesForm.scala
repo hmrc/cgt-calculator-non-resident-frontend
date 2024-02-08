@@ -16,11 +16,11 @@
 
 package forms
 
+import common.Formatters.text
 import common.Validation._
 import models.OtherPropertiesModel
 import play.api.data.Forms._
 import play.api.data._
-import common.Formatters.text
 
 object OtherPropertiesForm {
 

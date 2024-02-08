@@ -17,10 +17,11 @@
 package constructors
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import common.nonresident.CalculationType
 import controllers.routes
 import models.{QuestionAnswerModel, TotalGainResultsModel}
 import play.api.i18n.{Messages, MessagesProvider}
-import common.nonresident.CalculationType
+
 import javax.inject.Inject
 
 

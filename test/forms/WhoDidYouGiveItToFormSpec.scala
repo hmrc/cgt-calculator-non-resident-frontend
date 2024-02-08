@@ -16,10 +16,10 @@
 
 package forms
 
-import forms.WhoDidYouGiveItToForm._
-import models.WhoDidYouGiveItToModel
 import assets.KeyLookup.WhoDidYouGiveItTo
 import common.{CommonPlaySpec, WithCommonFakeApplication}
+import forms.WhoDidYouGiveItToForm._
+import models.WhoDidYouGiveItToModel
 
 class WhoDidYouGiveItToFormSpec extends CommonPlaySpec with WithCommonFakeApplication {
   "Creating the form from an empty model" should {

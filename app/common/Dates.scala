@@ -16,12 +16,11 @@
 
 package common
 
+import play.api.i18n.Messages
+
 import java.time._
 import java.time.format.{DateTimeFormatter, ResolverStyle}
 import java.time.temporal.ChronoUnit
-
-import play.api.i18n.Messages
-
 import scala.concurrent.Future
 
 object Dates {

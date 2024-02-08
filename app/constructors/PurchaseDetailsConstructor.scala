@@ -16,11 +16,11 @@
 
 package constructors
 
-import java.time.LocalDate
-
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.TaxDates
 import models._
+
+import java.time.LocalDate
 
 object PurchaseDetailsConstructor {
 

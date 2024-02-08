@@ -21,7 +21,6 @@ import assets.MessageLookup.{NonResident => commonMessages}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
-import controllers.routes
 import forms.PersonalAllowanceForm._
 import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar

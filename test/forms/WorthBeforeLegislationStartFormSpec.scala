@@ -18,8 +18,8 @@ package forms
 
 import assets.KeyLookup.NonResident.{WorthBeforeLegislationStart => messages}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
-import models.WorthBeforeLegislationStartModel
 import forms.WorthBeforeLegislationStartForm._
+import models.WorthBeforeLegislationStartModel
 
 class WorthBeforeLegislationStartFormSpec extends CommonPlaySpec with WithCommonFakeApplication {
 
