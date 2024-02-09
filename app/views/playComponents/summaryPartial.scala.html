@@ -17,6 +17,10 @@
 @import common._
 @import common.nonresident.{CalculationType, MoneyPounds}
 @import uk.gov.hmrc.govukfrontend.views.html.components._
+@import common.nonresident.Flat
+@import common.nonresident.Rebased
+@import common.nonresident.TimeApportioned
+
 
 @this(
     summaryPartialDeductionsSection: summaryPartialDeductionsSection,
@@ -27,7 +31,7 @@
     govukWarningText : GovukWarningText
 )
 
-@(calculationResult: TotalTaxOwedModel, taxYearModel: TaxYearModel, calculationType: String,
+@(calculationResult: TotalTaxOwedModel, taxYearModel: TaxYearModel, calculationType: CalculationType,
 disposalValue: BigDecimal, acquisitionValue: BigDecimal, totalCosts: BigDecimal, flatGain: Option[BigDecimal] = None, reliefsUsed: BigDecimal = 0)(implicit request: Request[_], messages: Messages, messagesApi: Option[MessagesApi] = None)
 
     <div id="tax-owed-banner" class="govuk-panel govuk-panel--confirmation">
@@ -50,7 +54,7 @@ disposalValue: BigDecimal, acquisitionValue: BigDecimal, totalCosts: BigDecimal,
     }
 
 
-    @{if(calculationType == CalculationType.flat || calculationType == CalculationType.rebased)
+    @{if(calculationType == Flat || calculationType == Rebased)
         summaryPartialWorkingOutSection(
             calculationType,
             disposalValue,
@@ -60,7 +64,7 @@ disposalValue: BigDecimal, acquisitionValue: BigDecimal, totalCosts: BigDecimal,
         )
     }
 
-    @{if(calculationType == CalculationType.timeApportioned)
+    @{if(calculationType == TimeApportioned)
         summaryPartialWorkingOutSection(
             calculationType,
             disposalValue,

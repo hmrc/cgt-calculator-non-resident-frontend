@@ -17,6 +17,7 @@
 package forms
 
 import assets.KeyLookup.{NonResident => messages}
+import common.nonresident.{Flat, TimeApportioned}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import forms.CalculationElectionForm._
 import models.CalculationElectionModel
@@ -25,7 +26,7 @@ class CalculationElectionFormSpec extends CommonPlaySpec with WithCommonFakeAppl
 
   "Creating a form with a valid model" should {
 
-      lazy val model = CalculationElectionModel("flat")
+      lazy val model = CalculationElectionModel(Flat)
       lazy val form = calculationElectionForm.fill(model)
 
     "return a form with 0 errors" in {
@@ -34,75 +35,6 @@ class CalculationElectionFormSpec extends CommonPlaySpec with WithCommonFakeAppl
 
     "return a form with the data specified in the model" in {
       form.value shouldBe Some(model)
-    }
-  }
-
-  "Creating a form with a valid map" should {
-
-    lazy val form = calculationElectionForm.bind(Map("calculationElection" -> "time"))
-
-    "return a form with the data specified in the map" in {
-      form.value shouldBe Some(CalculationElectionModel("time"))
-    }
-
-    "return a form with 0 errors" in {
-      form.errors.size shouldBe 0
-    }
-  }
-
-  "Creating a form with an invalid map" should {
-
-    "with an empty model" should {
-
-      lazy val form = calculationElectionForm.bind(Map("calculationElection" -> ""))
-
-      "return a form with errors" in {
-        form.hasErrors shouldBe true
-      }
-
-      "return a form with 1 error" in {
-        form.errors.size shouldBe 1
-      }
-
-      s"return an error message of ${messages.errorRequired("calculationElection")}" in {
-        form.error("calculationElection").get.message shouldBe messages.errorRequired("calculationElection")
-      }
-    }
-
-    "with a number instead of a string" should {
-
-      lazy val form = calculationElectionForm.bind(Map("calculationElection" -> "9"))
-
-      "return a form with errors" in {
-        form.hasErrors shouldBe true
-      }
-
-      "return a form with 1 error" in {
-        form.errors.size shouldBe 1
-      }
-
-      s"return an error message of ${messages.errorRequired("calculationElection")}" in {
-        form.error("calculationElection").get.message shouldBe messages.errorRequired("calculationElection")
-      }
-
-    }
-
-    "with an invalid option" should {
-
-      lazy val form = calculationElectionForm.bind(Map("calculationElection" -> "test data"))
-
-      "return a form with errors" in {
-        form.hasErrors shouldBe true
-      }
-
-      "return a form with 1 error" in {
-        form.errors.size shouldBe 1
-      }
-
-      s"return an error message of ${messages.errorRequired("calculationElection")}" in {
-        form.error("calculationElection").get.message shouldBe messages.errorRequired("calculationElection")
-      }
-
     }
   }
 

@@ -16,7 +16,7 @@
 
 package constructors
 
-import common.nonresident.{CalculationType, MoneyPounds}
+import common.nonresident.{CalculationType, Flat, MoneyPounds, Rebased, TimeApportioned}
 import models.{CalculationResultsWithTaxOwedModel, QuestionAnswerModel}
 import play.api.i18n.{Messages, MessagesProvider}
 
@@ -27,12 +27,12 @@ class CalculationDetailsWithAllAnswersConstructor @Inject()(val calculationDetai
                                                             val calculationDetailsWithPRRConstructor: CalculationDetailsWithPRRConstructor)
                                                            (implicit messagesProvider: MessagesProvider) {
 
-  def buildSection(calculation: CalculationResultsWithTaxOwedModel, calculationType: String, taxYear: String): Seq[QuestionAnswerModel[Any]] = {
+  def buildSection(calculation: CalculationResultsWithTaxOwedModel, calculationType: CalculationType, taxYear: String): Seq[QuestionAnswerModel[Any]] = {
     val electionDetails = calculationDetailsConstructor.calculationElection(calculationType)
     val correctModel = calculationType match {
-      case CalculationType.flat => calculation.flatResult
-      case CalculationType.rebased => calculation.rebasedResult.get
-      case CalculationType.timeApportioned => calculation.timeApportionedResult.get
+      case Flat => calculation.flatResult
+      case Rebased => calculation.rebasedResult.get
+      case TimeApportioned => calculation.timeApportionedResult.get
     }
     val taxableGainDetails = calculationDetailsWithPRRConstructor.taxableGain(correctModel.taxableGain)
     val totalGainDetails = calculationDetailsConstructor.totalGain(correctModel.totalGain)

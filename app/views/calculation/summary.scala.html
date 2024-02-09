@@ -19,6 +19,8 @@
 @import common.nonresident.MoneyPounds
 @import models._
 @import views.html.helper.CSPNonce
+@import common.nonresident.CalculationType
+
 
 @import java.time.LocalDate
 
@@ -31,7 +33,7 @@
 @(
         calculationResult: TotalTaxOwedModel,
         taxYearModel: TaxYearModel,
-        calculationType: String,
+        calculationType: CalculationType,
         disposalValue: BigDecimal,
         acquisitionValue: BigDecimal,
         totalCosts: BigDecimal,
@@ -39,7 +41,7 @@
         flatGain: Option[BigDecimal] = None,
         reliefsUsed: BigDecimal = 0,
         showUserResearchPanel: Boolean,
-        questionsForPrint: Seq[QuestionAnswerModel[Any]],
+        questionsForPrint: Seq[QuestionAnswerModel[Any]]
 )(implicit request: Request[_], messages: Messages)
 
 @scripts = {

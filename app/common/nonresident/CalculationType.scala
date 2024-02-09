@@ -16,8 +16,40 @@
 
 package common.nonresident
 
+import julienrf.json.derived
+import play.api.data.FormError
+import play.api.data.format.Formatter
+import play.api.libs.json.OFormat
+
 object CalculationType {
-  val flat: String = "flat"
-  val rebased: String = "rebased"
-  val timeApportioned: String = "time"
+  implicit val jsonFormat: OFormat[CalculationType] = derived.oformat[CalculationType]()
+
+  implicit val formatter: Formatter[CalculationType] = new Formatter[CalculationType] {
+
+    override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], CalculationType] =
+      data.get(key).map {
+        case "flat" => Right(Flat)
+        case "rebased" => Right(Rebased)
+        case "timeApportioned" => Right(TimeApportioned)
+      }.getOrElse(Left(Seq(FormError(key, "invalid"))))
+
+    override def unbind(key: String, value: CalculationType): Map[String, String] =
+      value match {
+        case Flat => Map(key -> "flat")
+        case Rebased => Map(key -> "rebased")
+        case TimeApportioned => Map(key -> "timeApportioned")
+      }
+  }
+}
+
+sealed trait CalculationType
+
+case object Flat extends CalculationType {
+  override def toString: String = "flat"
+}
+case object Rebased extends CalculationType {
+  override def toString: String = "rebased"
+}
+case object TimeApportioned extends CalculationType {
+  override def toString: String = "timeApportioned"
 }

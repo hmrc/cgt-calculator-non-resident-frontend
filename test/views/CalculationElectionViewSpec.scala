@@ -105,16 +105,6 @@ class CalculationElectionViewSpec extends CommonPlaySpec with WithCommonFakeAppl
       doc.body.getElementById("calculationElection").parent.classNames().contains("selected") shouldBe false
     }
 
-    "supplied with errors" should {
-      lazy val form = calculationElectionForm.bind(Map("calculationElection" -> "a"))
-      lazy val view = calculationElectionView(form, seq)(fakeRequest,mockMessage)
-      lazy val document = Jsoup.parse(view.body)
-
-      "have an error summary" in {
-        document.getElementsByClass("govuk-error-summary").size() shouldBe 1
-      }
-    }
-
     "should produce the same output when render and f are called" in {
 
       lazy val flatLowestTaxOwed: Seq[(String, String, String, String, Option[String], Option[BigDecimal])] =

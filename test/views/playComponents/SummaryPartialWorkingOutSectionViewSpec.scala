@@ -17,7 +17,7 @@
 package views.helpers
 
 import assets.MessageLookup.{SummaryPartialMessages => messages}
-import common.nonresident.CalculationType
+import common.nonresident.{CalculationType, Flat, Rebased, TimeApportioned}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
@@ -36,7 +36,7 @@ class SummaryPartialWorkingOutSectionViewSpec extends CommonPlaySpec with WithCo
     "supplied with a flat calculation and a gain" should {
 
       lazy val view = summaryPartialWorkingOutSectionView(
-        CalculationType.flat,
+        Flat,
         disposalValue = 100000,
         acquisitionValue = 20000,
         totalCosts = 4000,
@@ -108,7 +108,7 @@ class SummaryPartialWorkingOutSectionViewSpec extends CommonPlaySpec with WithCo
     "supplied with a rebased calculation and a loss" should {
 
       lazy val view = summaryPartialWorkingOutSectionView(
-        CalculationType.rebased,
+        Rebased,
         disposalValue = 100000,
         acquisitionValue = 120000,
         totalCosts = 4000,
@@ -180,7 +180,7 @@ class SummaryPartialWorkingOutSectionViewSpec extends CommonPlaySpec with WithCo
     "supplied with a time-apportioned calculation and a zero gain" should {
 
       lazy val view = summaryPartialWorkingOutSectionView(
-        CalculationType.timeApportioned,
+        TimeApportioned,
         disposalValue = 100000,
         acquisitionValue = 20000,
         totalCosts = 4000,
@@ -264,7 +264,7 @@ class SummaryPartialWorkingOutSectionViewSpec extends CommonPlaySpec with WithCo
     "supplied with a time-apportioned calculation and a loss" should {
 
       lazy val view = summaryPartialWorkingOutSectionView(
-        CalculationType.timeApportioned,
+        TimeApportioned,
         disposalValue = 100000,
         acquisitionValue = 120000,
         totalCosts = 4000,

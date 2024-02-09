@@ -17,7 +17,7 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import common.nonresident.CalculationType
+import common.nonresident.{CalculationType, Flat, Rebased, TimeApportioned}
 import common.nonresident.TaxableGainCalculation._
 import connectors.CalculatorConnector
 import constructors.{AnswersConstructor, YourAnswersConstructor}
@@ -45,11 +45,11 @@ class SummaryController @Inject()(calcConnector: CalculatorConnector,
   val summary: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     def getCalculationResult(calculationResultsWithTaxOwedModel: Option[CalculationResultsWithTaxOwedModel],
-                             calculationElection: String): Future[TotalTaxOwedModel] = {
+                             calculationElection: CalculationType): Future[TotalTaxOwedModel] = {
       (calculationResultsWithTaxOwedModel, calculationElection) match {
-        case (Some(model), CalculationType.flat) => Future.successful(model.flatResult)
-        case (Some(model), CalculationType.rebased) => Future.successful(model.rebasedResult.get)
-        case (Some(model), CalculationType.timeApportioned) => Future.successful(model.timeApportionedResult.get)
+        case (Some(model), Flat) => Future.successful(model.flatResult)
+        case (Some(model), Rebased) => Future.successful(model.rebasedResult.get)
+        case (Some(model), TimeApportioned) => Future.successful(model.timeApportionedResult.get)
         case _ => throw new MatchError("Unexpected values for: (calculationResultsWithTaxOwedModel, calculationElection)")
       }
     }
@@ -113,7 +113,7 @@ class SummaryController @Inject()(calcConnector: CalculatorConnector,
       questionAnswerRows = YourAnswersConstructor.fetchYourAnswers(answers, prrModel, finalAnswers, propertyLivedIn)
     } yield {
       calculationType.get.calculationType match {
-        case CalculationType.flat =>
+        case Flat =>
           Ok(summaryView(calculationResult, taxYearModel.get, calculationType.get.calculationType,
             answers.disposalValueModel.disposalValue,
             answers.acquisitionValueModel.acquisitionValueAmt,
@@ -123,7 +123,7 @@ class SummaryController @Inject()(calcConnector: CalculatorConnector,
             showUserResearchPanel = showUserResearchPanel,
             questionsForPrint = questionAnswerRows
           ))
-        case CalculationType.timeApportioned =>
+        case TimeApportioned =>
           Ok(summaryView(calculationResult, taxYearModel.get, calculationType.get.calculationType,
             answers.disposalValueModel.disposalValue,
             answers.acquisitionValueModel.acquisitionValueAmt,
@@ -133,7 +133,7 @@ class SummaryController @Inject()(calcConnector: CalculatorConnector,
             showUserResearchPanel = showUserResearchPanel,
             questionsForPrint = questionAnswerRows
           ))
-        case CalculationType.rebased =>
+        case Rebased =>
           Ok(summaryView(calculationResult, taxYearModel.get, calculationType.get.calculationType,
             answers.disposalValueModel.disposalValue,
             answers.rebasedValueModel.get.rebasedValueAmt,

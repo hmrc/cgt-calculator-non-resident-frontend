@@ -19,7 +19,7 @@ package controllers.CalculationControllerTests
 import akka.stream.Materializer
 import assets.MessageLookup.NonResident.{Summary => messages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import common.nonresident.CalculationType
+import common.nonresident.{CalculationType, Flat}
 import common.{CommonPlaySpec, TestModels, WithCommonFakeApplication}
 import config.ApplicationConfig
 import connectors.CalculatorConnector
@@ -159,7 +159,7 @@ class SummaryActionSpec extends CommonPlaySpec with WithCommonFakeApplication wi
       lazy val target = setupTarget(
         answerModel,
         TotalGainResultsModel(1000, Some(2000), Some(3000)),
-        CalculationElectionModel(CalculationType.flat),
+        CalculationElectionModel(Flat),
         Some(PrivateResidenceReliefModel("Yes", Some(1000), Some(10))),
         Some(CalculationResultsWithPRRModel(GainsAfterPRRModel(100, 0, 100), None, None)),
         finalAnswersModel,
@@ -186,7 +186,7 @@ class SummaryActionSpec extends CommonPlaySpec with WithCommonFakeApplication wi
       lazy val target = setupTarget(
         answerModel,
         TotalGainResultsModel(1000, None, None),
-        CalculationElectionModel(CalculationType.flat),
+        CalculationElectionModel(Flat),
         None,
         None,
         finalAnswersModel,
@@ -212,7 +212,7 @@ class SummaryActionSpec extends CommonPlaySpec with WithCommonFakeApplication wi
       lazy val target = setupTarget(
         answerModel,
         TotalGainResultsModel(1000, Some(2000), Some(3000)),
-        CalculationElectionModel(CalculationType.flat),
+        CalculationElectionModel(Flat),
         Some(PrivateResidenceReliefModel("Yes", Some(1000), Some(10))),
         Some(CalculationResultsWithPRRModel(GainsAfterPRRModel(100, 0, 100), None, None)),
         finalAnswersModel,
@@ -234,7 +234,7 @@ class SummaryActionSpec extends CommonPlaySpec with WithCommonFakeApplication wi
     lazy val target = setupTarget(
       answerModel,
       TotalGainResultsModel(1000, Some(2000), Some(3000)),
-      CalculationElectionModel(CalculationType.flat),
+      CalculationElectionModel(Flat),
       Some(PrivateResidenceReliefModel("Yes", Some(1000), Some(10))),
       Some(CalculationResultsWithPRRModel(GainsAfterPRRModel(100, 0, 100), None, None)),
       finalAnswersModel,

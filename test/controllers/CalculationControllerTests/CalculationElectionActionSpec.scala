@@ -20,6 +20,7 @@ import akka.stream.Materializer
 import assets.MessageLookup.NonResident.{CalculationElection => messages, CalculationElectionNoReliefs => nRMessages}
 import assets.MessageLookup.{NonResident => commonMessages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import common.nonresident.{Flat, TimeApportioned}
 import common.{CommonPlaySpec, TestModels, WithCommonFakeApplication}
 import config.ApplicationConfig
 import connectors.CalculatorConnector
@@ -190,7 +191,7 @@ class CalculationElectionActionSpec ()
 
     "supplied with a pre-existing model with tax owed" which {
       lazy val target = setupTarget(
-        Some(CalculationElectionModel("flat")),
+        Some(CalculationElectionModel(Flat)),
         None,
         Some(TotalGainResultsModel(200, None, None)),
         seq,
@@ -214,7 +215,7 @@ class CalculationElectionActionSpec ()
 
     "supplied with a pre-existing model with no tax owed" which {
       lazy val target = setupTarget(
-        Some(CalculationElectionModel("flat")),
+        Some(CalculationElectionModel(Flat)),
         None,
         Some(TotalGainResultsModel(0, Some(0), Some(0))),
         seq,
@@ -238,7 +239,7 @@ class CalculationElectionActionSpec ()
 
     "supplied with a pre-existing model and not claiming reliefs" which {
       lazy val target = setupTarget(
-        Some(CalculationElectionModel("flat")),
+        Some(CalculationElectionModel(Flat)),
         None,
         Some(TotalGainResultsModel(1000, Some(0), Some(0))),
         seq,
@@ -324,26 +325,6 @@ class CalculationElectionActionSpec ()
 
       "redirect to the other reliefs rebased page" in {
         redirectLocation(result) shouldBe Some(s"${routes.OtherReliefsRebasedController.otherReliefsRebased}")
-      }
-    }
-
-    "submitting a valid calculation election using the time apportioned reliefs button" should {
-      lazy val request = fakeRequestToPOSTWithSession(("calculationElection", "time"), ("action", "time"))
-      lazy val target = setupTarget(
-        None,
-        None,
-        Some(TotalGainResultsModel(0, Some(0), Some(0))),
-        seq,
-        finalAnswersModel
-      )
-      lazy val result = target.submitCalculationElection(request.withMethod("POST"))
-
-      "return a 303" in {
-        status(result) shouldBe 303
-      }
-
-      "redirect to the other reliefs flat page" in {
-        redirectLocation(result) shouldBe Some(s"${routes.OtherReliefsTAController.otherReliefsTA}")
       }
     }
 

@@ -17,6 +17,7 @@
 package views.helpers
 
 import assets.MessageLookup.{SummaryPartialMessages => messages}
+import common.nonresident.Flat
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import controllers.helpers.FakeRequestHelper
 import models.{TaxYearModel, TotalTaxOwedModel}
@@ -61,7 +62,7 @@ class SummaryPartialViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
       lazy val view = summaryPartialView(
         totalTaxOwedModel,
         TaxYearModel("2016/17", isValidYear = true, "2016/17"),
-        "flat",
+        Flat,
         100.00,
         100.00,
         0
@@ -161,7 +162,7 @@ class SummaryPartialViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
       lazy val view = summaryPartialView(
         totalTaxOwedModel,
         TaxYearModel("2018/19", isValidYear = false, "2016/17"),
-        "flat",
+        Flat,
         100.00,
         100.00,
         0

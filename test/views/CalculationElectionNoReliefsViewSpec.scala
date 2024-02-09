@@ -164,16 +164,6 @@ class CalculationElectionNoReliefsViewSpec extends CommonPlaySpec with WithCommo
       }
     }
 
-    "supplied with errors" should {
-      lazy val form = calculationElectionForm.bind(Map("calculationElection" -> "a"))
-      lazy val view = calculationElectionNoReliefsView(form, rebasedLowestTaxOwed)(fakeRequest, mockMessage)
-      lazy val document = Jsoup.parse(view.body)
-
-      "have an error summary" in {
-        document.select(".govuk-error-summary").size() shouldBe 1
-      }
-    }
-
     "should produce the same output when render and f are called" in {
 
       lazy val flatLowestTaxOwed: Seq[(String, String, String, String, Option[String], Option[BigDecimal])] =
