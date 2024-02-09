@@ -41,13 +41,6 @@ object BroughtForwardLossesForm {
     case _ => true
   }
 
-  private def getLossesAmount(model: BroughtForwardLossesModel): Option[BigDecimal] = {
-    model match {
-      case BroughtForwardLossesModel(true, losses) => losses
-      case _ => None
-    }
-  }
-
   val broughtForwardLossesForm = Form(
     mapping(
       "isClaiming" -> common.Formatters.text("calc.broughtForwardLosses.errors.required")
