@@ -18,7 +18,7 @@ package constructors
 
 import assets.MessageLookup.NonResident.{Improvements => messages}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
-import helpers.AssertHelpers
+import constructors.helpers.AssertHelpers
 import models._
 
 class PropertyDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeApplication with AssertHelpers {

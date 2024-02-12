@@ -16,12 +16,12 @@
 
 package constructors
 
-import java.time.LocalDate
-
 import assets.MessageLookup.{NonResident => messages}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import constructors.helpers.AssertHelpers
 import models._
+
+import java.time.LocalDate
 
 class PurchaseDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeApplication with AssertHelpers {
 

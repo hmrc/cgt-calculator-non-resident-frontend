@@ -16,7 +16,6 @@
 
 package controllers.CalculationControllerTests
 
-import java.time.LocalDate
 import akka.stream.Materializer
 import assets.MessageLookup.NonResident.{PrivateResidenceRelief => messages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
@@ -39,6 +38,7 @@ import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.privateResidenceRelief
 
+import java.time.LocalDate
 import scala.concurrent.{ExecutionContext, Future}
 
 class PrivateResidenceReliefActionSpec

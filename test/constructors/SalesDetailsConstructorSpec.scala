@@ -16,11 +16,11 @@
 
 package constructors
 
-import java.time.LocalDate
-
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import constructors.helpers.AssertHelpers
 import models._
+
+import java.time.LocalDate
 
 class SalesDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeApplication with AssertHelpers {
 

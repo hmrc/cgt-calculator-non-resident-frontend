@@ -17,7 +17,7 @@
 package models
 
 import common.CommonPlaySpec
-import common.nonresident.{CalculationType, Flat, Rebased, TimeApportioned}
+import common.nonresident.{Flat, Rebased, TimeApportioned}
 
 class SummaryModelSpec extends CommonPlaySpec{
 

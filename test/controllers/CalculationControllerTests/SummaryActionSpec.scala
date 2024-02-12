@@ -19,7 +19,7 @@ package controllers.CalculationControllerTests
 import akka.stream.Materializer
 import assets.MessageLookup.NonResident.{Summary => messages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import common.nonresident.{CalculationType, Flat}
+import common.nonresident.Flat
 import common.{CommonPlaySpec, TestModels, WithCommonFakeApplication}
 import config.ApplicationConfig
 import connectors.CalculatorConnector

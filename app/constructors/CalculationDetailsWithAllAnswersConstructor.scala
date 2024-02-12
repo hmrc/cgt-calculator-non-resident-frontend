@@ -16,7 +16,7 @@
 
 package constructors
 
-import common.nonresident.{CalculationType, Flat, MoneyPounds, Rebased, TimeApportioned}
+import common.nonresident._
 import models.{CalculationResultsWithTaxOwedModel, QuestionAnswerModel}
 import play.api.i18n.{Messages, MessagesProvider}
 

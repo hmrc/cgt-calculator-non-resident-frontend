@@ -17,8 +17,8 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import common.nonresident.{CalculationType, Flat, Rebased, TimeApportioned}
 import common.nonresident.TaxableGainCalculation._
+import common.nonresident.{CalculationType, Flat, Rebased, TimeApportioned}
 import connectors.CalculatorConnector
 import constructors.{AnswersConstructor, YourAnswersConstructor}
 import controllers.predicates.ValidActiveSession

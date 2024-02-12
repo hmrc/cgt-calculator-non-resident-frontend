@@ -16,13 +16,13 @@
 
 package constructors
 
-import models.{OtherReliefsModel, QuestionAnswerModel}
-import common.nonresident.{CalculationType, Flat, Rebased, TimeApportioned}
-import helpers.AssertHelpers
 import assets.MessageLookup.{NonResident => messages}
-import common.{CommonPlaySpec, WithCommonFakeApplication}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import common.nonresident.{Flat, Rebased, TimeApportioned}
+import common.{CommonPlaySpec, WithCommonFakeApplication}
+import constructors.helpers.AssertHelpers
 import controllers.helpers.FakeRequestHelper
+import models.{OtherReliefsModel, QuestionAnswerModel}
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.i18n.MessagesProvider
 import play.api.mvc.MessagesControllerComponents

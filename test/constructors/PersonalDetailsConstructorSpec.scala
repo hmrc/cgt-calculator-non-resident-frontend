@@ -17,10 +17,10 @@
 package constructors
 
 import assets.MessageLookup.{NonResident => messages}
-import common.{CommonPlaySpec, WithCommonFakeApplication}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.TestModels._
 import common.nonresident.PreviousGainOrLossKeys
+import common.{CommonPlaySpec, WithCommonFakeApplication}
 import controllers.helpers.FakeRequestHelper
 import controllers.routes
 import models._

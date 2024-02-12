@@ -17,7 +17,7 @@
 package services
 
 import common.KeystoreKeys.{NonResidentKeys => Key}
-import common.{CommonPlaySpec, KeystoreKeys, WithCommonFakeApplication}
+import common.{CommonPlaySpec, WithCommonFakeApplication}
 import models.DisposalValueModel
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.AnyContentAsEmpty

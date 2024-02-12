@@ -17,12 +17,12 @@
 package constructors
 
 import assets.MessageLookup.NonResident.{Summary => messages}
-import common.{CommonPlaySpec, WithCommonFakeApplication}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import common.nonresident.{CalculationType, Flat, Rebased, TimeApportioned}
+import common.nonresident.{Flat, Rebased, TimeApportioned}
+import common.{CommonPlaySpec, WithCommonFakeApplication}
+import constructors.helpers.AssertHelpers
 import controllers.helpers.FakeRequestHelper
 import controllers.routes
-import helpers.AssertHelpers
 import models.{CalculationResultsWithPRRModel, GainsAfterPRRModel}
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.i18n.MessagesProvider

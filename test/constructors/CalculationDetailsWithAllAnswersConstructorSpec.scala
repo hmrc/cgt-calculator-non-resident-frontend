@@ -16,10 +16,10 @@
 
 package constructors
 
-import helpers.AssertHelpers
 import assets.MessageLookup.{NonResident => messages}
 import common.nonresident.Flat
 import common.{CommonPlaySpec, WithCommonFakeApplication}
+import constructors.helpers.AssertHelpers
 import controllers.helpers.FakeRequestHelper
 import models.{CalculationResultsWithTaxOwedModel, QuestionAnswerModel, TotalTaxOwedModel}
 import org.scalatestplus.mockito.MockitoSugar

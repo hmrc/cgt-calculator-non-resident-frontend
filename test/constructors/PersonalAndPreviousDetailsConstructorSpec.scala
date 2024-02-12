@@ -17,8 +17,8 @@
 package constructors
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import common.{CommonPlaySpec, WithCommonFakeApplication, YesNoKeys}
 import common.nonresident.{CustomerTypeKeys, PreviousGainOrLossKeys}
+import common.{CommonPlaySpec, WithCommonFakeApplication, YesNoKeys}
 import controllers.routes
 import models._
 

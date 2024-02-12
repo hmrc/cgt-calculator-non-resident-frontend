@@ -17,8 +17,8 @@
 package constructors
 
 import akka.stream.Materializer
-import common.{CommonPlaySpec, WithCommonFakeApplication}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import common.{CommonPlaySpec, WithCommonFakeApplication}
 import connectors.CalculatorConnector
 import models._
 import org.mockito.ArgumentMatchers

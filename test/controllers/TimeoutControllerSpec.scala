@@ -18,8 +18,8 @@ package controllers
 
 import akka.stream.Materializer
 import akka.util.Timeout
-import common.{CommonPlaySpec, WithCommonFakeApplication}
 import assets.MessageLookup.{NonResident => commonMessages}
+import common.{CommonPlaySpec, WithCommonFakeApplication}
 import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import controllers.utils.TimeoutController

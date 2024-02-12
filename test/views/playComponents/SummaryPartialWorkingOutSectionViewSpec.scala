@@ -17,7 +17,7 @@
 package views.helpers
 
 import assets.MessageLookup.{SummaryPartialMessages => messages}
-import common.nonresident.{CalculationType, Flat, Rebased, TimeApportioned}
+import common.nonresident.{Flat, Rebased, TimeApportioned}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup

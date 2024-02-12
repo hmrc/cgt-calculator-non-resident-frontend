@@ -20,7 +20,7 @@ import akka.stream.Materializer
 import assets.MessageLookup.NonResident.{CalculationElection => messages, CalculationElectionNoReliefs => nRMessages}
 import assets.MessageLookup.{NonResident => commonMessages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import common.nonresident.{Flat, TimeApportioned}
+import common.nonresident.Flat
 import common.{CommonPlaySpec, TestModels, WithCommonFakeApplication}
 import config.ApplicationConfig
 import connectors.CalculatorConnector

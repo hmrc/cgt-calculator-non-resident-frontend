@@ -16,8 +16,7 @@
 
 package forms
 
-import assets.KeyLookup.{NonResident => messages}
-import common.nonresident.{Flat, TimeApportioned}
+import common.nonresident.Flat
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import forms.CalculationElectionForm._
 import models.CalculationElectionModel
