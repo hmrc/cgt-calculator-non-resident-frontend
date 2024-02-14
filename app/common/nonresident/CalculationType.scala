@@ -26,12 +26,17 @@ object CalculationType {
 
   implicit val formatter: Formatter[CalculationType] = new Formatter[CalculationType] {
 
-    override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], CalculationType] =
-      data.get(key).map {
-        case "flat" => Right(Flat)
-        case "rebased" => Right(Rebased)
-        case "timeApportioned" => Right(TimeApportioned)
-      }.getOrElse(Left(Seq(FormError(key, "invalid"))))
+    override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], CalculationType] = {
+      val bindCalculationTypeFn: PartialFunction[String,CalculationType] = {
+        case "flat" => Flat
+        case "rebased" => Rebased
+        case "timeApportioned" => TimeApportioned
+      }
+
+      data.get(key)
+        .flatMap(bindCalculationTypeFn.lift).map(Right(_))
+        .getOrElse(Left(Seq(FormError(key, s"calc.$key.errors.required"))))
+    }
 
     override def unbind(key: String, value: CalculationType): Map[String, String] =
       value match {
