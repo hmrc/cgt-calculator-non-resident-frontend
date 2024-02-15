@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,23 +16,23 @@
 
 package constructors
 
-import common.nonresident.{CalculationType, MoneyPounds}
-
-import javax.inject.Inject
+import common.nonresident._
 import models.{CalculationResultsWithTaxOwedModel, QuestionAnswerModel}
 import play.api.i18n.{Messages, MessagesProvider}
+
+import javax.inject.Inject
 
 
 class CalculationDetailsWithAllAnswersConstructor @Inject()(val calculationDetailsConstructor: CalculationDetailsConstructor,
                                                             val calculationDetailsWithPRRConstructor: CalculationDetailsWithPRRConstructor)
                                                            (implicit messagesProvider: MessagesProvider) {
 
-  def buildSection(calculation: CalculationResultsWithTaxOwedModel, calculationType: String, taxYear: String): Seq[QuestionAnswerModel[Any]] = {
+  def buildSection(calculation: CalculationResultsWithTaxOwedModel, calculationType: CalculationType, taxYear: String): Seq[QuestionAnswerModel[Any]] = {
     val electionDetails = calculationDetailsConstructor.calculationElection(calculationType)
     val correctModel = calculationType match {
-      case CalculationType.flat => calculation.flatResult
-      case CalculationType.rebased => calculation.rebasedResult.get
-      case CalculationType.timeApportioned => calculation.timeApportionedResult.get
+      case Flat => calculation.flatResult
+      case Rebased => calculation.rebasedResult.get
+      case TimeApportioned => calculation.timeApportionedResult.get
     }
     val taxableGainDetails = calculationDetailsWithPRRConstructor.taxableGain(correctModel.taxableGain)
     val totalGainDetails = calculationDetailsConstructor.totalGain(correctModel.totalGain)

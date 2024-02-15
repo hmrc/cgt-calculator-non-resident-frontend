@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +17,12 @@
 package constructors
 
 import assets.MessageLookup.NonResident.{Summary => messages}
-import common.{CommonPlaySpec, WithCommonFakeApplication}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import common.nonresident.CalculationType
+import common.nonresident.{Flat, Rebased, TimeApportioned}
+import common.{CommonPlaySpec, WithCommonFakeApplication}
+import constructors.helpers.AssertHelpers
 import controllers.helpers.FakeRequestHelper
 import controllers.routes
-import helpers.AssertHelpers
 import models.{CalculationResultsWithPRRModel, GainsAfterPRRModel}
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.i18n.MessagesProvider
@@ -42,7 +42,7 @@ class CalculationDetailsWithPRRConstructorSpec extends CommonPlaySpec with WithC
 
     "a loss has been made" should {
       val calculation = CalculationResultsWithPRRModel(GainsAfterPRRModel(-1000, 0, 0), None, None)
-      lazy val result = target.buildSection(calculation, CalculationType.flat)
+      lazy val result = target.buildSection(calculation, Flat)
 
       "have a calc election question" in {
         result.exists(qa => qa.id == KeystoreKeys.calculationElection) shouldBe true
@@ -69,7 +69,7 @@ class CalculationDetailsWithPRRConstructorSpec extends CommonPlaySpec with WithC
 
     "a gain has been made" should {
       val calculation = CalculationResultsWithPRRModel(GainsAfterPRRModel(-100, 10, 0), None, Some(GainsAfterPRRModel(1000, 500, 30)))
-      lazy val result = target.buildSection(calculation, CalculationType.timeApportioned)
+      lazy val result = target.buildSection(calculation, TimeApportioned)
 
       "have a calc election question" in {
         result.exists(qa => qa.id == KeystoreKeys.calculationElection) shouldBe true
@@ -95,7 +95,7 @@ class CalculationDetailsWithPRRConstructorSpec extends CommonPlaySpec with WithC
 
     "a zero gain has been made" should {
       val calculation = CalculationResultsWithPRRModel(GainsAfterPRRModel(1000, 0, 1000), Some(GainsAfterPRRModel(1000, 0, 1000)), None)
-      lazy val result = target.buildSection(calculation, CalculationType.rebased)
+      lazy val result = target.buildSection(calculation, Rebased)
 
       "have a calc election question" in {
         result.exists(qa => qa.id == KeystoreKeys.calculationElection) shouldBe true
@@ -122,7 +122,7 @@ class CalculationDetailsWithPRRConstructorSpec extends CommonPlaySpec with WithC
   "Calling calculationElection" when {
 
     "the calculation type is a flat calc" should {
-      lazy val result = target.calculationElection(CalculationType.flat)
+      lazy val result = target.calculationElection(Flat)
 
       "return some details for the calculation election" in {
         result should not be None
@@ -154,7 +154,7 @@ class CalculationDetailsWithPRRConstructorSpec extends CommonPlaySpec with WithC
     }
 
     "the calculation type is a rebased calc" should {
-      lazy val result = target.calculationElection(CalculationType.rebased)
+      lazy val result = target.calculationElection(Rebased)
 
       "return some details for the calculation election" in {
         result should not be None
@@ -186,7 +186,7 @@ class CalculationDetailsWithPRRConstructorSpec extends CommonPlaySpec with WithC
     }
 
     "the calculation type is a time apportioned calc" should {
-      lazy val result = target.calculationElection(CalculationType.timeApportioned)
+      lazy val result = target.calculationElection(TimeApportioned)
 
       "return some details for the calculation election" in {
         result should not be None

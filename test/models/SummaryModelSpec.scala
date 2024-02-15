@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,14 +17,14 @@
 package models
 
 import common.CommonPlaySpec
-import common.nonresident.CalculationType
+import common.nonresident.{Flat, Rebased, TimeApportioned}
 
 class SummaryModelSpec extends CommonPlaySpec{
 
   "SummaryModel.reliefApplied" should {
     "return flat" when {
       "Calculation Type is flat and relief amount is greater than zero" in {
-        val calculationType = CalculationElectionModel("flat")
+        val calculationType = CalculationElectionModel(Flat)
         val reliefs = OtherReliefsModel(BigDecimal(100))
 
         val model = SummaryModel(currentIncomeModel = CurrentIncomeModel(BigDecimal(0)),
@@ -46,13 +46,13 @@ class SummaryModelSpec extends CommonPlaySpec{
           otherReliefsModelRebased = reliefs,
           privateResidenceReliefModel = None)
 
-        model.reliefApplied() shouldBe CalculationType.flat
+        model.reliefApplied() shouldBe Flat
       }
     }
 
     "return rebased" when {
       "Calculation Type is rebased and relief amount is greater than zero" in {
-        val calculationType = CalculationElectionModel("rebased")
+        val calculationType = CalculationElectionModel(Rebased)
         val reliefs = OtherReliefsModel(BigDecimal(100))
 
         val model = SummaryModel(currentIncomeModel = CurrentIncomeModel(BigDecimal(0)),
@@ -74,13 +74,13 @@ class SummaryModelSpec extends CommonPlaySpec{
           otherReliefsModelRebased = reliefs,
           privateResidenceReliefModel = None)
 
-        model.reliefApplied() shouldBe CalculationType.rebased
+        model.reliefApplied() shouldBe Rebased
       }
     }
 
     "return timeApportioned" when {
       "Calculation Type is timeApportioned and relief amount is greater than zero" in {
-        val calculationType = CalculationElectionModel("time")
+        val calculationType = CalculationElectionModel(TimeApportioned)
         val reliefs = OtherReliefsModel(BigDecimal(100))
 
         val model = SummaryModel(currentIncomeModel = CurrentIncomeModel(BigDecimal(0)),
@@ -102,113 +102,7 @@ class SummaryModelSpec extends CommonPlaySpec{
           otherReliefsModelRebased = reliefs,
           privateResidenceReliefModel = None)
 
-        model.reliefApplied() shouldBe CalculationType.timeApportioned
-      }
-    }
-
-    "return none" when {
-      "Calculation Type is flat and relief amount is equal to or less than zero" in {
-        val calculationType = CalculationElectionModel("flat")
-        val reliefs = OtherReliefsModel(BigDecimal(0))
-
-        val model = SummaryModel(currentIncomeModel = CurrentIncomeModel(BigDecimal(0)),
-          personalAllowanceModel = None,
-          otherPropertiesModel = OtherPropertiesModel("None"),
-          annualExemptAmountModel = None,
-          acquisitionDateModel = DateModel(1,1, 2000),
-          acquisitionValueModel = AcquisitionValueModel(BigDecimal(0)),
-          rebasedValueModel = None,
-          rebasedCostsModel = None,
-          improvementsModel = ImprovementsModel("", None, None),
-          disposalDateModel = DateModel(1,1, 2000),
-          disposalValueModel = DisposalValueModel(BigDecimal(0)),
-          acquisitionCostsModel = AcquisitionCostsModel(BigDecimal(0)),
-          disposalCostsModel = DisposalCostsModel(BigDecimal(0)),
-          calculationElectionModel = calculationType,
-          otherReliefsModelFlat = reliefs,
-          otherReliefsModelTA = reliefs,
-          otherReliefsModelRebased = reliefs,
-          privateResidenceReliefModel = None)
-
-        model.reliefApplied() shouldBe "none"
-      }
-
-      "Calculation Type is rebased and relief amount is equal to or less than zero" in {
-        val calculationType = CalculationElectionModel("rebased")
-        val reliefs = OtherReliefsModel(BigDecimal(0))
-
-        val model = SummaryModel(currentIncomeModel = CurrentIncomeModel(BigDecimal(0)),
-          personalAllowanceModel = None,
-          otherPropertiesModel = OtherPropertiesModel("None"),
-          annualExemptAmountModel = None,
-          acquisitionDateModel = DateModel(1,1, 2000),
-          acquisitionValueModel = AcquisitionValueModel(BigDecimal(0)),
-          rebasedValueModel = None,
-          rebasedCostsModel = None,
-          improvementsModel = ImprovementsModel("", None, None),
-          disposalDateModel = DateModel(1,1, 2000),
-          disposalValueModel = DisposalValueModel(BigDecimal(0)),
-          acquisitionCostsModel = AcquisitionCostsModel(BigDecimal(0)),
-          disposalCostsModel = DisposalCostsModel(BigDecimal(0)),
-          calculationElectionModel = calculationType,
-          otherReliefsModelFlat = reliefs,
-          otherReliefsModelTA = reliefs,
-          otherReliefsModelRebased = reliefs,
-          privateResidenceReliefModel = None)
-
-        model.reliefApplied() shouldBe "none"
-      }
-
-      "Calculation Type is timeApportioned and relief amount is equal to or less than zero" in {
-        val calculationType = CalculationElectionModel("time")
-        val reliefs = OtherReliefsModel(BigDecimal(0))
-
-        val model = SummaryModel(currentIncomeModel = CurrentIncomeModel(BigDecimal(0)),
-          personalAllowanceModel = None,
-          otherPropertiesModel = OtherPropertiesModel("None"),
-          annualExemptAmountModel = None,
-          acquisitionDateModel = DateModel(1,1, 2000),
-          acquisitionValueModel = AcquisitionValueModel(BigDecimal(0)),
-          rebasedValueModel = None,
-          rebasedCostsModel = None,
-          improvementsModel = ImprovementsModel("", None, None),
-          disposalDateModel = DateModel(1,1, 2000),
-          disposalValueModel = DisposalValueModel(BigDecimal(0)),
-          acquisitionCostsModel = AcquisitionCostsModel(BigDecimal(0)),
-          disposalCostsModel = DisposalCostsModel(BigDecimal(0)),
-          calculationElectionModel = calculationType,
-          otherReliefsModelFlat = reliefs,
-          otherReliefsModelTA = reliefs,
-          otherReliefsModelRebased = reliefs,
-          privateResidenceReliefModel = None)
-
-        model.reliefApplied() shouldBe "none"
-      }
-
-      "Calculation Type is unknown" in {
-        val calculationType = CalculationElectionModel("fail")
-        val reliefs = OtherReliefsModel(BigDecimal(1000))
-
-        val model = SummaryModel(currentIncomeModel = CurrentIncomeModel(BigDecimal(0)),
-          personalAllowanceModel = None,
-          otherPropertiesModel = OtherPropertiesModel("None"),
-          annualExemptAmountModel = None,
-          acquisitionDateModel = DateModel(1,1, 2000),
-          acquisitionValueModel = AcquisitionValueModel(BigDecimal(0)),
-          rebasedValueModel = None,
-          rebasedCostsModel = None,
-          improvementsModel = ImprovementsModel("", None, None),
-          disposalDateModel = DateModel(1,1, 2000),
-          disposalValueModel = DisposalValueModel(BigDecimal(0)),
-          acquisitionCostsModel = AcquisitionCostsModel(BigDecimal(0)),
-          disposalCostsModel = DisposalCostsModel(BigDecimal(0)),
-          calculationElectionModel = calculationType,
-          otherReliefsModelFlat = reliefs,
-          otherReliefsModelTA = reliefs,
-          otherReliefsModelRebased = reliefs,
-          privateResidenceReliefModel = None)
-
-        model.reliefApplied() shouldBe "none"
+        model.reliefApplied() shouldBe TimeApportioned
       }
     }
   }
@@ -228,7 +122,7 @@ class SummaryModelSpec extends CommonPlaySpec{
         disposalValueModel = DisposalValueModel(BigDecimal(0)),
         acquisitionCostsModel = AcquisitionCostsModel(BigDecimal(0)),
         disposalCostsModel = DisposalCostsModel(BigDecimal(0)),
-        calculationElectionModel = CalculationElectionModel("time"),
+        calculationElectionModel = CalculationElectionModel(TimeApportioned),
         otherReliefsModelFlat = OtherReliefsModel(BigDecimal(0)),
         otherReliefsModelTA = OtherReliefsModel(BigDecimal(0)),
         otherReliefsModelRebased = OtherReliefsModel(BigDecimal(0)),

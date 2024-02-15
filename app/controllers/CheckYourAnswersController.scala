@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 package controllers
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import common.nonresident.CalculationType
+import common.nonresident.Flat
 import common.nonresident.TaxableGainCalculation._
 import connectors.CalculatorConnector
 import constructors.{AnswersConstructor, YourAnswersConstructor}
@@ -92,7 +92,7 @@ class CheckYourAnswersController @Inject()(http: DefaultHttpClient,
         if (seq.forall(_ <= 0)) Future.successful(Redirect(routes.CalculationElectionController.calculationElection))
         else Future.successful(Redirect(routes.ClaimingReliefsController.claimingReliefs))
       case Some(_) =>
-        sessionCacheService.saveFormData[CalculationElectionModel](KeystoreKeys.calculationElection, CalculationElectionModel(CalculationType.flat))
+        sessionCacheService.saveFormData[CalculationElectionModel](KeystoreKeys.calculationElection, CalculationElectionModel(Flat))
         redirectRoute(taxableGainModel, model.get)
     }
 

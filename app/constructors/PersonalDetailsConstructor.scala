@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,11 +18,10 @@ package constructors
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.nonresident.PreviousGainOrLossKeys
-import javax.inject.Inject
 import models._
 import play.api.i18n.{Messages, MessagesProvider}
 
-import scala.math.BigDecimal
+import javax.inject.Inject
 
 class PersonalDetailsConstructor @Inject()(implicit messagesProvider: MessagesProvider) {
 

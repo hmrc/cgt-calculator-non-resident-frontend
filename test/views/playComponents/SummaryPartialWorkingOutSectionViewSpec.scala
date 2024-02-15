@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,8 @@
 package views.helpers
 
 import assets.MessageLookup.{SummaryPartialMessages => messages}
+import common.nonresident.{Flat, Rebased, TimeApportioned}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
-import common.nonresident.CalculationType
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
@@ -36,7 +36,7 @@ class SummaryPartialWorkingOutSectionViewSpec extends CommonPlaySpec with WithCo
     "supplied with a flat calculation and a gain" should {
 
       lazy val view = summaryPartialWorkingOutSectionView(
-        CalculationType.flat,
+        Flat,
         disposalValue = 100000,
         acquisitionValue = 20000,
         totalCosts = 4000,
@@ -108,7 +108,7 @@ class SummaryPartialWorkingOutSectionViewSpec extends CommonPlaySpec with WithCo
     "supplied with a rebased calculation and a loss" should {
 
       lazy val view = summaryPartialWorkingOutSectionView(
-        CalculationType.rebased,
+        Rebased,
         disposalValue = 100000,
         acquisitionValue = 120000,
         totalCosts = 4000,
@@ -180,7 +180,7 @@ class SummaryPartialWorkingOutSectionViewSpec extends CommonPlaySpec with WithCo
     "supplied with a time-apportioned calculation and a zero gain" should {
 
       lazy val view = summaryPartialWorkingOutSectionView(
-        CalculationType.timeApportioned,
+        TimeApportioned,
         disposalValue = 100000,
         acquisitionValue = 20000,
         totalCosts = 4000,
@@ -264,7 +264,7 @@ class SummaryPartialWorkingOutSectionViewSpec extends CommonPlaySpec with WithCo
     "supplied with a time-apportioned calculation and a loss" should {
 
       lazy val view = summaryPartialWorkingOutSectionView(
-        CalculationType.timeApportioned,
+        TimeApportioned,
         disposalValue = 100000,
         acquisitionValue = 120000,
         totalCosts = 4000,

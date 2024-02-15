@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package connectors
 
-import common.nonresident.CalculationType
+import common.nonresident.Rebased
 import common.{TaxDates, YesNoKeys}
 import config.ApplicationConfig
 import constructors._
@@ -97,7 +97,7 @@ class CalculatorConnector @Inject()(val http: DefaultHttpClient,
 
   def calculateTotalCosts(answers: TotalGainAnswersModel, calculationType: Option[CalculationElectionModel])(implicit hc: HeaderCarrier): Future[BigDecimal] = calculationType match {
     case Some(calculationElection) =>
-      if(calculationElection.calculationType == CalculationType.rebased) {
+      if(calculationElection.calculationType == Rebased) {
         http.GET[BigDecimal](s"$serviceUrl/capital-gains-calculator/non-resident/calculate-total-costs?" +
           s"disposalCosts=${answers.disposalCostsModel.disposalCosts.toDouble}" +
           s"&acquisitionCosts=${answers.rebasedCostsModel.get.rebasedCosts.getOrElse(BigDecimal(0)).toDouble}" +

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +17,12 @@
 package constructors
 
 import assets.MessageLookup.NonResident.{Summary => messages}
-import common.{CommonPlaySpec, WithCommonFakeApplication}
-import common.nonresident.CalculationType
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import common.nonresident.{Flat, Rebased, TimeApportioned}
+import common.{CommonPlaySpec, WithCommonFakeApplication}
+import constructors.helpers.AssertHelpers
 import controllers.helpers.FakeRequestHelper
 import controllers.routes
-import helpers.AssertHelpers
 import models.TotalGainResultsModel
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.i18n.MessagesProvider
@@ -43,7 +43,7 @@ class CalculationDetailsConstructorSpec extends CommonPlaySpec with WithCommonFa
     val calculation = TotalGainResultsModel(-1000, Some(2000), Some(0))
     "a loss has been made" should {
 
-      lazy val result = target.buildSection(calculation, CalculationType.flat)
+      lazy val result = target.buildSection(calculation, Flat)
 
       "have a calc election question" in {
         result.exists(qa => qa.id == KeystoreKeys.calculationElection) shouldBe true
@@ -60,7 +60,7 @@ class CalculationDetailsConstructorSpec extends CommonPlaySpec with WithCommonFa
 
     "a gain has been made" should {
       val calculation = TotalGainResultsModel(-1000, Some(2000), Some(0))
-      lazy val result = target.buildSection(calculation, CalculationType.timeApportioned)
+      lazy val result = target.buildSection(calculation, TimeApportioned)
 
       "have a calc election question" in {
         result.exists(qa => qa.id == KeystoreKeys.calculationElection) shouldBe true
@@ -77,7 +77,7 @@ class CalculationDetailsConstructorSpec extends CommonPlaySpec with WithCommonFa
 
     "a zero gain has been made" should {
       val calculation = TotalGainResultsModel(-1000, Some(2000), Some(0))
-      lazy val result = target.buildSection(calculation, CalculationType.rebased)
+      lazy val result = target.buildSection(calculation, Rebased)
 
       "have a calc election question" in {
         result.exists(qa => qa.id == KeystoreKeys.calculationElection) shouldBe true
@@ -96,7 +96,7 @@ class CalculationDetailsConstructorSpec extends CommonPlaySpec with WithCommonFa
   "Calling calculationElection" when {
 
     "the calculation type is a flat calc" should {
-      lazy val result = target.calculationElection(CalculationType.flat)
+      lazy val result = target.calculationElection(Flat)
 
       "return some details for the calculation election" in {
         result should not be None
@@ -128,7 +128,7 @@ class CalculationDetailsConstructorSpec extends CommonPlaySpec with WithCommonFa
     }
 
     "the calculation type is a rebased calc" should {
-      lazy val result = target.calculationElection(CalculationType.rebased)
+      lazy val result = target.calculationElection(Rebased)
 
       "return some details for the calculation election" in {
         result should not be None
@@ -160,7 +160,7 @@ class CalculationDetailsConstructorSpec extends CommonPlaySpec with WithCommonFa
     }
 
     "the calculation type is a time apportioned calc" should {
-      lazy val result = target.calculationElection(CalculationType.timeApportioned)
+      lazy val result = target.calculationElection(TimeApportioned)
 
       "return some details for the calculation election" in {
         result should not be None

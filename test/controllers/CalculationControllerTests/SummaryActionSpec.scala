@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,14 +19,14 @@ package controllers.CalculationControllerTests
 import akka.stream.Materializer
 import assets.MessageLookup.NonResident.{Summary => messages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import common.nonresident.Flat
 import common.{CommonPlaySpec, TestModels, WithCommonFakeApplication}
-import common.nonresident.CalculationType
 import config.ApplicationConfig
 import connectors.CalculatorConnector
 import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
 import controllers.SummaryController
 import controllers.helpers.FakeRequestHelper
-import models.{TaxYearModel, _}
+import models._
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
@@ -159,7 +159,7 @@ class SummaryActionSpec extends CommonPlaySpec with WithCommonFakeApplication wi
       lazy val target = setupTarget(
         answerModel,
         TotalGainResultsModel(1000, Some(2000), Some(3000)),
-        CalculationElectionModel(CalculationType.flat),
+        CalculationElectionModel(Flat),
         Some(PrivateResidenceReliefModel("Yes", Some(1000), Some(10))),
         Some(CalculationResultsWithPRRModel(GainsAfterPRRModel(100, 0, 100), None, None)),
         finalAnswersModel,
@@ -186,7 +186,7 @@ class SummaryActionSpec extends CommonPlaySpec with WithCommonFakeApplication wi
       lazy val target = setupTarget(
         answerModel,
         TotalGainResultsModel(1000, None, None),
-        CalculationElectionModel(CalculationType.flat),
+        CalculationElectionModel(Flat),
         None,
         None,
         finalAnswersModel,
@@ -212,7 +212,7 @@ class SummaryActionSpec extends CommonPlaySpec with WithCommonFakeApplication wi
       lazy val target = setupTarget(
         answerModel,
         TotalGainResultsModel(1000, Some(2000), Some(3000)),
-        CalculationElectionModel(CalculationType.flat),
+        CalculationElectionModel(Flat),
         Some(PrivateResidenceReliefModel("Yes", Some(1000), Some(10))),
         Some(CalculationResultsWithPRRModel(GainsAfterPRRModel(100, 0, 100), None, None)),
         finalAnswersModel,
@@ -234,7 +234,7 @@ class SummaryActionSpec extends CommonPlaySpec with WithCommonFakeApplication wi
     lazy val target = setupTarget(
       answerModel,
       TotalGainResultsModel(1000, Some(2000), Some(3000)),
-      CalculationElectionModel(CalculationType.flat),
+      CalculationElectionModel(Flat),
       Some(PrivateResidenceReliefModel("Yes", Some(1000), Some(10))),
       Some(CalculationResultsWithPRRModel(GainsAfterPRRModel(100, 0, 100), None, None)),
       finalAnswersModel,

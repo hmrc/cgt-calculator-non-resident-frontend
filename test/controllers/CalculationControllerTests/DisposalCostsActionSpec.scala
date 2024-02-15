@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package controllers.CalculationControllerTests
 
 import akka.stream.Materializer
 import assets.MessageLookup.NonResident.{DisposalCosts => messages}
+import assets.MessageLookup.{NonResident => commonMessages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import config.ApplicationConfig
@@ -33,11 +34,10 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.i18n.Messages
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
+import services.SessionCacheService
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.disposalCosts
-import assets.MessageLookup.{NonResident => commonMessages}
-import services.SessionCacheService
 
 import scala.concurrent.{ExecutionContext, Future}
 

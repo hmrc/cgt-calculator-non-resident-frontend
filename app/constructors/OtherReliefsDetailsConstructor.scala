@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,15 +17,16 @@
 package constructors
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import common.nonresident.CalculationType
-import javax.inject.Inject
+import common.nonresident.{CalculationType, Flat, Rebased, TimeApportioned}
 import models.{OtherReliefsModel, QuestionAnswerModel}
 import play.api.i18n.{Messages, MessagesProvider}
+
+import javax.inject.Inject
 
 class OtherReliefsDetailsConstructor @Inject()(implicit messagesProvider: MessagesProvider) {
 
   def getOtherReliefsSection(otherReliefs: Option[OtherReliefsModel],
-                             calculationElection: String): Seq[QuestionAnswerModel[Any]] = {
+                             calculationElection: CalculationType): Seq[QuestionAnswerModel[Any]] = {
 
     val flatReliefsRow = getOtherReliefsFlatRow(otherReliefs, calculationElection)
     val rebasedReliefsRow = getOtherReliefsRebasedRow(otherReliefs, calculationElection)
@@ -35,9 +36,9 @@ class OtherReliefsDetailsConstructor @Inject()(implicit messagesProvider: Messag
   }
 
   def getOtherReliefsRebasedRow(rebasedReliefs: Option[OtherReliefsModel],
-                                calculationElection: String): Option[QuestionAnswerModel[BigDecimal]] = {
+                                calculationElection: CalculationType): Option[QuestionAnswerModel[BigDecimal]] = {
     (calculationElection, rebasedReliefs) match {
-      case (CalculationType.rebased, Some(OtherReliefsModel(value))) if value > 0 =>
+      case (Rebased, Some(OtherReliefsModel(value))) if value > 0 =>
         Some(QuestionAnswerModel(
           s"${KeystoreKeys.otherReliefsRebased}",
           value,
@@ -49,9 +50,9 @@ class OtherReliefsDetailsConstructor @Inject()(implicit messagesProvider: Messag
   }
 
   def getOtherReliefsTimeApportionedRow(timeApportionedReliefs: Option[OtherReliefsModel],
-                                        calculationElection: String): Option[QuestionAnswerModel[BigDecimal]] = {
+                                        calculationElection: CalculationType): Option[QuestionAnswerModel[BigDecimal]] = {
     (calculationElection, timeApportionedReliefs) match {
-      case (CalculationType.timeApportioned, Some(OtherReliefsModel(value))) if value > 0 =>
+      case (TimeApportioned, Some(OtherReliefsModel(value))) if value > 0 =>
         Some(QuestionAnswerModel(
           s"${KeystoreKeys.otherReliefsTA}",
           value,
@@ -63,9 +64,9 @@ class OtherReliefsDetailsConstructor @Inject()(implicit messagesProvider: Messag
   }
 
   def getOtherReliefsFlatRow(flatReliefs: Option[OtherReliefsModel],
-                             calculationElection: String): Option[QuestionAnswerModel[BigDecimal]] = {
+                             calculationElection: CalculationType): Option[QuestionAnswerModel[BigDecimal]] = {
     (calculationElection, flatReliefs) match {
-      case (CalculationType.flat, Some(OtherReliefsModel(value))) if value > 0 =>
+      case (Flat, Some(OtherReliefsModel(value))) if value > 0 =>
         Some(QuestionAnswerModel(
           s"${KeystoreKeys.otherReliefsFlat}",
           value,

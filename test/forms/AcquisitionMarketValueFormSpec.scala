@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,10 +18,10 @@ package forms
 
 import assets.KeyLookup.{NonResident => commonMessages}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
-import models.AcquisitionValueModel
 import forms.WorthWhenBoughtForLess.worthWhenBoughtForLessForm
-import forms.WorthWhenInherited.worthWhenInheritedForm
 import forms.WorthWhenGiftedTo.worthWhenGiftedToForm
+import forms.WorthWhenInherited.worthWhenInheritedForm
+import models.AcquisitionValueModel
 
 class AcquisitionMarketValueFormSpec extends CommonPlaySpec with WithCommonFakeApplication {
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,16 +20,16 @@ import common.Dates.{TemplateImplicits, formatter}
 import controllers.helpers.FakeRequestHelper
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import play.api.i18n.{Lang, MessagesApi}
+import play.api.i18n.{Lang, Messages, MessagesApi}
 
 import java.time.LocalDate
 import scala.concurrent.ExecutionContext
 
 class DatesSpec extends CommonPlaySpec with GuiceOneAppPerSuite with MockitoSugar with FakeRequestHelper {
-  lazy val messagesApi = fakeApplication.injector.instanceOf[MessagesApi]
-  implicit lazy val mockMessages = messagesApi.preferred(fakeRequest)
-  implicit val ec = fakeApplication.injector.instanceOf[ExecutionContext]
-  lazy val cyMockMessages = messagesApi.preferred(Seq(
+  lazy val messagesApi: MessagesApi = fakeApplication.injector.instanceOf[MessagesApi]
+  implicit lazy val mockMessages: Messages = messagesApi.preferred(fakeRequest)
+  implicit val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
+  lazy val cyMockMessages: Messages = messagesApi.preferred(Seq(
     Lang("cy")
   ))
 
@@ -105,7 +105,6 @@ class DatesSpec extends CommonPlaySpec with GuiceOneAppPerSuite with MockitoSuga
   "localFormat" should {
     import TemplateImplicits._
     "format an English date" in {
-      implicit val lang: Lang = Lang("en")
       val date = LocalDate.of(2018, 3, 19)
       date.localFormat("d MMMM yyyy") shouldBe "19 March 2018"
     }

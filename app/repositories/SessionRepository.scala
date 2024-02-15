@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,11 +21,12 @@ import play.api.mvc.Request
 import uk.gov.hmrc.http.SessionKeys
 import uk.gov.hmrc.mongo.cache.SessionCacheRepository
 import uk.gov.hmrc.mongo.{MongoComponent, TimestampSupport}
+import uk.gov.hmrc.play.http.logging.Mdc.preservingMdc
 
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration.Duration
+import scala.concurrent.{ExecutionContext, Future}
 
 class SessionRepository @Inject()(
                                    mongoComponent  : MongoComponent,
@@ -40,5 +41,7 @@ class SessionRepository @Inject()(
     sessionIdKey = SessionKeys.sessionId
   ){
   def clear(implicit request: Request[_]): Future[Unit] =
-    cacheRepo.deleteEntity(request)
+    preservingMdc {
+      cacheRepo.deleteEntity(request)
+    }
 }

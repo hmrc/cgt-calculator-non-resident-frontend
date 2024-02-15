@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,13 +20,14 @@ import akka.stream.Materializer
 import assets.MessageLookup.NonResident.{CalculationElection => messages, CalculationElectionNoReliefs => nRMessages}
 import assets.MessageLookup.{NonResident => commonMessages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import common.nonresident.Flat
 import common.{CommonPlaySpec, TestModels, WithCommonFakeApplication}
 import config.ApplicationConfig
 import connectors.CalculatorConnector
 import constructors.{AnswersConstructor, DefaultCalculationElectionConstructor}
 import controllers.helpers.FakeRequestHelper
 import controllers.{CalculationElectionController, routes}
-import models.{TaxYearModel, _}
+import models._
 import org.jsoup._
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
@@ -190,7 +191,7 @@ class CalculationElectionActionSpec ()
 
     "supplied with a pre-existing model with tax owed" which {
       lazy val target = setupTarget(
-        Some(CalculationElectionModel("flat")),
+        Some(CalculationElectionModel(Flat)),
         None,
         Some(TotalGainResultsModel(200, None, None)),
         seq,
@@ -214,7 +215,7 @@ class CalculationElectionActionSpec ()
 
     "supplied with a pre-existing model with no tax owed" which {
       lazy val target = setupTarget(
-        Some(CalculationElectionModel("flat")),
+        Some(CalculationElectionModel(Flat)),
         None,
         Some(TotalGainResultsModel(0, Some(0), Some(0))),
         seq,
@@ -238,7 +239,7 @@ class CalculationElectionActionSpec ()
 
     "supplied with a pre-existing model and not claiming reliefs" which {
       lazy val target = setupTarget(
-        Some(CalculationElectionModel("flat")),
+        Some(CalculationElectionModel(Flat)),
         None,
         Some(TotalGainResultsModel(1000, Some(0), Some(0))),
         seq,
@@ -324,26 +325,6 @@ class CalculationElectionActionSpec ()
 
       "redirect to the other reliefs rebased page" in {
         redirectLocation(result) shouldBe Some(s"${routes.OtherReliefsRebasedController.otherReliefsRebased}")
-      }
-    }
-
-    "submitting a valid calculation election using the time apportioned reliefs button" should {
-      lazy val request = fakeRequestToPOSTWithSession(("calculationElection", "time"), ("action", "time"))
-      lazy val target = setupTarget(
-        None,
-        None,
-        Some(TotalGainResultsModel(0, Some(0), Some(0))),
-        seq,
-        finalAnswersModel
-      )
-      lazy val result = target.submitCalculationElection(request.withMethod("POST"))
-
-      "return a 303" in {
-        status(result) shouldBe 303
-      }
-
-      "redirect to the other reliefs flat page" in {
-        redirectLocation(result) shouldBe Some(s"${routes.OtherReliefsTAController.otherReliefsTA}")
       }
     }
 

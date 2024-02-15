@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package models
 
-import common.nonresident.CalculationType
+import common.nonresident.{CalculationType, Flat, Rebased, TimeApportioned}
 
 case class SummaryModel(
                          currentIncomeModel: CurrentIncomeModel,
@@ -39,11 +39,10 @@ case class SummaryModel(
                          privateResidenceReliefModel: Option[PrivateResidenceReliefModel]
                        ) {
 
-  def reliefApplied(): String = calculationElectionModel.calculationType match {
-    case CalculationType.flat if otherReliefsModelFlat.otherReliefs > 0 => CalculationType.flat
-    case CalculationType.rebased if otherReliefsModelRebased.otherReliefs > 0 => CalculationType.rebased
-    case CalculationType.timeApportioned if otherReliefsModelTA.otherReliefs > 0 => CalculationType.timeApportioned
-    case _ => "none"
+  def reliefApplied(): CalculationType = calculationElectionModel.calculationType match {
+    case Flat if otherReliefsModelFlat.otherReliefs > 0 => Flat
+    case Rebased if otherReliefsModelRebased.otherReliefs > 0 => Rebased
+    case TimeApportioned if otherReliefsModelTA.otherReliefs > 0 => TimeApportioned
   }
 
   val personalDetailsRows: Seq[QuestionAnswerModel[Any]] = Seq(QuestionAnswerModel[String]("", "", "", None))

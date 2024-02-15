@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,6 @@ package controllers
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import controllers.predicates.ValidActiveSession
 import forms.AcquisitionValueForm._
-
-import javax.inject.Inject
 import models.AcquisitionValueModel
 import play.api.i18n.I18nSupport
 import play.api.mvc.MessagesControllerComponents
@@ -29,6 +27,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.acquisitionValue
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class AcquisitionValueController @Inject()(http: DefaultHttpClient,
