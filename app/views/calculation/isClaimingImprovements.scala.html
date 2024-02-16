@@ -36,7 +36,7 @@
     pageTitle = title
 ) {
     @errorSummary(isClaimingImprovementsForm.errors)
-    @form(action = "?") {
+    @form(action = controllers.routes.ImprovementsController.submitIsClaimingImprovements) {
         @inputYesNo(
             legend = heading,
             field = isClaimingImprovementsForm("isClaimingImprovements")

@@ -80,17 +80,18 @@ class ImprovementsController @Inject()(calcConnector: CalculatorConnector,
     def routeRequest(isClaimingImprovementsModel: Option[IsClaimingImprovementsModel], ownerBeforeLegislationStart: Boolean): Future[Result] = {
       isClaimingImprovementsModel match {
         case Some(data) =>
-          Future.successful(Ok(isClaimingImmprovementsView(isClaimingImprovementsForm.fill(data))))
+          Future.successful(Ok(isClaimingImprovementsView(isClaimingImprovementsForm.fill(data), ownerBeforeLegislationStart)))
         case _ =>
-          Future.successful(Ok(isClaimingImmprovementsView(isClaimingImprovementsForm))
+          Future.successful(Ok(isClaimingImprovementsView(isClaimingImprovementsForm, ownerBeforeLegislationStart)))
       }
+    }
 
-      (for {
-        acquisitionDate <- fetchAcquisitionDate(request)
-        isClaimingImprovements <- fetchIsClaimingImprovements(request)
-        ownerBeforeLegislationStart <- ownerBeforeLegislationStartCheck(acquisitionDate)
-        route <- routeRequest(isClaimingImprovements, ownerBeforeLegislationStart)
-      } yield route).recoverToStart
+    (for {
+      acquisitionDate <- fetchAcquisitionDate(request)
+      isClaimingImprovements <- fetchIsClaimingImprovements(request)
+      ownerBeforeLegislationStart <- ownerBeforeLegislationStartCheck(acquisitionDate)
+      route <- routeRequest(isClaimingImprovements, ownerBeforeLegislationStart)
+    } yield route).recoverToStart
   }
 
   val improvements: Action[AnyContent] = ValidateSession.async { implicit request =>
