@@ -23,7 +23,13 @@ import play.api.data.Forms._
 import play.api.data._
 import uk.gov.voa.play.form.ConditionalMappings.{isEqual, mandatoryIf}
 
+case class IsClaimingImprovementsModel (isClaimingImprovements: Boolean)
+
 object ImprovementsForm {
+
+  def isClaimingImprovementsForm: Form[String] = Form(mapping(
+    "isClaimingImprovements" -> nonEmptyText
+  ))(String.apply)(String.unapply)
 
   def improvementsForm(showHiddenQuestion: Boolean): Form[ImprovementsModel] =
     if (showHiddenQuestion) {

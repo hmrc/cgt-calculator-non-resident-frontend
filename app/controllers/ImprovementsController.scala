@@ -29,7 +29,7 @@ import play.api.i18n.I18nSupport
 import play.api.mvc._
 import services.SessionCacheService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import views.html.calculation.improvements
+import views.html.calculation.{improvements, isClaimingImprovements}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -38,7 +38,8 @@ class ImprovementsController @Inject()(calcConnector: CalculatorConnector,
                                        sessionCacheService: SessionCacheService,
                                        answersConstructor: AnswersConstructor,
                                        mcc: MessagesControllerComponents,
-                                       improvementsView: improvements)(implicit ec: ExecutionContext)
+                                       improvementsView: improvements,
+                                       isClaimingImprovementsView: isClaimingImprovements)(implicit ec: ExecutionContext)
                                         extends FrontendController(mcc) with ValidActiveSession with I18nSupport{
 
   private def improvementsBackUrl(acquisitionDate: Option[DateModel]): Future[String] = {
@@ -52,6 +53,10 @@ class ImprovementsController @Inject()(calcConnector: CalculatorConnector,
 
   private def fetchAcquisitionDate(implicit request: Request[_]): Future[Option[DateModel]] = {
     sessionCacheService.fetchAndGetFormData[DateModel](KeystoreKeys.acquisitionDate)
+  }
+
+  private def fetchIsClaimingImprovements(implicit request: Request[_]): Future[Option[IsClaimingImprovementsModel]] = {
+    sessionCacheService.fetchAndGetFormData[IsClaimingImprovementsModel](KeystoreKeys.isClaimingImprovements)
   }
 
   private def fetchImprovements(implicit request: Request[_]): Future[Option[ImprovementsModel]] = {
@@ -69,6 +74,23 @@ class ImprovementsController @Inject()(calcConnector: CalculatorConnector,
   private def ownerBeforeLegislationStartCheck(model: Option[DateModel]): Future[Boolean] = {
     if(TaxDates.dateBeforeLegislationStart(model.get.day, model.get.month, model.get.year)) Future.successful(true)
     else Future.successful(false)
+  }
+
+  val getIsClaimingImprovements: Action[AnyContent] = ValidateSession.async { implicit request =>
+    def routeRequest(isClaimingImprovementsModel: Option[IsClaimingImprovementsModel], ownerBeforeLegislationStart: Boolean): Future[Result] = {
+      isClaimingImprovementsModel match {
+        case Some(data) =>
+          Future.successful(Ok(isClaimingImmprovementsView(isClaimingImprovementsForm.fill(data))))
+        case _ =>
+          Future.successful(Ok(isClaimingImmprovementsView(isClaimingImprovementsForm))
+      }
+
+      (for {
+        acquisitionDate <- fetchAcquisitionDate(request)
+        isClaimingImprovements <- fetchIsClaimingImprovements(request)
+        ownerBeforeLegislationStart <- ownerBeforeLegislationStartCheck(acquisitionDate)
+        route <- routeRequest(isClaimingImprovements, ownerBeforeLegislationStart)
+      } yield route).recoverToStart
   }
 
   val improvements: Action[AnyContent] = ValidateSession.async { implicit request =>
@@ -93,6 +115,26 @@ class ImprovementsController @Inject()(calcConnector: CalculatorConnector,
       ownerBeforeLegislationStart <- ownerBeforeLegislationStartCheck(acquisitionDate)
       route <- routeRequest(backUrl, improvements, improvementsOptions, ownerBeforeLegislationStart)
     } yield route).recoverToStart
+  }
+
+  val submitIsClaimingImprovements: Action[AnyContent] = ValidateSession.async { implicit request =>
+
+    def errorAction(errors: Form[IsClaimingImprovementsModel]): Future[Result] =
+      Future.successful(BadRequest(isClaimingImprovementsView(errors, ownerBeforeLegislationStartCheck(acquisitionDate)))
+
+    def routeRequest(model: IsClaimingImprovementsModel): Future[Result] = {
+      if (model.isClaimingImprovements) Future.successful(Redirect(routes.ImprovementsController.improvements))
+      else Future.successful(Redirect(routes.DisposalValueController.disposalValue))
+    }
+
+    def successAction(model: IsClaimingImprovementsModel) = {
+      (for {
+        save <- sessionCacheService.saveFormData(KeystoreKeys.isClaimingImprovements, model)
+        route <- routeRequest(model)
+      } yield route).recoverToStart
+    }
+
+    isClaimingImprovementsForm.bindFromRequest().fold(errorAction, successAction)
   }
 
   val submitImprovements: Action[AnyContent] = ValidateSession.async { implicit request =>
