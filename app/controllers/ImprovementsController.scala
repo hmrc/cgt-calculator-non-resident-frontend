@@ -23,6 +23,7 @@ import constructors.AnswersConstructor
 import controllers.predicates.ValidActiveSession
 import controllers.utils.RecoverableFuture
 import forms.ImprovementsForm._
+import forms.IsClaimingImprovementsForm._
 import models._
 import play.api.data.Form
 import play.api.i18n.I18nSupport
@@ -120,8 +121,8 @@ class ImprovementsController @Inject()(calcConnector: CalculatorConnector,
 
   val submitIsClaimingImprovements: Action[AnyContent] = ValidateSession.async { implicit request =>
 
-    def errorAction(errors: Form[IsClaimingImprovementsModel]): Future[Result] =
-      Future.successful(BadRequest(isClaimingImprovementsView(errors, ownerBeforeLegislationStartCheck(acquisitionDate)))
+    def errorAction(errors: Form[IsClaimingImprovementsModel], ownerBeforeLegislationStart: Boolean): Future[Result] =
+      Future.successful(BadRequest(isClaimingImprovementsView(errors, ownerBeforeLegislationStart)))
 
     def routeRequest(model: IsClaimingImprovementsModel): Future[Result] = {
       if (model.isClaimingImprovements) Future.successful(Redirect(routes.ImprovementsController.improvements))
@@ -130,12 +131,19 @@ class ImprovementsController @Inject()(calcConnector: CalculatorConnector,
 
     def successAction(model: IsClaimingImprovementsModel) = {
       (for {
-        save <- sessionCacheService.saveFormData(KeystoreKeys.isClaimingImprovements, model)
+        _ <- sessionCacheService.saveFormData(KeystoreKeys.isClaimingImprovements, model)
         route <- routeRequest(model)
       } yield route).recoverToStart
     }
 
-    isClaimingImprovementsForm.bindFromRequest().fold(errorAction, successAction)
+    (for {
+      acquisitionDate <- fetchAcquisitionDate(request)
+      ownerBeforeLegislationStart <- ownerBeforeLegislationStartCheck(acquisitionDate)
+      route <- isClaimingImprovementsForm.bindFromRequest().fold(
+        errors => errorAction(errors, ownerBeforeLegislationStart),
+        success => successAction(success)
+      )
+    } yield route).recoverToStart
   }
 
   val submitImprovements: Action[AnyContent] = ValidateSession.async { implicit request =>

@@ -19,12 +19,13 @@ package forms
 import common.Formatters.text
 import common.Transformers._
 import common.Validation._
+import models.IsClaimingImprovementsModel
 import play.api.data.Form
 import play.api.data.Forms._
 
 object IsClaimingImprovementsForm {
 
-  val form: Form[IsClaimingImprovementsModel] = Form(
+  val isClaimingImprovementsForm: Form[IsClaimingImprovementsModel] = Form(
     mapping(
       "isClaimingImprovements" -> text("calc.improvements.errors.required")
         .verifying("calc.improvements.errors.required", mandatoryCheck)
