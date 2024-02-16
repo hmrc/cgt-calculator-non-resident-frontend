@@ -119,21 +119,31 @@ class ImprovementsController @Inject()(calcConnector: CalculatorConnector,
     } yield route).recoverToStart
   }
 
+  private def routeBasedOnGains(totalGainResultsModel: Option[TotalGainResultsModel]): Result =
+    totalGainResultsModel match {
+      case Some(model) =>
+        val totalGainResults: Seq[BigDecimal] = Seq(model.flatGain) ++ Seq(model.rebasedGain, model.timeApportionedGain).flatten
+        if (!totalGainResults.forall(_ <= 0)) Redirect(routes.PropertyLivedInController.propertyLivedIn)
+        else Redirect(routes.CheckYourAnswersController.checkYourAnswers)
+      case None => Redirect(common.DefaultRoutes.missingDataRoute)
+    }
+
   val submitIsClaimingImprovements: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     def errorAction(errors: Form[IsClaimingImprovementsModel], ownerBeforeLegislationStart: Boolean): Future[Result] =
       Future.successful(BadRequest(isClaimingImprovementsView(errors, ownerBeforeLegislationStart)))
 
-    def routeRequest(model: IsClaimingImprovementsModel): Future[Result] = {
-      if (model.isClaimingImprovements) Future.successful(Redirect(routes.ImprovementsController.improvements))
-      else Future.successful(Redirect(routes.DisposalValueController.disposalValue))
+    def routeRequest(model: IsClaimingImprovementsModel, totalGainResultsModel: Option[TotalGainResultsModel]): Result = {
+      if (model.isClaimingImprovements) Redirect(routes.ImprovementsController.improvements)
+      else routeBasedOnGains(totalGainResultsModel)
     }
 
-    def successAction(model: IsClaimingImprovementsModel) = {
+    def successAction(model: IsClaimingImprovementsModel): Future[Result] = {
       (for {
         _ <- sessionCacheService.saveFormData(KeystoreKeys.isClaimingImprovements, model)
-        route <- routeRequest(model)
-      } yield route).recoverToStart
+        allAnswersModel <- answersConstructor.getNRTotalGainAnswers
+        gains <- calcConnector.calculateTotalGain(allAnswersModel)
+      } yield routeRequest(model, gains)).recoverToStart
     }
 
     (for {
@@ -148,18 +158,8 @@ class ImprovementsController @Inject()(calcConnector: CalculatorConnector,
 
   val submitImprovements: Action[AnyContent] = ValidateSession.async { implicit request =>
 
-    def successRouteRequest(totalGainResultsModel: Option[TotalGainResultsModel]): Result = {
-      totalGainResultsModel match {
-        case Some(model) =>
-          val totalGainResults: Seq[BigDecimal] = Seq(model.flatGain) ++ Seq(model.rebasedGain, model.timeApportionedGain).flatten
-          if(!totalGainResults.forall(_ <= 0)) Redirect(routes.PropertyLivedInController.propertyLivedIn)
-          else Redirect(routes.CheckYourAnswersController.checkYourAnswers)
-        case None => Redirect(common.DefaultRoutes.missingDataRoute)
-      }
-    }
-
     def errorAction(errors: Form[ImprovementsModel], backUrl: String, improvementsOptions: Boolean,
-                    ownerBeforeLegislationStart: Boolean) = {
+                    ownerBeforeLegislationStart: Boolean): Future[Result] = {
       Future.successful(BadRequest(improvementsView(errors, improvementsOptions, backUrl, ownerBeforeLegislationStart)))
     }
 
@@ -168,7 +168,7 @@ class ImprovementsController @Inject()(calcConnector: CalculatorConnector,
         _ <- sessionCacheService.saveFormData(KeystoreKeys.improvements, improvements)
         allAnswersModel <- answersConstructor.getNRTotalGainAnswers
         gains <- calcConnector.calculateTotalGain(allAnswersModel)
-      } yield successRouteRequest(gains)).recoverToStart
+      } yield routeBasedOnGains(gains)).recoverToStart
     }
 
     def routeRequest(backUrl: String,

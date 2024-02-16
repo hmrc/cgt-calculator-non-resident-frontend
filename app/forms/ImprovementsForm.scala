@@ -28,11 +28,7 @@ object ImprovementsForm {
   def improvementsForm(showHiddenQuestion: Boolean): Form[ImprovementsModel] =
     if (showHiddenQuestion) {
       Form(mapping(
-          "isClaimingImprovements" -> common.Formatters.text("calc.improvements.errors.required")
-            .verifying("calc.improvements.errors.required", mandatoryCheck)
-            .verifying("calc.calc.improvements.errors.required", yesNoCheck),
-          "improvementsAmt" -> mandatoryIf(
-            isEqual("isClaimingImprovements", "Yes"),
+          "improvementsAmt" ->
             common.Formatters.text("calc.improvements.before.error.required")
               .transform(stripCurrencyCharacters, stripCurrencyCharacters)
               .verifying("calc.improvements.before.error.invalid", bigDecimalCheck)
@@ -43,10 +39,8 @@ object ImprovementsForm {
                   decimalPlaceConstraint("calc.improvements.before.error.decimalPlaces"),
                   maxMonetaryValueConstraint(errMsgKey = "calc.improvements.before.error.tooHigh")
                 )
-              )
-          ),
-          "improvementsAmtAfter" -> mandatoryIf(
-            isEqual("isClaimingImprovements", "Yes"),
+              ),
+          "improvementsAmtAfter" ->
             common.Formatters.text("calc.improvements.after.error.required")
               .transform(stripCurrencyCharacters, stripCurrencyCharacters)
               .verifying("calc.improvements.after.error.invalid", bigDecimalCheck)
@@ -58,15 +52,11 @@ object ImprovementsForm {
                   maxMonetaryValueConstraint(errMsgKey = "calc.improvements.after.error.tooHigh")
                 )
               )
-          )
+      )
         )(ImprovementsModel.apply)(ImprovementsModel.unapply))
     } else {
       Form(mapping(
-          "isClaimingImprovements" -> common.Formatters.text("calc.improvements.errors.required")
-            .verifying("calc.improvements.errors.required", mandatoryCheck)
-            .verifying("calc.calc.improvements.errors.required", yesNoCheck),
-          "improvementsAmt" -> mandatoryIf(
-            isEqual("isClaimingImprovements", "Yes"),
+          "improvementsAmt" ->
             common.Formatters.text("calc.improvements.error.required")
               .transform(stripCurrencyCharacters, stripCurrencyCharacters)
               .verifying("calc.improvements.error.invalid", bigDecimalCheck)
@@ -77,7 +67,6 @@ object ImprovementsForm {
                   decimalPlaceConstraint("calc.improvements.errorDecimalPlaces"),
                   maxMonetaryValueConstraint()
                 )
-              )
           ),
         "improvementsAmtAfter" -> optional(text)
           .transform(stripOptionalCurrencyCharacters, stripOptionalCurrencyCharacters)
