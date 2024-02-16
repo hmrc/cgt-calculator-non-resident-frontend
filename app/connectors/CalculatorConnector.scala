@@ -101,19 +101,19 @@ class CalculatorConnector @Inject()(val http: DefaultHttpClient,
         http.GET[BigDecimal](s"$serviceUrl/capital-gains-calculator/non-resident/calculate-total-costs?" +
           s"disposalCosts=${answers.disposalCostsModel.disposalCosts.toDouble}" +
           s"&acquisitionCosts=${answers.rebasedCostsModel.get.rebasedCosts.getOrElse(BigDecimal(0)).toDouble}" +
-          improvementsQueryParameter(answers.improvementsModel, answers.improvementsModel.improvementsAmtAfter.getOrElse(BigDecimal(0)).toDouble))
+          improvementsQueryParameter(answers.isClaimingImprovementsModel, answers.improvementsModel.improvementsAmtAfter.getOrElse(BigDecimal(0)).toDouble))
       } else {
         http.GET[BigDecimal](s"$serviceUrl/capital-gains-calculator/non-resident/calculate-total-costs?" +
           s"disposalCosts=${answers.disposalCostsModel.disposalCosts.toDouble}" +
           s"&acquisitionCosts=${selectAcquisitionCosts(answers).toDouble}" +
-          improvementsQueryParameter(answers.improvementsModel,
+          improvementsQueryParameter(answers.isClaimingImprovementsModel,
             answers.improvementsModel.improvementsAmt.getOrElse(BigDecimal(0)) + answers.improvementsModel.improvementsAmtAfter.getOrElse(BigDecimal(0))))
       }
     case _ => Future.successful(throw new Exception("No calculation election supplied"))
   }
 
-  private def improvementsQueryParameter(improvementsModel: ImprovementsModel, value: BigDecimal): String = {
-    if(improvementsModel.isClaimingImprovements == YesNoKeys.yes) s"&improvements=${value.toDouble}"
+  private def improvementsQueryParameter(isClaimingImprovementsModel: IsClaimingImprovementsModel, value: BigDecimal): String = {
+    if(isClaimingImprovementsModel.isClaimingImprovements) s"&improvements=${value.toDouble}"
     else "&improvements=0"
   }
 

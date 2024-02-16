@@ -79,7 +79,11 @@
     </div>
 
     @form(action = controllers.routes.ImprovementsController.submitImprovements) {
-        @if(improvementsOptions) { @beforeAndAfterInput else @amountInput }
+        @if(improvementsOptions) {
+            @beforeAndAfterInput
+        } else {
+            @amountInput
+        }
         @submitButton()
     }
 

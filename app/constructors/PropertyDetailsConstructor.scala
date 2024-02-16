@@ -25,7 +25,7 @@ object PropertyDetailsConstructor {
   def propertyDetailsRows(answers: TotalGainAnswersModel): Seq[QuestionAnswerModel[Any]] = {
 
     val showRebasedImprovements = !TaxDates.dateAfterStart(answers.acquisitionDateModel.get)
-    val showImprovements = answers.improvementsModel.isClaimingImprovements == "Yes"
+    val showImprovements = answers.isClaimingImprovementsModel.isClaimingImprovements
 
     val claimingImprovementsRow = constructClaimingImprovementsRow(answers)
     val improvementsTotalRow = constructTotalImprovementsRow(answers, showImprovements, showRebasedImprovements)
@@ -37,7 +37,7 @@ object PropertyDetailsConstructor {
 
   def constructClaimingImprovementsRow(answers: TotalGainAnswersModel): Option[QuestionAnswerModel[String]] = {
     Some(QuestionAnswerModel[String](s"${keys.improvements}-isClaiming",
-      answers.improvementsModel.isClaimingImprovements,
+      if(answers.isClaimingImprovementsModel.isClaimingImprovements) "Yes" else "No",
       "calc.improvements.question",
       Some(controllers.routes.ImprovementsController.improvements.url)
     ))

@@ -19,7 +19,7 @@ package models
 import constructors.TotalGainRequestConstructor.includeRebasedValuesInCalculation
 import play.api.libs.json.{JsObject, JsValue, Json, Writes}
 
-case class ImprovementsModel (improvementsAmt: Option[BigDecimal], improvementsAmtAfter: Option[BigDecimal] = None)
+case class ImprovementsModel(improvementsAmt: Option[BigDecimal] = Some(0), improvementsAmtAfter: Option[BigDecimal] = None)
 
 object ImprovementsModel {
   implicit val format = Json.format[ImprovementsModel]

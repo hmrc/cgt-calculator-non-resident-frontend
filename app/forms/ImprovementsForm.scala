@@ -52,7 +52,7 @@ object ImprovementsForm {
                   maxMonetaryValueConstraint(errMsgKey = "calc.improvements.after.error.tooHigh")
                 )
               )
-      )
+
         )(ImprovementsModel.apply)(ImprovementsModel.unapply))
     } else {
       Form(mapping(
