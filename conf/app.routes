@@ -92,13 +92,10 @@ GET         /rebased-costs                      @controllers.RebasedCostsControl
 POST        /rebased-costs                      @controllers.RebasedCostsController.submitRebasedCosts
 
 #Improvements
-GET         /improvements                       @controllers.ImprovementsController.getIsClamingImprovements
+GET         /improvements                       @controllers.ImprovementsController.getIsClaimingImprovements
 POST        /improvements                       @controllers.ImprovementsController.submitIsClaimingImprovements
 GET         /improvements-costs                 @controllers.ImprovementsController.improvements
 POST        /improvements-costs                 @controllers.ImprovementsController.submitImprovements
-GET         /how-much-did-improvements-cost     @controllers.ImprovementsController.improvements
-POST        /how-much-did-improvements-cost     @controllers.ImprovementsController.submitImprovements
-
 
 #Disposal Date
 GET         /                                   @controllers.DisposalDateController.disposalDate

@@ -79,15 +79,7 @@
     </div>
 
     @form(action = controllers.routes.ImprovementsController.submitImprovements) {
-
-        @inputYesNo(
-            legend = titleText,
-            legendClass = Some("govuk-visually-hidden"),
-            isPageHeading = false,
-            field = improvementsForm("isClaimingImprovements"),
-            conditionalYesHtml = if(improvementsOptions) Some(beforeAndAfterInput) else Some(amountInput)
-        )
-
+        @if(improvementsOptions) { @beforeAndAfterInput else @amountInput }
         @submitButton()
     }
 
