@@ -75,7 +75,7 @@ class CalculationElectionConstructorSpec()
       "should be returned with an order" which {
 
         "contain a time calculation" in {
-          calculations.head._1 shouldEqual "time"
+          calculations.head._1 shouldEqual "timeApportioned"
         }
 
         "should have flat as the second element" in {
@@ -95,7 +95,7 @@ class CalculationElectionConstructorSpec()
       "should be returned with an order" which {
 
         "contain a time calculation" in {
-          calculations.head._1 shouldEqual "time"
+          calculations.head._1 shouldEqual "timeApportioned"
         }
 
         "should have flat as the second element" in {
@@ -195,7 +195,7 @@ class CalculationElectionConstructorSpec()
       "should be returned with an order" which {
 
         "contain a time calculation" in {
-          calculations.head._1 shouldEqual "time"
+          calculations.head._1 shouldEqual "timeApportioned"
         }
 
         "should have rebased as the second element" in {
@@ -227,7 +227,7 @@ class CalculationElectionConstructorSpec()
         }
 
         "should have time as the third element" in {
-          calculations(2)._1 shouldEqual "time"
+          calculations(2)._1 shouldEqual "timeApportioned"
         }
       }
     }
@@ -258,7 +258,7 @@ class CalculationElectionConstructorSpec()
         }
 
         "should have time as the second element" in {
-          calculations(1)._1 shouldEqual "time"
+          calculations(1)._1 shouldEqual "timeApportioned"
         }
 
         "should have flat as the third element" in {
@@ -344,7 +344,7 @@ class CalculationElectionConstructorSpec()
       lazy val model = target.timeElementConstructor(1000, "data", Some(5000))
 
       "has a calcType of 'time'" in {
-        model.calcType shouldBe "time"
+        model.calcType shouldBe "timeApportioned"
       }
 
       "has an amount of '1000.00'" in {

@@ -115,7 +115,7 @@ trait CalculationElectionConstructor {
 
   def timeElementConstructor[T](amount: BigDecimal, data: T, otherReliefs: Option[BigDecimal]): CalculationElectionOption[T] = {
     CalculationElectionOption(
-      "time",
+      "timeApportioned",
       amount.setScale(2),
       "calc.calculationElection.message.time",
       "calc.calculationElection.description.time",

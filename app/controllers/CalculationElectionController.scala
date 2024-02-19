@@ -48,7 +48,7 @@ class CalculationElectionController @Inject()(calcConnector: CalculatorConnector
   def orderElements(content: Seq[(String, String, String, String, Option[String], Option[BigDecimal])],
                     claimingReliefs: Boolean): Seq[(String, String, String, String, Option[String], Option[BigDecimal])] = {
     if (claimingReliefs) {
-      val seq = Seq("rebased", "time", "flat")
+      val seq = Seq("rebased", "timeApportioned", "flat")
 
       def sort(s1: (String, String, String, String, Option[String], Option[BigDecimal]),
                s2: (String, String, String, String, Option[String], Option[BigDecimal])) = {
@@ -152,7 +152,7 @@ class CalculationElectionController @Inject()(calcConnector: CalculatorConnector
       sessionCacheService.saveFormData(KeystoreKeys.calculationElection, model)
       request.body.asFormUrlEncoded.flatMap(_.get("action").map(_.head)) match {
         case Some("flat") => Future.successful(Redirect(routes.OtherReliefsFlatController.otherReliefsFlat))
-        case Some("time") => Future.successful(Redirect(routes.OtherReliefsTAController.otherReliefsTA))
+        case Some("timeApportioned") => Future.successful(Redirect(routes.OtherReliefsTAController.otherReliefsTA))
         case Some("rebased") => Future.successful(Redirect(routes.OtherReliefsRebasedController.otherReliefsRebased))
         case _ => Future.successful(Redirect(routes.SummaryController.summary))
       }
