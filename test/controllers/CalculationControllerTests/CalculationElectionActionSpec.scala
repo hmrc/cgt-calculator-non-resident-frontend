@@ -357,16 +357,16 @@ class CalculationElectionActionSpec ()
     val sequence: Seq[(String, String, String, String, Option[String], Option[BigDecimal])] = Seq(
       ("flat", "test", "test", "test", None, Some(500)),
       ("rebased", "test", "test", "test", None, None),
-      ("time", "test", "test", "test", None, None)
+      ("timeApportioned", "test", "test", "test", None, None)
     )
     val sequenceNoReliefs: Seq[(String, String, String, String, Option[String], Option[BigDecimal])] = Seq(
       ("flat", "test", "test", "test", None, None),
       ("rebased", "test", "test", "test", None, None),
-      ("time", "test", "test", "test", None, None)
+      ("timeApportioned", "test", "test", "test", None, None)
     )
     val orderedSequence: Seq[(String, String, String, String, Option[String], Option[BigDecimal])] = Seq(
       ("rebased", "test", "test", "test", None, None),
-      ("time", "test", "test", "test", None, None),
+      ("timeApportioned", "test", "test", "test", None, None),
       ("flat", "test", "test", "test", None, Some(500))
     )
 

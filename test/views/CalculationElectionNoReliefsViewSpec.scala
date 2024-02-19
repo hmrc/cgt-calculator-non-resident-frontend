@@ -42,7 +42,7 @@ class CalculationElectionNoReliefsViewSpec extends CommonPlaySpec with WithCommo
       Seq(
         ("rebased", "0", "description", Messages("calc.calculationElection.description.rebased"), None, None),
         ("flat", "1000", "description", Messages("calc.calculationElection.description.flat"), None, None),
-        ("time", "2000", "description", Messages("calc.calculationElection.description.time"), None, None)
+        ("timeApportioned", "2000", "description", Messages("calc.calculationElection.description.time"), None, None)
       )
 
     "supplied with no errors and lowest tax owed is rebased method" should {
@@ -126,7 +126,7 @@ class CalculationElectionNoReliefsViewSpec extends CommonPlaySpec with WithCommo
         Seq(
           ("flat", "0", "description", Messages("calc.calculationElection.description.flat"), None, None),
           ("rebased", "1000", "description", Messages("calc.calculationElection.description.rebased"), None, None),
-          ("time", "2000", "description", Messages("calc.calculationElection.description.time"), None, None)
+          ("timeApportioned", "2000", "description", Messages("calc.calculationElection.description.time"), None, None)
         )
 
       lazy val view = calculationElectionNoReliefsView(calculationElectionForm, flatLowestTaxOwed)(fakeRequest, mockMessage)
@@ -170,7 +170,7 @@ class CalculationElectionNoReliefsViewSpec extends CommonPlaySpec with WithCommo
         Seq(
           ("flat", "0", "description", Messages("calc.calculationElection.description.flat"), None, None),
           ("rebased", "1000", "description", Messages("calc.calculationElection.description.rebased"), None, None),
-          ("time", "2000", "description", Messages("calc.calculationElection.description.time"), None, None)
+          ("timeApportioned", "2000", "description", Messages("calc.calculationElection.description.time"), None, None)
         )
 
       calculationElectionNoReliefsView.f(calculationElectionForm, flatLowestTaxOwed)(fakeRequest, mockMessage) shouldBe calculationElectionNoReliefsView.render(calculationElectionForm, flatLowestTaxOwed, fakeRequest, mockMessage)

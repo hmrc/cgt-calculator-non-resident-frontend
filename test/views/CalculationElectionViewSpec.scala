@@ -111,7 +111,7 @@ class CalculationElectionViewSpec extends CommonPlaySpec with WithCommonFakeAppl
         Seq(
           ("flat", "0", "description", Messages("calc.calculationElection.description.flat"), None, None),
           ("rebased", "1000", "description", Messages("calc.calculationElection.description.rebased"), None, None),
-          ("time", "2000", "description", Messages("calc.calculationElection.description.time"), None, None)
+          ("timeApportioned", "2000", "description", Messages("calc.calculationElection.description.time"), None, None)
         )
 
       calculationElectionView.f(calculationElectionForm, flatLowestTaxOwed)(fakeRequest, mockMessage) shouldBe calculationElectionView.render(calculationElectionForm, flatLowestTaxOwed, fakeRequest, mockMessage)
