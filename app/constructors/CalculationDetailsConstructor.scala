@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,22 +17,21 @@
 package constructors
 
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import common.nonresident.{CalculationType, Flat, Rebased, TimeApportioned}
 import controllers.routes
 import models.{QuestionAnswerModel, TotalGainResultsModel}
 import play.api.i18n.{Messages, MessagesProvider}
-
+import common.nonresident.CalculationType
 import javax.inject.Inject
 
 
 class CalculationDetailsConstructor @Inject()(implicit messagesProvider: MessagesProvider) {
 
-  def buildSection(calculation: TotalGainResultsModel, calculationType: CalculationType): Seq[QuestionAnswerModel[Any]] = {
+  def buildSection(calculation: TotalGainResultsModel, calculationType: String): Seq[QuestionAnswerModel[Any]] = {
     val electionDetails = calculationElection(calculationType)
     val totalGainAmount = calculationType match {
-      case Flat => calculation.flatGain
-      case TimeApportioned => calculation.timeApportionedGain.get
-      case Rebased => calculation.rebasedGain.get
+      case CalculationType.flat => calculation.flatGain
+      case CalculationType.timeApportioned => calculation.timeApportionedGain.get
+      case CalculationType.rebased => calculation.rebasedGain.get
     }
     val totalGainDetails = totalGain(totalGainAmount)
     val totalLossDetails = totalLoss(totalGainAmount)
@@ -43,16 +42,16 @@ class CalculationDetailsConstructor @Inject()(implicit messagesProvider: Message
     ).flatten
   }
 
-  def calculationElection(calculationType: CalculationType): Option[QuestionAnswerModel[String]] = {
+  def calculationElection(calculationType: String): Option[QuestionAnswerModel[String]] = {
 
     val id = KeystoreKeys.calculationElection
 
     val question = Messages("calc.summary.calculation.details.calculationElection")
 
     val answer = calculationType match {
-      case Flat => Messages("calc.summary.calculation.details.flatCalculation")
-      case TimeApportioned => Messages("calc.summary.calculation.details.timeCalculation")
-      case Rebased => Messages("calc.summary.calculation.details.rebasedCalculation")
+      case CalculationType.flat => Messages("calc.summary.calculation.details.flatCalculation")
+      case CalculationType.timeApportioned => Messages("calc.summary.calculation.details.timeCalculation")
+      case CalculationType.rebased => Messages("calc.summary.calculation.details.rebasedCalculation")
     }
 
     val link = routes.CalculationElectionController.calculationElection.url

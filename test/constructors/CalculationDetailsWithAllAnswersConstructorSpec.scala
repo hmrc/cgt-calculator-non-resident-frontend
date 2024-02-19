@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,9 @@
 
 package constructors
 
+import helpers.AssertHelpers
 import assets.MessageLookup.{NonResident => messages}
-import common.nonresident.Flat
 import common.{CommonPlaySpec, WithCommonFakeApplication}
-import constructors.helpers.AssertHelpers
 import controllers.helpers.FakeRequestHelper
 import models.{CalculationResultsWithTaxOwedModel, QuestionAnswerModel, TotalTaxOwedModel}
 import org.scalatestplus.mockito.MockitoSugar
@@ -61,10 +60,10 @@ class CalculationDetailsWithAllAnswersConstructorSpec extends CommonPlaySpec wit
       ), None, None
     )
 
-    lazy val result = calcDetailsWithAllAnswers.buildSection(model, Flat, "2016/17")
+    lazy val result = calcDetailsWithAllAnswers.buildSection(model, "flat", "2016/17")
 
     "return a sequence with the election details row" in {
-      result.contains(calcDetails.calculationElection(Flat).get)
+      result.contains(calcDetails.calculationElection("flat").get)
     }
 
     "return a sequence containing the total gain row" in {

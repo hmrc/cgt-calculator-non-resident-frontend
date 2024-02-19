@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,8 @@ import common.KeystoreKeys.{NonResidentKeys => keystoreKeys}
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
 import controllers.utils.RecoverableFuture
+
+import javax.inject.Inject
 import models.DateModel
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -28,7 +30,6 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.outsideTaxYear
 
-import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
 class OutsideTaxYearController @Inject()(http: DefaultHttpClient,

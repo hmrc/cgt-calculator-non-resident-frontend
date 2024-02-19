@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,10 @@
 
 package forms
 
-import assets.KeyLookup.WhoDidYouGiveItTo
-import common.{CommonPlaySpec, WithCommonFakeApplication}
 import forms.WhoDidYouGiveItToForm._
 import models.WhoDidYouGiveItToModel
+import assets.KeyLookup.WhoDidYouGiveItTo
+import common.{CommonPlaySpec, WithCommonFakeApplication}
 
 class WhoDidYouGiveItToFormSpec extends CommonPlaySpec with WithCommonFakeApplication {
   "Creating the form from an empty model" should {

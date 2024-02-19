@@ -1,5 +1,5 @@
 @*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,11 @@
  * limitations under the License.
  *@
 
-@import common.Dates.TemplateImplicits._
-@import common.Transformers.{booleanToMessageString, checkIfBooleanAsString}
-@import common.nonresident.{CalculationType, MoneyPounds}
 @import models._
 @import views.html.helper.CSPNonce
-
+@import common.Transformers.{booleanToMessageString, checkIfBooleanAsString}
+@import common.Dates.TemplateImplicits._
+@import common.nonresident.MoneyPounds
 @import java.time.LocalDate
 
 @this(
@@ -31,7 +30,7 @@
 @(
         calculationResult: TotalTaxOwedModel,
         taxYearModel: TaxYearModel,
-        calculationType: CalculationType,
+        calculationType: String,
         disposalValue: BigDecimal,
         acquisitionValue: BigDecimal,
         totalCosts: BigDecimal,
@@ -39,7 +38,7 @@
         flatGain: Option[BigDecimal] = None,
         reliefsUsed: BigDecimal = 0,
         showUserResearchPanel: Boolean,
-        questionsForPrint: Seq[QuestionAnswerModel[Any]]
+        questionsForPrint: Seq[QuestionAnswerModel[Any]],
 )(implicit request: Request[_], messages: Messages)
 
 @scripts = {

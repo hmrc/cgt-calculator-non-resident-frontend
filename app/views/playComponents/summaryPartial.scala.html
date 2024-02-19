@@ -1,5 +1,5 @@
 @*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  *@
 
 @import common._
-@import common.nonresident.{CalculationType, Flat, MoneyPounds, Rebased, TimeApportioned}
+@import common.nonresident.CalculationType
+@import common.nonresident.MoneyPounds
 @import uk.gov.hmrc.govukfrontend.views.html.components._
-
 
 @this(
     summaryPartialDeductionsSection: summaryPartialDeductionsSection,
@@ -28,7 +28,7 @@
     govukWarningText : GovukWarningText
 )
 
-@(calculationResult: TotalTaxOwedModel, taxYearModel: TaxYearModel, calculationType: CalculationType,
+@(calculationResult: TotalTaxOwedModel, taxYearModel: TaxYearModel, calculationType: String,
 disposalValue: BigDecimal, acquisitionValue: BigDecimal, totalCosts: BigDecimal, flatGain: Option[BigDecimal] = None, reliefsUsed: BigDecimal = 0)(implicit request: Request[_], messages: Messages, messagesApi: Option[MessagesApi] = None)
 
     <div id="tax-owed-banner" class="govuk-panel govuk-panel--confirmation">
@@ -51,7 +51,7 @@ disposalValue: BigDecimal, acquisitionValue: BigDecimal, totalCosts: BigDecimal,
     }
 
 
-    @{if(calculationType == Flat || calculationType == Rebased)
+    @{if(calculationType == CalculationType.flat || calculationType == CalculationType.rebased)
         summaryPartialWorkingOutSection(
             calculationType,
             disposalValue,
@@ -61,7 +61,7 @@ disposalValue: BigDecimal, acquisitionValue: BigDecimal, totalCosts: BigDecimal,
         )
     }
 
-    @{if(calculationType == TimeApportioned)
+    @{if(calculationType == CalculationType.timeApportioned)
         summaryPartialWorkingOutSection(
             calculationType,
             disposalValue,

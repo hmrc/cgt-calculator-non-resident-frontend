@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package forms
 import common.Constants
 import common.Transformers._
 import common.Validation._
+import forms.BroughtForwardLossesForm.verifyMandatory
 import models.BroughtForwardLossesModel
 import play.api.data.Forms._
 import play.api.data._
@@ -39,6 +40,13 @@ object BroughtForwardLossesForm {
   val verifyPositive: BroughtForwardLossesModel => Boolean = {
     case BroughtForwardLossesModel(true, Some(value)) => isPositive(value)
     case _ => true
+  }
+
+  private def getLossesAmount(model: BroughtForwardLossesModel): Option[BigDecimal] = {
+    model match {
+      case BroughtForwardLossesModel(true, losses) => losses
+      case _ => None
+    }
   }
 
   val broughtForwardLossesForm = Form(

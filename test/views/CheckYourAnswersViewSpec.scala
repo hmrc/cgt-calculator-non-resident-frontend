@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 
 package views
 
+import java.time.LocalDate
+
 import assets.MessageLookup
 import assets.MessageLookup.NonResident.{CheckYourAnswers => messages}
 import assets.MessageLookup.{NonResident => commonMessages}
@@ -28,8 +30,6 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.i18n.{Lang, MessagesApi}
 import play.api.mvc.MessagesControllerComponents
 import views.html.calculation.checkYourAnswers
-
-import java.time.LocalDate
 
 class CheckYourAnswersViewSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with MockitoSugar {
 

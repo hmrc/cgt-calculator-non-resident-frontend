@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,13 @@
 
 package constructors
 
-import assets.MessageLookup.{NonResident => messages}
-import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
-import common.nonresident.{Flat, Rebased, TimeApportioned}
-import common.{CommonPlaySpec, WithCommonFakeApplication}
-import constructors.helpers.AssertHelpers
-import controllers.helpers.FakeRequestHelper
 import models.{OtherReliefsModel, QuestionAnswerModel}
+import common.nonresident.CalculationType
+import helpers.AssertHelpers
+import assets.MessageLookup.{NonResident => messages}
+import common.{CommonPlaySpec, WithCommonFakeApplication}
+import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import controllers.helpers.FakeRequestHelper
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.i18n.MessagesProvider
 import play.api.mvc.MessagesControllerComponents
@@ -38,7 +38,7 @@ class OtherReliefsDetailsConstructorSpec extends CommonPlaySpec with AssertHelpe
   "Calling .getOtherReliefsRebasedRow" when {
 
     "provided with no model" should {
-      val result = target.getOtherReliefsRebasedRow(None, Rebased)
+      val result = target.getOtherReliefsRebasedRow(None, CalculationType.rebased)
 
       "return a None" in {
         result shouldBe None
@@ -46,7 +46,7 @@ class OtherReliefsDetailsConstructorSpec extends CommonPlaySpec with AssertHelpe
     }
 
     "provided with no value for other reliefs" should {
-      val result = target.getOtherReliefsRebasedRow(Some(OtherReliefsModel(0)), Rebased)
+      val result = target.getOtherReliefsRebasedRow(Some(OtherReliefsModel(0)), CalculationType.rebased)
 
       "should return a None" in {
         result shouldBe None
@@ -54,7 +54,7 @@ class OtherReliefsDetailsConstructorSpec extends CommonPlaySpec with AssertHelpe
     }
 
     "provided with a calculation type which is not rebased" should {
-      val result = target.getOtherReliefsRebasedRow(Some(OtherReliefsModel(10)), Flat)
+      val result = target.getOtherReliefsRebasedRow(Some(OtherReliefsModel(10)), CalculationType.flat)
 
       "return a None" in {
         result shouldBe None
@@ -62,7 +62,7 @@ class OtherReliefsDetailsConstructorSpec extends CommonPlaySpec with AssertHelpe
     }
 
     "provided with a rebased calculation and other reliefs value" should {
-      lazy val result = target.getOtherReliefsRebasedRow(Some(OtherReliefsModel(10)), Rebased)
+      lazy val result = target.getOtherReliefsRebasedRow(Some(OtherReliefsModel(10)), CalculationType.rebased)
 
       "return a QuestionAnswerModel" in {
         result.isDefined shouldBe true
@@ -89,7 +89,7 @@ class OtherReliefsDetailsConstructorSpec extends CommonPlaySpec with AssertHelpe
   "Calling .getOtherReliefsTimeApportionedRow" when {
 
     "provided with no model" should {
-      val result = target.getOtherReliefsTimeApportionedRow(None, TimeApportioned)
+      val result = target.getOtherReliefsTimeApportionedRow(None, CalculationType.timeApportioned)
 
       "return a None" in {
         result shouldBe None
@@ -98,7 +98,7 @@ class OtherReliefsDetailsConstructorSpec extends CommonPlaySpec with AssertHelpe
 
     "provided with no value for other reliefs" should {
       val result = target.getOtherReliefsTimeApportionedRow(Some(OtherReliefsModel(0)),
-        TimeApportioned)
+        CalculationType.timeApportioned)
 
       "should return a None" in {
         result shouldBe None
@@ -106,7 +106,7 @@ class OtherReliefsDetailsConstructorSpec extends CommonPlaySpec with AssertHelpe
     }
 
     "provided with a calculation type which is not time apportioned" should {
-      val result = target.getOtherReliefsTimeApportionedRow(Some(OtherReliefsModel(10)), Flat)
+      val result = target.getOtherReliefsTimeApportionedRow(Some(OtherReliefsModel(10)), CalculationType.flat)
 
       "return a None" in {
         result shouldBe None
@@ -115,7 +115,7 @@ class OtherReliefsDetailsConstructorSpec extends CommonPlaySpec with AssertHelpe
 
     "provided with a time apportioned calculation and other reliefs value" should {
       lazy val result = target.getOtherReliefsTimeApportionedRow(Some(OtherReliefsModel(10)),
-        TimeApportioned)
+        CalculationType.timeApportioned)
 
       "return a QuestionAnswerModel" in {
         result.isDefined shouldBe true
@@ -142,7 +142,7 @@ class OtherReliefsDetailsConstructorSpec extends CommonPlaySpec with AssertHelpe
   "Calling .getOtherReliefsFlatRow" when {
 
     "provided with no model" should {
-      val result = target.getOtherReliefsFlatRow(None, Flat)
+      val result = target.getOtherReliefsFlatRow(None, CalculationType.flat)
 
       "return a None" in {
         result shouldBe None
@@ -151,7 +151,7 @@ class OtherReliefsDetailsConstructorSpec extends CommonPlaySpec with AssertHelpe
 
     "provided with no value for other reliefs" should {
       val result = target.getOtherReliefsFlatRow(Some(OtherReliefsModel(0)),
-        Flat)
+        CalculationType.flat)
 
       "should return a None" in {
         result shouldBe None
@@ -159,7 +159,7 @@ class OtherReliefsDetailsConstructorSpec extends CommonPlaySpec with AssertHelpe
     }
 
     "provided with a calculation type which is not flat" should {
-      val result = target.getOtherReliefsFlatRow(Some(OtherReliefsModel(10)), Rebased)
+      val result = target.getOtherReliefsFlatRow(Some(OtherReliefsModel(10)), CalculationType.rebased)
 
       "return a None" in {
         result shouldBe None
@@ -168,7 +168,7 @@ class OtherReliefsDetailsConstructorSpec extends CommonPlaySpec with AssertHelpe
 
     "provided with a flat calculation and other reliefs value" should {
       lazy val result = target.getOtherReliefsFlatRow(Some(OtherReliefsModel(10)),
-        Flat)
+        CalculationType.flat)
 
       "return a QuestionAnswerModel" in {
         result.isDefined shouldBe true
@@ -195,7 +195,7 @@ class OtherReliefsDetailsConstructorSpec extends CommonPlaySpec with AssertHelpe
   "Calling . getOtherReliefsSection" when {
     "No otherReliefs are given" should {
       "return an empty list" in {
-        val result = target.getOtherReliefsSection(None, Flat)
+        val result = target.getOtherReliefsSection(None, CalculationType.flat)
 
         result shouldBe Seq.empty
       }
@@ -204,7 +204,7 @@ class OtherReliefsDetailsConstructorSpec extends CommonPlaySpec with AssertHelpe
     "otherReliefs are given" should {
       "return a list with otherReliefsFlat" in {
         val model = OtherReliefsModel(BigDecimal(100))
-        val result = target.getOtherReliefsSection(Some(model), Flat)
+        val result = target.getOtherReliefsSection(Some(model), CalculationType.flat)
 
         result shouldBe List(QuestionAnswerModel("nr:otherReliefsFlat",100,"How much extra tax relief are you claiming?",None,None))
       }
@@ -212,14 +212,14 @@ class OtherReliefsDetailsConstructorSpec extends CommonPlaySpec with AssertHelpe
 
       "return a list with otherReliefsRebased" in {
         val model = OtherReliefsModel(BigDecimal(100))
-        val result = target.getOtherReliefsSection(Some(model), Rebased)
+        val result = target.getOtherReliefsSection(Some(model), CalculationType.rebased)
 
         result shouldBe List(QuestionAnswerModel("nr:otherReliefsRebased",100,"How much extra tax relief are you claiming?",None,None))
       }
 
       "return a list with otherReliefsTA" in {
         val model = OtherReliefsModel(BigDecimal(100))
-        val result = target.getOtherReliefsSection(Some(model), TimeApportioned)
+        val result = target.getOtherReliefsSection(Some(model), CalculationType.timeApportioned)
 
         result shouldBe List(QuestionAnswerModel("nr:otherReliefsTA",100,"How much extra tax relief are you claiming?",None,None))
       }

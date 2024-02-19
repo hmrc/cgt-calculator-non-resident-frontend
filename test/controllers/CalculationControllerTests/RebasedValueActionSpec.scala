@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,8 @@ import common.{CommonPlaySpec, WithCommonFakeApplication}
 import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import controllers.{RebasedValueController, routes}
+
+import javax.inject.Inject
 import models.{DateModel, RebasedValueModel}
 import org.jsoup._
 import org.mockito.ArgumentMatchers
@@ -35,7 +37,6 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.rebasedValue
 
-import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class RebasedValueActionSpec @Inject()(rebasedValueController: RebasedValueController)

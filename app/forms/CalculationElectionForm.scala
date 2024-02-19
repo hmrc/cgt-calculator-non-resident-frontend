@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +16,25 @@
 
 package forms
 
-import common.nonresident.CalculationType
 import models.CalculationElectionModel
 import play.api.data.Forms._
 import play.api.data._
+import common.Formatters.text
 
 object CalculationElectionForm {
-  val calculationElectionForm: Form[CalculationElectionModel] = Form(
+
+  def validate: String => Boolean = calculationElection => calculationElection match {
+    case "flat" => true
+    case "time" => true
+    case "rebased" => true
+    case _ => false
+  }
+
+  val calculationElectionForm = Form(
     mapping(
-      "calculationElection" -> Forms.of[CalculationType]
+      "calculationElection" -> text("calc.calculationElection.errors.required")
+        .verifying("calc.calculationElection.errors.required", validate)
     )(CalculationElectionModel.apply)(CalculationElectionModel.unapply)
   )
+
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,45 +16,8 @@
 
 package common.nonresident
 
-import julienrf.json.derived
-import play.api.data.FormError
-import play.api.data.format.Formatter
-import play.api.libs.json.OFormat
-
 object CalculationType {
-  implicit val jsonFormat: OFormat[CalculationType] = derived.oformat[CalculationType]()
-
-  implicit val formatter: Formatter[CalculationType] = new Formatter[CalculationType] {
-
-    override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], CalculationType] = {
-      val bindCalculationTypeFn: PartialFunction[String,CalculationType] = {
-        case "flat" => Flat
-        case "rebased" => Rebased
-        case "timeApportioned" => TimeApportioned
-      }
-
-      data.get(key)
-        .flatMap(bindCalculationTypeFn.lift).map(Right(_))
-        .getOrElse(Left(Seq(FormError(key, s"calc.$key.errors.required"))))
-    }
-
-    override def unbind(key: String, value: CalculationType): Map[String, String] =
-      value match {
-        case Flat => Map(key -> "flat")
-        case Rebased => Map(key -> "rebased")
-        case TimeApportioned => Map(key -> "timeApportioned")
-      }
-  }
-}
-
-sealed trait CalculationType
-
-case object Flat extends CalculationType {
-  override def toString: String = "flat"
-}
-case object Rebased extends CalculationType {
-  override def toString: String = "rebased"
-}
-case object TimeApportioned extends CalculationType {
-  override def toString: String = "timeApportioned"
+  val flat: String = "flat"
+  val rebased: String = "rebased"
+  val timeApportioned: String = "time"
 }

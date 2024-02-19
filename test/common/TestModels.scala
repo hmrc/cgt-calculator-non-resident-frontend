@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 package common
 
-import common.nonresident.{Flat, Rebased}
 import models._
 
 object TestModels {
@@ -52,7 +51,7 @@ object TestModels {
     DisposalValueModel(150000),
     AcquisitionCostsModel(0),
     DisposalCostsModel(0),
-    CalculationElectionModel(Flat),
+    CalculationElectionModel("flat"),
     OtherReliefsModel(0),
     OtherReliefsModel(0),
     OtherReliefsModel(0),
@@ -73,7 +72,7 @@ object TestModels {
     DisposalValueModel(150000),
     AcquisitionCostsModel(0),
     DisposalCostsModel(0),
-    CalculationElectionModel(Flat),
+    CalculationElectionModel("flat"),
     OtherReliefsModel(0),
     OtherReliefsModel(0),
     OtherReliefsModel(0),
@@ -94,7 +93,7 @@ object TestModels {
     DisposalValueModel(150000),
     AcquisitionCostsModel(300),
     DisposalCostsModel(600),
-    CalculationElectionModel(Flat),
+    CalculationElectionModel("flat"),
     OtherReliefsModel(999),
     OtherReliefsModel(888),
     OtherReliefsModel(777),
@@ -115,7 +114,7 @@ object TestModels {
     DisposalValueModel(150000),
     AcquisitionCostsModel(0),
     DisposalCostsModel(0),
-    CalculationElectionModel(Flat),
+    CalculationElectionModel("flat"),
     OtherReliefsModel(0),
     OtherReliefsModel(0),
     OtherReliefsModel(0),
@@ -136,7 +135,7 @@ object TestModels {
     DisposalValueModel(150000),
     AcquisitionCostsModel(300),
     DisposalCostsModel(600),
-    CalculationElectionModel(Flat),
+    CalculationElectionModel("flat"),
     OtherReliefsModel(999),
     OtherReliefsModel(888),
     OtherReliefsModel(777),
@@ -157,7 +156,7 @@ object TestModels {
     DisposalValueModel(150000),
     AcquisitionCostsModel(300),
     DisposalCostsModel(600),
-    CalculationElectionModel(Flat),
+    CalculationElectionModel("flat"),
     OtherReliefsModel(999),
     OtherReliefsModel(888),
     OtherReliefsModel(777),
@@ -178,7 +177,7 @@ object TestModels {
     DisposalValueModel(150000),
     AcquisitionCostsModel(300),
     DisposalCostsModel(600),
-    CalculationElectionModel(Rebased),
+    CalculationElectionModel("rebased"),
     OtherReliefsModel(999),
     OtherReliefsModel(888),
     OtherReliefsModel(777),
@@ -199,7 +198,7 @@ object TestModels {
     DisposalValueModel(150000),
     AcquisitionCostsModel(300),
     DisposalCostsModel(600),
-    CalculationElectionModel(Rebased),
+    CalculationElectionModel("rebased"),
     OtherReliefsModel(999),
     OtherReliefsModel(888),
     OtherReliefsModel(0),
@@ -220,7 +219,7 @@ object TestModels {
     DisposalValueModel(150000),
     AcquisitionCostsModel(300),
     DisposalCostsModel(600),
-    CalculationElectionModel(Rebased),
+    CalculationElectionModel("rebased"),
     OtherReliefsModel(999),
     OtherReliefsModel(888),
     OtherReliefsModel(0),
@@ -241,7 +240,7 @@ object TestModels {
     DisposalValueModel(150000),
     AcquisitionCostsModel(300),
     DisposalCostsModel(600),
-    CalculationElectionModel(Rebased),
+    CalculationElectionModel("rebased"),
     OtherReliefsModel(999),
     OtherReliefsModel(888),
     OtherReliefsModel(0),
@@ -262,7 +261,7 @@ object TestModels {
     DisposalValueModel(150000),
     AcquisitionCostsModel(300),
     DisposalCostsModel(600),
-    CalculationElectionModel(Rebased),
+    CalculationElectionModel("rebased"),
     OtherReliefsModel(999),
     OtherReliefsModel(888),
     OtherReliefsModel(0),
@@ -283,7 +282,7 @@ object TestModels {
     DisposalValueModel(150000),
     AcquisitionCostsModel(300),
     DisposalCostsModel(600),
-    CalculationElectionModel(Rebased),
+    CalculationElectionModel("rebased"),
     OtherReliefsModel(999),
     OtherReliefsModel(888),
     OtherReliefsModel(0),
@@ -304,7 +303,7 @@ object TestModels {
     DisposalValueModel(150000),
     AcquisitionCostsModel(300),
     DisposalCostsModel(600),
-    CalculationElectionModel(Rebased),
+    CalculationElectionModel("rebased"),
     OtherReliefsModel(999),
     OtherReliefsModel(888),
     OtherReliefsModel(0),
@@ -325,7 +324,7 @@ object TestModels {
     DisposalValueModel(150000),
     AcquisitionCostsModel(300),
     DisposalCostsModel(600),
-    CalculationElectionModel(Rebased),
+    CalculationElectionModel("rebased"),
     OtherReliefsModel(999),
     OtherReliefsModel(888),
     OtherReliefsModel(0),
@@ -346,7 +345,7 @@ object TestModels {
     DisposalValueModel(150000),
     AcquisitionCostsModel(300),
     DisposalCostsModel(600),
-    CalculationElectionModel(Flat),
+    CalculationElectionModel("flat"),
     OtherReliefsModel(999),
     OtherReliefsModel(888),
     OtherReliefsModel(777),

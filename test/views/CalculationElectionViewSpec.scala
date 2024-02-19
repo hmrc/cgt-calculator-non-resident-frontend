@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package views
 
 import assets.MessageLookup.NonResident.{CalculationElection => messages}
 import assets.MessageLookup.{NonResident => commonMessages}
-import common.{CommonPlaySpec, WithCommonFakeApplication}
 import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import forms.CalculationElectionForm._
@@ -27,6 +26,7 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.i18n.Messages
 import play.api.mvc.MessagesControllerComponents
 import views.html.calculation.calculationElection
+import common.{CommonPlaySpec, WithCommonFakeApplication}
 
 class CalculationElectionViewSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with MockitoSugar {
 
@@ -103,6 +103,16 @@ class CalculationElectionViewSpec extends CommonPlaySpec with WithCommonFakeAppl
 
     "have no pre-selected option" in {
       doc.body.getElementById("calculationElection").parent.classNames().contains("selected") shouldBe false
+    }
+
+    "supplied with errors" should {
+      lazy val form = calculationElectionForm.bind(Map("calculationElection" -> "a"))
+      lazy val view = calculationElectionView(form, seq)(fakeRequest,mockMessage)
+      lazy val document = Jsoup.parse(view.body)
+
+      "have an error summary" in {
+        document.getElementsByClass("govuk-error-summary").size() shouldBe 1
+      }
     }
 
     "should produce the same output when render and f are called" in {

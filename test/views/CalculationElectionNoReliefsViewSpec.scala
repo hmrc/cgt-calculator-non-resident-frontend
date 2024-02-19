@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -161,6 +161,16 @@ class CalculationElectionNoReliefsViewSpec extends CommonPlaySpec with WithCommo
             input.get(2).attr("id") shouldBe "calculationElection-3"
           }
         }
+      }
+    }
+
+    "supplied with errors" should {
+      lazy val form = calculationElectionForm.bind(Map("calculationElection" -> "a"))
+      lazy val view = calculationElectionNoReliefsView(form, rebasedLowestTaxOwed)(fakeRequest, mockMessage)
+      lazy val document = Jsoup.parse(view.body)
+
+      "have an error summary" in {
+        document.select(".govuk-error-summary").size() shouldBe 1
       }
     }
 

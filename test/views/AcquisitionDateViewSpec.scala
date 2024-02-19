@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 
 package views
 
+import java.time.LocalDate
+
 import assets.MessageLookup.{NonResident => messages}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import config.ApplicationConfig
@@ -25,8 +27,6 @@ import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import views.html.calculation.acquisitionDate
-
-import java.time.LocalDate
 
 class AcquisitionDateViewSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 

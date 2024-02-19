@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +16,16 @@
 
 package views
 
-import _root_.views.html.calculation.outsideTaxYear
 import assets.MessageLookup.{NonResident => commonMessages, OutsideTaxYears => messages}
-import common.{CommonPlaySpec, WithCommonFakeApplication}
 import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import models.TaxYearModel
 import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
+import views.html.{calculation => views}
+import _root_.views.html.calculation.outsideTaxYear
+import common.{CommonPlaySpec, WithCommonFakeApplication}
 
 class OutsideTaxYearViewSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with MockitoSugar {
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]

@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,22 +17,36 @@
 package forms
 
 import assets.KeyLookup.{NonResident => messages}
-import common.nonresident.Flat
 import common.{CommonPlaySpec, WithCommonFakeApplication}
+import models.CalculationElectionModel
 import forms.CalculationElectionForm._
 
 class CalculationElectionFormSpec extends CommonPlaySpec with WithCommonFakeApplication {
 
   "Creating a form with a valid model" should {
 
-      lazy val form = calculationElectionForm.bind(Map("calculationElection" -> "flat"))
+      lazy val model = CalculationElectionModel("flat")
+      lazy val form = calculationElectionForm.fill(model)
 
     "return a form with 0 errors" in {
       form.errors.size shouldBe 0
     }
 
     "return a form with the data specified in the model" in {
-      form.value.map(_.calculationType) shouldBe Some(Flat)
+      form.value shouldBe Some(model)
+    }
+  }
+
+  "Creating a form with a valid map" should {
+
+    lazy val form = calculationElectionForm.bind(Map("calculationElection" -> "time"))
+
+    "return a form with the data specified in the map" in {
+      form.value shouldBe Some(CalculationElectionModel("time"))
+    }
+
+    "return a form with 0 errors" in {
+      form.errors.size shouldBe 0
     }
   }
 
