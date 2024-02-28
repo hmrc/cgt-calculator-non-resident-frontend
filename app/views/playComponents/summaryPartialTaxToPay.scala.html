@@ -19,7 +19,9 @@
 @(taxToPay: BigDecimal, gainAtBandOne: BigDecimal, gainAtBandTwo: BigDecimal, taxAtBandOne: BigDecimal, taxAtBandTwo: BigDecimal, taxRateOne: Int, taxRateTwo: Int)(implicit request: Request[_], messages: Messages, messagesApi: Option[MessagesApi] = None)
 
 <div id="yourTaxRate">
-    <h3 class="govuk-heading-m">@Messages("calc.summaryPartial.yourTaxRate")</h3>
+    @if(taxToPay > 0) {
+        <h3 class="govuk-heading-m">@Messages("calc.summaryPartial.yourTaxRate")</h3>
+    }
 
     <p class="govuk-body">@Messages("calc.summaryPartial.incomeBandInfo")</p>
     <table class="govuk-table cgt-for-print">

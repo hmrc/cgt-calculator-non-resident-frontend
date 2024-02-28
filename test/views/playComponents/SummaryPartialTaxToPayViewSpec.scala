@@ -158,7 +158,7 @@ class SummaryPartialTaxToPayViewSpec
       lazy val doc = Jsoup.parse(view.body)
 
       s"does not have the text ${messages.yourTaxRate}" in {
-        doc.select("h3").isEmpty shouldBe false
+        doc.select("h3").isEmpty shouldBe true
       }
 
       "does not have a information line" in {
