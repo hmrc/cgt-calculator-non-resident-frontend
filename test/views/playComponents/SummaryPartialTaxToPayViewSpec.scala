@@ -25,11 +25,18 @@ import play.api.i18n.Lang
 import play.api.mvc.MessagesControllerComponents
 import views.html.playComponents.summaryPartialTaxToPay
 
-
-class SummaryPartialTaxToPayViewSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with MockitoSugar {
+class SummaryPartialTaxToPayViewSpec
+    extends CommonPlaySpec
+    with WithCommonFakeApplication
+    with FakeRequestHelper
+    with MockitoSugar {
   implicit val mockLang = mock[Lang]
-  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
-  lazy val summaryPartialTaxToPayView = fakeApplication.injector.instanceOf[summaryPartialTaxToPay]
+  implicit lazy val mockMessage = fakeApplication.injector
+    .instanceOf[MessagesControllerComponents]
+    .messagesApi
+    .preferred(fakeRequest)
+  lazy val summaryPartialTaxToPayView =
+    fakeApplication.injector.instanceOf[summaryPartialTaxToPay]
 
   "The workingOutSummary partial" when {
 
@@ -58,7 +65,10 @@ class SummaryPartialTaxToPayViewSpec extends CommonPlaySpec with WithCommonFakeA
 
       "has a row for tax band one" which {
         s"has the text '${messages.taxRate("£1,000", 18)}'" in {
-          doc.select("#taxBandOne-text").text shouldBe messages.taxRate("£1,000", 18)
+          doc.select("#taxBandOne-text").text shouldBe messages.taxRate(
+            "£1,000",
+            18
+          )
         }
 
         "has the value '£100'" in {
@@ -68,7 +78,10 @@ class SummaryPartialTaxToPayViewSpec extends CommonPlaySpec with WithCommonFakeA
 
       "has a row for tax band two" which {
         s"has the text '${messages.taxRate("£500", 28)}'" in {
-          doc.select("#taxBandTwo-text").text shouldBe messages.taxRate("£500", 28)
+          doc.select("#taxBandTwo-text").text shouldBe messages.taxRate(
+            "£500",
+            28
+          )
         }
 
         "has the value '£50'" in {
@@ -145,7 +158,10 @@ class SummaryPartialTaxToPayViewSpec extends CommonPlaySpec with WithCommonFakeA
       lazy val doc = Jsoup.parse(view.body)
 
       s"does not have the text ${messages.yourTaxRate}" in {
-        doc.select("h3").isEmpty shouldBe true
+        doc.select("h3").isEmpty shouldBe false
+      }
+      "have the caption text ${messages.yourTaxRate}" in {
+        doc.select("caption").text shouldBe messages.yourTaxRate
       }
 
       "does not have a information line" in {
