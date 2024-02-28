@@ -24,6 +24,7 @@ totalDeductions: BigDecimal)(implicit request: Request[_], messages: Messages, m
     <h3 class="govuk-heading-m">@Messages("calc.summaryPartial.deductionsSectionHeading")</h3>
 
     <table class="govuk-table">
+        <caption class="govuk-table__caption govuk-table__caption--m govuk-visually-hidden">@Messages("calc.summaryPartial.deductionsSectionHeading")</caption>
         <tbody class="govuk-table__body">
             @if(reliefsUsed > 0) {
                 @summaryNumericRow("reliefsUsed", Messages("calc.summaryPartial.reliefsUsed"), reliefsUsed)

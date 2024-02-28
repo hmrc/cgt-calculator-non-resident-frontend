@@ -36,6 +36,8 @@ percentageTotalGain: BigDecimal = 0, percentageOfGain: Int = 0)(implicit request
     <h3 class="govuk-heading-m">@if(totalGain >= 0){@Messages("calc.summaryPartial.yourTotalGain")}else{@Messages("calc.summaryPartial.yourTotalLoss")}</h3>
 
     <table class="govuk-table">
+        <caption class="govuk-table__caption govuk-table__caption--m govuk-visually-hidden">@if(totalGain >= 0){@Messages("calc.summaryPartial.yourTotalGain")}else{@Messages("calc.summaryPartial.yourTotalLoss")}</caption>
+
         <tbody class="govuk-table__body">
     @summaryNumericRow("disposalValue",Messages("calc.summaryPartial.valueWhenSold"), disposalValue)
 

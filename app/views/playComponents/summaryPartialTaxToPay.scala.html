@@ -19,12 +19,15 @@
 @(taxToPay: BigDecimal, gainAtBandOne: BigDecimal, gainAtBandTwo: BigDecimal, taxAtBandOne: BigDecimal, taxAtBandTwo: BigDecimal, taxRateOne: Int, taxRateTwo: Int)(implicit request: Request[_], messages: Messages, messagesApi: Option[MessagesApi] = None)
 
 <div id="yourTaxRate">
-    <table class="govuk-table">
-        <tbody class="govuk-table__body">
-            @if(taxToPay > 0) {
-                <h3 class="govuk-heading-m">@Messages("calc.summaryPartial.yourTaxRate")</h3>
+    <h3 class="govuk-heading-m">@Messages("calc.summaryPartial.yourTaxRate")</h3>
 
-                <p class="govuk-body">@Messages("calc.summaryPartial.incomeBandInfo")</p>
+    <p class="govuk-body">@Messages("calc.summaryPartial.incomeBandInfo")</p>
+    <table class="govuk-table cgt-for-print">
+        <caption class="govuk-table__caption govuk-table__caption--m govuk-visually-hidden">@Messages("calc.summaryPartial.yourTaxRate")</caption>
+
+        <tbody class="govuk-table__body">
+
+             @if(taxToPay > 0) {
 
                 @if(gainAtBandOne > 0) {
                     @summaryNumericRow("taxBandOne", Messages("calc.summaryPartial.taxRate", gainAtBandOne, taxRateOne), taxAtBandOne)

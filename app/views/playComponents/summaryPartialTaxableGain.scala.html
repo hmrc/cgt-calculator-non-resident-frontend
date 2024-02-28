@@ -20,10 +20,11 @@
 
 <div id="yourTaxableGain">
 
+    <h3 class="govuk-heading-m">@Messages("calc.summaryPartial.yourTaxableGain")</h3>
     <table class="govuk-table">
+        <caption class="govuk-table__caption govuk-table__caption--m govuk-visually-hidden">@Messages("calc.summaryPartial.yourTaxableGain")</caption>
         <tbody class="govuk-table__body">
             @if(gain > 0){
-                <h3 class="govuk-heading-m">@Messages("calc.summaryPartial.yourTaxableGain")</h3>
                 @summaryNumericRow("gain", Messages("calc.summaryPartial.totalGain"), gain)
                 @summaryNumericRow("minusDeductions", Messages("calc.summaryPartial.minusDeductions"), totalDeductions)
                 @summaryNumericRow("taxableGain", Messages("calc.summaryPartial.taxableGain"), taxableGain, isTotal = true)
