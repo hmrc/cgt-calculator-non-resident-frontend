@@ -1,19 +1,18 @@
 @*
- * Copyright 2024 HM Revenue & Customs
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *@
-
+* Copyright 2024 HM Revenue & Customs
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*@
 @this(summaryNumericRow: summaryNumericRow)
 
 @(taxToPay: BigDecimal, gainAtBandOne: BigDecimal, gainAtBandTwo: BigDecimal, taxAtBandOne: BigDecimal, taxAtBandTwo: BigDecimal, taxRateOne: Int, taxRateTwo: Int)(implicit request: Request[_], messages: Messages, messagesApi: Option[MessagesApi] = None)
@@ -21,26 +20,26 @@
 <div id="yourTaxRate">
     @if(taxToPay > 0) {
         <h3 class="govuk-heading-m">@Messages("calc.summaryPartial.yourTaxRate")</h3>
+
+        <p class="govuk-body">@Messages("calc.summaryPartial.incomeBandInfo")</p>
     }
+<table class="govuk-table cgt-for-print">
+    <caption class="govuk-table__caption govuk-table__caption--m govuk-visually-hidden">@Messages("calc.summaryPartial.yourTaxRate")</caption>
 
-    <p class="govuk-body">@Messages("calc.summaryPartial.incomeBandInfo")</p>
-    <table class="govuk-table cgt-for-print">
-        <caption class="govuk-table__caption govuk-table__caption--m govuk-visually-hidden">@Messages("calc.summaryPartial.yourTaxRate")</caption>
+    <tbody class="govuk-table__body">
 
-        <tbody class="govuk-table__body">
+        @if(taxToPay > 0) {
 
-             @if(taxToPay > 0) {
-
-                @if(gainAtBandOne > 0) {
-                    @summaryNumericRow("taxBandOne", Messages("calc.summaryPartial.taxRate", gainAtBandOne, taxRateOne), taxAtBandOne)
-                }
-
-                @if(gainAtBandTwo > 0) {
-                    @summaryNumericRow("taxBandTwo", Messages("calc.summaryPartial.taxRate", gainAtBandTwo, taxRateTwo), taxAtBandTwo)
-                }
+            @if(gainAtBandOne > 0) {
+                @summaryNumericRow("taxBandOne", Messages("calc.summaryPartial.taxRate", gainAtBandOne, taxRateOne), taxAtBandOne)
             }
-            @summaryNumericRow("taxToPay", Messages("calc.summaryPartial.taxToPay"), taxToPay, isTotal = true)
-        </tbody>
-    </table>
+
+            @if(gainAtBandTwo > 0) {
+                @summaryNumericRow("taxBandTwo", Messages("calc.summaryPartial.taxRate", gainAtBandTwo, taxRateTwo), taxAtBandTwo)
+            }
+        }
+        @summaryNumericRow("taxToPay", Messages("calc.summaryPartial.taxToPay"), taxToPay, isTotal = true)
+</tbody>
+</table>
 
 </div>
