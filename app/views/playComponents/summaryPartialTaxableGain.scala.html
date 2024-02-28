@@ -19,8 +19,9 @@
 @(gain: BigDecimal, totalDeductions: BigDecimal, taxableGain: BigDecimal)(implicit request: Request[_], messages: Messages, messagesApi: Option[MessagesApi] = None)
 
 <div id="yourTaxableGain">
-
-    <h3 class="govuk-heading-m">@Messages("calc.summaryPartial.yourTaxableGain")</h3>
+    @if(gain > 0) {
+        <h3 class="govuk-heading-m">@Messages("calc.summaryPartial.yourTaxableGain")</h3>
+    }
     <table class="govuk-table">
         <caption class="govuk-table__caption govuk-table__caption--m govuk-visually-hidden">@Messages("calc.summaryPartial.yourTaxableGain")</caption>
         <tbody class="govuk-table__body">

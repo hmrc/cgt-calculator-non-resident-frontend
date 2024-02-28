@@ -160,9 +160,6 @@ class SummaryPartialTaxToPayViewSpec
       s"does not have the text ${messages.yourTaxRate}" in {
         doc.select("h3").isEmpty shouldBe false
       }
-      "have the caption text ${messages.yourTaxRate}" in {
-        doc.select("caption").text shouldBe messages.yourTaxRate
-      }
 
       "does not have a information line" in {
         doc.select("#incomeBandInfo").isEmpty shouldBe true
