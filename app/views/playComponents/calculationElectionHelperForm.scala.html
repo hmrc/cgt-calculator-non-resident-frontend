@@ -67,8 +67,7 @@
     items = radioOptions.map { case (value, amount, message, calcType, dateMessage, otherReliefs) =>
         RadioItem(
             value = Some(value),
-            content = HtmlContent(itemContent(Messages(calcType), Messages(message), dateMessage.map(Messages(_)), BigDecimal(amount))),
-            conditionalHtml = otherReliefs.map(otherReliefsContent(_, value))
+            content = HtmlContent(itemContent(Messages(calcType), Messages(message), dateMessage.map(Messages(_)), BigDecimal(amount)))
         )
     }
 )
