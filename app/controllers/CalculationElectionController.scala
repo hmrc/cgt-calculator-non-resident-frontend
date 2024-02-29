@@ -83,7 +83,7 @@ class CalculationElectionController @Inject()(calcConnector: CalculatorConnector
                                      prrModel: Option[PrivateResidenceReliefModel],
                                      totalTaxOwedModel: Option[TotalPersonalDetailsCalculationModel],
                                      maxAEA: BigDecimal,
-                                     otherReliefs: Option[AllOtherReliefsModel],
+                                     otherReliefs: Option[OtherReliefsModel],
                                      propertyLivedInModel: Option[PropertyLivedInModel])
                                     (implicit hc: HeaderCarrier): Future[Option[CalculationResultsWithTaxOwedModel]] = {
 
@@ -99,19 +99,11 @@ class CalculationElectionController @Inject()(calcConnector: CalculatorConnector
   }
 
   private def getAllOtherReliefs(totalGainResultsModel: TotalGainResultsModel)
-                                (implicit request: Request[_]): Future[Option[AllOtherReliefsModel]] = {
-    val results = Seq(totalGainResultsModel.flatGain) ++ Seq(totalGainResultsModel.rebasedGain, totalGainResultsModel.timeApportionedGain).flatten
+                                (implicit request: Request[_]): Future[Option[OtherReliefsModel]] = {
+    val gain = Seq(totalGainResultsModel.flatGain) ++ Seq(totalGainResultsModel.rebasedGain, totalGainResultsModel.timeApportionedGain).flatten
 
-    if (results.exists(_ > 0)) {
-      val flat = sessionCacheService.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsFlat)
-      val rebased = sessionCacheService.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsRebased)
-      val time = sessionCacheService.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsTA)
-
-      for {
-        flatReliefs <- flat
-        rebasedReliefs <- rebased
-        timeReliefs <- time
-      } yield Some(AllOtherReliefsModel(flatReliefs, rebasedReliefs, timeReliefs))
+    if (gain.exists(_ > 0)) {
+      sessionCacheService.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsFlat)
     } else Future.successful(None)
   }
 
@@ -152,8 +144,6 @@ class CalculationElectionController @Inject()(calcConnector: CalculatorConnector
       sessionCacheService.saveFormData(KeystoreKeys.calculationElection, model)
       request.body.asFormUrlEncoded.flatMap(_.get("action").map(_.head)) match {
         case Some("flat") => Future.successful(Redirect(routes.OtherReliefsFlatController.otherReliefsFlat))
-        case Some("timeApportioned") => Future.successful(Redirect(routes.OtherReliefsTAController.otherReliefsTA))
-        case Some("rebased") => Future.successful(Redirect(routes.OtherReliefsRebasedController.otherReliefsRebased))
         case _ => Future.successful(Redirect(routes.SummaryController.summary))
       }
     }

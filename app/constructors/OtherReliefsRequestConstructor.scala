@@ -20,9 +20,9 @@ import models.{AllOtherReliefsModel, OtherReliefsModel}
 
 object OtherReliefsRequestConstructor {
 
-  def otherReliefsQuery(otherReliefs: Option[AllOtherReliefsModel]): String = otherReliefs match {
+  def otherReliefsQuery(otherReliefs: Option[OtherReliefsModel]): String = otherReliefs match {
     case Some(data) =>
-      s"${flatReliefsQuery(data.otherReliefsFlat)}${rebasedReliefsQuery(data.otherReliefsRebased)}${timeApportionedReliefsQuery(data.otherReliefsTime)}"
+      s"${flatReliefsQuery(otherReliefs)}${rebasedReliefsQuery(otherReliefs)}${timeApportionedReliefsQuery(otherReliefs)}"
     case _ => ""
   }
 

@@ -59,7 +59,7 @@ class CalculatorConnector @Inject()(val http: DefaultHttpClient,
                              propertyLivedInModel: Option[PropertyLivedInModel],
                              totalTaxPersonalDetailsModel: Option[TotalPersonalDetailsCalculationModel],
                              maxAnnualExemptAmount: BigDecimal,
-                             otherReliefs: Option[AllOtherReliefsModel] = None)(implicit hc: HeaderCarrier):
+                             otherReliefs: Option[OtherReliefsModel] = None)(implicit hc: HeaderCarrier):
   Future[Option[CalculationResultsWithTaxOwedModel]] = {
 
     http.GET[Option[CalculationResultsWithTaxOwedModel]](s"$serviceUrl/capital-gains-calculator/non-resident/calculate-tax-owed?${

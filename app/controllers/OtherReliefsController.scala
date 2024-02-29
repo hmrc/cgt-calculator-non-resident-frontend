@@ -100,7 +100,7 @@ class OtherReliefsController @Inject()(calcConnector: CalculatorConnector,
 
     def successAction(model: OtherReliefsModel) = {
       sessionCacheService.saveFormData(KeystoreKeys.otherReliefsFlat, model).map(_ =>
-        Redirect(routes.SummaryController.summary))
+        Redirect(routes.CalculationElectionController.calculationElection))
     }
 
     otherReliefsForm.bindFromRequest().fold(

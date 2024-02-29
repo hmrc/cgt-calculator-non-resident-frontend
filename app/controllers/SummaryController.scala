@@ -67,7 +67,7 @@ class SummaryController @Inject()(calcConnector: CalculatorConnector,
                          propertyLivedInModel: Option[PropertyLivedInModel],
                          totalPersonalDetailsCalculationModel: Option[TotalPersonalDetailsCalculationModel],
                          maxAEA: BigDecimal,
-                         otherReliefs: Option[AllOtherReliefsModel]): Future[Option[CalculationResultsWithTaxOwedModel]] = {
+                         otherReliefs: Option[OtherReliefsModel]): Future[Option[CalculationResultsWithTaxOwedModel]] = {
       calcConnector.calculateNRCGTTotalTax(totalGainAnswersModel,
         privateResidenceReliefModel,
         propertyLivedInModel,
@@ -76,18 +76,10 @@ class SummaryController @Inject()(calcConnector: CalculatorConnector,
         otherReliefs)
     }
 
-    def getAllOtherReliefs(totalPersonalDetailsCalculationModel: Option[TotalPersonalDetailsCalculationModel]): Future[Option[AllOtherReliefsModel]] = {
+    def getAllOtherReliefs(totalPersonalDetailsCalculationModel: Option[TotalPersonalDetailsCalculationModel]): Future[Option[OtherReliefsModel]] = {
       totalPersonalDetailsCalculationModel match {
         case Some(_) =>
-          val flat = sessionCacheService.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsFlat)
-          val rebased = sessionCacheService.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsRebased)
-          val time = sessionCacheService.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsTA)
-
-          for {
-            flatReliefs <- flat
-            rebasedReliefs <- rebased
-            timeReliefs <- time
-          } yield Some(AllOtherReliefsModel(flatReliefs, rebasedReliefs, timeReliefs))
+          sessionCacheService.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsFlat)
         case _ => Future.successful(None)
       }
     }
