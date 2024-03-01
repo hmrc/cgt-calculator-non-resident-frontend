@@ -19,7 +19,7 @@ package models
 import common.CommonPlaySpec
 import play.api.libs.json.Json
 
-class ImprovementsModelSpec extends CommonPlaySpec {
+class ImprovementsRebasedModelSpec extends CommonPlaySpec {
 
 
   val testRebasedValueModel = RebasedValueModel(100)
@@ -39,25 +39,25 @@ class ImprovementsModelSpec extends CommonPlaySpec {
       "Improvements model has isClaimingImprovements = 'yes', improvementAmt and improvementAfterAmt defined" in {
         val value = ImprovementsModel("Yes", Some(100), Some(100))
 
-        ImprovementsModel.postWrites(Some(testRebasedValueModel), beforeStartDate).writes(value) shouldBe
+        ImprovementsRebasedModel.postWrites(Some(testRebasedValueModel), beforeStartDate).writes(value) shouldBe
           Json.obj(("improvements", 100), ("improvementsAfterTaxStarted", 100))
       }
       "Improvements model has isClaimingImprovements = 'yes' and improvementAfterAmt defined" in {
         val value = ImprovementsModel("Yes", None, Some(100))
 
-        ImprovementsModel.postWrites(Some(testRebasedValueModel), beforeStartDate).writes(value) shouldBe
+        ImprovementsRebasedModel.postWrites(Some(testRebasedValueModel), beforeStartDate).writes(value) shouldBe
           Json.obj(("improvementsAfterTaxStarted", 100))
       }
       "Improvements model has isClaimingImprovements = 'yes' and improvementAmt defined" in {
         val value = ImprovementsModel("Yes", Some(100), None)
 
-        ImprovementsModel.postWrites(Some(testRebasedValueModel), beforeStartDate).writes(value) shouldBe
+        ImprovementsRebasedModel.postWrites(Some(testRebasedValueModel), beforeStartDate).writes(value) shouldBe
           Json.obj(("improvements", 100))
       }
       "Improvements model has isClaimingImprovements = 'yes', improvementAmt and improvementAfterAmt defined and the tax date is after 5/4/2015" in {
         val value = ImprovementsModel("Yes", Some(100), Some(100))
 
-        ImprovementsModel.postWrites(Some(testRebasedValueModel), afterStartDate).writes(value) shouldBe
+        ImprovementsRebasedModel.postWrites(Some(testRebasedValueModel), afterStartDate).writes(value) shouldBe
           Json.obj(("improvements", 100))
       }
     }
@@ -65,13 +65,13 @@ class ImprovementsModelSpec extends CommonPlaySpec {
       "Improvements model has isClaimingImprovements = 'Yes' and improvementAfterAmt defined and the tax date is after 5/4/2015" in {
         val value = ImprovementsModel("Yes", None, Some(100))
 
-        ImprovementsModel.postWrites(Some(testRebasedValueModel), afterStartDate).writes(value) shouldBe
+        ImprovementsRebasedModel.postWrites(Some(testRebasedValueModel), afterStartDate).writes(value) shouldBe
           Json.obj()
       }
       "Improvements model has isClaimingImprovements = 'No', improvementAmt and improvementAfterAmt defined" in {
         val value = ImprovementsModel("No", Some(100), Some(100))
 
-        ImprovementsModel.postWrites(Some(testRebasedValueModel), beforeStartDate).writes(value) shouldBe
+        ImprovementsRebasedModel.postWrites(Some(testRebasedValueModel), beforeStartDate).writes(value) shouldBe
           Json.obj()
       }
     }

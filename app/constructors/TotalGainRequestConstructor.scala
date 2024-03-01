@@ -27,9 +27,9 @@ object TotalGainRequestConstructor {
     disposalCosts(totalGainAnswersModel.disposalCostsModel) +
     acquisitionValue(totalGainAnswersModel.acquisitionValueModel) +
     acquisitionCosts(totalGainAnswersModel.acquisitionCostsModel, totalGainAnswersModel.costsAtLegislationStart, totalGainAnswersModel.acquisitionDateModel) +
-    improvements(totalGainAnswersModel.improvementsModel) +
+    improvements(totalGainAnswersModel.improvementsRebasedModel.get) +
     rebasedValues(totalGainAnswersModel.rebasedValueModel, totalGainAnswersModel.rebasedCostsModel,
-      totalGainAnswersModel.improvementsModel, totalGainAnswersModel.acquisitionDateModel) +
+      totalGainAnswersModel.improvementsRebasedModel.get, totalGainAnswersModel.acquisitionDateModel) +
     disposalDate(totalGainAnswersModel.disposalDateModel) +
     acquisitionDate(totalGainAnswersModel.acquisitionDateModel)
   }
@@ -72,9 +72,9 @@ object TotalGainRequestConstructor {
   }
 
 
-  def improvements(improvementsModel: ImprovementsModel): String = {
-    improvementsModel match {
-      case ImprovementsModel(Some(value), _) =>
+  def improvements(improvementsRebasedModel: ImprovementsRebasedModel): String = {
+    improvementsRebasedModel match {
+      case ImprovementsRebasedModel(value, _) =>
         s"&improvements=${value.toDouble}"
       case _ => ""
     }
@@ -82,12 +82,12 @@ object TotalGainRequestConstructor {
 
   def rebasedValues(rebasedValueModel: Option[RebasedValueModel],
                     rebasedCostsModel: Option[RebasedCostsModel],
-                    improvementsModel: ImprovementsModel,
+                    improvementsRebasedModel: ImprovementsRebasedModel,
                     acquisitionDateModel: DateModel): String = {
     rebasedValueModel match {
       case Some(RebasedValueModel(value))
         if !TaxDates.dateAfterStart(acquisitionDateModel.get) =>
-        s"&rebasedValue=${value.toDouble}${rebasedCosts(rebasedCostsModel.get)}${improvementsAfterTaxStarted(improvementsModel)}"
+        s"&rebasedValue=${value.toDouble}${rebasedCosts(rebasedCostsModel.get)}${improvementsAfterTaxStarted(improvementsRebasedModel)}"
       case _ => ""
     }
   }
@@ -99,9 +99,9 @@ object TotalGainRequestConstructor {
     }
   }
 
-  def improvementsAfterTaxStarted(improvementsModel: ImprovementsModel): String = {
-    improvementsModel match {
-      case ImprovementsModel(_, Some(value)) => s"&improvementsAfterTaxStarted=${value.toDouble}"
+  def improvementsAfterTaxStarted(improvementsRebasedModel: ImprovementsRebasedModel): String = {
+    improvementsRebasedModel match {
+      case ImprovementsRebasedModel( _, value) => s"&improvementsAfterTaxStarted=${value.toDouble}"
       case _ => ""
     }
   }

@@ -26,32 +26,41 @@
     submitButton: playComponents.submitButton
 )
 
-@(improvementsForm: Form[ImprovementsModel], improvementsOptions: Boolean, backUrl: String, ownerBeforeLegislationStart: Boolean)(implicit request: Request[_], messages: Messages, messagesApi: MessagesApi)
+@(improvementsRebasedForm: Form[ImprovementsRebasedModel], backUrl: String, ownerBeforeLegislationStart: Boolean)(implicit request: Request[_], messages: Messages, messagesApi: MessagesApi)
 
 @titleText = @{
     if(ownerBeforeLegislationStart) messages("calc.improvements.ownerBeforeLegislationStartQuestion") else messages("calc.improvements.question")
 }
 
-@amountInput = {
+@beforeAndAfterInput = {
+
+    <div class="govuk-inset-text">
+        @messages("calc.improvements.jointOwnership")
+    </div>
     @formInputMoney(
-        field = improvementsForm("improvementsAmt"),
-        question = messages("calc.improvements.questionTwo"),
+        field = improvementsRebasedForm("improvementsAmt"),
+        question = messages("calc.improvements.questionThree"),
         labelClass = "govuk-label--m",
         hintText = Some(messages("calc.currencyHint", "£10,000.50"))
-    )
+        )
+    @formInputMoney(
+        field = improvementsRebasedForm("improvementsAmtAfter"),
+        question = messages("calc.improvements.questionFour"),
+        labelClass = "govuk-label--m",
+        hintText = Some(messages("calc.currencyHint", "£10,000.50"))
+        )
 }
 
 @layout(
-    pageTitle = if(improvementsForm.errors.nonEmpty) messages("site.title.error", titleText) else titleText
-) {
+    pageTitle = if(improvementsRebasedForm.errors.nonEmpty) messages("site.title.error", titleText) else titleText
+    ) {
 
-    @errorSummary(improvementsForm.errors, Some("improvementsAmt"))
+    @errorSummary(improvementsRebasedForm.errors, Some("improvementsAmt"))
 
     <h1 class="govuk-heading-xl">@titleText</h1>
 
-
     @form(action = controllers.routes.ImprovementsController.submitImprovementsRebased) {
-            @amountInput // improvement
+        @beforeAndAfterInput
         @submitButton()
     }
 

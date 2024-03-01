@@ -25,52 +25,19 @@ import uk.gov.voa.play.form.ConditionalMappings.{isEqual, mandatoryIf}
 
 object ImprovementsForm {
 
-  def improvementsForm(showHiddenQuestion: Boolean): Form[ImprovementsModel] =
-    if (showHiddenQuestion) {
+  val improvementsForm =
       Form(mapping(
-          "improvementsAmt" ->
-            common.Formatters.text("calc.improvements.before.error.required")
-              .transform(stripCurrencyCharacters, stripCurrencyCharacters)
-              .verifying("calc.improvements.before.error.invalid", bigDecimalCheck)
-              .transform(stringToBigDecimal, bigDecimalToString)
-              .verifying(
-                stopOnFirstFail(
-                  negativeConstraint("calc.improvements.before.error.tooLow"),
-                  decimalPlaceConstraint("calc.improvements.before.error.decimalPlaces"),
-                  maxMonetaryValueConstraint(errMsgKey = "calc.improvements.before.error.tooHigh")
-                )
-              ),
-          "improvementsAmtAfter" ->
-            common.Formatters.text("calc.improvements.after.error.required")
-              .transform(stripCurrencyCharacters, stripCurrencyCharacters)
-              .verifying("calc.improvements.after.error.invalid", bigDecimalCheck)
-              .transform(stringToBigDecimal, bigDecimalToString)
-              .verifying(
-                stopOnFirstFail(
-                  negativeConstraint("calc.improvements.after.error.tooLow"),
-                  decimalPlaceConstraint("calc.improvements.after.error.decimalPlaces"),
-                  maxMonetaryValueConstraint(errMsgKey = "calc.improvements.after.error.tooHigh")
-                )
+        "improvementsAmt" ->
+          common.Formatters.text("calc.improvements.error.required")
+            .transform(stripCurrencyCharacters, stripCurrencyCharacters)
+            .verifying("calc.improvements.error.invalid", bigDecimalCheck)
+            .transform(stringToBigDecimal, bigDecimalToString)
+            .verifying(
+              stopOnFirstFail(
+                negativeConstraint("calc.improvements.errorNegative"),
+                decimalPlaceConstraint("calc.improvements.errorDecimalPlaces"),
+                maxMonetaryValueConstraint()
               )
-
-        )(ImprovementsModel.apply)(ImprovementsModel.unapply))
-    } else {
-      Form(mapping(
-          "improvementsAmt" ->
-            common.Formatters.text("calc.improvements.error.required")
-              .transform(stripCurrencyCharacters, stripCurrencyCharacters)
-              .verifying("calc.improvements.error.invalid", bigDecimalCheck)
-              .transform(stringToBigDecimal, bigDecimalToString)
-              .verifying(
-                stopOnFirstFail(
-                  negativeConstraint("calc.improvements.errorNegative"),
-                  decimalPlaceConstraint("calc.improvements.errorDecimalPlaces"),
-                  maxMonetaryValueConstraint()
-                )
-          ),
-        "improvementsAmtAfter" -> optional(text)
-          .transform(stripOptionalCurrencyCharacters, stripOptionalCurrencyCharacters)
-          .transform(optionalStringToOptionalBigDecimal, optionalBigDecimalToOptionalString)
-        )(ImprovementsModel.apply)(ImprovementsModel.unapply))
-    }
+            )
+      )(ImprovementsModel.apply)(ImprovementsModel.unapply))
 }

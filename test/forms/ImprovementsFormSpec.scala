@@ -19,7 +19,7 @@ package forms
 import assets.KeyLookup.{NonResident => messages}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import forms.ImprovementsForm._
-import models.ImprovementsModel
+import models.ImprovementsRebasedModel
 
 class ImprovementsFormSpec extends CommonPlaySpec with WithCommonFakeApplication{
 

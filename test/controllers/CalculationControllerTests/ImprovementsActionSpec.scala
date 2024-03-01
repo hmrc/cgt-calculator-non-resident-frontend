@@ -65,13 +65,13 @@ class ImprovementsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
     )(ec)
   }
 
-  def setupTarget(getData: Option[ImprovementsModel],
+  def setupTarget(getData: Option[ImprovementsRebasedModel],
                   acquisitionDateData: Option[DateModel],
                   rebasedValueData: Option[RebasedValueModel] = None,
                   totalGainResultsModel: Option[TotalGainResultsModel] = None
                  ): ImprovementsController = {
 
-    when(mockSessionCacheService.fetchAndGetFormData[ImprovementsModel](ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.fetchAndGetFormData[ImprovementsRebasedModel](ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
     when(mockSessionCacheService.fetchAndGetFormData[RebasedValueModel](
@@ -88,7 +88,7 @@ class ImprovementsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
     when(mockCalcConnector.calculateTotalGain(ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(Future.successful(totalGainResultsModel))
 
-    when(mockSessionCacheService.saveFormData[ImprovementsModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.saveFormData[ImprovementsRebasedModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(("", "")))
 
     new ImprovementsController(mockCalcConnector, mockSessionCacheService, mockAnswersConstructor, mockMessagesControllerComponents, improvementsView)(ec)

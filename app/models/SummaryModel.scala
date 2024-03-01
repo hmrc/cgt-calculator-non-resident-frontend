@@ -27,7 +27,7 @@ case class SummaryModel(
                          acquisitionValueModel: AcquisitionValueModel,
                          rebasedValueModel: Option[RebasedValueModel],
                          rebasedCostsModel: Option[RebasedCostsModel],
-                         improvementsModel: ImprovementsModel,
+                         improvementsRebasedModel: ImprovementsRebasedModel,
                          disposalDateModel: DateModel,
                          disposalValueModel: DisposalValueModel,
                          acquisitionCostsModel: AcquisitionCostsModel,

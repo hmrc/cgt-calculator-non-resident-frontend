@@ -51,7 +51,7 @@ class CheckYourAnswersController @Inject()(http: DefaultHttpClient,
     case _ =>
       checkGainExists(totalGainResultsModel).map { gain =>
         if(gain) controllers.routes.PrivateResidenceReliefController.privateResidenceRelief.url
-        else controllers.routes.ImprovementsController.improvements.url
+        else controllers.routes.ImprovementsController.improvementsRebased.url
       }
   }
 

@@ -32,7 +32,8 @@ case class TotalGainAnswersModel(disposalDateModel: DateModel,
                                  rebasedValueModel: Option[RebasedValueModel],
                                  rebasedCostsModel: Option[RebasedCostsModel],
                                  isClaimingImprovementsModel: IsClaimingImprovementsModel,
-                                 improvementsModel: ImprovementsModel,
+                                 improvementsModel: Option[ImprovementsModel],
+                                 improvementsRebasedModel: Option[ImprovementsRebasedModel],
                                  otherReliefsFlat: Option[OtherReliefsModel],
                                  costsAtLegislationStart: Option[CostsAtLegislationStartModel] = None)
 
@@ -40,8 +41,11 @@ object TotalGainAnswersModel {
   private val ignore = OWrites[Any](_ => Json.obj())
 
   implicit val postWrites: Writes[TotalGainAnswersModel] = new Writes[TotalGainAnswersModel] {
-    override def writes(o: TotalGainAnswersModel): JsValue =
-      postWrites(o).writes(o)
+    override def writes(o: TotalGainAnswersModel): JsValue = {
+      println(o.improvementsModel)
+      postWrites(o)
+        .writes(o)
+    }
   }
 
   private def postWrites(model: TotalGainAnswersModel): Writes[TotalGainAnswersModel] = (
@@ -58,7 +62,8 @@ object TotalGainAnswersModel {
        __.writeNullable[RebasedValueModel](RebasedValueModel.postWrites(model.acquisitionDateModel)) and
        __.writeNullable[RebasedCostsModel](RebasedCostsModel.postWrites(model.rebasedValueModel, model.acquisitionDateModel)) and
        __.write[IsClaimingImprovementsModel](IsClaimingImprovementsModel.postWrites) and
-       __.write[ImprovementsModel](ImprovementsModel.postWrites(model.rebasedValueModel, model.acquisitionDateModel)) and
+       __.writeNullable[ImprovementsModel](ImprovementsModel.postWrites) and
+       __.writeNullable[ImprovementsRebasedModel](ImprovementsRebasedModel.postWrites(model.rebasedValueModel, model.acquisitionDateModel)) and
       ignore and
       ignore
     ) (unlift(TotalGainAnswersModel.unapply))

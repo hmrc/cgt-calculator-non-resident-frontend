@@ -92,7 +92,7 @@ class AcquisitionCostsController @Inject()(sessionCacheService: SessionCacheServ
 
       def result(acquisitionDateModel: Option[DateModel]) = acquisitionDateModel match {
         case Some(_) if TaxDates.dateAfterStart(acquisitionDateModel.get.get) =>
-          Future.successful(Redirect(routes.ImprovementsController.improvements))
+          Future.successful(Redirect(routes.ImprovementsController.getIsClaimingImprovements))
         case _ => Future.successful(Redirect(routes.RebasedValueController.rebasedValue))
       }
 

@@ -43,7 +43,8 @@ class AnswersConstructor @Inject()(sessionCacheService: SessionCacheService)(imp
     val rebasedValue = sessionCacheService.fetchAndGetFormData[RebasedValueModel](KeystoreKeys.rebasedValue)
     val rebasedCosts = sessionCacheService.fetchAndGetFormData[RebasedCostsModel](KeystoreKeys.rebasedCosts)
     val isClaimingImprovements = sessionCacheService.fetchAndGetFormData[IsClaimingImprovementsModel](KeystoreKeys.isClaimingImprovements).map(data => data.get)
-    val improvements = sessionCacheService.fetchAndGetFormData[ImprovementsModel](KeystoreKeys.improvements).map(data => data.get)
+    val improvementsRebased = sessionCacheService.fetchAndGetFormData[ImprovementsRebasedModel](KeystoreKeys.improvementsRebased)
+    val improvements =  sessionCacheService.fetchAndGetFormData[ImprovementsModel](KeystoreKeys.improvements)
     val otherReliefsFlat = sessionCacheService.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsFlat)
     val costsBeforeLegislationStart = sessionCacheService.fetchAndGetFormData[CostsAtLegislationStartModel](KeystoreKeys.costAtLegislationStart)
 
@@ -89,11 +90,12 @@ class AnswersConstructor @Inject()(sessionCacheService: SessionCacheService)(imp
       rebasedCosts <- rebasedCosts
       isClaimingImprovements <- isClaimingImprovements
       improvements <- improvements
+      improvementsRebased <- improvementsRebased
       otherReliefsFlat <- otherReliefsFlat
       costsBeforeLegislationStart <- costsBeforeLegislationStart
     } yield TotalGainAnswersModel(disposalDate, soldOrGivenAway, soldForLess, disposalValue, disposalCosts,
       howBecameOwner, boughtForLess, acquisitionValue, acquisitionCosts, acquisitionDate,
-      rebasedValue, rebasedCosts, isClaimingImprovements, improvements, otherReliefsFlat, costsBeforeLegislationStart)
+      rebasedValue, rebasedCosts,  isClaimingImprovements, improvements, improvementsRebased, otherReliefsFlat, costsBeforeLegislationStart)
   }
 
   def getPersonalDetailsAndPreviousCapitalGainsAnswers(implicit request: Request[_]): Future[Option[TotalPersonalDetailsCalculationModel]] = {

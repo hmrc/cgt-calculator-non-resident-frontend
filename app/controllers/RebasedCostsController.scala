@@ -53,7 +53,7 @@ class RebasedCostsController @Inject()(http: DefaultHttpClient,
 
     def successAction(model: RebasedCostsModel) = {
       sessionCacheService.saveFormData(KeystoreKeys.rebasedCosts, model).map(_ =>
-        Redirect(routes.ImprovementsController.improvements))
+        Redirect(routes.ImprovementsController.getIsClaimingImprovements))
     }
 
     rebasedCostsForm.bindFromRequest().fold(errorAction, successAction)

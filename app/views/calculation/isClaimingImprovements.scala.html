@@ -36,9 +36,13 @@
     pageTitle = title
 ) {
     @errorSummary(isClaimingImprovementsForm.errors)
+        <h1 class="govuk-heading-xl">@heading</h1>
+        <p class="govuk-body">@messages("calc.improvements.helpOne")</p>
+        <p class="govuk-body">@messages("calc.improvements.exampleOne")</p>
     @form(action = controllers.routes.ImprovementsController.submitIsClaimingImprovements) {
         @inputYesNo(
             legend = heading,
+            legendClass = Some("govuk-visually-hidden"),
             field = isClaimingImprovementsForm("isClaimingImprovements")
         )
         @submitButton()

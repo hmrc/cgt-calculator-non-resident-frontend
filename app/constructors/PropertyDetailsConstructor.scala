@@ -39,25 +39,25 @@ object PropertyDetailsConstructor {
     Some(QuestionAnswerModel[String](s"${keys.improvements}-isClaiming",
       if(answers.isClaimingImprovementsModel.isClaimingImprovements) "Yes" else "No",
       "calc.improvements.question",
-      Some(controllers.routes.ImprovementsController.improvements.url)
+      Some(controllers.routes.ImprovementsController.improvementsRebased.url)
     ))
   }
 
   def constructTotalImprovementsRow(answers: TotalGainAnswersModel, display: Boolean, displayRebased: Boolean): Option[QuestionAnswerModel[BigDecimal]] = {
     if (display && displayRebased) {
-      val total: BigDecimal = answers.improvementsModel.improvementsAmt.getOrElse(BigDecimal(0))
+      val total: BigDecimal = answers.improvementsRebasedModel.get.improvementsAmt
       Some(QuestionAnswerModel[BigDecimal](s"${keys.improvements}-total",
         total,
         "calc.improvements.questionThree",
-        Some(controllers.routes.ImprovementsController.improvements.url)
+        Some(controllers.routes.ImprovementsController.improvementsRebased.url)
       ))
     }
     else if(display) {
-      val total: BigDecimal = answers.improvementsModel.improvementsAmt.getOrElse(BigDecimal(0))
+      val total: BigDecimal = answers.improvementsRebasedModel.get.improvementsAmt
       Some(QuestionAnswerModel[BigDecimal](s"${keys.improvements}-total",
         total,
         "calc.improvements.questionTwo",
-        Some(controllers.routes.ImprovementsController.improvements.url)
+        Some(controllers.routes.ImprovementsController.improvementsRebased.url)
       ))
     }
     else None
@@ -66,9 +66,9 @@ object PropertyDetailsConstructor {
   def constructImprovementsAfterRow(answers: TotalGainAnswersModel, display: Boolean, displayRebased: Boolean): Option[QuestionAnswerModel[BigDecimal]] = {
     if (display && displayRebased) {
       Some(QuestionAnswerModel[BigDecimal](s"${keys.improvements}-after",
-        answers.improvementsModel.improvementsAmtAfter.getOrElse(0),
+        answers.improvementsRebasedModel.get.improvementsAmtAfter,
         "calc.improvements.questionFour",
-        Some(controllers.routes.ImprovementsController.improvements.url)
+        Some(controllers.routes.ImprovementsController.improvementsRebased.url)
       ))
     }
     else None

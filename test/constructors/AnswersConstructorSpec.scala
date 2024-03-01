@@ -106,8 +106,8 @@ class AnswersConstructorSpec extends CommonPlaySpec with MockitoSugar with WithC
     when(mockSessionCacheService.fetchAndGetFormData[RebasedCostsModel](ArgumentMatchers.eq(KeystoreKeys.rebasedCosts))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(totalGainAnswersModel.rebasedCostsModel))
 
-    when(mockSessionCacheService.fetchAndGetFormData[ImprovementsModel](ArgumentMatchers.eq(KeystoreKeys.improvements))(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(Some(totalGainAnswersModel.improvementsModel)))
+    when(mockSessionCacheService.fetchAndGetFormData[ImprovementsRebasedModel](ArgumentMatchers.eq(KeystoreKeys.improvements))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      .thenReturn(Future.successful(Some(totalGainAnswersModel.improvementsRebasedModel)))
 
     when(mockSessionCacheService.fetchAndGetFormData[OtherReliefsModel](
       ArgumentMatchers.eq(KeystoreKeys.otherReliefsFlat))(ArgumentMatchers.any(), ArgumentMatchers.any()))
