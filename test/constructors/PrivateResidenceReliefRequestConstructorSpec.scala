@@ -34,7 +34,8 @@ class PrivateResidenceReliefRequestConstructorSpec extends CommonPlaySpec{
     DateModel(7, 1, 2015),
     None,
     None,
-    ImprovementsModel("No", None, None),
+    IsClaimingImprovementsModel(false),
+    ImprovementsModel(),
     None
   )
 
@@ -51,7 +52,8 @@ class PrivateResidenceReliefRequestConstructorSpec extends CommonPlaySpec{
     DateModel(10, 10, 2015),
     None,
     None,
-    ImprovementsModel("No", None, None),
+    IsClaimingImprovementsModel(false),
+    ImprovementsModel(),
     None
   )
 
@@ -68,7 +70,8 @@ class PrivateResidenceReliefRequestConstructorSpec extends CommonPlaySpec{
     DateModel(10, 10, 2000),
     None,
     None,
-    ImprovementsModel("No", None, None),
+    IsClaimingImprovementsModel(false),
+    ImprovementsModel(),
     None
   )
 
@@ -85,7 +88,8 @@ class PrivateResidenceReliefRequestConstructorSpec extends CommonPlaySpec{
     DateModel(10, 10, 2000),
     Some(RebasedValueModel(1000)),
     None,
-    ImprovementsModel("No", None, None),
+    IsClaimingImprovementsModel(false),
+    ImprovementsModel(),
     None
   )
   val propertyLivedInModel = PropertyLivedInModel(true)

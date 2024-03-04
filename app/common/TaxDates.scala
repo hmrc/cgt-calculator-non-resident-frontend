@@ -17,8 +17,10 @@
 package common
 
 import common.Dates.{constructDate, formatter}
+import models.DateModel
 
 import java.time.LocalDate
+import scala.concurrent.Future
 
 object TaxDates {
   val legislationDate: LocalDate = LocalDate.parse("1/4/1982", formatter)
@@ -31,6 +33,9 @@ object TaxDates {
   def dateAfterStart(day: Int, month: Int, year: Int): Boolean = constructDate(day, month, year).isAfter(taxStartDate)
 
   def dateAfterStart(date: LocalDate): Boolean = date.isAfter(taxStartDate)
+
+  def dateAfterStart(date: Option[DateModel]): Boolean =
+    date.fold(false)(_.isDateAfter(DateModel(taxStartDate.getDayOfMonth, taxStartDate.getMonthValue, taxStartDate.getYear)))
 
   def dateBeforeLegislationStart(day: Int, month: Int, year: Int): Boolean = constructDate(day, month, year).isBefore(legislationDate)
 

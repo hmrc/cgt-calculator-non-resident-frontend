@@ -37,7 +37,8 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
     DateModel(1, 1, 2009),
     None,
     None,
-    ImprovementsModel("No", None, None),
+    IsClaimingImprovementsModel(false),
+    ImprovementsModel(),
     None
   )
 
@@ -54,7 +55,8 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
     DateModel(1, 1, 2009),
     None,
     None,
-    ImprovementsModel("No", None, None),
+    IsClaimingImprovementsModel(false),
+    ImprovementsModel(),
     Some(OtherReliefsModel(0))
   )
 
@@ -71,7 +73,8 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
     DateModel(1, 1, 2016),
     Some(RebasedValueModel(1)),
     Some(RebasedCostsModel("No", None)),
-    ImprovementsModel("No", None, None),
+    IsClaimingImprovementsModel(false),
+    ImprovementsModel(),
     Some(OtherReliefsModel(1450))
   )
 
@@ -88,7 +91,8 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
     DateModel(10, 4, 2015),
     None,
     None,
-    ImprovementsModel("No", None, None),
+    IsClaimingImprovementsModel(false),
+    ImprovementsModel(),
     Some(OtherReliefsModel(1450))
   )
 
@@ -105,7 +109,8 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
     DateModel(10, 2, 2015),
     None,
     None,
-    ImprovementsModel("No", None, None),
+    IsClaimingImprovementsModel(false),
+    ImprovementsModel(),
     Some(OtherReliefsModel(1450))
   )
 
@@ -122,7 +127,8 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
     DateModel(10, 4, 2015),
     None,
     None,
-    ImprovementsModel("No", None, None),
+    IsClaimingImprovementsModel(false),
+    ImprovementsModel(),
     Some(OtherReliefsModel(1450))
   )
 
@@ -139,7 +145,8 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
     DateModel(10, 2, 2016),
     None,
     None,
-    ImprovementsModel("No", None, None),
+    IsClaimingImprovementsModel(false),
+    ImprovementsModel(),
     Some(OtherReliefsModel(1450))
   )
 
@@ -156,7 +163,8 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
     DateModel(10, 2, 1990),
     None,
     None,
-    ImprovementsModel("No", None, None),
+    IsClaimingImprovementsModel(false),
+    ImprovementsModel(),
     Some(OtherReliefsModel(1450))
   )
 

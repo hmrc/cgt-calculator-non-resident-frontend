@@ -31,6 +31,7 @@ object KeystoreKeys {
     val acquisitionValue = "nr:acquisitionValue"
     val rebasedValue = "nr:rebasedValue"
     val rebasedCosts = "nr:rebasedCosts"
+    val isClaimingImprovements = "nr:isClaimingImprovements"
     val improvements = "nr:improvements"
     val disposalDate = "nr:disposalDate"
     val disposalValue = "nr:disposalValue"

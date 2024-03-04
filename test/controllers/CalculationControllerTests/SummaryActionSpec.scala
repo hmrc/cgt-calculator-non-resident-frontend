@@ -138,7 +138,8 @@ class SummaryActionSpec extends CommonPlaySpec with WithCommonFakeApplication wi
     DateModel(1, 1, 2016),
     None,
     None,
-    ImprovementsModel("No", None, None),
+    IsClaimingImprovementsModel(false),
+    ImprovementsModel(),
     None
   )
 

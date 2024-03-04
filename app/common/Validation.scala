@@ -47,13 +47,28 @@ object Validation {
     case Failure(_) => false
   }
 
+  val optionalBigDecimalCheck: Option[String] => Boolean = input => {
+    if(input.isDefined) {
+      Try(BigDecimal(input.get)) match {
+        case Success(_) => true
+        case Failure(_) if input.get.trim == "" => true
+        case Failure(_) => false
+      }
+    } else false
+  }
+
   val integerCheck: String => Boolean = input => Try(input.trim.toInt) match {
     case Success(_) => true
     case Failure(_) if input.trim == "" => true
     case Failure(_) => false
   }
 
-  val mandatoryCheck: String => Boolean = input => input.trim != ""
+  val mandatoryCheck: String => Boolean = input => input.trim.nonEmpty
+
+  val optionalCannotBeEmpty: Option[String] => Boolean = {
+    case Some(value) => value.nonEmpty
+    case _ => false
+  }
 
   val decimalPlacesCheck: BigDecimal => Boolean = input => input.scale < 3
 
@@ -68,8 +83,22 @@ object Validation {
       Invalid(errMsgKey)
   }
 
+  def optionalDecimalPlaceConstraint(errMsgKey: String, decimalPlace: Int = 3): Constraint[Option[BigDecimal]] = Constraint{
+    case Some(input) if input.scale < decimalPlace =>
+      Valid
+    case _ =>
+      Invalid(errMsgKey)
+  }
+
   def negativeConstraint(errMsgKey: String): Constraint[BigDecimal] = Constraint{
     case input if input >= 0 =>
+      Valid
+    case _ =>
+      Invalid(errMsgKey)
+  }
+
+  def optionalNegativeConstraint(errMsgKey: String): Constraint[Option[BigDecimal]] = Constraint{
+    case Some(input) if input >= 0 =>
       Valid
     case _ =>
       Invalid(errMsgKey)
@@ -80,6 +109,14 @@ object Validation {
                                   errMsgKey: String = "calc.common.error.maxNumericExceeded"
                                 ): Constraint[BigDecimal] = Constraint("constraints.maxValue")({
     value => maxMoneyCheck(value, maxValue, errMsgKey)
+  })
+
+  def optionalMaxMonetaryValueConstraint(
+                                  maxValue: BigDecimal = Constants.maxNumeric,
+                                  errMsgKey: String = "calc.common.error.maxNumericExceeded"
+                                ): Constraint[Option[BigDecimal]] = Constraint("constraints.maxValue")({
+    case Some(value) => maxMoneyCheck(value, maxValue, errMsgKey)
+    case _ => Invalid(ValidationError(errMsgKey, MoneyPounds(maxValue, 0).quantity))
   })
 
   def maxMonetaryValueConstraint[T](maxValue: BigDecimal, extractMoney: T => Option[BigDecimal], errMsgKey: Option[String]): Constraint[T] = {

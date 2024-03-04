@@ -37,7 +37,7 @@ class CheckYourAnswersViewSpec extends CommonPlaySpec with WithCommonFakeApplica
   lazy val lang: Lang = Lang("cy")
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   lazy val checkYourAnswersView = fakeApplication.injector.instanceOf[checkYourAnswers]
-  lazy val pageTitle = s"""${messages.question} - ${commonMessages.pageHeading} - GOV.UK"""
+  lazy val pageTitle = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
   val mockMessagesApi = mock[MessagesApi]
 
 
@@ -92,7 +92,7 @@ class CheckYourAnswersViewSpec extends CommonPlaySpec with WithCommonFakeApplica
     "should produce the same output when render and f are called" in {
       val answersSequence = Seq(QuestionAnswerModel("dummyId", 200, "dummyQuestion", Some("google.com")))
 
-      checkYourAnswersView.f(answersSequence, "back-link")(fakeRequest, mockMessage, lang, Some(mockMessagesApi)) shouldBe checkYourAnswersView.render(answersSequence, "back-link", fakeRequest, mockMessage, lang, Some(mockMessagesApi))
+      checkYourAnswersView.  f(answersSequence, "back-link")(fakeRequest, mockMessage, lang, Some(mockMessagesApi)) shouldBe checkYourAnswersView.render(answersSequence, "back-link", fakeRequest, mockMessage, lang, Some(mockMessagesApi))
     }
   }
 

@@ -32,7 +32,7 @@ class RebasedValueViewSpec extends CommonPlaySpec with WithCommonFakeApplication
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   lazy val rebasedValueView = fakeApplication.injector.instanceOf[rebasedValue]
-  val pageTitle = s"""${messages.question} - ${commonMessages.pageHeading} - GOV.UK"""
+  val pageTitle = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
 
   "The rebased value view" when {
 

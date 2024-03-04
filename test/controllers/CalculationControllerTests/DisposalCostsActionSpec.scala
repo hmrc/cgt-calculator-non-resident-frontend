@@ -52,7 +52,7 @@ class DisposalCostsActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val disposalCostsView = fakeApplication.injector.instanceOf[disposalCosts]
-  val pageTitle = s"""${messages.question} - ${commonMessages.pageHeading} - GOV.UK"""
+  val pageTitle = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
 
   class Setup {

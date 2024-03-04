@@ -25,7 +25,7 @@ object PropertyDetailsConstructor {
   def propertyDetailsRows(answers: TotalGainAnswersModel): Seq[QuestionAnswerModel[Any]] = {
 
     val showRebasedImprovements = !TaxDates.dateAfterStart(answers.acquisitionDateModel.get)
-    val showImprovements = answers.improvementsModel.isClaimingImprovements == "Yes"
+    val showImprovements = answers.isClaimingImprovementsModel.isClaimingImprovements
 
     val claimingImprovementsRow = constructClaimingImprovementsRow(answers)
     val improvementsTotalRow = constructTotalImprovementsRow(answers, showImprovements, showRebasedImprovements)
@@ -35,9 +35,10 @@ object PropertyDetailsConstructor {
     sequence.flatten
   }
 
-  def constructClaimingImprovementsRow(answers: TotalGainAnswersModel): Option[QuestionAnswerModel[String]] = {
-    Some(QuestionAnswerModel[String](s"${keys.improvements}-isClaiming",
-      answers.improvementsModel.isClaimingImprovements,
+  def constructClaimingImprovementsRow(answers: TotalGainAnswersModel): Option[QuestionAnswerModel[Boolean]] = {
+
+    Some(QuestionAnswerModel[Boolean](keys.isClaimingImprovements,
+      answers.isClaimingImprovementsModel.isClaimingImprovements,
       "calc.improvements.question",
       Some(controllers.routes.ImprovementsController.improvements.url)
     ))
@@ -45,15 +46,14 @@ object PropertyDetailsConstructor {
 
   def constructTotalImprovementsRow(answers: TotalGainAnswersModel, display: Boolean, displayRebased: Boolean): Option[QuestionAnswerModel[BigDecimal]] = {
     if (display && displayRebased) {
-      val total: BigDecimal = answers.improvementsModel.improvementsAmt.getOrElse(BigDecimal(0))
       Some(QuestionAnswerModel[BigDecimal](s"${keys.improvements}-total",
-        total,
+        answers.improvementsModel.improvementsAmt,
         "calc.improvements.questionThree",
-        Some(controllers.routes.ImprovementsController.improvements.url)
+        Some(controllers.routes.ImprovementsController.improvementsRebased.url)
       ))
     }
     else if(display) {
-      val total: BigDecimal = answers.improvementsModel.improvementsAmt.getOrElse(BigDecimal(0))
+      val total: BigDecimal = answers.improvementsModel.improvementsAmt
       Some(QuestionAnswerModel[BigDecimal](s"${keys.improvements}-total",
         total,
         "calc.improvements.questionTwo",
@@ -68,7 +68,7 @@ object PropertyDetailsConstructor {
       Some(QuestionAnswerModel[BigDecimal](s"${keys.improvements}-after",
         answers.improvementsModel.improvementsAmtAfter.getOrElse(0),
         "calc.improvements.questionFour",
-        Some(controllers.routes.ImprovementsController.improvements.url)
+        Some(controllers.routes.ImprovementsController.improvementsRebased.url)
       ))
     }
     else None

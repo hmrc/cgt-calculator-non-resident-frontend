@@ -42,7 +42,8 @@ class AnswersConstructor @Inject()(sessionCacheService: SessionCacheService)(imp
     val acquisitionDate = sessionCacheService.fetchAndGetFormData[DateModel](KeystoreKeys.acquisitionDate).map(data => data.get)
     val rebasedValue = sessionCacheService.fetchAndGetFormData[RebasedValueModel](KeystoreKeys.rebasedValue)
     val rebasedCosts = sessionCacheService.fetchAndGetFormData[RebasedCostsModel](KeystoreKeys.rebasedCosts)
-    val improvements = sessionCacheService.fetchAndGetFormData[ImprovementsModel](KeystoreKeys.improvements).map(data => data.get)
+    val isClaimingImprovements = sessionCacheService.fetchAndGetFormData[IsClaimingImprovementsModel](KeystoreKeys.isClaimingImprovements)
+    val improvements = sessionCacheService.fetchAndGetFormData[ImprovementsModel](KeystoreKeys.improvements)
     val otherReliefsFlat = sessionCacheService.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsFlat)
     val costsBeforeLegislationStart = sessionCacheService.fetchAndGetFormData[CostsAtLegislationStartModel](KeystoreKeys.costAtLegislationStart)
 
@@ -86,12 +87,13 @@ class AnswersConstructor @Inject()(sessionCacheService: SessionCacheService)(imp
       acquisitionCosts <- acquisitionCosts
       rebasedValue <- rebasedValue
       rebasedCosts <- rebasedCosts
+      isClaimingImprovements <- isClaimingImprovements
       improvements <- improvements
       otherReliefsFlat <- otherReliefsFlat
       costsBeforeLegislationStart <- costsBeforeLegislationStart
     } yield TotalGainAnswersModel(disposalDate, soldOrGivenAway, soldForLess, disposalValue, disposalCosts,
       howBecameOwner, boughtForLess, acquisitionValue, acquisitionCosts, acquisitionDate,
-      rebasedValue, rebasedCosts, improvements, otherReliefsFlat, costsBeforeLegislationStart)
+      rebasedValue, rebasedCosts, isClaimingImprovements.getOrElse(IsClaimingImprovementsModel(false)), improvements.getOrElse(ImprovementsModel()), otherReliefsFlat, costsBeforeLegislationStart)
   }
 
   def getPersonalDetailsAndPreviousCapitalGainsAnswers(implicit request: Request[_]): Future[Option[TotalPersonalDetailsCalculationModel]] = {

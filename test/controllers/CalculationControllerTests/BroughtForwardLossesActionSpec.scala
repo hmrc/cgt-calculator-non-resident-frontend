@@ -51,7 +51,7 @@ class BroughtForwardLossesActionSpec extends CommonPlaySpec with WithCommonFakeA
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val broughtForwardLossesView = fakeApplication.injector.instanceOf[broughtForwardLosses]
-  lazy val pageTitle = s"""${messages.BroughtForwardLosses.question} - ${messages.pageHeading} - GOV.UK"""
+  lazy val pageTitle = s"""${messages.BroughtForwardLosses.question} - ${messages.serviceName} - GOV.UK"""
 
   class Setup {
     val controller = new BroughtForwardLossesController(

@@ -70,7 +70,7 @@ class OtherReliefsFlatViewSpec
           heading.attr("class") shouldBe "govuk-heading-xl"
         }
 
-        s"has the text '${messages.pageHeading}'" in {
+        s"has the text '${messages.serviceName}'" in {
           heading.text shouldBe messages.OtherReliefs.question
         }
       }

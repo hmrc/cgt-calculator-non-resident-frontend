@@ -21,40 +21,13 @@
     layout: Layout,
     errorSummary: playComponents.errorSummary,
     form: FormWithCSRF,
-    inputYesNo: playComponents.input_yes_no,
     formInputMoney: playComponents.formInputMoney,
     submitButton: playComponents.submitButton
 )
 
-@(improvementsForm: Form[ImprovementsModel], improvementsOptions: Boolean, backUrl: String, ownerBeforeLegislationStart: Boolean)(implicit request: Request[_], messages: Messages, messagesApi: MessagesApi)
+@(improvementsForm: Form[ImprovementsModel])(implicit request: Request[_], messages: Messages, messagesApi: MessagesApi)
 
-@titleText = @{
-    if(ownerBeforeLegislationStart) messages("calc.improvements.ownerBeforeLegislationStartQuestion") else messages("calc.improvements.question")
-}
-
-@beforeAndAfterInput = {
-    @formInputMoney(
-        field = improvementsForm("improvementsAmt"),
-        question = messages("calc.improvements.questionThree"),
-        labelClass = "govuk-label--m",
-        hintText = Some(messages("calc.currencyHint", "£10,000.50"))
-    )
-    @formInputMoney(
-        field = improvementsForm("improvementsAmtAfter"),
-        question = messages("calc.improvements.questionFour"),
-        labelClass = "govuk-label--m",
-        hintText = Some(messages("calc.currencyHint", "£10,000.50"))
-    )
-}
-
-@amountInput = {
-    @formInputMoney(
-        field = improvementsForm("improvementsAmt"),
-        question = messages("calc.improvements.questionTwo"),
-        labelClass = "govuk-label--m",
-        hintText = Some(messages("calc.currencyHint", "£10,000.50"))
-    )
-}
+@titleText = @{messages("calc.improvements.questionTwo")}
 
 @layout(
     pageTitle = if(improvementsForm.errors.nonEmpty) messages("site.title.error", titleText) else titleText
@@ -62,32 +35,13 @@
 
     @errorSummary(improvementsForm.errors, Some("improvementsAmt"))
 
-    <h1 class="govuk-heading-xl">@titleText</h1>
-
-    <p class="govuk-body">
-        @messages("calc.improvements.helpOne")
-        @messages("calc.improvements.helpTwo")
-    </p>
-
-    <p class="govuk-body">
-        @messages("calc.improvements.exampleOne")
-        @messages("calc.improvements.exampleTwo")
-    </p>
-
-    <div class="govuk-inset-text">
-        @messages("calc.improvements.jointOwnership")
-    </div>
-
     @form(action = controllers.routes.ImprovementsController.submitImprovements) {
-
-        @inputYesNo(
-            legend = titleText,
-            legendClass = Some("govuk-visually-hidden"),
-            isPageHeading = false,
-            field = improvementsForm("isClaimingImprovements"),
-            conditionalYesHtml = if(improvementsOptions) Some(beforeAndAfterInput) else Some(amountInput)
+        @formInputMoney(
+            field = improvementsForm("improvementsAmt"),
+            question = titleText,
+            labelClass = "govuk-label--xl",
+            hintText = Some(messages("calc.improvements.jointOwnership") + " " + messages("calc.currencyHint", "£10,000.50"))
         )
-
         @submitButton()
     }
 

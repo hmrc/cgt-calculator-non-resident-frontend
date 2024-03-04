@@ -106,6 +106,10 @@ class AnswersConstructorSpec extends CommonPlaySpec with MockitoSugar with WithC
     when(mockSessionCacheService.fetchAndGetFormData[RebasedCostsModel](ArgumentMatchers.eq(KeystoreKeys.rebasedCosts))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(totalGainAnswersModel.rebasedCostsModel))
 
+    when(mockSessionCacheService.fetchAndGetFormData[IsClaimingImprovementsModel](
+      ArgumentMatchers.eq(KeystoreKeys.isClaimingImprovements))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      .thenReturn(Future.successful(Some(totalGainAnswersModel.isClaimingImprovementsModel)))
+
     when(mockSessionCacheService.fetchAndGetFormData[ImprovementsModel](ArgumentMatchers.eq(KeystoreKeys.improvements))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(totalGainAnswersModel.improvementsModel)))
 
@@ -150,7 +154,7 @@ class AnswersConstructorSpec extends CommonPlaySpec with MockitoSugar with WithC
     new AnswersConstructor(mockSessionCacheService)
   }
 
-  val totalGainNoOptionalModel = TotalGainAnswersModel(
+  val totalGainNoOptionalModel: TotalGainAnswersModel = TotalGainAnswersModel(
     DateModel(10, 10, 2016),
     SoldOrGivenAwayModel(false),
     None,
@@ -163,7 +167,8 @@ class AnswersConstructorSpec extends CommonPlaySpec with MockitoSugar with WithC
     DateModel(1, 1, 2016),
     None,
     None,
-    ImprovementsModel("No", None, None),
+    IsClaimingImprovementsModel(false),
+    ImprovementsModel(0, None),
     None
   )
 
@@ -180,7 +185,8 @@ class AnswersConstructorSpec extends CommonPlaySpec with MockitoSugar with WithC
     DateModel(1, 4, 2013),
     Some(RebasedValueModel(7500)),
     Some(RebasedCostsModel("Yes", Some(150))),
-    ImprovementsModel("Yes", Some(50), Some(25)),
+    IsClaimingImprovementsModel(true),
+    ImprovementsModel(50, Some(25)),
     Some(OtherReliefsModel(1000))
   )
 
@@ -197,7 +203,8 @@ class AnswersConstructorSpec extends CommonPlaySpec with MockitoSugar with WithC
     DateModel(1, 4, 1967),
     Some(RebasedValueModel(7500)),
     Some(RebasedCostsModel("Yes", Some(150))),
-    ImprovementsModel("Yes", Some(50), Some(25)),
+    IsClaimingImprovementsModel(true),
+    ImprovementsModel(50, Some(25)),
     Some(OtherReliefsModel(1000))
   )
 
@@ -214,7 +221,8 @@ class AnswersConstructorSpec extends CommonPlaySpec with MockitoSugar with WithC
     DateModel(1, 4, 2013),
     Some(RebasedValueModel(7500)),
     Some(RebasedCostsModel("Yes", Some(150))),
-    ImprovementsModel("Yes", Some(50), Some(25)),
+    IsClaimingImprovementsModel(true),
+    ImprovementsModel(50, Some(25)),
     Some(OtherReliefsModel(1000))
   )
 
@@ -231,7 +239,8 @@ class AnswersConstructorSpec extends CommonPlaySpec with MockitoSugar with WithC
     DateModel(1, 4, 2013),
     Some(RebasedValueModel(7500)),
     Some(RebasedCostsModel("Yes", Some(150))),
-    ImprovementsModel("Yes", Some(50), Some(25)),
+    IsClaimingImprovementsModel(true),
+    ImprovementsModel(50, Some(25)),
     Some(OtherReliefsModel(1000))
   )
 

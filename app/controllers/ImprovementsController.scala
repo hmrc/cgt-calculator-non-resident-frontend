@@ -23,13 +23,14 @@ import constructors.AnswersConstructor
 import controllers.predicates.ValidActiveSession
 import controllers.utils.RecoverableFuture
 import forms.ImprovementsForm._
+import forms.IsClaimingImprovementsForm._
 import models._
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc._
 import services.SessionCacheService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import views.html.calculation.improvements
+import views.html.calculation.{isClaimingImprovements, improvements, improvementsRebased}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -38,32 +39,22 @@ class ImprovementsController @Inject()(calcConnector: CalculatorConnector,
                                        sessionCacheService: SessionCacheService,
                                        answersConstructor: AnswersConstructor,
                                        mcc: MessagesControllerComponents,
-                                       improvementsView: improvements)(implicit ec: ExecutionContext)
+                                       improvementsView: improvements,
+                                       improvementsRebasedView: improvementsRebased,
+                                       isClaimingImprovementsView: isClaimingImprovements
+                                      )(implicit ec: ExecutionContext)
                                         extends FrontendController(mcc) with ValidActiveSession with I18nSupport{
-
-  private def improvementsBackUrl(acquisitionDate: Option[DateModel]): Future[String] = {
-    acquisitionDate match {
-      case Some(data) if TaxDates.dateAfterStart(data.get) =>
-        Future.successful(routes.AcquisitionCostsController.acquisitionCosts.url)
-      case Some(_) => Future.successful(routes.RebasedCostsController.rebasedCosts.url)
-      case _ => Future.successful(common.DefaultRoutes.missingDataRoute)
-    }
-  }
 
   private def fetchAcquisitionDate(implicit request: Request[_]): Future[Option[DateModel]] = {
     sessionCacheService.fetchAndGetFormData[DateModel](KeystoreKeys.acquisitionDate)
   }
 
-  private def fetchImprovements(implicit request: Request[_]): Future[Option[ImprovementsModel]] = {
-    sessionCacheService.fetchAndGetFormData[ImprovementsModel](KeystoreKeys.improvements)
+  private def fetchIsClaimingImprovements(implicit request: Request[_]): Future[Option[IsClaimingImprovementsModel]] = {
+    sessionCacheService.fetchAndGetFormData[IsClaimingImprovementsModel](KeystoreKeys.isClaimingImprovements)
   }
 
-  private def displayImprovementsSectionCheck(acquisitionDateModel: Option[DateModel]): Future[Boolean] = {
-    acquisitionDateModel match {
-      case Some(data) if !TaxDates.dateAfterStart(data.get) =>
-        Future.successful(true)
-      case _ => Future.successful(false)
-    }
+  private def fetchImprovements(implicit request: Request[_]): Future[Option[ImprovementsModel]] = {
+    sessionCacheService.fetchAndGetFormData[ImprovementsModel](KeystoreKeys.improvements)
   }
 
   private def ownerBeforeLegislationStartCheck(model: Option[DateModel]): Future[Boolean] = {
@@ -71,45 +62,82 @@ class ImprovementsController @Inject()(calcConnector: CalculatorConnector,
     else Future.successful(false)
   }
 
-  val improvements: Action[AnyContent] = ValidateSession.async { implicit request =>
+  private def routeBasedOnGains(totalGainResultsModel: Option[TotalGainResultsModel]): Result =
+    totalGainResultsModel match {
+      case Some(model) =>
+        val totalGainResults: Seq[BigDecimal] = Seq(model.flatGain) ++ Seq(model.rebasedGain, model.timeApportionedGain).flatten
+        if (!totalGainResults.forall(_ <= 0)) Redirect(routes.PropertyLivedInController.propertyLivedIn)
+        else Redirect(routes.CheckYourAnswersController.checkYourAnswers)
+      case None => Redirect(common.DefaultRoutes.missingDataRoute)
+    }
 
-    def routeRequest(backUrl: String, improvementsModel: Option[ImprovementsModel], improvementsOptions: Boolean,
-                     ownerBeforeLegislationStart: Boolean): Future[Result] = {
-      improvementsModel match {
-        case Some(data) =>
-          Future.successful(Ok(improvementsView(improvementsForm(improvementsOptions).fill(data),
-            improvementsOptions, backUrl, ownerBeforeLegislationStart)))
-        case None =>
-          Future.successful(Ok(improvementsView(improvementsForm(improvementsOptions),
-            improvementsOptions, backUrl, ownerBeforeLegislationStart)))
+  val getIsClaimingImprovements: Action[AnyContent] = ValidateSession.async { implicit request =>
+    def routeRequest(isClaimingImprovementsModel: Option[IsClaimingImprovementsModel], ownerBeforeLegislationStart: Boolean): Future[Result] = {
+      val form = isClaimingImprovementsModel match {
+        case Some(data) => isClaimingImprovementsForm.fill(data)
+        case _ => isClaimingImprovementsForm
       }
+      Future.successful(Ok(isClaimingImprovementsView(form, ownerBeforeLegislationStart)))
     }
 
     (for {
       acquisitionDate <- fetchAcquisitionDate(request)
-      improvements <- fetchImprovements(request)
-      improvementsOptions <- displayImprovementsSectionCheck(acquisitionDate)
-      backUrl <- improvementsBackUrl(acquisitionDate)
+      isClaimingImprovements <- fetchIsClaimingImprovements(request)
       ownerBeforeLegislationStart <- ownerBeforeLegislationStartCheck(acquisitionDate)
-      route <- routeRequest(backUrl, improvements, improvementsOptions, ownerBeforeLegislationStart)
+      route <- routeRequest(isClaimingImprovements, ownerBeforeLegislationStart)
+    } yield route).recoverToStart
+  }
+
+  val submitIsClaimingImprovements: Action[AnyContent] = ValidateSession.async { implicit request =>
+
+    def errorAction(errors: Form[IsClaimingImprovementsModel], ownerBeforeLegislationStart: Boolean): Future[Result] =
+      Future.successful(BadRequest(isClaimingImprovementsView(errors, ownerBeforeLegislationStart)))
+
+    def routeRequest(model: IsClaimingImprovementsModel, isAfterTaxStart: Boolean, gains: Option[TotalGainResultsModel]): Result = {
+      if (model.isClaimingImprovements && !isAfterTaxStart) Redirect(routes.ImprovementsController.improvementsRebased)
+      else if (model.isClaimingImprovements) Redirect(routes.ImprovementsController.improvements)
+      else routeBasedOnGains(gains)
+    }
+
+    def successAction(model: IsClaimingImprovementsModel, isAfterTaxStart: Boolean, gains: Option[TotalGainResultsModel]): Future[Result] = {
+      for {
+        _ <- sessionCacheService.saveFormData(KeystoreKeys.isClaimingImprovements, model)
+      } yield routeRequest(model, isAfterTaxStart, gains)
+    }
+
+    (for {
+      acquisitionDate <- fetchAcquisitionDate(request)
+      ownerBeforeLegislationStart <- ownerBeforeLegislationStartCheck(acquisitionDate)
+      allAnswersModel <- answersConstructor.getNRTotalGainAnswers
+      gains <- calcConnector.calculateTotalGain(allAnswersModel)
+      route <- isClaimingImprovementsForm.bindFromRequest().fold(
+        errors => errorAction(errors, ownerBeforeLegislationStart),
+        success => successAction(success, TaxDates.dateAfterStart(acquisitionDate), gains)
+      )
+    } yield route)
+  }
+
+  val improvements: Action[AnyContent] = ValidateSession.async { implicit request =>
+
+    def routeRequest(improvementsModel: Option[ImprovementsModel]): Future[Result] = {
+      improvementsModel match {
+        case Some(data) =>
+          Future.successful(Ok(improvementsView(improvementsForm(false).fill(data))))
+        case None =>
+          Future.successful(Ok(improvementsView(improvementsForm(false))))
+      }
+    }
+
+    (for {
+      improvements <- fetchImprovements(request)
+      route <- routeRequest(improvements)
     } yield route).recoverToStart
   }
 
   val submitImprovements: Action[AnyContent] = ValidateSession.async { implicit request =>
 
-    def successRouteRequest(totalGainResultsModel: Option[TotalGainResultsModel]): Result = {
-      totalGainResultsModel match {
-        case Some(model) =>
-          val totalGainResults: Seq[BigDecimal] = Seq(model.flatGain) ++ Seq(model.rebasedGain, model.timeApportionedGain).flatten
-          if(!totalGainResults.forall(_ <= 0)) Redirect(routes.PropertyLivedInController.propertyLivedIn)
-          else Redirect(routes.CheckYourAnswersController.checkYourAnswers)
-        case None => Redirect(common.DefaultRoutes.missingDataRoute)
-      }
-    }
-
-    def errorAction(errors: Form[ImprovementsModel], backUrl: String, improvementsOptions: Boolean,
-                    ownerBeforeLegislationStart: Boolean) = {
-      Future.successful(BadRequest(improvementsView(errors, improvementsOptions, backUrl, ownerBeforeLegislationStart)))
+    def errorAction(errors: Form[ImprovementsModel]) = {
+      Future.successful(BadRequest(improvementsView(errors)))
     }
 
     def successAction(improvements: ImprovementsModel): Future[Result] = {
@@ -117,24 +145,49 @@ class ImprovementsController @Inject()(calcConnector: CalculatorConnector,
         _ <- sessionCacheService.saveFormData(KeystoreKeys.improvements, improvements)
         allAnswersModel <- answersConstructor.getNRTotalGainAnswers
         gains <- calcConnector.calculateTotalGain(allAnswersModel)
-      } yield successRouteRequest(gains)).recoverToStart
+      } yield routeBasedOnGains(gains)).recoverToStart
     }
 
-    def routeRequest(backUrl: String,
-                     improvementsOptions: Boolean,
-                     ownerBeforeLegislationStart: Boolean): Future[Result] = {
-      improvementsForm(improvementsOptions).bindFromRequest().fold(
-        errors => errorAction(errors, backUrl, improvementsOptions, ownerBeforeLegislationStart),
-        success => successAction(success)
-      )
+    improvementsForm(false).bindFromRequest().fold(
+      errors => errorAction(errors),
+      success => successAction(success)
+    )
+  }
+
+  val improvementsRebased: Action[AnyContent] = ValidateSession.async { implicit request =>
+
+    def routeRequest(improvementsRebasedModel: Option[ImprovementsModel]): Future[Result] = {
+      val form = improvementsRebasedModel match {
+        case Some(data) => improvementsForm(true).fill(data)
+        case None => improvementsForm(true)
+      }
+      Future.successful(Ok(improvementsRebasedView(form)))
     }
 
     (for {
-      acquisitionDate <- fetchAcquisitionDate(request)
-      improvementsOptions <- displayImprovementsSectionCheck(acquisitionDate)
-      backUrl <- improvementsBackUrl(acquisitionDate)
-      ownerBeforeLegislationStart <- ownerBeforeLegislationStartCheck(acquisitionDate)
-      route <- routeRequest(backUrl, improvementsOptions, ownerBeforeLegislationStart)
+      improvements <- fetchImprovements(request)
+      route <- routeRequest(improvements)
     } yield route).recoverToStart
   }
+
+  val submitImprovementsRebased: Action[AnyContent] = ValidateSession.async { implicit request =>
+
+    def errorAction(errors: Form[ImprovementsModel]): Future[Result] = {
+      Future.successful(BadRequest(improvementsRebasedView(errors)))
+    }
+
+    def successAction(improvementsRebased: ImprovementsModel): Future[Result] = {
+      (for {
+        _ <- sessionCacheService.saveFormData[ImprovementsModel](KeystoreKeys.improvements, improvementsRebased)
+        allAnswersModel <- answersConstructor.getNRTotalGainAnswers
+        gains <- calcConnector.calculateTotalGain(allAnswersModel)
+      } yield routeBasedOnGains(gains)).recoverToStart
+    }
+
+    improvementsForm(true).bindFromRequest().fold(
+      errors => errorAction(errors),
+      success => successAction(success)
+    )
+  }
+
 }

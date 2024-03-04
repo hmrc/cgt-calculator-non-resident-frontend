@@ -41,7 +41,7 @@ class TimeoutControllerSpec extends CommonPlaySpec with WithCommonFakeApplicatio
   lazy val timeout = mock[Timeout]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   val sessionTimeoutView = fakeApplication.injector.instanceOf[sessionTimeout]
-  lazy val pageTitle = s"""${Messages("session.timeout.message")} - ${commonMessages.pageHeading} - GOV.UK"""
+  lazy val pageTitle = s"""${Messages("session.timeout.message")} - ${commonMessages.serviceName} - GOV.UK"""
 
 
     class fakeRequestTo(url : String, controllerAction : Action[AnyContent]) {

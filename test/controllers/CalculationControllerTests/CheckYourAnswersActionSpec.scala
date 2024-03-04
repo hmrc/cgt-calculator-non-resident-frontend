@@ -53,7 +53,7 @@ class CheckYourAnswersActionSpec()
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val checkYourAnswersView = fakeApplication.injector.instanceOf[checkYourAnswers]
-  val pageTitle = s"""${messages.question} - ${commonMessages.pageHeading} - GOV.UK"""
+  val pageTitle = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
 
   class Setup {
@@ -104,7 +104,8 @@ class CheckYourAnswersActionSpec()
     DateModel(4, 10, 2013),
     Some(RebasedValueModel(3000)),
     Some(RebasedCostsModel("Yes", Some(300))),
-    ImprovementsModel("Yes", Some(10), Some(20)),
+    IsClaimingImprovementsModel(true),
+    ImprovementsModel(10, Some(20)),
     Some(OtherReliefsModel(30)))
 
   val totalGainResultsModel = TotalGainResultsModel(0, Some(0), Some(0))
@@ -122,7 +123,8 @@ class CheckYourAnswersActionSpec()
     DateModel(4, 10, 2016),
     None,
     None,
-    ImprovementsModel("Yes", Some(10), Some(20)),
+    IsClaimingImprovementsModel(true),
+    ImprovementsModel(10, Some(20)),
     Some(OtherReliefsModel(30)))
 
   val personalDetailsModel = TotalPersonalDetailsCalculationModel(CurrentIncomeModel(9000),
