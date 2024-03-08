@@ -33,7 +33,8 @@ class YourAnswersConstructorSpec extends CommonPlaySpec with WithCommonFakeAppli
     DateModel(4, 10, 2013),
     Some(RebasedValueModel(3000)),
     Some(RebasedCostsModel("Yes", Some(300))),
-    ImprovementsModel("Yes", Some(10), Some(20)),
+    IsClaimingImprovementsModel(true),
+    ImprovementsModel(10, Some(20)),
     Some(OtherReliefsModel(30)))
 
   "Calling .fetchYourAnswers" when {

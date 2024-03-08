@@ -38,7 +38,8 @@ class PurchaseDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeA
     DateModel(1, 4, 2013),
     Some(RebasedValueModel(1000)),
     Some(RebasedCostsModel("Yes", Some(150))),
-    ImprovementsModel("No", None, None),
+    IsClaimingImprovementsModel(false),
+    ImprovementsModel(),
     None
   )
 
@@ -55,7 +56,8 @@ class PurchaseDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeA
     DateModel(1, 4, 2013),
     None,
     None,
-    ImprovementsModel("No", None, None),
+    IsClaimingImprovementsModel(false),
+    ImprovementsModel(),
     None
   )
 
@@ -72,7 +74,8 @@ class PurchaseDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeA
     DateModel(1, 4, 2013),
     Some(RebasedValueModel(7500)),
     Some(RebasedCostsModel("Yes", Some(150))),
-    ImprovementsModel("Yes", Some(50), Some(25)),
+    IsClaimingImprovementsModel(true),
+    ImprovementsModel(50, Some(25)),
     None
   )
 
@@ -89,7 +92,8 @@ class PurchaseDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeA
     DateModel(1, 4, 2013),
     Some(RebasedValueModel(7500)),
     Some(RebasedCostsModel("Yes", Some(150))),
-    ImprovementsModel("Yes", Some(50), Some(25)),
+    IsClaimingImprovementsModel(true),
+    ImprovementsModel(50, Some(25)),
     None
   )
 
@@ -106,7 +110,8 @@ class PurchaseDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeA
     DateModel(1, 4, 2013),
     Some(RebasedValueModel(7500)),
     Some(RebasedCostsModel("Yes", Some(150))),
-    ImprovementsModel("Yes", Some(50), Some(25)),
+    IsClaimingImprovementsModel(true),
+    ImprovementsModel(50, Some(25)),
     None
   )
 
@@ -126,7 +131,8 @@ class PurchaseDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeA
         DateModel(1, 4, 1970),
         Some(RebasedValueModel(7500)),
         Some(RebasedCostsModel("Yes", Some(150))),
-        ImprovementsModel("Yes", Some(50), Some(25)),
+        IsClaimingImprovementsModel(true),
+        ImprovementsModel(50, Some(25)),
         None,
         Some(model)
       )

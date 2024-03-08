@@ -31,7 +31,7 @@ class HowMuchLossViewSpec extends CommonPlaySpec with WithCommonFakeApplication 
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   lazy val howMuchLossView = fakeApplication.injector.instanceOf[howMuchLoss]
-  val pageTitle = s"""${messages.HowMuchLoss.question} - ${messages.pageHeading} - GOV.UK"""
+  val pageTitle = s"""${messages.HowMuchLoss.question} - ${messages.serviceName} - GOV.UK"""
 
   "Previous Loss view" when {
 

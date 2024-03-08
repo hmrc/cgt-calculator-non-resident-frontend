@@ -48,7 +48,7 @@ class OutsideTaxYearActionSpec()
   val mockCalcConnector =mock[CalculatorConnector]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val outsideTaxYearView = fakeApplication.injector.instanceOf[outsideTaxYear]
-  lazy val pageTitle = s"""${messages.title} - ${commonMessages.pageHeading} - GOV.UK"""
+  lazy val pageTitle = s"""${messages.title} - ${commonMessages.serviceName} - GOV.UK"""
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
 
   def setupTarget(disposalDateModel: Option[DateModel], taxYearModel: Option[TaxYearModel]): OutsideTaxYearController = {

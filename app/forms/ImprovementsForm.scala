@@ -25,14 +25,10 @@ import uk.gov.voa.play.form.ConditionalMappings.{isEqual, mandatoryIf}
 
 object ImprovementsForm {
 
-  def improvementsForm(showHiddenQuestion: Boolean): Form[ImprovementsModel] =
-    if (showHiddenQuestion) {
+  def improvementsForm(isBeforeTaxStarts: Boolean): Form[ImprovementsModel] =
+    if (isBeforeTaxStarts) {
       Form(mapping(
-          "isClaimingImprovements" -> common.Formatters.text("calc.improvements.errors.required")
-            .verifying("calc.improvements.errors.required", mandatoryCheck)
-            .verifying("calc.calc.improvements.errors.required", yesNoCheck),
-          "improvementsAmt" -> mandatoryIf(
-            isEqual("isClaimingImprovements", "Yes"),
+          "improvementsAmt" ->
             common.Formatters.text("calc.improvements.before.error.required")
               .transform(stripCurrencyCharacters, stripCurrencyCharacters)
               .verifying("calc.improvements.before.error.invalid", bigDecimalCheck)
@@ -43,30 +39,25 @@ object ImprovementsForm {
                   decimalPlaceConstraint("calc.improvements.before.error.decimalPlaces"),
                   maxMonetaryValueConstraint(errMsgKey = "calc.improvements.before.error.tooHigh")
                 )
-              )
           ),
-          "improvementsAmtAfter" -> mandatoryIf(
-            isEqual("isClaimingImprovements", "Yes"),
-            common.Formatters.text("calc.improvements.after.error.required")
-              .transform(stripCurrencyCharacters, stripCurrencyCharacters)
-              .verifying("calc.improvements.after.error.invalid", bigDecimalCheck)
-              .transform(stringToBigDecimal, bigDecimalToString)
+          "improvementsAmtAfter" ->
+            optional(text)
+              .verifying("calc.improvements.after.error.required", optionalCannotBeEmpty)
+              .transform(stripOptionalCurrencyCharacters, stripOptionalCurrencyCharacters)
+              .verifying("calc.improvements.after.error.invalid", optionalBigDecimalCheck)
+              .transform(optionalStringToOptionalBigDecimal, optionalBigDecimalToOptionalString)
               .verifying(
                 stopOnFirstFail(
-                  negativeConstraint("calc.improvements.after.error.tooLow"),
-                  decimalPlaceConstraint("calc.improvements.after.error.decimalPlaces"),
-                  maxMonetaryValueConstraint(errMsgKey = "calc.improvements.after.error.tooHigh")
+                  optionalNegativeConstraint("calc.improvements.after.error.tooLow"),
+                  optionalDecimalPlaceConstraint("calc.improvements.after.error.decimalPlaces"),
+                  optionalMaxMonetaryValueConstraint(errMsgKey = "calc.improvements.after.error.tooHigh")
                 )
-              )
+
           )
         )(ImprovementsModel.apply)(ImprovementsModel.unapply))
     } else {
       Form(mapping(
-          "isClaimingImprovements" -> common.Formatters.text("calc.improvements.errors.required")
-            .verifying("calc.improvements.errors.required", mandatoryCheck)
-            .verifying("calc.calc.improvements.errors.required", yesNoCheck),
-          "improvementsAmt" -> mandatoryIf(
-            isEqual("isClaimingImprovements", "Yes"),
+          "improvementsAmt" ->
             common.Formatters.text("calc.improvements.error.required")
               .transform(stripCurrencyCharacters, stripCurrencyCharacters)
               .verifying("calc.improvements.error.invalid", bigDecimalCheck)
@@ -77,11 +68,8 @@ object ImprovementsForm {
                   decimalPlaceConstraint("calc.improvements.errorDecimalPlaces"),
                   maxMonetaryValueConstraint()
                 )
-              )
           ),
-        "improvementsAmtAfter" -> optional(text)
-          .transform(stripOptionalCurrencyCharacters, stripOptionalCurrencyCharacters)
-          .transform(optionalStringToOptionalBigDecimal, optionalBigDecimalToOptionalString)
+        "improvementsAmtAfter" -> optional(text).transform(optionalStringToOptionalBigDecimal, optionalBigDecimalToOptionalString)
         )(ImprovementsModel.apply)(ImprovementsModel.unapply))
     }
 }

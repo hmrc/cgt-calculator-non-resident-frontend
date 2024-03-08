@@ -32,7 +32,7 @@ class CurrentIncomeViewSpec extends CommonPlaySpec with WithCommonFakeApplicatio
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   val currentIncomeView = fakeApplication.injector.instanceOf[currentIncome]
-  val pageTitle = s"${messages.question} - ${commonMessages.pageHeading} - GOV.UK"
+  val pageTitle = s"${messages.question} - ${commonMessages.serviceName} - GOV.UK"
 
 
   "Current Income view" when {

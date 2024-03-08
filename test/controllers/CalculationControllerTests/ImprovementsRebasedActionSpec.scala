@@ -23,8 +23,8 @@ import common.{CommonPlaySpec, WithCommonFakeApplication}
 import config.ApplicationConfig
 import connectors.CalculatorConnector
 import constructors.AnswersConstructor
-import controllers.helpers.FakeRequestHelper
 import controllers.ImprovementsController
+import controllers.helpers.FakeRequestHelper
 import models._
 import org.jsoup._
 import org.mockito.ArgumentMatchers
@@ -35,11 +35,11 @@ import play.api.test.Helpers._
 import services.SessionCacheService
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-import views.html.calculation.{improvementsRebased, improvements, isClaimingImprovements}
+import views.html.calculation.{improvements, improvementsRebased, isClaimingImprovements}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class ImprovementsActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
+class ImprovementsRebasedActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
   implicit val hc: HeaderCarrier = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
 
@@ -53,8 +53,7 @@ class ImprovementsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
   val improvementsView: improvements = fakeApplication.injector.instanceOf[improvements]
   val improvementsRebasedView: improvementsRebased = fakeApplication.injector.instanceOf[improvementsRebased]
   val isClaimingImprovementsView: isClaimingImprovements = fakeApplication.injector.instanceOf[isClaimingImprovements]
-  lazy val pageTitle = s"""${commonMessages.Improvements.title} - ${commonMessages.serviceName} - GOV.UK"""
-  lazy val pageTitleBeforeTax = s"""${commonMessages.ImprovementsRebased.title} - ${commonMessages.serviceName} - GOV.UK"""
+  lazy val pageTitle = s"${commonMessages.ImprovementsRebased.title} - ${commonMessages.serviceName} - GOV.UK"
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
 
   class Setup {
@@ -117,19 +116,14 @@ class ImprovementsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
     )(ec)
   }
 
-  "In CalculationController calling the .improvements action " when {
+  "In CalculationController calling the .improvementsRebased action " when {
 
     "not supplied with a pre-existing stored model" should {
 
-      "when Acquisition Date is > 5 April 2015" should {
+      "when Acquisition Date is < 6 April 2015" should {
 
-        lazy val target = setupTarget(
-          IsClaimingImprovementsModel(true),
-          ImprovementsModel(),
-          Some(DateModel(1, 1, 2017)),
-          Some(RebasedValueModel(1000))
-        )
-        lazy val result = target.improvements(fakeRequestWithSession)
+        lazy val target = setupTarget(IsClaimingImprovementsModel(true), ImprovementsModel(), Some(DateModel(1, 1, 2014)), Some(RebasedValueModel(1000)))
+        lazy val result = target.improvementsRebased(fakeRequestWithSession)
         lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
         "return a 200" in {
@@ -150,20 +144,19 @@ class ImprovementsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
     }
   }
 
-  "In CalculationController calling the .submitImprovements action " when {
+  "In CalculationController calling the .submitImprovementsRebased action " when {
 
-    "submitting a valid form" should {
+    "submitting a valid form with a rebased value" should {
 
-      lazy val gainsModel = Some(TotalGainResultsModel(1000, Some(2000), None))
       lazy val target = setupTarget(
         IsClaimingImprovementsModel(true),
-        ImprovementsModel(),
-        Some(DateModel(1, 1, 2016)),
+        ImprovementsModel(0, None),
+        Some(DateModel(1, 1, 2014)),
         Some(RebasedValueModel(2000)),
-        gainsModel
+        Some(TotalGainResultsModel(1000, Some(2000), Some(1000)))
       )
-      lazy val request = fakeRequestToPOSTWithSession("improvementsAmt" -> "100").withMethod("POST")
-      lazy val result = target.submitImprovements(request)
+      lazy val request = fakeRequestToPOSTWithSession("improvementsAmt" -> "100", "improvementsAmtAfter" -> "100").withMethod("POST")
+      lazy val result = target.submitImprovementsRebased(request)
 
       "return a 303" in {
         status(result) shouldBe 303
@@ -176,16 +169,16 @@ class ImprovementsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
 
     "submitting an invalid form with a value of 'fhu39awd8'" should {
 
-      val target = setupTarget(IsClaimingImprovementsModel(true), ImprovementsModel(), Some(DateModel(1, 1, 2016)))
-      lazy val request = fakeRequestToPOSTWithSession("improvementsAmt" -> "fhu39awd8").withMethod("POST")
-      lazy val result = target.submitImprovements(request)
+      val target = setupTarget(IsClaimingImprovementsModel(true), ImprovementsModel(), Some(DateModel(1, 1, 2014)))
+      lazy val request = fakeRequestToPOSTWithSession("improvementsAmt" -> "fhu39awd8", "improvementsAmtAfter" -> "199").withMethod("POST")
+      lazy val result = target.submitImprovementsRebased(request)
       lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
       "return a 400" in {
         status(result) shouldBe 400
       }
 
-      "return to the improvements page" in {
+      "return to the improvementsRebased page" in {
         document.title shouldBe "Error: " + pageTitle
       }
     }

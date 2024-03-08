@@ -48,7 +48,7 @@ class HowMuchLossActionSpec extends CommonPlaySpec with WithCommonFakeApplicatio
   val mockCalcConnector =mock[CalculatorConnector]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val howMuchLossView = fakeApplication.injector.instanceOf[howMuchLoss]
-  val pageTitle = s"""${messages.HowMuchLoss.question} - ${messages.pageHeading} - GOV.UK"""
+  val pageTitle = s"""${messages.HowMuchLoss.question} - ${messages.serviceName} - GOV.UK"""
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
 
   class Setup {

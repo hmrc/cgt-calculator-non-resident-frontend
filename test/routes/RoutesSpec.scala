@@ -277,17 +277,52 @@ class RoutesSpec extends CommonPlaySpec with WithCommonFakeApplication with Matc
   }
 
   /* Improvements routes */
+  "The URL for the isClaimingImprovements Action" should {
+    val route = "/calculate-your-capital-gains/non-resident/improvements"
+    s"be equal to $route" in {
+      val path = controllers.routes.ImprovementsController.getIsClaimingImprovements.url
+      path shouldEqual route
+    }
+  }
+
+  "The URL for the submitIsClaimingImprovements Action" should {
+    val route = "/calculate-your-capital-gains/non-resident/improvements"
+    s"be equal to $route" in {
+      val path = controllers.routes.ImprovementsController.submitIsClaimingImprovements.url
+      path shouldEqual route
+    }
+  }
+
+
   "The URL for the improvements Action" should {
-    "be equal to /calculate-your-capital-gains/non-resident/improvements" in {
+    val route = "/calculate-your-capital-gains/non-resident/how-much-did-improvements-cost"
+    s"be equal to $route" in {
       val path = controllers.routes.ImprovementsController.improvements.url
-      path shouldEqual "/calculate-your-capital-gains/non-resident/improvements"
+      path shouldEqual route
     }
   }
 
   "The URL for the submitImprovements Action" should {
-    "be equal to /calculate-your-capital-gains/non-resident/improvements" in {
+    val route = "/calculate-your-capital-gains/non-resident/how-much-did-improvements-cost"
+    s"be equal to $route" in {
       val path = controllers.routes.ImprovementsController.submitImprovements.url
-      path shouldEqual "/calculate-your-capital-gains/non-resident/improvements"
+      path shouldEqual route
+    }
+  }
+
+  "The URL for the improvementsRebased Action" should {
+    val route = "/calculate-your-capital-gains/non-resident/improvement-costs"
+    s"be equal to $route" in {
+      val path = controllers.routes.ImprovementsController.improvementsRebased.url
+      path shouldEqual route
+    }
+  }
+
+  "The URL for the submitImprovementsRebased Action" should {
+    val route = "/calculate-your-capital-gains/non-resident/improvement-costs"
+    s"be equal to $route" in {
+      val path = controllers.routes.ImprovementsController.submitImprovementsRebased.url
+      path shouldEqual route
     }
   }
 

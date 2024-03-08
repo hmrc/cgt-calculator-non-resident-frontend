@@ -128,8 +128,8 @@ class RebasedCostsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
         status(result) shouldBe 303
       }
 
-      "redirect to the improvements page" in {
-        redirectLocation(result).get shouldBe controllers.routes.ImprovementsController.improvements.url
+      "redirect to the isClaimingImprovements page" in {
+        redirectLocation(result).get shouldBe controllers.routes.ImprovementsController.getIsClaimingImprovements.url
       }
     }
 

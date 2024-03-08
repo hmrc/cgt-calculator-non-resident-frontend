@@ -32,7 +32,7 @@ class DisposalCostsViewSpec extends CommonPlaySpec with WithCommonFakeApplicatio
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   lazy val disposalCostsView = fakeApplication.injector.instanceOf[disposalCosts]
-  lazy val pageTitle = s"""${messages.question} - ${commonMessages.pageHeading} - GOV.UK"""
+  lazy val pageTitle = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
 
   "Disposal Costs view" when {
 

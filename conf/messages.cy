@@ -255,6 +255,9 @@ calc.improvements.question = A wnaethoch welliannau i’r eiddo?
 calc.improvements.questionFour = Faint ydych wedi’i wario ar welliannau ers 6 Ebrill 2015?
 calc.improvements.questionThree = Faint y gwnaethoch ei wario ar welliannau cyn 6 Ebrill 2015?
 calc.improvements.questionTwo = Beth oedd cost y gwelliannau?
+
+calc.improvementsAmountRebased.title = Costau gwella
+
 calc.marketValue.error.gaveItAway.required = Nodwch beth oedd gwerth yr eiddo pan wnaethoch ei roi i ffwrdd
 calc.marketValue.error.gaveItAway.errorReal = Mae’n rhaid i beth oedd gwerth yr eiddo pan wnaethoch ei roi i ffwrdd fod yn swm o arian mewn punnoedd
 calc.marketValue.error.gaveItAway.errorMax = Mae’n rhaid i ''Beth oedd gwerth yr eiddo pan wnaethoch ei roi i ffwrdd?'' fod yn £1,000,000,000 neu lai

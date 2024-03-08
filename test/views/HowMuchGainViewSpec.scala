@@ -37,7 +37,7 @@ class HowMuchGainViewSpec extends CommonPlaySpec with WithCommonFakeApplication 
     "supplied with no errors" when {
       lazy val view = howMuchGainView(howMuchGainForm)(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
-      val pageTitle = s"""${messages.HowMuchGain.question} - ${messages.pageHeading} - GOV.UK"""
+      val pageTitle = s"""${messages.HowMuchGain.question} - ${messages.serviceName} - GOV.UK"""
 
       s"have a title of '${pageTitle}'" in {
         document.title() shouldBe pageTitle

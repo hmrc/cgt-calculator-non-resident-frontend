@@ -53,7 +53,7 @@ class AcquisitionCostsActionSpec extends CommonPlaySpec with WithCommonFakeAppli
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val acquisitionCostsView = fakeApplication.injector.instanceOf[acquisitionCosts]
-  lazy val pageTitle = s"""${messages.question} - ${commonMessages.pageHeading} - GOV.UK"""
+  lazy val pageTitle = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
 
   class Setup {
     val controller = new AcquisitionCostsController(
@@ -202,11 +202,11 @@ class AcquisitionCostsActionSpec extends CommonPlaySpec with WithCommonFakeAppli
         status(result) shouldBe 303
       }
 
-      s"redirect to '${controllers.routes.ImprovementsController.improvements.url}'" in {
+      s"redirect to '${controllers.routes.ImprovementsController.getIsClaimingImprovements.url}'" in {
         val target = setupTarget(None, acquisitionDateData = Some(DateModel(10, 5, 2016)))
         lazy val request = fakeRequestToPOSTWithSession(("acquisitionCosts", "1000")).withMethod("POST")
         lazy val result = target.submitAcquisitionCosts(request)
-        redirectLocation(result).get shouldBe controllers.routes.ImprovementsController.improvements.url
+        redirectLocation(result).get shouldBe controllers.routes.ImprovementsController.getIsClaimingImprovements.url
       }
     }
 

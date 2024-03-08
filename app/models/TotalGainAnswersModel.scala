@@ -31,6 +31,7 @@ case class TotalGainAnswersModel(disposalDateModel: DateModel,
                                  acquisitionDateModel: DateModel,
                                  rebasedValueModel: Option[RebasedValueModel],
                                  rebasedCostsModel: Option[RebasedCostsModel],
+                                 isClaimingImprovementsModel: IsClaimingImprovementsModel,
                                  improvementsModel: ImprovementsModel,
                                  otherReliefsFlat: Option[OtherReliefsModel],
                                  costsAtLegislationStart: Option[CostsAtLegislationStartModel] = None)
@@ -56,6 +57,7 @@ object TotalGainAnswersModel {
       (__ \ "acquisitionDate").write[DateModel](DateModel.postWrites) and
        __.writeNullable[RebasedValueModel](RebasedValueModel.postWrites(model.acquisitionDateModel)) and
        __.writeNullable[RebasedCostsModel](RebasedCostsModel.postWrites(model.rebasedValueModel, model.acquisitionDateModel)) and
+       __.write[IsClaimingImprovementsModel](IsClaimingImprovementsModel.postWrites) and
        __.write[ImprovementsModel](ImprovementsModel.postWrites(model.rebasedValueModel, model.acquisitionDateModel)) and
       ignore and
       ignore

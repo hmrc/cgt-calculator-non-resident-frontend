@@ -33,7 +33,7 @@ class CalculationElectionViewSpec extends CommonPlaySpec with WithCommonFakeAppl
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   lazy val calculationElectionView = fakeApplication.injector.instanceOf[calculationElection]
-  lazy val pageTitle = s"""${messages.heading} - ${commonMessages.pageHeading} - GOV.UK"""
+  lazy val pageTitle = s"""${messages.heading} - ${commonMessages.serviceName} - GOV.UK"""
 
   "The Calculation Election View" should {
 

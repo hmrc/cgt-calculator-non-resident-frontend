@@ -29,8 +29,8 @@ object Formatters {
     def bind(key: String, data: Map[String, String]): Either[Seq[FormError], String] =
       data.get(key) match {
         case None => Left(Seq(FormError(key, errorKey)))
-        case Some(x) if x.trim.length == 0 && optional == false => Left(Seq(FormError(key, errorKey)))
-        case Some(x) if x.trim.length == 0 && optional == true => Right(x.trim)
+        case Some(x) if x.trim.isEmpty && !optional => Left(Seq(FormError(key, errorKey)))
+        case Some(x) if x.trim.isEmpty && optional => Right(x.trim)
         case Some(s) => Right(s.trim)
       }
 

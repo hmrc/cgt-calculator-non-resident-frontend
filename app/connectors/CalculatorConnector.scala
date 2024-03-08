@@ -17,7 +17,7 @@
 package connectors
 
 import common.nonresident.Rebased
-import common.{TaxDates, YesNoKeys}
+import common.TaxDates
 import config.ApplicationConfig
 import constructors._
 import models._
@@ -95,26 +95,23 @@ class CalculatorConnector @Inject()(val http: DefaultHttpClient,
     }
   }
 
-  def calculateTotalCosts(answers: TotalGainAnswersModel, calculationType: Option[CalculationElectionModel])(implicit hc: HeaderCarrier): Future[BigDecimal] = calculationType match {
+  def calculateTotalCosts(
+                           answers: TotalGainAnswersModel,
+                           calculationType: Option[CalculationElectionModel]
+                         )(implicit hc: HeaderCarrier): Future[BigDecimal] = calculationType match {
     case Some(calculationElection) =>
       if(calculationElection.calculationType == Rebased) {
         http.GET[BigDecimal](s"$serviceUrl/capital-gains-calculator/non-resident/calculate-total-costs?" +
           s"disposalCosts=${answers.disposalCostsModel.disposalCosts.toDouble}" +
           s"&acquisitionCosts=${answers.rebasedCostsModel.get.rebasedCosts.getOrElse(BigDecimal(0)).toDouble}" +
-          improvementsQueryParameter(answers.improvementsModel, answers.improvementsModel.improvementsAmtAfter.getOrElse(BigDecimal(0)).toDouble))
+          s"&improvements=${answers.improvementsModel.improvementsAmtAfter.getOrElse(BigDecimal(0)).toDouble}")
       } else {
         http.GET[BigDecimal](s"$serviceUrl/capital-gains-calculator/non-resident/calculate-total-costs?" +
           s"disposalCosts=${answers.disposalCostsModel.disposalCosts.toDouble}" +
           s"&acquisitionCosts=${selectAcquisitionCosts(answers).toDouble}" +
-          improvementsQueryParameter(answers.improvementsModel,
-            answers.improvementsModel.improvementsAmt.getOrElse(BigDecimal(0)) + answers.improvementsModel.improvementsAmtAfter.getOrElse(BigDecimal(0))))
+          s"&improvements=${answers.improvementsModel.improvementsAmt + answers.improvementsModel.improvementsAmtAfter.getOrElse(BigDecimal(0)).toDouble}")
       }
     case _ => Future.successful(throw new Exception("No calculation election supplied"))
-  }
-
-  private def improvementsQueryParameter(improvementsModel: ImprovementsModel, value: BigDecimal): String = {
-    if(improvementsModel.isClaimingImprovements == YesNoKeys.yes) s"&improvements=${value.toDouble}"
-    else "&improvements=0"
   }
 
   def getTaxYear(taxYear: String)(implicit hc: HeaderCarrier): Future[Option[TaxYearModel]] = {

@@ -17,13 +17,12 @@
 package models
 
 import constructors.TotalGainRequestConstructor.includeRebasedValuesInCalculation
-import play.api.libs.json.{JsObject, JsValue, Json, Writes}
+import play.api.libs.json.{JsObject, JsValue, Json, OFormat, Writes}
 
-case class ImprovementsModel (isClaimingImprovements: String, improvementsAmt: Option[BigDecimal], improvementsAmtAfter: Option[BigDecimal] = None)
+case class ImprovementsModel (improvementsAmt: BigDecimal = BigDecimal(0), improvementsAmtAfter: Option[BigDecimal] = None)
 
 object ImprovementsModel {
-  implicit val format = Json.format[ImprovementsModel]
-
+  implicit val format: OFormat[ImprovementsModel] = Json.format[ImprovementsModel]
 
   def postWrites(oRebasedValueModel: Option[RebasedValueModel], acquisitionDateModel: DateModel): Writes[ImprovementsModel] = new Writes[ImprovementsModel] {
     override def writes(o: ImprovementsModel): JsValue = {
@@ -36,8 +35,8 @@ object ImprovementsModel {
     Writes[ImprovementsModel] = new Writes[ImprovementsModel] {
       override def writes(o: ImprovementsModel): JsValue = {
         o match {
-          case ImprovementsModel("Yes", _, Some(value1)) if includeRebasedValuesInCalculation(oRebasedValueModel, acquisitionDateModel) =>
-            Json.obj(("improvementsAfterTaxStarted", value1))
+          case ImprovementsModel(_, Some(value)) if includeRebasedValuesInCalculation(oRebasedValueModel, acquisitionDateModel) =>
+            Json.obj(("improvementsAfterTaxStarted", value))
           case _ => Json.obj()
         }
       }
@@ -46,7 +45,7 @@ object ImprovementsModel {
   private val improvementsWrites = new Writes[ImprovementsModel] {
     override def writes(o: ImprovementsModel): JsValue = {
       o match {
-        case ImprovementsModel("Yes", Some(value), _) => Json.obj(("improvements", value))
+        case ImprovementsModel(value, _) => Json.obj(("improvements", value))
         case _ => Json.obj()
       }
     }

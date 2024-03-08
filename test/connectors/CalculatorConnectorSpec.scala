@@ -58,7 +58,8 @@ class CalculatorConnectorSpec extends CommonPlaySpec with WithCommonFakeApplicat
       DateModel(1, 1, 2016),
       None,
       None,
-      ImprovementsModel("Yes", Some(10), Some(20)),
+      IsClaimingImprovementsModel(true),
+      ImprovementsModel(10, Some(20)),
       None)
 
     "return a valid response" in new Setup {
@@ -95,7 +96,8 @@ class CalculatorConnectorSpec extends CommonPlaySpec with WithCommonFakeApplicat
       DateModel(1, 1, 2016),
       None,
       None,
-      ImprovementsModel("Yes", Some(10), Some(20)),
+      IsClaimingImprovementsModel(true),
+      ImprovementsModel(10, Some(20)),
       None)
 
 

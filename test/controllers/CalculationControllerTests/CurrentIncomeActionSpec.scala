@@ -49,7 +49,7 @@ class CurrentIncomeActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val currentIncomeView = fakeApplication.injector.instanceOf[currentIncome]
-  val pageTitle = s"${messages.question} - ${commonMessages.pageHeading} - GOV.UK"
+  val pageTitle = s"${messages.question} - ${commonMessages.serviceName} - GOV.UK"
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
   class Setup {
     val controller = new CurrentIncomeController(

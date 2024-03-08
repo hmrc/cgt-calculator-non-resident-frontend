@@ -30,7 +30,7 @@ class OutsideTaxYearViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   lazy val outsideTaxYearView = fakeApplication.injector.instanceOf[outsideTaxYear]
-  lazy val pageTitle = s"""${messages.title} - ${commonMessages.pageHeading} - GOV.UK"""
+  lazy val pageTitle = s"""${messages.title} - ${commonMessages.serviceName} - GOV.UK"""
 
 
   "Outside tax years views" when {

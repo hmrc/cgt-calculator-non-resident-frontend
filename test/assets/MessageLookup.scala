@@ -56,8 +56,7 @@ object MessageLookup {
 
   object NonResident extends Common {
 
-    val pageHeading = "Calculate your Non-Resident Capital Gains Tax"
-    val errorRealNumber = "Enter a number"
+    val serviceName = "Calculate your Non-Resident Capital Gains Tax"
 
     object AcquisitionCosts {
       val question = "How much did you pay in costs when you became the property owner?"
@@ -215,15 +214,29 @@ object MessageLookup {
       val errorDecimalPlaces = "Taxable Gain for has too many numbers after the decimal point"
       }
 
-    object Improvements extends Common {
+    object IsClaimingImprovements extends Common {
+      val title = "Did you make any improvements to the property?"
+      val ownerBeforeLegislationStartQuestion = "Did you make an improvement to the property after 31 March 1982?"
       val helpOne = "Improvements are permanent changes that increase the value of a property, like adding extensions or garages."
-      val helpTwo = "Normal maintenance costs don't count."
-      val exampleTitle = "Show me an example"
+      val helpTwo = "Normal maintenance costs do not count."
       val exampleOne = "Replacing a basic kitchen or bathroom with a luxury version is normally considered an improvement."
       val exampleTwo = "Replacing them with something of a similar standard is normally not an improvement."
-      val question = "Did you make any improvements to the property?"
-      val ownerBeforeLegislationStartQuestion = "Did you make an improvement to the property after 31 March 1982?"
-      val questionTwo = "How much did the improvements cost?"
+      val errorMessage = "Select yes if you made any improvements to the property"
+    }
+
+    object Improvements extends Common {
+      val title = "How much did the improvements cost?"
+      val noValueSuppliedError = "Enter the value of your improvements"
+      val negativeValueError = "Enter a positive number for the cost of your improvements"
+      val excessDecimalPlacesError = "The cost of your improvements has too many numbers after the decimal point"
+      val jointOwnership = "If you owned the property with someone else, only enter your share of the improvement costs, as agreed with your co-owner."
+
+      def errorMaximum(value: String): String = s"Enter an amount that's £$value or less"
+
+    }
+
+    object ImprovementsRebased extends Common {
+      val title = "Improvement costs"
       val questionThree = "How much did you spend on improvements before 6 April 2015?"
       val questionFour = "How much have you spent on improvements since 6 April 2015?"
       val noValueSuppliedError = "Enter the value of your improvements"

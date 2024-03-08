@@ -48,7 +48,7 @@ class HowMuchGainActionSpec extends CommonPlaySpec with WithCommonFakeApplicatio
   val mockCalcConnector =mock[CalculatorConnector]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val howMuchGainView = fakeApplication.injector.instanceOf[howMuchGain]
-  val pageTitle = s"""${messages.question} - ${commonMessages.pageHeading} - GOV.UK"""
+  val pageTitle = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
 
   class Setup {

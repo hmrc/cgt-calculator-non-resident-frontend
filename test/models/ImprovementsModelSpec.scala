@@ -36,43 +36,31 @@ class ImprovementsModelSpec extends CommonPlaySpec {
 
   "Post Writes" should {
     "Write data to json" when {
-      "Improvements model has isClaimingImprovements = 'yes', improvementAmt and improvementAfterAmt defined" in {
-        val value = ImprovementsModel("Yes", Some(100), Some(100))
+      "Improvements model has improvementAfterAmt defined" in {
+        val value = ImprovementsModel(0, Some(100))
 
         ImprovementsModel.postWrites(Some(testRebasedValueModel), beforeStartDate).writes(value) shouldBe
-          Json.obj(("improvements", 100), ("improvementsAfterTaxStarted", 100))
+          Json.obj(("improvements", 0), ("improvementsAfterTaxStarted", 100))
       }
-      "Improvements model has isClaimingImprovements = 'yes' and improvementAfterAmt defined" in {
-        val value = ImprovementsModel("Yes", None, Some(100))
-
-        ImprovementsModel.postWrites(Some(testRebasedValueModel), beforeStartDate).writes(value) shouldBe
-          Json.obj(("improvementsAfterTaxStarted", 100))
-      }
-      "Improvements model has isClaimingImprovements = 'yes' and improvementAmt defined" in {
-        val value = ImprovementsModel("Yes", Some(100), None)
+      "Improvements model has improvementAmt defined" in {
+        val value = ImprovementsModel(100, None)
 
         ImprovementsModel.postWrites(Some(testRebasedValueModel), beforeStartDate).writes(value) shouldBe
           Json.obj(("improvements", 100))
       }
-      "Improvements model has isClaimingImprovements = 'yes', improvementAmt and improvementAfterAmt defined and the tax date is after 5/4/2015" in {
-        val value = ImprovementsModel("Yes", Some(100), Some(100))
+      "Improvements model has improvementAmt and improvementAfterAmt defined and the tax date is after 5/4/2015" in {
+        val value = ImprovementsModel(100, Some(100))
 
         ImprovementsModel.postWrites(Some(testRebasedValueModel), afterStartDate).writes(value) shouldBe
           Json.obj(("improvements", 100))
       }
     }
-    "Not write data to json" when {
-      "Improvements model has isClaimingImprovements = 'Yes' and improvementAfterAmt defined and the tax date is after 5/4/2015" in {
-        val value = ImprovementsModel("Yes", None, Some(100))
+    "Not write improvementsAfterAmt data to json" when {
+      "Improvements model has improvementAfterAmt defined and the tax date is after 5/4/2015" in {
+        val value = ImprovementsModel(0, Some(100))
 
         ImprovementsModel.postWrites(Some(testRebasedValueModel), afterStartDate).writes(value) shouldBe
-          Json.obj()
-      }
-      "Improvements model has isClaimingImprovements = 'No', improvementAmt and improvementAfterAmt defined" in {
-        val value = ImprovementsModel("No", Some(100), Some(100))
-
-        ImprovementsModel.postWrites(Some(testRebasedValueModel), beforeStartDate).writes(value) shouldBe
-          Json.obj()
+          Json.obj(("improvements", 0))
       }
     }
   }

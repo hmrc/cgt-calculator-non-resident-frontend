@@ -53,7 +53,7 @@ class WorthWhenInheritedActionSpec extends CommonPlaySpec with WithCommonFakeApp
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val worthWhenInheritedView = fakeApplication.injector.instanceOf[worthWhenInherited]
-  val pageTitle = s"""${messages.question} - ${commonMessages.pageHeading} - GOV.UK"""
+  val pageTitle = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
 
   class Setup {
     val controller = new WorthWhenInheritedController(

@@ -34,6 +34,7 @@ class TotalGainAnswersModelSpec extends CommonPlaySpec with MockitoSugar {
           |"improvements":9000,
           |"rebasedValue":450000,
           |"rebasedCosts":20000,
+          |"isClaimingImprovements":true,
           |"disposalDate":"2017-05-12",
           |"acquisitionDate":"2014-08-14",
           |"improvementsAfterTaxStarted":1000
@@ -52,7 +53,8 @@ class TotalGainAnswersModelSpec extends CommonPlaySpec with MockitoSugar {
         DateModel(14, 8, 2014),
         Some(RebasedValueModel(450000)),
         Some(RebasedCostsModel("Yes", Some(20000))),
-        ImprovementsModel("Yes", Some(9000), Some(1000)),
+        IsClaimingImprovementsModel(true),
+        ImprovementsModel(9000, Some(1000)),
         None, None)
 
       Json.toJson(model) shouldBe outputJson
@@ -70,6 +72,7 @@ class TotalGainAnswersModelSpec extends CommonPlaySpec with MockitoSugar {
             |"improvements":9000,
             |"rebasedValue":450000,
             |"rebasedCosts":20000,
+            |"isClaimingImprovements":true,
             |"disposalDate":"2017-05-12",
             |"acquisitionDate":"2014-08-14",
             |"improvementsAfterTaxStarted":1000
@@ -88,7 +91,8 @@ class TotalGainAnswersModelSpec extends CommonPlaySpec with MockitoSugar {
           DateModel(14, 8, 2014),
           Some(RebasedValueModel(450000)),
           Some(RebasedCostsModel("Yes", Some(20000))),
-          ImprovementsModel("Yes", Some(9000), Some(1000)),
+          IsClaimingImprovementsModel(true),
+          ImprovementsModel(9000, Some(1000)),
           None,
           Some(CostsAtLegislationStartModel("Yes", Some(10000)))
         )
@@ -106,6 +110,8 @@ class TotalGainAnswersModelSpec extends CommonPlaySpec with MockitoSugar {
           |"acquisitionValue":350000,
           |"disposalDate":"2017-05-12",
           |"acquisitionDate":"2015-04-06",
+          |"isClaimingImprovements":true,
+          |"improvements": 0,
           |"acquisitionCosts":0
           |}
         """.stripMargin)
@@ -121,7 +127,8 @@ class TotalGainAnswersModelSpec extends CommonPlaySpec with MockitoSugar {
         None,
         DateModel(6, 4, 2015),
         None, None,
-        ImprovementsModel("Yes", None, None),
+        IsClaimingImprovementsModel(true),
+        ImprovementsModel(0, None),
         None, None)
 
       Json.toJson(model) shouldBe outputJson
@@ -138,6 +145,7 @@ class TotalGainAnswersModelSpec extends CommonPlaySpec with MockitoSugar {
           |"improvements":9000,
           |"rebasedValue":450000,
           |"rebasedCosts":20000,
+          |"isClaimingImprovements":true,
           |"disposalDate":"2017-05-12",
           |"acquisitionDate":"1981-08-14",
           |"improvementsAfterTaxStarted":1000
@@ -157,14 +165,15 @@ class TotalGainAnswersModelSpec extends CommonPlaySpec with MockitoSugar {
         DateModel(14, 8, 1981),
         Some(RebasedValueModel(450000)),
         Some(RebasedCostsModel("Yes", Some(20000))),
-        ImprovementsModel("Yes", Some(9000), Some(1000)),
+        IsClaimingImprovementsModel(true),
+        ImprovementsModel(9000, Some(1000)),
         Some(OtherReliefsModel(4500)),
         Some(CostsAtLegislationStartModel("Yes", Some(6000))))
 
       Json.toJson(model) shouldBe outputJson
     }
 
-    "return same json objedct as backend example" in {
+    "return same json object as backend example" in {
       val outputJson = Json.parse(
           """
             |{
@@ -175,6 +184,7 @@ class TotalGainAnswersModelSpec extends CommonPlaySpec with MockitoSugar {
             |"improvements":9000,
             |"rebasedValue":450000,
             |"rebasedCosts":20000,
+            |"isClaimingImprovements":true,
             |"disposalDate":"2017-05-12",
             |"acquisitionDate":"2014-08-14",
             |"improvementsAfterTaxStarted":1000
@@ -193,7 +203,8 @@ class TotalGainAnswersModelSpec extends CommonPlaySpec with MockitoSugar {
         DateModel(14, 8, 2014),
         Some(RebasedValueModel(450000)),
         Some(RebasedCostsModel("Yes", Some(20000))),
-        ImprovementsModel("Yes", Some(9000), Some(1000)),
+        IsClaimingImprovementsModel(true),
+        ImprovementsModel(9000, Some(1000)),
         None,
         None)
 

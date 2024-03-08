@@ -51,7 +51,7 @@ class CheckYourAnswersController @Inject()(http: DefaultHttpClient,
     case _ =>
       checkGainExists(totalGainResultsModel).map { gain =>
         if(gain) controllers.routes.PrivateResidenceReliefController.privateResidenceRelief.url
-        else controllers.routes.ImprovementsController.improvements.url
+        else controllers.routes.ImprovementsController.improvementsRebased.url
       }
   }
 
@@ -94,6 +94,7 @@ class CheckYourAnswersController @Inject()(http: DefaultHttpClient,
       case Some(_) =>
         sessionCacheService.saveFormData[CalculationElectionModel](KeystoreKeys.calculationElection, CalculationElectionModel(Flat))
         redirectRoute(taxableGainModel, model.get)
+      case _ => sys.error("TotalGainResultModel is missing")
     }
 
     (for {

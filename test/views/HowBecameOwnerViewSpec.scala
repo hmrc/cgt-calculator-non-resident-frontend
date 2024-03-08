@@ -32,7 +32,7 @@ class HowBecameOwnerViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   lazy val howBecameOwnerView = fakeApplication.injector.instanceOf[howBecameOwner]
-  val pageTitle = s"""${messages.question} - ${commonMessages.pageHeading} - GOV.UK"""
+  val pageTitle = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
 
   "The Sold for Less view spec" when {
 

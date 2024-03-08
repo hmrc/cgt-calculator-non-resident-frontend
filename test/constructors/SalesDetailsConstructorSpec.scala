@@ -37,7 +37,8 @@ class SalesDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeAppl
     DateModel(1, 4, 2013),
     None,
     None,
-    ImprovementsModel("No", None, None),
+    IsClaimingImprovementsModel(false),
+    ImprovementsModel(),
     None
   )
 
@@ -54,7 +55,8 @@ class SalesDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeAppl
     DateModel(1, 4,2013),
     Some(RebasedValueModel(7500)),
     Some(RebasedCostsModel("Yes", Some(150))),
-    ImprovementsModel("Yes", Some(50), Some(25)),
+    IsClaimingImprovementsModel(true),
+    ImprovementsModel(50, Some(25)),
     None
   )
 
@@ -71,7 +73,8 @@ class SalesDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeAppl
     DateModel(1, 4, 2013),
     Some(RebasedValueModel(7500)),
     Some(RebasedCostsModel("Yes", Some(150))),
-    ImprovementsModel("Yes", Some(50), Some(25)),
+    IsClaimingImprovementsModel(true),
+    ImprovementsModel(50, Some(25)),
     None
   )
 

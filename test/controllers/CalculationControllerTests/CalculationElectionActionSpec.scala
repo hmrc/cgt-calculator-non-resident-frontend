@@ -57,8 +57,8 @@ class CalculationElectionActionSpec ()
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val calculationElectionView = fakeApplication.injector.instanceOf[calculationElection]
   val calculationElectionNoReliefsView = fakeApplication.injector.instanceOf[calculationElectionNoReliefs]
-  val calculationElectionPageTitle = s"""${messages.heading} - ${commonMessages.pageHeading} - GOV.UK"""
-  val calculationElectionNoReliefsPageTitle = s"""${nRMessages.title} - ${commonMessages.pageHeading} - GOV.UK"""
+  val calculationElectionPageTitle = s"""${messages.heading} - ${commonMessages.serviceName} - GOV.UK"""
+  val calculationElectionNoReliefsPageTitle = s"""${nRMessages.title} - ${commonMessages.serviceName} - GOV.UK"""
 
   class Setup {
     val controller = new CalculationElectionController(

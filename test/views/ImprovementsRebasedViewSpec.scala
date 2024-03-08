@@ -26,22 +26,22 @@ import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.i18n.MessagesApi
 import play.api.mvc.MessagesControllerComponents
-import views.html.calculation.improvements
+import views.html.calculation.improvementsRebased
 
-class ImprovementsViewSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with MockitoSugar {
+class ImprovementsRebasedViewSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with MockitoSugar {
 
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   val mockMessagesApi = mock[MessagesApi]
-  lazy val improvementsView = fakeApplication.injector.instanceOf[improvements]
-  lazy val pageHeading: String = messages.Improvements.title
+  lazy val improvementsRebasedView = fakeApplication.injector.instanceOf[improvementsRebased]
+  lazy val pageHeading: String = messages.ImprovementsRebased.title
   lazy val pageTitle = s"$pageHeading - ${messages.serviceName} - GOV.UK"
 
   "Improvements view" should {
 
-    "supplied with no errors and is owner after legislation start" should {
+    "supplied with no errors, improvementsOptions = true and is owner after legislation start" should {
 
-      lazy val view = improvementsView(improvementsForm(true))(fakeRequest, mockMessage, mockMessagesApi)
+      lazy val view = improvementsRebasedView(improvementsForm(true))(fakeRequest, mockMessage, mockMessagesApi)
       lazy val document = Jsoup.parse(view.body)
 
       "return some HTML that" should {
@@ -52,6 +52,11 @@ class ImprovementsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
 
         s"has the heading of $pageHeading" in {
           document.body().getElementsByTag("h1").first().text shouldBe pageHeading
+        }
+
+        "contains 2 inputs for before and after" in {
+          document.body.select("input.govuk-input").first().attr("id") shouldBe "improvementsAmt"
+          document.body.select("input.govuk-input").last().attr("id") shouldBe "improvementsAmtAfter"
         }
 
         "have a back link" which {
@@ -75,13 +80,14 @@ class ImprovementsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
           document.getElementsByClass("hmrc-header__service-name hmrc-header__service-name--linked").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate.url
         }
 
-        "have hint text" which {
+        "have inset text" which {
 
-          lazy val helpText = document.getElementsByClass("govuk-hint")
+          lazy val helpText = document.getElementsByClass("govuk-inset-text")
 
-          s"should have hint text ${messages.Improvements.jointOwnership} For example, £10,000.50" in {
-            helpText.text() shouldBe(messages.Improvements.jointOwnership + " For example, £10,000.50")
+          s"should have help text of ${messages.ImprovementsRebased.jointOwnership}" in {
+            helpText.text() shouldBe messages.ImprovementsRebased.jointOwnership
           }
+
         }
 
         "have a form" which {
@@ -91,8 +97,16 @@ class ImprovementsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
             form.attr("method") shouldBe "POST"
           }
 
-          s"has an action of '${routes.ImprovementsController.submitImprovements.url}'" in {
-            form.attr("action") shouldBe controllers.routes.ImprovementsController.submitImprovements.url
+          s"has an action of '${routes.ImprovementsController.submitImprovementsRebased.url}'" in {
+            form.attr("action") shouldBe controllers.routes.ImprovementsController.submitImprovementsRebased.url
+          }
+
+          s"has one input for improvements amounts before tax started" in {
+            document.select("label.govuk-label").first().text() shouldBe messages.ImprovementsRebased.questionThree
+          }
+
+          s"has one input for improvements amounts after tax started" in {
+            document.select("label.govuk-label").last().text() shouldBe messages.ImprovementsRebased.questionFour
           }
         }
 
@@ -110,13 +124,13 @@ class ImprovementsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
       }
 
       "should produce the same output when render and f are called" in {
-        improvementsView.f(improvementsForm(true))(fakeRequest, mockMessage, mockMessagesApi) shouldBe improvementsView.render(improvementsForm(true), fakeRequest, mockMessage, mockMessagesApi)
+        improvementsRebasedView.f(improvementsForm(true))(fakeRequest, mockMessage, mockMessagesApi) shouldBe improvementsRebasedView.render(improvementsForm(true), fakeRequest, mockMessage, mockMessagesApi)
       }
     }
 
     "supplied with errors" should {
       lazy val form = improvementsForm(true).bind(Map("improvementsAmt" -> "testData"))
-      lazy val view = improvementsView(form)(fakeRequest, mockMessage, mockMessagesApi)
+      lazy val view = improvementsRebasedView(form)(fakeRequest, mockMessage, mockMessagesApi)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

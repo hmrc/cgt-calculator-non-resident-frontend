@@ -74,19 +74,19 @@ class TotalGainRequestConstructorSpec extends CommonPlaySpec {
   "Calling .improvements" should {
 
     "produce a valid query string with a provided value" in {
-      val result = TotalGainRequestConstructor.improvements(ImprovementsModel("Yes", Some(300), None))
+      val result = TotalGainRequestConstructor.improvements(ImprovementsModel(300, None))
 
       result shouldBe "&improvements=300.0"
     }
 
     "produce a valid query string with no provided value" in {
-      val result = TotalGainRequestConstructor.improvements(ImprovementsModel("No", Some(300), None))
+      val result = TotalGainRequestConstructor.improvements(ImprovementsModel())
 
       result shouldBe ""
     }
 
     "produce a valid query string with a None provided value" in {
-      val result = TotalGainRequestConstructor.improvements(ImprovementsModel("Yes", None, None))
+      val result = TotalGainRequestConstructor.improvements(ImprovementsModel())
 
       result shouldBe ""
     }
@@ -116,19 +116,19 @@ class TotalGainRequestConstructorSpec extends CommonPlaySpec {
   "Calling .improvementsAfterTaxStarted" should {
 
     "produce a valid query string with a provided value" in {
-      val result = TotalGainRequestConstructor.improvementsAfterTaxStarted(ImprovementsModel("Yes", None, Some(300)))
+      val result = TotalGainRequestConstructor.improvementsAfterTaxStarted(ImprovementsModel(0, Some(300)))
 
       result shouldBe "&improvementsAfterTaxStarted=300.0"
     }
 
     "produce a valid query string with no provided value" in {
-      val result = TotalGainRequestConstructor.improvementsAfterTaxStarted(ImprovementsModel("No", None, Some(300)))
+      val result = TotalGainRequestConstructor.improvementsAfterTaxStarted(ImprovementsModel())
 
       result shouldBe ""
     }
 
     "produce a valid query string with a None provided value" in {
-      val result = TotalGainRequestConstructor.improvementsAfterTaxStarted(ImprovementsModel("Yes", None, None))
+      val result = TotalGainRequestConstructor.improvementsAfterTaxStarted(ImprovementsModel())
 
       result shouldBe ""
     }
@@ -157,7 +157,7 @@ class TotalGainRequestConstructorSpec extends CommonPlaySpec {
     "produce a valid query string with an acquisition date before tax start" in {
       val result = TotalGainRequestConstructor.rebasedValues(Some(RebasedValueModel(3000)),
         Some(RebasedCostsModel("Yes", Some(300))),
-        ImprovementsModel("Yes", None, Some(30)),
+        ImprovementsModel(0, Some(30)),
         DateModel(5, 4, 2015))
 
       result shouldBe "&rebasedValue=3000.0&rebasedCosts=300.0&improvementsAfterTaxStarted=30.0"
@@ -166,7 +166,7 @@ class TotalGainRequestConstructorSpec extends CommonPlaySpec {
     "produce an empty query string with an acquisition date after tax start" in {
       val result = TotalGainRequestConstructor.rebasedValues(None,
         None,
-        ImprovementsModel("Yes", None, None),
+        ImprovementsModel(),
         DateModel(6, 4, 2015))
 
       result shouldBe ""
@@ -188,7 +188,8 @@ class TotalGainRequestConstructorSpec extends CommonPlaySpec {
         DateModel(6, 4, 2015),
         None,
         None,
-        ImprovementsModel("Yes", Some(10), None),
+        IsClaimingImprovementsModel(true),
+        ImprovementsModel(10, None),
         None)
 
       val result = TotalGainRequestConstructor.totalGainQuery(model)
@@ -210,7 +211,8 @@ class TotalGainRequestConstructorSpec extends CommonPlaySpec {
         DateModel(4, 10, 2013),
         Some(RebasedValueModel(3000)),
         Some(RebasedCostsModel("Yes", Some(300))),
-        ImprovementsModel("Yes", Some(10), Some(20)),
+        IsClaimingImprovementsModel(true),
+        ImprovementsModel(10, Some(20)),
         None)
 
       val result = TotalGainRequestConstructor.totalGainQuery(model)

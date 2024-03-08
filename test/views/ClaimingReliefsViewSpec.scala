@@ -33,7 +33,7 @@ class ClaimingReliefsViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   lazy val claimingReliefsView = fakeApplication.injector.instanceOf[claimingReliefs]
 
-  lazy val pageTitle = s"""${messages.title} - ${commonMessages.pageHeading} - GOV.UK"""
+  lazy val pageTitle = s"""${messages.title} - ${commonMessages.serviceName} - GOV.UK"""
 
   "ClaimingReliefs view" when {
 

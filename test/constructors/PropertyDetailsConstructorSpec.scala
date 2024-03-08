@@ -36,7 +36,8 @@ class PropertyDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeA
     DateModel(1, 1, 2015),
     None,
     None,
-    ImprovementsModel("No", None, None),
+    IsClaimingImprovementsModel(false),
+    ImprovementsModel(),
     None
   )
 
@@ -53,7 +54,8 @@ class PropertyDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeA
     DateModel(6, 4, 2015),
     None,
     Some(RebasedCostsModel("No", None)),
-    ImprovementsModel("Yes", Some(50), None),
+    IsClaimingImprovementsModel(true),
+    ImprovementsModel(50, None),
     None
   )
 
@@ -70,7 +72,8 @@ class PropertyDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeA
     DateModel(1, 4, 2013),
     Some(RebasedValueModel(7500)),
     Some(RebasedCostsModel("Yes", Some(150))),
-    ImprovementsModel("Yes", Some(50), Some(25)),
+    IsClaimingImprovementsModel(true),
+    ImprovementsModel(50, Some(25)),
     None
   )
 
@@ -99,12 +102,12 @@ class PropertyDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeA
     "supplied with a value of Yes" should {
       lazy val result = PropertyDetailsConstructor.constructClaimingImprovementsRow(claimingRebasedImprovements).get
 
-      "have an id of nr:improvements-isClaiming" in {
-        result.id shouldBe "nr:improvements-isClaiming"
+      "have an id of nr:isClaimingImprovements" in {
+        result.id shouldBe "nr:isClaimingImprovements"
       }
 
       s"have the data for ${messages.yes}" in {
-        result.data shouldBe messages.yes
+        result.data shouldBe true
       }
 
       "have the question for improvements is claiming" in {
@@ -120,7 +123,7 @@ class PropertyDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeA
       lazy val result = PropertyDetailsConstructor.constructClaimingImprovementsRow(noImprovements).get
 
       s"have the value ${messages.no}" in {
-        result.data shouldBe messages.no
+        result.data shouldBe false
       }
     }
   }
@@ -179,7 +182,7 @@ class PropertyDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeA
       }
 
       "have a link to the improvements page" in {
-        result.get.link shouldBe Some(controllers.routes.ImprovementsController.improvements.url)
+        result.get.link shouldBe Some(controllers.routes.ImprovementsController.improvementsRebased.url)
       }
     }
   }
@@ -206,7 +209,7 @@ class PropertyDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeA
       }
 
       "have a link to the improvements page" in {
-        result.get.link shouldBe Some(controllers.routes.ImprovementsController.improvements.url)
+        result.get.link shouldBe Some(controllers.routes.ImprovementsController.improvementsRebased.url)
       }
     }
 
