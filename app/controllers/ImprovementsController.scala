@@ -102,6 +102,7 @@ class ImprovementsController @Inject()(calcConnector: CalculatorConnector,
     def successAction(model: IsClaimingImprovementsModel, isAfterTaxStart: Boolean, gains: Option[TotalGainResultsModel]): Future[Result] = {
       for {
         _ <- sessionCacheService.saveFormData(KeystoreKeys.isClaimingImprovements, model)
+        _ <- sessionCacheService.saveFormData(KeystoreKeys.improvements, ImprovementsModel())
       } yield routeRequest(model, isAfterTaxStart, gains)
     }
 
