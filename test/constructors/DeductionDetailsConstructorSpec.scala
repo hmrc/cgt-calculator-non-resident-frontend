@@ -38,7 +38,7 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
     None,
     None,
     IsClaimingImprovementsModel(false),
-    ImprovementsModel(),
+    None,
     None
   )
 
@@ -56,7 +56,7 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
     None,
     None,
     IsClaimingImprovementsModel(false),
-    ImprovementsModel(),
+    None,
     Some(OtherReliefsModel(0))
   )
 
@@ -74,7 +74,7 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
     Some(RebasedValueModel(1)),
     Some(RebasedCostsModel("No", None)),
     IsClaimingImprovementsModel(false),
-    ImprovementsModel(),
+    None,
     Some(OtherReliefsModel(1450))
   )
 
@@ -92,7 +92,7 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
     None,
     None,
     IsClaimingImprovementsModel(false),
-    ImprovementsModel(),
+    None,
     Some(OtherReliefsModel(1450))
   )
 
@@ -110,7 +110,7 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
     None,
     None,
     IsClaimingImprovementsModel(false),
-    ImprovementsModel(),
+    None,
     Some(OtherReliefsModel(1450))
   )
 
@@ -128,7 +128,7 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
     None,
     None,
     IsClaimingImprovementsModel(false),
-    ImprovementsModel(),
+    None,
     Some(OtherReliefsModel(1450))
   )
 
@@ -146,7 +146,7 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
     None,
     None,
     IsClaimingImprovementsModel(false),
-    ImprovementsModel(),
+    None,
     Some(OtherReliefsModel(1450))
   )
 
@@ -164,7 +164,7 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
     None,
     None,
     IsClaimingImprovementsModel(false),
-    ImprovementsModel(),
+    None,
     Some(OtherReliefsModel(1450))
   )
 

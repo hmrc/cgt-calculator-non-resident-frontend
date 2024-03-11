@@ -68,7 +68,7 @@ class WhatNextControllerSpec extends CommonPlaySpec with WithCommonFakeApplicati
     None,
     None,
     IsClaimingImprovementsModel(false),
-    ImprovementsModel(),
+    None,
     None
   )
 

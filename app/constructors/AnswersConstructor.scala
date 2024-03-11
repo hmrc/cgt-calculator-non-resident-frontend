@@ -93,7 +93,7 @@ class AnswersConstructor @Inject()(sessionCacheService: SessionCacheService)(imp
       costsBeforeLegislationStart <- costsBeforeLegislationStart
     } yield TotalGainAnswersModel(disposalDate, soldOrGivenAway, soldForLess, disposalValue, disposalCosts,
       howBecameOwner, boughtForLess, acquisitionValue, acquisitionCosts, acquisitionDate,
-      rebasedValue, rebasedCosts, isClaimingImprovements.getOrElse(IsClaimingImprovementsModel(false)), improvements.getOrElse(ImprovementsModel()), otherReliefsFlat, costsBeforeLegislationStart)
+      rebasedValue, rebasedCosts, isClaimingImprovements.getOrElse(IsClaimingImprovementsModel(false)), improvements, otherReliefsFlat, costsBeforeLegislationStart)
   }
 
   def getPersonalDetailsAndPreviousCapitalGainsAnswers(implicit request: Request[_]): Future[Option[TotalPersonalDetailsCalculationModel]] = {

@@ -39,7 +39,7 @@ class PurchaseDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeA
     Some(RebasedValueModel(1000)),
     Some(RebasedCostsModel("Yes", Some(150))),
     IsClaimingImprovementsModel(false),
-    ImprovementsModel(),
+    None,
     None
   )
 
@@ -57,7 +57,7 @@ class PurchaseDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeA
     None,
     None,
     IsClaimingImprovementsModel(false),
-    ImprovementsModel(),
+    None,
     None
   )
 
@@ -75,7 +75,7 @@ class PurchaseDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeA
     Some(RebasedValueModel(7500)),
     Some(RebasedCostsModel("Yes", Some(150))),
     IsClaimingImprovementsModel(true),
-    ImprovementsModel(50, Some(25)),
+    Some(ImprovementsModel(50, Some(25))),
     None
   )
 
@@ -93,7 +93,7 @@ class PurchaseDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeA
     Some(RebasedValueModel(7500)),
     Some(RebasedCostsModel("Yes", Some(150))),
     IsClaimingImprovementsModel(true),
-    ImprovementsModel(50, Some(25)),
+    Some(ImprovementsModel(50, Some(25))),
     None
   )
 
@@ -111,7 +111,7 @@ class PurchaseDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeA
     Some(RebasedValueModel(7500)),
     Some(RebasedCostsModel("Yes", Some(150))),
     IsClaimingImprovementsModel(true),
-    ImprovementsModel(50, Some(25)),
+    Some(ImprovementsModel(50, Some(25))),
     None
   )
 
@@ -132,7 +132,7 @@ class PurchaseDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeA
         Some(RebasedValueModel(7500)),
         Some(RebasedCostsModel("Yes", Some(150))),
         IsClaimingImprovementsModel(true),
-        ImprovementsModel(50, Some(25)),
+        Some(ImprovementsModel(50, Some(25))),
         None,
         Some(model)
       )

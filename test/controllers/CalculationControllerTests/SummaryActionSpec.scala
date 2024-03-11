@@ -139,7 +139,7 @@ class SummaryActionSpec extends CommonPlaySpec with WithCommonFakeApplication wi
     None,
     None,
     IsClaimingImprovementsModel(false),
-    ImprovementsModel(),
+    None,
     None
   )
 

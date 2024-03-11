@@ -59,7 +59,7 @@ class CalculatorConnectorSpec extends CommonPlaySpec with WithCommonFakeApplicat
       None,
       None,
       IsClaimingImprovementsModel(true),
-      ImprovementsModel(10, Some(20)),
+      Some(ImprovementsModel(10, Some(20))),
       None)
 
     "return a valid response" in new Setup {
@@ -97,7 +97,7 @@ class CalculatorConnectorSpec extends CommonPlaySpec with WithCommonFakeApplicat
       None,
       None,
       IsClaimingImprovementsModel(true),
-      ImprovementsModel(10, Some(20)),
+      Some(ImprovementsModel(10, Some(20))),
       None)
 
 

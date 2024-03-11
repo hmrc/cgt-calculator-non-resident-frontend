@@ -24,8 +24,8 @@ object PropertyDetailsConstructor {
 
   def propertyDetailsRows(answers: TotalGainAnswersModel): Seq[QuestionAnswerModel[Any]] = {
 
-    val showRebasedImprovements = !TaxDates.dateAfterStart(answers.acquisitionDateModel.get)
     val showImprovements = answers.isClaimingImprovementsModel.isClaimingImprovements
+    val showRebasedImprovements = showImprovements && !TaxDates.dateAfterStart(answers.acquisitionDateModel.get)
 
     val claimingImprovementsRow = constructClaimingImprovementsRow(answers)
     val improvementsTotalRow = constructTotalImprovementsRow(answers, showImprovements, showRebasedImprovements)
@@ -40,20 +40,20 @@ object PropertyDetailsConstructor {
     Some(QuestionAnswerModel[Boolean](keys.isClaimingImprovements,
       answers.isClaimingImprovementsModel.isClaimingImprovements,
       "calc.improvements.question",
-      Some(controllers.routes.ImprovementsController.improvements.url)
+      Some(controllers.routes.ImprovementsController.getIsClaimingImprovements.url)
     ))
   }
 
   def constructTotalImprovementsRow(answers: TotalGainAnswersModel, display: Boolean, displayRebased: Boolean): Option[QuestionAnswerModel[BigDecimal]] = {
-    if (display && displayRebased) {
+    if (display && displayRebased && answers.improvementsModel.isDefined) {
       Some(QuestionAnswerModel[BigDecimal](s"${keys.improvements}-total",
-        answers.improvementsModel.improvementsAmt,
+        answers.improvementsModel.get.improvementsAmt,
         "calc.improvements.questionThree",
         Some(controllers.routes.ImprovementsController.improvementsRebased.url)
       ))
     }
-    else if(display) {
-      val total: BigDecimal = answers.improvementsModel.improvementsAmt
+    else if(display && answers.improvementsModel.isDefined) {
+      val total: BigDecimal = answers.improvementsModel.get.improvementsAmt
       Some(QuestionAnswerModel[BigDecimal](s"${keys.improvements}-total",
         total,
         "calc.improvements.questionTwo",
@@ -64,9 +64,9 @@ object PropertyDetailsConstructor {
   }
 
   def constructImprovementsAfterRow(answers: TotalGainAnswersModel, display: Boolean, displayRebased: Boolean): Option[QuestionAnswerModel[BigDecimal]] = {
-    if (display && displayRebased) {
+    if (display && displayRebased && answers.improvementsModel.isDefined) {
       Some(QuestionAnswerModel[BigDecimal](s"${keys.improvements}-after",
-        answers.improvementsModel.improvementsAmtAfter.getOrElse(0),
+        answers.improvementsModel.get.improvementsAmtAfter.getOrElse(0),
         "calc.improvements.questionFour",
         Some(controllers.routes.ImprovementsController.improvementsRebased.url)
       ))

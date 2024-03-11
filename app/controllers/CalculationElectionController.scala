@@ -181,7 +181,7 @@ class CalculationElectionController @Inject()(calcConnector: CalculatorConnector
         content <- calcElectionConstructor.generateElection(totalGain.get, totalGainWithPRR, taxOwed, otherReliefs)
       } yield {
         action(orderElements(content, isClaimingReliefs), isClaimingReliefs)
-      }).recoverToStart
+      })
     }
 
     calculationElectionForm.bindFromRequest().fold(errorAction, successAction)

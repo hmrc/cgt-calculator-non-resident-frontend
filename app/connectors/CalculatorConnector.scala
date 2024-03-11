@@ -104,14 +104,23 @@ class CalculatorConnector @Inject()(val http: DefaultHttpClient,
         http.GET[BigDecimal](s"$serviceUrl/capital-gains-calculator/non-resident/calculate-total-costs?" +
           s"disposalCosts=${answers.disposalCostsModel.disposalCosts.toDouble}" +
           s"&acquisitionCosts=${answers.rebasedCostsModel.get.rebasedCosts.getOrElse(BigDecimal(0)).toDouble}" +
-          s"&improvements=${answers.improvementsModel.improvementsAmtAfter.getOrElse(BigDecimal(0)).toDouble}")
+          getImprovements(answers, rebased = true))
       } else {
         http.GET[BigDecimal](s"$serviceUrl/capital-gains-calculator/non-resident/calculate-total-costs?" +
           s"disposalCosts=${answers.disposalCostsModel.disposalCosts.toDouble}" +
           s"&acquisitionCosts=${selectAcquisitionCosts(answers).toDouble}" +
-          s"&improvements=${answers.improvementsModel.improvementsAmt + answers.improvementsModel.improvementsAmtAfter.getOrElse(BigDecimal(0)).toDouble}")
+          getImprovements(answers, rebased = false))
       }
     case _ => Future.successful(throw new Exception("No calculation election supplied"))
+  }
+
+  private def getImprovements(answers: TotalGainAnswersModel, rebased: Boolean): String = {
+    answers.improvementsModel match {
+      case Some(model) => if(!rebased)
+        s"&improvements=${model.improvementsAmt.toDouble + model.improvementsAmtAfter.getOrElse(BigDecimal(0)).toDouble}"
+        else s"&improvements=${model.improvementsAmtAfter.getOrElse(BigDecimal(0)).toDouble}"
+      case _ => "&improvements=0.0"
+    }
   }
 
   def getTaxYear(taxYear: String)(implicit hc: HeaderCarrier): Future[Option[TaxYearModel]] = {

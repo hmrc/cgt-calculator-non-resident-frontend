@@ -90,6 +90,11 @@ class ImprovementsController @Inject()(calcConnector: CalculatorConnector,
 
   val submitIsClaimingImprovements: Action[AnyContent] = ValidateSession.async { implicit request =>
 
+    def unsetImprovementsValues(oldValues: Option[ImprovementsModel]): Future[Unit] = oldValues match {
+      case Some(_) => sessionCacheService.unsetData(KeystoreKeys.improvements)
+      case _ => Future.unit
+    }
+
     def errorAction(errors: Form[IsClaimingImprovementsModel], ownerBeforeLegislationStart: Boolean): Future[Result] =
       Future.successful(BadRequest(isClaimingImprovementsView(errors, ownerBeforeLegislationStart)))
 
@@ -99,21 +104,22 @@ class ImprovementsController @Inject()(calcConnector: CalculatorConnector,
       else routeBasedOnGains(gains)
     }
 
-    def successAction(model: IsClaimingImprovementsModel, isAfterTaxStart: Boolean, gains: Option[TotalGainResultsModel]): Future[Result] = {
+    def successAction(model: IsClaimingImprovementsModel, isAfterTaxStart: Boolean): Future[Result] = {
       for {
         _ <- sessionCacheService.saveFormData(KeystoreKeys.isClaimingImprovements, model)
-        _ <- sessionCacheService.saveFormData(KeystoreKeys.improvements, ImprovementsModel())
+        oldValues <- sessionCacheService.fetchAndGetFormData[ImprovementsModel](KeystoreKeys.improvements)
+        _ <- unsetImprovementsValues(oldValues)
+        allAnswersModel <- answersConstructor.getNRTotalGainAnswers
+        gains <- calcConnector.calculateTotalGain(allAnswersModel)
       } yield routeRequest(model, isAfterTaxStart, gains)
     }
 
     (for {
       acquisitionDate <- fetchAcquisitionDate(request)
       ownerBeforeLegislationStart <- ownerBeforeLegislationStartCheck(acquisitionDate)
-      allAnswersModel <- answersConstructor.getNRTotalGainAnswers
-      gains <- calcConnector.calculateTotalGain(allAnswersModel)
       route <- isClaimingImprovementsForm.bindFromRequest().fold(
         errors => errorAction(errors, ownerBeforeLegislationStart),
-        success => successAction(success, TaxDates.dateAfterStart(acquisitionDate), gains)
+        success => successAction(success, TaxDates.dateAfterStart(acquisitionDate))
       )
     } yield route)
   }
