@@ -72,16 +72,16 @@ object TotalGainRequestConstructor {
   }
 
 
-  def improvements(improvementsModel: ImprovementsModel): String = {
+  def improvements(improvementsModel: Option[ImprovementsModel]): String = {
     improvementsModel match {
-      case ImprovementsModel(value, _) if value > 0 => s"&improvements=${value.toDouble}"
+      case Some(ImprovementsModel(value, _)) if value > 0 => s"&improvements=${value.toDouble}"
       case _ => ""
     }
   }
 
   def rebasedValues(rebasedValueModel: Option[RebasedValueModel],
                     rebasedCostsModel: Option[RebasedCostsModel],
-                    improvementsModel: ImprovementsModel,
+                    improvementsModel: Option[ImprovementsModel],
                     acquisitionDateModel: DateModel): String = {
     rebasedValueModel match {
       case Some(RebasedValueModel(value))
@@ -98,9 +98,9 @@ object TotalGainRequestConstructor {
     }
   }
 
-  def improvementsAfterTaxStarted(improvementsModel: ImprovementsModel): String = {
+  def improvementsAfterTaxStarted(improvementsModel: Option[ImprovementsModel]): String = {
     improvementsModel match {
-      case ImprovementsModel(_, Some(value)) => s"&improvementsAfterTaxStarted=${value.toDouble}"
+      case Some(ImprovementsModel(_, Some(value))) => s"&improvementsAfterTaxStarted=${value.toDouble}"
       case _ => ""
     }
   }

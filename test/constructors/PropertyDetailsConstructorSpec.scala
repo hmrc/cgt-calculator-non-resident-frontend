@@ -37,7 +37,7 @@ class PropertyDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeA
     None,
     None,
     IsClaimingImprovementsModel(false),
-    ImprovementsModel(),
+    None,
     None
   )
 
@@ -55,11 +55,11 @@ class PropertyDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeA
     None,
     Some(RebasedCostsModel("No", None)),
     IsClaimingImprovementsModel(true),
-    ImprovementsModel(50, None),
+    Some(ImprovementsModel(50, None)),
     None
   )
 
-  val claimingRebasedImprovements = TotalGainAnswersModel(
+  val claimingRebasedImprovements: TotalGainAnswersModel = TotalGainAnswersModel(
     DateModel(10, 10, 2016),
     SoldOrGivenAwayModel(true),
     Some(SoldForLessModel(true)),
@@ -73,7 +73,7 @@ class PropertyDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeA
     Some(RebasedValueModel(7500)),
     Some(RebasedCostsModel("Yes", Some(150))),
     IsClaimingImprovementsModel(true),
-    ImprovementsModel(50, Some(25)),
+    Some(ImprovementsModel(50, Some(25))),
     None
   )
 
@@ -110,12 +110,12 @@ class PropertyDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeA
         result.data shouldBe true
       }
 
-      "have the question for improvements is claiming" in {
+      "have the question for claiming improvements" in {
         result.question shouldBe "calc.improvements.question"
       }
 
-      "have a link to the improvements page" in {
-        result.link shouldBe Some(controllers.routes.ImprovementsController.improvements.url)
+      "have a link to the Is Claiming Improvements page" in {
+        result.link shouldBe Some(controllers.routes.ImprovementsController.getIsClaimingImprovements.url)
       }
     }
 

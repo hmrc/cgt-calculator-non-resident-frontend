@@ -105,7 +105,7 @@ class CheckYourAnswersActionSpec()
     Some(RebasedValueModel(3000)),
     Some(RebasedCostsModel("Yes", Some(300))),
     IsClaimingImprovementsModel(true),
-    ImprovementsModel(10, Some(20)),
+    Some(ImprovementsModel(10, Some(20))),
     Some(OtherReliefsModel(30)))
 
   val totalGainResultsModel = TotalGainResultsModel(0, Some(0), Some(0))
@@ -124,7 +124,7 @@ class CheckYourAnswersActionSpec()
     None,
     None,
     IsClaimingImprovementsModel(true),
-    ImprovementsModel(10, Some(20)),
+    Some(ImprovementsModel(10, Some(20))),
     Some(OtherReliefsModel(30)))
 
   val personalDetailsModel = TotalPersonalDetailsCalculationModel(CurrentIncomeModel(9000),

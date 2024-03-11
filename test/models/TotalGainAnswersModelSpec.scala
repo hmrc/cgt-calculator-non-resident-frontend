@@ -54,7 +54,7 @@ class TotalGainAnswersModelSpec extends CommonPlaySpec with MockitoSugar {
         Some(RebasedValueModel(450000)),
         Some(RebasedCostsModel("Yes", Some(20000))),
         IsClaimingImprovementsModel(true),
-        ImprovementsModel(9000, Some(1000)),
+        Some(ImprovementsModel(9000, Some(1000))),
         None, None)
 
       Json.toJson(model) shouldBe outputJson
@@ -92,7 +92,7 @@ class TotalGainAnswersModelSpec extends CommonPlaySpec with MockitoSugar {
           Some(RebasedValueModel(450000)),
           Some(RebasedCostsModel("Yes", Some(20000))),
           IsClaimingImprovementsModel(true),
-          ImprovementsModel(9000, Some(1000)),
+          Some(ImprovementsModel(9000, Some(1000))),
           None,
           Some(CostsAtLegislationStartModel("Yes", Some(10000)))
         )
@@ -111,7 +111,7 @@ class TotalGainAnswersModelSpec extends CommonPlaySpec with MockitoSugar {
           |"disposalDate":"2017-05-12",
           |"acquisitionDate":"2015-04-06",
           |"isClaimingImprovements":true,
-          |"improvements": 0,
+          |"improvements": 10,
           |"acquisitionCosts":0
           |}
         """.stripMargin)
@@ -128,7 +128,7 @@ class TotalGainAnswersModelSpec extends CommonPlaySpec with MockitoSugar {
         DateModel(6, 4, 2015),
         None, None,
         IsClaimingImprovementsModel(true),
-        ImprovementsModel(0, None),
+        Some(ImprovementsModel(10, None)),
         None, None)
 
       Json.toJson(model) shouldBe outputJson
@@ -166,7 +166,7 @@ class TotalGainAnswersModelSpec extends CommonPlaySpec with MockitoSugar {
         Some(RebasedValueModel(450000)),
         Some(RebasedCostsModel("Yes", Some(20000))),
         IsClaimingImprovementsModel(true),
-        ImprovementsModel(9000, Some(1000)),
+        Some(ImprovementsModel(9000, Some(1000))),
         Some(OtherReliefsModel(4500)),
         Some(CostsAtLegislationStartModel("Yes", Some(6000))))
 
@@ -204,7 +204,7 @@ class TotalGainAnswersModelSpec extends CommonPlaySpec with MockitoSugar {
         Some(RebasedValueModel(450000)),
         Some(RebasedCostsModel("Yes", Some(20000))),
         IsClaimingImprovementsModel(true),
-        ImprovementsModel(9000, Some(1000)),
+        Some(ImprovementsModel(9000, Some(1000))),
         None,
         None)
 

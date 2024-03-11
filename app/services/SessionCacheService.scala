@@ -34,6 +34,12 @@ class SessionCacheService @Inject()(
     }
   }
 
+  def unsetData[T](key: String)(implicit request: Request[_]): Future[Unit] = {
+      preservingMdc {
+        sessionRepository.deleteFromSession(DataKey(key))
+      }
+  }
+
   def fetchAndGetFormData[T](key: String)(implicit request: Request[_], formats: Format[T]): Future[Option[T]] = {
     preservingMdc {
       sessionRepository.getFromSession[T](DataKey(key))

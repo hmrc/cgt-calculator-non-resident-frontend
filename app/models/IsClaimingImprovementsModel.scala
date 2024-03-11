@@ -17,7 +17,7 @@
 package models
 
 import common.YesNoKeys
-import play.api.libs.json.{JsValue, Json, OFormat, Writes}
+import play.api.libs.json.{JsObject, JsValue, Json, OFormat, Writes}
 
 case class IsClaimingImprovementsModel(isClaimingImprovements: Boolean)
 

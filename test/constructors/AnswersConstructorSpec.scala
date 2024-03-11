@@ -111,7 +111,7 @@ class AnswersConstructorSpec extends CommonPlaySpec with MockitoSugar with WithC
       .thenReturn(Future.successful(Some(totalGainAnswersModel.isClaimingImprovementsModel)))
 
     when(mockSessionCacheService.fetchAndGetFormData[ImprovementsModel](ArgumentMatchers.eq(KeystoreKeys.improvements))(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(Some(totalGainAnswersModel.improvementsModel)))
+      .thenReturn(Future.successful(totalGainAnswersModel.improvementsModel))
 
     when(mockSessionCacheService.fetchAndGetFormData[OtherReliefsModel](
       ArgumentMatchers.eq(KeystoreKeys.otherReliefsFlat))(ArgumentMatchers.any(), ArgumentMatchers.any()))
@@ -168,7 +168,7 @@ class AnswersConstructorSpec extends CommonPlaySpec with MockitoSugar with WithC
     None,
     None,
     IsClaimingImprovementsModel(false),
-    ImprovementsModel(0, None),
+    None,
     None
   )
 
@@ -186,7 +186,7 @@ class AnswersConstructorSpec extends CommonPlaySpec with MockitoSugar with WithC
     Some(RebasedValueModel(7500)),
     Some(RebasedCostsModel("Yes", Some(150))),
     IsClaimingImprovementsModel(true),
-    ImprovementsModel(50, Some(25)),
+    Some(ImprovementsModel(50, Some(25))),
     Some(OtherReliefsModel(1000))
   )
 
@@ -204,7 +204,7 @@ class AnswersConstructorSpec extends CommonPlaySpec with MockitoSugar with WithC
     Some(RebasedValueModel(7500)),
     Some(RebasedCostsModel("Yes", Some(150))),
     IsClaimingImprovementsModel(true),
-    ImprovementsModel(50, Some(25)),
+    Some(ImprovementsModel(50, Some(25))),
     Some(OtherReliefsModel(1000))
   )
 
@@ -222,7 +222,7 @@ class AnswersConstructorSpec extends CommonPlaySpec with MockitoSugar with WithC
     Some(RebasedValueModel(7500)),
     Some(RebasedCostsModel("Yes", Some(150))),
     IsClaimingImprovementsModel(true),
-    ImprovementsModel(50, Some(25)),
+    Some(ImprovementsModel(50, Some(25))),
     Some(OtherReliefsModel(1000))
   )
 
@@ -240,7 +240,7 @@ class AnswersConstructorSpec extends CommonPlaySpec with MockitoSugar with WithC
     Some(RebasedValueModel(7500)),
     Some(RebasedCostsModel("Yes", Some(150))),
     IsClaimingImprovementsModel(true),
-    ImprovementsModel(50, Some(25)),
+    Some(ImprovementsModel(50, Some(25))),
     Some(OtherReliefsModel(1000))
   )
 
