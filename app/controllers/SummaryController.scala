@@ -144,7 +144,7 @@ class SummaryController @Inject()(calcConnector: CalculatorConnector,
             questionsForPrint = questionAnswerRows
           ))
       }
-    })
+    }).recoverToStart
   }
 
   private[controllers] def setURPanelFlag(implicit hc: HeaderCarrier): Boolean = {
