@@ -1,3 +1,19 @@
+/*
+ * Copyright 2016 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import uk.gov.hmrc.DefaultBuildSettings.{defaultSettings, scalaSettings}
 
 lazy val appName = "cgt-calculator-non-resident-frontend"
@@ -6,21 +22,10 @@ lazy val plugins : Seq[Plugins] = Seq(play.sbt.PlayScala)
 lazy val playSettings : Seq[Setting[_]] = Seq.empty
 val silencerVersion = "1.17.13"
 
-lazy val scoverageSettings = {
-  import scoverage.ScoverageKeys
-  Seq(
-    // Semicolon-separated list of regexs matching classes to exclude
-    ScoverageKeys.coverageExcludedPackages := "<empty>;Reverse.*;.*AuthService.*;models\\.data\\..*;views.html.helpers.*;uk.gov.hmrc.BuildInfo;app.*;nr.*;res.*;prod.*;config.*;controllers.SessionCacheController;com.kenshoo.play.*;controllers.utils.javascript.*;controllers.javascript.*",
-    ScoverageKeys.coverageMinimumStmtTotal := 90,
-    ScoverageKeys.coverageFailOnMinimum := false,
-    ScoverageKeys.coverageHighlighting := true
-  )
-}
-
 lazy val microservice = Project(appName, file("."))
   .enablePlugins(Seq(play.sbt.PlayScala, SbtDistributablesPlugin) ++ plugins : _*)
   .disablePlugins(JUnitXmlReportPlugin)
-  .settings(scoverageSettings : _*)
+  .settings(CodeCoverageSettings.settings : _*)
   .settings(majorVersion := 1)
   .settings(playSettings : _*)
   .settings(PlayKeys.playDefaultPort := 9902)
