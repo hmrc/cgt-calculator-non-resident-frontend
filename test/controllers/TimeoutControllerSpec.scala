@@ -16,8 +16,8 @@
 
 package controllers
 
-import akka.stream.Materializer
-import akka.util.Timeout
+import org.apache.pekko.stream.Materializer
+import org.apache.pekko.util.Timeout
 import assets.MessageLookup.{NonResident => commonMessages}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import config.ApplicationConfig

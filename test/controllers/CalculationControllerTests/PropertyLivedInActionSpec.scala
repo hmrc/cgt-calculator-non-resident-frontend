@@ -16,7 +16,7 @@
 
 package controllers.CalculationControllerTests
 
-import akka.stream.Materializer
+import org.apache.pekko.stream.Materializer
 import assets.MessageLookup.{PropertyLivedIn => messages}
 import common.KeystoreKeys.{NonResidentKeys => keyStoreKeys}
 import common.{CommonPlaySpec, WithCommonFakeApplication}

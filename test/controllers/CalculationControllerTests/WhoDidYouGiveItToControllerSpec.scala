@@ -16,8 +16,8 @@
 
 package controllers.CalculationControllerTests
 
-import akka.stream.Materializer
-import akka.util.Timeout
+import org.apache.pekko.stream.Materializer
+import org.apache.pekko.util.Timeout
 import assets.MessageLookup
 import assets.MessageLookup.{NoTaxToPay => messages}
 import common.KeystoreKeys.{NonResidentKeys => keystoreKeys}

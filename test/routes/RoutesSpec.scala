@@ -17,7 +17,7 @@
 package routes
 
 import common.{CommonPlaySpec, WithCommonFakeApplication}
-import org.scalatest.Matchers
+import org.scalatest.matchers.should.Matchers
 
 class RoutesSpec extends CommonPlaySpec with WithCommonFakeApplication with Matchers {
 

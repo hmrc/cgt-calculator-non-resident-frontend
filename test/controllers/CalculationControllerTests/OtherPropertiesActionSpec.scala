@@ -16,7 +16,7 @@
 
 package controllers.CalculationControllerTests
 
-import akka.stream.Materializer
+import org.apache.pekko.stream.Materializer
 import assets.MessageLookup.NonResident.{OtherProperties => messages}
 import assets.MessageLookup.{NonResident => commonMessages}
 import com.codahale.metrics.SharedMetricRegistries
