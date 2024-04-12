@@ -16,7 +16,7 @@
 
 package controllers.CalculationControllerTests
 
-import akka.stream.Materializer
+import org.apache.pekko.stream.Materializer
 import assets.MessageLookup
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import config.ApplicationConfig

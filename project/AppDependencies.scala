@@ -14,21 +14,20 @@
  * limitations under the License.
  */
 
-import play.core.PlayVersion
 import sbt.*
 
 object AppDependencies {
 
-  val bootstrapVersion         = "7.22.0"
-  val playVersion              = "play-28"
-  val hmrcMongoVersion         = "1.3.0"
+  val bootstrapVersion         = "8.5.0"
+  val playVersion              = "play-30"
+  val hmrcMongoVersion         = "1.7.0"
 
   val compile = Seq(
-    "uk.gov.hmrc"       %% s"bootstrap-frontend-$playVersion"    % bootstrapVersion,
-    "uk.gov.hmrc"       %% s"play-frontend-hmrc-$playVersion"    % "8.5.0",
-    "uk.gov.hmrc.mongo" %% s"hmrc-mongo-$playVersion"            % hmrcMongoVersion,
-    "uk.gov.hmrc"       %% "play-conditional-form-mapping"       % s"1.13.0-$playVersion",
-    "org.julienrf"      %% "play-json-derived-codecs"            % "10.1.0"
+    "uk.gov.hmrc"       %% s"bootstrap-frontend-$playVersion"             % bootstrapVersion,
+    "uk.gov.hmrc"       %% s"play-frontend-hmrc-$playVersion"             % bootstrapVersion,
+    "uk.gov.hmrc.mongo" %% s"hmrc-mongo-$playVersion"                     % hmrcMongoVersion,
+    "uk.gov.hmrc"       %% s"play-conditional-form-mapping-$playVersion"  % "2.0.0",
+    "org.julienrf"      %% "play-json-derived-codecs"                     % "10.1.0"
   )
 
   trait TestDependencies {
@@ -40,13 +39,13 @@ object AppDependencies {
     def apply(): Seq[ModuleID] = new TestDependencies {
       override lazy val test = Seq(
         "uk.gov.hmrc"             %% s"bootstrap-test-$playVersion"   % bootstrapVersion    % scope,
-        "org.scalatestplus.play"  %% "scalatestplus-play"             % "5.1.0"             % scope,
+        "org.scalatestplus.play"  %% "scalatestplus-play"             % "7.0.1"             % scope,
         "org.scalatestplus"       %% "scalatestplus-mockito"          % "1.0.0-M2"          % scope,
-        "org.mockito"             %  "mockito-core"                   % "5.5.0"            % scope,
+        "org.mockito"             %  "mockito-core"                   % "5.11.0"            % scope,
         "org.pegdown"             %  "pegdown"                        % "1.6.0"             % scope,
-        "org.jsoup"               %  "jsoup"                          % "1.16.1"            % scope,
-        "com.typesafe.play"       %% "play-test"                      % PlayVersion.current % scope,
-        "uk.gov.hmrc.mongo"       %%  s"hmrc-mongo-test-$playVersion" % hmrcMongoVersion      % scope
+        "org.jsoup"               %  "jsoup"                          % "1.17.2"            % scope,
+        "org.playframework"       %% "play-test"                      % "3.0.2"             % scope,
+        "uk.gov.hmrc.mongo"       %%  s"hmrc-mongo-test-$playVersion" % hmrcMongoVersion    % scope
       )
     }.test
   }
