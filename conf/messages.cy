@@ -2,6 +2,12 @@ service.name = Cyfrifo’ch Treth Enillion Cyfalaf
 
 site.title.error = Gwall: {0}
 
+## Sign out banner
+signOut.title = Rydych ar fin cael eich allgofnodi
+signOut.message = Er eich diogelwch, byddwn yn eich allgofnodi cyn pen
+signOut.keepAliveButtonText = Ewch ati i gyfrifo eich Treth Enillion Cyfalaf
+signOut.signOutButtonText = Dileu''ch atebion
+
 ##Month Names##
 calc.month.1 = Ionawr
 calc.month.2 = Chwefror
@@ -516,4 +522,4 @@ nocgt.content.two = Rydych wedi rhoi gwybod i ni eich bod wedi gwerthu’r eiddo
 
 nocgt.invaliddate.title = Does dim treth i’w thalu
 
-session.timeout.message = Mae’ch sesiwn wedi dod i ben
+session.timeout.message = Er eich diogelwch, gwnaethom ddileu’ch atebion Dechrau eto
