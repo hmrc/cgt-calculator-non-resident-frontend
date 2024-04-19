@@ -24,6 +24,12 @@ site.title.error = Error: {0}
 
 calc.currencyHint = For example, {0}
 
+## Sign out banner
+signOut.title = For your security
+signOut.message = We will delete your answers in
+signOut.keepAliveButtonText = Continue calculating your Capital Gains Tax
+signOut.signOutButtonText = Delete your answers
+
 ##Month Names##
 calc.month.1 = January
 calc.month.2 = February
@@ -42,7 +48,7 @@ calc.month.12 = December
 calc.error.summary.heading = This page has errors
 
 ## Session Timeout message ##
-session.timeout.message = Your session has ended
+session.timeout.message = For your security, we deleted your answers
 
 ## PLAY! Error Overrides ##
 error.number = Enter a number, for example 10000.00
