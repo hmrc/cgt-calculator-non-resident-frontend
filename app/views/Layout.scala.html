@@ -67,7 +67,9 @@
             serviceUrl = Some(controllers.routes.DisposalDateController.disposalDate.url)
         ),
         banners = Banners(
-            userResearchBanner = Option.when(userResearchBannerEnabled){ UserResearchBanner(url = appConfig.urBannerLink) }
+            userResearchBanner = if(appConfig.userRecruitmentBannerEnabled) Some(UserResearchBanner(
+                url = appConfig.urBannerLink
+            )) else None
         ),
         serviceName = Some(messages("service.name")),
         pageTitle = Some(s"""$pageTitle - ${messages("service.name")} - GOV.UK"""),
