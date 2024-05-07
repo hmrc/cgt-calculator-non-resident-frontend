@@ -98,7 +98,7 @@ class DisposalCostsActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
         val target = setupTarget(None, None, None)
         lazy val result = target.disposalCosts(fakeRequestWithSession)
         lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
-        document.getElementsByTag("title").text shouldBe pageTitle
+        document.title() shouldBe pageTitle
       }
 
       "have a back link ot the missing data route" in new Setup {
@@ -121,8 +121,7 @@ class DisposalCostsActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
         val target = setupTarget(None, None, None)
         lazy val result = target.disposalCosts(fakeRequestWithSession)
         lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
-
-        document.getElementsByTag("title").text shouldBe pageTitle
+        document.title() shouldBe pageTitle
       }
     }
 
@@ -153,7 +152,7 @@ class DisposalCostsActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
         val target = setupTarget(None, Some(SoldOrGivenAwayModel(false)), Some(SoldForLessModel(true)))
         lazy val result = target.disposalCosts(fakeRequestWithSession)
         lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
-        document.getElementsByTag("title").text shouldBe pageTitle
+        document.title() shouldBe pageTitle
       }
 
       "have a back link to the market value controller gave away" in new Setup {
@@ -176,7 +175,7 @@ class DisposalCostsActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
         val target = setupTarget(None, Some(SoldOrGivenAwayModel(true)), Some(SoldForLessModel(true)))
         lazy val result = target.disposalCosts(fakeRequestWithSession)
         lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
-        document.getElementsByTag("title").text shouldBe pageTitle
+        document.title() shouldBe pageTitle
       }
 
       "have a back link to the market value controller when sold" in {
@@ -199,7 +198,7 @@ class DisposalCostsActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
         val target = setupTarget(None, Some(SoldOrGivenAwayModel(true)), Some(SoldForLessModel(false)))
         lazy val result = target.disposalCosts(fakeRequestWithSession)
         lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
-        document.getElementsByTag("title").text shouldBe pageTitle
+        document.title() shouldBe pageTitle
       }
 
       "have a back link to the market value controller disposal value" in {

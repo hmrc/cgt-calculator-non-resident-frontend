@@ -159,7 +159,7 @@ class OtherPropertiesActionSpec extends CommonPlaySpec with WithCommonFakeApplic
       }
 
       "return to the other properties page" in {
-        Jsoup.parse(bodyOf(result)(materializer, ec)).select("title").text shouldEqual s"""Error: ${pageTitle}"""
+        Jsoup.parse(bodyOf(result)(materializer, ec)).title() shouldEqual s"""Error: $pageTitle"""
       }
     }
   }

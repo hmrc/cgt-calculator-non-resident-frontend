@@ -43,7 +43,7 @@
 )(implicit request: Request[_], messages: Messages)
 
 @scripts = {
-    <script @CSPNonce.attr src='@controllers.routes.Assets.versioned("javascripts/print.js")'></script>
+    <script type="module" @CSPNonce.attr src='@controllers.routes.Assets.versioned("javascripts/print.js")'></script>
 }
 
 @layout(
