@@ -66,7 +66,7 @@
             serviceUrl = Some(controllers.routes.DisposalDateController.disposalDate.url)
         ),
         banners = Banners(
-            userResearchBanner = if(appConfig.userRecruitmentBannerEnabled) Some(UserResearchBanner(
+            userResearchBanner = if(appConfig.userResearchBannerEnabled) Some(UserResearchBanner(
                 url = appConfig.urBannerLink
             )) else None
         ),

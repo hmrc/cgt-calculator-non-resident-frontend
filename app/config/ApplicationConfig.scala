@@ -49,6 +49,6 @@ class ApplicationConfig @Inject()(val servicesConfig: ServicesConfig,
   lazy val govUkLink: String = loadConfig("links.gov-uk")
   lazy val urBannerLink = "https://signup.take-part-in-research.service.gov.uk/?utm_campaign=CGT_non_resident_summary&utm_source=Survey_Banner&utm_medium=other&t=HMRC&id=116"
   lazy val isWelshTranslationAvailable: Boolean = servicesConfig.getBoolean("microservice.services.features.welsh-translation")
-  lazy val userRecruitmentBannerEnabled: Boolean = servicesConfig.getBoolean(("user-recruitment-banner.enabled"))
+  lazy val userResearchBannerEnabled: Boolean = servicesConfig.getBoolean(("user-research-banner.enabled"))
 
 }
