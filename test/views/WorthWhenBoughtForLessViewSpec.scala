@@ -62,7 +62,7 @@ class WorthWhenBoughtForLessViewSpec extends CommonPlaySpec with WithCommonFakeA
       }
 
       s"have a home link to '${controllers.routes.DisposalDateController.disposalDate.url}'" in {
-        document.getElementsByClass("hmrc-header__service-name hmrc-header__service-name--linked").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate.url
+        document.getElementsByClass(homeLinkClass).attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate.url
       }
 
 

@@ -68,4 +68,6 @@ trait CommonPlaySpec extends AnyWordSpecLike with Matchers with OptionValues {
   def bodyOf(resultF: Future[Result])(implicit mat: Materializer, ec: ExecutionContext): Future[String] = {
     resultF.map(bodyOf)
   }
+
+  val homeLinkClass: String = "govuk-header__link govuk-header__service-name"
 }

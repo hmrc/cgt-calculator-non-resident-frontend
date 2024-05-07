@@ -63,7 +63,7 @@ class TimeoutControllerSpec extends CommonPlaySpec with WithCommonFakeApplicatio
       }
 
       "have the title" in {
-        timeoutTestDataItem.jsoupDoc.getElementsByTag("title").text shouldEqual pageTitle
+        timeoutTestDataItem.jsoupDoc.title() shouldEqual pageTitle
       }
 
       "contain the heading 'Your session has timed out." in {
