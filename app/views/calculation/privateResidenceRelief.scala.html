@@ -29,81 +29,11 @@
     submitButton: playComponents.submitButton
 )
 
-@(privateResidenceReliefForm: Form[PrivateResidenceReliefModel], daysBetweenShow: Boolean, showFirstQuestion: Boolean, disposalDateLess18Months: Option[LocalDate], pRRMonths: Int, showOnlyFlatQuestion: Boolean)(implicit request: Request[_], messages: Messages, lang: Lang)
+@(privateResidenceReliefForm: Form[ClaimingPrrModel], daysBetweenShow: Boolean, showFirstQuestion: Boolean, disposalDateLess18Months: Option[LocalDate], pRRMonths: Int, showOnlyFlatQuestion: Boolean)(implicit request: Request[_], messages: Messages, lang: Lang)
 
+@title = @{Messages("calc.privateResidenceRelief.question")}
 
-@disposalDateLess18MonthsString = {@disposalDateLess18Months.map(_.localFormat("d MMMM yyyy")).getOrElse("")}
-
-@detailHtml = {
-    <details class="govuk-details" data-module="govuk-details">
-        <summary class="govuk-details__summary">
-        <span class="govuk-details__summary-text">
-            @if(daysBetweenShow){
-                @Messages("calc.privateResidenceRelief.helpTextBeforeAfter")
-            } else {
-                @Messages("calc.privateResidenceRelief.helpTextJustBefore")
-            }
-        </span>
-        </summary>
-        <div class="govuk-details__text">
-            @if(daysBetweenShow) {
-                <p class="govuk-body" id="bulletPointTitle">@messages("calc.privateResidenceRelief.helpTextSubTitle")</p>
-
-                <ul>
-                    <li id="detailsBullet1">@messages("calc.privateResidenceRelief.daysBeforeHelpText")</li>
-                    <li id="detailsBullet2">@messages("calc.privateResidenceRelief.daysBetweenHelpText", disposalDateLess18MonthsString, pRRMonths)</li>
-                </ul>
-            }
-            @if(!daysBetweenShow){
-                <p id="helpTextBetween" class="govuk-body">@messages("calc.privateResidenceRelief.daysBetweenHelpText", disposalDateLess18MonthsString)</p>
-            }
-        </div>
-    </details>
-}
-
-@title = @{
-    if(privateResidenceReliefForm.errors.nonEmpty) messages("site.title.error", Messages("calc.privateResidenceRelief.question")) else Messages("calc.privateResidenceRelief.question")
-}
-
-@hiddenYesHtml = {
-    <p id="formExplanation" class="govuk-body">@messages("calc.privateResidenceRelief.formHintExplanation")</p>
-
-    @if(showFirstQuestion) {
-        @formInputNumber(
-            field = privateResidenceReliefForm("daysClaimed"),
-            question = {if(showOnlyFlatQuestion){messages("calc.privateResidenceRelief.questionFlat", disposalDateLess18MonthsString)}else{messages("calc.privateResidenceRelief.firstQuestion")}},
-            labelClass = "govuk-label--m",
-            showCurrency = false
-        )
-    }
-    @if(daysBetweenShow) {
-        @formInputNumber(
-            field = privateResidenceReliefForm("daysClaimedAfter"),
-            question = messages("calc.privateResidenceRelief.questionBetween", disposalDateLess18MonthsString),
-            labelClass = "govuk-label--m",
-            showCurrency = false
-        )
-    }
-    <br>
-    @if(showFirstQuestion){
-        @detailHtml
-    }
-}
-
-@layout(
-    pageTitle = title
-) {
-
-    @if(showFirstQuestion) {
-        @errorSummary(privateResidenceReliefForm.errors, Some("daysClaimed"))
-    } else {
-        @if(daysBetweenShow) {
-            @errorSummary(privateResidenceReliefForm.errors, Some("daysClaimedAfter"))
-        } else {
-            @errorSummary(privateResidenceReliefForm.errors)
-        }
-    }
-
+@layout(pageTitle = title) {
     <h1 class="govuk-heading-xl">@messages("calc.privateResidenceRelief.question")</h1>
 
     <p class="govuk-body" id="intro">
@@ -129,8 +59,7 @@
             legend = messages("calc.privateResidenceRelief.question"),
             legendClass = Some("govuk-visually-hidden"),
             isPageHeading = false,
-            field = privateResidenceReliefForm("isClaimingPRR"),
-            conditionalYesHtml = if(!showFirstQuestion && !daysBetweenShow) None else Some(hiddenYesHtml)
+            field = privateResidenceReliefForm("isClaimingPRR")
         )
 
         @submitButton()

@@ -18,7 +18,7 @@ package forms
 
 import common.Transformers._
 import common.Validation._
-import models.PrivateResidenceReliefModel
+import models.{ClaimingPrrModel, PrivateResidenceReliefModel}
 import play.api.data.Forms._
 import play.api.data._
 import uk.gov.voa.play.form.ConditionalMappings.{isEqual, mandatoryIf}
@@ -61,6 +61,9 @@ object PrivateResidenceReliefForm {
     fieldName -> optional(text)
       .transform(optionalStringToOptionalBigDecimal, optionalBigDecimalToOptionalString)
   }
+
+  def isClaimingPrrForm: Form[ClaimingPrrModel] =
+      Form(mapping(isClaimingPRR)(ClaimingPrrModel.apply)(ClaimingPrrModel.unapply))
 
   def privateResidenceReliefForm (showBefore: Boolean, showAfter: Boolean): Form[PrivateResidenceReliefModel] =
     (showBefore, showAfter) match {

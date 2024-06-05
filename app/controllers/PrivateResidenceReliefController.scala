@@ -30,17 +30,19 @@ import play.api.i18n.{I18nSupport, Lang}
 import play.api.mvc._
 import services.SessionCacheService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import views.html.calculation.privateResidenceRelief
+import views.html.calculation.{privateResidenceRelief, privateResidenceReliefAmount}
 
 import java.time.LocalDate
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.chaining.scalaUtilChainingOps
 
 class PrivateResidenceReliefController @Inject()(calcConnector: CalculatorConnector,
                                                  sessionCacheService: SessionCacheService,
                                                  answersConstructor: AnswersConstructor,
                                                  mcc: MessagesControllerComponents,
-                                                 privateResidenceReliefView: privateResidenceRelief)
+                                                 privateResidenceReliefView: privateResidenceRelief,
+                                                 privateResidenceReliefAmountView: privateResidenceReliefAmount)
                                                 (implicit ec: ExecutionContext)
                                                   extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
@@ -83,7 +85,34 @@ class PrivateResidenceReliefController @Inject()(calcConnector: CalculatorConnec
     }
   }
 
-  val privateResidenceRelief: Action[AnyContent] = ValidateSession.async { implicit request =>
+  def privateResidenceRelief: Action[AnyContent] = ValidateSession.async { implicit request =>
+    implicit val lang: Lang  = mcc.messagesApi.preferred(request).lang
+
+    def action(disposalDate: Option[LocalDate], acquisitionDate: Option[LocalDate]) = {
+
+      val pRRDateDetails = TaxDates.privateResidenceReliefMonthDeductionApplicable(disposalDate)
+
+      val showOnlyFlatQuestion = displayOnlyFlatCalculationQuestion(disposalDate, acquisitionDate)
+      val showFirstQuestion = displayFirstQuestion(disposalDate, acquisitionDate)
+      val showBetweenQuestion = displayAfterQuestion(disposalDate, acquisitionDate)
+      val disposalDateLessMonths = Dates.dateMinusMonths(disposalDate, pRRDateDetails.months)
+
+      sessionCacheService.fetchAndGetFormData[ClaimingPrrModel](KeystoreKeys.privateResidenceRelief).map {
+        case Some(data) => Ok(privateResidenceReliefView(
+          isClaimingPrrForm.fill(data), showBetweenQuestion, showFirstQuestion, disposalDateLessMonths, pRRDateDetails.months, showOnlyFlatQuestion))
+        case None => Ok(privateResidenceReliefView(
+          isClaimingPrrForm, showBetweenQuestion, showFirstQuestion, disposalDateLessMonths, pRRDateDetails.months, showOnlyFlatQuestion))
+      }
+    }
+
+    (for {
+      disposalDate <- getDisposalDate
+      acquisitionDate <- getAcquisitionDate
+      finalResult <- action(disposalDate, acquisitionDate)
+    } yield finalResult).recoverToStart
+  }
+
+  def privateResidenceReliefAmount: Action[AnyContent] = ValidateSession.async { implicit request =>
     implicit val lang: Lang  = mcc.messagesApi.preferred(request).lang
 
     def action(disposalDate: Option[LocalDate], acquisitionDate: Option[LocalDate]) = {
@@ -96,9 +125,9 @@ class PrivateResidenceReliefController @Inject()(calcConnector: CalculatorConnec
       val disposalDateLessMonths = Dates.dateMinusMonths(disposalDate, pRRDateDetails.months)
 
       sessionCacheService.fetchAndGetFormData[PrivateResidenceReliefModel](KeystoreKeys.privateResidenceRelief).map {
-        case Some(data) => Ok(privateResidenceReliefView(privateResidenceReliefForm(showFirstQuestion,
+        case Some(data) => Ok(privateResidenceReliefAmountView(privateResidenceReliefForm(showFirstQuestion,
           showBetweenQuestion).fill(data), showBetweenQuestion, showFirstQuestion, disposalDateLessMonths, pRRDateDetails.months, showOnlyFlatQuestion))
-        case None => Ok(privateResidenceReliefView(privateResidenceReliefForm(showFirstQuestion, showBetweenQuestion),
+        case None => Ok(privateResidenceReliefAmountView(privateResidenceReliefForm(showFirstQuestion, showBetweenQuestion),
           showBetweenQuestion, showFirstQuestion, disposalDateLessMonths, pRRDateDetails.months, showOnlyFlatQuestion))
       }
     }
@@ -110,7 +139,19 @@ class PrivateResidenceReliefController @Inject()(calcConnector: CalculatorConnec
     } yield finalResult).recoverToStart
   }
 
-  val submitPrivateResidenceRelief: Action[AnyContent] = ValidateSession.async { implicit request =>
+  def checkTaxableGainsZeroOrLess(calculationResultsWithPRRModel: CalculationResultsWithPRRModel) = {
+    val optionSeq = Seq(calculationResultsWithPRRModel.rebasedResult, calculationResultsWithPRRModel.timeApportionedResult).flatten
+    val finalSeq = Seq(calculationResultsWithPRRModel.flatResult) ++ optionSeq
+
+    Future.successful(finalSeq.forall(_.taxableGain <= 0))
+  }
+
+  def routeDestination(taxableGainsZeroOrLess: Boolean) = {
+    if (taxableGainsZeroOrLess) Future.successful(Redirect(controllers.routes.CheckYourAnswersController.checkYourAnswers.url))
+    else Future.successful(Redirect(controllers.routes.CurrentIncomeController.currentIncome.url))
+  }
+
+  def submitPrivateResidenceRelief: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     def action(disposalDate: Option[LocalDate], acquisitionDate: Option[LocalDate]): Future[Result] = {
 
@@ -122,21 +163,52 @@ class PrivateResidenceReliefController @Inject()(calcConnector: CalculatorConnec
 
       val disposalDateLessMonths = Dates.dateMinusMonths(disposalDate, pRRDateDetails.months)
 
-      def checkTaxableGainsZeroOrLess(calculationResultsWithPRRModel: CalculationResultsWithPRRModel) = {
-        val optionSeq = Seq(calculationResultsWithPRRModel.rebasedResult, calculationResultsWithPRRModel.timeApportionedResult).flatten
-        val finalSeq = Seq(calculationResultsWithPRRModel.flatResult) ++ optionSeq
-
-        Future.successful(finalSeq.forall(_.taxableGain <= 0))
+      isClaimingPrrForm.bindFromRequest().fold(Left(_), Right(_)).pipe {
+        case Left(form) =>
+          implicit val lang: Lang = mcc.messagesApi.preferred(request).lang
+          Future.successful(BadRequest(privateResidenceReliefView(form, showBetweenQuestion,
+            showFirstQuestion, disposalDateLessMonths, 0, showOnlyFlatQuestion)))
+        case Right(model) =>
+          if (model.isClaimingPRR == "Yes")
+            Future.successful(Redirect(controllers.routes.PrivateResidenceReliefController.submitPrivateResidenceReliefAmount.url))
+          else {
+            val model = PrivateResidenceReliefModel("No", None, None)
+            for {
+              _ <- sessionCacheService.saveFormData(KeystoreKeys.privateResidenceRelief, model)
+              answers <- answersConstructor.getNRTotalGainAnswers
+              totalGainResultsModel <- calcConnector.calculateTotalGain(answers)
+              gainExists <- checkGainExists(totalGainResultsModel.get)
+              propertyLivedIn <- getPropertyLivedInResponse(gainExists, sessionCacheService)
+              results <- calcConnector.calculateTaxableGainAfterPRR(answers, model, propertyLivedIn.get)
+              taxableGainsZeroOrLess <- checkTaxableGainsZeroOrLess(results.get)
+              route <- routeDestination(taxableGainsZeroOrLess)
+            } yield route
+          }
       }
+    }
 
-      def routeDestination(taxableGainsZeroOrLess: Boolean) = {
-        if (taxableGainsZeroOrLess) Future.successful(Redirect(controllers.routes.CheckYourAnswersController.checkYourAnswers.url))
-        else Future.successful(Redirect(controllers.routes.CurrentIncomeController.currentIncome.url))
-      }
+    (for {
+      disposalDate <- getDisposalDate
+      acquisitionDate <- getAcquisitionDate
+      finalResult <- action(disposalDate, acquisitionDate)
+    } yield finalResult).recoverToStart
+  }
+
+  def submitPrivateResidenceReliefAmount: Action[AnyContent] = ValidateSession.async { implicit request =>
+
+    def action(disposalDate: Option[LocalDate], acquisitionDate: Option[LocalDate]): Future[Result] = {
+
+      val showOnlyFlatQuestion = displayOnlyFlatCalculationQuestion(disposalDate, acquisitionDate)
+      val showFirstQuestion = displayFirstQuestion(disposalDate, acquisitionDate)
+      val showBetweenQuestion = displayAfterQuestion(disposalDate, acquisitionDate)
+
+      val pRRDateDetails = TaxDates.privateResidenceReliefMonthDeductionApplicable(disposalDate)
+
+      val disposalDateLessMonths = Dates.dateMinusMonths(disposalDate, pRRDateDetails.months)
 
       def errorAction(form: Form[PrivateResidenceReliefModel]) = {
         implicit val lang: Lang = mcc.messagesApi.preferred(request).lang
-        Future.successful(BadRequest(privateResidenceReliefView(form, showBetweenQuestion,
+        Future.successful(BadRequest(privateResidenceReliefAmountView(form, showBetweenQuestion,
           showFirstQuestion, disposalDateLessMonths, 0, showOnlyFlatQuestion)))
       }
 
