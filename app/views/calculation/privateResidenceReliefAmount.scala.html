@@ -112,24 +112,7 @@
         }
     }
 
-    <h1 class="govuk-heading-xl">@messages("calc.privateResidenceRelief.question")</h1>
-
-    <p class="govuk-body" id="intro">
-        @if(daysBetweenShow) {
-            @messages("calc.privateResidenceRelief.intro2")
-        } else {
-            @messages("calc.privateResidenceRelief.intro1")
-        }
-        @messages("calc.privateResidenceRelief.qualify")
-    </p>
-
-    <div id="privateResidenceReliefLink">
-        <p class="govuk-body">@messages("calc.privateResidenceRelief.helpText")
-            <a class="govuk-link" rel="external" href="https://www.gov.uk/tax-live-abroad-sell-uk-home" target="_blank">
-                @messages("calc.privateResidenceRelief.helpLink") <span>@messages("calc.base.externalLink")</span>
-            </a>
-        </p>
-    </div>
+    <h1 class="govuk-heading-xl">@messages("calc.privateResidenceRelief.amountQuestion")</h1>
 
     @form(action = controllers.routes.PrivateResidenceReliefController.submitPrivateResidenceReliefAmount) {
       @hiddenYesHtml
