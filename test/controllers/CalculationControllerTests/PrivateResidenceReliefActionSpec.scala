@@ -36,7 +36,7 @@ import play.api.test.Helpers._
 import services.SessionCacheService
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-import views.html.calculation.privateResidenceRelief
+import views.html.calculation.{privateResidenceRelief, privateResidenceReliefAmount}
 
 import java.time.LocalDate
 import scala.concurrent.{ExecutionContext, Future}
@@ -53,6 +53,7 @@ class PrivateResidenceReliefActionSpec
   val mockAnswersConstructor = mock[AnswersConstructor]
   val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val privateResidenceReliefView = fakeApplication.injector.instanceOf[privateResidenceRelief]
+  val privateResidenceReliefAmountView = fakeApplication.injector.instanceOf[privateResidenceReliefAmount]
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
 
   class Setup {
@@ -61,7 +62,8 @@ class PrivateResidenceReliefActionSpec
       mockSessionCacheService,
       mockAnswersConstructor,
       mockMessagesControllerComponents,
-      privateResidenceReliefView
+      privateResidenceReliefView,
+      privateResidenceReliefAmountView,
     )(ec)
   }
 
@@ -110,7 +112,7 @@ class PrivateResidenceReliefActionSpec
       .thenReturn(Future.successful(Some(totalGainResultsModel)))
 
 
-    new PrivateResidenceReliefController(mockCalcConnector, mockSessionCacheService, mockAnswersConstructor, mockMessagesControllerComponents, privateResidenceReliefView)(ec)
+    new PrivateResidenceReliefController(mockCalcConnector, mockSessionCacheService, mockAnswersConstructor, mockMessagesControllerComponents, privateResidenceReliefView, privateResidenceReliefAmountView)(ec)
   }
 
   "Calling the .getAcquisitionDate method" should {

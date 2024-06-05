@@ -29,7 +29,7 @@ import views.html.calculation.privateResidenceRelief
 
 import java.time.LocalDate
 
-class PrivateResidenceReliefViewSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
+class PrivateResidenceReliefAmountViewSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
   val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
@@ -46,9 +46,7 @@ class PrivateResidenceReliefViewSpec extends CommonPlaySpec with WithCommonFakeA
       "if both inputs should be displayed" should {
 
         lazy val view = privateResidenceReliefView(
-          privateResidenceReliefForm(
-            showBefore = true,
-            showAfter = true),
+          isClaimingPrrForm,
           daysBetweenShow = true,
           showFirstQuestion = true,
           Some(testDate),
@@ -171,26 +169,12 @@ class PrivateResidenceReliefViewSpec extends CommonPlaySpec with WithCommonFakeA
             button.attr("id") shouldBe "submit"
           }
         }
-
-        "should produce the same output when render and f are called" in {
-          privateResidenceReliefView.f(
-            privateResidenceReliefForm(true, true),
-            true, true, Some(testDate), 9, false
-          )(fakeRequest, mockMessage, Lang("en")) shouldBe
-            privateResidenceReliefView.render(
-              privateResidenceReliefForm(true, true), true, true,
-              Some(testDate),
-              9, false, fakeRequest, mockMessage, Lang("en")
-            )
-        }
       }
 
       "if only the acquisition date after tax start date input is displayed" should {
 
         lazy val view = privateResidenceReliefView(
-          privateResidenceReliefForm(
-            showBefore = true,
-            showAfter = false),
+          isClaimingPrrForm,
           daysBetweenShow = false,
           showFirstQuestion = true,
           Some(testDate),
@@ -237,9 +221,7 @@ class PrivateResidenceReliefViewSpec extends CommonPlaySpec with WithCommonFakeA
       "if neither of the inputs are displayed" should {
 
         lazy val view = privateResidenceReliefView(
-          privateResidenceReliefForm(
-            showBefore = false,
-            showAfter = false),
+          isClaimingPrrForm,
           daysBetweenShow = false,
           showFirstQuestion = false,
           Some(testDate),
@@ -267,7 +249,7 @@ class PrivateResidenceReliefViewSpec extends CommonPlaySpec with WithCommonFakeA
 
     "supplied with errors" should {
       val map = Map("isClaimingPRR" -> "")
-      lazy val view = privateResidenceReliefView(privateResidenceReliefForm(false, false).bind(map),
+      lazy val view = privateResidenceReliefView(isClaimingPrrForm.bind(map),
         false, false, None, 9, false)(fakeRequest, mockMessage, Lang("en"))
       lazy val document = Jsoup.parse(view.body)
 
