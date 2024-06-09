@@ -44,17 +44,15 @@ import scala.concurrent.{ExecutionContext, Future}
 class PrivateResidenceReliefActionSpec
   extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val implicitHeaderCarrier = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
-  implicit val ec = fakeApplication.injector.instanceOf[ExecutionContext]
-  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  val mockMaterializer = mock[Materializer]
-  val mockHttp = mock[DefaultHttpClient]
-  val mockCalcConnector = mock[CalculatorConnector]
-  val mockAnswersConstructor = mock[AnswersConstructor]
-  val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
-  val privateResidenceReliefView = fakeApplication.injector.instanceOf[privateResidenceRelief]
-  val privateResidenceReliefAmountView = fakeApplication.injector.instanceOf[privateResidenceReliefAmount]
-  val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
+  implicit val implicitHeaderCarrier: HeaderCarrier = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
+  implicit val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
+  private val mockMaterializer = mock[Materializer]
+  private val mockCalcConnector = mock[CalculatorConnector]
+  private val mockAnswersConstructor = mock[AnswersConstructor]
+  private val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
+  private val privateResidenceReliefView = fakeApplication.injector.instanceOf[privateResidenceRelief]
+  private val privateResidenceReliefAmountView = fakeApplication.injector.instanceOf[privateResidenceReliefAmount]
+  private val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
 
   class Setup {
     val controller = new PrivateResidenceReliefController(
@@ -281,7 +279,7 @@ class PrivateResidenceReliefActionSpec
           redirectLocation(result).get should include("/calculate-your-capital-gains/non-resident/session-timeout")
           fail("Exception should be thrown")
         } catch {
-          case ex: Exception =>
+          case _: Exception =>
         }
       }
     }
@@ -305,7 +303,7 @@ class PrivateResidenceReliefActionSpec
         try {
           redirectLocation(result).get shouldBe controllers.routes.CheckYourAnswersController.checkYourAnswers.url
         } catch {
-          case ex: Exception =>
+          case _: Exception =>
         }
       }
     }
@@ -327,7 +325,7 @@ class PrivateResidenceReliefActionSpec
           redirectLocation(result).get shouldBe controllers.routes.CurrentIncomeController.currentIncome.url
           fail("Failure should be thrown")
         } catch {
-          case ex: Exception =>
+          case _: Exception =>
         }
       }
     }
