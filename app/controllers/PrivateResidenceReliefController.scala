@@ -46,17 +46,13 @@ class PrivateResidenceReliefController @Inject()(calcConnector: CalculatorConnec
                                                 (implicit ec: ExecutionContext)
                                                   extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
+  private def modelToDate(model: DateModel) = Dates.constructDate(model.day, model.month, model.year)
+
   def getAcquisitionDate(implicit request: Request[_]): Future[Option[LocalDate]] =
-    sessionCacheService.fetchAndGetFormData[DateModel](KeystoreKeys.acquisitionDate).map {
-      case Some(DateModel(day, month, year)) => Some(Dates.constructDate(day, month, year))
-      case _ => None
-    }
+    sessionCacheService.fetchAndGetFormData[DateModel](KeystoreKeys.acquisitionDate).map(_.map(modelToDate))
 
   def getDisposalDate(implicit request: Request[_]): Future[Option[LocalDate]] =
-    sessionCacheService.fetchAndGetFormData[DateModel](KeystoreKeys.disposalDate).map {
-      case Some(data) => Some(Dates.constructDate(data.day, data.month, data.year))
-      case _ => None
-    }
+    sessionCacheService.fetchAndGetFormData[DateModel](KeystoreKeys.disposalDate).map(_.map(modelToDate))
 
   def displayAfterQuestion(disposalDate: Option[LocalDate], acquisitionDate: Option[LocalDate]): Boolean =
     (disposalDate, acquisitionDate) match {
