@@ -86,22 +86,11 @@ class PrivateResidenceReliefController @Inject()(calcConnector: CalculatorConnec
   }
 
   def privateResidenceRelief: Action[AnyContent] = ValidateSession.async { implicit request =>
-    implicit val lang: Lang  = mcc.messagesApi.preferred(request).lang
-
     def action(disposalDate: Option[LocalDate], acquisitionDate: Option[LocalDate]) = {
-
-      val pRRDateDetails = TaxDates.privateResidenceReliefMonthDeductionApplicable(disposalDate)
-
-      val showOnlyFlatQuestion = displayOnlyFlatCalculationQuestion(disposalDate, acquisitionDate)
-      val showFirstQuestion = displayFirstQuestion(disposalDate, acquisitionDate)
       val showBetweenQuestion = displayAfterQuestion(disposalDate, acquisitionDate)
-      val disposalDateLessMonths = Dates.dateMinusMonths(disposalDate, pRRDateDetails.months)
-
       sessionCacheService.fetchAndGetFormData[ClaimingPrrModel](KeystoreKeys.privateResidenceRelief).map {
-        case Some(data) => Ok(privateResidenceReliefView(
-          isClaimingPrrForm.fill(data), showBetweenQuestion, showFirstQuestion, disposalDateLessMonths, pRRDateDetails.months, showOnlyFlatQuestion))
-        case None => Ok(privateResidenceReliefView(
-          isClaimingPrrForm, showBetweenQuestion, showFirstQuestion, disposalDateLessMonths, pRRDateDetails.months, showOnlyFlatQuestion))
+        case Some(data) => Ok(privateResidenceReliefView(isClaimingPrrForm.fill(data), showBetweenQuestion))
+        case None => Ok(privateResidenceReliefView(isClaimingPrrForm, showBetweenQuestion))
       }
     }
 
@@ -154,20 +143,10 @@ class PrivateResidenceReliefController @Inject()(calcConnector: CalculatorConnec
   def submitPrivateResidenceRelief: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     def action(disposalDate: Option[LocalDate], acquisitionDate: Option[LocalDate]): Future[Result] = {
-
-      val showOnlyFlatQuestion = displayOnlyFlatCalculationQuestion(disposalDate, acquisitionDate)
-      val showFirstQuestion = displayFirstQuestion(disposalDate, acquisitionDate)
-      val showBetweenQuestion = displayAfterQuestion(disposalDate, acquisitionDate)
-
-      val pRRDateDetails = TaxDates.privateResidenceReliefMonthDeductionApplicable(disposalDate)
-
-      val disposalDateLessMonths = Dates.dateMinusMonths(disposalDate, pRRDateDetails.months)
-
       isClaimingPrrForm.bindFromRequest().fold(Left(_), Right(_)).pipe {
         case Left(form) =>
-          implicit val lang: Lang = mcc.messagesApi.preferred(request).lang
-          Future.successful(BadRequest(privateResidenceReliefView(form, showBetweenQuestion,
-            showFirstQuestion, disposalDateLessMonths, 0, showOnlyFlatQuestion)))
+          val showBetweenQuestion = displayAfterQuestion(disposalDate, acquisitionDate)
+          Future.successful(BadRequest(privateResidenceReliefView(form, showBetweenQuestion)))
         case Right(model) =>
           if (model.isClaimingPRR == "Yes")
             Future.successful(Redirect(controllers.routes.PrivateResidenceReliefController.submitPrivateResidenceReliefAmount.url))

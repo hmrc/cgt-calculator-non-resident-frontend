@@ -14,11 +14,7 @@
  * limitations under the License.
  *@
 
-@import common.Dates.TemplateImplicits._
-@import models.PrivateResidenceReliefModel
 @import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
-
-@import java.time.LocalDate
 
 @this(
     inputYesNo : playComponents.input_yes_no,
@@ -29,7 +25,7 @@
     submitButton: playComponents.submitButton
 )
 
-@(privateResidenceReliefForm: Form[ClaimingPrrModel], daysBetweenShow: Boolean, showFirstQuestion: Boolean, disposalDateLess18Months: Option[LocalDate], pRRMonths: Int, showOnlyFlatQuestion: Boolean)(implicit request: Request[_], messages: Messages, lang: Lang)
+@(privateResidenceReliefForm: Form[ClaimingPrrModel], daysBetweenShow: Boolean)(implicit request: Request[_], messages: Messages)
 
 @title = @{Messages("calc.privateResidenceRelief.question")}
 
@@ -54,7 +50,6 @@
     </div>
 
     @form(action = controllers.routes.PrivateResidenceReliefController.submitPrivateResidenceRelief) {
-
         @inputYesNo(
             legend = messages("calc.privateResidenceRelief.question"),
             legendClass = Some("govuk-visually-hidden"),
