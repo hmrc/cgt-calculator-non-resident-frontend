@@ -297,7 +297,7 @@ class PrivateResidenceReliefActionSpec
         rebasedValueData = Some(RebasedValueModel(1000)),
         calculationResultsWithPRRModel = Some(model))
       lazy val request = fakeRequestToPOSTWithSession(("isClaimingPRR", "No"))
-      lazy val result = target.submitPrivateResidenceRelief(request)
+      lazy val result = target.submitPrivateResidenceReliefAmount(request)
 
       "redirect to the Check Your Answers page" in {
         try {
@@ -318,7 +318,7 @@ class PrivateResidenceReliefActionSpec
         rebasedValueData = Some(RebasedValueModel(1000)),
         calculationResultsWithPRRModel = Some(model))
       lazy val request = fakeRequestToPOSTWithSession(("isClaimingPRR", "No"))
-      lazy val result = target.submitPrivateResidenceRelief(request)
+      lazy val result = target.submitPrivateResidenceReliefAmount(request)
 
       "redirect to the Current Income page" in {
         try {
@@ -337,7 +337,7 @@ class PrivateResidenceReliefActionSpec
         acquisitionDateData = Some(DateModel(1, 1, 2016)),
         rebasedValueData = Some(RebasedValueModel(1000)))
       lazy val request = fakeRequestToPOSTWithSession(("isClaimingPRR", ""))
-      lazy val result = target.submitPrivateResidenceRelief(request)
+      lazy val result = target.submitPrivateResidenceReliefAmount(request)
       lazy val document = Jsoup.parse(bodyOf(result)(mockMaterializer, ec))
 
       "return a status of 400" in {
