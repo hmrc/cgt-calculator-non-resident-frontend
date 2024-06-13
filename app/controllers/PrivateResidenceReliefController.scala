@@ -68,9 +68,7 @@ class PrivateResidenceReliefController @Inject()(calcConnector: CalculatorConnec
     } yield disposalDate -> acquisitionDate
 
   def displayFirstQuestion(disposalDate: Option[LocalDate], acquisitionDate: Option[LocalDate]): Boolean = {
-
     val pRRDateDetails = TaxDates.privateResidenceReliefMonthDeductionApplicable(disposalDate)
-
     (disposalDate, acquisitionDate) match {
       case (Some(dDate), Some(aDate)) if !TaxDates.dateAfterOctober(dDate) || !dDate.minusMonths(pRRDateDetails.months).isAfter(aDate) => false
       case _ => true
@@ -78,9 +76,7 @@ class PrivateResidenceReliefController @Inject()(calcConnector: CalculatorConnec
   }
 
   def displayOnlyFlatCalculationQuestion(disposalDate: Option[LocalDate], acquisitionDate: Option[LocalDate]): Boolean = {
-
     val pRRDateDetails = TaxDates.privateResidenceReliefMonthDeductionApplicable(disposalDate)
-
     (disposalDate, acquisitionDate) match {
       case (Some(dDate), Some(aDate)) if TaxDates.dateAfterStart(aDate) && dDate.minusMonths(pRRDateDetails.months).isAfter(aDate) => true
       case _ => false
