@@ -120,16 +120,25 @@ class PrivateResidenceReliefController @Inject()(calcConnector: CalculatorConnec
     }.recoverToStart
   }
 
-  def checkTaxableGainsZeroOrLess(calculationResultsWithPRRModel: CalculationResultsWithPRRModel) = {
+  private def checkTaxableGainsZeroOrLess(calculationResultsWithPRRModel: CalculationResultsWithPRRModel) = {
     val optionSeq = Seq(calculationResultsWithPRRModel.rebasedResult, calculationResultsWithPRRModel.timeApportionedResult).flatten
     val finalSeq = Seq(calculationResultsWithPRRModel.flatResult) ++ optionSeq
 
     Future.successful(finalSeq.forall(_.taxableGain <= 0))
   }
 
-  def routeDestination(taxableGainsZeroOrLess: Boolean) = {
-    if (taxableGainsZeroOrLess) Future.successful(Redirect(controllers.routes.CheckYourAnswersController.checkYourAnswers.url))
-    else Future.successful(Redirect(controllers.routes.CurrentIncomeController.currentIncome.url))
+  private def saveAndRedirect(model: PrivateResidenceReliefModel)(implicit request: Request[_]) = {
+    for {
+      _ <- sessionCacheService.saveFormData(KeystoreKeys.privateResidenceRelief, model)
+      answers <- answersConstructor.getNRTotalGainAnswers
+      totalGainResultsModel <- calcConnector.calculateTotalGain(answers)
+      gainExists <- checkGainExists(totalGainResultsModel.get)
+      propertyLivedIn <- getPropertyLivedInResponse(gainExists, sessionCacheService)
+      results <- calcConnector.calculateTaxableGainAfterPRR(answers, model, propertyLivedIn.get)
+      taxableGainsZeroOrLess <- checkTaxableGainsZeroOrLess(results.get)
+    } yield
+      if (taxableGainsZeroOrLess) Redirect(controllers.routes.CheckYourAnswersController.checkYourAnswers.url)
+      else Redirect(controllers.routes.CurrentIncomeController.currentIncome.url)
   }
 
   def submitPrivateResidenceRelief: Action[AnyContent] = ValidateSession.async { implicit request =>
@@ -143,16 +152,7 @@ class PrivateResidenceReliefController @Inject()(calcConnector: CalculatorConnec
             Future.successful(Redirect(controllers.routes.PrivateResidenceReliefController.submitPrivateResidenceReliefAmount.url))
           else {
             val model = PrivateResidenceReliefModel("No", None, None)
-            for {
-              _ <- sessionCacheService.saveFormData(KeystoreKeys.privateResidenceRelief, model)
-              answers <- answersConstructor.getNRTotalGainAnswers
-              totalGainResultsModel <- calcConnector.calculateTotalGain(answers)
-              gainExists <- checkGainExists(totalGainResultsModel.get)
-              propertyLivedIn <- getPropertyLivedInResponse(gainExists, sessionCacheService)
-              results <- calcConnector.calculateTaxableGainAfterPRR(answers, model, propertyLivedIn.get)
-              taxableGainsZeroOrLess <- checkTaxableGainsZeroOrLess(results.get)
-              route <- routeDestination(taxableGainsZeroOrLess)
-            } yield route
+            saveAndRedirect(model)
           }
       }
     }.recoverToStart
@@ -174,20 +174,7 @@ class PrivateResidenceReliefController @Inject()(calcConnector: CalculatorConnec
           showFirstQuestion, disposalDateLessMonths, 0, showOnlyFlatQuestion)))
       }
 
-      def successAction(model: PrivateResidenceReliefModel) = {
-        (for {
-          _ <- sessionCacheService.saveFormData(KeystoreKeys.privateResidenceRelief, model)
-          answers <- answersConstructor.getNRTotalGainAnswers
-          totalGainResultsModel <- calcConnector.calculateTotalGain(answers)
-          gainExists <- checkGainExists(totalGainResultsModel.get)
-          propertyLivedIn <- getPropertyLivedInResponse(gainExists, sessionCacheService)
-          results <- calcConnector.calculateTaxableGainAfterPRR(answers, model, propertyLivedIn.get)
-          taxableGainsZeroOrLess <- checkTaxableGainsZeroOrLess(results.get)
-          route <- routeDestination(taxableGainsZeroOrLess)
-        } yield route).recoverToStart
-      }
-
-      privateResidenceReliefForm(showFirstQuestion, showBetweenQuestion).bindFromRequest().fold(errorAction, successAction)
+      privateResidenceReliefForm(showFirstQuestion, showBetweenQuestion).bindFromRequest().fold(errorAction, saveAndRedirect)
     }.recoverToStart
   }
 }
