@@ -36,7 +36,7 @@ import play.api.test.Helpers._
 import services.SessionCacheService
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-import views.html.calculation.{privateResidenceRelief, privateResidenceReliefAmount}
+import views.html.calculation.{privateResidenceRelief, privateResidenceReliefValue}
 
 import java.time.LocalDate
 import scala.concurrent.{ExecutionContext, Future}
@@ -51,7 +51,7 @@ class PrivateResidenceReliefActionSpec
   private val mockAnswersConstructor = mock[AnswersConstructor]
   private val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   private val privateResidenceReliefView = fakeApplication.injector.instanceOf[privateResidenceRelief]
-  private val privateResidenceReliefAmountView = fakeApplication.injector.instanceOf[privateResidenceReliefAmount]
+  private val privateResidenceReliefValueView = fakeApplication.injector.instanceOf[privateResidenceReliefValue]
   private val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
 
   class Setup {
@@ -61,7 +61,7 @@ class PrivateResidenceReliefActionSpec
       mockAnswersConstructor,
       mockMessagesControllerComponents,
       privateResidenceReliefView,
-      privateResidenceReliefAmountView,
+      privateResidenceReliefValueView,
     )(ec)
   }
 
@@ -110,7 +110,7 @@ class PrivateResidenceReliefActionSpec
       .thenReturn(Future.successful(Some(totalGainResultsModel)))
 
 
-    new PrivateResidenceReliefController(mockCalcConnector, mockSessionCacheService, mockAnswersConstructor, mockMessagesControllerComponents, privateResidenceReliefView, privateResidenceReliefAmountView)(ec)
+    new PrivateResidenceReliefController(mockCalcConnector, mockSessionCacheService, mockAnswersConstructor, mockMessagesControllerComponents, privateResidenceReliefView, privateResidenceReliefValueView)(ec)
   }
 
   "Calling the .getAcquisitionDate method" should {
@@ -297,7 +297,7 @@ class PrivateResidenceReliefActionSpec
         rebasedValueData = Some(RebasedValueModel(1000)),
         calculationResultsWithPRRModel = Some(model))
       lazy val request = fakeRequestToPOSTWithSession(("isClaimingPRR", "No"))
-      lazy val result = target.submitPrivateResidenceReliefAmount(request)
+      lazy val result = target.submitprivateResidenceReliefValue(request)
 
       "redirect to the Check Your Answers page" in {
         try {
@@ -318,7 +318,7 @@ class PrivateResidenceReliefActionSpec
         rebasedValueData = Some(RebasedValueModel(1000)),
         calculationResultsWithPRRModel = Some(model))
       lazy val request = fakeRequestToPOSTWithSession(("isClaimingPRR", "No"))
-      lazy val result = target.submitPrivateResidenceReliefAmount(request)
+      lazy val result = target.submitprivateResidenceReliefValue(request)
 
       "redirect to the Current Income page" in {
         try {
@@ -337,7 +337,7 @@ class PrivateResidenceReliefActionSpec
         acquisitionDateData = Some(DateModel(1, 1, 2016)),
         rebasedValueData = Some(RebasedValueModel(1000)))
       lazy val request = fakeRequestToPOSTWithSession(("isClaimingPRR", ""))
-      lazy val result = target.submitPrivateResidenceReliefAmount(request)
+      lazy val result = target.submitprivateResidenceReliefValue(request)
       lazy val document = Jsoup.parse(bodyOf(result)(mockMaterializer, ec))
 
       "return a status of 400" in {

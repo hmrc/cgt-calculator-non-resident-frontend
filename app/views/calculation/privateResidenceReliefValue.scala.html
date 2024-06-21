@@ -115,7 +115,7 @@
 
     <h1 class="govuk-heading-xl">@messages("calc.privateResidenceRelief.amountQuestion")</h1>
 
-    @form(action = controllers.routes.PrivateResidenceReliefController.submitPrivateResidenceReliefAmount) {
+    @form(action = controllers.routes.PrivateResidenceReliefController.submitprivateResidenceReliefValue) {
       @hiddenYesHtml
       <input type="hidden" name="isClaimingPRR" value="Yes">
       @submitButton()
