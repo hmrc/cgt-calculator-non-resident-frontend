@@ -1,0 +1,123 @@
+@*
+ * Copyright 2024 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import common.Dates.TemplateImplicits._
+@import models.PrivateResidenceReliefModel
+@import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
+
+@import java.time.LocalDate
+
+@this(
+        inputYesNo: playComponents.input_yes_no,
+        formInputNumber: playComponents.formInputMoney,
+        form: FormWithCSRF,
+        layout: Layout,
+        errorSummary: playComponents.errorSummary,
+        submitButton: playComponents.submitButton
+)
+
+@(privateResidenceReliefForm: Form[PrivateResidenceReliefModel], daysBetweenShow: Boolean, showFirstQuestion: Boolean, disposalDateLess18Months: Option[LocalDate], pRRMonths: Int, showOnlyFlatQuestion: Boolean)(implicit request: Request[_], messages: Messages, lang: Lang)
+
+
+@disposalDateLess18MonthsString = {
+@disposalDateLess18Months.map(_.localFormat("d MMMM yyyy")).getOrElse("")
+}
+
+@detailHtml = {
+    <details class="govuk-details" data-module="govuk-details">
+        <summary class="govuk-details__summary">
+            <span class="govuk-details__summary-text">
+            @if(daysBetweenShow) {
+                @Messages("calc.privateResidenceRelief.helpTextBeforeAfter")
+            } else {
+                @Messages("calc.privateResidenceRelief.helpTextJustBefore")
+            }
+            </span>
+        </summary>
+        <div class="govuk-details__text">
+            @if(daysBetweenShow) {
+                <p class="govuk-body" id="bulletPointTitle">@messages("calc.privateResidenceRelief.helpTextSubTitle")</p>
+
+                <ul>
+                    <li id="detailsBullet1">@messages("calc.privateResidenceRelief.daysBeforeHelpText")</li>
+                    <li id="detailsBullet2">@messages("calc.privateResidenceRelief.daysBetweenHelpText", disposalDateLess18MonthsString, pRRMonths)</li>
+                </ul>
+            }
+            @if(!daysBetweenShow) {
+                <p id="helpTextBetween" class="govuk-body">@messages("calc.privateResidenceRelief.daysBetweenHelpText", disposalDateLess18MonthsString)</p>
+            }
+        </div>
+    </details>
+}
+
+@title = @{
+    if(privateResidenceReliefForm.errors.nonEmpty) messages("site.title.error", Messages("calc.privateResidenceRelief.question")) else Messages("calc.privateResidenceRelief.question")
+}
+
+@hiddenYesHtml = {
+@if(!showFirstQuestion && !daysBetweenShow) {
+    <p id="formExplanation" class="govuk-body">@messages("calc.privateResidenceRelief.formHintExplanation")</p>
+}
+@if(showFirstQuestion) {
+    @formInputNumber(
+        field = privateResidenceReliefForm("daysClaimed"),
+        question = {
+            if(showOnlyFlatQuestion) {
+                messages("calc.privateResidenceRelief.questionFlat", disposalDateLess18MonthsString)
+            } else {
+                messages("calc.privateResidenceRelief.firstQuestion")
+            }
+        },
+        labelClass = "govuk-label--m",
+        showCurrency = false
+    )
+}
+@if(daysBetweenShow) {
+    @formInputNumber(
+        field = privateResidenceReliefForm("daysClaimedAfter"),
+        question = messages("calc.privateResidenceRelief.questionBetween", disposalDateLess18MonthsString),
+        labelClass = "govuk-label--m",
+        showCurrency = false
+    )
+}
+    <br>
+@if(showFirstQuestion) {
+    @detailHtml
+}
+}
+
+@layout(
+    pageTitle = title
+) {
+
+    @if(showFirstQuestion) {
+        @errorSummary(privateResidenceReliefForm.errors, Some("daysClaimed"))
+    } else {
+        @if(daysBetweenShow) {
+            @errorSummary(privateResidenceReliefForm.errors, Some("daysClaimedAfter"))
+        } else {
+            @errorSummary(privateResidenceReliefForm.errors)
+        }
+    }
+
+    <h1 class="govuk-heading-xl">@messages("calc.privateResidenceRelief.amountQuestion")</h1>
+
+    @form(action = controllers.routes.PrivateResidenceReliefController.submitprivateResidenceReliefValue) {
+      @hiddenYesHtml
+      <input type="hidden" name="isClaimingPRR" value="Yes">
+      @submitButton()
+    }
+}

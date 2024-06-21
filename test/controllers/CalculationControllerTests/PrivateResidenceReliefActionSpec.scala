@@ -36,7 +36,7 @@ import play.api.test.Helpers._
 import services.SessionCacheService
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-import views.html.calculation.privateResidenceRelief
+import views.html.calculation.{privateResidenceRelief, privateResidenceReliefValue}
 
 import java.time.LocalDate
 import scala.concurrent.{ExecutionContext, Future}
@@ -44,16 +44,15 @@ import scala.concurrent.{ExecutionContext, Future}
 class PrivateResidenceReliefActionSpec
   extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val implicitHeaderCarrier = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
-  implicit val ec = fakeApplication.injector.instanceOf[ExecutionContext]
-  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  val mockMaterializer = mock[Materializer]
-  val mockHttp = mock[DefaultHttpClient]
-  val mockCalcConnector = mock[CalculatorConnector]
-  val mockAnswersConstructor = mock[AnswersConstructor]
-  val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
-  val privateResidenceReliefView = fakeApplication.injector.instanceOf[privateResidenceRelief]
-  val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
+  implicit val implicitHeaderCarrier: HeaderCarrier = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
+  implicit val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
+  private val mockMaterializer = mock[Materializer]
+  private val mockCalcConnector = mock[CalculatorConnector]
+  private val mockAnswersConstructor = mock[AnswersConstructor]
+  private val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
+  private val privateResidenceReliefView = fakeApplication.injector.instanceOf[privateResidenceRelief]
+  private val privateResidenceReliefValueView = fakeApplication.injector.instanceOf[privateResidenceReliefValue]
+  private val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
 
   class Setup {
     val controller = new PrivateResidenceReliefController(
@@ -61,7 +60,8 @@ class PrivateResidenceReliefActionSpec
       mockSessionCacheService,
       mockAnswersConstructor,
       mockMessagesControllerComponents,
-      privateResidenceReliefView
+      privateResidenceReliefView,
+      privateResidenceReliefValueView,
     )(ec)
   }
 
@@ -110,7 +110,7 @@ class PrivateResidenceReliefActionSpec
       .thenReturn(Future.successful(Some(totalGainResultsModel)))
 
 
-    new PrivateResidenceReliefController(mockCalcConnector, mockSessionCacheService, mockAnswersConstructor, mockMessagesControllerComponents, privateResidenceReliefView)(ec)
+    new PrivateResidenceReliefController(mockCalcConnector, mockSessionCacheService, mockAnswersConstructor, mockMessagesControllerComponents, privateResidenceReliefView, privateResidenceReliefValueView)(ec)
   }
 
   "Calling the .getAcquisitionDate method" should {
@@ -279,7 +279,7 @@ class PrivateResidenceReliefActionSpec
           redirectLocation(result).get should include("/calculate-your-capital-gains/non-resident/session-timeout")
           fail("Exception should be thrown")
         } catch {
-          case ex: Exception =>
+          case _: Exception =>
         }
       }
     }
@@ -297,13 +297,13 @@ class PrivateResidenceReliefActionSpec
         rebasedValueData = Some(RebasedValueModel(1000)),
         calculationResultsWithPRRModel = Some(model))
       lazy val request = fakeRequestToPOSTWithSession(("isClaimingPRR", "No"))
-      lazy val result = target.submitPrivateResidenceRelief(request)
+      lazy val result = target.submitprivateResidenceReliefValue(request)
 
       "redirect to the Check Your Answers page" in {
         try {
           redirectLocation(result).get shouldBe controllers.routes.CheckYourAnswersController.checkYourAnswers.url
         } catch {
-          case ex: Exception =>
+          case _: Exception =>
         }
       }
     }
@@ -318,14 +318,14 @@ class PrivateResidenceReliefActionSpec
         rebasedValueData = Some(RebasedValueModel(1000)),
         calculationResultsWithPRRModel = Some(model))
       lazy val request = fakeRequestToPOSTWithSession(("isClaimingPRR", "No"))
-      lazy val result = target.submitPrivateResidenceRelief(request)
+      lazy val result = target.submitprivateResidenceReliefValue(request)
 
       "redirect to the Current Income page" in {
         try {
           redirectLocation(result).get shouldBe controllers.routes.CurrentIncomeController.currentIncome.url
           fail("Failure should be thrown")
         } catch {
-          case ex: Exception =>
+          case _: Exception =>
         }
       }
     }
@@ -337,7 +337,7 @@ class PrivateResidenceReliefActionSpec
         acquisitionDateData = Some(DateModel(1, 1, 2016)),
         rebasedValueData = Some(RebasedValueModel(1000)))
       lazy val request = fakeRequestToPOSTWithSession(("isClaimingPRR", ""))
-      lazy val result = target.submitPrivateResidenceRelief(request)
+      lazy val result = target.submitprivateResidenceReliefValue(request)
       lazy val document = Jsoup.parse(bodyOf(result)(mockMaterializer, ec))
 
       "return a status of 400" in {

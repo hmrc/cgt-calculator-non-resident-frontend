@@ -128,6 +128,10 @@ POST        /disposal-costs                     @controllers.DisposalCostsContro
 GET         /private-residence-relief           @controllers.PrivateResidenceReliefController.privateResidenceRelief
 POST        /private-residence-relief           @controllers.PrivateResidenceReliefController.submitPrivateResidenceRelief
 
+#Private Residence Relief Value
+GET         /private-residence-relief-value    @controllers.PrivateResidenceReliefController.privateResidenceReliefValue
+POST        /private-residence-relief-value    @controllers.PrivateResidenceReliefController.submitprivateResidenceReliefValue
+
 #Previous Gain Or Loss
 GET         /previous-gain-or-loss              @controllers.PreviousGainOrLossController.previousGainOrLoss
 POST        /previous-gain-or-loss              @controllers.PreviousGainOrLossController.submitPreviousGainOrLoss

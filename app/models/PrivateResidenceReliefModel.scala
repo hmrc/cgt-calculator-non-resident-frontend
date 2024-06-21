@@ -18,6 +18,12 @@ package models
 
 import play.api.libs.json._
 
+case class ClaimingPrrModel (isClaimingPRR: String)
+
+object ClaimingPrrModel {
+  implicit val format = Json.format[ClaimingPrrModel]
+}
+
 case class PrivateResidenceReliefModel (isClaimingPRR: String, daysClaimed: Option[BigDecimal], daysClaimedAfter: Option[BigDecimal] = None)
 
 object PrivateResidenceReliefModel {
