@@ -68,8 +68,9 @@
 }
 
 @hiddenYesHtml = {
+@if(!showFirstQuestion && !daysBetweenShow) {
     <p id="formExplanation" class="govuk-body">@messages("calc.privateResidenceRelief.formHintExplanation")</p>
-
+}
 @if(showFirstQuestion) {
     @formInputNumber(
         field = privateResidenceReliefForm("daysClaimed"),
