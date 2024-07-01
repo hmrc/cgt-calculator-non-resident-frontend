@@ -29,11 +29,11 @@
 @(privateResidenceReliefForm: Form[ClaimingPrrModel], daysBetweenShow: Boolean)(implicit request: Request[_], messages: Messages)
 
 @title = @{
-    Messages("calc.privateResidenceRelief.question")
+    Messages("calc.privateResidenceRelief.title")
 }
 
 @layout(pageTitle = title) {
-    <h1 class="govuk-heading-xl">@messages("calc.privateResidenceRelief.question")</h1>
+    <h1 class="govuk-heading-xl">@messages("calc.privateResidenceRelief.title")</h1>
 
     <p class="govuk-body" id="intro">
         @if(daysBetweenShow) {
