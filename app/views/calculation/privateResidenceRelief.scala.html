@@ -17,17 +17,20 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
-    inputYesNo : playComponents.input_yes_no,
-    formInputNumber: playComponents.formInputMoney,
-    form: FormWithCSRF,
-    layout: Layout,
-    errorSummary: playComponents.errorSummary,
-    submitButton: playComponents.submitButton
+        govukRadios: GovukRadios,
+        inputYesNo : playComponents.input_yes_no,
+        formInputNumber: playComponents.formInputMoney,
+        form: FormWithCSRF,
+        layout: Layout,
+        errorSummary: playComponents.errorSummary,
+        submitButton: playComponents.submitButton
 )
 
 @(privateResidenceReliefForm: Form[ClaimingPrrModel], daysBetweenShow: Boolean)(implicit request: Request[_], messages: Messages)
 
-@title = @{Messages("calc.privateResidenceRelief.question")}
+@title = @{
+    Messages("calc.privateResidenceRelief.question")
+}
 
 @layout(pageTitle = title) {
     <h1 class="govuk-heading-xl">@messages("calc.privateResidenceRelief.question")</h1>
@@ -51,11 +54,11 @@
 
     @form(action = controllers.routes.PrivateResidenceReliefController.submitPrivateResidenceRelief) {
         @inputYesNo(
-            legend = messages("calc.privateResidenceRelief.question"),
-            legendClass = Some("govuk-visually-hidden"),
-            isPageHeading = false,
-            field = privateResidenceReliefForm("isClaimingPRR")
-        )
+                        legend = messages("calc.privateResidenceRelief.question"),
+                        legendClass = Some("govuk-fieldset__legend--m"),
+                        isPageHeading = false,
+                        field = privateResidenceReliefForm("isClaimingPRR"),
+            conditionalYesHtml = Some(Html("")))
 
         @submitButton()
     }
