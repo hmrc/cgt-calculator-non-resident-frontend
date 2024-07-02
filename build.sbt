@@ -37,6 +37,10 @@ lazy val microservice = Project(appName, file("."))
     //evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
     Assets / pipelineStages := Seq(digest)
   )
+  .settings(
+    scalacOptions.+=("-Wconf:src=html/.*:s"), //suppresses warnings in twirl files and routes.
+    scalacOptions.+=("-Wconf:src=routes/.*:s"), //these warnings are loud and inconsequential.
+  )
   .configs(IntegrationTest)
   .settings(inConfig(IntegrationTest)(Defaults.itSettings): _*)
   .settings(resolvers += Resolver.jcenterRepo)

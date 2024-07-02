@@ -19,7 +19,8 @@ package common.nonresident
 import julienrf.json.derived
 import play.api.data.FormError
 import play.api.data.format.Formatter
-import play.api.libs.json.OFormat
+import play.api.libs.json.{OFormat}
+
 
 object CalculationType {
   implicit val jsonFormat: OFormat[CalculationType] = derived.oformat[CalculationType]()
