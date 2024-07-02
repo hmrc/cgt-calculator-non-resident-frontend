@@ -320,7 +320,7 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
       }
 
       "return a question for Private Residence Relief" in {
-        assertExpectedResult[QuestionAnswerModel[String]](result)(_.question shouldBe "calc.privateResidenceRelief.firstQuestion")
+        assertExpectedResult[QuestionAnswerModel[String]](result)(_.question shouldBe "calc.privateResidenceReliefValue.firstQuestion")
       }
 
       "return a link to the Private Residence Relief page" in {
@@ -334,7 +334,7 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
         lazy val result = DeductionDetailsConstructor.privateResidenceReliefDaysClaimedBeforeRow(
           Some(PrivateResidenceReliefModel("Yes", Some(4), None)), edgeDatesJustDaysBefore)
 
-        result.get.question shouldBe "calc.privateResidenceRelief.questionFlat"
+        result.get.question shouldBe "calc.privateResidenceReliefValue.questionFlat"
         result.get.oDate shouldBe Some(LocalDate.of(2015, 9, 2))
       }
     }
@@ -402,7 +402,7 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
       }
 
       "return a question for Private Residence Relief" in {
-        assertExpectedResult[QuestionAnswerModel[String]](result)(_.question shouldBe "calc.privateResidenceRelief.questionBetween")
+        assertExpectedResult[QuestionAnswerModel[String]](result)(_.question shouldBe "calc.privateResidenceReliefValue.questionBetween")
         assertExpectedResult[QuestionAnswerModel[String]](result)(_.oDate shouldBe Some(LocalDate.of(2017, 4, 10)))
       }
 
@@ -429,7 +429,7 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
       }
 
       "return a question for Private Residence Relief" in {
-        assertExpectedResult[QuestionAnswerModel[String]](result)(_.question shouldBe "calc.privateResidenceRelief.questionBetween")
+        assertExpectedResult[QuestionAnswerModel[String]](result)(_.question shouldBe "calc.privateResidenceReliefValue.questionBetween")
         assertExpectedResult[QuestionAnswerModel[String]](result)(_.oDate shouldBe Some(LocalDate.of(2015, 4, 10)))
       }
 

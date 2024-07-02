@@ -41,44 +41,44 @@
         <summary class="govuk-details__summary">
             <span class="govuk-details__summary-text">
             @if(daysBetweenShow) {
-                @Messages("calc.privateResidenceRelief.helpTextBeforeAfter")
+                @Messages("calc.privateResidenceReliefValue.helpTextBeforeAfter")
             } else {
-                @Messages("calc.privateResidenceRelief.helpTextJustBefore")
+                @Messages("calc.privateResidenceReliefValue.helpTextJustBefore")
             }
             </span>
         </summary>
         <div class="govuk-details__text">
             @if(daysBetweenShow) {
-                <p class="govuk-body" id="bulletPointTitle">@messages("calc.privateResidenceRelief.helpTextSubTitle")</p>
+                <p class="govuk-body" id="bulletPointTitle">@messages("calc.privateResidenceReliefValue.helpTextSubTitle")</p>
 
                 <ul>
-                    <li id="detailsBullet1">@messages("calc.privateResidenceRelief.daysBeforeHelpText")</li>
-                    <li id="detailsBullet2">@messages("calc.privateResidenceRelief.daysBetweenHelpText", disposalDateLess18MonthsString, pRRMonths)</li>
+                    <li id="detailsBullet1">@messages("calc.privateResidenceReliefValue.daysBeforeHelpText")</li>
+                    <li id="detailsBullet2">@messages("calc.privateResidenceReliefValue.daysBetweenHelpText", disposalDateLess18MonthsString, pRRMonths)</li>
                 </ul>
             }
             @if(!daysBetweenShow) {
-                <p id="helpTextBetween" class="govuk-body">@messages("calc.privateResidenceRelief.daysBetweenHelpText", disposalDateLess18MonthsString)</p>
+                <p id="helpTextBetween" class="govuk-body">@messages("calc.privateResidenceReliefValue.daysBetweenHelpText", disposalDateLess18MonthsString)</p>
             }
         </div>
     </details>
 }
 
 @title = @{
-    if(privateResidenceReliefForm.errors.nonEmpty) messages("site.title.error", Messages("calc.privateResidenceRelief.amountQuestion")) else Messages("calc.privateResidenceRelief.amountQuestion")
+    if(privateResidenceReliefForm.errors.nonEmpty) messages("site.title.error", Messages("calc.privateResidenceReliefValue.amountQuestion")) else Messages("calc.privateResidenceReliefValue.amountQuestion")
 }
 
 @hiddenYesHtml = {
 @if(!showFirstQuestion && !daysBetweenShow) {
-    <p id="formExplanation" class="govuk-body">@messages("calc.privateResidenceRelief.formHintExplanation")</p>
+    <p id="formExplanation" class="govuk-body">@messages("calc.privateResidenceReliefValue.formHintExplanation")</p>
 }
 @if(showFirstQuestion) {
     @formInputNumber(
         field = privateResidenceReliefForm("daysClaimed"),
         question = {
             if(showOnlyFlatQuestion) {
-                messages("calc.privateResidenceRelief.questionFlat", disposalDateLess18MonthsString)
+                messages("calc.privateResidenceReliefValue.questionFlat", disposalDateLess18MonthsString)
             } else {
-                messages("calc.privateResidenceRelief.firstQuestion")
+                messages("calc.privateResidenceReliefValue.firstQuestion")
             }
         },
         labelClass = "govuk-label--m",
@@ -88,7 +88,7 @@
 @if(daysBetweenShow) {
     @formInputNumber(
         field = privateResidenceReliefForm("daysClaimedAfter"),
-        question = messages("calc.privateResidenceRelief.questionBetween", disposalDateLess18MonthsString),
+        question = messages("calc.privateResidenceReliefValue.questionBetween", disposalDateLess18MonthsString),
         labelClass = "govuk-label--m",
         showCurrency = false
     )
@@ -113,7 +113,7 @@
         }
     }
 
-    <h1 class="govuk-heading-xl">@messages("calc.privateResidenceRelief.amountQuestion")</h1>
+    <h1 class="govuk-heading-xl">@messages("calc.privateResidenceReliefValue.amountQuestion")</h1>
 
     @form(action = controllers.routes.PrivateResidenceReliefController.submitprivateResidenceReliefValue) {
       @hiddenYesHtml
