@@ -355,7 +355,7 @@ calc.privateResidenceRelief.title = Ryddhad Preswylfa Breifat
 calc.privateResidenceRelief.question = Ydych chi’n hawlio Rhyddhad Preswylfan Preifat?
 
 ## Private Residence Relief Value ##
-calc.privateResidenceReliefValue.amountQuestion = Ryddhad Preswylfa Breifat
+calc.privateResidenceReliefValue.title = Faint o Ryddhad Preswylfan Preifat sydd gennych hawl iddo?
 calc.privateResidenceReliefValue.firstQuestion = Am sawl diwrnod cyn 6 Ebrill 2015 yr oeddech yn byw yn yr eiddo hwn fel eich prif gartref?
 calc.privateResidenceReliefValue.helpTextBeforeAfter = Pam y dyddiadau penodol hyn?
 calc.privateResidenceReliefValue.helpTextJustBefore = Pam y dyddiad hwn?

@@ -64,7 +64,7 @@
 }
 
 @title = @{
-    if(privateResidenceReliefForm.errors.nonEmpty) messages("site.title.error", Messages("calc.privateResidenceReliefValue.amountQuestion")) else Messages("calc.privateResidenceReliefValue.amountQuestion")
+    if(privateResidenceReliefForm.errors.nonEmpty) messages("site.title.error", Messages("calc.privateResidenceReliefValue.title")) else Messages("calc.privateResidenceReliefValue.title")
 }
 
 @hiddenYesHtml = {
@@ -113,7 +113,7 @@
         }
     }
 
-    <h1 class="govuk-heading-xl">@messages("calc.privateResidenceReliefValue.amountQuestion")</h1>
+    <h1 class="govuk-heading-xl">@messages("calc.privateResidenceReliefValue.title")</h1>
 
     @form(action = controllers.routes.PrivateResidenceReliefController.submitprivateResidenceReliefValue) {
       @hiddenYesHtml

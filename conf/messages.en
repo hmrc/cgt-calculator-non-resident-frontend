@@ -315,7 +315,7 @@ calc.privateResidenceRelief.error.errorDecimalPlaces = There are too many number
 calc.privateResidenceRelief.error.maxNumericExceeded = Enter a value for your days claimed that''s {0} or less
 
 ## Private Residence Relief Value ##
-calc.privateResidenceReliefValue.amountQuestion = Private Residence Relief
+calc.privateResidenceReliefValue.title = How much Private Residence Relief are you entitled to?
 calc.privateResidenceReliefValue.firstQuestion = How many days before 6 April 2015 did you live in this property as your main home?
 calc.privateResidenceReliefValue.helpTextBeforeAfter = Why these specific dates?
 calc.privateResidenceReliefValue.helpTextJustBefore = Why this date?

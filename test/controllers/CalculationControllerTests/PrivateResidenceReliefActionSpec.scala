@@ -343,7 +343,7 @@ class PrivateResidenceReliefActionSpec
       }
 
       "return to the private residence relief page" in {
-        document.title() shouldBe s"Error: ${messages.title}"
+        document.title() shouldBe s"Error: ${messages.valueTitle}"
       }
     }
   }

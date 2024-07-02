@@ -333,6 +333,7 @@ object MessageLookup {
 
     object PrivateResidenceRelief {
       val title = "Private Residence Relief - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
+      val valueTitle = "How much Private Residence Relief are you entitled to? - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
       val question = "Are you claiming Private Residence Relief?"
       val intro1 = "You could get full tax relief of 365 days for any tax years when you or your spouse or civil partner spent at least 90 days in your UK home."
       val intro2 = "You could get full tax relief of 365 days for any tax years after 6 April 2015 when you or your spouse or civil partner spent at least 90 days in your UK home."
