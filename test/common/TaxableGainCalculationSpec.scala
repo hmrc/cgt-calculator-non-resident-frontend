@@ -39,7 +39,7 @@ class TaxableGainCalculationSpec extends CommonPlaySpec with GuiceOneAppPerSuite
   val mockAnswersConstructor: AnswersConstructor = mock[AnswersConstructor]
 
   val calculationResultsWithPRRModel = CalculationResultsWithPRRModel(GainsAfterPRRModel(1000, 1500, 2000), None, None)
-  val prrModel = PrivateResidenceReliefModel("No", None, None)
+  val prrModel = PrivateResidenceReliefModel("No", None)
   val taxYearModel = TaxYearModel("2015/16", isValidYear = true, "2015/16")
   val personalDetailsModel = TotalPersonalDetailsCalculationModel(
     CurrentIncomeModel(20000),

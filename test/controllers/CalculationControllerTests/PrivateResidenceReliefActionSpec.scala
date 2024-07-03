@@ -248,7 +248,7 @@ class PrivateResidenceReliefActionSpec
 
     "supplied wth a pre-existing stored model" should {
       val target = setupTarget(
-        Some(PrivateResidenceReliefModel("Yes", None, None)),
+        Some(PrivateResidenceReliefModel("Yes", None)),
         disposalDateData = Some(DateModel(5, 8, 2015)),
         acquisitionDateData = Some(DateModel(1, 1, 2016)),
         rebasedValueData = Some(RebasedValueModel(1000)))

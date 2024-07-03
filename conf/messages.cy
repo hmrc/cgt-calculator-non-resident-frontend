@@ -343,10 +343,7 @@ calc.previousLossOrGain.question = A wnaeth y gwarediadau hyn arwain at golledio
 
 ## Private Residence Relief ##
 calc.privateResidenceRelief.errors.required = Dewiswch ''Iawn'' os ydych yn hawlio Rhyddhad Preswylfa Breifat
-calc.privateResidenceRelief.error.errorDecimalPlaces = Mae gormod o rifau ar ôl y pwynt degol yn nifer y diwrnodau rydych yn gwneud cais ar eu cyfer
-calc.privateResidenceRelief.error.errorNegative = Nodwch rif positif ar gyfer sawl diwrnod rydych yn gwneud cais ar eu cyfer
 calc.privateResidenceRelief.error.maxNumericExceeded = Nodwch rif ar gyfer sawl diwrnod rydych yn gwneud cais ar eu cyfer sy’n {0} neu lai
-calc.privateResidenceRelief.error.noValueProvided = Nodwch sawl diwrnod rydych yn gwneud cais ar eu cyfer
 calc.privateResidenceRelief.helpLink = Ryddhad Preswylfan Preifat ar gyfer y rhai nad ydynt yn breswyl yn y DU
 calc.privateResidenceRelief.helpText = Rhagor o fanylion am
 calc.privateResidenceRelief.intro1 = Gallech gael rhyddhad treth llawn am 365 diwrnod ar gyfer unrhyw flwyddyn dreth pan wnaethoch chi neu’ch priod neu bartner sifil dreulio o leiaf 90 diwrnod yn eich cartref yn y DU.
@@ -356,6 +353,7 @@ calc.privateResidenceRelief.question = Ydych chi’n hawlio Rhyddhad Preswylfan 
 
 ## Private Residence Relief Value ##
 calc.privateResidenceReliefValue.title = Faint o Ryddhad Preswylfan Preifat sydd gennych hawl iddo?
+calc.privateResidenceReliefValue.hint = Er enghraifft, £10,000.50
 calc.privateResidenceReliefValue.firstQuestion = Am sawl diwrnod cyn 6 Ebrill 2015 yr oeddech yn byw yn yr eiddo hwn fel eich prif gartref?
 calc.privateResidenceReliefValue.helpTextBeforeAfter = Pam y dyddiadau penodol hyn?
 calc.privateResidenceReliefValue.helpTextJustBefore = Pam y dyddiad hwn?
@@ -365,6 +363,10 @@ calc.privateResidenceReliefValue.helpTextSubTitle = Mae''r dyddiadau hyn yn bwys
 calc.privateResidenceReliefValue.formHintExplanation = I gyfrifo’ch Rhyddhad Preswylfan Preifat, mae angen rhywfaint o wybodaeth arnom ynglŷn â phryd oeddech chi’n byw yn yr eiddo.
 calc.privateResidenceReliefValue.questionFlat = AAm sawl diwrnod cyn {0} yr oedd yr eiddo hwn yn gymwys am ryddhad?
 calc.privateResidenceReliefValue.questionBetween = Am sawl diwrnod rhwng 6 Ebrill 2015 a {0} yr oedd yr eiddo hwn yn gymwys am ryddhad?
+calc.privateResidenceReliefValue.error.noValueProvided = Nodwch faint o Ryddhad Preswylfa Breifat y mae gennych hawl iddo
+calc.privateResidenceReliefValue.error.number = Mae’n rhaid i faint o Ryddhad Preswylfa Breifat y mae gennych hawl iddo fod yn swm o arian mewn punnoedd
+calc.privateResidenceReliefValue.error.errorNegative = Mae’n rhaid i’r Rhyddhad Preswylfa Breifat fod yn £0 neu fwy
+calc.privateResidenceReliefValue.error.errorDecimalPlaces = Mae faint o Ryddhad Preswylfa Breifat y mae gennych hawl iddo yn cynnwys gormod o rifau ar ôl y pwynt degol
 
 calc.propertyLivedIn.errors.required = Dewiswch ''Iawn'' os ydych erioed wedi byw yn yr eiddo ers i chi ddod yn berchennog arno
 calc.propertyLivedIn.title = Ydych chi wedi byw yn yr eiddo ar ryw adeg ers i chi ddod yn berchennog?

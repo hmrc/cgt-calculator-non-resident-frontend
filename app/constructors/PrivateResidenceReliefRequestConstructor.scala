@@ -26,14 +26,13 @@ object PrivateResidenceReliefRequestConstructor {
                                   propertyLivedInModel: Option[PropertyLivedInModel]): String = {
     if(checkLivedInProperty(propertyLivedInModel)) {
       eligibleForPrivateResidenceRelief(privateResidenceReliefModel) +
-        daysClaimed(totalGainAnswersModel, privateResidenceReliefModel) +
-        daysClaimedAfter(totalGainAnswersModel, privateResidenceReliefModel)
+        daysClaimed(totalGainAnswersModel, privateResidenceReliefModel)
     } else "&claimingPRR=false"
   }
 
   def eligibleForPrivateResidenceRelief(privateResidenceReliefModel: Option[PrivateResidenceReliefModel]): String = {
     privateResidenceReliefModel match {
-      case Some(PrivateResidenceReliefModel("Yes", _, _)) => "&claimingPRR=true"
+      case Some(PrivateResidenceReliefModel("Yes", _)) => "&claimingPRR=true"
       case _ => "&claimingPRR=false"
     }
   }
@@ -44,23 +43,9 @@ object PrivateResidenceReliefRequestConstructor {
     val pRRDateDetails = TaxDates.privateResidenceReliefMonthDeductionApplicable(totalGainAnswersModel.disposalDateModel)
 
     privateResidenceReliefModel match {
-      case (Some(PrivateResidenceReliefModel("Yes", Some(value), daysAfter)))
+      case Some(PrivateResidenceReliefModel("Yes", Some(value)))
         if totalGainAnswersModel.acquisitionDateModel.get.plusMonths(pRRDateDetails.months).isBefore(totalGainAnswersModel.disposalDateModel.get) =>
-        s"&daysClaimed=${value + daysAfter.getOrElse(0)}"
-      case _ => ""
-    }
-  }
-
-  def daysClaimedAfter(totalGainAnswersModel: TotalGainAnswersModel,
-                       privateResidenceReliefModel: Option[PrivateResidenceReliefModel]): String = {
-
-    val pRRDateDetails = TaxDates.privateResidenceReliefMonthDeductionApplicable(totalGainAnswersModel.disposalDateModel)
-
-    privateResidenceReliefModel match {
-      case (Some(PrivateResidenceReliefModel("Yes", _, Some(value))))
-        if totalGainAnswersModel.acquisitionDateModel.get.plusMonths(pRRDateDetails.months).isBefore(totalGainAnswersModel.disposalDateModel.get) &&
-        !TaxDates.dateAfterStart(totalGainAnswersModel.acquisitionDateModel.get) =>
-          s"&daysClaimedAfter=$value"
+        s"&daysClaimed=${value + 0}"
       case _ => ""
     }
   }

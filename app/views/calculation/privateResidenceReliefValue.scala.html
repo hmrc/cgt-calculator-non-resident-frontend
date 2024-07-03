@@ -14,11 +14,8 @@
  * limitations under the License.
  *@
 
-@import common.Dates.TemplateImplicits._
 @import models.PrivateResidenceReliefModel
 @import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
-
-@import java.time.LocalDate
 
 @this(
         inputYesNo: playComponents.input_yes_no,
@@ -29,89 +26,27 @@
         submitButton: playComponents.submitButton
 )
 
-@(privateResidenceReliefForm: Form[PrivateResidenceReliefModel], daysBetweenShow: Boolean, showFirstQuestion: Boolean, disposalDateLess18Months: Option[LocalDate], pRRMonths: Int, showOnlyFlatQuestion: Boolean)(implicit request: Request[_], messages: Messages, lang: Lang)
-
-
-@disposalDateLess18MonthsString = {
-@disposalDateLess18Months.map(_.localFormat("d MMMM yyyy")).getOrElse("")
-}
-
-@detailHtml = {
-    <details class="govuk-details" data-module="govuk-details">
-        <summary class="govuk-details__summary">
-            <span class="govuk-details__summary-text">
-            @if(daysBetweenShow) {
-                @Messages("calc.privateResidenceReliefValue.helpTextBeforeAfter")
-            } else {
-                @Messages("calc.privateResidenceReliefValue.helpTextJustBefore")
-            }
-            </span>
-        </summary>
-        <div class="govuk-details__text">
-            @if(daysBetweenShow) {
-                <p class="govuk-body" id="bulletPointTitle">@messages("calc.privateResidenceReliefValue.helpTextSubTitle")</p>
-
-                <ul>
-                    <li id="detailsBullet1">@messages("calc.privateResidenceReliefValue.daysBeforeHelpText")</li>
-                    <li id="detailsBullet2">@messages("calc.privateResidenceReliefValue.daysBetweenHelpText", disposalDateLess18MonthsString, pRRMonths)</li>
-                </ul>
-            }
-            @if(!daysBetweenShow) {
-                <p id="helpTextBetween" class="govuk-body">@messages("calc.privateResidenceReliefValue.daysBetweenHelpText", disposalDateLess18MonthsString)</p>
-            }
-        </div>
-    </details>
-}
+@(privateResidenceReliefForm: Form[PrivateResidenceReliefModel])(implicit request: Request[_], messages: Messages, lang: Lang)
 
 @title = @{
     if(privateResidenceReliefForm.errors.nonEmpty) messages("site.title.error", Messages("calc.privateResidenceReliefValue.title")) else Messages("calc.privateResidenceReliefValue.title")
 }
 
 @hiddenYesHtml = {
-@if(!showFirstQuestion && !daysBetweenShow) {
-    <p id="formExplanation" class="govuk-body">@messages("calc.privateResidenceReliefValue.formHintExplanation")</p>
-}
-@if(showFirstQuestion) {
     @formInputNumber(
         field = privateResidenceReliefForm("daysClaimed"),
-        question = {
-            if(showOnlyFlatQuestion) {
-                messages("calc.privateResidenceReliefValue.questionFlat", disposalDateLess18MonthsString)
-            } else {
-                messages("calc.privateResidenceReliefValue.firstQuestion")
-            }
-        },
+        question = "",
         labelClass = "govuk-label--m",
-        showCurrency = false
+        showCurrency = true,
+        hintText = Some(messages("calc.privateResidenceReliefValue.hint"))
     )
-}
-@if(daysBetweenShow) {
-    @formInputNumber(
-        field = privateResidenceReliefForm("daysClaimedAfter"),
-        question = messages("calc.privateResidenceReliefValue.questionBetween", disposalDateLess18MonthsString),
-        labelClass = "govuk-label--m",
-        showCurrency = false
-    )
-}
     <br>
-@if(showFirstQuestion) {
-    @detailHtml
-}
 }
 
 @layout(
     pageTitle = title
 ) {
-
-    @if(showFirstQuestion) {
-        @errorSummary(privateResidenceReliefForm.errors, Some("daysClaimed"))
-    } else {
-        @if(daysBetweenShow) {
-            @errorSummary(privateResidenceReliefForm.errors, Some("daysClaimedAfter"))
-        } else {
-            @errorSummary(privateResidenceReliefForm.errors)
-        }
-    }
+    @errorSummary(privateResidenceReliefForm.errors, Some("daysClaimed"))
 
     <h1 class="govuk-heading-xl">@messages("calc.privateResidenceReliefValue.title")</h1>
 

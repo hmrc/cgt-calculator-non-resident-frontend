@@ -24,7 +24,7 @@ object ClaimingPrrModel {
   implicit val format = Json.format[ClaimingPrrModel]
 }
 
-case class PrivateResidenceReliefModel (isClaimingPRR: String, daysClaimed: Option[BigDecimal], daysClaimedAfter: Option[BigDecimal] = None)
+case class PrivateResidenceReliefModel(isClaimingPRR: String, daysClaimed: Option[BigDecimal])
 
 object PrivateResidenceReliefModel {
 
