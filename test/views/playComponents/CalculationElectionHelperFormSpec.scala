@@ -28,8 +28,8 @@ import views.html.playComponents.calculationElectionHelperForm
 
 class CalculationElectionHelperFormSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
-  implicit lazy val calculationElectionHelperFormView = fakeApplication.injector.instanceOf[calculationElectionHelperForm]
+  implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  implicit lazy val calculationElectionHelperFormView: calculationElectionHelperForm = fakeApplication.injector.instanceOf[calculationElectionHelperForm]
 
   "Creating a calculationElectionHelperForm" should {
 

@@ -25,7 +25,7 @@ import java.time.LocalDate
 
 class PurchaseDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeApplication with AssertHelpers {
 
-  val totalGainGiven = TotalGainAnswersModel(
+  val totalGainGiven: TotalGainAnswersModel = TotalGainAnswersModel(
     DateModel(10, 10, 2016),
     SoldOrGivenAwayModel(false),
     None,
@@ -43,7 +43,7 @@ class PurchaseDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeA
     None
   )
 
-  val totalGainInherited = TotalGainAnswersModel(
+  val totalGainInherited: TotalGainAnswersModel = TotalGainAnswersModel(
     DateModel(10, 10, 2010),
     SoldOrGivenAwayModel(false),
     None,
@@ -61,7 +61,7 @@ class PurchaseDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeA
     None
   )
 
-  val totalGainSold = TotalGainAnswersModel(
+  val totalGainSold: TotalGainAnswersModel = TotalGainAnswersModel(
     DateModel(10, 10, 2018),
     SoldOrGivenAwayModel(true),
     Some(SoldForLessModel(false)),
@@ -79,7 +79,7 @@ class PurchaseDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeA
     None
   )
 
-  val totalGainForLess = TotalGainAnswersModel(
+  val totalGainForLess: TotalGainAnswersModel = TotalGainAnswersModel(
     DateModel(10, 10, 2016),
     SoldOrGivenAwayModel(true),
     Some(SoldForLessModel(true)),
@@ -97,7 +97,7 @@ class PurchaseDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeA
     None
   )
 
-  val totalGainForLessNoHowBecameOwnerModel = TotalGainAnswersModel(
+  val totalGainForLessNoHowBecameOwnerModel: TotalGainAnswersModel = TotalGainAnswersModel(
     DateModel(10, 10, 2016),
     SoldOrGivenAwayModel(true),
     Some(SoldForLessModel(true)),
@@ -138,7 +138,7 @@ class PurchaseDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeA
       )
   }
 
-  private def assertExpectedResult[T](option: Option[T])(test: T => Unit) = assertOption("expected option is None")(option)(test)
+  private def assertExpectedResult[T](option: Option[T])(test: T => Unit): Unit = assertOption("expected option is None")(option)(test)
 
   "Calling purchaseDetailsRow" when {
 

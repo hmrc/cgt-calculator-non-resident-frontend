@@ -17,14 +17,14 @@
 package models
 
 
-import play.api.libs.json.{JsValue, Json, Writes}
+import play.api.libs.json.{JsValue, Json, OFormat, Writes}
 
 case class HowBecameOwnerModel(gainedBy: String)
 
 object HowBecameOwnerModel {
-  implicit val format = Json.format[HowBecameOwnerModel]
+  implicit val format: OFormat[HowBecameOwnerModel] = Json.format[HowBecameOwnerModel]
 
-  val postWrites = new Writes[HowBecameOwnerModel] {
+  val postWrites: Writes[HowBecameOwnerModel] = new Writes[HowBecameOwnerModel] {
     override def writes(model: HowBecameOwnerModel): JsValue = {
       Json.toJson(model.gainedBy)
     }

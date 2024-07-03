@@ -21,21 +21,22 @@ import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.Application
+import play.api.i18n.Messages
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.FakeRequest
 import play.twirl.api.Html
 import views.html.Layout
 
 class LayoutViewSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
-  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   implicit lazy val fakeApp: Application = fakeApplication
-  lazy val LayoutView = fakeApplication.injector.instanceOf[Layout]
+  lazy val LayoutView: Layout = fakeApplication.injector.instanceOf[Layout]
 
   "Main Template" should {
     "produce the same output when render and f are called" in {
-      LayoutView("Title", false, false, false)(Html(""))(FakeRequest("GET", ""), mockMessage) shouldBe
-        LayoutView.render("Title", false, false, false, None, Html(""), FakeRequest("GET", ""), mockMessage)
+      LayoutView("Title", backLinkEnabled = false, timeoutEnabled = false, fullGrid = false)(Html(""))(FakeRequest("GET", ""), mockMessage) shouldBe
+        LayoutView.render("Title", backLinkEnabled = false, timeoutEnabled = false, fullGrid = false, None, Html(""), FakeRequest("GET", ""), mockMessage)
     }
   }
 }

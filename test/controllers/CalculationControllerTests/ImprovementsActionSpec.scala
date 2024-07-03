@@ -138,7 +138,7 @@ class ImprovementsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
 
         "return some HTML that" should {
 
-          s"have the title ${pageTitle}" in {
+          s"have the title $pageTitle" in {
             document.title shouldEqual pageTitle
           }
         }

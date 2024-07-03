@@ -22,7 +22,7 @@ import forms.WorthWhenInherited.worthWhenInheritedForm
 import models.AcquisitionValueModel
 import play.api.data.Form
 import play.api.i18n.I18nSupport
-import play.api.mvc.MessagesControllerComponents
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.SessionCacheService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
@@ -38,14 +38,14 @@ class WorthWhenInheritedController @Inject()(http: DefaultHttpClient,
                                             )(implicit ec: ExecutionContext)
   extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
-  val worthWhenInherited = ValidateSession.async { implicit request =>
+  val worthWhenInherited: Action[AnyContent] = ValidateSession.async { implicit request =>
     sessionCacheService.fetchAndGetFormData[AcquisitionValueModel](KeystoreKeys.acquisitionMarketValue).map {
       case Some(data) => Ok(worthWhenInheritedView(worthWhenInheritedForm.fill(data)))
       case None => Ok(worthWhenInheritedView(worthWhenInheritedForm))
     }
   }
 
-  val submitWorthWhenInherited = ValidateSession.async { implicit request =>
+  val submitWorthWhenInherited: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     def errorAction(form: Form[AcquisitionValueModel]) = Future.successful(BadRequest(worthWhenInheritedView(form)))
 

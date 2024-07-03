@@ -25,7 +25,7 @@ import play.api.data._
 
 object BoughtForLessForm {
 
-  val boughtForLessForm =
+  val boughtForLessForm: Form[BoughtForLessModel] =
     Form(
       mapping(
         "boughtForLess" -> text("calc.boughtForLess.errors.required")

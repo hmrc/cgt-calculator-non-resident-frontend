@@ -43,16 +43,16 @@ import scala.concurrent.{ExecutionContext, Future}
 class AcquisitionCostsActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper
   with BeforeAndAfterEach {
 
-  implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
-  val ec = fakeApplication.injector.instanceOf[ExecutionContext]
+  implicit val hc: HeaderCarrier = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
+  val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
 
-  val materializer = mock[Materializer]
-  val mockCalcConnector =mock[CalculatorConnector]
+  val materializer: Materializer = mock[Materializer]
+  val mockCalcConnector: CalculatorConnector =mock[CalculatorConnector]
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
-  val mockDefaultCalcElecConstructor = mock[DefaultCalculationElectionConstructor]
-  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
-  val acquisitionCostsView = fakeApplication.injector.instanceOf[acquisitionCosts]
+  val mockDefaultCalcElecConstructor: DefaultCalculationElectionConstructor = mock[DefaultCalculationElectionConstructor]
+  val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  val mockMessagesControllerComponents: MessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
+  val acquisitionCostsView: acquisitionCosts = fakeApplication.injector.instanceOf[acquisitionCosts]
   lazy val pageTitle = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
 
   class Setup {
@@ -241,7 +241,7 @@ class AcquisitionCostsActionSpec extends CommonPlaySpec with WithCommonFakeAppli
         lazy val request = fakeRequestToPOSTWithSession(("acquisitionCosts", "a"))
         lazy val result = target.submitAcquisitionCosts(request)
         lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
-        document.title shouldBe s"""Error: ${pageTitle}"""
+        document.title shouldBe s"""Error: $pageTitle"""
       }
 
       "have a back link to the WorthWhenInherited page" in {

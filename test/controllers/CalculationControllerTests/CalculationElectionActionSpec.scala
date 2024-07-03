@@ -41,22 +41,22 @@ import views.html.calculation.{calculationElection, calculationElectionNoReliefs
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class CalculationElectionActionSpec ()
+class CalculationElectionActionSpec
   extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
+  implicit val hc: HeaderCarrier = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
 
-  val materializer = mock[Materializer]
-  val ec = fakeApplication.injector.instanceOf[ExecutionContext]
-  val mockHttp =mock[DefaultHttpClient]
-  val mockCalcConnector =mock[CalculatorConnector]
+  val materializer: Materializer = mock[Materializer]
+  val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
+  val mockHttp: DefaultHttpClient =mock[DefaultHttpClient]
+  val mockCalcConnector: CalculatorConnector =mock[CalculatorConnector]
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
-  val mockAnswersConstructor = mock[AnswersConstructor]
-  val mockDefaultCalElecConstructor = mock[DefaultCalculationElectionConstructor]
-  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
-  val calculationElectionView = fakeApplication.injector.instanceOf[calculationElection]
-  val calculationElectionNoReliefsView = fakeApplication.injector.instanceOf[calculationElectionNoReliefs]
+  val mockAnswersConstructor: AnswersConstructor = mock[AnswersConstructor]
+  val mockDefaultCalElecConstructor: DefaultCalculationElectionConstructor = mock[DefaultCalculationElectionConstructor]
+  val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  val mockMessagesControllerComponents: MessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
+  val calculationElectionView: calculationElection = fakeApplication.injector.instanceOf[calculationElection]
+  val calculationElectionNoReliefsView: calculationElectionNoReliefs = fakeApplication.injector.instanceOf[calculationElectionNoReliefs]
   val calculationElectionPageTitle = s"""${messages.heading} - ${commonMessages.serviceName} - GOV.UK"""
   val calculationElectionNoReliefsPageTitle = s"""${nRMessages.title} - ${commonMessages.serviceName} - GOV.UK"""
 
@@ -132,7 +132,7 @@ class CalculationElectionActionSpec ()
       calculationElectionNoReliefsView)(ec)
   }
 
-  val finalAnswersModel = TotalPersonalDetailsCalculationModel(
+  val finalAnswersModel: TotalPersonalDetailsCalculationModel = TotalPersonalDetailsCalculationModel(
     CurrentIncomeModel(0),
     None,
     OtherPropertiesModel("No"),
@@ -379,7 +379,7 @@ class CalculationElectionActionSpec ()
         Seq.empty,
         finalAnswersModel
       )
-      target.orderElements(sequence, false) shouldBe sequenceNoReliefs
+      target.orderElements(sequence, claimingReliefs = false) shouldBe sequenceNoReliefs
     }
 
     "return the ordered sequence if claiming reliefs" in {
@@ -390,7 +390,7 @@ class CalculationElectionActionSpec ()
         Seq.empty,
         finalAnswersModel
       )
-      target.orderElements(sequence, true) shouldBe orderedSequence
+      target.orderElements(sequence, claimingReliefs = true) shouldBe orderedSequence
     }
   }
 }

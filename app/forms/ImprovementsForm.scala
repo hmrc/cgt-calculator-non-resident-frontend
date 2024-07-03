@@ -21,7 +21,6 @@ import common.Validation._
 import models.ImprovementsModel
 import play.api.data.Forms._
 import play.api.data._
-import uk.gov.voa.play.form.ConditionalMappings.{isEqual, mandatoryIf}
 
 object ImprovementsForm {
 

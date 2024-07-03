@@ -23,7 +23,7 @@ import models._
 
 class PropertyDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeApplication with AssertHelpers {
 
-  val noImprovements = TotalGainAnswersModel(
+  val noImprovements: TotalGainAnswersModel = TotalGainAnswersModel(
     DateModel(10, 10, 2010),
     SoldOrGivenAwayModel(false),
     None,
@@ -41,7 +41,7 @@ class PropertyDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeA
     None
   )
 
-  val flatOnlyImprovements = TotalGainAnswersModel(
+  val flatOnlyImprovements: TotalGainAnswersModel = TotalGainAnswersModel(
     DateModel(10, 10, 2018),
     SoldOrGivenAwayModel(true),
     Some(SoldForLessModel(false)),

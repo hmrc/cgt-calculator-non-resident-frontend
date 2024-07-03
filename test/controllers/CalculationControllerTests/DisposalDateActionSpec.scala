@@ -40,15 +40,15 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class DisposalDateActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
+  implicit val hc: HeaderCarrier = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
 
-  val materializer = mock[Materializer]
-  val ec = fakeApplication.injector.instanceOf[ExecutionContext]
-  val mockHttp =mock[DefaultHttpClient]
-  val mockCalcConnector =mock[CalculatorConnector]
-  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
-  val disposalDateView = fakeApplication.injector.instanceOf[disposalDate]
+  val materializer: Materializer = mock[Materializer]
+  val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
+  val mockHttp: DefaultHttpClient =mock[DefaultHttpClient]
+  val mockCalcConnector: CalculatorConnector =mock[CalculatorConnector]
+  val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  val mockMessagesControllerComponents: MessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
+  val disposalDateView: disposalDate = fakeApplication.injector.instanceOf[disposalDate]
   val pageTitle = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
 
@@ -129,7 +129,7 @@ class DisposalDateActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
 
     "submitting a valid date 31/01/2016" should {
 
-      lazy val target = setupTarget(None, Some(TaxYearModel("2015/16", true, "2015/16")))
+      lazy val target = setupTarget(None, Some(TaxYearModel("2015/16", isValidYear = true, "2015/16")))
       lazy val request = fakeRequestToPOSTWithSession(("disposalDate.day", "31"), ("disposalDate.month", "1"), ("disposalDate.year", "2016")).withMethod("POST")
       lazy val result = target.submitDisposalDate(request)
 
@@ -144,7 +144,7 @@ class DisposalDateActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
 
     "submitting a valid leap year date 29/02/2016" should {
 
-      lazy val target = setupTarget(None, Some(TaxYearModel("2015/16", true, "2015/16")))
+      lazy val target = setupTarget(None, Some(TaxYearModel("2015/16", isValidYear = true, "2015/16")))
       lazy val request = fakeRequestToPOSTWithSession(("disposalDate.day", "29"), ("disposalDate.month", "2"), ("disposalDate.year", "2016")).withMethod("POST")
       lazy val result = target.submitDisposalDate(request)
 
@@ -159,7 +159,7 @@ class DisposalDateActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
 
     "submitting a valid date of 20/02/2014 before the tax start date" should {
 
-      lazy val target = setupTarget(None, Some(TaxYearModel("2014/15", false, "2015/16")))
+      lazy val target = setupTarget(None, Some(TaxYearModel("2014/15", isValidYear = false, "2015/16")))
       lazy val request = fakeRequestToPOSTWithSession(("disposalDate.day", "20"), ("disposalDate.month", "2"), ("disposalDate.year", "2014")).withMethod("POST")
       lazy val result = target.submitDisposalDate(request)
 
@@ -173,7 +173,7 @@ class DisposalDateActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
     }
 
     "submitting a valid date in the future" should {
-      lazy val target = setupTarget(None, Some(TaxYearModel("2020/21", false, "2017/18")))
+      lazy val target = setupTarget(None, Some(TaxYearModel("2020/21", isValidYear = false, "2017/18")))
       lazy val request = fakeRequestToPOSTWithSession(("disposalDate.day", "20"), ("disposalDate.month", "2"), ("disposalDate.year", "2021")).withMethod("POST")
       lazy val result = target.submitDisposalDate(request)
 

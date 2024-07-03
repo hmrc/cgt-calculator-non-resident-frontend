@@ -17,24 +17,22 @@
 package models
 
 import constructors.TotalGainRequestConstructor.includeRebasedValuesInCalculation
-import play.api.libs.json.{JsNumber, JsValue, Json, Writes}
+import play.api.libs.json.{JsNumber, Json, OFormat, Writes}
 
 case class RebasedCostsModel(hasRebasedCosts: String, rebasedCosts: Option[BigDecimal])
 
 object RebasedCostsModel {
-  implicit val format = Json.format[RebasedCostsModel]
+  implicit val format: OFormat[RebasedCostsModel] = Json.format[RebasedCostsModel]
 
 
-  def postWrites(oRebasedValueModel: Option[RebasedValueModel], acquisitionDateModel: DateModel): Writes[RebasedCostsModel] = new Writes[RebasedCostsModel] {
-    override def writes(model: RebasedCostsModel): JsValue = {
-      if (includeRebasedValuesInCalculation(oRebasedValueModel, acquisitionDateModel)) {
-        model match {
-          case RebasedCostsModel("Yes", Some(value)) => Json.obj(("rebasedCosts", JsNumber(value)))
-          case _ => Json.obj()
-        }
-      } else {
-        Json.obj()
+  def postWrites(oRebasedValueModel: Option[RebasedValueModel], acquisitionDateModel: DateModel): Writes[RebasedCostsModel] = (model: RebasedCostsModel) => {
+    if (includeRebasedValuesInCalculation(oRebasedValueModel, acquisitionDateModel)) {
+      model match {
+        case RebasedCostsModel("Yes", Some(value)) => Json.obj(("rebasedCosts", JsNumber(value)))
+        case _ => Json.obj()
       }
+    } else {
+      Json.obj()
     }
   }
 }

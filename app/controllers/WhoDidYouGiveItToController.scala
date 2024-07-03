@@ -39,7 +39,7 @@ class WhoDidYouGiveItToController @Inject()(http: DefaultHttpClient,
                                             whoDidYouGiveItToView: whoDidYouGiveItTo)
                                            (implicit ec: ExecutionContext) extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
-  val whoDidYouGiveItTo = ValidateSession.async { implicit request =>
+  val whoDidYouGiveItTo: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     sessionCacheService.fetchAndGetFormData[WhoDidYouGiveItToModel](keystoreKeys.whoDidYouGiveItTo).map {
       case Some(data) => Ok(whoDidYouGiveItToView(whoDidYouGiveItToForm.fill(data)))
@@ -60,7 +60,7 @@ class WhoDidYouGiveItToController @Inject()(http: DefaultHttpClient,
       })
   }
 
-  val noTaxToPay = ValidateSession.async { implicit request =>
+  val noTaxToPay: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     def isGivenToCharity: Future[Boolean] = {
       sessionCacheService.fetchAndGetFormData[WhoDidYouGiveItToModel](keystoreKeys.whoDidYouGiveItTo).map {

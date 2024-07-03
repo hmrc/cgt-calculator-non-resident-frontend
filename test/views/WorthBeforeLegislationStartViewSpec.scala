@@ -24,14 +24,15 @@ import controllers.helpers.FakeRequestHelper
 import forms.WorthBeforeLegislationStartForm._
 import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.i18n.Messages
 import play.api.mvc.MessagesControllerComponents
 import views.html.calculation.worthBeforeLegislationStart
 
 class WorthBeforeLegislationStartViewSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
-  lazy val worthBeforeLegislationStartView = fakeApplication.injector.instanceOf[worthBeforeLegislationStart]
+  val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  lazy val worthBeforeLegislationStartView: worthBeforeLegislationStart = fakeApplication.injector.instanceOf[worthBeforeLegislationStart]
 
   "The Worth Before Legislation Start view spec" when {
 

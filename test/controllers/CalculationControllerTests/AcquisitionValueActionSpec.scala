@@ -40,15 +40,15 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class AcquisitionValueActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
-  val ec = fakeApplication.injector.instanceOf[ExecutionContext]
+  implicit val hc: HeaderCarrier = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
+  val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
 
-  val materializer = mock[Materializer]
-  val mockHttp =mock[DefaultHttpClient]
-  val mockCalcConnector =mock[CalculatorConnector]
-  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
-  val acquisitionValueView =  fakeApplication.injector.instanceOf[acquisitionValue]
+  val materializer: Materializer = mock[Materializer]
+  val mockHttp: DefaultHttpClient =mock[DefaultHttpClient]
+  val mockCalcConnector: CalculatorConnector =mock[CalculatorConnector]
+  val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  val mockMessagesControllerComponents: MessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
+  val acquisitionValueView: acquisitionValue =  fakeApplication.injector.instanceOf[acquisitionValue]
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
 
   class Setup {

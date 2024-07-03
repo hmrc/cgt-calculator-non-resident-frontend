@@ -24,14 +24,15 @@ import controllers.helpers.FakeRequestHelper
 import forms.WorthWhenInherited.worthWhenInheritedForm
 import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.i18n.Messages
 import play.api.mvc.MessagesControllerComponents
 import views.html.calculation.worthWhenInherited
 
 class WorthWhenInheritedViewSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
-  lazy val worthWhenInheritedView = fakeApplication.injector.instanceOf[worthWhenInherited]
+  val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  lazy val worthWhenInheritedView: worthWhenInherited = fakeApplication.injector.instanceOf[worthWhenInherited]
   lazy val pageTitle = s"""${WorthWhenInherited.question} - ${commonMessages.serviceName} - GOV.UK"""
 
   "The Worth When Inherited To view spec" when {

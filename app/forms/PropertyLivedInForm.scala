@@ -25,7 +25,7 @@ import play.api.data._
 
 object PropertyLivedInForm {
 
-  val propertyLivedInForm =
+  val propertyLivedInForm: Form[PropertyLivedInModel] =
     Form(
       mapping(
         "propertyLivedIn" -> text("calc.propertyLivedIn.errors.required")

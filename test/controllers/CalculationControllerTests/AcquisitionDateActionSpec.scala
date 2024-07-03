@@ -42,16 +42,16 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class AcquisitionDateActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
-  val ec = fakeApplication.injector.instanceOf[ExecutionContext]
-  val materializer = mock[Materializer]
-  val mockHttp =mock[DefaultHttpClient]
-  val mockCalcConnector =mock[CalculatorConnector]
-  val mockDefaultCalcElecConstructor = mock[DefaultCalculationElectionConstructor]
-  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
-  val acquisitionCostsView = fakeApplication.injector.instanceOf[acquisitionDate]
-  val sessionTimeoutView = fakeApplication.injector.instanceOf[sessionTimeout]
+  implicit val hc: HeaderCarrier = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
+  val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
+  val materializer: Materializer = mock[Materializer]
+  val mockHttp: DefaultHttpClient =mock[DefaultHttpClient]
+  val mockCalcConnector: CalculatorConnector =mock[CalculatorConnector]
+  val mockDefaultCalcElecConstructor: DefaultCalculationElectionConstructor = mock[DefaultCalculationElectionConstructor]
+  val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  val mockMessagesControllerComponents: MessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
+  val acquisitionCostsView: acquisitionDate = fakeApplication.injector.instanceOf[acquisitionDate]
+  val sessionTimeoutView: sessionTimeout = fakeApplication.injector.instanceOf[sessionTimeout]
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
 
   class Setup {

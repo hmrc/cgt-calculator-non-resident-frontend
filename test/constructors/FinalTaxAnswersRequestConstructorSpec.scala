@@ -193,7 +193,7 @@ class FinalTaxAnswersRequestConstructorSpec extends CommonPlaySpec {
           howMuchLossModel = None,
           howMuchGainModel = None,
           annualExemptAmountModel = None,
-          broughtForwardLossesModel = BroughtForwardLossesModel(false, None))
+          broughtForwardLossesModel = BroughtForwardLossesModel(isClaiming = false, None))
 
         FinalTaxAnswersRequestConstructor.additionalParametersQuery(Some(model), BigDecimal(100)) shouldBe
           "&currentIncome=100.0&annualExemptAmount=100.0"
@@ -209,7 +209,7 @@ class FinalTaxAnswersRequestConstructorSpec extends CommonPlaySpec {
           howMuchLossModel = Some(HowMuchLossModel(BigDecimal(300))),
           howMuchGainModel = Some(HowMuchGainModel(BigDecimal(400))),
           annualExemptAmountModel = Some(AnnualExemptAmountModel(BigDecimal(500))),
-          broughtForwardLossesModel = BroughtForwardLossesModel(false, None))
+          broughtForwardLossesModel = BroughtForwardLossesModel(isClaiming = false, None))
 
         FinalTaxAnswersRequestConstructor.additionalParametersQuery(Some(model), model.annualExemptAmountModel.get.annualExemptAmount) shouldBe
           "&currentIncome=100.0&personalAllowanceAmt=200.0&annualExemptAmount=500.0"

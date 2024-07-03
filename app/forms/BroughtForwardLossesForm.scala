@@ -41,7 +41,7 @@ object BroughtForwardLossesForm {
     case _ => true
   }
 
-  val broughtForwardLossesForm = Form(
+  val broughtForwardLossesForm: Form[BroughtForwardLossesModel] = Form(
     mapping(
       "isClaiming" -> common.Formatters.text("calc.broughtForwardLosses.errors.required")
         .verifying("calc.broughtForwardLosses.errors.required", mandatoryCheck)

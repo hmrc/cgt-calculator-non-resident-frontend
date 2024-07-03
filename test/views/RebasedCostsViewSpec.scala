@@ -23,13 +23,14 @@ import controllers.helpers.FakeRequestHelper
 import forms.RebasedCostsForm._
 import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.i18n.Messages
 import play.api.mvc.MessagesControllerComponents
 import views.html.calculation.rebasedCosts
 
 class RebasedCostsViewSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with MockitoSugar {
-  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
-  lazy val rebasedCostsView = fakeApplication.injector.instanceOf[rebasedCosts]
+  val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  lazy val rebasedCostsView: rebasedCosts = fakeApplication.injector.instanceOf[rebasedCosts]
 
   "The rebased value view" when {
 

@@ -41,18 +41,18 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class IsClaimingImprovementsActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
+  implicit val hc: HeaderCarrier = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
 
-  val materializer = mock[Materializer]
-  val ec = fakeApplication.injector.instanceOf[ExecutionContext]
-  val mockHttp =mock[DefaultHttpClient]
-  val mockCalcConnector =mock[CalculatorConnector]
-  val mockAnswersConstructor = mock[AnswersConstructor]
-  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
-  val improvementsView = fakeApplication.injector.instanceOf[improvements]
-  val improvementsRebasedView = fakeApplication.injector.instanceOf[improvementsRebased]
-  val isClaimingImprovementsView = fakeApplication.injector.instanceOf[isClaimingImprovements]
+  val materializer: Materializer = mock[Materializer]
+  val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
+  val mockHttp: DefaultHttpClient =mock[DefaultHttpClient]
+  val mockCalcConnector: CalculatorConnector =mock[CalculatorConnector]
+  val mockAnswersConstructor: AnswersConstructor = mock[AnswersConstructor]
+  val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  val mockMessagesControllerComponents: MessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
+  val improvementsView: improvements = fakeApplication.injector.instanceOf[improvements]
+  val improvementsRebasedView: improvementsRebased = fakeApplication.injector.instanceOf[improvementsRebased]
+  val isClaimingImprovementsView: isClaimingImprovements = fakeApplication.injector.instanceOf[isClaimingImprovements]
   lazy val pageTitle = s"""${commonMessages.IsClaimingImprovements.title} - ${commonMessages.serviceName} - GOV.UK"""
   lazy val pageTitleBeforeLegislation =
     s"${commonMessages.IsClaimingImprovements.ownerBeforeLegislationStartQuestion} - ${commonMessages.serviceName} - GOV.UK"
@@ -115,7 +115,7 @@ class IsClaimingImprovementsActionSpec extends CommonPlaySpec with WithCommonFak
 
         "return some HTML that" should {
 
-          s"have the title ${pageTitle}" in {
+          s"have the title $pageTitle" in {
             document.title shouldEqual pageTitle
           }
         }
@@ -135,7 +135,7 @@ class IsClaimingImprovementsActionSpec extends CommonPlaySpec with WithCommonFak
         lazy val result = target.getIsClaimingImprovements(fakeRequestWithSession)
         lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
-        s"have the title ${pageTitleBeforeLegislation}" in {
+        s"have the title $pageTitleBeforeLegislation" in {
           document.title shouldEqual pageTitleBeforeLegislation
         }
 

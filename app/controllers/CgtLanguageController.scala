@@ -37,7 +37,7 @@ class CgtLanguageController @Inject()(
 
   private def fallbackURL: String = configuration.getOptional[String](s"language.fallbackUrl").getOrElse("/")
 
-  def languageMap: Map[String, Lang] = Map(
+  private def languageMap: Map[String, Lang] = Map(
     "english" -> Lang("en"),
     "cymraeg" -> Lang("cy")
   )

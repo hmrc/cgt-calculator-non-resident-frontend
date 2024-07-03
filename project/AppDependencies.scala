@@ -22,7 +22,7 @@ object AppDependencies {
   val playVersion              = "play-30"
   val hmrcMongoVersion         = "1.7.0"
 
-  val compile = Seq(
+  val compile: Seq[ModuleID] = Seq(
     "uk.gov.hmrc"       %% s"bootstrap-frontend-$playVersion"             % bootstrapVersion,
     "uk.gov.hmrc"       %% s"play-frontend-hmrc-$playVersion"             % bootstrapVersion,
     "uk.gov.hmrc.mongo" %% s"hmrc-mongo-$playVersion"                     % hmrcMongoVersion,
@@ -37,7 +37,7 @@ object AppDependencies {
 
   object Test {
     def apply(): Seq[ModuleID] = new TestDependencies {
-      override lazy val test = Seq(
+      override lazy val test: Seq[sbt.ModuleID] = Seq(
         "uk.gov.hmrc"             %% s"bootstrap-test-$playVersion"   % bootstrapVersion    % scope,
         "org.scalatestplus.play"  %% "scalatestplus-play"             % "7.0.1"             % scope,
         "org.scalatestplus"       %% "scalatestplus-mockito"          % "1.0.0-M2"          % scope,

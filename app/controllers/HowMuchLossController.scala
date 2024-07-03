@@ -22,7 +22,7 @@ import forms.HowMuchLossForm._
 import models.HowMuchLossModel
 import play.api.data.Form
 import play.api.i18n.I18nSupport
-import play.api.mvc.MessagesControllerComponents
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.SessionCacheService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
@@ -37,14 +37,14 @@ class HowMuchLossController @Inject()(http: DefaultHttpClient,
                                       howMuchLossView: howMuchLoss)(implicit ec: ExecutionContext)
                                         extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
-  val howMuchLoss = ValidateSession.async { implicit request =>
+  val howMuchLoss: Action[AnyContent] = ValidateSession.async { implicit request =>
     sessionCacheService.fetchAndGetFormData[HowMuchLossModel](KeystoreKeys.howMuchLoss).map {
       case Some(data) => Ok(howMuchLossView(howMuchLossForm.fill(data)))
       case _ => Ok(howMuchLossView(howMuchLossForm))
     }
   }
 
-  val submitHowMuchLoss = ValidateSession.async { implicit request =>
+  val submitHowMuchLoss: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     def errorAction(form: Form[HowMuchLossModel]) = {
       Future.successful(BadRequest(howMuchLossView(form)))

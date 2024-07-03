@@ -16,6 +16,9 @@
 
 package forms
 
+import models.AcquisitionValueModel
+import play.api.data.Form
+
 object WorthWhenBoughtForLess extends AcquisitionMarketValueForm {
   override val errorRequired: String = "calc.worthWhenBoughtForLess.error.required"
   override val errorReal: String = "calc.worthWhenBoughtForLess.errorReal"
@@ -23,5 +26,5 @@ object WorthWhenBoughtForLess extends AcquisitionMarketValueForm {
   override val errorNegative = "calc.worthWhenBoughtForLess.errorNegative"
   override val errorDecimalPlaces = "calc.worthWhenBoughtForLess.errorDecimalPlaces"
 
-  val worthWhenBoughtForLessForm = acquisitionMarketValueForm()
+  val worthWhenBoughtForLessForm: Form[AcquisitionValueModel] = acquisitionMarketValueForm()
 }

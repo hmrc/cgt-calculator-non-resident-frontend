@@ -18,9 +18,9 @@ package common.nonresident
 
 case class MoneyPounds(value: BigDecimal, decimalPlaces: Int = 2, roundUp: Boolean = false) {
 
-  def isNegative = value < 0
+  def isNegative: Boolean = value < 0
 
-  def quantity =
+  def quantity: String =
     s"%,.${decimalPlaces}f".format(
       value
         .setScale(decimalPlaces, if (roundUp) BigDecimal.RoundingMode.CEILING else BigDecimal.RoundingMode.FLOOR)

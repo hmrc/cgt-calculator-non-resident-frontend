@@ -24,17 +24,17 @@ import controllers.helpers.FakeRequestHelper
 import forms.AnnualExemptAmountForm._
 import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.i18n.{Lang, MessagesApi}
+import play.api.i18n.{Lang, Messages, MessagesApi}
 import play.api.mvc.MessagesControllerComponents
 import views.html.calculation.annualExemptAmount
 
 class AnnualExemptAmountViewSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  implicit val mockLang = mock[Lang]
-  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
-  val mockMessagesApi = mock[MessagesApi]
-  lazy val annualExemptAmountView = fakeApplication.injector.instanceOf[annualExemptAmount]
+  val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  implicit val mockLang: Lang = mock[Lang]
+  implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  val mockMessagesApi: MessagesApi = mock[MessagesApi]
+  lazy val annualExemptAmountView: annualExemptAmount = fakeApplication.injector.instanceOf[annualExemptAmount]
 
   "Annual exempt amount view" when {
 

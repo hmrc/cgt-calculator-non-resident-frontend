@@ -43,17 +43,17 @@ import scala.concurrent.{ExecutionContext, Future}
 class AnnualExemptAmountActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper
   with BeforeAndAfterEach {
 
-  implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
-  val ec = fakeApplication.injector.instanceOf[ExecutionContext]
+  implicit val hc: HeaderCarrier = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
+  val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
-  val materializer = mock[Materializer]
-  val mockHttp =mock[DefaultHttpClient]
-  val mockCalcConnector =mock[CalculatorConnector]
-  val mockAnswersConstructor = mock[AnswersConstructor]
-  val mockDefaultCalElecConstructor = mock[DefaultCalculationElectionConstructor]
-  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
-  val annualExemptAmountView = fakeApplication.injector.instanceOf[annualExemptAmount]
+  val materializer: Materializer = mock[Materializer]
+  val mockHttp: DefaultHttpClient =mock[DefaultHttpClient]
+  val mockCalcConnector: CalculatorConnector =mock[CalculatorConnector]
+  val mockAnswersConstructor: AnswersConstructor = mock[AnswersConstructor]
+  val mockDefaultCalElecConstructor: DefaultCalculationElectionConstructor = mock[DefaultCalculationElectionConstructor]
+  val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  val mockMessagesControllerComponents: MessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
+  val annualExemptAmountView: annualExemptAmount = fakeApplication.injector.instanceOf[annualExemptAmount]
 
   class Setup {
     val controller = new AnnualExemptAmountController(

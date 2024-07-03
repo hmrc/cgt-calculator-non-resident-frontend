@@ -16,10 +16,10 @@
 
 package models
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class HowMuchGainModel (howMuchGain: BigDecimal)
 
 object HowMuchGainModel {
-  implicit val format = Json.format[HowMuchGainModel]
+  implicit val format: OFormat[HowMuchGainModel] = Json.format[HowMuchGainModel]
 }

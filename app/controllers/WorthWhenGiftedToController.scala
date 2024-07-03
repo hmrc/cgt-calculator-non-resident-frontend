@@ -22,7 +22,7 @@ import forms.WorthWhenGiftedTo.worthWhenGiftedToForm
 import models.AcquisitionValueModel
 import play.api.data.Form
 import play.api.i18n.I18nSupport
-import play.api.mvc.MessagesControllerComponents
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.SessionCacheService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
@@ -37,14 +37,14 @@ class WorthWhenGiftedToController @Inject()(http: DefaultHttpClient,
                                             worthWhenGiftedToView: worthWhenGiftedTo)(implicit ec: ExecutionContext)
                                               extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
-  val worthWhenGiftedTo = ValidateSession.async { implicit request =>
+  val worthWhenGiftedTo: Action[AnyContent] = ValidateSession.async { implicit request =>
     sessionCacheService.fetchAndGetFormData[AcquisitionValueModel](KeystoreKeys.acquisitionMarketValue).map {
       case Some(data) => Ok(worthWhenGiftedToView(worthWhenGiftedToForm.fill(data)))
       case None => Ok(worthWhenGiftedToView(worthWhenGiftedToForm))
     }
   }
 
-  val submitWorthWhenGiftedTo = ValidateSession.async { implicit request =>
+  val submitWorthWhenGiftedTo: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     def errorAction(form: Form[AcquisitionValueModel]) = Future.successful(BadRequest(worthWhenGiftedToView(form)))
 

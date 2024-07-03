@@ -23,7 +23,7 @@ import forms.PreviousLossOrGainForm._
 import models.PreviousLossOrGainModel
 import play.api.data.Form
 import play.api.i18n.I18nSupport
-import play.api.mvc.{MessagesControllerComponents, Result}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import services.SessionCacheService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
@@ -39,14 +39,14 @@ class PreviousGainOrLossController @Inject()(http: DefaultHttpClient,
                                             (implicit ec: ExecutionContext)
                                               extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
-  val previousGainOrLoss = ValidateSession.async { implicit request =>
+  val previousGainOrLoss: Action[AnyContent] = ValidateSession.async { implicit request =>
     sessionCacheService.fetchAndGetFormData[PreviousLossOrGainModel](KeystoreKeys.previousLossOrGain) map {
       case Some(data) => Ok(previousLossOrGainView(previousLossOrGainForm().fill(data)))
       case None => Ok(previousLossOrGainView(previousLossOrGainForm()))
     }
   }
 
-  val submitPreviousGainOrLoss = ValidateSession.async {
+  val submitPreviousGainOrLoss: Action[AnyContent] = ValidateSession.async {
     implicit request =>
 
       def errorAction(form: Form[PreviousLossOrGainModel]) = {

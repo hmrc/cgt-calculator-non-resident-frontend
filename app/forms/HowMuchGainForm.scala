@@ -24,7 +24,7 @@ import play.api.data._
 
 object HowMuchGainForm {
 
-  val howMuchGainForm = Form(
+  val howMuchGainForm: Form[HowMuchGainModel] = Form(
     mapping(
       "howMuchGain" -> text
         .transform(stripCurrencyCharacters, stripCurrencyCharacters)

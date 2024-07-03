@@ -21,5 +21,5 @@ import play.api.libs.json._
 case class AnnualExemptAmountModel (annualExemptAmount: BigDecimal)
 
 object AnnualExemptAmountModel {
-  implicit val format = Json.format[AnnualExemptAmountModel]
+  implicit val format: OFormat[AnnualExemptAmountModel] = Json.format[AnnualExemptAmountModel]
 }

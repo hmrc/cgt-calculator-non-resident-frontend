@@ -24,14 +24,15 @@ import controllers.helpers.FakeRequestHelper
 import forms.OtherPropertiesForm._
 import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.i18n.Messages
 import play.api.mvc.MessagesControllerComponents
 import views.html.calculation.otherProperties
 
 class OtherPropertiesViewSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with MockitoSugar {
 
-  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
-  lazy val otherPropertiesView = fakeApplication.injector.instanceOf[otherProperties]
+  val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  lazy val otherPropertiesView: otherProperties = fakeApplication.injector.instanceOf[otherProperties]
   lazy val pageTitle = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
 
   "The other properties view" should {
@@ -41,7 +42,7 @@ class OtherPropertiesViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
       lazy val view = otherPropertiesView(otherPropertiesForm)(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
-      s"have the title '${pageTitle}'" in {
+      s"have the title '$pageTitle'" in {
         document.title shouldEqual pageTitle
       }
 
@@ -90,7 +91,7 @@ class OtherPropertiesViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
       lazy val view = otherPropertiesView(otherPropertiesForm)(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
-      s"have the title '${pageTitle}'" in {
+      s"have the title '$pageTitle'" in {
         document.title shouldEqual pageTitle
       }
 

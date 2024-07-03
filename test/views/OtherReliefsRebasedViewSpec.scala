@@ -23,14 +23,15 @@ import controllers.helpers.FakeRequestHelper
 import forms.OtherReliefsForm._
 import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.i18n.Messages
 import play.api.mvc.MessagesControllerComponents
 import views.html.calculation.otherReliefsRebased
 
 class OtherReliefsRebasedViewSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
-  lazy val otherReliefsRebasedView = fakeApplication.injector.instanceOf[otherReliefsRebased]
+  val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  lazy val otherReliefsRebasedView: otherReliefsRebased = fakeApplication.injector.instanceOf[otherReliefsRebased]
 
 
   "The Other Reliefs Rebased view" when {
@@ -130,7 +131,7 @@ class OtherReliefsRebasedViewSpec extends CommonPlaySpec with WithCommonFakeAppl
       }
 
       "should produce the same output when render and f are called" in {
-        otherReliefsRebasedView.f(otherReliefsForm, false, BigDecimal(2000), BigDecimal(2500))(fakeRequest, mockMessage) shouldBe otherReliefsRebasedView.render(otherReliefsForm,  false, BigDecimal(2000), BigDecimal(2500), fakeRequest, mockMessage)
+        otherReliefsRebasedView.f(otherReliefsForm, false, BigDecimal(2000), BigDecimal(2500))(fakeRequest, mockMessage) shouldBe otherReliefsRebasedView.render(otherReliefsForm,  hasExistingReliefAmount = false, BigDecimal(2000), BigDecimal(2500), fakeRequest, mockMessage)
       }
     }
 

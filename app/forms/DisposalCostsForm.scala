@@ -23,7 +23,7 @@ import play.api.data.Forms._
 import play.api.data._
 
 object DisposalCostsForm {
-  val disposalCostsForm = Form(
+  val disposalCostsForm: Form[DisposalCostsModel] = Form(
     mapping(
       "disposalCosts" -> text
         .transform(stripCurrencyCharacters, stripCurrencyCharacters)

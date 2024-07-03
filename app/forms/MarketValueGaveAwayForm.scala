@@ -16,6 +16,9 @@
 
 package forms
 
+import models.DisposalValueModel
+import play.api.data.Form
+
 object MarketValueGaveAwayForm extends MarketDisposalValueForm {
   override val errorRequired: String = "calc.marketValue.error.gaveItAway.required"
   override val errorReal: String = "calc.marketValue.error.gaveItAway.errorReal"
@@ -23,5 +26,5 @@ object MarketValueGaveAwayForm extends MarketDisposalValueForm {
   override val errorNegative = "calc.marketValue.error.gaveItAway.negative"
   override val errorDecimalPlaces = "calc.marketValue.error.gaveItAway.decimalPlaces"
 
-  val marketValueWhenGaveAwayForm = marketValueForm
+  val marketValueWhenGaveAwayForm: Form[DisposalValueModel] = marketValueForm
 }

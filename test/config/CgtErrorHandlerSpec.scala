@@ -49,11 +49,11 @@ class CgtErrorHandlerSpec extends CommonPlaySpec with WithCommonFakeApplication 
     }
   }
 
-  val app = new GuiceApplicationBuilder().router(routerForTest).build()
+  val app: Application = new GuiceApplicationBuilder().router(routerForTest).build()
 
-  lazy val actionBuilder = app.injector.instanceOf[DefaultActionBuilder]
+  lazy val actionBuilder: DefaultActionBuilder = app.injector.instanceOf[DefaultActionBuilder]
 
-  implicit val ec = app.injector.instanceOf[ExecutionContext]
+  implicit val ec: ExecutionContext = app.injector.instanceOf[ExecutionContext]
 
   def routeWithError[A](app: Application, request: Request[A])
                        (implicit writeable: Writeable[A]): Option[Future[Result]] = {

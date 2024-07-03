@@ -43,15 +43,15 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class WhoDidYouGiveItToControllerSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with MockitoSugar {
 
-  implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
-  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  val materializer = mock[Materializer]
-  val ec = fakeApplication.injector.instanceOf[ExecutionContext]
-  val mockHttp =mock[DefaultHttpClient]
-  val mockCalcConnector =mock[CalculatorConnector]
-  val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
-  val noTaxToPayView = fakeApplication.injector.instanceOf[noTaxToPay]
-  val whoDidYouGiveItToView = fakeApplication.injector.instanceOf[whoDidYouGiveItTo]
+  implicit val hc: HeaderCarrier = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
+  val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  val materializer: Materializer = mock[Materializer]
+  val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
+  val mockHttp: DefaultHttpClient =mock[DefaultHttpClient]
+  val mockCalcConnector: CalculatorConnector =mock[CalculatorConnector]
+  val mockMessagesControllerComponents: MessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
+  val noTaxToPayView: noTaxToPay = fakeApplication.injector.instanceOf[noTaxToPay]
+  val whoDidYouGiveItToView: whoDidYouGiveItTo = fakeApplication.injector.instanceOf[whoDidYouGiveItTo]
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
   class Setup {
     val controller = new WhoDidYouGiveItToController(

@@ -26,13 +26,14 @@ import forms.PropertyLivedInForm._
 import models.PropertyLivedInModel
 import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.i18n.Messages
 import play.api.mvc.MessagesControllerComponents
 import views.html.calculation.propertyLivedIn
 
 class PropertyLivedInViewSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper with AssertHelpers {
-  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
-  lazy val propertyLivedInView = fakeApplication.injector.instanceOf[propertyLivedIn]
+  val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  lazy val propertyLivedInView: propertyLivedIn = fakeApplication.injector.instanceOf[propertyLivedIn]
 
   "PropertyLivedIn view" when {
 

@@ -24,14 +24,15 @@ import controllers.helpers.FakeRequestHelper
 import forms.PreviousLossOrGainForm._
 import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.i18n.Messages
 import play.api.mvc.MessagesControllerComponents
 import views.html.calculation.previousLossOrGain
 
 class PreviousLossOrGainViewSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
-  lazy val previousLossOrGainView = fakeApplication.injector.instanceOf[previousLossOrGain]
+  val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  lazy val previousLossOrGainView: previousLossOrGain = fakeApplication.injector.instanceOf[previousLossOrGain]
 
   "The PreviousLossOrGain view" should {
 

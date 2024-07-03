@@ -21,7 +21,7 @@ import models._
 
 object TestModels {
 
-  val businessScenarioFiveModel = TotalGainAnswersModel(
+  val businessScenarioFiveModel: TotalGainAnswersModel = TotalGainAnswersModel(
     DateModel(5, 6, 2016),
     SoldOrGivenAwayModel(true),
     Some(SoldForLessModel(true)),
@@ -39,7 +39,7 @@ object TestModels {
     Some(OtherReliefsModel(0))
   )
 
-  val sumModelFlat = SummaryModel(
+  val sumModelFlat: SummaryModel = SummaryModel(
     CurrentIncomeModel(1000),
     Some(PersonalAllowanceModel(11100)),
     OtherPropertiesModel("No"),
@@ -60,7 +60,7 @@ object TestModels {
     None
   )
 
-  val summaryFlatNoIncomeOtherPropNo = SummaryModel(
+  val summaryFlatNoIncomeOtherPropNo: SummaryModel = SummaryModel(
     CurrentIncomeModel(0),
     None,
     OtherPropertiesModel("No"),
@@ -81,7 +81,7 @@ object TestModels {
     None
   )
 
-  val summaryFlatWithoutAEA = SummaryModel(
+  val summaryFlatWithoutAEA: SummaryModel = SummaryModel(
     CurrentIncomeModel(1000),
     Some(PersonalAllowanceModel(9000)),
     OtherPropertiesModel("No"),
@@ -102,7 +102,7 @@ object TestModels {
     None
   )
 
-  val summaryFlatWithAEA = SummaryModel(
+  val summaryFlatWithAEA: SummaryModel = SummaryModel(
     CurrentIncomeModel(1000),
     Some(PersonalAllowanceModel(9000)),
     OtherPropertiesModel("Yes"),
@@ -123,7 +123,7 @@ object TestModels {
     None
   )
 
-  val summaryIndividualImprovementsNoRebasedModel = SummaryModel (
+  val summaryIndividualImprovementsNoRebasedModel: SummaryModel = SummaryModel (
     CurrentIncomeModel(1000),
     Some(PersonalAllowanceModel(9000)),
     OtherPropertiesModel("No"),
@@ -144,7 +144,7 @@ object TestModels {
     Some(PrivateResidenceReliefModel("No", None))
   )
 
-  val summaryImprovementsWithRebasedModel = SummaryModel(
+  val summaryImprovementsWithRebasedModel: SummaryModel = SummaryModel(
     CurrentIncomeModel(1000),
     Some(PersonalAllowanceModel(9000)),
     OtherPropertiesModel("No"),
@@ -165,7 +165,7 @@ object TestModels {
     Some(PrivateResidenceReliefModel("No", None))
   )
 
-  val summaryRebased = SummaryModel(
+  val summaryRebased: SummaryModel = SummaryModel(
     CurrentIncomeModel(1000),
     Some(PersonalAllowanceModel(9000)),
     OtherPropertiesModel("No"),
@@ -186,7 +186,7 @@ object TestModels {
     Some(PrivateResidenceReliefModel("No", None))
   )
 
-  val summaryRebasedNoImprovements = SummaryModel(
+  val summaryRebasedNoImprovements: SummaryModel = SummaryModel(
     CurrentIncomeModel(1000),
     Some(PersonalAllowanceModel(9000)),
     OtherPropertiesModel("No"),
@@ -207,7 +207,7 @@ object TestModels {
     Some(PrivateResidenceReliefModel("No", None))
   )
 
-  val summaryRebasedNoneImprovements = SummaryModel(
+  val summaryRebasedNoneImprovements: SummaryModel = SummaryModel(
     CurrentIncomeModel(1000),
     Some(PersonalAllowanceModel(9000)),
     OtherPropertiesModel("No"),
@@ -228,7 +228,7 @@ object TestModels {
     Some(PrivateResidenceReliefModel("No", None))
   )
 
-  val summaryPRRAcqDateAfterAndDisposalDateBefore = SummaryModel(
+  val summaryPRRAcqDateAfterAndDisposalDateBefore: SummaryModel = SummaryModel(
     CurrentIncomeModel(1000),
     Some(PersonalAllowanceModel(9000)),
     OtherPropertiesModel("No"),
@@ -249,7 +249,7 @@ object TestModels {
     Some(PrivateResidenceReliefModel("Yes", Some(100)))
   )
 
-  val summaryPRRAcqDateAfterAndNoRebased = SummaryModel(
+  val summaryPRRAcqDateAfterAndNoRebased: SummaryModel = SummaryModel(
     CurrentIncomeModel(1000),
     Some(PersonalAllowanceModel(9000)),
     OtherPropertiesModel("No"),
@@ -270,7 +270,7 @@ object TestModels {
     Some(PrivateResidenceReliefModel("Yes", Some(100)))
   )
 
-  val summaryPRRAcqDateAfterAndDisposalDateAfter = SummaryModel(
+  val summaryPRRAcqDateAfterAndDisposalDateAfter: SummaryModel = SummaryModel(
     CurrentIncomeModel(1000),
     Some(PersonalAllowanceModel(9000)),
     OtherPropertiesModel("No"),
@@ -291,7 +291,7 @@ object TestModels {
     Some(PrivateResidenceReliefModel("Yes", Some(100)))
   )
 
-  val summaryPRRAcqDateAfterAndDisposalDateAfterWithRebased = SummaryModel(
+  val summaryPRRAcqDateAfterAndDisposalDateAfterWithRebased: SummaryModel = SummaryModel(
     CurrentIncomeModel(1000),
     Some(PersonalAllowanceModel(9000)),
     OtherPropertiesModel("No"),
@@ -312,7 +312,7 @@ object TestModels {
     Some(PrivateResidenceReliefModel("Yes", Some(100)))
   )
 
-  val summaryPRRAcqDateBeforeAndDisposalDateAfterWithRebased = SummaryModel(
+  val summaryPRRAcqDateBeforeAndDisposalDateAfterWithRebased: SummaryModel = SummaryModel(
     CurrentIncomeModel(1000),
     Some(PersonalAllowanceModel(9000)),
     OtherPropertiesModel("No"),
@@ -333,7 +333,7 @@ object TestModels {
     Some(PrivateResidenceReliefModel("Yes", Some(100)))
   )
 
-  val summaryWithAllOptions = SummaryModel(
+  val summaryWithAllOptions: SummaryModel = SummaryModel(
     CurrentIncomeModel(1000),
     Some(PersonalAllowanceModel(9000)),
     OtherPropertiesModel("No"),
@@ -354,7 +354,7 @@ object TestModels {
     Some(PrivateResidenceReliefModel("Yes", Some(100)))
   )
 
-  val totalGainAnswersModelWithRebasedTA = TotalGainAnswersModel(
+  val totalGainAnswersModelWithRebasedTA: TotalGainAnswersModel = TotalGainAnswersModel(
     DateModel(5, 6, 2016),
     SoldOrGivenAwayModel(true),
     Some(SoldForLessModel(true)),
@@ -372,25 +372,25 @@ object TestModels {
     Some(OtherReliefsModel(0))
   )
 
-  val calculationResultsModelWithRebased = CalculationResultsWithTaxOwedModel(
+  val calculationResultsModelWithRebased: CalculationResultsWithTaxOwedModel = CalculationResultsWithTaxOwedModel(
     TotalTaxOwedModel(100, 100, 20, None, None, 200, 100, None, None, None, None, 0, None, None, None, None, None, None, None),
     Some(TotalTaxOwedModel(500, 500, 20, None, None, 500, 500, None, None, None, None, 0, None, None, None, None, None, None, None)),
     None
   )
 
-  val calculationResultsModelWithTA = CalculationResultsWithTaxOwedModel(
+  val calculationResultsModelWithTA: CalculationResultsWithTaxOwedModel = CalculationResultsWithTaxOwedModel(
     TotalTaxOwedModel(100, 100, 20, None, None, 200, 100, None, None, None, None, 0, None, None, None, None, None, None, None),
     None,
     Some(TotalTaxOwedModel(500, 500, 20, None, None, 200, 100, None, None, None, None, 0, None, None, None, None, None, None, None))
   )
 
-  val calculationResultsModelWithAll = CalculationResultsWithTaxOwedModel(
+  val calculationResultsModelWithAll: CalculationResultsWithTaxOwedModel = CalculationResultsWithTaxOwedModel(
     TotalTaxOwedModel(100, 100, 20, None, None, 200, 100, None, None, None, None, 0, None, None, None, None, None, None, None),
     Some(TotalTaxOwedModel(500, 0, 20, None, None, 200, 100, None, None, None, None, 0, None, None, None, None, None, None, None)),
     Some(TotalTaxOwedModel(500, 0, 20, None, None, 200, 100, None, None, None, None, 0, None, None, None, None, None, None, None))
   )
 
-  val personalDetailsCalculationModel = TotalPersonalDetailsCalculationModel(
+  val personalDetailsCalculationModel: TotalPersonalDetailsCalculationModel = TotalPersonalDetailsCalculationModel(
     CurrentIncomeModel(20000),
     Some(PersonalAllowanceModel(0)),
     OtherPropertiesModel("Yes"),

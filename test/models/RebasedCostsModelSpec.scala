@@ -21,13 +21,13 @@ import play.api.libs.json.Json
 
 class RebasedCostsModelSpec extends CommonPlaySpec {
 
-  val testRebasedValueModel = RebasedValueModel(100)
-  val beforeStartDate = DateModel(
+  val testRebasedValueModel: RebasedValueModel = RebasedValueModel(100)
+  val beforeStartDate: DateModel = DateModel(
     day = 5,
     month = 4,
     year = 2015
   )
-  val afterStartDate = DateModel(
+  val afterStartDate: DateModel = DateModel(
     day = 6,
     month = 4,
     year = 2015

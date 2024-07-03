@@ -24,7 +24,7 @@ import play.api.data._
 
 object AcquisitionValueForm {
 
-  val acquisitionValueForm = Form(
+  val acquisitionValueForm: Form[AcquisitionValueModel] = Form(
     mapping(
       "acquisitionValue" -> text
         .transform(stripCurrencyCharacters, stripCurrencyCharacters)

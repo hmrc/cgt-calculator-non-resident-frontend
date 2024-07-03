@@ -23,14 +23,15 @@ import controllers.helpers.FakeRequestHelper
 import forms.HowMuchLossForm._
 import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.i18n.Messages
 import play.api.mvc.MessagesControllerComponents
 import views.html.calculation.howMuchLoss
 
 class HowMuchLossViewSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with MockitoSugar {
 
-  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
-  lazy val howMuchLossView = fakeApplication.injector.instanceOf[howMuchLoss]
+  val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  lazy val howMuchLossView: howMuchLoss = fakeApplication.injector.instanceOf[howMuchLoss]
   val pageTitle = s"""${messages.HowMuchLoss.question} - ${messages.serviceName} - GOV.UK"""
 
   "Previous Loss view" when {
@@ -39,7 +40,7 @@ class HowMuchLossViewSpec extends CommonPlaySpec with WithCommonFakeApplication 
       lazy val view = howMuchLossView(howMuchLossForm)(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
-      s"have a title of ${pageTitle}" in {
+      s"have a title of $pageTitle" in {
         document.title shouldBe pageTitle
       }
 

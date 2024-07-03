@@ -25,19 +25,19 @@ import controllers.helpers.FakeRequestHelper
 import controllers.routes
 import models.TotalGainResultsModel
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.i18n.MessagesProvider
+import play.api.i18n.{Messages, MessagesProvider}
 import play.api.mvc.MessagesControllerComponents
 
 class CalculationDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeApplication with AssertHelpers with MockitoSugar with FakeRequestHelper {
-  implicit lazy val mockMessagesProvider = mock[MessagesProvider]
-  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  implicit lazy val mockMessagesProvider: MessagesProvider = mock[MessagesProvider]
+  implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
 
 
   val target = new CalculationDetailsConstructor
 
-  private def assertExpectedResult[T](option: Option[T])(test: T => Unit) = assertOption("expected option is None")(option)(test)
+  private def assertExpectedResult[T](option: Option[T])(test: T => Unit): Unit = assertOption("expected option is None")(option)(test)
 
-  private def assertExpectedLink[T](option: Option[T])(test: T => Unit) = assertOption("expected link is None")(option)(test)
+  private def assertExpectedLink[T](option: Option[T])(test: T => Unit): Unit = assertOption("expected link is None")(option)(test)
 
   "Calling buildSection" when {
     val calculation = TotalGainResultsModel(-1000, Some(2000), Some(0))

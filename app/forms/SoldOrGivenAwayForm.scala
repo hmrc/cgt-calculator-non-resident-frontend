@@ -25,7 +25,7 @@ import play.api.data.Forms._
 
 object SoldOrGivenAwayForm {
 
-  val soldOrGivenAwayForm = Form(
+  val soldOrGivenAwayForm: Form[SoldOrGivenAwayModel] = Form(
     mapping(
       "soldIt" -> text("calc.soldOrGivenAway.errors.required")
         .verifying("calc.soldOrGivenAway.errors.required", mandatoryCheck)

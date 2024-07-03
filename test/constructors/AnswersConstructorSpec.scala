@@ -32,10 +32,10 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class AnswersConstructorSpec extends CommonPlaySpec with MockitoSugar with WithCommonFakeApplication {
 
-  implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
-  implicit val ec = fakeApplication.injector.instanceOf[ExecutionContext]
-  val materializer = mock[Materializer]
-  val mockCalcConnector =mock[CalculatorConnector]
+  implicit val hc: HeaderCarrier = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
+  implicit val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
+  val materializer: Materializer = mock[Materializer]
+  val mockCalcConnector: CalculatorConnector =mock[CalculatorConnector]
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
 
   class Setup {
@@ -172,7 +172,7 @@ class AnswersConstructorSpec extends CommonPlaySpec with MockitoSugar with WithC
     None
   )
 
-  val totalGainAllOptionalModel = TotalGainAnswersModel(
+  val totalGainAllOptionalModel: TotalGainAnswersModel = TotalGainAnswersModel(
     DateModel(10, 10, 2016),
     SoldOrGivenAwayModel(true),
     Some(SoldForLessModel(false)),
@@ -190,7 +190,7 @@ class AnswersConstructorSpec extends CommonPlaySpec with MockitoSugar with WithC
     Some(OtherReliefsModel(1000))
   )
 
-  val modelDateBeforeLegislationStart = TotalGainAnswersModel(
+  val modelDateBeforeLegislationStart: TotalGainAnswersModel = TotalGainAnswersModel(
     DateModel(10, 10, 2016),
     SoldOrGivenAwayModel(true),
     Some(SoldForLessModel(false)),
@@ -208,7 +208,7 @@ class AnswersConstructorSpec extends CommonPlaySpec with MockitoSugar with WithC
     Some(OtherReliefsModel(1000))
   )
 
-  val totalGainBoughtForLess = TotalGainAnswersModel(
+  val totalGainBoughtForLess: TotalGainAnswersModel = TotalGainAnswersModel(
     DateModel(10, 10, 2016),
     SoldOrGivenAwayModel(true),
     Some(SoldForLessModel(false)),
@@ -226,7 +226,7 @@ class AnswersConstructorSpec extends CommonPlaySpec with MockitoSugar with WithC
     Some(OtherReliefsModel(1000))
   )
 
-  val totalGainSoldForLess = TotalGainAnswersModel(
+  val totalGainSoldForLess: TotalGainAnswersModel = TotalGainAnswersModel(
     DateModel(10, 10, 2016),
     SoldOrGivenAwayModel(true),
     Some(SoldForLessModel(true)),

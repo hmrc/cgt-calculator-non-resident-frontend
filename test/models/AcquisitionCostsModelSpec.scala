@@ -21,12 +21,12 @@ import play.api.libs.json.Json
 
 class AcquisitionCostsModelSpec extends CommonPlaySpec {
 
-  val beforeLegislationDate = DateModel(
+  val beforeLegislationDate: DateModel = DateModel(
     day = 31,
     month = 3,
     year = 1982
   )
-  val afterLegislationDate = DateModel(
+  val afterLegislationDate: DateModel = DateModel(
     day = 1,
     month = 4,
     year = 1982

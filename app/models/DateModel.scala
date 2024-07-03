@@ -17,7 +17,7 @@
 package models
 
 import common.Dates
-import play.api.libs.json.{JsValue, Json, Writes}
+import play.api.libs.json.{JsValue, Json, OFormat, Writes}
 
 import java.time.LocalDate
 import scala.util.{Success, Try}
@@ -32,7 +32,7 @@ case class DateModel(day: Int, month: Int, year: Int) {
 }
 
 object DateModel {
-  implicit val format = Json.format[DateModel]
+  implicit val format: OFormat[DateModel] = Json.format[DateModel]
 
   implicit val createDate: DateModel => Option[LocalDate] = model => {
     val dateFormatter = Dates.formatter
@@ -44,7 +44,7 @@ object DateModel {
     }
   }
 
-  val postWrites = new Writes[DateModel] {
+  val postWrites: Writes[DateModel] = new Writes[DateModel] {
     override def writes(model: DateModel): JsValue = {
       Json.toJson(LocalDate.of(model.year, model.month, model.day))
     }

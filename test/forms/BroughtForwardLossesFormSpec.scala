@@ -26,7 +26,7 @@ class BroughtForwardLossesFormSpec extends CommonPlaySpec with WithCommonFakeApp
   "Creating a valid form with a valid model" should {
 
     "return a form with the specified data" in {
-      val model = BroughtForwardLossesModel(true, Some(100))
+      val model = BroughtForwardLossesModel(isClaiming = true, Some(100))
       val form = broughtForwardLossesForm.fill(model)
 
       form.data shouldBe Map("isClaiming" -> "Yes",
@@ -46,7 +46,7 @@ class BroughtForwardLossesFormSpec extends CommonPlaySpec with WithCommonFakeApp
       }
 
       "return a model with the mapped data" in {
-        form.value shouldBe Some(BroughtForwardLossesModel(true, Some(100)))
+        form.value shouldBe Some(BroughtForwardLossesModel(isClaiming = true, Some(100)))
       }
     }
 
@@ -60,7 +60,7 @@ class BroughtForwardLossesFormSpec extends CommonPlaySpec with WithCommonFakeApp
       }
 
       "return a model with the mapped data" in {
-        form.value shouldBe Some(BroughtForwardLossesModel(false, None))
+        form.value shouldBe Some(BroughtForwardLossesModel(isClaiming = false, None))
       }
     }
   }

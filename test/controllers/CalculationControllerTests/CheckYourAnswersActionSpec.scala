@@ -39,20 +39,20 @@ import views.html.calculation.checkYourAnswers
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class CheckYourAnswersActionSpec()
+class CheckYourAnswersActionSpec
   extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
+  implicit val hc: HeaderCarrier = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
 
-  val materializer = mock[Materializer]
-  val ec = fakeApplication.injector.instanceOf[ExecutionContext]
-  val mockHttp =mock[DefaultHttpClient]
-  val mockCalcConnector =mock[CalculatorConnector]
-  val mockAnswersConstructor = mock[AnswersConstructor]
-  val mockDefaultCalElecConstructor = mock[DefaultCalculationElectionConstructor]
-  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
-  val checkYourAnswersView = fakeApplication.injector.instanceOf[checkYourAnswers]
+  val materializer: Materializer = mock[Materializer]
+  val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
+  val mockHttp: DefaultHttpClient =mock[DefaultHttpClient]
+  val mockCalcConnector: CalculatorConnector =mock[CalculatorConnector]
+  val mockAnswersConstructor: AnswersConstructor = mock[AnswersConstructor]
+  val mockDefaultCalElecConstructor: DefaultCalculationElectionConstructor = mock[DefaultCalculationElectionConstructor]
+  val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  val mockMessagesControllerComponents: MessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
+  val checkYourAnswersView: checkYourAnswers = fakeApplication.injector.instanceOf[checkYourAnswers]
   val pageTitle = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
 
@@ -92,7 +92,7 @@ class CheckYourAnswersActionSpec()
     new CheckYourAnswersController(mockHttp, mockCalcConnector, mockSessionCacheService, mockAnswersConstructor, mockMessagesControllerComponents, checkYourAnswersView)(ec)
   }
 
-  val modelWithMultipleGains = TotalGainAnswersModel(DateModel(5, 10, 2016),
+  val modelWithMultipleGains: TotalGainAnswersModel = TotalGainAnswersModel(DateModel(5, 10, 2016),
     SoldOrGivenAwayModel(true),
     Some(SoldForLessModel(false)),
     DisposalValueModel(1000),
@@ -108,10 +108,10 @@ class CheckYourAnswersActionSpec()
     Some(ImprovementsModel(10, Some(20))),
     Some(OtherReliefsModel(30)))
 
-  val totalGainResultsModel = TotalGainResultsModel(0, Some(0), Some(0))
-  val totalGainWithValueResultsModel = TotalGainResultsModel(100, Some(-100), None)
+  val totalGainResultsModel: TotalGainResultsModel = TotalGainResultsModel(0, Some(0), Some(0))
+  val totalGainWithValueResultsModel: TotalGainResultsModel = TotalGainResultsModel(100, Some(-100), None)
 
-  val modelWithOnlyFlat = TotalGainAnswersModel(DateModel(5, 10, 2016),
+  val modelWithOnlyFlat: TotalGainAnswersModel = TotalGainAnswersModel(DateModel(5, 10, 2016),
     SoldOrGivenAwayModel(true),
     Some(SoldForLessModel(false)),
     DisposalValueModel(1000),
@@ -127,7 +127,7 @@ class CheckYourAnswersActionSpec()
     Some(ImprovementsModel(10, Some(20))),
     Some(OtherReliefsModel(30)))
 
-  val personalDetailsModel = TotalPersonalDetailsCalculationModel(CurrentIncomeModel(9000),
+  val personalDetailsModel: TotalPersonalDetailsCalculationModel = TotalPersonalDetailsCalculationModel(CurrentIncomeModel(9000),
     Some(PersonalAllowanceModel(1000)),
     OtherPropertiesModel("No"),
     Some(PreviousLossOrGainModel("gain")),

@@ -30,9 +30,9 @@ import views.html.calculation.calculationElection
 
 class CalculationElectionViewSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with MockitoSugar {
 
-  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
-  lazy val calculationElectionView = fakeApplication.injector.instanceOf[calculationElection]
+  val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  lazy val calculationElectionView: calculationElection = fakeApplication.injector.instanceOf[calculationElection]
   lazy val pageTitle = s"""${messages.heading} - ${commonMessages.serviceName} - GOV.UK"""
 
   "The Calculation Election View" should {

@@ -22,7 +22,7 @@ import forms.OtherPropertiesForm._
 import models.OtherPropertiesModel
 import play.api.data.Form
 import play.api.i18n.I18nSupport
-import play.api.mvc.{MessagesControllerComponents, Result}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import services.SessionCacheService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
@@ -38,7 +38,7 @@ class OtherPropertiesController @Inject()(http: DefaultHttpClient,
                                          (implicit ec: ExecutionContext)
                                             extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
-  val otherProperties = ValidateSession.async { implicit request =>
+  val otherProperties: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     sessionCacheService.fetchAndGetFormData[OtherPropertiesModel](KeystoreKeys.otherProperties).map {
       case Some(data) => Ok(otherPropertiesView(otherPropertiesForm.fill(data)))
@@ -46,7 +46,7 @@ class OtherPropertiesController @Inject()(http: DefaultHttpClient,
     }
   }
 
-  val submitOtherProperties = ValidateSession.async { implicit request =>
+  val submitOtherProperties: Action[AnyContent] = ValidateSession.async { implicit request =>
     def errorAction(form: Form[OtherPropertiesModel]) = {
       Future.successful(BadRequest(otherPropertiesView(form)))
     }

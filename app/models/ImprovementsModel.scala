@@ -24,23 +24,19 @@ case class ImprovementsModel (improvementsAmt: BigDecimal = BigDecimal(0), impro
 object ImprovementsModel {
   implicit val format: OFormat[ImprovementsModel] = Json.format[ImprovementsModel]
 
-  def postWrites(oRebasedValueModel: Option[RebasedValueModel], acquisitionDateModel: DateModel): Writes[ImprovementsModel] = new Writes[ImprovementsModel] {
-    override def writes(o: ImprovementsModel): JsValue = {
-      improvementsWrites.writes(o).as[JsObject] ++
+  def postWrites(oRebasedValueModel: Option[RebasedValueModel], acquisitionDateModel: DateModel): Writes[ImprovementsModel] = (o: ImprovementsModel) => {
+    improvementsWrites.writes(o).as[JsObject] ++
       improvementsAftWrites(oRebasedValueModel, acquisitionDateModel).writes(o).as[JsObject]
-    }
   }
 
   private def improvementsAftWrites(oRebasedValueModel: Option[RebasedValueModel], acquisitionDateModel: DateModel):
-    Writes[ImprovementsModel] = new Writes[ImprovementsModel] {
-      override def writes(o: ImprovementsModel): JsValue = {
-        o match {
-          case ImprovementsModel(_, Some(value)) if includeRebasedValuesInCalculation(oRebasedValueModel, acquisitionDateModel) =>
-            Json.obj(("improvementsAfterTaxStarted", value))
-          case _ => Json.obj()
-        }
-      }
+    Writes[ImprovementsModel] = (o: ImprovementsModel) => {
+    o match {
+      case ImprovementsModel(_, Some(value)) if includeRebasedValuesInCalculation(oRebasedValueModel, acquisitionDateModel) =>
+        Json.obj(("improvementsAfterTaxStarted", value))
+      case _ => Json.obj()
     }
+  }
 
   private val improvementsWrites = new Writes[ImprovementsModel] {
     override def writes(o: ImprovementsModel): JsValue = {

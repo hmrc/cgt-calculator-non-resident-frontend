@@ -23,13 +23,14 @@ import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.i18n.Messages
 import play.api.mvc.MessagesControllerComponents
 
 class NoTaxToPayViewSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with MockitoSugar {
 
-  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
-  lazy val noTaxToPayView = fakeApplication.injector.instanceOf[noTaxToPay]
+  val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  lazy val noTaxToPayView: noTaxToPay = fakeApplication.injector.instanceOf[noTaxToPay]
 
   "No Tax to Pay View when gifted to spouse" should {
     lazy val view = noTaxToPayView(forCharity = false)(fakeRequest, mockMessage)
@@ -67,7 +68,7 @@ class NoTaxToPayViewSpec extends CommonPlaySpec with WithCommonFakeApplication w
     }
 
     "should produce the same output when render and f are called" in {
-      noTaxToPayView.f(false)(fakeRequest, mockMessage) shouldBe noTaxToPayView.render(false, fakeRequest, mockMessage)
+      noTaxToPayView.f(false)(fakeRequest, mockMessage) shouldBe noTaxToPayView.render(forCharity = false, fakeRequest, mockMessage)
     }
   }
 

@@ -41,15 +41,15 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class OtherReliefsActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
-  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  val materializer = mock[Materializer]
-  val ec = fakeApplication.injector.instanceOf[ExecutionContext]
-  val mockHttp =mock[DefaultHttpClient]
-  val mockCalcConnector =mock[CalculatorConnector]
-  val mockAnswersConstructor = mock[AnswersConstructor]
-  val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
-  val otherReliefsView = fakeApplication.injector.instanceOf[otherReliefs]
+  implicit val hc: HeaderCarrier = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
+  val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  val materializer: Materializer = mock[Materializer]
+  val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
+  val mockHttp: DefaultHttpClient =mock[DefaultHttpClient]
+  val mockCalcConnector: CalculatorConnector =mock[CalculatorConnector]
+  val mockAnswersConstructor: AnswersConstructor = mock[AnswersConstructor]
+  val mockMessagesControllerComponents: MessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
+  val otherReliefsView: otherReliefs = fakeApplication.injector.instanceOf[otherReliefs]
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
 
   class Setup {
@@ -109,7 +109,7 @@ class OtherReliefsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
     new OtherReliefsController(mockCalcConnector, mockSessionCacheService, mockAnswersConstructor, mockMessagesControllerComponents, otherReliefsView)(ec)
   }
 
-  val personalDetailsModel = TotalPersonalDetailsCalculationModel(
+  val personalDetailsModel: TotalPersonalDetailsCalculationModel = TotalPersonalDetailsCalculationModel(
     CurrentIncomeModel(20000),
     Some(PersonalAllowanceModel(0)),
     OtherPropertiesModel("Yes"),
@@ -120,7 +120,7 @@ class OtherReliefsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
     BroughtForwardLossesModel(isClaiming = false, None)
   )
 
-  val calculationResultsModel = CalculationResultsWithTaxOwedModel(
+  val calculationResultsModel: CalculationResultsWithTaxOwedModel = CalculationResultsWithTaxOwedModel(
     TotalTaxOwedModel(100, 100, 20, None, None, 200, 100, None, None, None, None, 0, None , None , None , None , None , None , None),
     None,
     None

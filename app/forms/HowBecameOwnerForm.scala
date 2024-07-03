@@ -24,7 +24,7 @@ import play.api.data.Forms._
 
 object HowBecameOwnerForm {
 
-  val howBecameOwnerForm = Form(
+  val howBecameOwnerForm: Form[HowBecameOwnerModel] = Form(
     mapping(
       "gainedBy" -> text("calc.howBecameOwner.errors.required")
         .verifying("calc.howBecameOwner.errors.required", mandatoryCheck)

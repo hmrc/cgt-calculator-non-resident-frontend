@@ -24,7 +24,7 @@ import play.api.data._
 
 object CurrentIncomeForm {
 
-  val currentIncomeForm = Form(
+  val currentIncomeForm: Form[CurrentIncomeModel] = Form(
     mapping(
       "currentIncome" -> text
         .transform(stripCurrencyCharacters, stripCurrencyCharacters)

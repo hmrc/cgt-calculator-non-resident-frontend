@@ -23,14 +23,15 @@ import controllers.helpers.FakeRequestHelper
 import forms.OtherReliefsForm._
 import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.i18n.Messages
 import play.api.mvc.MessagesControllerComponents
 import views.html.calculation.otherReliefsTA
 
 class OtherReliefsTAViewSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
-  lazy val otherReliefsTAView = fakeApplication.injector.instanceOf[otherReliefsTA]
+  val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  lazy val otherReliefsTAView: otherReliefsTA = fakeApplication.injector.instanceOf[otherReliefsTA]
 
   "The Other Reliefs TA view" when {
 
@@ -130,7 +131,7 @@ class OtherReliefsTAViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
       }
 
       "should produce the same output when render and f are called" in {
-        otherReliefsTAView.f(otherReliefsForm, false, 1000, 100)(fakeRequest, mockMessage) shouldBe otherReliefsTAView.render(otherReliefsForm, false, 1000, 100, fakeRequest, mockMessage)
+        otherReliefsTAView.f(otherReliefsForm, false, 1000, 100)(fakeRequest, mockMessage) shouldBe otherReliefsTAView.render(otherReliefsForm, hasExistingReliefAmount = false, 1000, 100, fakeRequest, mockMessage)
       }
     }
 

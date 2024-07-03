@@ -16,12 +16,12 @@
 
 package models
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class TaxYearModel (taxYearSupplied: String, isValidYear: Boolean, calculationTaxYear: String)
 
 object TaxYearModel {
-  implicit val formats = Json.format[TaxYearModel]
+  implicit val formats: OFormat[TaxYearModel] = Json.format[TaxYearModel]
 
   def convertToSummaryFormat(taxYear: String): String = {
     val startYear = taxYear.take(4)

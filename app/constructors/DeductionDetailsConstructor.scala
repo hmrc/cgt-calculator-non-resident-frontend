@@ -22,14 +22,14 @@ import models._
 
 object DeductionDetailsConstructor {
 
-  def datesOutsideRangeCheck(acquisitionDateModel: DateModel, disposalDateModel: DateModel): Boolean = {
+  private def datesOutsideRangeCheck(acquisitionDateModel: DateModel, disposalDateModel: DateModel): Boolean = {
 
     val pRRDateDetails = TaxDates.privateResidenceReliefMonthDeductionApplicable(disposalDateModel)
 
     acquisitionDateModel.get.plusMonths(pRRDateDetails.months).isBefore(disposalDateModel.get)
   }
 
-  def acquisitionAfterPropertyDisposalOver18Month(acquisitionDateModel: DateModel, disposalDateModel: DateModel): Boolean = {
+  private def acquisitionAfterPropertyDisposalOver18Month(acquisitionDateModel: DateModel, disposalDateModel: DateModel): Boolean = {
 
     val pRRDateDetails = TaxDates.privateResidenceReliefMonthDeductionApplicable(disposalDateModel)
 

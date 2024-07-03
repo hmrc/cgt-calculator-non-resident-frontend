@@ -36,7 +36,7 @@ class ApplicationConfig @Inject()(val servicesConfig: ServicesConfig,
                                   val environment: Environment) extends AppConfig {
   private def loadConfig(key: String): String = servicesConfig.getString(key)
 
-  lazy val contactFrontendService = servicesConfig.getConfString("contact-frontend.www", "")
+  private lazy val contactFrontendService: String = servicesConfig.getConfString("contact-frontend.www", "")
 
   lazy val assetsPrefix: String = loadConfig("assets.url") + loadConfig("assets.version")
 
@@ -49,6 +49,6 @@ class ApplicationConfig @Inject()(val servicesConfig: ServicesConfig,
   lazy val govUkLink: String = loadConfig("links.gov-uk")
   lazy val urBannerLink = "https://signup.take-part-in-research.service.gov.uk/?utm_campaign=CGT_non_resident_summary&utm_source=Survey_Banner&utm_medium=other&t=HMRC&id=116"
   lazy val isWelshTranslationAvailable: Boolean = servicesConfig.getBoolean("microservice.services.features.welsh-translation")
-  lazy val userResearchBannerEnabled: Boolean = servicesConfig.getBoolean(("user-research-banner.enabled"))
+  lazy val userResearchBannerEnabled: Boolean = servicesConfig.getBoolean("user-research-banner.enabled")
 
 }

@@ -31,7 +31,7 @@ object PersonalAndPreviousDetailsConstructor {
     }
   }
 
-  def constructRows(personalAndPreviousDetailsModel: TotalPersonalDetailsCalculationModel): Seq[QuestionAnswerModel[Any]] = {
+  private def constructRows(personalAndPreviousDetailsModel: TotalPersonalDetailsCalculationModel): Seq[QuestionAnswerModel[Any]] = {
 
     val currentIncomeAnswerData = currentIncomeAnswerRow(personalAndPreviousDetailsModel.currentIncomeModel)
     val personalAllowanceAnswerData = personalAllowanceAnswerRow(
@@ -84,7 +84,7 @@ object PersonalAndPreviousDetailsConstructor {
                                  personalAllowanceModel: Option[PersonalAllowanceModel]): Option[QuestionAnswerModel[BigDecimal]] = {
 
     personalAllowanceModel match {
-      case (Some(data)) if currentIncomeModel.currentIncome > 0 =>
+      case Some(data) if currentIncomeModel.currentIncome > 0 =>
         Some(QuestionAnswerModel(
           s"${KeystoreKeys.personalAllowance}-question",
           data.personalAllowanceAmt,
