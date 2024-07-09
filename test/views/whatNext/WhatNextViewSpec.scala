@@ -35,7 +35,7 @@ class WhatNextViewSpec extends CommonPlaySpec with WithCommonFakeApplication wit
   "What next view should" when {
     implicit lazy val fakeApp: Application = fakeApplication
 
-    lazy val view = whatNextView(isDateAfter = false)(FakeRequest("GET", ""), mockMessage)
+    lazy val view = whatNextView(isDateAfter = false, 30)(FakeRequest("GET", ""), mockMessage)
     lazy val doc = Jsoup.parse(view.body)
 
     s"have a title of ${messages.title}" in {
@@ -107,12 +107,12 @@ class WhatNextViewSpec extends CommonPlaySpec with WithCommonFakeApplication wit
     }
 
     "should produce the same output when render and f are called" in {
-      whatNextView.f(false)(FakeRequest("GET", ""), mockMessage) shouldBe whatNextView.render(false, FakeRequest("GET", ""), mockMessage)
+      whatNextView(false, 30)(FakeRequest("GET", ""), mockMessage) shouldBe whatNextView.render(false, 30, FakeRequest("GET", ""), mockMessage)
     }
   }
 
   "Disposal date is after 6 April 2020" which {
-    lazy val view2 = whatNextView(isDateAfter = true)(FakeRequest("GET", ""), mockMessage)
+    lazy val view2 = whatNextView(isDateAfter = true, 30)(FakeRequest("GET", ""), mockMessage)
     lazy val doc2 = Jsoup.parse(view2.body)
 
     "doesn't have information for sa users" in {

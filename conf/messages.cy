@@ -459,7 +459,7 @@ calc.summaryPartial.yourTotalLoss = Cyfanswm eich colledion
 
 calc.whatNext.finish = Yn ôl i GOV.UK
 calc.whatNext.listOne = rhoi gwybod i ni am yr eiddo rydych wedi’i werthu neu wedi’i roi i ffwrdd
-calc.whatNext.listTitle = Mae gennych 30 diwrnod o’r dyddiad y gwnaethoch gwblhau trosglwyddiad eich eiddo (y ''dyddiad trawsgludo'') i wneud y canlynol:
+calc.whatNext.listTitle = Mae gennych {0} diwrnod o’r dyddiad y gwnaethoch gwblhau trosglwyddiad eich eiddo (y ''dyddiad trawsgludo'') i wneud y canlynol:
 calc.whatNext.listTwo = talu’r Dreth Enillion Cyfalaf
 calc.whatNext.penaltyWarning = Defnyddiwch ein ffurflen ar-lein i roi gwybod nawr. Bydd yn rhaid i chi dalu cosb os ydych yn colli’r dyddiad cau ar gyfer rhoi gwybod.
 calc.whatNext.report = Rhowch wybod nawr

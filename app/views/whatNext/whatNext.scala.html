@@ -22,7 +22,7 @@
     applicationConfig: ApplicationConfig
 )
 
-@(isDateAfter: Boolean)(implicit request: Request[_], messages: Messages)
+@(isDateAfter: Boolean, reportWindowDays: Int)(implicit request: Request[_], messages: Messages)
 
 @layout(
     pageTitle = Messages("calc.whatNext.title")
@@ -30,7 +30,7 @@
 
     <h1 class="govuk-heading-xl">@Messages("calc.whatNext.title")</h1>
 
-    <p class="govuk-body" id="list-title">@Messages("calc.whatNext.listTitle")</p>
+    <p class="govuk-body" id="list-title">@Messages("calc.whatNext.listTitle", reportWindowDays)</p>
 
     <ul class="govuk-list govuk-list--bullet">
         <li id="item1">@Messages("calc.whatNext.listOne")</li>
