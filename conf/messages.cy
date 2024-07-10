@@ -350,7 +350,6 @@ calc.privateResidenceRelief.error.noValueProvided = Nodwch sawl diwrnod rydych y
 calc.privateResidenceRelief.helpLink = Ryddhad Preswylfan Preifat ar gyfer y rhai nad ydynt yn breswyl yn y DU
 calc.privateResidenceRelief.helpText = Rhagor o fanylion am
 calc.privateResidenceRelief.intro1 = Gallech gael rhyddhad treth llawn am 365 diwrnod ar gyfer unrhyw flwyddyn dreth pan wnaethoch chi neu’ch priod neu bartner sifil dreulio o leiaf 90 diwrnod yn eich cartref yn y DU.
-calc.privateResidenceRelief.intro2 = Gallech gael rhyddhad treth llawn am 365 diwrnod ar gyfer unrhyw flwyddyn dreth ar ôl 6 Ebrill 2015 pan wnaethoch chi neu’ch priod neu bartner sifil dreulio o leiaf 90 diwrnod yn eich cartref yn y DU.
 calc.privateResidenceRelief.qualify = Er mwyn bod yn gymwys, rhaid i chi enwebu''r cartref yr ydych yn ei werthu fel eich unig gartref, neu’ch prif gartref, i CThEF.
 calc.privateResidenceRelief.title = Ryddhad Preswylfa Breifat
 calc.privateResidenceRelief.question = Ydych chi’n hawlio Rhyddhad Preswylfan Preifat?

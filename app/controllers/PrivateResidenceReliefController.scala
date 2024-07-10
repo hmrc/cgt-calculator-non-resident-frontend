@@ -84,13 +84,11 @@ class PrivateResidenceReliefController @Inject()(calcConnector: CalculatorConnec
   }
 
   def privateResidenceRelief: Action[AnyContent] = ValidateSession.async { implicit request =>
-    disposalDateAndAcquisitionDate.flatMap { case disposalDate -> acquisitionDate =>
-      val showBetweenQuestion = displayAfterQuestion(disposalDate, acquisitionDate)
       sessionCacheService.fetchAndGetFormData[ClaimingPrrModel](KeystoreKeys.privateResidenceRelief).map {
-        case Some(data) => Ok(privateResidenceReliefView(isClaimingPrrForm.fill(data), showBetweenQuestion))
-        case None => Ok(privateResidenceReliefView(isClaimingPrrForm, showBetweenQuestion))
+        case Some(data) => Ok(privateResidenceReliefView(isClaimingPrrForm.fill(data)))
+        case None => Ok(privateResidenceReliefView(isClaimingPrrForm))
       }
-    }.recoverToStart
+    .recoverToStart
   }
 
   def privateResidenceReliefValue: Action[AnyContent] = ValidateSession.async { implicit request =>
@@ -134,11 +132,9 @@ class PrivateResidenceReliefController @Inject()(calcConnector: CalculatorConnec
   }
 
   def submitPrivateResidenceRelief: Action[AnyContent] = ValidateSession.async { implicit request =>
-    disposalDateAndAcquisitionDate.flatMap { case disposalDate -> acquisitionDate =>
       isClaimingPrrForm.bindFromRequest().fold(Left(_), Right(_)).pipe {
         case Left(form) =>
-          val showBetweenQuestion = displayAfterQuestion(disposalDate, acquisitionDate)
-          Future.successful(BadRequest(privateResidenceReliefView(form, showBetweenQuestion)))
+          Future.successful(BadRequest(privateResidenceReliefView(form)))
         case Right(model) =>
           if (model.isClaimingPRR == "Yes")
             Future.successful(Redirect(controllers.routes.PrivateResidenceReliefController.submitprivateResidenceReliefValue.url))
@@ -147,7 +143,7 @@ class PrivateResidenceReliefController @Inject()(calcConnector: CalculatorConnec
             saveAndRedirect(model)
           }
       }
-    }.recoverToStart
+    .recoverToStart
   }
 
   def submitprivateResidenceReliefValue: Action[AnyContent] = ValidateSession.async { implicit request =>

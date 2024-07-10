@@ -307,7 +307,6 @@ calc.privateResidenceRelief.question = Are you claiming Private Residence Relief
 calc.privateResidenceRelief.helpText = See more details about
 calc.privateResidenceRelief.helpLink = Private Residence Relief for non-UK residents
 calc.privateResidenceRelief.intro1 = You could get full tax relief of 365 days for any tax years when you or your spouse or civil partner spent at least 90 days in your UK home.
-calc.privateResidenceRelief.intro2 = You could get full tax relief of 365 days for any tax years after 6 April 2015 when you or your spouse or civil partner spent at least 90 days in your UK home.
 calc.privateResidenceRelief.qualify = To qualify, you must nominate the home you are selling as your only or main home to HMRC.
 calc.privateResidenceRelief.errors.required = Select yes if you are claiming Private Residence Relief
 calc.privateResidenceRelief.error.noValueProvided = Enter the value for your days claimed

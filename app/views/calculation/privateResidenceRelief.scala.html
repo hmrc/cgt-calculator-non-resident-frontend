@@ -26,7 +26,7 @@
         submitButton: playComponents.submitButton
 )
 
-@(privateResidenceReliefForm: Form[ClaimingPrrModel], daysBetweenShow: Boolean)(implicit request: Request[_], messages: Messages)
+@(privateResidenceReliefForm: Form[ClaimingPrrModel])(implicit request: Request[_], messages: Messages)
 
 @title = @{
     Messages("calc.privateResidenceRelief.title")
@@ -36,11 +36,7 @@
     <h1 class="govuk-heading-xl">@messages("calc.privateResidenceRelief.title")</h1>
 
     <p class="govuk-body" id="intro">
-        @if(daysBetweenShow) {
-            @messages("calc.privateResidenceRelief.intro2")
-        } else {
-            @messages("calc.privateResidenceRelief.intro1")
-        }
+        @messages("calc.privateResidenceRelief.intro1")
         @messages("calc.privateResidenceRelief.qualify")
     </p>
 
