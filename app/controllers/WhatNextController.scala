@@ -21,12 +21,12 @@ import controllers.predicates.ValidActiveSession
 import controllers.utils.RecoverableFuture
 import models.DateModel
 import play.api.i18n.I18nSupport
-import play.api.mvc.MessagesControllerComponents
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.whatNext.whatNext
 
 import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 class WhatNextController @Inject()(answersConstructor: AnswersConstructor,
                                    mcc: MessagesControllerComponents,
@@ -34,13 +34,14 @@ class WhatNextController @Inject()(answersConstructor: AnswersConstructor,
                                   (implicit ec: ExecutionContext) extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   val referenceDate: DateModel = DateModel(5, 4, 2020)
+  val conveyanceDate: DateModel = DateModel(27, 10, 2021)
 
-  val whatNext = ValidateSession.async { implicit request => {
-    answersConstructor.getNRTotalGainAnswers.flatMap(answerModel => {
+  def whatNext: Action[AnyContent] = ValidateSession.async { implicit request =>
+    answersConstructor.getNRTotalGainAnswers.map { answerModel =>
       val isDateAfter: Boolean = answerModel.disposalDateModel.isDateAfter(referenceDate)
-      Future.successful(Ok(whatNextView(isDateAfter)))
-    }).recoverToStart
-  }
+      val reportWindow = if (conveyanceDate.isDateAfter(answerModel.disposalDateModel)) 30 else 60
+      Ok(whatNextView(isDateAfter, reportWindow))
+    }.recoverToStart
   }
 
 }

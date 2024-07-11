@@ -566,7 +566,7 @@ calc.summaryPartial.broughtForwardLossesRemaining = Losses to carry forward from
 
 ## What Next messages
 calc.whatNext.title = Report your property now
-calc.whatNext.listTitle = You have 30 days from the date you completed the transfer of your property (the ''conveyance date'') to:
+calc.whatNext.listTitle = You have {0} days from the date you completed the transfer of your property (the ''conveyance date'') to:
 calc.whatNext.listOne = tell us about the property you''ve sold or gave away
 calc.whatNext.listTwo = pay any Capital Gains Tax
 calc.whatNext.penaltyWarning = Use our online form to report now. You''ll have to pay a penalty if you miss the reporting deadline.
