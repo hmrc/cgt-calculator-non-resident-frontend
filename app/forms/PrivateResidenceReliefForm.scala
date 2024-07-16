@@ -25,22 +25,20 @@ import uk.gov.voa.play.form.ConditionalMappings.{isEqual, mandatoryIf}
 
 object PrivateResidenceReliefForm {
 
-  val isClaimingPRR = "isClaimingPRR" -> common.Formatters.text("calc.privateResidenceRelief.errors.required")
+  private val isClaimingPRR = "isClaimingPRR" -> common.Formatters.text("calc.privateResidenceRelief.errors.required")
     .verifying("calc.privateResidenceRelief.errors.required", mandatoryCheck)
     .verifying("calc.privateResidenceRelief.errors.required", yesNoCheck)
 
-  val daysClaimed = "daysClaimed" -> mandatoryIf(
+  private val daysClaimed = "daysClaimed" -> mandatoryIf(
     isEqual("isClaimingPRR", "Yes"),
     common.Formatters.text("calc.privateResidenceReliefValue.error.noValueProvided")
-      .verifying("calc.privateResidenceReliefValue.error.number", bigDecimalCheck)
+      .transform(stripCurrencyCharacters, stripCurrencyCharacters)
+      .verifying("calc.currentIncome.error.required", mandatoryCheck)
+      .verifying("calc.currentIncome.errorReal", bigDecimalCheck)
       .transform(stringToBigDecimal, bigDecimalToString)
-      .verifying(
-        stopOnFirstFail(
-          negativeConstraint("calc.privateResidenceReliefValue.error.errorNegative"),
-          decimalPlaceConstraint("calc.privateResidenceReliefValue.error.errorDecimalPlaces", 1),
-          maxMonetaryValueConstraint(errMsgKey = "calc.privateResidenceRelief.error.maxNumericExceeded")
-        )
-      )
+      .verifying("calc.currentIncome.errorNegative", isPositive)
+      .verifying("calc.currentIncome.errorDecimalPlaces", decimalPlacesCheck)
+      .verifying("calc.currentIncome.errorMax", maxCheck)
   )
 
   def isClaimingPrrForm: Form[ClaimingPrrModel] =
