@@ -17,7 +17,7 @@
 package constructors
 
 import common.KeystoreKeys.{NonResidentKeys => keys}
-import common.{Dates, TaxDates}
+import common.TaxDates
 import models._
 
 object DeductionDetailsConstructor {
@@ -54,11 +54,11 @@ object DeductionDetailsConstructor {
       }
       else {
         val privateResidenceReliefQuestion = privateResidenceReliefQuestionRow(privateResidenceReliefModel)
-        val privateResidenceReliefDaysClaimedBefore = privateResidenceReliefDaysClaimedBeforeRow(privateResidenceReliefModel, answers)
+        val privateResidenceReliefAmount = privateResidenceReliefAmountRow(privateResidenceReliefModel, answers)
 
         val sequence = Seq(
           privateResidenceReliefQuestion,
-          privateResidenceReliefDaysClaimedBefore)
+          privateResidenceReliefAmount)
 
         propertyLivedInRow ++ sequence.flatten
       }
@@ -89,26 +89,18 @@ object DeductionDetailsConstructor {
     }
   }
 
-  def privateResidenceReliefDaysClaimedBeforeRow(prr: Option[PrivateResidenceReliefModel],
-                                                 answers: TotalGainAnswersModel): Option[QuestionAnswerModel[String]] = {
+  def privateResidenceReliefAmountRow(prr: Option[PrivateResidenceReliefModel],
+                                      answers: TotalGainAnswersModel): Option[QuestionAnswerModel[BigDecimal]] = {
     val datesOutside = datesOutsideRangeCheck(answers.acquisitionDateModel, answers.disposalDateModel)
     val acquisitionPostTaxStartDisposalPost18Month = acquisitionAfterPropertyDisposalOver18Month(answers.acquisitionDateModel, answers.disposalDateModel)
-    (prr, datesOutside, acquisitionPostTaxStartDisposalPost18Month) match {
-      case (Some(PrivateResidenceReliefModel("Yes", Some(value))), true, false) =>
+    prr match {
+      case Some(PrivateResidenceReliefModel("Yes", Some(value))) if datesOutside || acquisitionPostTaxStartDisposalPost18Month =>
         Some(QuestionAnswerModel(
           s"${keys.privateResidenceRelief}-daysClaimed",
-          value.toString(),
-          "calc.privateResidenceReliefValue.firstQuestion",
+          value,
+          "calc.privateResidenceReliefValue.title",
           Some(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief.url)
         ))
-      case (Some(PrivateResidenceReliefModel("Yes", Some(value))), _, true) =>
-        val pRRDateDetails = TaxDates.privateResidenceReliefMonthDeductionApplicable(answers.disposalDateModel)
-        Some(QuestionAnswerModel(
-          s"${keys.privateResidenceRelief}-daysClaimed",
-          value.toString(),
-          "calc.privateResidenceReliefValue.questionFlat",
-          Some(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief.url),
-          Dates.dateMinusMonths(answers.disposalDateModel, pRRDateDetails.months)))
       case _ => None
     }
   }
