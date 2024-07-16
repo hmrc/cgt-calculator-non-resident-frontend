@@ -104,21 +104,18 @@ class PrivateResidenceReliefRequestConstructorSpec extends CommonPlaySpec{
     "prr claimed, property lived in and dates are valid" in {
       val fractions =
         Table(
-          ("totalGainsModel",                   "claiming", "amount",    "livedIn",   "expected"),
-          (modelWithValidDates,                 "Yes",      Some(d(4)),  Some(true),  "&prrClaimed=4"),
-          (modelWithValidDates,                 "Yes",      Some(d(42)), Some(true),  "&prrClaimed=42"),
-          (modelWithRebasedValue,               "Yes",      Some(d(4)),  Some(true),  "&prrClaimed=4"),
-          (modelWithValidDates,                 "Yes",      None,        Some(true),  ""),
-          (modelWithValidDates,                 "No",       None,        Some(true),  ""),
-          (modelWithValidDates,                 "Yes",      Some(d(4)),  Some(false), ""),
-          (modelWithValidDates,                 "Yes",      Some(d(4)),  None,        ""),
-          (modelDatesWithin18Months,            "Yes",      Some(d(4)),  Some(true),  ""),
-          (modelDatesAcquisitionDateAfterStart, "Yes",      Some(d(4)),  Some(true),  ""),
-          (modelWithRebasedValue,               "No",       None,        None,        ""),
+          ("claiming", "amount",    "livedIn",   "expected"),
+          ("Yes",      Some(d(4)),  Some(true),  "&prrClaimed=4"),
+          ("Yes",      Some(d(42)), Some(true),  "&prrClaimed=42"),
+          ("Yes",      Some(d(4)),  Some(true),  "&prrClaimed=4"),
+          ("Yes",      None,        Some(true),  ""),
+          ("No",       None,        Some(true),  ""),
+          ("Yes",      Some(d(4)),  Some(false), ""),
+          ("Yes",      Some(d(4)),  None,        ""),
+          ("No",       None,        None,        ""),
         )
-      forAll (fractions) { (totalGainsModel, claiming, amount, livedIn, expected) =>
-        val result = privateResidenceReliefQuery(
-          totalGainsModel, Some(PrivateResidenceReliefModel(claiming, amount)), livedIn.map(PropertyLivedInModel(_)))
+      forAll (fractions) { (claiming, amount, livedIn, expected) =>
+        val result = privateResidenceReliefQuery(Some(PrivateResidenceReliefModel(claiming, amount)), livedIn.map(PropertyLivedInModel(_)))
         result shouldBe expected
       }
     }

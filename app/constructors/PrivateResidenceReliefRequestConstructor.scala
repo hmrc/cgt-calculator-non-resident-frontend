@@ -16,20 +16,15 @@
 
 package constructors
 
-import common.TaxDates
 import models.{PrivateResidenceReliefModel, PropertyLivedInModel, TotalGainAnswersModel}
 
 object PrivateResidenceReliefRequestConstructor {
 
-  def privateResidenceReliefQuery(totalGainAnswersModel: TotalGainAnswersModel,
-                                  privateResidenceReliefModel: Option[PrivateResidenceReliefModel],
+  def privateResidenceReliefQuery(privateResidenceReliefModel: Option[PrivateResidenceReliefModel],
                                   propertyLivedInModel: Option[PropertyLivedInModel]): String = {
     if (propertyLivedInModel.exists(_.propertyLivedIn)) {
-      val pRRDateDetails = TaxDates.privateResidenceReliefMonthDeductionApplicable(totalGainAnswersModel.disposalDateModel)
       privateResidenceReliefModel match {
-        case Some(PrivateResidenceReliefModel("Yes", Some(value)))
-          if totalGainAnswersModel.acquisitionDateModel.get.plusMonths(pRRDateDetails.months).isBefore(totalGainAnswersModel.disposalDateModel.get) =>
-          s"&prrClaimed=$value"
+        case Some(PrivateResidenceReliefModel("Yes", Some(value))) => s"&prrClaimed=$value"
         case _ => ""
       }
     } else ""

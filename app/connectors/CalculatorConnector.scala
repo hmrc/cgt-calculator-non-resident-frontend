@@ -48,7 +48,7 @@ class CalculatorConnector @Inject()(val http: DefaultHttpClient,
                                   (implicit hc: HeaderCarrier): Future[Option[CalculationResultsWithPRRModel]] = {
     http.GET[Option[CalculationResultsWithPRRModel]](s"$serviceUrl/capital-gains-calculator/non-resident/calculate-gain-after-prr?${
       TotalGainRequestConstructor.totalGainQuery(totalGainAnswersModel) +
-        PrivateResidenceReliefRequestConstructor.privateResidenceReliefQuery(totalGainAnswersModel,
+        PrivateResidenceReliefRequestConstructor.privateResidenceReliefQuery(
           Some(privateResidenceReliefModel),
           Some(propertyLivedInModel))
     }")
@@ -64,7 +64,7 @@ class CalculatorConnector @Inject()(val http: DefaultHttpClient,
 
     http.GET[Option[CalculationResultsWithTaxOwedModel]](s"$serviceUrl/capital-gains-calculator/non-resident/calculate-tax-owed?${
       TotalGainRequestConstructor.totalGainQuery(totalGainAnswersModel) +
-        PrivateResidenceReliefRequestConstructor.privateResidenceReliefQuery(totalGainAnswersModel,
+        PrivateResidenceReliefRequestConstructor.privateResidenceReliefQuery(
           privateResidenceReliefModel,
           propertyLivedInModel) +
         FinalTaxAnswersRequestConstructor.additionalParametersQuery(totalTaxPersonalDetailsModel, maxAnnualExemptAmount) +
