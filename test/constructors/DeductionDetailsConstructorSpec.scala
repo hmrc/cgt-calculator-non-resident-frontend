@@ -330,7 +330,7 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
         lazy val result = DeductionDetailsConstructor.privateResidenceReliefAmountRow(
           Some(PrivateResidenceReliefModel("Yes", Some(4))), edgeDatesJustDaysBefore)
 
-        result.get.question shouldBe "calc.privateResidenceReliefValue.questionFlat"
+        result.get.question shouldBe "calc.privateResidenceReliefValue.title"
         result.get.oDate shouldBe Some(LocalDate.of(2015, 9, 2))
       }
     }
