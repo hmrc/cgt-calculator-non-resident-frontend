@@ -34,7 +34,7 @@
 
 @hiddenYesHtml = {
     @formInputNumber(
-        field = privateResidenceReliefForm("daysClaimed"),
+        field = privateResidenceReliefForm("prrClaimed"),
         question = "",
         labelClass = "govuk-label--m",
         showCurrency = true,
@@ -46,7 +46,7 @@
 @layout(
     pageTitle = title
 ) {
-    @errorSummary(privateResidenceReliefForm.errors, Some("daysClaimed"))
+    @errorSummary(privateResidenceReliefForm.errors, Some("prrClaimed"))
 
     <h1 class="govuk-heading-xl">@messages("calc.privateResidenceReliefValue.title")</h1>
 

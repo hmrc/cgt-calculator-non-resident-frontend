@@ -96,7 +96,7 @@ object DeductionDetailsConstructor {
     prr match {
       case Some(PrivateResidenceReliefModel("Yes", Some(value))) if datesOutside || acquisitionPostTaxStartDisposalPost18Month =>
         Some(QuestionAnswerModel(
-          s"${keys.privateResidenceRelief}-daysClaimed",
+          s"${keys.privateResidenceRelief}-prrClaimed",
           value,
           "calc.privateResidenceReliefValue.title",
           Some(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief.url)

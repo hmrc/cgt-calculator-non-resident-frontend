@@ -42,7 +42,7 @@ class PrivateResidenceReliefFormSpec extends CommonPlaySpec with WithCommonFakeA
      lazy val baseForm = privateResidenceReliefForm
 
       "passing in a valid map with 'Yes', 1000" should {
-        val map = Map("isClaimingPRR" -> "Yes", "daysClaimed" -> "1000")
+        val map = Map("isClaimingPRR" -> "Yes", "prrClaimed" -> "1000")
         lazy val form = baseForm.bind(map)
 
         "return a valid form with no errors" in {
@@ -81,13 +81,13 @@ class PrivateResidenceReliefFormSpec extends CommonPlaySpec with WithCommonFakeA
       }
     }
 
-    "the additional input for daysClaimed is available and" when {
+    "the additional input for prrClaimed is available and" when {
       lazy val baseForm = privateResidenceReliefForm
 
       "passing in a valid map with 'Yes'" should {
         val map = Map(
           "isClaimingPRR" -> "Yes",
-          "daysClaimed" -> "100")
+          "prrClaimed" -> "100")
         lazy val form = baseForm.bind(map)
 
         "return a valid form with no errors" in {
@@ -102,7 +102,7 @@ class PrivateResidenceReliefFormSpec extends CommonPlaySpec with WithCommonFakeA
       "passing in a valid map with 'No'" should {
         val map = Map(
           "isClaimingPRR" -> "No",
-          "daysClaimed" -> "")
+          "prrClaimed" -> "")
         lazy val form = baseForm.bind(map)
 
         "return a valid form with no errors" in {
@@ -117,7 +117,7 @@ class PrivateResidenceReliefFormSpec extends CommonPlaySpec with WithCommonFakeA
       "passing in an invalid map with an amount with too many decimal places" should {
         val map = Map(
           "isClaimingPRR" -> "Yes",
-          "daysClaimed" -> "100.001")
+          "prrClaimed" -> "100.001")
         lazy val form = baseForm.bind(map)
 
         "return an invalid form with one error" in {
@@ -125,14 +125,14 @@ class PrivateResidenceReliefFormSpec extends CommonPlaySpec with WithCommonFakeA
         }
 
         s"return an error message of '${messages.PrivateResidenceRelief.errorDecimalPlaces}" in {
-          form.error("daysClaimed").get.message shouldBe messages.PrivateResidenceRelief.errorDecimalPlaces
+          form.error("prrClaimed").get.message shouldBe messages.PrivateResidenceRelief.errorDecimalPlaces
         }
       }
 
       "passing in an invalid map with an amount with a negative value" should {
         val map = Map(
           "isClaimingPRR" -> "Yes",
-          "daysClaimed" -> "-100")
+          "prrClaimed" -> "-100")
         lazy val form = baseForm.bind(map)
 
         "return an invalid form with one error" in {
@@ -140,14 +140,14 @@ class PrivateResidenceReliefFormSpec extends CommonPlaySpec with WithCommonFakeA
         }
 
         s"return an error message of '${messages.PrivateResidenceRelief.errorNegative}" in {
-          form.error("daysClaimed").get.message shouldBe messages.PrivateResidenceRelief.errorNegative
+          form.error("prrClaimed").get.message shouldBe messages.PrivateResidenceRelief.errorNegative
         }
       }
 
       "passing in an invalid map with an amount with a value larger than the maximum" should {
         val map = Map(
           "isClaimingPRR" -> "Yes",
-          "daysClaimed" -> "1000000001")
+          "prrClaimed" -> "1000000001")
         lazy val form = baseForm.bind(map)
 
         "return an invalid form with one error" in {
@@ -155,15 +155,15 @@ class PrivateResidenceReliefFormSpec extends CommonPlaySpec with WithCommonFakeA
         }
 
         s"return the correct error message" in {
-          form.error("daysClaimed").get.message shouldBe "calc.privateResidenceRelief.error.maxNumericExceeded"
-          form.error("daysClaimed").get.args shouldBe Array("1,000,000,000")
+          form.error("prrClaimed").get.message shouldBe "calc.privateResidenceRelief.error.maxNumericExceeded"
+          form.error("prrClaimed").get.args shouldBe Array("1,000,000,000")
         }
       }
 
       "passing in an invalid map with multiple errors" should {
         val map = Map(
           "isClaimingPRR" -> "Yes",
-          "daysClaimed" -> "-1000.5")
+          "prrClaimed" -> "-1000.5")
         lazy val form = baseForm.bind(map)
 
         "return an invalid form with one error" in {

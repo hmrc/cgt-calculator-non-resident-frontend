@@ -29,7 +29,7 @@ object PrivateResidenceReliefForm {
     .verifying("calc.privateResidenceRelief.errors.required", mandatoryCheck)
     .verifying("calc.privateResidenceRelief.errors.required", yesNoCheck)
 
-  private val daysClaimed = "daysClaimed" -> mandatoryIf(
+  private val prrClaimed = "prrClaimed" -> mandatoryIf(
     isEqual("isClaimingPRR", "Yes"),
     common.Formatters.text("calc.privateResidenceReliefValue.error.noValueProvided")
       .transform(stripCurrencyCharacters, stripCurrencyCharacters)
@@ -44,5 +44,5 @@ object PrivateResidenceReliefForm {
   def isClaimingPrrForm: Form[ClaimingPrrModel] =
       Form(mapping(isClaimingPRR)(ClaimingPrrModel.apply)(ClaimingPrrModel.unapply))
 
-  def privateResidenceReliefForm: Form[PrivateResidenceReliefModel] = Form(mapping(isClaimingPRR, daysClaimed)(PrivateResidenceReliefModel.apply)(PrivateResidenceReliefModel.unapply))
+  def privateResidenceReliefForm: Form[PrivateResidenceReliefModel] = Form(mapping(isClaimingPRR, prrClaimed)(PrivateResidenceReliefModel.apply)(PrivateResidenceReliefModel.unapply))
 }

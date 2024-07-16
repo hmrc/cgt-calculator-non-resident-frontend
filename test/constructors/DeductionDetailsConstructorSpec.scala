@@ -270,7 +270,7 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
     }
   }
 
-  "Calling .privateResidenceReliefDaysClaimedBeforeRow" when {
+  "Calling .privateResidenceReliefprrClaimedBeforeRow" when {
 
     "provided with no privateResidenceReliefModel" should {
       lazy val result = DeductionDetailsConstructor.privateResidenceReliefAmountRow(None, validDates)
@@ -305,8 +305,8 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
         result.isDefined shouldBe true
       }
 
-      "return an id of nr:privateResidenceRelief-daysClaimed" in {
-        assertExpectedResult(result)(_.id shouldBe "nr:privateResidenceRelief-daysClaimed")
+      "return an id of nr:privateResidenceRelief-prrClaimed" in {
+        assertExpectedResult(result)(_.id shouldBe "nr:privateResidenceRelief-prrClaimed")
       }
 
       "return a value of '4'" in {
