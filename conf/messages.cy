@@ -354,14 +354,12 @@ calc.privateResidenceRelief.question = Ydych chi’n hawlio Rhyddhad Preswylfan 
 ## Private Residence Relief Value ##
 calc.privateResidenceReliefValue.title = Faint o Ryddhad Preswylfan Preifat sydd gennych hawl iddo?
 calc.privateResidenceReliefValue.hint = Er enghraifft, £10,000.50
-calc.privateResidenceReliefValue.firstQuestion = Am sawl diwrnod cyn 6 Ebrill 2015 yr oeddech yn byw yn yr eiddo hwn fel eich prif gartref?
 calc.privateResidenceReliefValue.helpTextBeforeAfter = Pam y dyddiadau penodol hyn?
 calc.privateResidenceReliefValue.helpTextJustBefore = Pam y dyddiad hwn?
 calc.privateResidenceReliefValue.daysBeforeHelpText = 6 Ebrill 2015 yw pan ddaeth y rheolau Treth Enillion Cyfalaf ar gyfer rhai nad ydynt yn breswyl yn y DU i rym
 calc.privateResidenceReliefValue.daysBetweenHelpText = {0} yw’rdyddiad y gwnaethoch drosglwyddo’r eiddo, llai {1} mis (byddwch yn cael Lwfans Preswylfan Preifat yn awtomatig am y {1} mis diwethaf yr oeddech yn berchen ar yr eiddo)
 calc.privateResidenceReliefValue.helpTextSubTitle = Mae''r dyddiadau hyn yn bwysig oherwydd:
 calc.privateResidenceReliefValue.formHintExplanation = I gyfrifo’ch Rhyddhad Preswylfan Preifat, mae angen rhywfaint o wybodaeth arnom ynglŷn â phryd oeddech chi’n byw yn yr eiddo.
-calc.privateResidenceReliefValue.questionFlat = AAm sawl diwrnod cyn {0} yr oedd yr eiddo hwn yn gymwys am ryddhad?
 calc.privateResidenceReliefValue.questionBetween = Am sawl diwrnod rhwng 6 Ebrill 2015 a {0} yr oedd yr eiddo hwn yn gymwys am ryddhad?
 calc.privateResidenceReliefValue.error.noValueProvided = Nodwch faint o Ryddhad Preswylfa Breifat y mae gennych hawl iddo
 calc.privateResidenceReliefValue.error.number = Mae’n rhaid i faint o Ryddhad Preswylfa Breifat y mae gennych hawl iddo fod yn swm o arian mewn punnoedd

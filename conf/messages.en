@@ -314,14 +314,12 @@ calc.privateResidenceRelief.error.maxNumericExceeded = Enter a value for your da
 ## Private Residence Relief Value ##
 calc.privateResidenceReliefValue.title = How much Private Residence Relief are you entitled to?
 calc.privateResidenceReliefValue.hint = For example, £10,000.50
-calc.privateResidenceReliefValue.firstQuestion = How many days before 6 April 2015 did you live in this property as your main home?
 calc.privateResidenceReliefValue.helpTextBeforeAfter = Why these specific dates?
 calc.privateResidenceReliefValue.helpTextJustBefore = Why this date?
 calc.privateResidenceReliefValue.daysBeforeHelpText = 6 April 2015 is when the Capital Gains Tax rules for non-UK residents came into effect
 calc.privateResidenceReliefValue.daysBetweenHelpText = {0} is the date you transferred the property minus {1} months (you automatically get Private Residence Relief for the last {1} months that you owned the property)
 calc.privateResidenceReliefValue.helpTextSubTitle = These dates are important because:
 calc.privateResidenceReliefValue.formHintExplanation = To work out your Private Residence Relief, we need some information about when you lived in the property.
-calc.privateResidenceReliefValue.questionFlat = For how many days before {0} did this property qualify for relief?
 calc.privateResidenceReliefValue.questionBetween = For how many days between 6 April 2015 and {0} did this property qualify for relief?
 calc.privateResidenceReliefValue.error.noValueProvided = Enter how much Private Residence Relief you are entitled to
 calc.privateResidenceReliefValue.error.number = How much Private Residence Relief you are entitled to must be an amount of money in pounds
