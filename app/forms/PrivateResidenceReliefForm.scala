@@ -33,12 +33,12 @@ object PrivateResidenceReliefForm {
     isEqual("isClaimingPRR", "Yes"),
     common.Formatters.text("calc.privateResidenceReliefValue.error.noValueProvided")
       .transform(stripCurrencyCharacters, stripCurrencyCharacters)
-      .verifying("calc.currentIncome.error.required", mandatoryCheck)
-      .verifying("calc.currentIncome.errorReal", bigDecimalCheck)
+      .verifying("calc.privateResidenceReliefValue.error.required", mandatoryCheck)
+      .verifying("calc.privateResidenceReliefValue.error.number", bigDecimalCheck)
       .transform(stringToBigDecimal, bigDecimalToString)
-      .verifying("calc.currentIncome.errorNegative", isPositive)
-      .verifying("calc.currentIncome.errorDecimalPlaces", decimalPlacesCheck)
-      .verifying("calc.currentIncome.errorMax", maxCheck)
+      .verifying("calc.privateResidenceReliefValue.error.errorNegative", isPositive)
+      .verifying("calc.privateResidenceReliefValue.error.errorDecimalPlaces", decimalPlacesCheck)
+      .verifying(maxMonetaryValueConstraint(errMsgKey = "calc.privateResidenceRelief.error.maxNumericExceeded"))
   )
 
   def isClaimingPrrForm: Form[ClaimingPrrModel] =
