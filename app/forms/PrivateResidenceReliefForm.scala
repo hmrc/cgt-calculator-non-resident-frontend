@@ -43,11 +43,6 @@ object PrivateResidenceReliefForm {
       )
   )
 
-  def emptyForm(fieldName: String) = {
-    fieldName -> optional(text)
-      .transform(optionalStringToOptionalBigDecimal, optionalBigDecimalToOptionalString)
-  }
-
   def isClaimingPrrForm: Form[ClaimingPrrModel] =
       Form(mapping(isClaimingPRR)(ClaimingPrrModel.apply)(ClaimingPrrModel.unapply))
 
