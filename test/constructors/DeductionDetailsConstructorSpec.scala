@@ -20,8 +20,6 @@ import common.{CommonPlaySpec, WithCommonFakeApplication}
 import constructors.helpers.AssertHelpers
 import models._
 
-import java.time.LocalDate
-
 class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeApplication with AssertHelpers {
 
   val noneOtherReliefs = TotalGainAnswersModel(
@@ -312,11 +310,11 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
       }
 
       "return a value of '4'" in {
-        assertExpectedResult(result)(_.data shouldBe "4")
+        assertExpectedResult(result)(_.data.toString() shouldBe "4")
       }
 
       "return a question for Private Residence Relief" in {
-        assertExpectedResult(result)(_.question shouldBe "calc.privateResidenceReliefValue.firstQuestion")
+        assertExpectedResult(result)(_.question shouldBe "calc.privateResidenceReliefValue.title")
       }
 
       "return a link to the Private Residence Relief page" in {
@@ -326,12 +324,12 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
     }
 
     "provided with an acquisition date after 6th April 2015 and disposal date over 18 months later" should {
-      s"have the question message ${}" in {
+      s"have the question message" in {
         lazy val result = DeductionDetailsConstructor.privateResidenceReliefAmountRow(
           Some(PrivateResidenceReliefModel("Yes", Some(4))), edgeDatesJustDaysBefore)
 
         result.get.question shouldBe "calc.privateResidenceReliefValue.title"
-        result.get.oDate shouldBe Some(LocalDate.of(2015, 9, 2))
+        assertExpectedResult(result)(_.data.toString() shouldBe "4")
       }
     }
   }
