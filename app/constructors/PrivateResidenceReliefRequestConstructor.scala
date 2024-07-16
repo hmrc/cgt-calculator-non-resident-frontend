@@ -24,36 +24,14 @@ object PrivateResidenceReliefRequestConstructor {
   def privateResidenceReliefQuery(totalGainAnswersModel: TotalGainAnswersModel,
                                   privateResidenceReliefModel: Option[PrivateResidenceReliefModel],
                                   propertyLivedInModel: Option[PropertyLivedInModel]): String = {
-    if(checkLivedInProperty(propertyLivedInModel)) {
-      eligibleForPrivateResidenceRelief(privateResidenceReliefModel) +
-        daysClaimed(totalGainAnswersModel, privateResidenceReliefModel)
-    } else "&claimingPRR=false"
-  }
-
-  def eligibleForPrivateResidenceRelief(privateResidenceReliefModel: Option[PrivateResidenceReliefModel]): String = {
-    privateResidenceReliefModel match {
-      case Some(PrivateResidenceReliefModel("Yes", _)) => "&claimingPRR=true"
-      case _ => "&claimingPRR=false"
-    }
-  }
-
-  def daysClaimed(totalGainAnswersModel: TotalGainAnswersModel,
-                  privateResidenceReliefModel: Option[PrivateResidenceReliefModel]): String = {
-
-    val pRRDateDetails = TaxDates.privateResidenceReliefMonthDeductionApplicable(totalGainAnswersModel.disposalDateModel)
-
-    privateResidenceReliefModel match {
-      case Some(PrivateResidenceReliefModel("Yes", Some(value)))
-        if totalGainAnswersModel.acquisitionDateModel.get.plusMonths(pRRDateDetails.months).isBefore(totalGainAnswersModel.disposalDateModel.get) =>
-        s"&daysClaimed=${value + 0}"
-      case _ => ""
-    }
-  }
-
-  def checkLivedInProperty(propertyLivedInModel: Option[PropertyLivedInModel]): Boolean = {
-    propertyLivedInModel match {
-      case Some(data) if data.propertyLivedIn => true
-      case _ => false
-    }
+    if (propertyLivedInModel.exists(_.propertyLivedIn)) {
+      val pRRDateDetails = TaxDates.privateResidenceReliefMonthDeductionApplicable(totalGainAnswersModel.disposalDateModel)
+      privateResidenceReliefModel match {
+        case Some(PrivateResidenceReliefModel("Yes", Some(value)))
+          if totalGainAnswersModel.acquisitionDateModel.get.plusMonths(pRRDateDetails.months).isBefore(totalGainAnswersModel.disposalDateModel.get) =>
+          s"&prrClaimed=$value"
+        case _ => ""
+      }
+    } else ""
   }
 }
