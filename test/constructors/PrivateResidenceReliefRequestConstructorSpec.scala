@@ -18,8 +18,12 @@ package constructors
 
 import common.CommonPlaySpec
 import models._
+import org.scalatest.prop.TableDrivenPropertyChecks.forAll
+import org.scalatest.prop.Tables.Table
 
 class PrivateResidenceReliefRequestConstructorSpec extends CommonPlaySpec{
+
+  import PrivateResidenceReliefRequestConstructor._
 
   val modelDatesWithin18Months = TotalGainAnswersModel(
     DateModel(7, 7, 2016),
@@ -92,85 +96,30 @@ class PrivateResidenceReliefRequestConstructorSpec extends CommonPlaySpec{
     None,
     None
   )
-  val propertyLivedInModel = PropertyLivedInModel(true)
+
+  private def d(x: Int) = BigDecimal(x)
 
   "Calling the privateResidenceReliefQuery method" should {
 
-    "return a string made up of the smaller substring methods" in {
-      val privateResidenceReliefModel = PrivateResidenceReliefModel("Yes", Some(4))
-      val result = PrivateResidenceReliefRequestConstructor.privateResidenceReliefQuery(modelWithValidDates,
-        Some(privateResidenceReliefModel),
-        Some(propertyLivedInModel))
-
-      result shouldBe PrivateResidenceReliefRequestConstructor.eligibleForPrivateResidenceRelief(Some(privateResidenceReliefModel)) +
-      PrivateResidenceReliefRequestConstructor.daysClaimed(modelWithValidDates, Some(privateResidenceReliefModel))
-    }
-  }
-
-  "Calling the eligibleForPrivateResidenceRelief method" should {
-
-    "return a true" in {
-      val privateResidenceReliefModel = PrivateResidenceReliefModel("Yes", Some(4))
-      val result = PrivateResidenceReliefRequestConstructor.eligibleForPrivateResidenceRelief(Some(privateResidenceReliefModel))
-
-      result shouldBe "&claimingPRR=true"
-    }
-
-    "return a false" in {
-      val privateResidenceReliefModel = PrivateResidenceReliefModel("No", None)
-      val result = PrivateResidenceReliefRequestConstructor.eligibleForPrivateResidenceRelief(Some(privateResidenceReliefModel))
-
-      result shouldBe "&claimingPRR=false"
-    }
-  }
-
-  "Calling the daysClaimed method" should {
-
-    "return a blank string when acquisition and disposal date are within 18 months of each other" in {
-      val privateResidenceReliefModel = PrivateResidenceReliefModel("Yes", Some(4))
-      val result = PrivateResidenceReliefRequestConstructor.daysClaimed(modelDatesWithin18Months, Some(privateResidenceReliefModel))
-
-      result shouldBe ""
-    }
-
-    "return a blank string with prr not claimed" in {
-      val privateResidenceReliefModel = PrivateResidenceReliefModel("No", Some(4))
-      val result = PrivateResidenceReliefRequestConstructor.daysClaimed(modelWithValidDates, Some(privateResidenceReliefModel))
-
-      result shouldBe ""
-    }
-
-    "return a valid string that contains the value of daysClaimed when prr is claimed" in {
-      val privateResidenceReliefModel = PrivateResidenceReliefModel("Yes", Some(4))
-      val result = PrivateResidenceReliefRequestConstructor.daysClaimed(modelWithValidDates, Some(privateResidenceReliefModel))
-
-      result shouldBe "&daysClaimed=4"
-    }
-  }
-
-  "Calling the checkLivedInProperty method" when {
-
-    "supplied with None" should {
-      val result = PrivateResidenceReliefRequestConstructor.checkLivedInProperty(None)
-
-      "return false" in {
-        result shouldEqual false
-      }
-    }
-
-    "property was lived in" should {
-      val result = PrivateResidenceReliefRequestConstructor.checkLivedInProperty(Some(propertyLivedInModel))
-
-      "return true" in {
-        result shouldEqual true
-      }
-    }
-
-    "property was not lived in" should {
-      val result = PrivateResidenceReliefRequestConstructor.checkLivedInProperty(Some(PropertyLivedInModel(false)))
-
-      "return false" in {
-        result shouldEqual false
+    "prr claimed, property lived in and dates are valid" in {
+      val fractions =
+        Table(
+          ("totalGainsModel",                   "claiming", "amount",    "livedIn",   "expected"),
+          (modelWithValidDates,                 "Yes",      Some(d(4)),  Some(true),  "&prrClaimed=4"),
+          (modelWithValidDates,                 "Yes",      Some(d(42)), Some(true),  "&prrClaimed=42"),
+          (modelWithRebasedValue,               "Yes",      Some(d(4)),  Some(true),  "&prrClaimed=4"),
+          (modelWithValidDates,                 "Yes",      None,        Some(true),  ""),
+          (modelWithValidDates,                 "No",       None,        Some(true),  ""),
+          (modelWithValidDates,                 "Yes",      Some(d(4)),  Some(false), ""),
+          (modelWithValidDates,                 "Yes",      Some(d(4)),  None,        ""),
+          (modelDatesWithin18Months,            "Yes",      Some(d(4)),  Some(true),  ""),
+          (modelDatesAcquisitionDateAfterStart, "Yes",      Some(d(4)),  Some(true),  ""),
+          (modelWithRebasedValue,               "No",       None,        None,        ""),
+        )
+      forAll (fractions) { (totalGainsModel, claiming, amount, livedIn, expected) =>
+        val result = privateResidenceReliefQuery(
+          totalGainsModel, Some(PrivateResidenceReliefModel(claiming, amount)), livedIn.map(PropertyLivedInModel(_)))
+        result shouldBe expected
       }
     }
   }
