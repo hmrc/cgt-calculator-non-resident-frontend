@@ -20,8 +20,6 @@ import common.{CommonPlaySpec, WithCommonFakeApplication}
 import constructors.helpers.AssertHelpers
 import models._
 
-import java.time.LocalDate
-
 class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeApplication with AssertHelpers {
 
   val noneOtherReliefs = TotalGainAnswersModel(
@@ -168,7 +166,7 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
     Some(OtherReliefsModel(1450))
   )
 
-  val yesPRRModel = PrivateResidenceReliefModel("Yes", Some(2), Some(3))
+  val yesPRRModel = PrivateResidenceReliefModel("Yes", Some(2))
 
   private def assertExpectedResult[T](option: Option[T])(test: T => Unit) = assertOption("expected option is None")(option)(test)
 
@@ -178,7 +176,7 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
       lazy val result = DeductionDetailsConstructor.deductionDetailsRows(validDates, Some(yesPRRModel), Some(PropertyLivedInModel(true)))
 
       "have a sequence of size 3" in {
-        result.size shouldBe 4
+        result.size shouldBe 3
       }
 
       "return a sequence with a property lived in question answer" in {
@@ -190,11 +188,7 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
       }
 
       "return a sequence with the days claimed answer" in {
-        result.contains(DeductionDetailsConstructor.privateResidenceReliefDaysClaimedBeforeRow(Some(yesPRRModel), validDates).get)
-      }
-
-      "return a sequence with the days claimed after answer" in {
-        result.contains(DeductionDetailsConstructor.privateResidenceReliefDaysClaimedAfterRow(Some(yesPRRModel), validDates).get)
+        result.contains(DeductionDetailsConstructor.privateResidenceReliefAmountRow(Some(yesPRRModel), validDates).get)
       }
     }
   }
@@ -249,7 +243,7 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
     "provided with a privateResidenceRelief model" should {
 
       "with answer 'Yes'" should {
-        val prrModel = PrivateResidenceReliefModel("Yes", None, None)
+        val prrModel = PrivateResidenceReliefModel("Yes", None)
         lazy val result = DeductionDetailsConstructor.privateResidenceReliefQuestionRow(Some(prrModel))
 
         "return some value" in {
@@ -257,29 +251,29 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
         }
 
         "return an id of nr:privateResidenceRelief" in {
-          assertExpectedResult[QuestionAnswerModel[String]](result)(_.id shouldBe "nr:privateResidenceRelief")
+          assertExpectedResult(result)(_.id shouldBe "nr:privateResidenceRelief")
         }
 
         "return a value of 'Yes'" in {
-          assertExpectedResult[QuestionAnswerModel[String]](result)(_.data shouldBe "Yes")
+          assertExpectedResult(result)(_.data shouldBe "Yes")
         }
 
         "return a question for Private Residence Relief" in {
-          assertExpectedResult[QuestionAnswerModel[String]](result)(_.question shouldBe "calc.privateResidenceRelief.question")
+          assertExpectedResult(result)(_.question shouldBe "calc.privateResidenceRelief.question")
         }
 
         "return a link to the Private Residence Relief page" in {
-          assertExpectedResult[QuestionAnswerModel[String]](result)(_.link shouldBe
+          assertExpectedResult(result)(_.link shouldBe
             Some(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief.url))
         }
       }
     }
   }
 
-  "Calling .privateResidenceReliefDaysClaimedBeforeRow" when {
+  "Calling .privateResidenceReliefprrClaimedBeforeRow" when {
 
     "provided with no privateResidenceReliefModel" should {
-      lazy val result = DeductionDetailsConstructor.privateResidenceReliefDaysClaimedBeforeRow(None, validDates)
+      lazy val result = DeductionDetailsConstructor.privateResidenceReliefAmountRow(None, validDates)
 
       "return a None" in {
         result shouldBe None
@@ -287,7 +281,7 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
     }
 
     "provided with an answer of 'No' to prr" should {
-      lazy val result = DeductionDetailsConstructor.privateResidenceReliefDaysClaimedBeforeRow(Some(PrivateResidenceReliefModel("No", None, None)), validDates)
+      lazy val result = DeductionDetailsConstructor.privateResidenceReliefAmountRow(Some(PrivateResidenceReliefModel("No", None)), validDates)
 
       "return a None" in {
         result shouldBe None
@@ -295,8 +289,8 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
     }
 
     "provided with an an acquisition date and disposal date within 18 months of each other" should {
-      lazy val result = DeductionDetailsConstructor.privateResidenceReliefDaysClaimedBeforeRow(
-        Some(PrivateResidenceReliefModel("Yes", Some(4), None)), within18Months)
+      lazy val result = DeductionDetailsConstructor.privateResidenceReliefAmountRow(
+        Some(PrivateResidenceReliefModel("Yes", Some(4))), within18Months)
 
       "return a None" in {
         result shouldBe None
@@ -304,138 +298,38 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
     }
 
     "provided with a valid value and conditions to use it" should {
-      lazy val result = DeductionDetailsConstructor.privateResidenceReliefDaysClaimedBeforeRow(
-        Some(PrivateResidenceReliefModel("Yes", Some(4), None)), validDates)
+      lazy val result = DeductionDetailsConstructor.privateResidenceReliefAmountRow(
+        Some(PrivateResidenceReliefModel("Yes", Some(4))), validDates)
 
       "return some value" in {
         result.isDefined shouldBe true
       }
 
-      "return an id of nr:privateResidenceRelief-daysClaimed" in {
-        assertExpectedResult[QuestionAnswerModel[String]](result)(_.id shouldBe "nr:privateResidenceRelief-daysClaimed")
+      "return an id of nr:privateResidenceRelief-prrClaimed" in {
+        assertExpectedResult(result)(_.id shouldBe "nr:privateResidenceRelief-prrClaimed")
       }
 
       "return a value of '4'" in {
-        assertExpectedResult[QuestionAnswerModel[String]](result)(_.data shouldBe "4")
+        assertExpectedResult(result)(_.data.toString() shouldBe "4")
       }
 
       "return a question for Private Residence Relief" in {
-        assertExpectedResult[QuestionAnswerModel[String]](result)(_.question shouldBe "calc.privateResidenceRelief.firstQuestion")
+        assertExpectedResult(result)(_.question shouldBe "calc.privateResidenceReliefValue.title")
       }
 
       "return a link to the Private Residence Relief page" in {
-        assertExpectedResult[QuestionAnswerModel[String]](result)(_.link shouldBe
+        assertExpectedResult(result)(_.link shouldBe
           Some(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief.url))
       }
     }
 
     "provided with an acquisition date after 6th April 2015 and disposal date over 18 months later" should {
-      s"have the question message ${}" in {
-        lazy val result = DeductionDetailsConstructor.privateResidenceReliefDaysClaimedBeforeRow(
-          Some(PrivateResidenceReliefModel("Yes", Some(4), None)), edgeDatesJustDaysBefore)
+      s"have the question message" in {
+        lazy val result = DeductionDetailsConstructor.privateResidenceReliefAmountRow(
+          Some(PrivateResidenceReliefModel("Yes", Some(4))), edgeDatesJustDaysBefore)
 
-        result.get.question shouldBe "calc.privateResidenceRelief.questionFlat"
-        result.get.oDate shouldBe Some(LocalDate.of(2015, 9, 2))
-      }
-    }
-  }
-
-  "Calling privateResidenceReliefDaysClaimedAfterRow" when {
-
-    "provided with no privateResidenceReliefModel" should {
-      lazy val result = DeductionDetailsConstructor.privateResidenceReliefDaysClaimedAfterRow(None, validDates)
-
-      "return a None" in {
-        result shouldBe None
-      }
-    }
-
-    "provided with an answer of 'No' to prr" should {
-      lazy val result = DeductionDetailsConstructor.privateResidenceReliefDaysClaimedAfterRow(Some(PrivateResidenceReliefModel("No", None, None)), validDates)
-
-      "return a None" in {
-        result shouldBe None
-      }
-    }
-
-    "provided with an acquisition date after the start" should {
-      lazy val result = DeductionDetailsConstructor.privateResidenceReliefDaysClaimedAfterRow(
-        Some(PrivateResidenceReliefModel("Yes", None, Some(3))), acquisitionDateAfterStart)
-
-      "return a None" in {
-        result shouldBe None
-      }
-    }
-
-    "provided with a disposal date before the 18 month rebased period" should {
-      lazy val result = DeductionDetailsConstructor.privateResidenceReliefDaysClaimedAfterRow(
-        Some(PrivateResidenceReliefModel("Yes", None, Some(3))), disposalDateWithin18Months)
-
-      "return a None" in {
-        result shouldBe None
-      }
-    }
-
-    "provided with no acquisition date and no rebased value" should {
-      lazy val result = DeductionDetailsConstructor.privateResidenceReliefDaysClaimedAfterRow(
-        Some(PrivateResidenceReliefModel("Yes", None, Some(3))), noOtherReliefs)
-
-      "return a None" in {
-        result shouldBe None
-      }
-    }
-
-    "provided with a rebased value and no acquisition date" should {
-      lazy val result = DeductionDetailsConstructor.privateResidenceReliefDaysClaimedAfterRow(
-        Some(PrivateResidenceReliefModel("Yes", None, Some(3))), yesOtherReliefs)
-
-      "return some value" in {
-        result.isDefined shouldBe true
-      }
-
-      "return an id of nr:privateResidenceRelief-daysClaimedAfter" in {
-        assertExpectedResult[QuestionAnswerModel[String]](result)(_.id shouldBe "nr:privateResidenceRelief-daysClaimedAfter")
-      }
-
-      "return a value of '3'" in {
-        assertExpectedResult[QuestionAnswerModel[String]](result)(_.data shouldBe "3")
-      }
-
-      "return a question for Private Residence Relief" in {
-        assertExpectedResult[QuestionAnswerModel[String]](result)(_.question shouldBe "calc.privateResidenceRelief.questionBetween")
-        assertExpectedResult[QuestionAnswerModel[String]](result)(_.oDate shouldBe Some(LocalDate.of(2017, 4, 10)))
-      }
-
-      "return a link to the Private Residence Relief page" in {
-        assertExpectedResult[QuestionAnswerModel[String]](result)(_.link shouldBe
-          Some(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief.url))
-      }
-    }
-
-    "provided with a valid acquisition date" should {
-      lazy val result = DeductionDetailsConstructor.privateResidenceReliefDaysClaimedAfterRow(
-        Some(PrivateResidenceReliefModel("Yes", None, Some(3))), validDates)
-
-      "return some value" in {
-        result.isDefined shouldBe true
-      }
-
-      "return an id of nr:privateResidenceRelief-daysClaimedAfter" in {
-        assertExpectedResult[QuestionAnswerModel[String]](result)(_.id shouldBe "nr:privateResidenceRelief-daysClaimedAfter")
-      }
-
-      "return a value of '3'" in {
-        assertExpectedResult[QuestionAnswerModel[String]](result)(_.data shouldBe "3")
-      }
-
-      "return a question for Private Residence Relief" in {
-        assertExpectedResult[QuestionAnswerModel[String]](result)(_.question shouldBe "calc.privateResidenceRelief.questionBetween")
-        assertExpectedResult[QuestionAnswerModel[String]](result)(_.oDate shouldBe Some(LocalDate.of(2015, 4, 10)))
-      }
-
-      "return a link to the Private Residence Relief page" in {
-        assertExpectedResult[QuestionAnswerModel[String]](result)(_.link shouldBe
-          Some(controllers.routes.PrivateResidenceReliefController.privateResidenceRelief.url))
+        result.get.question shouldBe "calc.privateResidenceReliefValue.title"
+        assertExpectedResult(result)(_.data.toString() shouldBe "4")
       }
     }
   }

@@ -118,7 +118,7 @@ class CalculationElectionActionSpec ()
 
     when(mockSessionCacheService.fetchAndGetFormData[PrivateResidenceReliefModel](
       ArgumentMatchers.eq(KeystoreKeys.privateResidenceRelief))(ArgumentMatchers.any(), ArgumentMatchers.any()))
-    .thenReturn(Future.successful(Some(PrivateResidenceReliefModel("Yes", Some(0), Some(0)))))
+    .thenReturn(Future.successful(Some(PrivateResidenceReliefModel("Yes", Some(0)))))
 
     when(mockCalcConnector.calculateTaxableGainAfterPRR(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any()))
     .thenReturn(Future.successful(Some(CalculationResultsWithPRRModel(GainsAfterPRRModel(0, 0, 0), None, None))))

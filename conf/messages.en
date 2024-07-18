@@ -302,27 +302,29 @@ calc.marketValue.helpTextAdditional = You might have to pay more if we think you
 calc.marketValue.jointOwnership = If you owned the property with someone else, only enter your share of the property value.
 
 ## Private Residence Relief ##
-calc.privateResidenceRelief.amountQuestion = Private Residence Relief
+calc.privateResidenceRelief.title = Private Residence Relief
 calc.privateResidenceRelief.question = Are you claiming Private Residence Relief?
-calc.privateResidenceRelief.questionBetween = For how many days between 6 April 2015 and {0} did this property qualify for relief?
-calc.privateResidenceRelief.firstQuestion = How many days before 6 April 2015 did you live in this property as your main home?
-calc.privateResidenceRelief.questionFlat = For how many days before {0} did this property qualify for relief?
 calc.privateResidenceRelief.helpText = See more details about
 calc.privateResidenceRelief.helpLink = Private Residence Relief for non-UK residents
 calc.privateResidenceRelief.intro1 = You could get full tax relief of 365 days for any tax years when you or your spouse or civil partner spent at least 90 days in your UK home.
-calc.privateResidenceRelief.intro2 = You could get full tax relief of 365 days for any tax years after 6 April 2015 when you or your spouse or civil partner spent at least 90 days in your UK home.
 calc.privateResidenceRelief.qualify = To qualify, you must nominate the home you are selling as your only or main home to HMRC.
 calc.privateResidenceRelief.errors.required = Select yes if you are claiming Private Residence Relief
-calc.privateResidenceRelief.error.noValueProvided = Enter the value for your days claimed
-calc.privateResidenceRelief.error.errorNegative = Enter a positive number for your days claimed
-calc.privateResidenceRelief.error.errorDecimalPlaces = There are too many numbers after the decimal point in your days claimed
 calc.privateResidenceRelief.error.maxNumericExceeded = Enter a value for your days claimed that''s {0} or less
-calc.privateResidenceRelief.formHintExplanation = To work out your Private Residence Relief, we need some information about when you lived in the property.
-calc.privateResidenceRelief.helpTextBeforeAfter = Why these specific dates?
-calc.privateResidenceRelief.helpTextJustBefore = Why this date?
-calc.privateResidenceRelief.helpTextSubTitle = These dates are important because:
-calc.privateResidenceRelief.daysBetweenHelpText = {0} is the date you transferred the property minus {1} months (you automatically get Private Residence Relief for the last {1} months that you owned the property)
-calc.privateResidenceRelief.daysBeforeHelpText = 6 April 2015 is when the Capital Gains Tax rules for non-UK residents came into effect
+
+## Private Residence Relief Value ##
+calc.privateResidenceReliefValue.title = How much Private Residence Relief are you entitled to?
+calc.privateResidenceReliefValue.hint = For example, £10,000.50
+calc.privateResidenceReliefValue.helpTextBeforeAfter = Why these specific dates?
+calc.privateResidenceReliefValue.helpTextJustBefore = Why this date?
+calc.privateResidenceReliefValue.daysBeforeHelpText = 6 April 2015 is when the Capital Gains Tax rules for non-UK residents came into effect
+calc.privateResidenceReliefValue.daysBetweenHelpText = {0} is the date you transferred the property minus {1} months (you automatically get Private Residence Relief for the last {1} months that you owned the property)
+calc.privateResidenceReliefValue.helpTextSubTitle = These dates are important because:
+calc.privateResidenceReliefValue.formHintExplanation = To work out your Private Residence Relief, we need some information about when you lived in the property.
+calc.privateResidenceReliefValue.questionBetween = For how many days between 6 April 2015 and {0} did this property qualify for relief?
+calc.privateResidenceReliefValue.error.noValueProvided = Enter how much Private Residence Relief you are entitled to
+calc.privateResidenceReliefValue.error.number = How much Private Residence Relief you are entitled to must be an amount of money in pounds
+calc.privateResidenceReliefValue.error.errorNegative = Private Residence Relief must be £0 or more
+calc.privateResidenceReliefValue.error.errorDecimalPlaces = How much Private Residence Relief you are entitled to has too many numbers after the decimal point
 
 ## Previous Loss Or Gain ##
 calc.previousLossOrGain.question = Did these disposals result in an overall Capital Gains Tax loss or gain?

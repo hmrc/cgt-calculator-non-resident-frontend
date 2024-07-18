@@ -105,7 +105,7 @@ class CalculatorConnectorSpec extends CommonPlaySpec with WithCommonFakeApplicat
       when(mockHttp.GET[Option[CalculationResultsWithPRRModel]](ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any()))
         .thenReturn(Future.successful(Option(validResponse)))
 
-      val result = connector.calculateTaxableGainAfterPRR(model, PrivateResidenceReliefModel("No", None, None),
+      val result = connector.calculateTaxableGainAfterPRR(model, PrivateResidenceReliefModel("No", None),
         PropertyLivedInModel(true))
 
       await(result) shouldBe Some(validResponse)

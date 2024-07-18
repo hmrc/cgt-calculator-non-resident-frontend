@@ -189,9 +189,9 @@ object KeyLookup {
 
     object PrivateResidenceRelief {
       val errorRequired = "calc.privateResidenceRelief.error.required"
-      val errorNoValue = "calc.privateResidenceRelief.error.noValueProvided"
-      val errorNegative = "calc.privateResidenceRelief.error.errorNegative"
-      val errorDecimalPlaces = "calc.privateResidenceRelief.error.errorDecimalPlaces"
+      val errorNoValue = "calc.privateResidenceReliefValue.error.noValueProvided"
+      val errorNegative = "calc.privateResidenceReliefValue.error.errorNegative"
+      val errorDecimalPlaces = "calc.privateResidenceReliefValue.error.errorDecimalPlaces"
     }
 
     object RebasedCosts {

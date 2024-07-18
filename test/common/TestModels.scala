@@ -141,7 +141,7 @@ object TestModels {
     OtherReliefsModel(999),
     OtherReliefsModel(888),
     OtherReliefsModel(777),
-    Some(PrivateResidenceReliefModel("No", None, None))
+    Some(PrivateResidenceReliefModel("No", None))
   )
 
   val summaryImprovementsWithRebasedModel = SummaryModel(
@@ -162,7 +162,7 @@ object TestModels {
     OtherReliefsModel(999),
     OtherReliefsModel(888),
     OtherReliefsModel(777),
-    Some(PrivateResidenceReliefModel("No", None, None))
+    Some(PrivateResidenceReliefModel("No", None))
   )
 
   val summaryRebased = SummaryModel(
@@ -183,7 +183,7 @@ object TestModels {
     OtherReliefsModel(999),
     OtherReliefsModel(888),
     OtherReliefsModel(777),
-    Some(PrivateResidenceReliefModel("No", None, None))
+    Some(PrivateResidenceReliefModel("No", None))
   )
 
   val summaryRebasedNoImprovements = SummaryModel(
@@ -204,7 +204,7 @@ object TestModels {
     OtherReliefsModel(999),
     OtherReliefsModel(888),
     OtherReliefsModel(0),
-    Some(PrivateResidenceReliefModel("No", None, None))
+    Some(PrivateResidenceReliefModel("No", None))
   )
 
   val summaryRebasedNoneImprovements = SummaryModel(
@@ -225,7 +225,7 @@ object TestModels {
     OtherReliefsModel(999),
     OtherReliefsModel(888),
     OtherReliefsModel(0),
-    Some(PrivateResidenceReliefModel("No", None, None))
+    Some(PrivateResidenceReliefModel("No", None))
   )
 
   val summaryPRRAcqDateAfterAndDisposalDateBefore = SummaryModel(
@@ -246,7 +246,7 @@ object TestModels {
     OtherReliefsModel(999),
     OtherReliefsModel(888),
     OtherReliefsModel(0),
-    Some(PrivateResidenceReliefModel("Yes", Some(100), Some(50)))
+    Some(PrivateResidenceReliefModel("Yes", Some(100)))
   )
 
   val summaryPRRAcqDateAfterAndNoRebased = SummaryModel(
@@ -267,7 +267,7 @@ object TestModels {
     OtherReliefsModel(999),
     OtherReliefsModel(888),
     OtherReliefsModel(0),
-    Some(PrivateResidenceReliefModel("Yes", Some(100), Some(50)))
+    Some(PrivateResidenceReliefModel("Yes", Some(100)))
   )
 
   val summaryPRRAcqDateAfterAndDisposalDateAfter = SummaryModel(
@@ -288,7 +288,7 @@ object TestModels {
     OtherReliefsModel(999),
     OtherReliefsModel(888),
     OtherReliefsModel(0),
-    Some(PrivateResidenceReliefModel("Yes", Some(100), Some(50)))
+    Some(PrivateResidenceReliefModel("Yes", Some(100)))
   )
 
   val summaryPRRAcqDateAfterAndDisposalDateAfterWithRebased = SummaryModel(
@@ -309,7 +309,7 @@ object TestModels {
     OtherReliefsModel(999),
     OtherReliefsModel(888),
     OtherReliefsModel(0),
-    Some(PrivateResidenceReliefModel("Yes", Some(100), Some(50)))
+    Some(PrivateResidenceReliefModel("Yes", Some(100)))
   )
 
   val summaryPRRAcqDateBeforeAndDisposalDateAfterWithRebased = SummaryModel(
@@ -330,7 +330,7 @@ object TestModels {
     OtherReliefsModel(999),
     OtherReliefsModel(888),
     OtherReliefsModel(0),
-    Some(PrivateResidenceReliefModel("Yes", Some(100), Some(50)))
+    Some(PrivateResidenceReliefModel("Yes", Some(100)))
   )
 
   val summaryWithAllOptions = SummaryModel(
@@ -351,7 +351,7 @@ object TestModels {
     OtherReliefsModel(999),
     OtherReliefsModel(888),
     OtherReliefsModel(777),
-    Some(PrivateResidenceReliefModel("Yes", Some(100), Some(50)))
+    Some(PrivateResidenceReliefModel("Yes", Some(100)))
   )
 
   val totalGainAnswersModelWithRebasedTA = TotalGainAnswersModel(

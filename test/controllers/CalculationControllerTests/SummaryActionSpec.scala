@@ -161,7 +161,7 @@ class SummaryActionSpec extends CommonPlaySpec with WithCommonFakeApplication wi
         answerModel,
         TotalGainResultsModel(1000, Some(2000), Some(3000)),
         CalculationElectionModel(Flat),
-        Some(PrivateResidenceReliefModel("Yes", Some(1000), Some(10))),
+        Some(PrivateResidenceReliefModel("Yes", Some(1000))),
         Some(CalculationResultsWithPRRModel(GainsAfterPRRModel(100, 0, 100), None, None)),
         finalAnswersModel,
         Some(TestModels.calculationResultsModelWithAll)
@@ -214,7 +214,7 @@ class SummaryActionSpec extends CommonPlaySpec with WithCommonFakeApplication wi
         answerModel,
         TotalGainResultsModel(1000, Some(2000), Some(3000)),
         CalculationElectionModel(Flat),
-        Some(PrivateResidenceReliefModel("Yes", Some(1000), Some(10))),
+        Some(PrivateResidenceReliefModel("Yes", Some(1000))),
         Some(CalculationResultsWithPRRModel(GainsAfterPRRModel(100, 0, 100), None, None)),
         finalAnswersModel,
         Some(TestModels.calculationResultsModelWithRebased)
@@ -236,7 +236,7 @@ class SummaryActionSpec extends CommonPlaySpec with WithCommonFakeApplication wi
       answerModel,
       TotalGainResultsModel(1000, Some(2000), Some(3000)),
       CalculationElectionModel(Flat),
-      Some(PrivateResidenceReliefModel("Yes", Some(1000), Some(10))),
+      Some(PrivateResidenceReliefModel("Yes", Some(1000))),
       Some(CalculationResultsWithPRRModel(GainsAfterPRRModel(100, 0, 100), None, None)),
       finalAnswersModel,
       Some(TestModels.calculationResultsModelWithRebased)

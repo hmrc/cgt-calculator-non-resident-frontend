@@ -25,63 +25,24 @@ import uk.gov.voa.play.form.ConditionalMappings.{isEqual, mandatoryIf}
 
 object PrivateResidenceReliefForm {
 
-  val isClaimingPRR = "isClaimingPRR" -> common.Formatters.text("calc.privateResidenceRelief.errors.required")
+  private val isClaimingPRR = "isClaimingPRR" -> common.Formatters.text("calc.privateResidenceRelief.errors.required")
     .verifying("calc.privateResidenceRelief.errors.required", mandatoryCheck)
     .verifying("calc.privateResidenceRelief.errors.required", yesNoCheck)
 
-  val daysClaimed = "daysClaimed" -> mandatoryIf(
+  private val prrClaimed = "prrClaimed" -> mandatoryIf(
     isEqual("isClaimingPRR", "Yes"),
-    common.Formatters.text("calc.privateResidenceRelief.error.noValueProvided")
-      .verifying("error.number", bigDecimalCheck)
+    common.Formatters.text("calc.privateResidenceReliefValue.error.noValueProvided")
+      .transform(stripCurrencyCharacters, stripCurrencyCharacters)
+      .verifying("calc.privateResidenceReliefValue.error.required", mandatoryCheck)
+      .verifying("calc.privateResidenceReliefValue.error.number", bigDecimalCheck)
       .transform(stringToBigDecimal, bigDecimalToString)
-      .verifying(
-        stopOnFirstFail(
-          negativeConstraint("calc.privateResidenceRelief.error.errorNegative"),
-          decimalPlaceConstraint("calc.privateResidenceRelief.error.errorDecimalPlaces", 1),
-          maxMonetaryValueConstraint(errMsgKey = "calc.privateResidenceRelief.error.maxNumericExceeded")
-        )
-      )
+      .verifying("calc.privateResidenceReliefValue.error.errorNegative", isPositive)
+      .verifying("calc.privateResidenceReliefValue.error.errorDecimalPlaces", decimalPlacesCheck)
+      .verifying(maxMonetaryValueConstraint(errMsgKey = "calc.privateResidenceRelief.error.maxNumericExceeded"))
   )
-
-  val daysClaimedAfter = "daysClaimedAfter" -> mandatoryIf(
-    isEqual("isClaimingPRR", "Yes"),
-    common.Formatters.text("calc.privateResidenceRelief.error.noValueProvided")
-      .verifying("error.number", bigDecimalCheck)
-      .transform(stringToBigDecimal, bigDecimalToString)
-      .verifying(
-        stopOnFirstFail(
-          negativeConstraint("calc.privateResidenceRelief.error.errorNegative"),
-          decimalPlaceConstraint("calc.privateResidenceRelief.error.errorDecimalPlaces", 1),
-          maxMonetaryValueConstraint(errMsgKey = "calc.privateResidenceRelief.error.maxNumericExceeded")
-        )
-      )
-  )
-
-  def emptyForm(fieldName: String) = {
-    fieldName -> optional(text)
-      .transform(optionalStringToOptionalBigDecimal, optionalBigDecimalToOptionalString)
-  }
 
   def isClaimingPrrForm: Form[ClaimingPrrModel] =
       Form(mapping(isClaimingPRR)(ClaimingPrrModel.apply)(ClaimingPrrModel.unapply))
 
-  def privateResidenceReliefForm (showBefore: Boolean, showAfter: Boolean): Form[PrivateResidenceReliefModel] =
-    (showBefore, showAfter) match {
-      case (true, true) => Form(
-        mapping(isClaimingPRR, daysClaimed, daysClaimedAfter)
-        (PrivateResidenceReliefModel.apply)(PrivateResidenceReliefModel.unapply)
-      )
-      case (true, false) => Form(
-        mapping(isClaimingPRR, daysClaimed, emptyForm("daysClaimedAfter"))
-        (PrivateResidenceReliefModel.apply)(PrivateResidenceReliefModel.unapply)
-      )
-      case (false, true) => Form(
-        mapping(isClaimingPRR, emptyForm("daysClaimed"), daysClaimedAfter)
-        (PrivateResidenceReliefModel.apply)(PrivateResidenceReliefModel.unapply)
-      )
-      case _ => Form(
-        mapping(isClaimingPRR, emptyForm("daysClaimed"), emptyForm("daysClaimedAfter"))
-        (PrivateResidenceReliefModel.apply)(PrivateResidenceReliefModel.unapply)
-      )
-    }
+  def privateResidenceReliefForm: Form[PrivateResidenceReliefModel] = Form(mapping(isClaimingPRR, prrClaimed)(PrivateResidenceReliefModel.apply)(PrivateResidenceReliefModel.unapply))
 }

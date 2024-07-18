@@ -16,16 +16,15 @@
 
 package controllers.CalculationControllerTests
 
-import org.apache.pekko.stream.Materializer
 import assets.MessageLookup.NonResident.{PrivateResidenceRelief => messages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
-import config.ApplicationConfig
 import connectors.CalculatorConnector
 import constructors.AnswersConstructor
 import controllers.PrivateResidenceReliefController
 import controllers.helpers.FakeRequestHelper
 import models._
+import org.apache.pekko.stream.Materializer
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
@@ -35,7 +34,6 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.SessionCacheService
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
-import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.{privateResidenceRelief, privateResidenceReliefValue}
 
 import java.time.LocalDate
@@ -250,7 +248,7 @@ class PrivateResidenceReliefActionSpec
 
     "supplied wth a pre-existing stored model" should {
       val target = setupTarget(
-        Some(PrivateResidenceReliefModel("Yes", None, None)),
+        Some(PrivateResidenceReliefModel("Yes", None)),
         disposalDateData = Some(DateModel(5, 8, 2015)),
         acquisitionDateData = Some(DateModel(1, 1, 2016)),
         rebasedValueData = Some(RebasedValueModel(1000)))
@@ -345,7 +343,7 @@ class PrivateResidenceReliefActionSpec
       }
 
       "return to the private residence relief page" in {
-        document.title() shouldBe s"Error: ${messages.title}"
+        document.title() shouldBe s"Error: ${messages.valueTitle}"
       }
     }
   }

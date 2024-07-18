@@ -16,59 +16,17 @@
 
 package constructors
 
-import common.TaxDates
 import models.{PrivateResidenceReliefModel, PropertyLivedInModel, TotalGainAnswersModel}
 
 object PrivateResidenceReliefRequestConstructor {
 
-  def privateResidenceReliefQuery(totalGainAnswersModel: TotalGainAnswersModel,
-                                  privateResidenceReliefModel: Option[PrivateResidenceReliefModel],
+  def privateResidenceReliefQuery(privateResidenceReliefModel: Option[PrivateResidenceReliefModel],
                                   propertyLivedInModel: Option[PropertyLivedInModel]): String = {
-    if(checkLivedInProperty(propertyLivedInModel)) {
-      eligibleForPrivateResidenceRelief(privateResidenceReliefModel) +
-        daysClaimed(totalGainAnswersModel, privateResidenceReliefModel) +
-        daysClaimedAfter(totalGainAnswersModel, privateResidenceReliefModel)
-    } else "&claimingPRR=false"
-  }
-
-  def eligibleForPrivateResidenceRelief(privateResidenceReliefModel: Option[PrivateResidenceReliefModel]): String = {
-    privateResidenceReliefModel match {
-      case Some(PrivateResidenceReliefModel("Yes", _, _)) => "&claimingPRR=true"
-      case _ => "&claimingPRR=false"
-    }
-  }
-
-  def daysClaimed(totalGainAnswersModel: TotalGainAnswersModel,
-                  privateResidenceReliefModel: Option[PrivateResidenceReliefModel]): String = {
-
-    val pRRDateDetails = TaxDates.privateResidenceReliefMonthDeductionApplicable(totalGainAnswersModel.disposalDateModel)
-
-    privateResidenceReliefModel match {
-      case (Some(PrivateResidenceReliefModel("Yes", Some(value), daysAfter)))
-        if totalGainAnswersModel.acquisitionDateModel.get.plusMonths(pRRDateDetails.months).isBefore(totalGainAnswersModel.disposalDateModel.get) =>
-        s"&daysClaimed=${value + daysAfter.getOrElse(0)}"
-      case _ => ""
-    }
-  }
-
-  def daysClaimedAfter(totalGainAnswersModel: TotalGainAnswersModel,
-                       privateResidenceReliefModel: Option[PrivateResidenceReliefModel]): String = {
-
-    val pRRDateDetails = TaxDates.privateResidenceReliefMonthDeductionApplicable(totalGainAnswersModel.disposalDateModel)
-
-    privateResidenceReliefModel match {
-      case (Some(PrivateResidenceReliefModel("Yes", _, Some(value))))
-        if totalGainAnswersModel.acquisitionDateModel.get.plusMonths(pRRDateDetails.months).isBefore(totalGainAnswersModel.disposalDateModel.get) &&
-        !TaxDates.dateAfterStart(totalGainAnswersModel.acquisitionDateModel.get) =>
-          s"&daysClaimedAfter=$value"
-      case _ => ""
-    }
-  }
-
-  def checkLivedInProperty(propertyLivedInModel: Option[PropertyLivedInModel]): Boolean = {
-    propertyLivedInModel match {
-      case Some(data) if data.propertyLivedIn => true
-      case _ => false
-    }
+    if (propertyLivedInModel.exists(_.propertyLivedIn)) {
+      privateResidenceReliefModel match {
+        case Some(PrivateResidenceReliefModel("Yes", Some(value))) => s"&prrClaimed=$value"
+        case _ => ""
+      }
+    } else ""
   }
 }
