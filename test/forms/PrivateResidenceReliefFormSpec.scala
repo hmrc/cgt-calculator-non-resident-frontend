@@ -155,7 +155,7 @@ class PrivateResidenceReliefFormSpec extends CommonPlaySpec with WithCommonFakeA
         }
 
         s"return the correct error message" in {
-          form.error("prrClaimed").get.message shouldBe "calc.privateResidenceRelief.error.maxNumericExceeded"
+          form.error("prrClaimed").get.message shouldBe "calc.common.error.maxNumericExceeded"
           form.error("prrClaimed").get.args shouldBe Array("1,000,000,000")
         }
       }

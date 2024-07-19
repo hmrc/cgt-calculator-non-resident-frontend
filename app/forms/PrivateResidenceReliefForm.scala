@@ -38,7 +38,7 @@ object PrivateResidenceReliefForm {
       .transform(stringToBigDecimal, bigDecimalToString)
       .verifying("calc.privateResidenceReliefValue.error.errorNegative", isPositive)
       .verifying("calc.privateResidenceReliefValue.error.errorDecimalPlaces", decimalPlacesCheck)
-      .verifying(maxMonetaryValueConstraint(errMsgKey = "calc.privateResidenceRelief.error.maxNumericExceeded"))
+      .verifying(maxMonetaryValueConstraint())
   )
 
   def isClaimingPrrForm: Form[ClaimingPrrModel] =
