@@ -343,7 +343,6 @@ calc.previousLossOrGain.question = A wnaeth y gwarediadau hyn arwain at golledio
 
 ## Private Residence Relief ##
 calc.privateResidenceRelief.errors.required = Dewiswch ''Iawn'' os ydych yn hawlio Rhyddhad Preswylfa Breifat
-calc.privateResidenceRelief.error.maxNumericExceeded = Nodwch rif ar gyfer sawl diwrnod rydych yn gwneud cais ar eu cyfer sy’n {0} neu lai
 calc.privateResidenceRelief.helpLink = Ryddhad Preswylfan Preifat ar gyfer y rhai nad ydynt yn breswyl yn y DU
 calc.privateResidenceRelief.helpText = Rhagor o fanylion am
 calc.privateResidenceRelief.intro1 = Gallech gael rhyddhad treth llawn am 365 diwrnod ar gyfer unrhyw flwyddyn dreth pan wnaethoch chi neu’ch priod neu bartner sifil dreulio o leiaf 90 diwrnod yn eich cartref yn y DU.
