@@ -21,13 +21,13 @@ import play.api.libs.json._
 case class ClaimingPrrModel (isClaimingPRR: String)
 
 object ClaimingPrrModel {
-  implicit val format = Json.format[ClaimingPrrModel]
+  implicit val format: OFormat[ClaimingPrrModel] = Json.format[ClaimingPrrModel]
 }
 
 case class PrivateResidenceReliefModel(isClaimingPRR: String, prrClaimed: Option[BigDecimal])
 
 object PrivateResidenceReliefModel {
 
-  implicit val format = Json.format[PrivateResidenceReliefModel]
+  implicit val format: OFormat[PrivateResidenceReliefModel] = Json.format[PrivateResidenceReliefModel]
 
 }

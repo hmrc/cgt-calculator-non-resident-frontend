@@ -39,10 +39,7 @@ case class TotalGainAnswersModel(disposalDateModel: DateModel,
 object TotalGainAnswersModel {
   private val ignore = OWrites[Any](_ => Json.obj())
 
-  implicit val postWrites: Writes[TotalGainAnswersModel] = new Writes[TotalGainAnswersModel] {
-    override def writes(o: TotalGainAnswersModel): JsValue =
-      postWrites(o).writes(o)
-  }
+  implicit val postWrites: Writes[TotalGainAnswersModel] = (o: TotalGainAnswersModel) => postWrites(o).writes(o)
 
   private def postWrites(model: TotalGainAnswersModel): Writes[TotalGainAnswersModel] = (
     (__ \ "disposalDate").write[DateModel](DateModel.postWrites) and

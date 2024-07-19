@@ -55,7 +55,7 @@ class SessionCacheServiceSpec extends CommonPlaySpec with WithCommonFakeApplicat
 
     "save data to keystore and return the same session ID if it already exists" in new Setup {
 
-      lazy val result = sessionCacheService.saveFormData(Key.disposalValue, testModel)
+      lazy val result: Future[(String, String)] = sessionCacheService.saveFormData(Key.disposalValue, testModel)
       await(result) shouldBe sessionPair
     }
 

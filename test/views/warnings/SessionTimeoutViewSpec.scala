@@ -21,15 +21,16 @@ import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.Application
+import play.api.i18n.Messages
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.FakeRequest
 import views.html.warnings.sessionTimeout
 
 class SessionTimeoutViewSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
-  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   implicit lazy val fakeApp: Application = fakeApplication
-  lazy val sessionTimeoutView = fakeApplication.injector.instanceOf[sessionTimeout]
+  lazy val sessionTimeoutView: sessionTimeout = fakeApplication.injector.instanceOf[sessionTimeout]
 
 
   "Session Timeout View" should {

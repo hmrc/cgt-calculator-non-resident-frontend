@@ -39,13 +39,13 @@ import scala.concurrent.{ExecutionContext, Future}
 class WhatNextControllerSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
   implicit val hc: HeaderCarrier = mock[HeaderCarrier]
-  val mockHttp = mock[DefaultHttpClient]
-  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  lazy val materializer = mock[Materializer]
-  val ec = fakeApplication.injector.instanceOf[ExecutionContext]
-  val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
-  val mockAnswersConstructor = mock[AnswersConstructor]
-  val whatNextView = fakeApplication.injector.instanceOf[whatNext]
+  val mockHttp: DefaultHttpClient = mock[DefaultHttpClient]
+  val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  lazy val materializer: Materializer = mock[Materializer]
+  val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
+  val mockMessagesControllerComponents: MessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
+  val mockAnswersConstructor: AnswersConstructor = mock[AnswersConstructor]
+  val whatNextView: whatNext = fakeApplication.injector.instanceOf[whatNext]
 
   def setupTarget(summary: TotalGainAnswersModel): WhatNextController = {
     when(mockAnswersConstructor.getNRTotalGainAnswers(ArgumentMatchers.any()))
@@ -54,7 +54,7 @@ class WhatNextControllerSpec extends CommonPlaySpec with WithCommonFakeApplicati
     new WhatNextController(mockAnswersConstructor, mockMessagesControllerComponents, whatNextView)(ec)
   }
 
-  lazy val answerModel = TotalGainAnswersModel(
+  lazy val answerModel: TotalGainAnswersModel = TotalGainAnswersModel(
     DateModel(6, 4, 2020),
     SoldOrGivenAwayModel(false),
     None,

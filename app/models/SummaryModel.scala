@@ -43,6 +43,7 @@ case class SummaryModel(
     case Flat if otherReliefsModelFlat.otherReliefs > 0 => Flat
     case Rebased if otherReliefsModelRebased.otherReliefs > 0 => Rebased
     case TimeApportioned if otherReliefsModelTA.otherReliefs > 0 => TimeApportioned
+    case _ => throw new Exception("unexpected calculation type")
   }
 
   val personalDetailsRows: Seq[QuestionAnswerModel[Any]] = Seq(QuestionAnswerModel[String]("", "", "", None))

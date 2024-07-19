@@ -46,10 +46,9 @@ class RebasedValueController @Inject()(http: DefaultHttpClient,
     val localDate: Option[LocalDate] = acquisitionDate.map{x => x.get}
 
     localDate match {
-      case Some(x) => {
+      case Some(x) =>
         if (TaxDates.dateBeforeLegislationStart(x)) controllers.routes.CostsAtLegislationStartController.costsAtLegislationStart.url
         else controllers.routes.AcquisitionCostsController.acquisitionCosts.url
-      }
       case _ => controllers.routes.AcquisitionCostsController.acquisitionCosts.url
     }
   }

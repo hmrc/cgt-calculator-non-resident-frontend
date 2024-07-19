@@ -21,7 +21,7 @@ import models.{AllOtherReliefsModel, OtherReliefsModel}
 
 class OtherReliefsRequestConstructorSpec extends CommonPlaySpec {
 
-  val allReliefs = AllOtherReliefsModel(
+  val allReliefs: AllOtherReliefsModel = AllOtherReliefsModel(
     Some(OtherReliefsModel(1)),
     Some(OtherReliefsModel(2)),
     Some(OtherReliefsModel(3))

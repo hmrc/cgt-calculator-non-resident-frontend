@@ -27,12 +27,14 @@ import controllers.OtherReliefsRebasedController
 import controllers.helpers.FakeRequestHelper
 import models._
 import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.mockito.stubbing.OngoingStubbing
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.mvc.{MessagesControllerComponents, Result}
+import play.api.mvc.{AnyContentAsFormUrlEncoded, MessagesControllerComponents, Result}
+import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.SessionCacheService
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
@@ -43,16 +45,16 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class OtherReliefsRebasedActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper with BeforeAndAfterEach {
 
-  implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
+  implicit val hc: HeaderCarrier = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
 
-  val materializer = mock[Materializer]
-  val ec = fakeApplication.injector.instanceOf[ExecutionContext]
-  val mockHttp =mock[DefaultHttpClient]
-  val mockCalcConnector =mock[CalculatorConnector]
-  val mockAnswerConstuctor = mock[AnswersConstructor]
-  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
-  val otherReliefsRebasedView = fakeApplication.injector.instanceOf[otherReliefsRebased]
+  val materializer: Materializer = mock[Materializer]
+  val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
+  val mockHttp: DefaultHttpClient =mock[DefaultHttpClient]
+  val mockCalcConnector: CalculatorConnector =mock[CalculatorConnector]
+  val mockAnswerConstuctor: AnswersConstructor = mock[AnswersConstructor]
+  val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  val mockMessagesControllerComponents: MessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
+  val otherReliefsRebasedView: otherReliefsRebased = fakeApplication.injector.instanceOf[otherReliefsRebased]
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
 
   class Setup {
@@ -110,7 +112,7 @@ class OtherReliefsRebasedActionSpec extends CommonPlaySpec with WithCommonFakeAp
       .thenReturn(Future.successful(("", "")))
   }
 
-  def document(result : Future[Result]) = Jsoup.parse(bodyOf(result)(materializer, ec))
+  def document(result : Future[Result]): Document = Jsoup.parse(bodyOf(result)(materializer, ec))
 
   "Calling the .otherReliefsRebased action " when {
 
@@ -126,25 +128,25 @@ class OtherReliefsRebasedActionSpec extends CommonPlaySpec with WithCommonFakeAp
 
       "return a 200 with a valid calculation result" in new Setup {
         setupMocks()
-        lazy val result = controller.otherReliefsRebased(fakeRequestWithSession)
+        lazy val result: Future[Result] = controller.otherReliefsRebased(fakeRequestWithSession)
         status(result) shouldBe 200
       }
 
       "load the otherReliefs rebased page" in new Setup {
         setupMocks()
-        lazy val result = controller.otherReliefsRebased(fakeRequestWithSession)
+        lazy val result: Future[Result] = controller.otherReliefsRebased(fakeRequestWithSession)
         document(result).title() shouldBe messages.title
       }
 
       s"have a total gain message with text '${messages.totalGain}' £500" in new Setup {
         setupMocks()
-        lazy val result = controller.otherReliefsRebased(fakeRequestWithSession)
+        lazy val result: Future[Result] = controller.otherReliefsRebased(fakeRequestWithSession)
         document(result).getElementById("totalGain").text() shouldBe s"${messages.totalGain} £500"
       }
 
       s"have a taxable gain message with text '${messages.taxableGain}' £500" in new Setup {
         setupMocks()
-        lazy val result = controller.otherReliefsRebased(fakeRequestWithSession)
+        lazy val result: Future[Result] = controller.otherReliefsRebased(fakeRequestWithSession)
         document(result).getElementById("taxableGain").text() shouldBe s"${messages.taxableGain} £500"
       }
     }
@@ -160,14 +162,14 @@ class OtherReliefsRebasedActionSpec extends CommonPlaySpec with WithCommonFakeAp
 
       "return a status of 200" in new Setup() {
         setupStubs()
-        lazy val result = controller.otherReliefsRebased(fakeRequestWithSession)
+        lazy val result: Future[Result] = controller.otherReliefsRebased(fakeRequestWithSession)
         status(result) shouldBe 200
       }
 
       "load the otherReliefs rebased page" in new Setup() {
         setupStubs()
-        lazy val result = controller.otherReliefsRebased(fakeRequestWithSession)
-        val doc = document(result)
+        lazy val result: Future[Result] = controller.otherReliefsRebased(fakeRequestWithSession)
+        val doc: Document = document(result)
         doc.title() shouldBe messages.title
       }
     }
@@ -182,13 +184,13 @@ class OtherReliefsRebasedActionSpec extends CommonPlaySpec with WithCommonFakeAp
 
       "return a status of 303" in new Setup() {
         setupStubs
-        val result = controller.otherReliefsRebased(fakeRequest)
+        val result: Future[Result] = controller.otherReliefsRebased(fakeRequest)
         status(result) shouldBe 303
       }
 
       "redirect to the session timeout page" in new Setup() {
         setupStubs
-        val result = controller.otherReliefsRebased(fakeRequest)
+        val result: Future[Result] = controller.otherReliefsRebased(fakeRequest)
         redirectLocation(result).get should include("/calculate-your-capital-gains/non-resident/session-timeout")
       }
     }
@@ -207,15 +209,15 @@ class OtherReliefsRebasedActionSpec extends CommonPlaySpec with WithCommonFakeAp
 
       "return a status of 303" in new Setup {
         setupStubs
-        lazy val request = fakeRequestToPOSTWithSession(("isClaimingOtherReliefs", "Yes"), ("otherReliefs", "1000")).withMethod("POST")
-        lazy val result = controller.submitOtherReliefsRebased(request)
+        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequestToPOSTWithSession(("isClaimingOtherReliefs", "Yes"), ("otherReliefs", "1000")).withMethod("POST")
+        lazy val result: Future[Result] = controller.submitOtherReliefsRebased(request)
         status(result) shouldBe 303
       }
 
       "redirect to the calculation election page" in new Setup {
         setupStubs
-        lazy val request = fakeRequestToPOSTWithSession(("isClaimingOtherReliefs", "Yes"), ("otherReliefs", "1000")).withMethod("POST")
-        lazy val result = controller.submitOtherReliefsRebased(request)
+        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequestToPOSTWithSession(("isClaimingOtherReliefs", "Yes"), ("otherReliefs", "1000")).withMethod("POST")
+        lazy val result: Future[Result] = controller.submitOtherReliefsRebased(request)
         redirectLocation(result) shouldBe Some(controllers.routes.CalculationElectionController.calculationElection.url)
       }
     }
@@ -230,15 +232,15 @@ class OtherReliefsRebasedActionSpec extends CommonPlaySpec with WithCommonFakeAp
 
       "return a status of 400" in new Setup {
         setupStubs
-        lazy val request = fakeRequestToPOSTWithSession(("isClaimingOtherReliefs", "Yes"), ("otherReliefs", "-1000"))
-        lazy val result = controller.submitOtherReliefsRebased(request)
+        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequestToPOSTWithSession(("isClaimingOtherReliefs", "Yes"), ("otherReliefs", "-1000"))
+        lazy val result: Future[Result] = controller.submitOtherReliefsRebased(request)
         status(result) shouldBe 400
       }
 
       "return to the other reliefs rebased page" in new Setup{
         setupStubs
-        lazy val request = fakeRequestToPOSTWithSession(("isClaimingOtherReliefs", "Yes"), ("otherReliefs", "-1000"))
-        lazy val result = controller.submitOtherReliefsRebased(request)
+        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequestToPOSTWithSession(("isClaimingOtherReliefs", "Yes"), ("otherReliefs", "-1000"))
+        lazy val result: Future[Result] = controller.submitOtherReliefsRebased(request)
         document(result).title() shouldBe s"Error: ${messages.title}"
       }
     }

@@ -23,14 +23,14 @@ import constructors.helpers.AssertHelpers
 import controllers.helpers.FakeRequestHelper
 import models.{CalculationResultsWithTaxOwedModel, QuestionAnswerModel, TotalTaxOwedModel}
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.i18n.MessagesProvider
+import play.api.i18n.{Messages, MessagesProvider}
 import play.api.mvc.MessagesControllerComponents
 
 class CalculationDetailsWithAllAnswersConstructorSpec extends CommonPlaySpec with WithCommonFakeApplication with AssertHelpers with MockitoSugar with FakeRequestHelper {
 
-  implicit val mockMessagesProvider = mock[MessagesProvider]
-  private def assertExpectedResult[T](option: Option[T])(test: T => Unit) = assertOption("expected option is None")(option)(test)
-  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  implicit val mockMessagesProvider: MessagesProvider = mock[MessagesProvider]
+  private def assertExpectedResult[T](option: Option[T])(test: T => Unit): Unit = assertOption("expected option is None")(option)(test)
+  implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
 
   val calcDetails = new CalculationDetailsConstructor
   val calcDetailWithPRR =  new CalculationDetailsWithPRRConstructor

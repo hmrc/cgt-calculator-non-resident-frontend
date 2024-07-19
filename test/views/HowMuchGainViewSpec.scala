@@ -23,14 +23,15 @@ import controllers.helpers.FakeRequestHelper
 import forms.HowMuchGainForm._
 import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.i18n.Messages
 import play.api.mvc.MessagesControllerComponents
 import views.html.calculation.howMuchGain
 
 class HowMuchGainViewSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  lazy val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
-  lazy val howMuchGainView = fakeApplication.injector.instanceOf[howMuchGain]
+  lazy val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  lazy val howMuchGainView: howMuchGain = fakeApplication.injector.instanceOf[howMuchGain]
 
   "How Much Gain view" should {
 
@@ -39,7 +40,7 @@ class HowMuchGainViewSpec extends CommonPlaySpec with WithCommonFakeApplication 
       lazy val document = Jsoup.parse(view.body)
       val pageTitle = s"""${messages.HowMuchGain.question} - ${messages.serviceName} - GOV.UK"""
 
-      s"have a title of '${pageTitle}'" in {
+      s"have a title of '$pageTitle'" in {
         document.title() shouldBe pageTitle
       }
 

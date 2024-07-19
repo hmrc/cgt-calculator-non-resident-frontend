@@ -24,18 +24,18 @@ import controllers.helpers.FakeRequestHelper
 import models.{QuestionAnswerModel, TaxYearModel, TotalTaxOwedModel}
 import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.i18n.Lang
+import play.api.i18n.{Lang, Messages}
 import play.api.mvc.MessagesControllerComponents
 import views.html.calculation.summary
 
 class SummaryViewSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with MockitoSugar {
 
-  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
-  implicit val mockLang = mock[Lang]
-  lazy val summaryView = fakeApplication.injector.instanceOf[summary]
-  val questionAnswer = QuestionAnswerModel[String]("text", "1000", "test-question", None)
-  val seqQuestionAnswers = Seq(questionAnswer, questionAnswer)
+  val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  implicit val mockLang: Lang = mock[Lang]
+  lazy val summaryView: summary = fakeApplication.injector.instanceOf[summary]
+  val questionAnswer: QuestionAnswerModel[String] = QuestionAnswerModel[String]("text", "1000", "test-question", None)
+  val seqQuestionAnswers: Seq[QuestionAnswerModel[String]] = Seq(questionAnswer, questionAnswer)
 
   "Summary view" when {
     "supplied with a disposal date within the valid tax years" should {
@@ -122,8 +122,8 @@ class SummaryViewSpec extends CommonPlaySpec with WithCommonFakeApplication with
       }
 
       "should produce the same output when render and apply are called" in {
-        summaryView(totalTaxOwedModel, taxYearModel, Flat, 1000.0, 100, 100, "back-link", Some(BigDecimal(100.1)), BigDecimal(10000.0), false, questionsForPrint = seqQuestionAnswers)(fakeRequest, mockMessage) shouldBe
-          summaryView.render(totalTaxOwedModel, taxYearModel, Flat, 1000.0, 100, 100, "back-link", Some(BigDecimal(100.1)), BigDecimal(10000.0), false, questionsForPrint = seqQuestionAnswers, fakeRequest, mockMessage)
+        summaryView(totalTaxOwedModel, taxYearModel, Flat, 1000.0, 100, 100, "back-link", Some(BigDecimal(100.1)), BigDecimal(10000.0), showUserResearchPanel = false, questionsForPrint = seqQuestionAnswers)(fakeRequest, mockMessage) shouldBe
+          summaryView.render(totalTaxOwedModel, taxYearModel, Flat, 1000.0, 100, 100, "back-link", Some(BigDecimal(100.1)), BigDecimal(10000.0), showUserResearchPanel = false, questionsForPrint = seqQuestionAnswers, fakeRequest, mockMessage)
       }
     }
 

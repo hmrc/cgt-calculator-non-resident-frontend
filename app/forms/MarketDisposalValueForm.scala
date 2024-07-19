@@ -29,7 +29,7 @@ trait MarketDisposalValueForm {
   val errorNegative: String
   val errorDecimalPlaces: String
 
-  val marketValueForm = Form(
+  val marketValueForm: Form[DisposalValueModel] = Form(
     mapping(
       "disposalValue" -> text
         .transform(stripCurrencyCharacters, stripCurrencyCharacters)

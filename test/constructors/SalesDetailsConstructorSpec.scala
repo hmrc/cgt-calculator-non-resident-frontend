@@ -24,7 +24,7 @@ import java.time.LocalDate
 
 class SalesDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeApplication with AssertHelpers {
 
-  val totalGainGiven = TotalGainAnswersModel(
+  val totalGainGiven: TotalGainAnswersModel = TotalGainAnswersModel(
     DateModel(10, 10, 2010),
     SoldOrGivenAwayModel(false),
     None,
@@ -42,7 +42,7 @@ class SalesDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeAppl
     None
   )
 
-  val totalGainSold = TotalGainAnswersModel(
+  val totalGainSold: TotalGainAnswersModel = TotalGainAnswersModel(
     DateModel(10, 10, 2018),
     SoldOrGivenAwayModel(true),
     Some(SoldForLessModel(false)),
@@ -60,7 +60,7 @@ class SalesDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeAppl
     None
   )
 
-  val totalGainForLess = TotalGainAnswersModel(
+  val totalGainForLess: TotalGainAnswersModel = TotalGainAnswersModel(
     DateModel(10, 10, 2016),
     SoldOrGivenAwayModel(true),
     Some(SoldForLessModel(true)),
@@ -78,7 +78,7 @@ class SalesDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeAppl
     None
   )
 
-  private def assertExpectedResult[T](option: Option[T])(test: T => Unit) = assertOption("expected option is None")(option)(test)
+  private def assertExpectedResult[T](option: Option[T])(test: T => Unit): Unit = assertOption("expected option is None")(option)(test)
 
   "Calling salesDetailsRows" when {
 

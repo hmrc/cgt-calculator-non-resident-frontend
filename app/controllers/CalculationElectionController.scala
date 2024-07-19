@@ -62,7 +62,7 @@ class CalculationElectionController @Inject()(calcConnector: CalculatorConnector
     }
   }
 
-  def determineClaimingReliefs(totalGainResultsModel: TotalGainResultsModel)(implicit request: Request[_]): Future[Boolean] = {
+  private def determineClaimingReliefs(totalGainResultsModel: TotalGainResultsModel)(implicit request: Request[_]): Future[Boolean] = {
     val optionSeq = Seq(totalGainResultsModel.rebasedGain, totalGainResultsModel.timeApportionedGain).flatten
     val finalSeq = Seq(totalGainResultsModel.flatGain) ++ optionSeq
     if (finalSeq.exists(_ > 0)) sessionCacheService.fetchAndGetFormData[ClaimingReliefsModel](KeystoreKeys.claimingReliefs).map {
@@ -165,7 +165,7 @@ class CalculationElectionController @Inject()(calcConnector: CalculatorConnector
         else BadRequest(calculationElectionNoReliefsView(form, content))
       }
 
-      (for {
+      for {
         totalGainAnswers <- calcAnswersConstructor.getNRTotalGainAnswers
         totalGain <- calcConnector.calculateTotalGain(totalGainAnswers)
         gainExists <- checkGainExists(totalGain.get)
@@ -181,7 +181,7 @@ class CalculationElectionController @Inject()(calcConnector: CalculatorConnector
         content <- calcElectionConstructor.generateElection(totalGain.get, totalGainWithPRR, taxOwed, otherReliefs)
       } yield {
         action(orderElements(content, isClaimingReliefs), isClaimingReliefs)
-      })
+      }
     }
 
     calculationElectionForm.bindFromRequest().fold(errorAction, successAction)

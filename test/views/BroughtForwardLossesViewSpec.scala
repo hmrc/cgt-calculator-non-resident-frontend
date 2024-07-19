@@ -24,14 +24,15 @@ import controllers.helpers.FakeRequestHelper
 import forms.BroughtForwardLossesForm._
 import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.i18n.Messages
 import play.api.mvc.MessagesControllerComponents
 import views.html.calculation.broughtForwardLosses
 
 class BroughtForwardLossesViewSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with AssertHelpers with MockitoSugar{
 
-  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
-  lazy val broughtForwardLossesView = fakeApplication.injector.instanceOf[broughtForwardLosses]
+  val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  lazy val broughtForwardLossesView: broughtForwardLosses = fakeApplication.injector.instanceOf[broughtForwardLosses]
   lazy val pageTitle = s"""${messages.BroughtForwardLosses.question} - ${messages.serviceName} - GOV.UK"""
 
   "Brought forward losses view" when {
@@ -40,7 +41,7 @@ class BroughtForwardLossesViewSpec extends CommonPlaySpec with WithCommonFakeApp
       lazy val view = broughtForwardLossesView(broughtForwardLossesForm, "back-link")(fakeRequest,mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
-      s"have a title of ${pageTitle}" in {
+      s"have a title of $pageTitle" in {
         document.title() shouldBe pageTitle
       }
 

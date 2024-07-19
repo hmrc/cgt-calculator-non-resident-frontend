@@ -20,23 +20,23 @@ import scala.util.{Failure, Success, Try}
 
 object Transformers {
 
-  val stripCurrencyCharacters: String => String = (input) =>
+  val stripCurrencyCharacters: String => String = input =>
     input
       .trim()
       .replaceAll(",", "")
       .replaceAll("£", "")
 
-  val stripOptionalCurrencyCharacters: Option[String] => Option[String] = (input) => input match {
+  val stripOptionalCurrencyCharacters: Option[String] => Option[String] = {
     case Some(v) => Some(stripCurrencyCharacters(v))
     case None => None
   }
 
-  val stringToBigDecimal: String => BigDecimal = (input) => Try(BigDecimal(input.trim)) match {
+  val stringToBigDecimal: String => BigDecimal = input => Try(BigDecimal(input.trim)) match {
     case Success(value) => value
     case Failure(_) => BigDecimal(0)
   }
 
-  val stringToOptionalBigDecimal: String => Option[BigDecimal] = (input) => {
+  private val stringToOptionalBigDecimal: String => Option[BigDecimal] = input => {
     Try(BigDecimal(input.trim)) match {
       case Success(value) => Some(value)
       case Failure(_) => None
@@ -53,7 +53,7 @@ object Transformers {
     case None => None
   }
 
-  val bigDecimalToString: BigDecimal => String = (input) => input.scale match {
+  val bigDecimalToString: BigDecimal => String = input => input.scale match {
     case scale if scale < 2 && scale != 0 => input.setScale(2).toString()
     case _ => input.toString
   }
@@ -63,7 +63,7 @@ object Transformers {
     case None => ""
   }
 
-  val stringToInteger: String => Int = (input) => Try(input.trim.toInt) match {
+  val stringToInteger: String => Int = input => Try(input.trim.toInt) match {
     case Success(value) => value
     case Failure(_) => 0
   }
@@ -73,9 +73,9 @@ object Transformers {
     case _ => false
   }
 
-  val booleanToString: Boolean => String = (input) => if (input) "Yes" else "No"
+  val booleanToString: Boolean => String = input => if (input) "Yes" else "No"
 
-  val booleanToMessageString: Boolean => String = (input) => if (input) "calc.base.yes" else "calc.base.no"
+  val booleanToMessageString: Boolean => String = input => if (input) "calc.base.yes" else "calc.base.no"
 
   def checkIfBooleanAsString(input: String): String = input match {
     case "Yes" => "calc.base.yes"
@@ -83,8 +83,8 @@ object Transformers {
     case _ => input
   }
 
-  val finalDate: Boolean => String = (input) => if (input)
+  val finalDate: Boolean => String = input => if (input)
     "calc.privateResidenceRelief.questionBetween.partOneAndTwo" else ""
 
-  val localDateMonthKey: Int => String = (input) => s"calc.month.$input"
+  val localDateMonthKey: Int => String = input => s"calc.month.$input"
 }

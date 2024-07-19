@@ -20,13 +20,13 @@ import common.{CommonPlaySpec, WithCommonFakeApplication}
 import models._
 import org.scalatestplus.mockito.MockitoSugar
 
-class CalculationElectionConstructorSpec()
+class CalculationElectionConstructorSpec
   extends CommonPlaySpec with MockitoSugar with WithCommonFakeApplication {
 
-  val onlyFlat = TotalGainResultsModel(BigDecimal(0), None, None)
-  val flatAndRebased = TotalGainResultsModel(BigDecimal(-100), Some(BigDecimal(-50)), None)
-  val flatAndTime = TotalGainResultsModel(BigDecimal(-20), None, Some(BigDecimal(-300)))
-  val flatRebasedAndTime = TotalGainResultsModel(BigDecimal(0), Some(BigDecimal(0)), Some(BigDecimal(-300)))
+  val onlyFlat: TotalGainResultsModel = TotalGainResultsModel(BigDecimal(0), None, None)
+  val flatAndRebased: TotalGainResultsModel = TotalGainResultsModel(BigDecimal(-100), Some(BigDecimal(-50)), None)
+  val flatAndTime: TotalGainResultsModel = TotalGainResultsModel(BigDecimal(-20), None, Some(BigDecimal(-300)))
+  val flatRebasedAndTime: TotalGainResultsModel = TotalGainResultsModel(BigDecimal(0), Some(BigDecimal(0)), Some(BigDecimal(-300)))
 
   val target: CalculationElectionConstructor = new DefaultCalculationElectionConstructor()
 
@@ -110,28 +110,28 @@ class CalculationElectionConstructorSpec()
   }
 
   //order: rebased, flat
-  val totalGainsAfterPRRFlatAndTASortByTotalGain = CalculationResultsWithPRRModel(
+  val totalGainsAfterPRRFlatAndTASortByTotalGain: CalculationResultsWithPRRModel = CalculationResultsWithPRRModel(
     GainsAfterPRRModel(2, 1, 0),
     Some(GainsAfterPRRModel(1, 1, 0)),
     None
   )
 
   //order: rebased, flat
-  val totalGainsAfterPRRFlatAndTASortByTaxableGain = CalculationResultsWithPRRModel(
+  val totalGainsAfterPRRFlatAndTASortByTaxableGain: CalculationResultsWithPRRModel = CalculationResultsWithPRRModel(
     GainsAfterPRRModel(2, 3, 0),
     Some(GainsAfterPRRModel(2, 1, 0)),
     None
   )
 
   //order: time, rebased, flat
-  val totalGainsAllSortByTotalGain = CalculationResultsWithPRRModel(
+  val totalGainsAllSortByTotalGain: CalculationResultsWithPRRModel = CalculationResultsWithPRRModel(
     GainsAfterPRRModel(3, 1, 0),
     Some(GainsAfterPRRModel(2, 1, 0)),
     Some(GainsAfterPRRModel(1, 4, 0))
   )
 
   //order: rebased, flat, time
-  val totalGainsAllSortByTaxableGain = CalculationResultsWithPRRModel(
+  val totalGainsAllSortByTaxableGain: CalculationResultsWithPRRModel = CalculationResultsWithPRRModel(
     GainsAfterPRRModel(3, 3, 0),
     Some(GainsAfterPRRModel(3, 1, 0)),
     Some(GainsAfterPRRModel(3, 4, 0))
@@ -233,7 +233,7 @@ class CalculationElectionConstructorSpec()
     }
   }
 
-  val calculationResultsTotalSortByTaxOwed = CalculationResultsWithTaxOwedModel(
+  val calculationResultsTotalSortByTaxOwed: CalculationResultsWithTaxOwedModel = CalculationResultsWithTaxOwedModel(
     TotalTaxOwedModel(4, 1, 1, Some(1), Some(1), 1, 1, Some(1), Some(1), Some(1), Some(1), 1, Some(1), Some(1), Some(1), Some(1), Some(1), Some(1), Some(1)),
     Some(TotalTaxOwedModel(1, 1, 1, Some(1), Some(1), 1, 1, Some(1), Some(1), Some(1),
       Some(1), 1, Some(1), Some(1), Some(1), Some(1), Some(1), Some(1), Some(1))),

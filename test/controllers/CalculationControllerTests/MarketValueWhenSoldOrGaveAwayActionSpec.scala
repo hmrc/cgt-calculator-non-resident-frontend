@@ -41,16 +41,16 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class MarketValueWhenSoldOrGaveAwayActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
-  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  val materializer = mock[Materializer]
-  val ec = fakeApplication.injector.instanceOf[ExecutionContext]
-  val mockEnvironment =mock[Environment]
-  val mockHttp =mock[DefaultHttpClient]
-  val mockCalcConnector =mock[CalculatorConnector]
-  val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
-  val marketValueSoldView = fakeApplication.injector.instanceOf[marketValueSold]
-  val marketValueGaveAwayView = fakeApplication.injector.instanceOf[marketValueGaveAway]
+  implicit val hc: HeaderCarrier = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
+  val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  val materializer: Materializer = mock[Materializer]
+  val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
+  val mockEnvironment: Environment =mock[Environment]
+  val mockHttp: DefaultHttpClient =mock[DefaultHttpClient]
+  val mockCalcConnector: CalculatorConnector =mock[CalculatorConnector]
+  val mockMessagesControllerComponents: MessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
+  val marketValueSoldView: marketValueSold = fakeApplication.injector.instanceOf[marketValueSold]
+  val marketValueGaveAwayView: marketValueGaveAway = fakeApplication.injector.instanceOf[marketValueGaveAway]
   val pageTitle = s"""${marketValueMessages.disposalSoldQuestion} - ${commonMessages.serviceName} - GOV.UK"""
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
 

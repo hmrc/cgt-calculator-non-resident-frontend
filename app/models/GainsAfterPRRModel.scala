@@ -16,10 +16,10 @@
 
 package models
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class GainsAfterPRRModel(totalGain: BigDecimal, taxableGain: BigDecimal, prrUsed: BigDecimal)
 
 object GainsAfterPRRModel {
-  implicit val formats = Json.format[GainsAfterPRRModel]
+  implicit val formats: OFormat[GainsAfterPRRModel] = Json.format[GainsAfterPRRModel]
 }

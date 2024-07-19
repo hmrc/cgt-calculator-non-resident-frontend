@@ -39,17 +39,17 @@ import views.html.calculation.boughtForLess
 import scala.concurrent.{ExecutionContext, Future}
 
 class BoughtForLessActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
-  implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
-  val ec = fakeApplication.injector.instanceOf[ExecutionContext]
+  implicit val hc: HeaderCarrier = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
+  val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
 
-  val materializer = mock[Materializer]
-  val mockHttp =mock[DefaultHttpClient]
-  val mockCalcConnector =mock[CalculatorConnector]
-  val mockAnswersConstructor = mock[AnswersConstructor]
-  val mockDefaultCalElecConstructor = mock[DefaultCalculationElectionConstructor]
-  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
-  val boughtForLessView = fakeApplication.injector.instanceOf[boughtForLess]
+  val materializer: Materializer = mock[Materializer]
+  val mockHttp: DefaultHttpClient =mock[DefaultHttpClient]
+  val mockCalcConnector: CalculatorConnector =mock[CalculatorConnector]
+  val mockAnswersConstructor: AnswersConstructor = mock[AnswersConstructor]
+  val mockDefaultCalElecConstructor: DefaultCalculationElectionConstructor = mock[DefaultCalculationElectionConstructor]
+  val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  val mockMessagesControllerComponents: MessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
+  val boughtForLessView: boughtForLess = fakeApplication.injector.instanceOf[boughtForLess]
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
 
   lazy val pageTitle = s"""${messages.BoughtForLess.question} - ${messages.serviceName} - GOV.UK"""

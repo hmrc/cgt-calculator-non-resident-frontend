@@ -21,7 +21,7 @@ import models._
 
 class YourAnswersConstructorSpec extends CommonPlaySpec with WithCommonFakeApplication {
 
-  val totalGainModel = TotalGainAnswersModel(DateModel(5, 10, 2016),
+  val totalGainModel: TotalGainAnswersModel = TotalGainAnswersModel(DateModel(5, 10, 2016),
     SoldOrGivenAwayModel(true),
     Some(SoldForLessModel(false)),
     DisposalValueModel(1000),

@@ -23,14 +23,14 @@ import controllers.helpers.FakeRequestHelper
 import models.{TaxYearModel, TotalTaxOwedModel}
 import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.i18n.Lang
+import play.api.i18n.{Lang, Messages}
 import play.api.mvc.MessagesControllerComponents
 import views.html.playComponents.summaryPartial
 
 class SummaryPartialViewSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with MockitoSugar {
-  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
-  implicit val mockLang = mock[Lang]
-  lazy val summaryPartialView = fakeApplication.injector.instanceOf[summaryPartial]
+  implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  implicit val mockLang: Lang = mock[Lang]
+  lazy val summaryPartialView: summaryPartial = fakeApplication.injector.instanceOf[summaryPartial]
 
   "the summaryPartial" should {
 

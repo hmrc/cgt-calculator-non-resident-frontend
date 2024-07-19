@@ -16,10 +16,10 @@
 
 package models
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class WorthBeforeLegislationStartModel(worthBeforeLegislationStart: BigDecimal)
 
 object WorthBeforeLegislationStartModel {
-  implicit val format = Json.format[WorthBeforeLegislationStartModel]
+  implicit val format: OFormat[WorthBeforeLegislationStartModel] = Json.format[WorthBeforeLegislationStartModel]
 }

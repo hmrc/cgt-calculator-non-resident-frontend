@@ -21,7 +21,7 @@ import controllers.predicates.ValidActiveSession
 import controllers.utils.RecoverableFuture
 import models.DateModel
 import play.api.i18n.{I18nSupport, Lang}
-import play.api.mvc.MessagesControllerComponents
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.SessionCacheService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
@@ -37,7 +37,7 @@ class NoCapitalGainsTaxController @Inject()(http: DefaultHttpClient,
                                            (implicit ec: ExecutionContext)
   extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
-  val noCapitalGainsTax = ValidateSession.async { implicit request =>
+  val noCapitalGainsTax: Action[AnyContent] = ValidateSession.async { implicit request =>
     implicit val lang: Lang = mcc.messagesApi.preferred(request).lang
     sessionCacheService.fetchAndGetFormData[DateModel](KeystoreKeys.disposalDate).map {
       result => Ok(noCapitalGainsTaxView(result.get))

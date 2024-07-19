@@ -24,14 +24,15 @@ import controllers.helpers.FakeRequestHelper
 import forms.DisposalCostsForm._
 import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.i18n.Messages
 import play.api.mvc.MessagesControllerComponents
 import views.html.calculation.disposalCosts
 
 class DisposalCostsViewSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with MockitoSugar {
 
-  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
-  lazy val disposalCostsView = fakeApplication.injector.instanceOf[disposalCosts]
+  val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  lazy val disposalCostsView: disposalCosts = fakeApplication.injector.instanceOf[disposalCosts]
   lazy val pageTitle = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
 
   "Disposal Costs view" when {
@@ -40,7 +41,7 @@ class DisposalCostsViewSpec extends CommonPlaySpec with WithCommonFakeApplicatio
       lazy val view = disposalCostsView(disposalCostsForm, "back-link")(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
-      s"have a title of '${pageTitle}'" in {
+      s"have a title of '$pageTitle'" in {
         document.title shouldBe pageTitle
       }
 

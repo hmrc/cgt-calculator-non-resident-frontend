@@ -25,17 +25,17 @@ import forms.ImprovementsForm._
 import forms.IsClaimingImprovementsForm.isClaimingImprovementsForm
 import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.i18n.MessagesApi
+import play.api.i18n.{Messages, MessagesApi}
 import play.api.mvc.MessagesControllerComponents
 import views.html.calculation.isClaimingImprovements
 
 class IsClaimingImprovementsViewSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with MockitoSugar {
 
-  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
-  lazy val isClaimingImprovementsView = fakeApplication.injector.instanceOf[isClaimingImprovements]
-  lazy val headingBeforeLegislationStart = messages.IsClaimingImprovements.ownerBeforeLegislationStartQuestion
-  lazy val headingAfterLegislationStart = messages.IsClaimingImprovements.title
+  val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  lazy val isClaimingImprovementsView: isClaimingImprovements = fakeApplication.injector.instanceOf[isClaimingImprovements]
+  lazy val headingBeforeLegislationStart: String = messages.IsClaimingImprovements.ownerBeforeLegislationStartQuestion
+  lazy val headingAfterLegislationStart: String = messages.IsClaimingImprovements.title
   lazy val pageTitle = s"$headingAfterLegislationStart - ${messages.serviceName} - GOV.UK"
   lazy val pageTitleOwnerBeforeLegislationStart = s"$headingBeforeLegislationStart - ${messages.serviceName} - GOV.UK"
 
@@ -125,7 +125,7 @@ class IsClaimingImprovementsViewSpec extends CommonPlaySpec with WithCommonFakeA
 
         "have that content" which {
 
-          s"has the title of ${pageTitleOwnerBeforeLegislationStart}" in {
+          s"has the title of $pageTitleOwnerBeforeLegislationStart" in {
             document.title shouldBe pageTitleOwnerBeforeLegislationStart
           }
 

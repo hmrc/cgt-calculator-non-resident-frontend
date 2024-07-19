@@ -42,16 +42,16 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class SummaryActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val hc = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
-  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  val materializer = mock[Materializer]
-  val ec = fakeApplication.injector.instanceOf[ExecutionContext]
-  val mockHttp =mock[DefaultHttpClient]
-  val mockCalcConnector =mock[CalculatorConnector]
-  val mockAnswersConstructor = mock[AnswersConstructor]
-  val mockDefaultCalElecConstructor = mock[DefaultCalculationElectionConstructor]
-  val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
-  val summaryView = fakeApplication.injector.instanceOf[summary]
+  implicit val hc: HeaderCarrier = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
+  val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  val materializer: Materializer = mock[Materializer]
+  val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
+  val mockHttp: DefaultHttpClient =mock[DefaultHttpClient]
+  val mockCalcConnector: CalculatorConnector =mock[CalculatorConnector]
+  val mockAnswersConstructor: AnswersConstructor = mock[AnswersConstructor]
+  val mockDefaultCalElecConstructor: DefaultCalculationElectionConstructor = mock[DefaultCalculationElectionConstructor]
+  val mockMessagesControllerComponents: MessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
+  val summaryView: summary = fakeApplication.injector.instanceOf[summary]
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
   class Setup {
     val controller = new SummaryController(
@@ -125,7 +125,7 @@ class SummaryActionSpec extends CommonPlaySpec with WithCommonFakeApplication wi
     new SummaryController(mockCalcConnector, mockSessionCacheService, mockAnswersConstructor, mockMessagesControllerComponents, summaryView)(ec)
   }
 
-  lazy val answerModel = TotalGainAnswersModel(
+  lazy val answerModel: TotalGainAnswersModel = TotalGainAnswersModel(
     DateModel(10, 10, 2016),
     SoldOrGivenAwayModel(false),
     None,
@@ -143,7 +143,7 @@ class SummaryActionSpec extends CommonPlaySpec with WithCommonFakeApplication wi
     None
   )
 
-  lazy val finalAnswersModel = TotalPersonalDetailsCalculationModel(
+  lazy val finalAnswersModel: TotalPersonalDetailsCalculationModel = TotalPersonalDetailsCalculationModel(
     CurrentIncomeModel(0),
     None,
     OtherPropertiesModel("No"),

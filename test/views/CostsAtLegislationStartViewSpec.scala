@@ -23,14 +23,15 @@ import controllers.helpers.FakeRequestHelper
 import forms.CostsAtLegislationStartForm._
 import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.i18n.Messages
 import play.api.mvc.MessagesControllerComponents
 import views.html.calculation.costsAtLegislationStart
 
 class CostsAtLegislationStartViewSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with MockitoSugar {
 
-  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
-  lazy val costsAtLegislationStartView = fakeApplication.injector.instanceOf[costsAtLegislationStart]
+  val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  lazy val costsAtLegislationStartView: costsAtLegislationStart = fakeApplication.injector.instanceOf[costsAtLegislationStart]
 
   "The costs at legislation start date view" when {
 

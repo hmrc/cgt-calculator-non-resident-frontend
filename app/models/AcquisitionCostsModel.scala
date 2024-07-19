@@ -22,21 +22,19 @@ import play.api.libs.json._
 case class AcquisitionCostsModel (acquisitionCostsAmt: BigDecimal)
 
 object AcquisitionCostsModel {
-  implicit val format = Json.format[AcquisitionCostsModel]
+  implicit val format: OFormat[AcquisitionCostsModel] = Json.format[AcquisitionCostsModel]
   implicit val convertToSome: AcquisitionCostsModel => Option[AcquisitionCostsModel] = model => Some(model)
 
 
   def postWrites(oCostsAtLegislationStartModel: Option[CostsAtLegislationStartModel], acquisitionDateModel: DateModel):
-    Writes[Option[AcquisitionCostsModel]] = new Writes[Option[AcquisitionCostsModel]] {
-    override def writes(o: Option[AcquisitionCostsModel])= {
-        (o, oCostsAtLegislationStartModel) match {
-          case (_, Some(value)) if includeLegislationCosts(value, acquisitionDateModel)=>
-            Json.obj(("acquisitionCosts",value.costs.get))
-          case (Some(value), _) if afterLegislation(acquisitionDateModel) =>
-            Json.obj(("acquisitionCosts", value.acquisitionCostsAmt))
-          case _ => Json.obj(("acquisitionCosts", 0))
-        }
-      }
+    Writes[Option[AcquisitionCostsModel]] = (o: Option[AcquisitionCostsModel]) => {
+    (o, oCostsAtLegislationStartModel) match {
+      case (_, Some(value)) if includeLegislationCosts(value, acquisitionDateModel) =>
+        Json.obj(("acquisitionCosts", value.costs.get))
+      case (Some(value), _) if afterLegislation(acquisitionDateModel) =>
+        Json.obj(("acquisitionCosts", value.acquisitionCostsAmt))
+      case _ => Json.obj(("acquisitionCosts", 0))
     }
+  }
   }
 

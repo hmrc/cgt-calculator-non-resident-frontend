@@ -24,18 +24,18 @@ import controllers.helpers.FakeRequestHelper
 import forms.DisposalDateForm._
 import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.i18n.{Lang, MessagesApi}
+import play.api.i18n.{Lang, Messages, MessagesApi}
 import play.api.mvc.MessagesControllerComponents
 import views.html.calculation.disposalDate
 
 class DisposalDateViewSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with MockitoSugar {
-  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   private val api: MessagesApi = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi
-  implicit lazy val mockMessage = api.preferred(fakeRequest)
-  lazy val disposalDateView = fakeApplication.injector.instanceOf[disposalDate]
+  implicit lazy val mockMessage: Messages = api.preferred(fakeRequest)
+  lazy val disposalDateView: disposalDate = fakeApplication.injector.instanceOf[disposalDate]
 
   lazy val welshLanguage: Lang = Lang("cy")
-  lazy val cyMockMessage = api.preferred(Seq(
+  lazy val cyMockMessage: Messages = api.preferred(Seq(
     welshLanguage
   ))
   lazy val pageTitle = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""

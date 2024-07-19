@@ -21,5 +21,5 @@ import play.api.libs.json._
 case class CurrentIncomeModel (currentIncome: BigDecimal)
 
 object CurrentIncomeModel {
-  implicit val format = Json.format[CurrentIncomeModel]
+  implicit val format: OFormat[CurrentIncomeModel] = Json.format[CurrentIncomeModel]
 }

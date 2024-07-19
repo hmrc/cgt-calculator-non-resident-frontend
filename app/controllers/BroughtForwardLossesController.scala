@@ -39,7 +39,7 @@ class BroughtForwardLossesController @Inject()(calcConnector: CalculatorConnecto
                                               extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
 
-  def generateBackLink(implicit request: Request[_]): Future[String] = {
+  private def generateBackLink(implicit request: Request[_]): Future[String] = {
     val getOtherProperties = sessionCacheService.fetchAndGetFormData[OtherPropertiesModel](KeystoreKeys.otherProperties)
     val getGainOrLoss = sessionCacheService.fetchAndGetFormData[PreviousLossOrGainModel](KeystoreKeys.previousLossOrGain)
     val getGain = sessionCacheService.fetchAndGetFormData[HowMuchGainModel](KeystoreKeys.howMuchGain)

@@ -25,13 +25,11 @@ object RebasedValueModel {
   implicit val formats: OFormat[RebasedValueModel] = Json.format[RebasedValueModel]
 
 
-  def postWrites(acquisitionDateModel: DateModel): Writes[RebasedValueModel] = new Writes[RebasedValueModel] {
-    override def writes(model: RebasedValueModel): JsValue = {
-      if (includeRebasedValuesInCalculation(Some(model), acquisitionDateModel)) {
-        Json.obj(("rebasedValue", JsNumber(model.rebasedValueAmt)))
-      } else {
-        Json.obj()
-      }
+  def postWrites(acquisitionDateModel: DateModel): Writes[RebasedValueModel] = (model: RebasedValueModel) => {
+    if (includeRebasedValuesInCalculation(Some(model), acquisitionDateModel)) {
+      Json.obj(("rebasedValue", JsNumber(model.rebasedValueAmt)))
+    } else {
+      Json.obj()
     }
   }
 }

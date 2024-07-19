@@ -16,12 +16,12 @@
 
 package models
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class CalculationResultsWithTaxOwedModel (flatResult: TotalTaxOwedModel,
                                                rebasedResult: Option[TotalTaxOwedModel],
                                                timeApportionedResult: Option[TotalTaxOwedModel])
 
 object CalculationResultsWithTaxOwedModel {
-  implicit val formats = Json.format[CalculationResultsWithTaxOwedModel]
+  implicit val formats: OFormat[CalculationResultsWithTaxOwedModel] = Json.format[CalculationResultsWithTaxOwedModel]
 }

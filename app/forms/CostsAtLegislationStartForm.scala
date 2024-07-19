@@ -25,7 +25,7 @@ import uk.gov.voa.play.form.ConditionalMappings.{isEqual, mandatoryIf}
 
 object CostsAtLegislationStartForm {
 
-  val costsAtLegislationStartForm = Form(
+  val costsAtLegislationStartForm: Form[CostsAtLegislationStartModel] = Form(
     mapping(
       "hasCosts" -> common.Formatters.text("calc.costsAtLegislationStart.errors.required")
         .verifying("calc.costsAtLegislationStart.errors.required", mandatoryCheck)

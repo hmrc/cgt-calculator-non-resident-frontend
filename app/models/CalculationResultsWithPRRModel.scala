@@ -16,12 +16,12 @@
 
 package models
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class CalculationResultsWithPRRModel(flatResult: GainsAfterPRRModel,
                                   rebasedResult: Option[GainsAfterPRRModel],
                                   timeApportionedResult: Option[GainsAfterPRRModel])
 
 object CalculationResultsWithPRRModel {
-  implicit val formats = Json.format[CalculationResultsWithPRRModel]
+  implicit val formats: OFormat[CalculationResultsWithPRRModel] = Json.format[CalculationResultsWithPRRModel]
 }

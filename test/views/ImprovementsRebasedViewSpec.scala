@@ -24,16 +24,16 @@ import controllers.routes
 import forms.ImprovementsForm._
 import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.i18n.MessagesApi
+import play.api.i18n.{Messages, MessagesApi}
 import play.api.mvc.MessagesControllerComponents
 import views.html.calculation.improvementsRebased
 
 class ImprovementsRebasedViewSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with MockitoSugar {
 
-  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
-  val mockMessagesApi = mock[MessagesApi]
-  lazy val improvementsRebasedView = fakeApplication.injector.instanceOf[improvementsRebased]
+  val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  val mockMessagesApi: MessagesApi = mock[MessagesApi]
+  lazy val improvementsRebasedView: improvementsRebased = fakeApplication.injector.instanceOf[improvementsRebased]
   lazy val pageHeading: String = messages.ImprovementsRebased.title
   lazy val pageTitle = s"$pageHeading - ${messages.serviceName} - GOV.UK"
 

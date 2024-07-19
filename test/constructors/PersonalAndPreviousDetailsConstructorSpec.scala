@@ -24,7 +24,7 @@ import models._
 
 class PersonalAndPreviousDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeApplication {
 
-  val modelIndividual = TotalPersonalDetailsCalculationModel(
+  val modelIndividual: TotalPersonalDetailsCalculationModel = TotalPersonalDetailsCalculationModel(
     CurrentIncomeModel(25000),
     Some(PersonalAllowanceModel(10000)),
     OtherPropertiesModel(YesNoKeys.yes),

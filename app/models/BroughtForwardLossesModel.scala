@@ -16,10 +16,10 @@
 
 package models
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class BroughtForwardLossesModel(isClaiming: Boolean, broughtForwardLoss: Option[BigDecimal])
 
 object BroughtForwardLossesModel {
-  implicit val formats = Json.format[BroughtForwardLossesModel]
+  implicit val formats: OFormat[BroughtForwardLossesModel] = Json.format[BroughtForwardLossesModel]
 }

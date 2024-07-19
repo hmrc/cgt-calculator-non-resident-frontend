@@ -22,5 +22,5 @@ import play.api.libs.json._
 case class CalculationElectionModel(calculationType: CalculationType)
 
 object CalculationElectionModel {
-  implicit val formats = Json.format[CalculationElectionModel]
+  implicit val formats: OFormat[CalculationElectionModel] = Json.format[CalculationElectionModel]
 }

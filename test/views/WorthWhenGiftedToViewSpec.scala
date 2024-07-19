@@ -24,14 +24,15 @@ import controllers.helpers.FakeRequestHelper
 import forms.WorthWhenGiftedTo.worthWhenGiftedToForm
 import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.i18n.Messages
 import play.api.mvc.MessagesControllerComponents
 import views.html.calculation.worthWhenGiftedTo
 
 class WorthWhenGiftedToViewSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
-  val worthWhenGiftedToView = fakeApplication.injector.instanceOf[worthWhenGiftedTo]
+  val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  val worthWhenGiftedToView: worthWhenGiftedTo = fakeApplication.injector.instanceOf[worthWhenGiftedTo]
   lazy val pageTitle = s"""${WorthWhenGiftedTo.question} - ${commonMessages.serviceName} - GOV.UK"""
 
   "The Worth When Gifted To view spec" when {
@@ -41,7 +42,7 @@ class WorthWhenGiftedToViewSpec extends CommonPlaySpec with WithCommonFakeApplic
       lazy val view = worthWhenGiftedToView(worthWhenGiftedToForm)(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
-      s"have a title of '${pageTitle}'" in {
+      s"have a title of '$pageTitle'" in {
         document.title() shouldBe pageTitle
       }
 

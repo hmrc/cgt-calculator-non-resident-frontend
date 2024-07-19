@@ -23,14 +23,15 @@ import controllers.helpers.FakeRequestHelper
 import forms.OtherReliefsForm._
 import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.i18n.Messages
 import play.api.mvc.MessagesControllerComponents
 import views.html.calculation.otherReliefs
 
 class OtherReliefsViewSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
-  lazy val otherReliefsView = fakeApplication.injector.instanceOf[otherReliefs]
+  val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  lazy val otherReliefsView: otherReliefs = fakeApplication.injector.instanceOf[otherReliefs]
 
   "The Other Reliefs Flat view" when {
 

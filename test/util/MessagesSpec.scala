@@ -61,13 +61,13 @@ class MessagesSpec extends CommonPlaySpec  {
 
   private def countMessagesWithArgs(messages: Map[String, String]) = messages.values.filter(_.contains("{0}"))
 
-  private def assertNonEmpty(label: String, messages: Map[String, String]) = messages.foreach { case (key: String, value: String) =>
+  private def assertNonEmpty(label: String, messages: Map[String, String]): Unit = messages.foreach { case (key: String, value: String) =>
     withClue(s"In $label, there is an empty value for the key:[$key][$value]") {
       value.trim.isEmpty shouldBe false
     }
   }
 
-  private def assertCorrectUseOfQuotes(label: String, messages: Map[String, String]) = messages.foreach { case (key: String, value: String) =>
+  private def assertCorrectUseOfQuotes(label: String, messages: Map[String, String]): Unit = messages.foreach { case (key: String, value: String) =>
     withClue(s"In $label, there is an unescaped or invalid quote:[$key][$value]") {
       MatchSingleQuoteOnly.findFirstIn(value).isDefined shouldBe false
       MatchBacktickQuoteOnly.findFirstIn(value).isDefined shouldBe false

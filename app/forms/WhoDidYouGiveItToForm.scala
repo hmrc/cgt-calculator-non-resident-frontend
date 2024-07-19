@@ -22,7 +22,7 @@ import play.api.data.Form
 import play.api.data.Forms._
 
 object WhoDidYouGiveItToForm {
-  val whoDidYouGiveItToForm = Form(
+  val whoDidYouGiveItToForm: Form[WhoDidYouGiveItToModel] = Form(
     mapping("whoDidYouGiveItTo" -> text
       .verifying("calc.whoDidYouGiveThePropertyTo.errormandatory", mandatoryCheck)
       .verifying("calc.whoDidYouGiveThePropertyTo.errormandatory", whoDidYouGiveItToCheck)

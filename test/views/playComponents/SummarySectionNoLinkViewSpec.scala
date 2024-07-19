@@ -21,14 +21,14 @@ import controllers.helpers.FakeRequestHelper
 import models.QuestionAnswerModel
 import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.i18n.Lang
+import play.api.i18n.{Lang, Messages}
 import play.api.mvc.MessagesControllerComponents
 import views.html.playComponents.summarySectionNoLink
 
 class SummarySectionNoLinkViewSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
-  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
-  implicit val mockLang = mock[Lang]
-  lazy val summarySectionNoLinkView = fakeApplication.injector.instanceOf[summarySectionNoLink]
+  implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  implicit val mockLang: Lang = mock[Lang]
+  lazy val summarySectionNoLinkView: summarySectionNoLink = fakeApplication.injector.instanceOf[summarySectionNoLink]
 
   "Creating a summary section" when {
     val firstItem = QuestionAnswerModel[String]("firstID", "firstData", "firstQuestion", Some("first-link"))

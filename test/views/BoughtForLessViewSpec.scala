@@ -27,12 +27,13 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import views.html.calculation.boughtForLess
 import assets.MessageLookup.{NonResident => commonMessages}
+import play.api.i18n.Messages
 
 class BoughtForLessViewSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper with AssertHelpers {
 
-  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
-  lazy val boughtForLessView = fakeApplication.injector.instanceOf[boughtForLess]
+  val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  lazy val boughtForLessView: boughtForLess = fakeApplication.injector.instanceOf[boughtForLess]
 
   lazy val pageTitle = s"""${messages.BoughtForLess.question} - ${commonMessages.serviceName} - GOV.UK"""
 

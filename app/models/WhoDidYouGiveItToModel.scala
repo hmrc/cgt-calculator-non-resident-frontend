@@ -16,10 +16,10 @@
 
 package models
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class WhoDidYouGiveItToModel(option: String)
 
 object WhoDidYouGiveItToModel{
-  implicit val format = Json.format[WhoDidYouGiveItToModel]
+  implicit val format: OFormat[WhoDidYouGiveItToModel] = Json.format[WhoDidYouGiveItToModel]
 }

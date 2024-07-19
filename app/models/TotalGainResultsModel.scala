@@ -16,11 +16,11 @@
 
 package models
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class TotalGainResultsModel(flatGain: BigDecimal, rebasedGain: Option[BigDecimal], timeApportionedGain: Option[BigDecimal]) {
 }
 
 object TotalGainResultsModel {
-  implicit val formats = Json.format[TotalGainResultsModel]
+  implicit val formats: OFormat[TotalGainResultsModel] = Json.format[TotalGainResultsModel]
 }

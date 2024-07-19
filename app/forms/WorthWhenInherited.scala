@@ -16,6 +16,9 @@
 
 package forms
 
+import models.AcquisitionValueModel
+import play.api.data.Form
+
 object WorthWhenInherited extends AcquisitionMarketValueForm {
   override val errorRequired: String = "calc.worthWhenInherited.error.required"
   override val errorReal: String = "calc.worthWhenInherited.errorReal"
@@ -23,5 +26,5 @@ object WorthWhenInherited extends AcquisitionMarketValueForm {
   override val errorNegative = "calc.worthWhenInherited.errorNegative"
   override val errorDecimalPlaces = "calc.worthWhenInherited.errorDecimalPlaces"
 
-  val worthWhenInheritedForm = acquisitionMarketValueForm()
+  val worthWhenInheritedForm: Form[AcquisitionValueModel] = acquisitionMarketValueForm()
 }

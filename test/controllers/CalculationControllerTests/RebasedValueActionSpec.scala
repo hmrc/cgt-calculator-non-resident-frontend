@@ -41,12 +41,12 @@ import scala.concurrent.{ExecutionContext, Future}
 class RebasedValueActionSpec @Inject()(rebasedValueController: RebasedValueController)
   extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val hc = new HeaderCarrier()
-  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  lazy val materializer = mock[Materializer]
-  val ec = fakeApplication.injector.instanceOf[ExecutionContext]
-  val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
-  val rebasedValueView = fakeApplication.injector.instanceOf[rebasedValue]
+  implicit val hc: HeaderCarrier = new HeaderCarrier()
+  val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  lazy val materializer: Materializer = mock[Materializer]
+  val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
+  val mockMessagesControllerComponents: MessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
+  val rebasedValueView: rebasedValue = fakeApplication.injector.instanceOf[rebasedValue]
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
   def setupTarget(getData: Option[RebasedValueModel],
                   acquisitionDateModel: Option[DateModel] = Some(DateModel(10, 10, 2015))): RebasedValueController = {

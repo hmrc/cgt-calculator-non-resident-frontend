@@ -21,15 +21,16 @@ import controllers.helpers.FakeRequestHelper
 import models.QuestionAnswerModel
 import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.i18n.{Lang, Messages}
 import play.api.mvc.MessagesControllerComponents
 import views.html.playComponents.questionAnswerRowNoLink
 
 import java.time.LocalDate
 
 class QuestionAnswersRowNoLinkViewSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
-  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
-  implicit lazy val lang = mockMessage.lang
-  implicit lazy val questionAnswerRowNoLinkView = fakeApplication.injector.instanceOf[questionAnswerRowNoLink]
+  implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  implicit lazy val lang: Lang = mockMessage.lang
+  implicit lazy val questionAnswerRowNoLinkView: questionAnswerRowNoLink = fakeApplication.injector.instanceOf[questionAnswerRowNoLink]
 
   "Creating questionAnswerRow" when {
 

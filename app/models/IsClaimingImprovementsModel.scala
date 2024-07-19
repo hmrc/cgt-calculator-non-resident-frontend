@@ -16,18 +16,15 @@
 
 package models
 
-import common.YesNoKeys
-import play.api.libs.json.{JsObject, JsValue, Json, OFormat, Writes}
+import play.api.libs.json.{Json, OFormat, Writes}
 
 case class IsClaimingImprovementsModel(isClaimingImprovements: Boolean)
 
 object IsClaimingImprovementsModel {
   implicit val format: OFormat[IsClaimingImprovementsModel] = Json.format[IsClaimingImprovementsModel]
 
-  val postWrites: Writes[IsClaimingImprovementsModel] = new Writes[IsClaimingImprovementsModel] {
-    override def writes(model: IsClaimingImprovementsModel): JsValue = {
-      Json.toJson(model)
-    }
+  val postWrites: Writes[IsClaimingImprovementsModel] = (model: IsClaimingImprovementsModel) => {
+    Json.toJson(model)
   }
 
 }

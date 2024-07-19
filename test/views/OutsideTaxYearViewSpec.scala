@@ -24,19 +24,20 @@ import controllers.helpers.FakeRequestHelper
 import models.TaxYearModel
 import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.i18n.Messages
 import play.api.mvc.MessagesControllerComponents
 
 class OutsideTaxYearViewSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with MockitoSugar {
-  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
-  lazy val outsideTaxYearView = fakeApplication.injector.instanceOf[outsideTaxYear]
+  val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  lazy val outsideTaxYearView: outsideTaxYear = fakeApplication.injector.instanceOf[outsideTaxYear]
   lazy val pageTitle = s"""${messages.title} - ${commonMessages.serviceName} - GOV.UK"""
 
 
   "Outside tax years views" when {
 
     "using a disposal date of 2018/19 " should {
-      lazy val taxYear = TaxYearModel("2018/19", false, "2017/18")
+      lazy val taxYear = TaxYearModel("2018/19", isValidYear = false, "2017/18")
       lazy val view = outsideTaxYearView(taxYear)(fakeRequestWithSession, mockMessage)
       lazy val doc = Jsoup.parse(view.body)
 
@@ -44,7 +45,7 @@ class OutsideTaxYearViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
         doc.charset().toString shouldBe "UTF-8"
       }
 
-      s"return a title of ${pageTitle}" in {
+      s"return a title of $pageTitle" in {
         doc.title shouldBe pageTitle
       }
 

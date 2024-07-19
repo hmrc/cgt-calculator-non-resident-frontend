@@ -16,14 +16,14 @@
 
 package models
 
-import play.api.libs.json.{JsValue, Json, Writes}
+import play.api.libs.json.{JsValue, Json, OFormat, Writes}
 
 case class SoldForLessModel (soldForLess: Boolean)
 
 object SoldForLessModel {
-  implicit val format = Json.format[SoldForLessModel]
+  implicit val format: OFormat[SoldForLessModel] = Json.format[SoldForLessModel]
 
-  val postWrites = new Writes[SoldForLessModel] {
+  val postWrites: Writes[SoldForLessModel] = new Writes[SoldForLessModel] {
     override def writes(model: SoldForLessModel): JsValue = {
       Json.toJson(model.soldForLess)
     }

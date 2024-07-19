@@ -23,7 +23,7 @@ import forms.CurrentIncomeForm._
 import models.{CurrentIncomeModel, PropertyLivedInModel}
 import play.api.data.Form
 import play.api.i18n.I18nSupport
-import play.api.mvc.{MessagesControllerComponents, Request}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request}
 import services.SessionCacheService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.calculation.currentIncome
@@ -44,11 +44,11 @@ class CurrentIncomeController @Inject()(sessionCacheService: SessionCacheService
     }
   }
 
-  val currentIncome = ValidateSession.async { implicit request =>
+  val currentIncome: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     def getForm: Future[Form[CurrentIncomeModel]] = {
       sessionCacheService.fetchAndGetFormData[CurrentIncomeModel](KeystoreKeys.currentIncome).map {
-        case(Some(data)) => currentIncomeForm.fill(data)
+        case Some(data) => currentIncomeForm.fill(data)
         case _ => currentIncomeForm
       }
     }
@@ -59,7 +59,7 @@ class CurrentIncomeController @Inject()(sessionCacheService: SessionCacheService
     } yield Ok(currentIncomeView(form))).recoverToStart
   }
 
-  val submitCurrentIncome = ValidateSession.async { implicit request =>
+  val submitCurrentIncome: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     def routeRequest(model: CurrentIncomeModel) = {
       if (model.currentIncome > 0) Future.successful(Redirect(routes.PersonalAllowanceController.personalAllowance))

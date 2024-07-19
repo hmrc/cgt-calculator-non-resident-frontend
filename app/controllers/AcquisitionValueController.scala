@@ -21,7 +21,7 @@ import controllers.predicates.ValidActiveSession
 import forms.AcquisitionValueForm._
 import models.AcquisitionValueModel
 import play.api.i18n.I18nSupport
-import play.api.mvc.MessagesControllerComponents
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.SessionCacheService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
@@ -37,14 +37,14 @@ class AcquisitionValueController @Inject()(http: DefaultHttpClient,
                                           )(implicit ec: ExecutionContext) extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
 
-  val acquisitionValue = ValidateSession.async { implicit request =>
+  val acquisitionValue: Action[AnyContent] = ValidateSession.async { implicit request =>
     sessionCacheService.fetchAndGetFormData[AcquisitionValueModel](KeystoreKeys.acquisitionValue).map {
       case Some(data) => Ok(acquisitionValueView(acquisitionValueForm.fill(data)))
       case None => Ok(acquisitionValueView(acquisitionValueForm))
     }
   }
 
-  val submitAcquisitionValue = ValidateSession.async { implicit request =>
+  val submitAcquisitionValue: Action[AnyContent] = ValidateSession.async { implicit request =>
     acquisitionValueForm.bindFromRequest().fold(
       errors => Future.successful(BadRequest(acquisitionValueView(errors))),
       success => {

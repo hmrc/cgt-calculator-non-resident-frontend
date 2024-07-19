@@ -24,14 +24,15 @@ import controllers.helpers.FakeRequestHelper
 import forms.PersonalAllowanceForm._
 import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.i18n.Messages
 import play.api.mvc.MessagesControllerComponents
 import views.html.calculation.personalAllowance
 
 class PersonalAllowanceViewSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
-  lazy val personalAllowanceView = fakeApplication.injector.instanceOf[personalAllowance]
+  val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  lazy val personalAllowanceView: personalAllowance = fakeApplication.injector.instanceOf[personalAllowance]
   lazy val pageTitle = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
 
   "The Personal Allowance View" should {
@@ -41,7 +42,7 @@ class PersonalAllowanceViewSpec extends CommonPlaySpec with WithCommonFakeApplic
       lazy val view = personalAllowanceView(personalAllowanceForm(11000))(fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
-      s"has the title ${pageTitle}" in {
+      s"has the title $pageTitle" in {
         document.title shouldEqual pageTitle
       }
 

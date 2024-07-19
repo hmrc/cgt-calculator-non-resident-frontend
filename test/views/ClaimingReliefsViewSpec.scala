@@ -24,14 +24,15 @@ import controllers.helpers.FakeRequestHelper
 import forms.ClaimingReliefsForm
 import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.i18n.Messages
 import play.api.mvc.MessagesControllerComponents
 import views.html.calculation.claimingReliefs
 
 class ClaimingReliefsViewSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
-  lazy val claimingReliefsView = fakeApplication.injector.instanceOf[claimingReliefs]
+  val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  lazy val claimingReliefsView: claimingReliefs = fakeApplication.injector.instanceOf[claimingReliefs]
 
   lazy val pageTitle = s"""${messages.title} - ${commonMessages.serviceName} - GOV.UK"""
 

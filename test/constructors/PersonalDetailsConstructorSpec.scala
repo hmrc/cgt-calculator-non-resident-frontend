@@ -25,12 +25,12 @@ import controllers.helpers.FakeRequestHelper
 import controllers.routes
 import models._
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.i18n.MessagesProvider
+import play.api.i18n.{Messages, MessagesProvider}
 import play.api.mvc.MessagesControllerComponents
 
 class PersonalDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
-  implicit val mockMessagesProvider = mock[MessagesProvider]
-  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  implicit val mockMessagesProvider: MessagesProvider = mock[MessagesProvider]
+  implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
 
 
   val target = new PersonalDetailsConstructor
@@ -531,7 +531,7 @@ class PersonalDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeA
   }
 
   "Calling .broughtForwardLossesQuestion" should {
-    lazy val result = target.getBroughtForwardLossesQuestion(BroughtForwardLossesModel(false, None))
+    lazy val result = target.getBroughtForwardLossesQuestion(BroughtForwardLossesModel(isClaiming = false, None))
 
     "return a Some" in {
       result.isDefined shouldBe true
@@ -565,7 +565,7 @@ class PersonalDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeA
   "Calling .broughtForwardLossesAnswer" when {
 
     "an answer of no is given" should {
-      lazy val result = target.getBroughtForwardLossesAnswer(BroughtForwardLossesModel(false, None))
+      lazy val result = target.getBroughtForwardLossesAnswer(BroughtForwardLossesModel(isClaiming = false, None))
 
       "return a None" in {
         result shouldBe None
@@ -573,7 +573,7 @@ class PersonalDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeA
     }
 
     "an answer of yes is given" should {
-      lazy val result = target.getBroughtForwardLossesAnswer(BroughtForwardLossesModel(true, Some(1000)))
+      lazy val result = target.getBroughtForwardLossesAnswer(BroughtForwardLossesModel(isClaiming = true, Some(1000)))
 
       "return a Some" in {
         result.isDefined shouldBe true
@@ -621,7 +621,7 @@ class PersonalDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeA
           howMuchLossModel = Some(HowMuchLossModel(BigDecimal(300))),
           howMuchGainModel = Some(HowMuchGainModel(BigDecimal(400))),
           annualExemptAmountModel = Some(AnnualExemptAmountModel(BigDecimal(500))),
-          broughtForwardLossesModel = BroughtForwardLossesModel(false, None))
+          broughtForwardLossesModel = BroughtForwardLossesModel(isClaiming = false, None))
         val result = target.getPersonalDetailsSection(Some(model))
 
         result.head shouldBe QuestionAnswerModel("nr:currentIncome", 100, "What was your total UK income in the tax year when you stopped owning the property?", Some("/calculate-your-capital-gains/non-resident/current-income"), None)

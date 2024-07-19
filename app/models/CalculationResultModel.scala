@@ -16,7 +16,7 @@
 
 package models
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class CalculationResultModel(taxOwed: BigDecimal,
                                   totalGain: BigDecimal,
@@ -34,5 +34,5 @@ case class CalculationResultModel(taxOwed: BigDecimal,
 }
 
 object CalculationResultModel {
-  implicit val formats = Json.format[CalculationResultModel]
+  implicit val formats: OFormat[CalculationResultModel] = Json.format[CalculationResultModel]
 }

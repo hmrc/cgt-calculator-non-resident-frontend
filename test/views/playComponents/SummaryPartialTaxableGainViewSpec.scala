@@ -21,14 +21,14 @@ import common.{CommonPlaySpec, WithCommonFakeApplication}
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.i18n.Lang
+import play.api.i18n.{Lang, Messages}
 import play.api.mvc.MessagesControllerComponents
 import views.html.playComponents.summaryPartialTaxableGain
 
 class SummaryPartialTaxableGainViewSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with MockitoSugar {
-  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
-  implicit val mockLang = mock[Lang]
-  lazy val summaryPartialTaxableGainView = fakeApplication.injector.instanceOf[summaryPartialTaxableGain]
+  implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  implicit val mockLang: Lang = mock[Lang]
+  lazy val summaryPartialTaxableGainView: summaryPartialTaxableGain = fakeApplication.injector.instanceOf[summaryPartialTaxableGain]
 
   "The workingOutSummary partial" when {
 

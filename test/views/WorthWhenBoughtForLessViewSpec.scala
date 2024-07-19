@@ -24,14 +24,15 @@ import controllers.helpers.FakeRequestHelper
 import forms.WorthWhenBoughtForLess.worthWhenBoughtForLessForm
 import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.i18n.Messages
 import play.api.mvc.MessagesControllerComponents
 import views.html.calculation.worthWhenBoughtForLess
 
 class WorthWhenBoughtForLessViewSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
-  lazy val worthWhenBoughtForLessView = fakeApplication.injector.instanceOf[worthWhenBoughtForLess]
+  val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  lazy val worthWhenBoughtForLessView: worthWhenBoughtForLess = fakeApplication.injector.instanceOf[worthWhenBoughtForLess]
 
   "The Worth When Bought For Less view spec" when {
 

@@ -24,8 +24,8 @@ import forms.DisposalDateForm._
 import models.DateModel
 import play.api.Logging
 import play.api.data.Form
-import play.api.i18n.I18nSupport
-import play.api.mvc.MessagesControllerComponents
+import play.api.i18n.{I18nSupport, Lang}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.SessionCacheService
 import uk.gov.hmrc.http.SessionKeys
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
@@ -45,8 +45,8 @@ class DisposalDateController @Inject()(http: DefaultHttpClient,
                                       (implicit ec: ExecutionContext)
                                         extends FrontendController(mcc) with ValidActiveSession with I18nSupport with Logging{
 
-  val disposalDate = Action.async { implicit request =>
-    implicit val lang = mcc.messagesApi.preferred(request).lang
+  val disposalDate: Action[AnyContent] = Action.async { implicit request =>
+    implicit val lang: Lang = mcc.messagesApi.preferred(request).lang
     if (request.session.get(SessionKeys.sessionId).isEmpty) {
       val sessionId = UUID.randomUUID.toString
       Future.successful(Ok(disposalDateView(disposalDateForm)).withSession(request.session +
@@ -60,8 +60,8 @@ class DisposalDateController @Inject()(http: DefaultHttpClient,
     }
   }
 
-  val submitDisposalDate = ValidateSession.async { implicit request =>
-    implicit val lang = mcc.messagesApi.preferred(request).lang
+  val submitDisposalDate: Action[AnyContent] = ValidateSession.async { implicit request =>
+    implicit val lang: Lang = mcc.messagesApi.preferred(request).lang
 
     def errorAction(form: Form[DateModel]) = Future.successful(BadRequest(disposalDateView(form)))
 

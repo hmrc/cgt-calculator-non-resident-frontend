@@ -25,7 +25,7 @@ import controllers.helpers.FakeRequestHelper
 import models.QuestionAnswerModel
 import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.i18n.{Lang, MessagesApi}
+import play.api.i18n.{Lang, Messages, MessagesApi}
 import play.api.mvc.MessagesControllerComponents
 import views.html.calculation.checkYourAnswers
 
@@ -33,12 +33,12 @@ import java.time.LocalDate
 
 class CheckYourAnswersViewSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with MockitoSugar {
 
-  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   lazy val lang: Lang = Lang("cy")
-  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
-  lazy val checkYourAnswersView = fakeApplication.injector.instanceOf[checkYourAnswers]
+  implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  lazy val checkYourAnswersView: checkYourAnswers = fakeApplication.injector.instanceOf[checkYourAnswers]
   lazy val pageTitle = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
-  val mockMessagesApi = mock[MessagesApi]
+  val mockMessagesApi: MessagesApi = mock[MessagesApi]
 
 
   "The check your answers view" when {

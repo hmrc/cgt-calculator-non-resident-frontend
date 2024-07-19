@@ -30,7 +30,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class RecoverableFutureSpec extends AnyWordSpec with ScalaFutures with Matchers with IntegrationPatience with Status with WithCommonFakeApplication {
 
   ".recoverToStart" should {
-    implicit val ec = fakeApplication.injector.instanceOf[ExecutionContext]
+    implicit val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
 
     "convert a `NoSuchElementException` into an `ApplicationException`" in {
 

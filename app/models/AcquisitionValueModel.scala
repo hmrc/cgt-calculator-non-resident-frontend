@@ -21,9 +21,9 @@ import play.api.libs.json._
 case class AcquisitionValueModel (acquisitionValueAmt: BigDecimal)
 
 object AcquisitionValueModel {
-  implicit val format = Json.format[AcquisitionValueModel]
+  implicit val format: OFormat[AcquisitionValueModel] = Json.format[AcquisitionValueModel]
 
-  val postWrites = new Writes[AcquisitionValueModel] {
+  val postWrites: Writes[AcquisitionValueModel] = new Writes[AcquisitionValueModel] {
     override def writes(model: AcquisitionValueModel): JsValue = {
       Json.toJson(model.acquisitionValueAmt)
     }

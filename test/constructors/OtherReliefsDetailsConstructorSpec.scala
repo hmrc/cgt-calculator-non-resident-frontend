@@ -24,14 +24,14 @@ import constructors.helpers.AssertHelpers
 import controllers.helpers.FakeRequestHelper
 import models.{OtherReliefsModel, QuestionAnswerModel}
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.i18n.MessagesProvider
+import play.api.i18n.{Messages, MessagesProvider}
 import play.api.mvc.MessagesControllerComponents
 
 class OtherReliefsDetailsConstructorSpec extends CommonPlaySpec with AssertHelpers with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  private def assertExpectedResult[T](option: Option[T])(test: T => Unit) = assertOption("expected option is None")(option)(test)
-  implicit val mockMessagesProvider = mock[MessagesProvider]
-  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  private def assertExpectedResult[T](option: Option[T])(test: T => Unit): Unit = assertOption("expected option is None")(option)(test)
+  implicit val mockMessagesProvider: MessagesProvider = mock[MessagesProvider]
+  implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
 
   val target = new OtherReliefsDetailsConstructor
 

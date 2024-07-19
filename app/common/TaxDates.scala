@@ -20,14 +20,13 @@ import common.Dates.{constructDate, formatter}
 import models.DateModel
 
 import java.time.LocalDate
-import scala.concurrent.Future
 
 object TaxDates {
-  val legislationDate: LocalDate = LocalDate.parse("1/4/1982", formatter)
+  private val legislationDate: LocalDate = LocalDate.parse("1/4/1982", formatter)
   val taxStartDate: LocalDate = LocalDate.parse("5/4/2015", formatter)
-  val taxStartDatePlus18Months: LocalDate = LocalDate.parse("6/10/2016", formatter)
-  val taxYearStartDate: LocalDate = LocalDate.parse("5/4/2016", formatter)
-  val taxYearEndDate: LocalDate = LocalDate.parse("5/4/2017", formatter)
+  private val taxStartDatePlus18Months: LocalDate = LocalDate.parse("6/10/2016", formatter)
+  private val taxYearStartDate: LocalDate = LocalDate.parse("5/4/2016", formatter)
+  private val taxYearEndDate: LocalDate = LocalDate.parse("5/4/2017", formatter)
   private val pppReliefDeductionApplicableDate: LocalDate = LocalDate.parse("5/4/2020", formatter)
 
   def dateAfterStart(day: Int, month: Int, year: Int): Boolean = constructDate(day, month, year).isAfter(taxStartDate)
@@ -61,14 +60,15 @@ object TaxDates {
 
     if(date.isDefined) {
       val dateAfter = date.get.isAfter(pppReliefDeductionApplicableDate)
-      val monthsToDeduct = dateAfter match {
-        case true => 9
-        case false => 18
+      val monthsToDeduct = if (dateAfter) {
+        9
+      } else {
+        18
       }
       val dateWithDeduction = Dates.dateMinusMonths(date, monthsToDeduct)
       PrivateResidenceReliefDateDetails(dateAfter, monthsToDeduct, dateWithDeduction)
     }else{
-      PrivateResidenceReliefDateDetails(false, 18, None)
+      PrivateResidenceReliefDateDetails(shortedPeriod = false, 18, None)
     }
   }
 

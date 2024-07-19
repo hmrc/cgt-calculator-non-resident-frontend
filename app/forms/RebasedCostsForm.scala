@@ -25,7 +25,7 @@ import uk.gov.voa.play.form.ConditionalMappings._
 
 object RebasedCostsForm {
 
-  val rebasedCostsForm = Form(
+  val rebasedCostsForm: Form[RebasedCostsModel] = Form(
     mapping(
       "hasRebasedCosts" -> common.Formatters.text("calc.rebasedCosts.errors.required")
         .verifying("calc.rebasedCosts.errors.required", mandatoryCheck)

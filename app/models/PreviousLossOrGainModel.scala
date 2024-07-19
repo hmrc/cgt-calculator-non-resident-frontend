@@ -16,11 +16,11 @@
 
 package models
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 
 case class PreviousLossOrGainModel(previousLossOrGain: String)
 
 object PreviousLossOrGainModel {
-  implicit val format = Json.format[PreviousLossOrGainModel]
+  implicit val format: OFormat[PreviousLossOrGainModel] = Json.format[PreviousLossOrGainModel]
 }

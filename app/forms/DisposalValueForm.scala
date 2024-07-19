@@ -24,7 +24,7 @@ import play.api.data._
 
 object DisposalValueForm {
 
-  val disposalValueForm = Form(
+  val disposalValueForm: Form[DisposalValueModel] = Form(
     mapping(
       "disposalValue" -> text
         .transform(stripCurrencyCharacters, stripCurrencyCharacters)

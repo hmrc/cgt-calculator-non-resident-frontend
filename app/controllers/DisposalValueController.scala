@@ -22,7 +22,7 @@ import forms.DisposalValueForm._
 import models.DisposalValueModel
 import play.api.data.Form
 import play.api.i18n.I18nSupport
-import play.api.mvc.MessagesControllerComponents
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.SessionCacheService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
@@ -37,14 +37,14 @@ class DisposalValueController @Inject()(http: DefaultHttpClient,
                                         disposalValueView: disposalValue)(implicit ec: ExecutionContext)
                                           extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
-  val disposalValue = ValidateSession.async { implicit request =>
+  val disposalValue: Action[AnyContent] = ValidateSession.async { implicit request =>
     sessionCacheService.fetchAndGetFormData[DisposalValueModel](KeystoreKeys.disposalValue).map {
       case Some(data) => Ok(disposalValueView(disposalValueForm.fill(data)))
       case None => Ok(disposalValueView(disposalValueForm))
     }
   }
 
-  val submitDisposalValue = ValidateSession.async { implicit request =>
+  val submitDisposalValue: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     def errorAction(form: Form[DisposalValueModel]) = Future.successful(BadRequest(disposalValueView(form)))
 

@@ -22,7 +22,7 @@ import forms.HowMuchGainForm._
 import models.HowMuchGainModel
 import play.api.data.Form
 import play.api.i18n.I18nSupport
-import play.api.mvc.MessagesControllerComponents
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.SessionCacheService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
@@ -37,14 +37,14 @@ class HowMuchGainController @Inject()(http: DefaultHttpClient,
                                       howMuchGainView: howMuchGain)(implicit ec: ExecutionContext)
                                         extends FrontendController(mcc) with ValidActiveSession with I18nSupport{
 
-  val howMuchGain = ValidateSession.async { implicit request =>
+  val howMuchGain: Action[AnyContent] = ValidateSession.async { implicit request =>
     sessionCacheService.fetchAndGetFormData[HowMuchGainModel](KeystoreKeys.howMuchGain).map {
       case Some(data) => Ok(howMuchGainView(howMuchGainForm.fill(data)))
       case None => Ok(howMuchGainView(howMuchGainForm))
     }
   }
 
-  val submitHowMuchGain = ValidateSession.async { implicit request =>
+  val submitHowMuchGain: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     def errorAction(form: Form[HowMuchGainModel]) = Future.successful(BadRequest(howMuchGainView(form)))
 

@@ -24,7 +24,7 @@ import forms.BoughtForLessForm._
 import models.BoughtForLessModel
 import play.api.data.Form
 import play.api.i18n.I18nSupport
-import play.api.mvc.MessagesControllerComponents
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.SessionCacheService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
@@ -41,14 +41,14 @@ class BoughtForLessController @Inject()(http: DefaultHttpClient,
                                           extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
 
-  val boughtForLess = ValidateSession.async { implicit request =>
+  val boughtForLess: Action[AnyContent] = ValidateSession.async { implicit request =>
     sessionCacheService.fetchAndGetFormData[BoughtForLessModel](KeystoreKeys.boughtForLess).map {
       case Some(data) => Ok(boughtForLessView(boughtForLessForm.fill(data)))
       case None => Ok(boughtForLessView(boughtForLessForm))
     }
   }
 
-  val submitBoughtForLess = ValidateSession.async {implicit request =>
+  val submitBoughtForLess: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     def errorAction(errors: Form[BoughtForLessModel]) = Future.successful(BadRequest(boughtForLessView(errors)))
 

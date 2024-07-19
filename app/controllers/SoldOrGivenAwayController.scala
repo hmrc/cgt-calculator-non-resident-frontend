@@ -21,7 +21,7 @@ import controllers.predicates.ValidActiveSession
 import forms.SoldOrGivenAwayForm._
 import models.SoldOrGivenAwayModel
 import play.api.i18n.I18nSupport
-import play.api.mvc.MessagesControllerComponents
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.SessionCacheService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
@@ -37,14 +37,14 @@ class SoldOrGivenAwayController @Inject()(http: DefaultHttpClient,
                                          (implicit ec: ExecutionContext)
                                             extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
-  val soldOrGivenAway = ValidateSession.async { implicit request =>
+  val soldOrGivenAway: Action[AnyContent] = ValidateSession.async { implicit request =>
     sessionCacheService.fetchAndGetFormData[SoldOrGivenAwayModel](KeystoreKeys.soldOrGivenAway).map {
       case Some(data) => Ok(soldOrGivenAwayView(soldOrGivenAwayForm.fill(data)))
       case None => Ok(soldOrGivenAwayView(soldOrGivenAwayForm))
     }
   }
 
-  val submitSoldOrGivenAway = ValidateSession.async { implicit request =>
+  val submitSoldOrGivenAway: Action[AnyContent] = ValidateSession.async { implicit request =>
 
     soldOrGivenAwayForm.bindFromRequest().fold(
       errors => Future.successful(BadRequest(soldOrGivenAwayView(errors))),

@@ -114,14 +114,14 @@ class ImprovementsController @Inject()(calcConnector: CalculatorConnector,
       } yield routeRequest(model, isAfterTaxStart, gains)
     }
 
-    (for {
+    for {
       acquisitionDate <- fetchAcquisitionDate(request)
       ownerBeforeLegislationStart <- ownerBeforeLegislationStartCheck(acquisitionDate)
       route <- isClaimingImprovementsForm.bindFromRequest().fold(
         errors => errorAction(errors, ownerBeforeLegislationStart),
         success => successAction(success, TaxDates.dateAfterStart(acquisitionDate))
       )
-    } yield route)
+    } yield route
   }
 
   val improvements: Action[AnyContent] = ValidateSession.async { implicit request =>

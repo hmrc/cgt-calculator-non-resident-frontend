@@ -25,14 +25,15 @@ import controllers.helpers.FakeRequestHelper
 import forms.MarketValueWhenSoldForm._
 import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.i18n.Messages
 import play.api.mvc.MessagesControllerComponents
 import views.html.calculation.marketValueSold
 
 class MarketValueWhenSoldViewSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
-  lazy val marketValueSoldView = fakeApplication.injector.instanceOf[marketValueSold]
+  val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  lazy val marketValueSoldView: marketValueSold = fakeApplication.injector.instanceOf[marketValueSold]
   lazy val pageTitle = s"""${MarketValueMessages.disposalSoldQuestion} - ${commonMessages.serviceName} - GOV.UK"""
 
 
