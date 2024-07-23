@@ -21,11 +21,10 @@ import common.{CommonPlaySpec, WithCommonFakeApplication}
 import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import controllers.routes
-import forms.ImprovementsForm._
 import forms.IsClaimingImprovementsForm.isClaimingImprovementsForm
 import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.i18n.{Messages, MessagesApi}
+import play.api.i18n.Messages
 import play.api.mvc.MessagesControllerComponents
 import views.html.calculation.isClaimingImprovements
 
