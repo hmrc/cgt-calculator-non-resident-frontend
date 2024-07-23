@@ -26,9 +26,9 @@ import java.time.LocalDate
 import scala.concurrent.ExecutionContext
 
 class DatesSpec extends CommonPlaySpec with GuiceOneAppPerSuite with MockitoSugar with FakeRequestHelper {
-  lazy val messagesApi: MessagesApi = fakeApplication.injector.instanceOf[MessagesApi]
+  lazy val messagesApi: MessagesApi = fakeApplication().injector.instanceOf[MessagesApi]
   implicit lazy val mockMessages: Messages = messagesApi.preferred(fakeRequest)
-  implicit val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
+  implicit val ec: ExecutionContext = fakeApplication().injector.instanceOf[ExecutionContext]
   lazy val cyMockMessages: Messages = messagesApi.preferred(Seq(
     Lang("cy")
   ))
