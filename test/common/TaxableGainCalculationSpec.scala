@@ -32,16 +32,16 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class TaxableGainCalculationSpec extends CommonPlaySpec with GuiceOneAppPerSuite with MockitoSugar with FakeRequestHelper {
 
-  implicit val hc = new HeaderCarrier()
-  implicit val ec = app.injector.instanceOf[ExecutionContext]
+  implicit val hc: HeaderCarrier = new HeaderCarrier()
+  implicit val ec: ExecutionContext = app.injector.instanceOf[ExecutionContext]
   val mockCalcConnector: CalculatorConnector = mock[CalculatorConnector]
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
   val mockAnswersConstructor: AnswersConstructor = mock[AnswersConstructor]
 
-  val calculationResultsWithPRRModel = CalculationResultsWithPRRModel(GainsAfterPRRModel(1000, 1500, 2000), None, None)
-  val prrModel = PrivateResidenceReliefModel("No", None)
-  val taxYearModel = TaxYearModel("2015/16", isValidYear = true, "2015/16")
-  val personalDetailsModel = TotalPersonalDetailsCalculationModel(
+  val calculationResultsWithPRRModel: CalculationResultsWithPRRModel = CalculationResultsWithPRRModel(GainsAfterPRRModel(1000, 1500, 2000), None, None)
+  val prrModel: PrivateResidenceReliefModel = PrivateResidenceReliefModel("No", None)
+  val taxYearModel: TaxYearModel = TaxYearModel("2015/16", isValidYear = true, "2015/16")
+  val personalDetailsModel: TotalPersonalDetailsCalculationModel = TotalPersonalDetailsCalculationModel(
     CurrentIncomeModel(20000),
     Some(PersonalAllowanceModel(0)),
     OtherPropertiesModel("Yes"),
