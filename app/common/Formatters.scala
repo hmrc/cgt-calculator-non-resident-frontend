@@ -25,7 +25,7 @@ object Formatters {
   def text(errorKey: String = "error.required", optional: Boolean = false): FieldMapping[String] =
     of(stringFormatter(errorKey, optional))
 
-  private def stringFormatter(errorKey: String, optional: Boolean = false): Formatter[String] = new Formatter[String] {
+  private def stringFormatter(errorKey: String, optional: Boolean): Formatter[String] = new Formatter[String] {
 
     def bind(key: String, data: Map[String, String]): Either[Seq[FormError], String] =
       data.get(key) match {
