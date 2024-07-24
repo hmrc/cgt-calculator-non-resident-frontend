@@ -44,6 +44,8 @@ class RecoverableFutureSpec extends AnyWordSpec with ScalaFutures with Matchers 
           result.header.headers should contain("Location" -> url)
           result.header.status shouldBe SEE_OTHER
           message should equal("test message")
+        case other:Throwable =>
+          fail(s"Unexpected exception: $other")
       }
     }
 
