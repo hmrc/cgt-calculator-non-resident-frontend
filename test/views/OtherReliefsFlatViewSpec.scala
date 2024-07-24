@@ -21,7 +21,6 @@ import common.{CommonPlaySpec, WithCommonFakeApplication}
 import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import forms.OtherReliefsForm._
-import models.CalculationResultModel
 import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.i18n.Messages
@@ -204,8 +203,6 @@ class OtherReliefsFlatViewSpec
     }
 
     "supplied with an invalid map" should {
-      val model =
-        CalculationResultModel(100, 1000, -100, 18, 0, None, None, None)
       val map = Map("otherReliefs" -> "-1000")
       lazy val view = otherReliefsFlatView(
         otherReliefsForm.bind(map),

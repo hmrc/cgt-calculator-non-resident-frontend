@@ -37,7 +37,7 @@ class CalculatorConnectorSpec extends CommonPlaySpec with WithCommonFakeApplicat
   val sessionId        = UUID.randomUUID.toString
 
   implicit val hc: HeaderCarrier = HeaderCarrier(sessionId = Some(SessionId(sessionId)))
-  implicit val ec = fakeApplication.injector.instanceOf[ExecutionContext]
+  implicit val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
 
   class Setup {
     val connector = new CalculatorConnector(mockHttp, mockConfig, mockServiceConf)

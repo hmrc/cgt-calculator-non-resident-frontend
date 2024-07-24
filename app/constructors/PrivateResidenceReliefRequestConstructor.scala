@@ -16,7 +16,7 @@
 
 package constructors
 
-import models.{PrivateResidenceReliefModel, PropertyLivedInModel, TotalGainAnswersModel}
+import models.{PrivateResidenceReliefModel, PropertyLivedInModel}
 
 object PrivateResidenceReliefRequestConstructor {
 

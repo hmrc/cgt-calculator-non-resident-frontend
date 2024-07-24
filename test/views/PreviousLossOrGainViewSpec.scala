@@ -36,7 +36,7 @@ class PreviousLossOrGainViewSpec extends CommonPlaySpec with WithCommonFakeAppli
 
   "The PreviousLossOrGain view" should {
 
-    lazy val view = previousLossOrGainView(previousLossOrGainForm)(fakeRequest, mockMessage)
+    lazy val view = previousLossOrGainView(previousLossOrGainForm())(fakeRequest, mockMessage)
     lazy val document = Jsoup.parse(view.body)
 
     "return some HTML" which {
@@ -123,7 +123,7 @@ class PreviousLossOrGainViewSpec extends CommonPlaySpec with WithCommonFakeAppli
     }
 
     "should produce the same output when render and f are called" in {
-      previousLossOrGainView.f(previousLossOrGainForm)(fakeRequest, mockMessage) shouldBe previousLossOrGainView.render(previousLossOrGainForm, fakeRequest, mockMessage)
+      previousLossOrGainView.f(previousLossOrGainForm())(fakeRequest, mockMessage) shouldBe previousLossOrGainView.render(previousLossOrGainForm(), fakeRequest, mockMessage)
     }
   }
 

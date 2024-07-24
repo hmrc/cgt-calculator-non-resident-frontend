@@ -22,18 +22,17 @@ import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.Application
+import play.api.i18n.Messages
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.FakeRequest
 import views.html.whatNext.whatNext
 
 class WhatNextViewSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
-  val mockConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  implicit lazy val mockMessage = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
-  val whatNextView = fakeApplication.injector.instanceOf[whatNext]
+  val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
+  implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
+  val whatNextView: whatNext = fakeApplication.injector.instanceOf[whatNext]
 
   "What next view should" when {
-    implicit lazy val fakeApp: Application = fakeApplication
 
     lazy val view = whatNextView(isDateAfter = false, 30)(FakeRequest("GET", ""), mockMessage)
     lazy val doc = Jsoup.parse(view.body)
