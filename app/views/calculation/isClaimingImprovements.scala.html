@@ -41,6 +41,7 @@
     <p class="govuk-body">@messages("calc.improvements.exampleOne") @messages("calc.improvements.exampleTwo")</p>
     @form(action = controllers.routes.ImprovementsController.submitIsClaimingImprovements) {
         @inputYesNo(
+            isPageHeading = false,
             legend = heading,
             legendClass = Some("govuk-visually-hidden"),
             field = isClaimingImprovementsForm("isClaimingImprovements")
