@@ -23,7 +23,7 @@
 percentageTotalGain: BigDecimal = 0, percentageOfGain: Int = 0)(implicit request: Request[_], messages: Messages, messagesApi: Option[MessagesApi] = None)
 
 <div id="workedOutSection">
-    <h2 class="govuk-heading-m">@Messages("calc.summaryPartial.workingOutSectionHeading")</h2>
+    <h2 class="govuk-heading-l">@Messages("calc.summaryPartial.workingOutSectionHeading")</h2>
     <p class="govuk-body">
         @{calculationType match {
             case Flat => Messages("calc.summary.flat.description")
