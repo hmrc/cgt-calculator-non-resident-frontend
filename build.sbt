@@ -14,40 +14,27 @@
  * limitations under the License.
  */
 
-import uk.gov.hmrc.DefaultBuildSettings.{defaultSettings, scalaSettings}
-
 lazy val appName = "cgt-calculator-non-resident-frontend"
-lazy val appDependencies : Seq[ModuleID] = Seq.empty
-lazy val plugins : Seq[Plugins] = Seq(play.sbt.PlayScala)
-lazy val playSettings : Seq[Setting[_]] = Seq.empty
 
 lazy val microservice = Project(appName, file("."))
-  .enablePlugins(Seq(play.sbt.PlayScala, SbtDistributablesPlugin) ++ plugins : _*)
+  .enablePlugins(play.sbt.PlayScala, SbtDistributablesPlugin)
   .disablePlugins(JUnitXmlReportPlugin)
-  .settings(CodeCoverageSettings.settings : _*)
+  .settings(CodeCoverageSettings.settings *)
   .settings(majorVersion := 1)
-  .settings(playSettings : _*)
   .settings(PlayKeys.playDefaultPort := 9902)
-  .settings(scalaSettings: _*)
-  .settings(defaultSettings(): _*)
   .settings(
     scalaVersion := "2.13.12",
     libraryDependencies ++= AppDependencies(),
-    retrieveManaged := true,
-    //evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
-    Assets / pipelineStages := Seq(digest)
   )
   .settings(
     scalacOptions.+=("-Wconf:src=html/.*:s"), //suppresses warnings in twirl files and routes.
     scalacOptions.+=("-Wconf:src=routes/.*:s"), //these warnings are loud and inconsequential.
   )
   .configs(IntegrationTest)
-  .settings(inConfig(IntegrationTest)(Defaults.itSettings): _*)
+  .settings(inConfig(IntegrationTest)(Defaults.itSettings) *)
   .settings(TwirlKeys.templateImports ++= Seq(
     "uk.gov.hmrc.govukfrontend.views.html.components._",
     "uk.gov.hmrc.hmrcfrontend.views.html.components._",
     "uk.gov.hmrc.hmrcfrontend.views.html.helpers._",
     "uk.gov.hmrc.govukfrontend.views.html.components.implicits._"
   ))
-
-run / fork := true
