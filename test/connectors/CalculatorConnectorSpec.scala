@@ -14,13 +14,13 @@ import uk.gov.hmrc.http.{HeaderCarrier, UpstreamErrorResponse}
 
 class CalculatorConnectorSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with BeforeAndAfterEach {
 
-  val Port = 9985
+  val Port = 11119
   val Host = "localhost"
   val wireMockServer = new WireMockServer(wireMockConfig().port(Port))
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
 
-  val model = TotalGainAnswersModel(
+  private val model = TotalGainAnswersModel(
     disposalDateModel = DateModel(1, 1, 2024),
     soldOrGivenAwayModel = SoldOrGivenAwayModel(soldIt = true),
     soldForLessModel = Some(SoldForLessModel(soldForLess = false)),
