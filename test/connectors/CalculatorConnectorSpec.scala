@@ -12,7 +12,7 @@ import org.scalatest.BeforeAndAfterEach
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.{HeaderCarrier, UpstreamErrorResponse}
 
-class WiremockCalculatorConnectorSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with BeforeAndAfterEach {
+class CalculatorConnectorSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with BeforeAndAfterEach {
 
   val Port = 9985
   val Host = "localhost"
