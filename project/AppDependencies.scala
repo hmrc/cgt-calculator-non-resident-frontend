@@ -31,12 +31,6 @@ object AppDependencies {
 
       def test(scope: String = "test"): Seq[sbt.ModuleID] = Seq(
         "uk.gov.hmrc"             %% s"bootstrap-test-$playVersion"   % bootstrapVersion    % scope,
-        "org.scalatestplus.play"  %% "scalatestplus-play"             % "7.0.1"             % scope,
-        "org.scalatestplus"       %% "scalatestplus-mockito"          % "1.0.0-M2"          % scope,
-        "org.mockito"             %  "mockito-core"                   % "5.11.0"            % scope,
-        "org.pegdown"             %  "pegdown"                        % "1.6.0"             % scope,
-        "org.jsoup"               %  "jsoup"                          % "1.17.2"            % scope,
-        "org.playframework"       %% "play-test"                      % "3.0.2"             % scope,
         "uk.gov.hmrc.mongo"       %%  s"hmrc-mongo-test-$playVersion" % hmrcMongoVersion    % scope
       )
 }
