@@ -105,14 +105,14 @@ class PrivateResidenceReliefRequestConstructorSpec extends CommonPlaySpec{
       val fractions =
         Table(
           ("claiming", "amount",    "livedIn",   "expected"),
-          ("Yes",      Some(d(4)),  Some(true),  "&prrClaimed=4"),
-          ("Yes",      Some(d(42)), Some(true),  "&prrClaimed=42"),
-          ("Yes",      Some(d(4)),  Some(true),  "&prrClaimed=4"),
-          ("Yes",      None,        Some(true),  ""),
-          ("No",       None,        Some(true),  ""),
-          ("Yes",      Some(d(4)),  Some(false), ""),
-          ("Yes",      Some(d(4)),  None,        ""),
-          ("No",       None,        None,        ""),
+          ("Yes",      Some(d(4)),  Some(true),  Some(Map("prrClaimed" -> "4"))),
+          ("Yes",      Some(d(42)), Some(true),  Some(Map("prrClaimed" -> "42"))),
+          ("Yes",      Some(d(4)),  Some(true),  Some(Map("prrClaimed" -> "4"))),
+          ("Yes",      None,        Some(true),  None),
+          ("No",       None,        Some(true),  None),
+          ("Yes",      Some(d(4)),  Some(false), None),
+          ("Yes",      Some(d(4)),  None,        None),
+          ("No",       None,        None,        None),
         )
       forAll (fractions) { (claiming, amount, livedIn, expected) =>
         val result = privateResidenceReliefQuery(Some(PrivateResidenceReliefModel(claiming, amount)), livedIn.map(PropertyLivedInModel(_)))

@@ -21,12 +21,11 @@ import models.{PrivateResidenceReliefModel, PropertyLivedInModel}
 object PrivateResidenceReliefRequestConstructor {
 
   def privateResidenceReliefQuery(privateResidenceReliefModel: Option[PrivateResidenceReliefModel],
-                                  propertyLivedInModel: Option[PropertyLivedInModel]): String = {
-    if (propertyLivedInModel.exists(_.propertyLivedIn)) {
-      privateResidenceReliefModel match {
-        case Some(PrivateResidenceReliefModel("Yes", Some(value))) => s"&prrClaimed=$value"
-        case _ => ""
+                                  propertyLivedInModel: Option[PropertyLivedInModel]): Option[Map[String, String]] =
+    privateResidenceReliefModel
+      .filter(_ => propertyLivedInModel.exists(_.propertyLivedIn))
+      .flatMap {
+        case PrivateResidenceReliefModel("Yes", Some(value)) => Some(Map("prrClaimed" -> value.toString()))
+        case _ => None
       }
-    } else ""
-  }
 }

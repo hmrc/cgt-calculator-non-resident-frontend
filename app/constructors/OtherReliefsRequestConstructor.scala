@@ -16,28 +16,17 @@
 
 package constructors
 
-import models.{AllOtherReliefsModel, OtherReliefsModel}
+import models.AllOtherReliefsModel
 
 object OtherReliefsRequestConstructor {
 
-  def otherReliefsQuery(otherReliefs: Option[AllOtherReliefsModel]): String = otherReliefs match {
+  def otherReliefsQuery(otherReliefs: Option[AllOtherReliefsModel]): Map[String, Option[String]] = otherReliefs match {
     case Some(data) =>
-      s"${flatReliefsQuery(data.otherReliefsFlat)}${rebasedReliefsQuery(data.otherReliefsRebased)}${timeApportionedReliefsQuery(data.otherReliefsTime)}"
-    case _ => ""
-  }
-
-  def flatReliefsQuery(reliefs: Option[OtherReliefsModel]): String = reliefs match {
-    case Some(data) => s"&otherReliefsFlat=${data.otherReliefs.toDouble}"
-    case _ => ""
-  }
-
-  def rebasedReliefsQuery(reliefs: Option[OtherReliefsModel]): String = reliefs match {
-    case Some(data) => s"&otherReliefsRebased=${data.otherReliefs.toDouble}"
-    case _ => ""
-  }
-
-  def timeApportionedReliefsQuery(reliefs: Option[OtherReliefsModel]): String = reliefs match {
-    case Some(data) => s"&otherReliefsTimeApportioned=${data.otherReliefs.toDouble}"
-    case _ => ""
+      Map(
+        "otherReliefsFlat" -> data.otherReliefsFlat.map(_.otherReliefs.toString),
+        "otherReliefsRebased" -> data.otherReliefsRebased.map(_.otherReliefs.toString),
+        "otherReliefsTimeApportioned" -> data.otherReliefsTime.map(_.otherReliefs.toString)
+      )
+    case _ => Map.empty
   }
 }

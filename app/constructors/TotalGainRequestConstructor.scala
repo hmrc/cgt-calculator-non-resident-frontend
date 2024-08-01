@@ -21,46 +21,37 @@ import models._
 
 object TotalGainRequestConstructor {
 
-  def totalGainQuery(totalGainAnswersModel: TotalGainAnswersModel): String = {
-
-    disposalValue(totalGainAnswersModel.disposalValueModel) +
-    disposalCosts(totalGainAnswersModel.disposalCostsModel) +
-    acquisitionValue(totalGainAnswersModel.acquisitionValueModel) +
-    acquisitionCosts(totalGainAnswersModel.acquisitionCostsModel, totalGainAnswersModel.costsAtLegislationStart, totalGainAnswersModel.acquisitionDateModel) +
-    improvements(totalGainAnswersModel.improvementsModel) +
-    rebasedValues(totalGainAnswersModel.rebasedValueModel, totalGainAnswersModel.rebasedCostsModel,
-      totalGainAnswersModel.improvementsModel, totalGainAnswersModel.acquisitionDateModel) +
-    disposalDate(totalGainAnswersModel.disposalDateModel) +
-    acquisitionDate(totalGainAnswersModel.acquisitionDateModel)
-  }
-
-  def disposalValue(disposalValueModel: DisposalValueModel): String = {
-    s"disposalValue=${disposalValueModel.disposalValue.toDouble}"
-  }
-
-  def disposalCosts(disposalCostsModel: DisposalCostsModel): String = {
-    s"&disposalCosts=${disposalCostsModel.disposalCosts.toDouble}"
-  }
-
-  def acquisitionValue(acquisitionValueModel: AcquisitionValueModel): String = {
-    s"&acquisitionValue=${acquisitionValueModel.acquisitionValueAmt.toDouble}"
-  }
-
-  def acquisitionCosts(acquisitionCostsModel: Option[AcquisitionCostsModel],
-                       costsAtLegislationStartModel: Option[CostsAtLegislationStartModel],
-                       acquisitionDateModel: DateModel): String = {
-
-    val selectAcquisitionCosts = {
-      (acquisitionCostsModel, costsAtLegislationStartModel) match {
-        case (_, Some(model)) if TaxDates.dateBeforeLegislationStart(acquisitionDateModel.get) && model.hasCosts == "Yes" =>
-          model.costs.get
-        case (Some(model), _) if !TaxDates.dateBeforeLegislationStart(acquisitionDateModel.get) =>
-          model.acquisitionCostsAmt
+  def totalGainQuery(model: TotalGainAnswersModel): Map[String, Option[String]] = {
+    val acquisitionCosts = {
+      (model.acquisitionCostsModel, model.costsAtLegislationStart) match {
+        case (_, Some(CostsAtLegislationStartModel("Yes", costs))) if TaxDates.dateBeforeLegislationStart(model.acquisitionDateModel.get) =>
+          costs.get
+        case (Some(acquisition), _) if !TaxDates.dateBeforeLegislationStart(model.acquisitionDateModel.get) =>
+          acquisition.acquisitionCostsAmt
         case _ => BigDecimal(0)
       }
     }
-
-    s"&acquisitionCosts=${selectAcquisitionCosts.toDouble}"
+    val improvements = model.improvementsModel.map(_.improvementsAmt).filter(_ > 0)
+    val rebasedProps = model.rebasedValueModel.flatMap {
+      case RebasedValueModel(value) if !TaxDates.dateAfterStart(model.acquisitionDateModel.get) =>
+        val rebasedCosts = model.rebasedCostsModel.filter(_.hasRebasedCosts == "Yes").flatMap(_.rebasedCosts)
+        val improvementsAfterTaxStarted = model.improvementsModel.flatMap(_.improvementsAmtAfter)
+        Some(Map(
+          "rebasedValue" -> Some(value.toString),
+          "rebasedCosts" -> rebasedCosts.map(_.toString),
+          "improvementsAfterTaxStarted" -> improvementsAfterTaxStarted.map(_.toString)
+        ))
+      case _ => None
+    }
+    Map(
+      "disposalValue" -> Some(model.disposalValueModel.disposalValue.toString()),
+      "disposalCosts" -> Some(model.disposalCostsModel.disposalCosts.toString()),
+      "acquisitionValue" -> Some(model.acquisitionValueModel.acquisitionValueAmt.toString),
+      "acquisitionCosts" -> Some(acquisitionCosts.toString()),
+      "improvements" -> improvements.map(_.toString()),
+      "disposalDate" -> Some(dateToString(model.disposalDateModel)),
+      "acquisitionDate" -> Some(dateToString(model.acquisitionDateModel))
+    ) ++ rebasedProps.getOrElse(Map.empty)
   }
 
   def includeLegislationCosts(costsAtLegislationStartModel: CostsAtLegislationStartModel, acquisitionDateModel: DateModel): Boolean = {
@@ -71,50 +62,8 @@ object TotalGainRequestConstructor {
     !TaxDates.dateBeforeLegislationStart(acquisitionDateModel.get)
   }
 
-
-  def improvements(improvementsModel: Option[ImprovementsModel]): String = {
-    improvementsModel match {
-      case Some(ImprovementsModel(value, _)) if value > 0 => s"&improvements=${value.toDouble}"
-      case _ => ""
-    }
-  }
-
-  def rebasedValues(rebasedValueModel: Option[RebasedValueModel],
-                    rebasedCostsModel: Option[RebasedCostsModel],
-                    improvementsModel: Option[ImprovementsModel],
-                    acquisitionDateModel: DateModel): String = {
-    rebasedValueModel match {
-      case Some(RebasedValueModel(value))
-        if !TaxDates.dateAfterStart(acquisitionDateModel.get) =>
-        s"&rebasedValue=${value.toDouble}${rebasedCosts(rebasedCostsModel.get)}${improvementsAfterTaxStarted(improvementsModel)}"
-      case _ => ""
-    }
-  }
-
-  def rebasedCosts(rebasedCostsModel: RebasedCostsModel): String = {
-    rebasedCostsModel match {
-      case RebasedCostsModel("Yes", Some(value)) => s"&rebasedCosts=${value.toDouble}"
-      case _ => ""
-    }
-  }
-
-  def improvementsAfterTaxStarted(improvementsModel: Option[ImprovementsModel]): String = {
-    improvementsModel match {
-      case Some(ImprovementsModel(_, Some(value))) => s"&improvementsAfterTaxStarted=${value.toDouble}"
-      case _ => ""
-    }
-  }
-
   def includeRebasedValuesInCalculation(oRebasedValueModel: Option[RebasedValueModel], acquisitionDateModel: DateModel): Boolean = {
     oRebasedValueModel.isDefined && !TaxDates.dateAfterStart(Some(acquisitionDateModel))
-  }
-
-  def disposalDate(disposalDateModel: DateModel): String = {
-    s"&disposalDate=${dateToString(disposalDateModel)}"
-  }
-
-  def acquisitionDate(acquisitionDateModel: DateModel): String = {
-    s"&acquisitionDate=${dateToString(acquisitionDateModel)}"
   }
 
   private def dateToString(date: DateModel) = s"${date.year}-${date.month}-${date.day}"
