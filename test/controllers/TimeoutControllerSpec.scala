@@ -18,14 +18,12 @@ package controllers
 
 import assets.MessageLookup.{NonResident => commonMessages}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
-import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import controllers.utils.TimeoutController
-import org.apache.pekko.util.Timeout
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.i18n.{Messages, MessagesProvider}
+import play.api.i18n.Messages
 import play.api.mvc._
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, status}
@@ -34,14 +32,10 @@ import views.html.warnings.sessionTimeout
 import scala.concurrent.Future
 
 class TimeoutControllerSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with MockitoSugar {
-  implicit val mockMessagesProvider: MessagesProvider = mock[MessagesProvider]
-  val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesComponent: MessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
-  lazy val timeout: Timeout = mock[Timeout]
   implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   val sessionTimeoutView: sessionTimeout = fakeApplication.injector.instanceOf[sessionTimeout]
   lazy val pageTitle = s"""${Messages("session.timeout.message")} - ${commonMessages.serviceName} - GOV.UK"""
-
 
     class fakeRequestTo(url : String, controllerAction : Action[AnyContent]) {
     val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "/calculate-your-capital-gains/" + url)
@@ -62,7 +56,7 @@ class TimeoutControllerSpec extends CommonPlaySpec with WithCommonFakeApplicatio
       }
 
       "have the title" in {
-        timeoutTestDataItem.jsoupDoc.getElementsByTag("title").text shouldEqual pageTitle
+        timeoutTestDataItem.jsoupDoc.title shouldEqual pageTitle
       }
 
       "contain the heading 'Your session has timed out." in {

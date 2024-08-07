@@ -78,7 +78,7 @@ class OtherReliefsFlatViewSpec
       s"have a home link to '${controllers.routes.DisposalDateController.disposalDate.url}'" in {
         document
           .getElementsByClass(
-            "hmrc-header__service-name hmrc-header__service-name--linked"
+            "govuk-header__link govuk-header__service-name hmrc-header__service-name hmrc-header__service-name--linked"
           )
           .attr(
             "href"

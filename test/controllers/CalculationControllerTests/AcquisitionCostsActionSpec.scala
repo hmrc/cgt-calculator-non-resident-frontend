@@ -21,8 +21,6 @@ import assets.MessageLookup.{NonResident => commonMessages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import config.ApplicationConfig
-import connectors.CalculatorConnector
-import constructors.DefaultCalculationElectionConstructor
 import controllers.AcquisitionCostsController
 import controllers.helpers.FakeRequestHelper
 import models.{AcquisitionCostsModel, BoughtForLessModel, DateModel, HowBecameOwnerModel}
@@ -41,10 +39,7 @@ import scala.concurrent.Future
 
 class AcquisitionCostsActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper
   with BeforeAndAfterEach {
-
-  val mockCalcConnector: CalculatorConnector =mock[CalculatorConnector]
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
-  val mockDefaultCalcElecConstructor: DefaultCalculationElectionConstructor = mock[DefaultCalculationElectionConstructor]
   val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents: MessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val acquisitionCostsView: acquisitionCosts = fakeApplication.injector.instanceOf[acquisitionCosts]
