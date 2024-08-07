@@ -21,7 +21,6 @@ import assets.MessageLookup.{NonResident => commonMessages}
 import com.codahale.metrics.SharedMetricRegistries
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import config.ApplicationConfig
-import connectors.CalculatorConnector
 import controllers.helpers.FakeRequestHelper
 import controllers.utils.TimeoutController
 import controllers.{OtherPropertiesController, routes}
@@ -41,9 +40,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class OtherPropertiesActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
-
   val mockHttp: DefaultHttpClient =mock[DefaultHttpClient]
-  val mockCalcConnector: CalculatorConnector =mock[CalculatorConnector]
   val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents: MessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val otherPropertiesView: otherProperties = fakeApplication.injector.instanceOf[otherProperties]
@@ -154,7 +151,7 @@ class OtherPropertiesActionSpec extends CommonPlaySpec with WithCommonFakeApplic
       }
 
       "return to the other properties page" in {
-        Jsoup.parse(contentAsString(result)).select("title").text shouldEqual s"""Error: $pageTitle"""
+        Jsoup.parse(contentAsString(result)).title shouldEqual s"""Error: $pageTitle"""
       }
     }
   }
