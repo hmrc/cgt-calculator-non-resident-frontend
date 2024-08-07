@@ -189,7 +189,7 @@ class SummaryPartialViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
         }
 
         s"has a visually hidden message of ${messages.warningHidden}" in {
-          outsideTaxYearsSummary.select(".govuk-warning-text__assistive").text shouldBe messages.warningHidden
+          outsideTaxYearsSummary.select(".govuk-warning-text .govuk-visually-hidden").text shouldBe messages.warningHidden
         }
 
         s"has a strong tag with the text ${messages.warningNoticeSummary}" in {
