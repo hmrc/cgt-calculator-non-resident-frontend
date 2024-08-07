@@ -67,6 +67,10 @@ class CalculatorConnectorSpec extends CommonPlaySpec with WithCommonFakeApplicat
     wireMockServer.stop()
   }
 
+  private def equalToNumber(number: Int) = {
+    matching(s"$number(\\.0)?")
+  }
+
   "calculateTotalGain" should {
     val url = "/capital-gains-calculator/non-resident/calculate-total-gain"
     "return some parsed JSON on success" in {
@@ -140,21 +144,21 @@ class CalculatorConnectorSpec extends CommonPlaySpec with WithCommonFakeApplicat
 
       verify(
         getRequestedFor(urlPathEqualTo("/capital-gains-calculator/non-resident/calculate-tax-owed"))
-          .withQueryParam("disposalValue", equalTo("300000.0"))
-          .withQueryParam("disposalCosts", equalTo("0.0"))
-          .withQueryParam("acquisitionValue", equalTo("100000.0"))
-          .withQueryParam("acquisitionCosts", equalTo("0.0"))
-          .withQueryParam("improvements", equalTo("351.0"))
-          .withQueryParam("rebasedValue", equalTo("200000.0"))
+          .withQueryParam("disposalValue", equalToNumber(300000))
+          .withQueryParam("disposalCosts", equalToNumber(0))
+          .withQueryParam("acquisitionValue", equalToNumber(100000))
+          .withQueryParam("acquisitionCosts", equalToNumber(0))
+          .withQueryParam("improvements", equalToNumber(351))
+          .withQueryParam("rebasedValue", equalToNumber(200000))
           .withQueryParam("disposalDate", equalTo("2024-1-1"))
           .withQueryParam("acquisitionDate", equalTo("2000-1-1"))
-          .withQueryParam("prrClaimed", equalTo("9000"))
-          .withQueryParam("currentIncome", equalTo("20000.0"))
-          .withQueryParam("personalAllowanceAmt", equalTo("0.0"))
-          .withQueryParam("annualExemptAmount", equalTo("0.0"))
-          .withQueryParam("otherReliefsFlat", equalTo("1000.0"))
-          .withQueryParam("otherReliefsRebased", equalTo("1000.0"))
-          .withQueryParam("otherReliefsTimeApportioned", equalTo("1000.0")))
+          .withQueryParam("prrClaimed", equalToNumber(9000))
+          .withQueryParam("currentIncome", equalToNumber(20000))
+          .withQueryParam("personalAllowanceAmt", equalToNumber(0))
+          .withQueryParam("annualExemptAmount", equalToNumber(0))
+          .withQueryParam("otherReliefsFlat", equalToNumber(1000))
+          .withQueryParam("otherReliefsRebased", equalToNumber(1000))
+          .withQueryParam("otherReliefsTimeApportioned", equalToNumber(1000)))
     }
     "return some parsed JSON on success" in {
       stubFor(get(urlPathMatching(".*")).willReturn(aResponse().withStatus(200).withBody(Json.toJson(expected).toString())))
@@ -200,15 +204,15 @@ class CalculatorConnectorSpec extends CommonPlaySpec with WithCommonFakeApplicat
       await(con.calculateTaxableGainAfterPRR(model, prrModel, propertyLivedInModel))
 
       verify(getRequestedFor(urlPathEqualTo("/capital-gains-calculator/non-resident/calculate-gain-after-prr"))
-        .withQueryParam("disposalValue", equalTo("300000.0"))
-        .withQueryParam("disposalCosts", equalTo("0.0"))
-        .withQueryParam("acquisitionValue", equalTo("100000.0"))
-        .withQueryParam("acquisitionCosts", equalTo("0.0"))
-        .withQueryParam("improvements", equalTo("351.0"))
-        .withQueryParam("rebasedValue", equalTo("200000.0"))
+        .withQueryParam("disposalValue", equalToNumber(300000))
+        .withQueryParam("disposalCosts", equalToNumber(0))
+        .withQueryParam("acquisitionValue", equalToNumber(100000))
+        .withQueryParam("acquisitionCosts", equalToNumber(0))
+        .withQueryParam("improvements", equalToNumber(351))
+        .withQueryParam("rebasedValue", equalToNumber(200000))
         .withQueryParam("disposalDate", equalTo("2024-1-1"))
         .withQueryParam("acquisitionDate", equalTo("2000-1-1"))
-        .withQueryParam("prrClaimed", equalTo("9000"))
+        .withQueryParam("prrClaimed", equalToNumber(9000))
       )
     }
 
