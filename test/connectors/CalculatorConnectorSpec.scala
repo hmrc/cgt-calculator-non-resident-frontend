@@ -127,20 +127,41 @@ class CalculatorConnectorSpec extends CommonPlaySpec with WithCommonFakeApplicat
     val maxAnnualExemptAmount = BigDecimal(9000)
     val otherReliefs = AllOtherReliefsModel(Some(OtherReliefsModel(1000)), Some(OtherReliefsModel(1000)), Some(OtherReliefsModel(1000)))
 
-    val url = "/capital-gains-calculator/non-resident/calculate-tax-owed?disposalValue=300000.0&disposalCosts=0.0&acquisitionValue=100000.0&acquisitionCosts=0.0&improvements=351.0&rebasedValue=200000.0&disposalDate=2024-1-1&acquisitionDate=2000-1-1&prrClaimed=9000&currentIncome=20000.0&personalAllowanceAmt=0.0&annualExemptAmount=0.0&otherReliefsFlat=1000.0&otherReliefsRebased=1000.0&otherReliefsTimeApportioned=1000.0"
+    val expected = CalculationResultsWithTaxOwedModel(
+      TotalTaxOwedModel(100, 100, 20, None, None, 200, 100, None, None, None, None, 0, None, None, None, None, None, None, None),
+      None,
+      None
+    )
 
+    "call the correct endpoint" in {
+      stubFor(get(urlPathMatching(".*")).willReturn(aResponse().withStatus(200).withBody(Json.toJson(expected).toString())))
+
+      await(con.calculateNRCGTTotalTax(model, Some(prrModel), Some(propertyLivedInModel), Some(total), maxAnnualExemptAmount, Some(otherReliefs)))
+
+      verify(
+        getRequestedFor(urlPathEqualTo("/capital-gains-calculator/non-resident/calculate-tax-owed"))
+          .withQueryParam("disposalValue", equalTo("300000.0"))
+          .withQueryParam("disposalCosts", equalTo("0.0"))
+          .withQueryParam("acquisitionValue", equalTo("100000.0"))
+          .withQueryParam("acquisitionCosts", equalTo("0.0"))
+          .withQueryParam("improvements", equalTo("351.0"))
+          .withQueryParam("rebasedValue", equalTo("200000.0"))
+          .withQueryParam("disposalDate", equalTo("2024-1-1"))
+          .withQueryParam("acquisitionDate", equalTo("2000-1-1"))
+          .withQueryParam("prrClaimed", equalTo("9000"))
+          .withQueryParam("currentIncome", equalTo("20000.0"))
+          .withQueryParam("personalAllowanceAmt", equalTo("0.0"))
+          .withQueryParam("annualExemptAmount", equalTo("0.0"))
+          .withQueryParam("otherReliefsFlat", equalTo("1000.0"))
+          .withQueryParam("otherReliefsRebased", equalTo("1000.0"))
+          .withQueryParam("otherReliefsTimeApportioned", equalTo("1000.0")))
+    }
     "return some parsed JSON on success" in {
-      val expected = CalculationResultsWithTaxOwedModel(
-        TotalTaxOwedModel(100, 100, 20, None, None, 200, 100, None, None, None, None, 0, None, None, None, None, None, None, None),
-        None,
-        None
-      )
       stubFor(get(urlPathMatching(".*")).willReturn(aResponse().withStatus(200).withBody(Json.toJson(expected).toString())))
 
       val response = await(con.calculateNRCGTTotalTax(model, Some(prrModel), Some(propertyLivedInModel), Some(total), maxAnnualExemptAmount, Some(otherReliefs)))
 
       response shouldBe Some(expected)
-      verify(getRequestedFor(urlEqualTo(url)))
     }
 
     "return None on 404" in {
@@ -149,7 +170,6 @@ class CalculatorConnectorSpec extends CommonPlaySpec with WithCommonFakeApplicat
       val response = await(con.calculateNRCGTTotalTax(model, Some(prrModel), Some(propertyLivedInModel), Some(total), maxAnnualExemptAmount, Some(otherReliefs)))
 
       response shouldBe None
-      verify(getRequestedFor(urlEqualTo(url)))
     }
 
     "Throw UpstreamErrorResponse on 500" in {
@@ -158,8 +178,6 @@ class CalculatorConnectorSpec extends CommonPlaySpec with WithCommonFakeApplicat
       assertThrows[UpstreamErrorResponse] {
         await(con.calculateNRCGTTotalTax(model, Some(prrModel), Some(propertyLivedInModel), Some(total), maxAnnualExemptAmount, Some(otherReliefs)))
       }
-
-      verify(getRequestedFor(urlEqualTo(url)))
     }
   }
 
@@ -167,7 +185,33 @@ class CalculatorConnectorSpec extends CommonPlaySpec with WithCommonFakeApplicat
     val prrModel = PrivateResidenceReliefModel(isClaimingPRR = "Yes", prrClaimed = Some(9000))
     val propertyLivedInModel = PropertyLivedInModel(true)
 
-    val url = "/capital-gains-calculator/non-resident/calculate-gain-after-prr?disposalValue=300000.0&disposalCosts=0.0&acquisitionValue=100000.0&acquisitionCosts=0.0&improvements=351.0&rebasedValue=200000.0&disposalDate=2024-1-1&acquisitionDate=2000-1-1&prrClaimed=9000"
+    "call the correct endpoint" in {
+      val expected = CalculationResultsWithPRRModel(
+        GainsAfterPRRModel(
+          BigDecimal(10.0),
+          BigDecimal(20.0),
+          BigDecimal(30.0)
+        ),
+        None,
+        None
+      )
+      stubFor(get(urlPathMatching(".*")).willReturn(aResponse().withStatus(200).withBody(Json.toJson(expected).toString())))
+
+      await(con.calculateTaxableGainAfterPRR(model, prrModel, propertyLivedInModel))
+
+      verify(getRequestedFor(urlPathEqualTo("/capital-gains-calculator/non-resident/calculate-gain-after-prr"))
+        .withQueryParam("disposalValue", equalTo("300000.0"))
+        .withQueryParam("disposalCosts", equalTo("0.0"))
+        .withQueryParam("acquisitionValue", equalTo("100000.0"))
+        .withQueryParam("acquisitionCosts", equalTo("0.0"))
+        .withQueryParam("improvements", equalTo("351.0"))
+        .withQueryParam("rebasedValue", equalTo("200000.0"))
+        .withQueryParam("disposalDate", equalTo("2024-1-1"))
+        .withQueryParam("acquisitionDate", equalTo("2000-1-1"))
+        .withQueryParam("prrClaimed", equalTo("9000"))
+      )
+    }
+
     "return some parsed JSON on success" in {
       val expected = CalculationResultsWithPRRModel(
         GainsAfterPRRModel(
@@ -183,7 +227,6 @@ class CalculatorConnectorSpec extends CommonPlaySpec with WithCommonFakeApplicat
       val response = await(con.calculateTaxableGainAfterPRR(model, prrModel, propertyLivedInModel))
 
       response shouldBe Some(expected)
-      verify(getRequestedFor(urlEqualTo(url)))
     }
 
     "return None on 404" in {
@@ -192,7 +235,6 @@ class CalculatorConnectorSpec extends CommonPlaySpec with WithCommonFakeApplicat
       val response = await(con.calculateTaxableGainAfterPRR(model, prrModel, propertyLivedInModel))
 
       response shouldBe None
-      verify(getRequestedFor(urlEqualTo(url)))
     }
 
     "Throw UpstreamErrorResponse on 500" in {
@@ -201,8 +243,6 @@ class CalculatorConnectorSpec extends CommonPlaySpec with WithCommonFakeApplicat
       assertThrows[UpstreamErrorResponse] {
         await(con.calculateTaxableGainAfterPRR(model, prrModel, propertyLivedInModel))
       }
-
-      verify(getRequestedFor(urlEqualTo(url)))
     }
   }
 
