@@ -16,7 +16,6 @@
 
 package controllers.CalculationControllerTests
 
-import org.apache.pekko.stream.Materializer
 import assets.MessageLookup.NonResident.{DisposalValue => messages}
 import assets.MessageLookup.{NonResident => commonMessages}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
@@ -32,19 +31,15 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
 import services.SessionCacheService
-import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.disposalValue
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class DisposalValueActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
 
-  implicit val hc: HeaderCarrier = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
-
-  val materializer: Materializer = mock[Materializer]
-  val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp: DefaultHttpClient =mock[DefaultHttpClient]
   val mockCalcConnector: CalculatorConnector =mock[CalculatorConnector]
   val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
@@ -58,7 +53,7 @@ class DisposalValueActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
       mockSessionCacheService,
       mockMessagesControllerComponents,
       disposalValueView
-    )(ec)
+    )
   }
 
 
@@ -71,7 +66,7 @@ class DisposalValueActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
     when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(("", "")))
 
-    new DisposalValueController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, disposalValueView)(ec)
+    new DisposalValueController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, disposalValueView)
   }
 
   //GET Tests
@@ -80,7 +75,7 @@ class DisposalValueActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
     "not supplied with a pre-existing stored model" should {
       val target = setupTarget(None)
       lazy val result = target.disposalValue(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+      lazy val document = Jsoup.parse(contentAsString(result))
 
       "return a 200" in {
         status(result) shouldBe 200
@@ -94,7 +89,7 @@ class DisposalValueActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
     "supplied with a pre-existing stored model" should {
       val target = setupTarget(Some(DisposalValueModel(1000)))
       lazy val result = target.disposalValue(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+      lazy val document = Jsoup.parse(contentAsString(result))
 
       "return a 200" in {
         status(result) shouldBe 200
@@ -139,7 +134,7 @@ class DisposalValueActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
       val target = setupTarget(None)
       lazy val request = fakeRequestToPOSTWithSession(("disposalValue", "-100"))
       lazy val result = target.submitDisposalValue(request)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+      lazy val document = Jsoup.parse(contentAsString(result))
 
       "return a 400" in {
         status(result) shouldBe 400

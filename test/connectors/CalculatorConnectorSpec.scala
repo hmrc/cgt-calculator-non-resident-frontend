@@ -22,14 +22,14 @@ import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration._
 import common.nonresident.{Flat, Rebased}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
-import controllers.helpers.FakeRequestHelper
 import models._
 import org.scalatest.BeforeAndAfterEach
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.json.Json
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.http.{HeaderCarrier, UpstreamErrorResponse}
 
-class CalculatorConnectorSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with BeforeAndAfterEach {
-
+class CalculatorConnectorSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with BeforeAndAfterEach {
   val Port = 11119
   val Host = "localhost"
   val wireMockServer = new WireMockServer(wireMockConfig().port(Port))
@@ -404,4 +404,3 @@ class CalculatorConnectorSpec extends CommonPlaySpec with WithCommonFakeApplicat
     }
   }
 }
-

@@ -16,7 +16,6 @@
 
 package controllers.CalculationControllerTests
 
-import org.apache.pekko.stream.Materializer
 import assets.MessageLookup.NonResident.{CalculationElection => messages, CalculationElectionNoReliefs => nRMessages}
 import assets.MessageLookup.{NonResident => commonMessages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
@@ -35,19 +34,15 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
 import services.SessionCacheService
-import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.{calculationElection, calculationElectionNoReliefs}
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class CalculationElectionActionSpec
   extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val hc: HeaderCarrier = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
-
-  val materializer: Materializer = mock[Materializer]
-  val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp: DefaultHttpClient =mock[DefaultHttpClient]
   val mockCalcConnector: CalculatorConnector =mock[CalculatorConnector]
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
@@ -69,7 +64,7 @@ class CalculationElectionActionSpec
       mockMessagesControllerComponents,
       calculationElectionView,
       calculationElectionNoReliefsView
-    )(ec)
+    )
   }
 
 
@@ -93,7 +88,7 @@ class CalculationElectionActionSpec
       .thenReturn(Future.successful(TestModels.businessScenarioFiveModel))
 
     when(mockCalcConnector.calculateTotalGain(ArgumentMatchers.any())(ArgumentMatchers.any()))
-      .thenReturn(totalGainResultsModel)
+      .thenReturn(Future.successful(totalGainResultsModel))
 
     when(mockDefaultCalElecConstructor.generateElection(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(contentElements))
@@ -129,7 +124,7 @@ class CalculationElectionActionSpec
 
     new CalculationElectionController(mockCalcConnector, mockSessionCacheService, mockAnswersConstructor, mockDefaultCalElecConstructor, mockMessagesControllerComponents,
       calculationElectionView,
-      calculationElectionNoReliefsView)(ec)
+      calculationElectionNoReliefsView)
   }
 
   val finalAnswersModel: TotalPersonalDetailsCalculationModel = TotalPersonalDetailsCalculationModel(
@@ -178,7 +173,7 @@ class CalculationElectionActionSpec
         finalAnswersModel
       )
       lazy val result = target.calculationElection(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+      lazy val document = Jsoup.parse(contentAsString(result))
 
       "return a 200" in {
         status(result) shouldBe 200
@@ -198,7 +193,7 @@ class CalculationElectionActionSpec
         finalAnswersModel
       )
       lazy val result = target.calculationElection(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+      lazy val document = Jsoup.parse(contentAsString(result))
 
       "return a 200" in {
         status(result) shouldBe 200
@@ -222,7 +217,7 @@ class CalculationElectionActionSpec
         finalAnswersModel
       )
       lazy val result = target.calculationElection(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+      lazy val document = Jsoup.parse(contentAsString(result))
 
       "return a 200" in {
         status(result) shouldBe 200
@@ -247,7 +242,7 @@ class CalculationElectionActionSpec
         claimingReliefs = false
       )
       lazy val result = target.calculationElection(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+      lazy val document = Jsoup.parse(contentAsString(result))
 
       "return a 200" in {
         status(result) shouldBe 200
@@ -339,7 +334,7 @@ class CalculationElectionActionSpec
         finalAnswersModel
       )
       lazy val result = target.submitCalculationElection(request)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+      lazy val document = Jsoup.parse(contentAsString(result))
 
       "return a 400" in {
         status(result) shouldBe 400

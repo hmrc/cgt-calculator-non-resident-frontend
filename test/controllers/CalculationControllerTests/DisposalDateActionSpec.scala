@@ -16,7 +16,6 @@
 
 package controllers.CalculationControllerTests
 
-import org.apache.pekko.stream.Materializer
 import assets.MessageLookup.NonResident.{DisposalDate => messages}
 import assets.MessageLookup.{NonResident => commonMessages}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
@@ -32,18 +31,14 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
 import services.SessionCacheService
-import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.disposalDate
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class DisposalDateActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val hc: HeaderCarrier = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
-
-  val materializer: Materializer = mock[Materializer]
-  val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp: DefaultHttpClient =mock[DefaultHttpClient]
   val mockCalcConnector: CalculatorConnector =mock[CalculatorConnector]
   val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
@@ -59,7 +54,7 @@ class DisposalDateActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
       mockSessionCacheService,
       mockMessagesControllerComponents,
       disposalDateView
-    )(ec)
+    )
   }
 
   def setupTarget(getData: Option[DateModel], taxYearModel: Option[TaxYearModel] = None): DisposalDateController = {
@@ -73,7 +68,7 @@ class DisposalDateActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
     when(mockCalcConnector.getTaxYear(ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(Future.successful(taxYearModel))
 
-    new DisposalDateController(mockHttp, mockCalcConnector, mockSessionCacheService, mockMessagesControllerComponents, disposalDateView)(ec)
+    new DisposalDateController(mockHttp, mockCalcConnector, mockSessionCacheService, mockMessagesControllerComponents, disposalDateView)
   }
 
   // GET Tests
@@ -83,7 +78,7 @@ class DisposalDateActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
 
       lazy val target = setupTarget(None)
       lazy val result = target.disposalDate(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+      lazy val document = Jsoup.parse(contentAsString(result))
 
       "return a 200" in {
         status(result) shouldBe 200
@@ -98,7 +93,7 @@ class DisposalDateActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
 
       lazy val target = setupTarget(Some(DateModel(1, 3, 2016)))
       lazy val result = target.disposalDate(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+      lazy val document = Jsoup.parse(contentAsString(result))
 
       "return a 200" in {
         status(result) shouldBe 200
@@ -112,7 +107,7 @@ class DisposalDateActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
     "supplied with a pre-existing stored model without a session" should {
       lazy val target = setupTarget(Some(DateModel(1, 3, 2016)))
       lazy val result = target.disposalDate(fakeRequest)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+      lazy val document = Jsoup.parse(contentAsString(result))
 
       "return a 200" in {
         status(result) shouldBe 200

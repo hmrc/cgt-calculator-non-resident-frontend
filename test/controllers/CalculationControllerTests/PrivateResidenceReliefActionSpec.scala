@@ -24,7 +24,6 @@ import constructors.AnswersConstructor
 import controllers.PrivateResidenceReliefController
 import controllers.helpers.FakeRequestHelper
 import models._
-import org.apache.pekko.stream.Materializer
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
@@ -33,18 +32,15 @@ import play.api.mvc.MessagesControllerComponents
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.SessionCacheService
-import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import views.html.calculation.{privateResidenceRelief, privateResidenceReliefValue}
 
 import java.time.LocalDate
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class PrivateResidenceReliefActionSpec
   extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val implicitHeaderCarrier: HeaderCarrier = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
-  implicit val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
-  private val mockMaterializer = mock[Materializer]
   private val mockCalcConnector = mock[CalculatorConnector]
   private val mockAnswersConstructor = mock[AnswersConstructor]
   private val mockMessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
@@ -60,7 +56,7 @@ class PrivateResidenceReliefActionSpec
       mockMessagesControllerComponents,
       privateResidenceReliefView,
       privateResidenceReliefValueView,
-    )(ec)
+    )
   }
 
   def setupTarget
@@ -76,7 +72,7 @@ class PrivateResidenceReliefActionSpec
 
     when(mockSessionCacheService.saveFormData[PrivateResidenceReliefModel](
       ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(("", ""))
+      .thenReturn(Future.successful("", ""))
 
     when(mockSessionCacheService.fetchAndGetFormData[PrivateResidenceReliefModel](
       ArgumentMatchers.eq(KeystoreKeys.privateResidenceRelief))(ArgumentMatchers.any(), ArgumentMatchers.any()))
@@ -95,10 +91,10 @@ class PrivateResidenceReliefActionSpec
       .thenReturn(Future.successful(rebasedValueData))
 
     when(mockCalcConnector.calculateTaxableGainAfterPRR(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any()))
-      .thenReturn(calculationResultsWithPRRModel)
+      .thenReturn(Future.successful(calculationResultsWithPRRModel))
 
     when(mockAnswersConstructor.getNRTotalGainAnswers(ArgumentMatchers.any()))
-      .thenReturn(mock[TotalGainAnswersModel])
+      .thenReturn(Future.successful(mock[TotalGainAnswersModel]))
 
     when(mockSessionCacheService.fetchAndGetFormData[PropertyLivedInModel](ArgumentMatchers.eq(KeystoreKeys.propertyLivedIn))
       (ArgumentMatchers.any(), ArgumentMatchers.any()))
@@ -108,7 +104,7 @@ class PrivateResidenceReliefActionSpec
       .thenReturn(Future.successful(Some(totalGainResultsModel)))
 
 
-    new PrivateResidenceReliefController(mockCalcConnector, mockSessionCacheService, mockAnswersConstructor, mockMessagesControllerComponents, privateResidenceReliefView, privateResidenceReliefValueView)(ec)
+    new PrivateResidenceReliefController(mockCalcConnector, mockSessionCacheService, mockAnswersConstructor, mockMessagesControllerComponents, privateResidenceReliefView, privateResidenceReliefValueView)
   }
 
   "Calling the .getAcquisitionDate method" should {
@@ -235,7 +231,7 @@ class PrivateResidenceReliefActionSpec
         acquisitionDateData = Some(DateModel(1, 1, 2016)),
         rebasedValueData = Some(RebasedValueModel(1000)))
       lazy val result = target.privateResidenceRelief(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(mockMaterializer, ec))
+      lazy val document = Jsoup.parse(contentAsString(result))
 
       "return a status of 200" in {
         status(result) shouldBe 200
@@ -253,7 +249,7 @@ class PrivateResidenceReliefActionSpec
         acquisitionDateData = Some(DateModel(1, 1, 2016)),
         rebasedValueData = Some(RebasedValueModel(1000)))
       lazy val result = target.privateResidenceRelief(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(mockMaterializer, ec))
+      lazy val document = Jsoup.parse(contentAsString(result))
 
       "return a status of 200" in {
         status(result) shouldBe 200
@@ -336,7 +332,7 @@ class PrivateResidenceReliefActionSpec
         rebasedValueData = Some(RebasedValueModel(1000)))
       lazy val request = fakeRequestToPOSTWithSession(("isClaimingPRR", ""))
       lazy val result = target.submitprivateResidenceReliefValue(request)
-      lazy val document = Jsoup.parse(bodyOf(result)(mockMaterializer, ec))
+      lazy val document = Jsoup.parse(contentAsString(result))
 
       "return a status of 400" in {
         status(result) shouldBe 400

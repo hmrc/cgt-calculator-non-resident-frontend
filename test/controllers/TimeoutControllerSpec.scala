@@ -16,29 +16,27 @@
 
 package controllers
 
-import org.apache.pekko.stream.Materializer
-import org.apache.pekko.util.Timeout
 import assets.MessageLookup.{NonResident => commonMessages}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import config.ApplicationConfig
 import controllers.helpers.FakeRequestHelper
 import controllers.utils.TimeoutController
+import org.apache.pekko.util.Timeout
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.i18n.{Messages, MessagesProvider}
-import play.api.mvc.{Action, AnyContent, AnyContentAsEmpty, MessagesControllerComponents, Result}
+import play.api.mvc._
 import play.api.test.FakeRequest
+import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, status}
 import views.html.warnings.sessionTimeout
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 
 class TimeoutControllerSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with MockitoSugar {
   implicit val mockMessagesProvider: MessagesProvider = mock[MessagesProvider]
   val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesComponent: MessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
-  lazy val materializer: Materializer = mock[Materializer]
-  val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
   lazy val timeout: Timeout = mock[Timeout]
   implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   val sessionTimeoutView: sessionTimeout = fakeApplication.injector.instanceOf[sessionTimeout]
@@ -48,7 +46,7 @@ class TimeoutControllerSpec extends CommonPlaySpec with WithCommonFakeApplicatio
     class fakeRequestTo(url : String, controllerAction : Action[AnyContent]) {
     val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "/calculate-your-capital-gains/" + url)
     val result: Future[Result] = controllerAction(fakeRequest)
-    val jsoupDoc: Document = Jsoup.parse(bodyOf(result)(materializer, ec))
+    val jsoupDoc: Document = Jsoup.parse(contentAsString(result))
   }
 
   val controller = new TimeoutController(mockMessagesComponent, sessionTimeoutView)

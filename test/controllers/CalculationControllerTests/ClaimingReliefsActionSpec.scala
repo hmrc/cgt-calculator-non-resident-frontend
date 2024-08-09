@@ -16,7 +16,6 @@
 
 package controllers.CalculationControllerTests
 
-import org.apache.pekko.stream.Materializer
 import assets.MessageLookup.NonResident.{ClaimingReliefs => messages}
 import assets.MessageLookup.{NonResident => commonMessages}
 import common.KeystoreKeys.NonResidentKeys
@@ -33,18 +32,14 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
 import services.SessionCacheService
-import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.claimingReliefs
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class ClaimingReliefsActionSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with MockitoSugar {
 
-  implicit val hc: HeaderCarrier = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
-
-  val materializer: Materializer = mock[Materializer]
-  val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp: DefaultHttpClient =mock[DefaultHttpClient]
   val mockCalcConnector: CalculatorConnector =mock[CalculatorConnector]
   val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
@@ -58,7 +53,7 @@ class ClaimingReliefsActionSpec extends CommonPlaySpec with WithCommonFakeApplic
       mockSessionCacheService,
       mockMessagesControllerComponents,
       claimingReliefsView
-    )(ec)
+    )
   }
   def setupTarget(model: Option[ClaimingReliefsModel]): ClaimingReliefsController = {
 
@@ -67,12 +62,12 @@ class ClaimingReliefsActionSpec extends CommonPlaySpec with WithCommonFakeApplic
       .thenReturn(Future.successful(model))
 
     when(mockSessionCacheService.saveFormData[ClaimingReliefsModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(("", ""))
+      .thenReturn(Future.successful(("", "")))
 
     when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(("", "")))
 
-    new ClaimingReliefsController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, claimingReliefsView)(ec) {
+    new ClaimingReliefsController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, claimingReliefsView) {
     }
   }
 
@@ -87,7 +82,7 @@ class ClaimingReliefsActionSpec extends CommonPlaySpec with WithCommonFakeApplic
       }
 
       "return the claiming-reliefs view" in {
-        Jsoup.parse(bodyOf(result)(materializer, ec)).title shouldBe pageTitle
+        Jsoup.parse(contentAsString(result)).title shouldBe pageTitle
       }
     }
 
@@ -100,7 +95,7 @@ class ClaimingReliefsActionSpec extends CommonPlaySpec with WithCommonFakeApplic
       }
 
       "return the claiming-reliefs view" in {
-        Jsoup.parse(bodyOf(result)(materializer, ec)).title shouldBe pageTitle
+        Jsoup.parse(contentAsString(result)).title shouldBe pageTitle
       }
     }
 
@@ -158,7 +153,7 @@ class ClaimingReliefsActionSpec extends CommonPlaySpec with WithCommonFakeApplic
       }
 
       "return to the claiming-reliefs page" in {
-        Jsoup.parse(bodyOf(result)(materializer, ec)).title shouldBe "Error: " + pageTitle
+        Jsoup.parse(contentAsString(result)).title shouldBe "Error: " + pageTitle
       }
     }
   }

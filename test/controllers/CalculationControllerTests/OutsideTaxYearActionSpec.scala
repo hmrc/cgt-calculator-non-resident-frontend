@@ -16,7 +16,6 @@
 
 package controllers.CalculationControllerTests
 
-import org.apache.pekko.stream.Materializer
 import assets.MessageLookup.{NonResident => commonMessages, OutsideTaxYears => messages}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import config.ApplicationConfig
@@ -31,19 +30,16 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
 import services.SessionCacheService
-import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.outsideTaxYear
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class OutsideTaxYearActionSpec
   extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with MockitoSugar {
 
-  implicit val hc: HeaderCarrier = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
   val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  val materializer: Materializer = mock[Materializer]
-  val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp: DefaultHttpClient =mock[DefaultHttpClient]
   val mockCalcConnector: CalculatorConnector =mock[CalculatorConnector]
   val mockMessagesControllerComponents: MessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
@@ -59,7 +55,7 @@ class OutsideTaxYearActionSpec
     when(mockCalcConnector.getTaxYear(ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(Future.successful(taxYearModel))
 
-    new OutsideTaxYearController(mockHttp, mockCalcConnector, mockSessionCacheService, mockMessagesControllerComponents, outsideTaxYearView)(ec) {
+    new OutsideTaxYearController(mockHttp, mockCalcConnector, mockSessionCacheService, mockMessagesControllerComponents, outsideTaxYearView) {
     }
   }
 
@@ -78,11 +74,11 @@ class OutsideTaxYearActionSpec
       }
 
       s"return a title of $pageTitle" in {
-        Jsoup.parse(bodyOf(result)(materializer, ec)).title shouldBe pageTitle
+        Jsoup.parse(contentAsString(result)).title shouldBe pageTitle
       }
 
       s"have a back link to '${controllers.routes.DisposalDateController.disposalDate.url}'" in {
-        Jsoup.parse(bodyOf(result)(materializer, ec)).getElementsByClass("govuk-back-link").attr("href") shouldBe "#"
+        Jsoup.parse(contentAsString(result)).getElementsByClass("govuk-back-link").attr("href") shouldBe "#"
       }
     }
 

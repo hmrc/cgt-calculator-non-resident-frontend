@@ -16,7 +16,6 @@
 
 package controllers.CalculationControllerTests
 
-import org.apache.pekko.stream.Materializer
 import assets.MessageLookup.NonResident.{SoldForLess => messages}
 import assets.MessageLookup.{NonResident => commonMessages}
 import common.KeystoreKeys.{NonResidentKeys => keyStoreKeys}
@@ -33,18 +32,15 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
 import services.SessionCacheService
-import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.soldForLess
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class SoldForLessActionSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with MockitoSugar {
 
-  implicit val hc: HeaderCarrier = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
   val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  val materializer: Materializer = mock[Materializer]
-  val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp: DefaultHttpClient =mock[DefaultHttpClient]
   val mockCalcConnector: CalculatorConnector =mock[CalculatorConnector]
   val mockMessagesControllerComponents: MessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
@@ -56,7 +52,7 @@ class SoldForLessActionSpec extends CommonPlaySpec with WithCommonFakeApplicatio
     val controller = new SoldForLessController(
       mockHttp,
       mockSessionCacheService,
-      mockMessagesControllerComponents, soldForLessView)(ec)
+      mockMessagesControllerComponents, soldForLessView)
   }
 
   def setupTarget(getData: Option[SoldForLessModel]): SoldForLessController = {
@@ -67,7 +63,7 @@ class SoldForLessActionSpec extends CommonPlaySpec with WithCommonFakeApplicatio
     when(mockSessionCacheService.saveFormData[SoldForLessModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(("", "")))
 
-    new SoldForLessController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, soldForLessView)(ec)
+    new SoldForLessController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, soldForLessView)
   }
 
   "Calling .soldForLess from the nonresident SoldForLess" when {
@@ -83,7 +79,7 @@ class SoldForLessActionSpec extends CommonPlaySpec with WithCommonFakeApplicatio
 
       s"return some html with title of ${messages.question}" in {
         contentType(result) shouldBe Some("text/html")
-        Jsoup.parse(bodyOf(result)(materializer, ec)).title shouldEqual pageTitle
+        Jsoup.parse(contentAsString(result)).title shouldEqual pageTitle
       }
     }
 
@@ -98,7 +94,7 @@ class SoldForLessActionSpec extends CommonPlaySpec with WithCommonFakeApplicatio
 
       s"return some html with title of ${messages.question}" in {
         contentType(result) shouldBe Some("text/html")
-        Jsoup.parse(bodyOf(result)(materializer, ec)).title shouldEqual pageTitle
+        Jsoup.parse(contentAsString(result)).title shouldEqual pageTitle
       }
     }
 
@@ -155,7 +151,7 @@ class SoldForLessActionSpec extends CommonPlaySpec with WithCommonFakeApplicatio
       lazy val target = setupTarget(None)
       lazy val request = fakeRequestToPOSTWithSession(("soldForLess", ""))
       lazy val result = target.submitSoldForLess(request)
-      lazy val doc = Jsoup.parse(bodyOf(result)(materializer, ec))
+      lazy val doc = Jsoup.parse(contentAsString(result))
 
       "return a status of 400" in {
         status(result) shouldBe 400

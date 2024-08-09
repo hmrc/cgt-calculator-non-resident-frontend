@@ -16,7 +16,6 @@
 
 package controllers.CalculationControllerTests
 
-import org.apache.pekko.stream.Materializer
 import assets.MessageLookup.NonResident.{CostsAtLegislationStart => messages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
@@ -32,18 +31,14 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
 import services.SessionCacheService
-import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.costsAtLegislationStart
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class CostsAtLegislationStartActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val hc: HeaderCarrier = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
-
-  val materializer: Materializer = mock[Materializer]
-  val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp: DefaultHttpClient =mock[DefaultHttpClient]
   val mockCalcConnector: CalculatorConnector =mock[CalculatorConnector]
   val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
@@ -56,7 +51,7 @@ class CostsAtLegislationStartActionSpec extends CommonPlaySpec with WithCommonFa
       mockSessionCacheService,
       mockMessagesControllerComponents,
       costsAtLegislationStartView
-    )(ec)
+    )
   }
 
   def setupTarget(getData: Option[CostsAtLegislationStartModel]): CostsAtLegislationStartController = {
@@ -70,7 +65,7 @@ class CostsAtLegislationStartActionSpec extends CommonPlaySpec with WithCommonFa
       ArgumentMatchers.eq(KeystoreKeys.costAtLegislationStart), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(successfulSave)
 
-    new CostsAtLegislationStartController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, costsAtLegislationStartView)(ec)
+    new CostsAtLegislationStartController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, costsAtLegislationStartView)
   }
 
   // GET Tests
@@ -92,7 +87,7 @@ class CostsAtLegislationStartActionSpec extends CommonPlaySpec with WithCommonFa
     "no data has already been saved" should {
       val target = setupTarget(None)
       lazy val result = target.costsAtLegislationStart(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+      lazy val document = Jsoup.parse(contentAsString(result))
 
       "return a 200" in {
         status(result) shouldBe 200
@@ -106,7 +101,7 @@ class CostsAtLegislationStartActionSpec extends CommonPlaySpec with WithCommonFa
     "some data has already been supplied" should {
       val target = setupTarget(Some(CostsAtLegislationStartModel("Yes", Some(1500))))
       lazy val result = target.costsAtLegislationStart(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+      lazy val document = Jsoup.parse(contentAsString(result))
 
       "return a 200" in {
         status(result) shouldBe 200
@@ -139,7 +134,7 @@ class CostsAtLegislationStartActionSpec extends CommonPlaySpec with WithCommonFa
       val target = setupTarget(None)
       lazy val request = fakeRequestToPOSTWithSession("hasCosts" -> "Yes", "costs" -> "")
       lazy val result = target.submitCostsAtLegislationStart(request)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+      lazy val document = Jsoup.parse(contentAsString(result))
 
       "return a 400" in {
         status(result) shouldBe 400

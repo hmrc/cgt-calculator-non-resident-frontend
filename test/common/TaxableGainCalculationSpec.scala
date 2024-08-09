@@ -25,15 +25,15 @@ import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import services.SessionCacheService
 import uk.gov.hmrc.http.HeaderCarrier
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class TaxableGainCalculationSpec extends CommonPlaySpec with GuiceOneAppPerSuite with MockitoSugar with FakeRequestHelper {
-
-  implicit val hc: HeaderCarrier = new HeaderCarrier()
-  implicit val ec: ExecutionContext = app.injector.instanceOf[ExecutionContext]
+  implicit val hc: HeaderCarrier = HeaderCarrier()
   val mockCalcConnector: CalculatorConnector = mock[CalculatorConnector]
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
   val mockAnswersConstructor: AnswersConstructor = mock[AnswersConstructor]
@@ -80,7 +80,7 @@ class TaxableGainCalculationSpec extends CommonPlaySpec with GuiceOneAppPerSuite
     .thenReturn(Future.successful(Some(prrModel)))
 
   when(mockCalcConnector.calculateTaxableGainAfterPRR(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any()))
-    .thenReturn(Some(calculationResultsWithPRRModel))
+    .thenReturn(Future.successful(Some(calculationResultsWithPRRModel)))
 
   when(mockAnswersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers(ArgumentMatchers.any()))
     .thenReturn(Future.successful(Some(personalDetailsModel)))

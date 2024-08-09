@@ -16,7 +16,6 @@
 
 package controllers.CalculationControllerTests
 
-import org.apache.pekko.stream.Materializer
 import assets.MessageLookup
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import config.ApplicationConfig
@@ -30,19 +29,16 @@ import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
-import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.whatNext.whatNext
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class WhatNextControllerSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val hc: HeaderCarrier = mock[HeaderCarrier]
   val mockHttp: DefaultHttpClient = mock[DefaultHttpClient]
   val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  lazy val materializer: Materializer = mock[Materializer]
-  val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockMessagesControllerComponents: MessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val mockAnswersConstructor: AnswersConstructor = mock[AnswersConstructor]
   val whatNextView: whatNext = fakeApplication.injector.instanceOf[whatNext]
@@ -51,7 +47,7 @@ class WhatNextControllerSpec extends CommonPlaySpec with WithCommonFakeApplicati
     when(mockAnswersConstructor.getNRTotalGainAnswers(ArgumentMatchers.any()))
       .thenReturn(Future.successful(summary))
 
-    new WhatNextController(mockAnswersConstructor, mockMessagesControllerComponents, whatNextView)(ec)
+    new WhatNextController(mockAnswersConstructor, mockMessagesControllerComponents, whatNextView)
   }
 
   lazy val answerModel: TotalGainAnswersModel = TotalGainAnswersModel(
@@ -76,7 +72,7 @@ class WhatNextControllerSpec extends CommonPlaySpec with WithCommonFakeApplicati
     lazy val target = setupTarget(answerModel)
     "provided with a valid request" should {
       lazy val result = target.whatNext(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+      lazy val document = Jsoup.parse(contentAsString(result))
 
       "return a status of 200" in {
         status(result) shouldBe 200

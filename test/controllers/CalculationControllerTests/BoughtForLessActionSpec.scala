@@ -16,7 +16,6 @@
 
 package controllers.CalculationControllerTests
 
-import org.apache.pekko.stream.Materializer
 import assets.MessageLookup.{NonResident => messages}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import config.ApplicationConfig
@@ -32,17 +31,13 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
 import services.SessionCacheService
-import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.boughtForLess
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class BoughtForLessActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
-  implicit val hc: HeaderCarrier = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
-  val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
-
-  val materializer: Materializer = mock[Materializer]
   val mockHttp: DefaultHttpClient =mock[DefaultHttpClient]
   val mockCalcConnector: CalculatorConnector =mock[CalculatorConnector]
   val mockAnswersConstructor: AnswersConstructor = mock[AnswersConstructor]
@@ -61,7 +56,7 @@ class BoughtForLessActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
       mockDefaultCalElecConstructor,
       mockMessagesControllerComponents,
       boughtForLessView
-    )(ec)
+    )
   }
 
   def setupTarget(getData: Option[BoughtForLessModel]): BoughtForLessController = {
@@ -73,7 +68,7 @@ class BoughtForLessActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
       ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(("", "")))
 
-    new BoughtForLessController(mockHttp, mockSessionCacheService, mockDefaultCalElecConstructor, mockMessagesControllerComponents, boughtForLessView)(ec) {
+    new BoughtForLessController(mockHttp, mockSessionCacheService, mockDefaultCalElecConstructor, mockMessagesControllerComponents, boughtForLessView) {
     }
   }
 
@@ -82,7 +77,7 @@ class BoughtForLessActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
     "provided with no previous data" should {
       val target = setupTarget(None)
       lazy val result = target.boughtForLess(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+      lazy val document = Jsoup.parse(contentAsString(result))
 
       "return a status of 200" in {
         status(result) shouldBe 200
@@ -96,7 +91,7 @@ class BoughtForLessActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
     "provided with some previous data" should {
       val target = setupTarget(Some(BoughtForLessModel(true)))
       lazy val result = target.boughtForLess(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+      lazy val document = Jsoup.parse(contentAsString(result))
 
       "return a status of 200" in {
         status(result) shouldBe 200
@@ -155,7 +150,7 @@ class BoughtForLessActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
       lazy val request = fakeRequestToPOSTWithSession(("boughtForLess", ""))
       lazy val target = setupTarget(None)
       lazy val result = target.submitBoughtForLess(request)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+      lazy val document = Jsoup.parse(contentAsString(result))
 
       "return a status of 400" in {
         status(result) shouldBe 400
