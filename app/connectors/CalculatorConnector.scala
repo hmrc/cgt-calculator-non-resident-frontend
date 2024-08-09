@@ -16,42 +16,46 @@
 
 package connectors
 
-import common.nonresident.Rebased
 import common.TaxDates
+import common.nonresident.Rebased
 import config.ApplicationConfig
 import constructors._
 import models._
-import uk.gov.hmrc.http.HeaderCarrier
+import play.api.libs.json.Json
 import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.HttpReadsInstances.readFromJson
+import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
-import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import uk.gov.hmrc.play.bootstrap.http.HttpClientV2Provider
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class CalculatorConnector @Inject()(val http: DefaultHttpClient,
+class CalculatorConnector @Inject()(val httpProvider: HttpClientV2Provider,
                                     val appConfig: ApplicationConfig,
                                     val servicesConfig: ServicesConfig)
                                    (implicit ec: ExecutionContext) {
+  private val http = httpProvider.get()
 
   val serviceUrl: String = servicesConfig.baseUrl("capital-gains-calculator")
 
   def calculateTotalGain(totalGainAnswersModel: TotalGainAnswersModel)
-                        (implicit hc: HeaderCarrier): Future[Option[TotalGainResultsModel]] = {
-    http.POST[TotalGainAnswersModel, Option[TotalGainResultsModel]](s"$serviceUrl/capital-gains-calculator/non-resident/calculate-total-gain",
-      totalGainAnswersModel)
-  }
+                        (implicit hc: HeaderCarrier): Future[Option[TotalGainResultsModel]] =
+    http.post(url"$serviceUrl/capital-gains-calculator/non-resident/calculate-total-gain")
+      .withBody(Json.toJson(totalGainAnswersModel))
+      .setHeader("Coontent-Type" -> "application/json")
+      .execute[Option[TotalGainResultsModel]]
 
   def calculateTaxableGainAfterPRR(totalGainAnswersModel: TotalGainAnswersModel,
                                    privateResidenceReliefModel: PrivateResidenceReliefModel,
                                    propertyLivedInModel: PropertyLivedInModel)
                                   (implicit hc: HeaderCarrier): Future[Option[CalculationResultsWithPRRModel]] = {
-    http.GET[Option[CalculationResultsWithPRRModel]](s"$serviceUrl/capital-gains-calculator/non-resident/calculate-gain-after-prr?${
-      TotalGainRequestConstructor.totalGainQuery(totalGainAnswersModel) +
-        PrivateResidenceReliefRequestConstructor.privateResidenceReliefQuery(
-          Some(privateResidenceReliefModel),
-          Some(propertyLivedInModel))
-    }")
+    val totalGain = TotalGainRequestConstructor.totalGainQuery(totalGainAnswersModel)
+    val prrRelief = PrivateResidenceReliefRequestConstructor.privateResidenceReliefQuery(
+      Some(privateResidenceReliefModel),
+      Some(propertyLivedInModel)).getOrElse(Map())
+    http.get(url"$serviceUrl/capital-gains-calculator/non-resident/calculate-gain-after-prr?${totalGain ++ prrRelief}")
+      .execute[Option[CalculationResultsWithPRRModel]]
   }
 
   def calculateNRCGTTotalTax(totalGainAnswersModel: TotalGainAnswersModel,
@@ -61,28 +65,26 @@ class CalculatorConnector @Inject()(val http: DefaultHttpClient,
                              maxAnnualExemptAmount: BigDecimal,
                              otherReliefs: Option[AllOtherReliefsModel] = None)(implicit hc: HeaderCarrier):
   Future[Option[CalculationResultsWithTaxOwedModel]] = {
-
-    http.GET[Option[CalculationResultsWithTaxOwedModel]](s"$serviceUrl/capital-gains-calculator/non-resident/calculate-tax-owed?${
-      TotalGainRequestConstructor.totalGainQuery(totalGainAnswersModel) +
-        PrivateResidenceReliefRequestConstructor.privateResidenceReliefQuery(
-          privateResidenceReliefModel,
-          propertyLivedInModel) +
-        FinalTaxAnswersRequestConstructor.additionalParametersQuery(totalTaxPersonalDetailsModel, maxAnnualExemptAmount) +
-        OtherReliefsRequestConstructor.otherReliefsQuery(otherReliefs)
-    }")
+    val totalGain = TotalGainRequestConstructor.totalGainQuery(totalGainAnswersModel)
+    val prrRelief = PrivateResidenceReliefRequestConstructor.privateResidenceReliefQuery(
+      privateResidenceReliefModel,
+      propertyLivedInModel)
+    val additionalParams = FinalTaxAnswersRequestConstructor.additionalParametersQuery(totalTaxPersonalDetailsModel, maxAnnualExemptAmount)
+    val otherReliefsQuery = OtherReliefsRequestConstructor.otherReliefsQuery(otherReliefs)
+    val params = totalGain ++ additionalParams ++ otherReliefsQuery ++ prrRelief.getOrElse(Map())
+    http.get(url"$serviceUrl/capital-gains-calculator/non-resident/calculate-tax-owed?$params")
+      .execute[Option[CalculationResultsWithTaxOwedModel]]
   }
 
   def getFullAEA(taxYear: Int)(implicit hc: HeaderCarrier): Future[Option[BigDecimal]] = {
-    http.GET[Option[BigDecimal]](s"$serviceUrl/capital-gains-calculator/tax-rates-and-bands/max-full-aea?taxYear=$taxYear")
+    http.get(url"$serviceUrl/capital-gains-calculator/tax-rates-and-bands/max-full-aea?taxYear=$taxYear")
+      .execute[Option[BigDecimal]]
   }
 
   def getPA(taxYear: Int, isEligibleBlindPersonsAllowance: Boolean = false)(implicit hc: HeaderCarrier): Future[Option[BigDecimal]] = {
-    http.GET[Option[BigDecimal]](s"$serviceUrl/capital-gains-calculator/tax-rates-and-bands/max-pa?taxYear=$taxYear" +
-      s"${
-        if (isEligibleBlindPersonsAllowance) s"&isEligibleBlindPersonsAllowance=true"
-        else ""
-      }"
-    )
+    val eligible = Some(isEligibleBlindPersonsAllowance).filter(identity)
+    http.get(url"$serviceUrl/capital-gains-calculator/tax-rates-and-bands/max-pa?taxYear=$taxYear&isEligibleBlindPersonsAllowance=$eligible")
+      .execute[Option[BigDecimal]]
   }
 
   private def selectAcquisitionCosts(answers: TotalGainAnswersModel) = {
@@ -100,30 +102,30 @@ class CalculatorConnector @Inject()(val http: DefaultHttpClient,
                            calculationType: Option[CalculationElectionModel]
                          )(implicit hc: HeaderCarrier): Future[BigDecimal] = calculationType match {
     case Some(calculationElection) =>
-      if(calculationElection.calculationType == Rebased) {
-        http.GET[BigDecimal](s"$serviceUrl/capital-gains-calculator/non-resident/calculate-total-costs?" +
-          s"disposalCosts=${answers.disposalCostsModel.disposalCosts.toDouble}" +
-          s"&acquisitionCosts=${answers.rebasedCostsModel.get.rebasedCosts.getOrElse(BigDecimal(0)).toDouble}" +
-          getImprovements(answers, rebased = true))
-      } else {
-        http.GET[BigDecimal](s"$serviceUrl/capital-gains-calculator/non-resident/calculate-total-costs?" +
-          s"disposalCosts=${answers.disposalCostsModel.disposalCosts.toDouble}" +
-          s"&acquisitionCosts=${selectAcquisitionCosts(answers).toDouble}" +
-          getImprovements(answers, rebased = false))
-      }
+      val params =
+        if (calculationElection.calculationType == Rebased) {
+          Map(
+            "disposalCosts" -> answers.disposalCostsModel.disposalCosts.toDouble,
+            "acquisitionCosts" -> answers.rebasedCostsModel.get.rebasedCosts.map(_.toDouble).getOrElse(0.0),
+            "improvements" -> answers.improvementsModel.flatMap(_.improvementsAmtAfter).map(_.toDouble).getOrElse(0.0),
+          )
+        } else {
+          Map(
+            "disposalCosts" -> answers.disposalCostsModel.disposalCosts.toDouble,
+            "acquisitionCosts" -> selectAcquisitionCosts(answers).toDouble,
+            "improvements" ->
+              (answers.improvementsModel match {
+                case Some(model) => model.improvementsAmt.toDouble + model.improvementsAmtAfter.map(_.toDouble).getOrElse(0.0)
+                case None => 0.0
+              })
+          )
+        }
+      http.get(url"$serviceUrl/capital-gains-calculator/non-resident/calculate-total-costs?$params")
+        .execute[BigDecimal]
     case _ => Future.successful(throw new Exception("No calculation election supplied"))
   }
 
-  private def getImprovements(answers: TotalGainAnswersModel, rebased: Boolean): String = {
-    answers.improvementsModel match {
-      case Some(model) => if(!rebased)
-        s"&improvements=${model.improvementsAmt.toDouble + model.improvementsAmtAfter.getOrElse(BigDecimal(0)).toDouble}"
-        else s"&improvements=${model.improvementsAmtAfter.getOrElse(BigDecimal(0)).toDouble}"
-      case _ => "&improvements=0.0"
-    }
-  }
-
   def getTaxYear(taxYear: String)(implicit hc: HeaderCarrier): Future[Option[TaxYearModel]] = {
-    http.GET[Option[TaxYearModel]](s"$serviceUrl/capital-gains-calculator/tax-year?date=$taxYear")
+    http.get(url"$serviceUrl/capital-gains-calculator/tax-year?date=$taxYear").execute[Option[TaxYearModel]]
   }
 }

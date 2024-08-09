@@ -14,22 +14,9 @@
  * limitations under the License.
  */
 
-package constructors
+package util
 
-import common.CommonPlaySpec
-import models.{AllOtherReliefsModel, OtherReliefsModel}
-
-class OtherReliefsRequestConstructorSpec extends CommonPlaySpec {
-
-  val allReliefs: AllOtherReliefsModel = AllOtherReliefsModel(
-    Some(OtherReliefsModel(1)),
-    Some(OtherReliefsModel(2)),
-    Some(OtherReliefsModel(3))
-  )
-
-  "Calling .otherReliefsQuery" should {
-    "when called with an empty model" in {
-      OtherReliefsRequestConstructor.otherReliefsQuery(None) shouldEqual Map()
-    }
-  }
+object Util {
+    def trim(map: Map[String, Option[String]]): Map[String, String] =
+      map.filter(_._2.isDefined).view.mapValues(_.get).toMap
 }
