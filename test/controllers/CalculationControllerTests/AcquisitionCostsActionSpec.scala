@@ -16,7 +16,6 @@
 
 package controllers.CalculationControllerTests
 
-import org.apache.pekko.stream.Materializer
 import assets.MessageLookup.NonResident.{AcquisitionCosts => messages}
 import assets.MessageLookup.{NonResident => commonMessages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
@@ -35,18 +34,14 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
 import services.SessionCacheService
-import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import views.html.calculation.acquisitionCosts
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class AcquisitionCostsActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper
   with BeforeAndAfterEach {
 
-  implicit val hc: HeaderCarrier = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
-  val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
-
-  val materializer: Materializer = mock[Materializer]
   val mockCalcConnector: CalculatorConnector =mock[CalculatorConnector]
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
   val mockDefaultCalcElecConstructor: DefaultCalculationElectionConstructor = mock[DefaultCalculationElectionConstructor]
@@ -60,7 +55,7 @@ class AcquisitionCostsActionSpec extends CommonPlaySpec with WithCommonFakeAppli
       mockSessionCacheService,
       mockMessagesControllerComponents,
       acquisitionCostsView
-    )(ec)
+    )
   }
 
   def setupTarget(getData: Option[AcquisitionCostsModel],
@@ -74,20 +69,20 @@ class AcquisitionCostsActionSpec extends CommonPlaySpec with WithCommonFakeAppli
 
     when(mockSessionCacheService.fetchAndGetFormData[DateModel](
       ArgumentMatchers.eq(KeystoreKeys.acquisitionDate))(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(acquisitionDateData)
+      .thenReturn(Future.successful(acquisitionDateData))
 
     when(mockSessionCacheService.fetchAndGetFormData[HowBecameOwnerModel](
       ArgumentMatchers.eq(KeystoreKeys.howBecameOwner))(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(howBecameOwnerData)
+      .thenReturn(Future.successful(howBecameOwnerData))
 
     when(mockSessionCacheService.fetchAndGetFormData[BoughtForLessModel](
       ArgumentMatchers.eq(KeystoreKeys.boughtForLess))(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(boughtForLessData)
+      .thenReturn(Future.successful(boughtForLessData))
 
     when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(("", "")))
 
-    new AcquisitionCostsController(mockSessionCacheService, mockMessagesControllerComponents, acquisitionCostsView)(ec)
+    new AcquisitionCostsController(mockSessionCacheService, mockMessagesControllerComponents, acquisitionCostsView)
   }
 
   "Calling the .backLink method" should {
@@ -145,14 +140,14 @@ class AcquisitionCostsActionSpec extends CommonPlaySpec with WithCommonFakeAppli
       "load the acquisitionCosts page" in {
         val target = setupTarget(None, acquisitionDateData = Some(DateModel(1, 1, 2016)), Some(HowBecameOwnerModel("Gifted")))
         lazy val result = target.acquisitionCosts(fakeRequestWithSession)
-        lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+        lazy val document = Jsoup.parse(contentAsString(result))
         document.title shouldBe pageTitle
       }
 
       "have a back link to the WorthWhenGiftedTo page" in {
         val target = setupTarget(None, acquisitionDateData = Some(DateModel(1, 1, 2016)), Some(HowBecameOwnerModel("Gifted")))
         lazy val result = target.acquisitionCosts(fakeRequestWithSession)
-        lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+        lazy val document = Jsoup.parse(contentAsString(result))
         document.select(".govuk-back-link").attr("href") shouldBe "#"
       }
     }
@@ -170,7 +165,7 @@ class AcquisitionCostsActionSpec extends CommonPlaySpec with WithCommonFakeAppli
         val testAcquisitionCostsModel = new AcquisitionCostsModel(1000)
         val target = setupTarget(Some(testAcquisitionCostsModel))
         lazy val result = target.acquisitionCosts(fakeRequestWithSession)
-        lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+        lazy val document = Jsoup.parse(contentAsString(result))
         document.title shouldBe pageTitle
       }
     }
@@ -240,7 +235,7 @@ class AcquisitionCostsActionSpec extends CommonPlaySpec with WithCommonFakeAppli
         val target = setupTarget(None, acquisitionDateData = Some(DateModel(1, 1, 2016)), Some(HowBecameOwnerModel("Inherited")))
         lazy val request = fakeRequestToPOSTWithSession(("acquisitionCosts", "a"))
         lazy val result = target.submitAcquisitionCosts(request)
-        lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+        lazy val document = Jsoup.parse(contentAsString(result))
         document.title shouldBe s"""Error: $pageTitle"""
       }
 
@@ -248,7 +243,7 @@ class AcquisitionCostsActionSpec extends CommonPlaySpec with WithCommonFakeAppli
         val target = setupTarget(None, acquisitionDateData = Some(DateModel(1, 1, 2016)), Some(HowBecameOwnerModel("Inherited")))
         lazy val request = fakeRequestToPOSTWithSession(("acquisitionCosts", "a"))
         lazy val result = target.submitAcquisitionCosts(request)
-        lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+        lazy val document = Jsoup.parse(contentAsString(result))
         document.select(".govuk-back-link").attr("href") shouldBe "#"
       }
     }

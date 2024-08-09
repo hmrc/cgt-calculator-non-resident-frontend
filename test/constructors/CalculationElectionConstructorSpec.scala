@@ -19,6 +19,7 @@ package constructors
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import models._
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
 
 class CalculationElectionConstructorSpec
   extends CommonPlaySpec with MockitoSugar with WithCommonFakeApplication {
@@ -34,7 +35,7 @@ class CalculationElectionConstructorSpec
 
     "when only a flat calculation result is provided" should {
 
-      lazy val calculations = target.generateElection(onlyFlat, None, None, None)
+      lazy val calculations = await(target.generateElection(onlyFlat, None, None, None))
       "produce sequence with one element" in {
         calculations.size shouldBe 1
       }
@@ -46,7 +47,7 @@ class CalculationElectionConstructorSpec
 
     "when a flat calculation and a rebased calculation result are provided" should {
 
-      lazy val calculations = target.generateElection(flatAndRebased, None, None, None)
+      lazy val calculations = await(target.generateElection(flatAndRebased, None, None, None))
 
       "produce two entries in the sequence" in {
         calculations.size shouldBe 2
@@ -66,7 +67,7 @@ class CalculationElectionConstructorSpec
 
     "when a flat calculation and a time calculation result are provided" should {
 
-      lazy val calculations = target.generateElection(flatAndTime, None, None, None)
+      lazy val calculations = await(target.generateElection(flatAndTime, None, None, None))
 
       "produce two entries in the sequence" in {
         calculations.size shouldBe 2
@@ -86,7 +87,7 @@ class CalculationElectionConstructorSpec
 
     "when a flat, rebased and time are all provided" should {
 
-      lazy val calculations = target.generateElection(flatRebasedAndTime, None, None, None)
+      lazy val calculations = await(target.generateElection(flatRebasedAndTime, None, None, None))
 
       "produce a three entry sequence" in {
         calculations.size shouldBe 3
@@ -141,15 +142,15 @@ class CalculationElectionConstructorSpec
 
     "when a flat calculation and a rebased PRR calculation result are provided" should {
 
-      lazy val calculations = target.generateElection(flatAndRebased, Some(totalGainsAfterPRRFlatAndTASortByTotalGain), None,
-        Some(AllOtherReliefsModel(Some(OtherReliefsModel(1000)), Some(OtherReliefsModel(1000)), Some(OtherReliefsModel(1000)))))
+      lazy val calculations = await(target.generateElection(flatAndRebased, Some(totalGainsAfterPRRFlatAndTASortByTotalGain), None,
+        Some(AllOtherReliefsModel(Some(OtherReliefsModel(1000)), Some(OtherReliefsModel(1000)), Some(OtherReliefsModel(1000))))))
 
       "produce two entries in the sequence" in {
         calculations.size shouldBe 2
       }
 
       "should contain entries with reliefs included" in {
-        await(calculations).forall(_._6.isDefined) shouldBe true
+        calculations.forall(_._6.isDefined) shouldBe true
       }
 
       "should be returned with an order" which {
@@ -166,7 +167,7 @@ class CalculationElectionConstructorSpec
 
     "when a flat calculation and a rebased calculation result are provided that should be ordered by taxable gain" should {
 
-      lazy val calculations = target.generateElection(flatAndTime, Some(totalGainsAfterPRRFlatAndTASortByTaxableGain), None, None)
+      lazy val calculations = await(target.generateElection(flatAndTime, Some(totalGainsAfterPRRFlatAndTASortByTaxableGain), None, None))
 
       "produce two entries in the sequence" in {
         calculations.size shouldBe 2
@@ -186,7 +187,7 @@ class CalculationElectionConstructorSpec
 
     "when a flat, rebased and time prr result should be sorted by total gain" should {
 
-      lazy val calculations = target.generateElection(flatRebasedAndTime, Some(totalGainsAllSortByTotalGain), None, None)
+      lazy val calculations = await(target.generateElection(flatRebasedAndTime, Some(totalGainsAllSortByTotalGain), None, None))
 
       "produce a three entry sequence" in {
         calculations.size shouldBe 3
@@ -210,7 +211,7 @@ class CalculationElectionConstructorSpec
 
     "when a flat, rebased and time prr result should be sorted by taxable gain" should {
 
-      lazy val calculations = target.generateElection(flatRebasedAndTime, Some(totalGainsAllSortByTaxableGain), None, None)
+      lazy val calculations = await(target.generateElection(flatRebasedAndTime, Some(totalGainsAllSortByTaxableGain), None, None))
 
       "produce a three entry sequence" in {
         calculations.size shouldBe 3
@@ -245,7 +246,7 @@ class CalculationElectionConstructorSpec
 
     "when a flat, rebased and time prr result should be sorted by taxable gain" should {
 
-      lazy val calculations = target.generateElection(flatRebasedAndTime, None, Some(calculationResultsTotalSortByTaxOwed), None)
+      lazy val calculations = await(target.generateElection(flatRebasedAndTime, None, Some(calculationResultsTotalSortByTaxOwed), None))
 
       "produce a three entry sequence" in {
         calculations.size shouldBe 3

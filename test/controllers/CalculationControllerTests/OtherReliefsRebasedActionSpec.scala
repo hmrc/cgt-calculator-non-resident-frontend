@@ -16,7 +16,6 @@
 
 package controllers.CalculationControllerTests
 
-import org.apache.pekko.stream.Materializer
 import assets.MessageLookup.NonResident.{OtherReliefs => messages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.{CommonPlaySpec, TestModels, WithCommonFakeApplication}
@@ -37,18 +36,14 @@ import play.api.mvc.{AnyContentAsFormUrlEncoded, MessagesControllerComponents, R
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.SessionCacheService
-import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.otherReliefsRebased
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class OtherReliefsRebasedActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper with BeforeAndAfterEach {
 
-  implicit val hc: HeaderCarrier = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
-
-  val materializer: Materializer = mock[Materializer]
-  val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp: DefaultHttpClient =mock[DefaultHttpClient]
   val mockCalcConnector: CalculatorConnector =mock[CalculatorConnector]
   val mockAnswerConstuctor: AnswersConstructor = mock[AnswersConstructor]
@@ -64,7 +59,7 @@ class OtherReliefsRebasedActionSpec extends CommonPlaySpec with WithCommonFakeAp
       mockAnswerConstuctor,
       mockMessagesControllerComponents,
       otherReliefsRebasedView
-    )(ec)
+    )
   }
 
   def setupTarget(getData: Option[OtherReliefsModel],
@@ -91,7 +86,7 @@ class OtherReliefsRebasedActionSpec extends CommonPlaySpec with WithCommonFakeAp
       .thenReturn(Future.successful(Some(personalDetailsModel)))
 
     when(mockCalcConnector.calculateTaxableGainAfterPRR(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any()))
-      .thenReturn(calculationResultsWithPRRModel)
+      .thenReturn(Future.successful(calculationResultsWithPRRModel))
 
     when(mockCalcConnector.getFullAEA(ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(BigDecimal(11000))))
@@ -112,7 +107,7 @@ class OtherReliefsRebasedActionSpec extends CommonPlaySpec with WithCommonFakeAp
       .thenReturn(Future.successful(("", "")))
   }
 
-  def document(result : Future[Result]): Document = Jsoup.parse(bodyOf(result)(materializer, ec))
+  def document(result : Future[Result]): Document = Jsoup.parse(contentAsString(result))
 
   "Calling the .otherReliefsRebased action " when {
 

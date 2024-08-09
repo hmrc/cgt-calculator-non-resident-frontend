@@ -16,7 +16,6 @@
 
 package controllers.CalculationControllerTests
 
-import org.apache.pekko.stream.Materializer
 import assets.MessageLookup.NonResident.{OtherReliefs => messages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.{CommonPlaySpec, TestModels, WithCommonFakeApplication}
@@ -33,18 +32,15 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
 import services.SessionCacheService
-import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.otherReliefs
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class OtherReliefsActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val hc: HeaderCarrier = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
   val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  val materializer: Materializer = mock[Materializer]
-  val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp: DefaultHttpClient =mock[DefaultHttpClient]
   val mockCalcConnector: CalculatorConnector =mock[CalculatorConnector]
   val mockAnswersConstructor: AnswersConstructor = mock[AnswersConstructor]
@@ -59,7 +55,7 @@ class OtherReliefsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
       mockAnswersConstructor,
       mockMessagesControllerComponents,
       otherReliefsView
-    )(ec)
+    )
   }
   def setupTarget(getData: Option[OtherReliefsModel],
                   calculationResultsModel: CalculationResultsWithTaxOwedModel,
@@ -86,7 +82,7 @@ class OtherReliefsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
       .thenReturn(Future.successful(Some(personalDetailsModel)))
 
     when(mockCalcConnector.calculateTaxableGainAfterPRR(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any()))
-      .thenReturn(calculationResultsWithPRRModel)
+      .thenReturn(Future.successful(calculationResultsWithPRRModel))
 
     when(mockCalcConnector.getFullAEA(ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(BigDecimal(11000))))
@@ -106,7 +102,7 @@ class OtherReliefsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
     when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(("", "")))
 
-    new OtherReliefsController(mockCalcConnector, mockSessionCacheService, mockAnswersConstructor, mockMessagesControllerComponents, otherReliefsView)(ec)
+    new OtherReliefsController(mockCalcConnector, mockSessionCacheService, mockAnswersConstructor, mockMessagesControllerComponents, otherReliefsView)
   }
 
   val personalDetailsModel: TotalPersonalDetailsCalculationModel = TotalPersonalDetailsCalculationModel(
@@ -133,7 +129,7 @@ class OtherReliefsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
         calculationResultsModel,
         personalDetailsModel)
       lazy val result = target.otherReliefs(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+      lazy val document = Jsoup.parse(contentAsString(result))
 
       "return a status of 200" in {
         status(result) shouldBe 200
@@ -154,7 +150,7 @@ class OtherReliefsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
         calculationResultsModel,
         personalDetailsModel)
       lazy val result = target.otherReliefs(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+      lazy val document = Jsoup.parse(contentAsString(result))
 
       "return a status of 200" in {
         status(result) shouldBe 200
@@ -205,7 +201,7 @@ class OtherReliefsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
         personalDetailsModel)
       lazy val request = fakeRequestToPOSTWithSession("otherReliefs" -> "")
       lazy val result = target.submitOtherReliefs(request)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+      lazy val document = Jsoup.parse(contentAsString(result))
 
       "return a status of 400" in {
         status(result) shouldBe 400

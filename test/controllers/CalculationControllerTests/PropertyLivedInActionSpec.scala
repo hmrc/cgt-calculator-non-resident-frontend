@@ -16,7 +16,6 @@
 
 package controllers.CalculationControllerTests
 
-import org.apache.pekko.stream.Materializer
 import assets.MessageLookup.{PropertyLivedIn => messages}
 import common.KeystoreKeys.{NonResidentKeys => keyStoreKeys}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
@@ -32,18 +31,14 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers.{contentType, _}
 import services.SessionCacheService
-import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.propertyLivedIn
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class PropertyLivedInActionSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with MockitoSugar {
 
-  implicit val hc: HeaderCarrier = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
-
-  val materializer: Materializer = mock[Materializer]
-  val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp: DefaultHttpClient =mock[DefaultHttpClient]
   val mockCalcConnector: CalculatorConnector =mock[CalculatorConnector]
   val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
@@ -57,7 +52,7 @@ class PropertyLivedInActionSpec extends CommonPlaySpec with WithCommonFakeApplic
       mockSessionCacheService,
       mockMessagesControllerComponents,
       propertyLivedInView
-    )(ec)
+    )
   }
 
 
@@ -70,7 +65,7 @@ class PropertyLivedInActionSpec extends CommonPlaySpec with WithCommonFakeApplic
     when(mockSessionCacheService.saveFormData[PropertyLivedInModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(("", "")))
 
-    new PropertyLivedInController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, propertyLivedInView)(ec)
+    new PropertyLivedInController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, propertyLivedInView)
   }
 
   "Calling .propertyLivedIn from the resident PropertyLivedInController" when {
@@ -86,7 +81,7 @@ class PropertyLivedInActionSpec extends CommonPlaySpec with WithCommonFakeApplic
 
       s"return some html with title of ${messages.title}" in {
         contentType(result) shouldBe Some("text/html")
-        Jsoup.parse(bodyOf(result)(materializer, ec)).title shouldEqual s"${messages.title} - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
+        Jsoup.parse(contentAsString(result)).title shouldEqual s"${messages.title} - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
       }
     }
 
@@ -101,7 +96,7 @@ class PropertyLivedInActionSpec extends CommonPlaySpec with WithCommonFakeApplic
 
       s"return some html with title of ${messages.title}" in {
         contentType(result) shouldBe Some("text/html")
-        Jsoup.parse(bodyOf(result)(materializer, ec)).title shouldEqual s"${messages.title} - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
+        Jsoup.parse(contentAsString(result)).title shouldEqual s"${messages.title} - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
       }
     }
 
@@ -157,7 +152,7 @@ class PropertyLivedInActionSpec extends CommonPlaySpec with WithCommonFakeApplic
       lazy val target = setupTarget(None)
       lazy val request = fakeRequestToPOSTWithSession(("propertyLivedIn", ""))
       lazy val result = target.submitPropertyLivedIn(request)
-      lazy val doc = Jsoup.parse(bodyOf(result)(materializer, ec))
+      lazy val doc = Jsoup.parse(contentAsString(result))
 
       "return a status of 400" in {
         status(result) shouldBe 400

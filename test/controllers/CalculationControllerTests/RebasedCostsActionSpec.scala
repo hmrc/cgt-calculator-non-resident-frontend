@@ -16,7 +16,6 @@
 
 package controllers.CalculationControllerTests
 
-import org.apache.pekko.stream.Materializer
 import assets.MessageLookup.NonResident.{RebasedCosts => messages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
@@ -32,18 +31,14 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
 import services.SessionCacheService
-import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.rebasedCosts
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class RebasedCostsActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val hc: HeaderCarrier = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
-
-  val materializer: Materializer = mock[Materializer]
-  val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp: DefaultHttpClient =mock[DefaultHttpClient]
   val mockCalcConnector: CalculatorConnector =mock[CalculatorConnector]
   val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
@@ -56,7 +51,7 @@ class RebasedCostsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
       mockSessionCacheService,
       mockMessagesControllerComponents,
       rebasedCostsView
-    )(ec)
+    )
   }
 
   def setupTarget(getData: Option[RebasedCostsModel]): RebasedCostsController = {
@@ -68,7 +63,7 @@ class RebasedCostsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
     when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(("", "")))
 
-    new RebasedCostsController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, rebasedCostsView)(ec)
+    new RebasedCostsController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, rebasedCostsView)
   }
 
   // GET Tests
@@ -77,7 +72,7 @@ class RebasedCostsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
     "not supplied with a pre-existing stored model" should {
       val target = setupTarget(None)
       lazy val result = target.rebasedCosts(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+      lazy val document = Jsoup.parse(contentAsString(result))
 
       "return a 200" in {
         status(result) shouldBe 200
@@ -90,7 +85,7 @@ class RebasedCostsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
       "a previous value is supplied with a pre-existing stored model" should {
         val target = setupTarget(Some(RebasedCostsModel("Yes", Some(1500))))
         lazy val result = target.rebasedCosts(fakeRequestWithSession)
-        lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+        lazy val document = Jsoup.parse(contentAsString(result))
 
         "return a 200" in {
           status(result) shouldBe 200
@@ -137,7 +132,7 @@ class RebasedCostsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
       val target = setupTarget(None)
       lazy val request = fakeRequestToPOSTWithSession("hasRebasedCosts" -> "Yes", "rebasedCosts" -> "")
       lazy val result = target.submitRebasedCosts(request)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+      lazy val document = Jsoup.parse(contentAsString(result))
 
       "return a 400" in {
         status(result) shouldBe 400

@@ -16,7 +16,6 @@
 
 package controllers.CalculationControllerTests
 
-import org.apache.pekko.stream.Materializer
 import assets.MessageLookup.NonResident.{WorthWhenInherited => messages}
 import assets.MessageLookup.{NonResident => commonMessages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
@@ -34,18 +33,14 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
 import services.SessionCacheService
-import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.worthWhenInherited
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class WorthWhenInheritedActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val hc: HeaderCarrier = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
-
-  val materializer: Materializer = mock[Materializer]
-  val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp: DefaultHttpClient =mock[DefaultHttpClient]
   val mockCalcConnector: CalculatorConnector =mock[CalculatorConnector]
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
@@ -61,7 +56,7 @@ class WorthWhenInheritedActionSpec extends CommonPlaySpec with WithCommonFakeApp
       mockSessionCacheService,
       mockMessagesControllerComponents,
       worthWhenInheritedView
-    )(ec)
+    )
   }
 
   def setupTarget(getData: Option[AcquisitionValueModel]): WorthWhenInheritedController = {
@@ -74,7 +69,7 @@ class WorthWhenInheritedActionSpec extends CommonPlaySpec with WithCommonFakeApp
     when(mockSessionCacheService.saveFormData[AcquisitionValueModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(("", "")))
 
-    new WorthWhenInheritedController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, worthWhenInheritedView)(ec)
+    new WorthWhenInheritedController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, worthWhenInheritedView)
   }
 
   "Calling .worthWhenInherited" when {
@@ -90,7 +85,7 @@ class WorthWhenInheritedActionSpec extends CommonPlaySpec with WithCommonFakeApp
 
       s"return some html with title of $pageTitle" in {
         contentType(result) shouldBe Some("text/html")
-        Jsoup.parse(bodyOf(result)(materializer, ec)).title shouldEqual pageTitle
+        Jsoup.parse(contentAsString(result)).title shouldEqual pageTitle
       }
     }
 
@@ -105,7 +100,7 @@ class WorthWhenInheritedActionSpec extends CommonPlaySpec with WithCommonFakeApp
 
       s"return some html with title of $pageTitle" in {
         contentType(result) shouldBe Some("text/html")
-        Jsoup.parse(bodyOf(result)(materializer, ec)).title shouldEqual pageTitle
+        Jsoup.parse(contentAsString(result)).title shouldEqual pageTitle
       }
     }
 
@@ -146,7 +141,7 @@ class WorthWhenInheritedActionSpec extends CommonPlaySpec with WithCommonFakeApp
       lazy val target = setupTarget(None)
       lazy val request = fakeRequestToPOSTWithSession(("acquisitionMarketValue", "a"))
       lazy val result = target.submitWorthWhenInherited(request)
-      lazy val doc = Jsoup.parse(bodyOf(result)(materializer, ec))
+      lazy val doc = Jsoup.parse(contentAsString(result))
 
       "return a status of 400" in {
         status(result) shouldBe 400

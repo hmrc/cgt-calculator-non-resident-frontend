@@ -16,7 +16,6 @@
 
 package controllers.CalculationControllerTests
 
-import org.apache.pekko.stream.Materializer
 import assets.MessageLookup.NonResident.{NoCapitalGainsTax => messages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
@@ -32,19 +31,16 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
 import services.SessionCacheService
-import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.noCapitalGainsTax
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class NoCapitalGainsTaxActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val hc: HeaderCarrier = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
   val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
 
-  val materializer: Materializer = mock[Materializer]
-  val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp: DefaultHttpClient =mock[DefaultHttpClient]
   val mockCalcConnector: CalculatorConnector =mock[CalculatorConnector]
   val mockMessagesControllerComponents: MessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
@@ -56,7 +52,7 @@ class NoCapitalGainsTaxActionSpec extends CommonPlaySpec with WithCommonFakeAppl
       mockSessionCacheService,
       mockMessagesControllerComponents,
       noCapitalGainsTaxView
-    )(ec)
+    )
   }
 
   def setupTarget(getData: Option[DateModel]): NoCapitalGainsTaxController = {
@@ -65,7 +61,7 @@ class NoCapitalGainsTaxActionSpec extends CommonPlaySpec with WithCommonFakeAppl
       ArgumentMatchers.eq(KeystoreKeys.disposalDate))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    new NoCapitalGainsTaxController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, noCapitalGainsTaxView)(ec)
+    new NoCapitalGainsTaxController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, noCapitalGainsTaxView)
   }
 
   //GET Tests
@@ -74,7 +70,7 @@ class NoCapitalGainsTaxActionSpec extends CommonPlaySpec with WithCommonFakeAppl
     "called with a valid session" should {
       val target = setupTarget(Some(DateModel(1, 1, 2015)))
       lazy val result = target.noCapitalGainsTax(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+      lazy val document = Jsoup.parse(contentAsString(result))
 
       "return a 200" in {
         status(result) shouldBe 200

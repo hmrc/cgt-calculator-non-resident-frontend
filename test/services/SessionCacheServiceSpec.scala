@@ -22,17 +22,18 @@ import models.DisposalValueModel
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import repositories.SessionRepository
 import uk.gov.hmrc.http.SessionKeys
 import uk.gov.hmrc.mongo.CurrentTimestampSupport
 import uk.gov.hmrc.mongo.test.MongoSupport
 
 import java.util.UUID
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class SessionCacheServiceSpec extends CommonPlaySpec with WithCommonFakeApplication with MongoSupport with MockitoSugar {
 
-  implicit val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
   val sessionId: String = UUID.randomUUID.toString
   val sessionPair: (String, String) = SessionKeys.sessionId -> sessionId
   implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest().withSession(sessionPair)

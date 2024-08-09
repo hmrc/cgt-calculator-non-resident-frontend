@@ -22,22 +22,22 @@ import models._
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
 import java.util.UUID
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class CalculatorConnectorSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar {
+  implicit val hc: HeaderCarrier = HeaderCarrier()
 
   val mockHttp         = mock[DefaultHttpClient]
   val mockServiceConf  = mock[ServicesConfig]
   val mockConfig       = fakeApplication.injector.instanceOf[ApplicationConfig]
   val sessionId        = UUID.randomUUID.toString
-
-  implicit val hc: HeaderCarrier = HeaderCarrier(sessionId = Some(SessionId(sessionId)))
-  implicit val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
 
   class Setup {
     val connector = new CalculatorConnector(mockHttp, mockConfig, mockServiceConf)

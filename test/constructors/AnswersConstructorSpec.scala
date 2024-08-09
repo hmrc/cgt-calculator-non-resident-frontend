@@ -16,7 +16,6 @@
 
 package constructors
 
-import org.apache.pekko.stream.Materializer
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import connectors.CalculatorConnector
@@ -25,16 +24,13 @@ import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.test.FakeRequest
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import services.SessionCacheService
-import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class AnswersConstructorSpec extends CommonPlaySpec with MockitoSugar with WithCommonFakeApplication {
-
-  implicit val hc: HeaderCarrier = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
-  implicit val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
-  val materializer: Materializer = mock[Materializer]
   val mockCalcConnector: CalculatorConnector =mock[CalculatorConnector]
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
 

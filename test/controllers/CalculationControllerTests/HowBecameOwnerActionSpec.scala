@@ -16,7 +16,6 @@
 
 package controllers.CalculationControllerTests
 
-import org.apache.pekko.stream.Materializer
 import assets.MessageLookup.NonResident.{HowBecameOwner => messages}
 import assets.MessageLookup.{NonResident => commonMessages}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
@@ -32,18 +31,14 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
 import services.SessionCacheService
-import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.howBecameOwner
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class HowBecameOwnerActionSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with MockitoSugar {
 
-  implicit val hc: HeaderCarrier = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
-
-  val materializer: Materializer = mock[Materializer]
-  val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp: DefaultHttpClient =mock[DefaultHttpClient]
   val mockCalcConnector: CalculatorConnector =mock[CalculatorConnector]
   val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
@@ -58,19 +53,19 @@ class HowBecameOwnerActionSpec extends CommonPlaySpec with WithCommonFakeApplica
       mockSessionCacheService,
       mockMessagesControllerComponents,
       howBecameOwnerView
-    )(ec)
+    )
   }
 
   def setupTarget(getData: Option[HowBecameOwnerModel]): HowBecameOwnerController = {
 
     when(mockSessionCacheService.fetchAndGetFormData[HowBecameOwnerModel](ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(getData)
+      .thenReturn(Future.successful(getData))
 
     when(mockSessionCacheService.saveFormData[HowBecameOwnerModel](
       ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(("", ""))
+      .thenReturn(Future.successful("", ""))
 
-    new HowBecameOwnerController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, howBecameOwnerView)(ec)
+    new HowBecameOwnerController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, howBecameOwnerView)
   }
 
   "Calling .howBecameOwner action" when {
@@ -78,7 +73,7 @@ class HowBecameOwnerActionSpec extends CommonPlaySpec with WithCommonFakeApplica
     "provided with a valid session with no stored data" should {
       lazy val target = setupTarget(None)
       lazy val result = target.howBecameOwner(fakeRequestWithSession)
-      lazy val doc = Jsoup.parse(bodyOf(result)(materializer, ec))
+      lazy val doc = Jsoup.parse(contentAsString(result))
 
       "return a status of 200" in {
         status(result) shouldBe 200
@@ -92,7 +87,7 @@ class HowBecameOwnerActionSpec extends CommonPlaySpec with WithCommonFakeApplica
     "provided with a valid session with stored data" should {
       lazy val target = setupTarget(Some(HowBecameOwnerModel("Bought")))
       lazy val result = target.howBecameOwner(fakeRequestWithSession)
-      lazy val doc = Jsoup.parse(bodyOf(result)(materializer, ec))
+      lazy val doc = Jsoup.parse(contentAsString(result))
 
       "return a status of 200" in {
         status(result) shouldBe 200
@@ -163,7 +158,7 @@ class HowBecameOwnerActionSpec extends CommonPlaySpec with WithCommonFakeApplica
   "an invalid form with no answer is submitted" should {
     lazy val target = setupTarget(None)
     lazy val result = target.submitHowBecameOwner(fakeRequestToPOSTWithSession(("gainedBy", "")))
-    lazy val doc = Jsoup.parse(bodyOf(result)(materializer, ec))
+    lazy val doc = Jsoup.parse(contentAsString(result))
 
     "return a status of 400" in {
       status(result) shouldBe 400

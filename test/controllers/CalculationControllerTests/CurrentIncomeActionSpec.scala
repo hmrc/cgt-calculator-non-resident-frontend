@@ -16,7 +16,6 @@
 
 package controllers.CalculationControllerTests
 
-import org.apache.pekko.stream.Materializer
 import assets.MessageLookup.NonResident.{CurrentIncome => messages}
 import assets.MessageLookup.{NonResident => commonMessages}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
@@ -32,18 +31,14 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
 import services.SessionCacheService
-import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.currentIncome
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class CurrentIncomeActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val hc: HeaderCarrier = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
-
-  val materializer: Materializer = mock[Materializer]
-  val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp: DefaultHttpClient =mock[DefaultHttpClient]
   val mockCalcConnector: CalculatorConnector =mock[CalculatorConnector]
   val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
@@ -56,7 +51,7 @@ class CurrentIncomeActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
       mockSessionCacheService,
       mockMessagesControllerComponents,
       currentIncomeView
-    )(ec)
+    )
   }
 
   def setupTarget(getData: Option[CurrentIncomeModel], getPropertyLivedIn: Option[PropertyLivedInModel] = None): CurrentIncomeController = {
@@ -68,9 +63,9 @@ class CurrentIncomeActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
       .thenReturn(Future.successful(getPropertyLivedIn))
 
     when(mockSessionCacheService.saveFormData[CurrentIncomeModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(("", ""))
+      .thenReturn(Future.successful("", ""))
 
-    new CurrentIncomeController(mockSessionCacheService, mockMessagesControllerComponents, currentIncomeView)(ec)
+    new CurrentIncomeController(mockSessionCacheService, mockMessagesControllerComponents, currentIncomeView)
   }
 
   //GET Tests
@@ -80,7 +75,7 @@ class CurrentIncomeActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
 
       val target = setupTarget(None)
       lazy val result = target.currentIncome(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+      lazy val document = Jsoup.parse(contentAsString(result))
 
       "return a 200" in {
         status(result) shouldBe 200
@@ -95,7 +90,7 @@ class CurrentIncomeActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
 
       val target = setupTarget(Some(CurrentIncomeModel(1000)))
       lazy val result = target.currentIncome(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+      lazy val document = Jsoup.parse(contentAsString(result))
 
       "return a 200" in {
         status(result) shouldBe 200
@@ -155,7 +150,7 @@ class CurrentIncomeActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
       val target = setupTarget(None)
       lazy val request = fakeRequestToPOSTWithSession(("currentIncome", "-10"))
       lazy val result = target.submitCurrentIncome(request)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+      lazy val document = Jsoup.parse(contentAsString(result))
 
       "return a 400" in {
         status(result) shouldBe 400

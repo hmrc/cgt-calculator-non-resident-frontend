@@ -16,7 +16,6 @@
 
 package controllers.CalculationControllerTests
 
-import org.apache.pekko.stream.Materializer
 import assets.MessageLookup.NonResident.{AnnualExemptAmount => messages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
@@ -34,19 +33,16 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
 import services.SessionCacheService
-import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.annualExemptAmount
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class AnnualExemptAmountActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper
   with BeforeAndAfterEach {
 
-  implicit val hc: HeaderCarrier = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
-  val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
-  val materializer: Materializer = mock[Materializer]
   val mockHttp: DefaultHttpClient =mock[DefaultHttpClient]
   val mockCalcConnector: CalculatorConnector =mock[CalculatorConnector]
   val mockAnswersConstructor: AnswersConstructor = mock[AnswersConstructor]
@@ -61,7 +57,7 @@ class AnnualExemptAmountActionSpec extends CommonPlaySpec with WithCommonFakeApp
       mockSessionCacheService,
       mockMessagesControllerComponents,
       annualExemptAmountView
-    )(ec)
+    )
   }
 
   def setupTarget(
@@ -91,15 +87,15 @@ class AnnualExemptAmountActionSpec extends CommonPlaySpec with WithCommonFakeApp
       .thenReturn(Future.successful(howMuchLoss))
 
     when(mockCalcConnector.getFullAEA(ArgumentMatchers.anyInt())(ArgumentMatchers.any()))
-      .thenReturn(Some(BigDecimal(11100)))
+      .thenReturn(Future.successful(Some(BigDecimal(11100))))
 
     when(mockCalcConnector.getTaxYear(ArgumentMatchers.anyString())(ArgumentMatchers.any()))
-      .thenReturn(Some(TaxYearModel("2016-5-6", isValidYear = true, "2016/17")))
+      .thenReturn(Future.successful(Some(TaxYearModel("2016-5-6", isValidYear = true, "2016/17"))))
 
     when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(("", "")))
 
-    new AnnualExemptAmountController(mockCalcConnector, mockSessionCacheService, mockMessagesControllerComponents, annualExemptAmountView)(ec) {
+    new AnnualExemptAmountController(mockCalcConnector, mockSessionCacheService, mockMessagesControllerComponents, annualExemptAmountView) {
     }
   }
 
@@ -117,7 +113,7 @@ class AnnualExemptAmountActionSpec extends CommonPlaySpec with WithCommonFakeApp
       s"have the title '${messages.question}'" in {
         val target = setupTarget(None)
         lazy val result = target.annualExemptAmount(fakeRequestWithSession)
-        lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+        lazy val document = Jsoup.parse(contentAsString(result))
         document.title shouldEqual s"${messages.question} - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
       }
     }
@@ -133,7 +129,7 @@ class AnnualExemptAmountActionSpec extends CommonPlaySpec with WithCommonFakeApp
       s"have the help text '${messages.hint("11,100")}'" in {
         val target = setupTarget(None, "Yes", disposalDate = Some(DateModel(12, 12, 2016)))
         lazy val result = target.annualExemptAmount(fakeRequestWithSession)
-        lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+        lazy val document = Jsoup.parse(contentAsString(result))
         document.select("#input-hint").text() shouldBe messages.hint("11,100")
       }
     }
@@ -149,7 +145,7 @@ class AnnualExemptAmountActionSpec extends CommonPlaySpec with WithCommonFakeApp
       s"have the help text '${messages.hint("11,100")}'" in {
         val target = setupTarget(None, disposalDate = Some(DateModel(12, 12, 2015)))
         lazy val result = target.annualExemptAmount(fakeRequestWithSession)
-        lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+        lazy val document = Jsoup.parse(contentAsString(result))
         document.select("#input-hint").text() shouldBe messages.hint("11,100")
       }
     }
@@ -165,7 +161,7 @@ class AnnualExemptAmountActionSpec extends CommonPlaySpec with WithCommonFakeApp
       s"have the help text '${messages.hint("11,100")}'" in {
         val target = setupTarget(None, disposalDate = Some(DateModel(12, 12, 2013)))
         lazy val result = target.annualExemptAmount(fakeRequestWithSession)
-        lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+        lazy val document = Jsoup.parse(contentAsString(result))
         document.select("#input-hint").text() shouldBe messages.hint("11,100")
       }
     }
@@ -190,7 +186,7 @@ class AnnualExemptAmountActionSpec extends CommonPlaySpec with WithCommonFakeApp
       "have a back link to previous-gain-or-loss" in {
         val target = setupTarget(None, previousLossOrGain = Some(PreviousLossOrGainModel("Neither")))
         lazy val result = target.annualExemptAmount(fakeRequestWithSession)
-        lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+        lazy val document = Jsoup.parse(contentAsString(result))
         document.select(".govuk-back-link").attr("href") shouldEqual "#"
       }
     }
@@ -200,7 +196,7 @@ class AnnualExemptAmountActionSpec extends CommonPlaySpec with WithCommonFakeApp
       "have a back link to previous-gain-or-loss" in {
         val target = setupTarget(None, previousLossOrGain = Some(PreviousLossOrGainModel("Loss")), howMuchLoss = Some(HowMuchLossModel(0)))
         lazy val result = target.annualExemptAmount(fakeRequestWithSession)
-        lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+        lazy val document = Jsoup.parse(contentAsString(result))
         document.select(".govuk-back-link").attr("href") shouldEqual "#"
       }
     }
@@ -210,7 +206,7 @@ class AnnualExemptAmountActionSpec extends CommonPlaySpec with WithCommonFakeApp
       "have a back link to previous-gain-or-loss" in {
         val target = setupTarget(None, previousLossOrGain = Some(PreviousLossOrGainModel("Gain")), howMuchGain = Some(HowMuchGainModel(0)))
         lazy val result = target.annualExemptAmount(fakeRequestWithSession)
-        lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+        lazy val document = Jsoup.parse(contentAsString(result))
         document.select(".govuk-back-link").attr("href") shouldEqual "#"
       }
     }
@@ -249,7 +245,7 @@ class AnnualExemptAmountActionSpec extends CommonPlaySpec with WithCommonFakeApp
         val target = setupTarget(None, "Yes")
         lazy val request = fakeRequestToPOSTWithSession(("annualExemptAmount", "1000000"))
         lazy val result = target.submitAnnualExemptAmount(request)
-        lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+        lazy val document = Jsoup.parse(contentAsString(result))
         document.title shouldBe s"Error: ${messages.question} - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
       }
     }
