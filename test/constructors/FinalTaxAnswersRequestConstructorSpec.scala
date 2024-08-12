@@ -121,6 +121,21 @@ class FinalTaxAnswersRequestConstructorSpec extends CommonPlaySpec {
 
         trimAndSort(result) shouldBe Seq("annualExemptAmount" -> "500", "currentIncome" -> "100", "personalAllowanceAmt" -> "200")
       }
+
+      "BroughtForwardLossesModel is passed" in {
+        val model = TotalPersonalDetailsCalculationModel(currentIncomeModel = CurrentIncomeModel(BigDecimal(100)),
+          personalAllowanceModel = Some(PersonalAllowanceModel(BigDecimal(200))),
+          otherPropertiesModel = OtherPropertiesModel(""),
+          previousGainOrLoss = Some(PreviousLossOrGainModel("loss")),
+          howMuchLossModel = Some(HowMuchLossModel(BigDecimal(300))),
+          howMuchGainModel = Some(HowMuchGainModel(BigDecimal(400))),
+          annualExemptAmountModel = Some(AnnualExemptAmountModel(BigDecimal(500))),
+          broughtForwardLossesModel = BroughtForwardLossesModel(isClaiming = true, Some(2033)))
+
+        val result = FinalTaxAnswersRequestConstructor.additionalParametersQuery(Some(model), model.annualExemptAmountModel.get.annualExemptAmount)
+
+        trimAndSort(result) shouldBe Seq("annualExemptAmount" -> "500", "broughtForwardLoss" -> "2033", "currentIncome" -> "100", "personalAllowanceAmt" -> "200")
+      }
     }
 
   }

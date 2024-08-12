@@ -41,7 +41,7 @@ object FinalTaxAnswersRequestConstructor {
       }
       val broughtForwardLosses =
         data.broughtForwardLossesModel match {
-          case BroughtForwardLossesModel(true, broughtForwardLoss) => Some(broughtForwardLoss)
+          case BroughtForwardLossesModel(true, broughtForwardLoss) => broughtForwardLoss
           case _ => None
         }
       val annualExemptAmountValue = annualExemptAmount(
