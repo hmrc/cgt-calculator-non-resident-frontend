@@ -16,13 +16,11 @@
 
 package controllers.CalculationControllerTests
 
-import org.apache.pekko.stream.Materializer
 import assets.MessageLookup.NonResident.{OtherProperties => messages}
 import assets.MessageLookup.{NonResident => commonMessages}
 import com.codahale.metrics.SharedMetricRegistries
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import config.ApplicationConfig
-import connectors.CalculatorConnector
 import controllers.helpers.FakeRequestHelper
 import controllers.utils.TimeoutController
 import controllers.{OtherPropertiesController, routes}
@@ -34,21 +32,15 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
 import services.SessionCacheService
-import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.otherProperties
 import views.html.warnings.sessionTimeout
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class OtherPropertiesActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
-
-  implicit val hc: HeaderCarrier = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
-
-  val materializer: Materializer = mock[Materializer]
-  val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp: DefaultHttpClient =mock[DefaultHttpClient]
-  val mockCalcConnector: CalculatorConnector =mock[CalculatorConnector]
   val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents: MessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val otherPropertiesView: otherProperties = fakeApplication.injector.instanceOf[otherProperties]
@@ -62,7 +54,7 @@ class OtherPropertiesActionSpec extends CommonPlaySpec with WithCommonFakeApplic
       mockSessionCacheService,
       mockMessagesControllerComponents,
       otherPropertiesView
-    )(ec)
+    )
   }
 
   def setupTarget(getData: Option[OtherPropertiesModel]): OtherPropertiesController = {
@@ -72,9 +64,9 @@ class OtherPropertiesActionSpec extends CommonPlaySpec with WithCommonFakeApplic
       .thenReturn(Future.successful(getData))
 
     when(mockSessionCacheService.saveFormData[OtherPropertiesModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(("", ""))
+      .thenReturn(Future.successful("", ""))
 
-    new OtherPropertiesController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, otherPropertiesView)(ec)
+    new OtherPropertiesController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, otherPropertiesView)
   }
 
   val controller = new TimeoutController(mockMessagesControllerComponents, sessionTimeoutView)
@@ -101,7 +93,7 @@ class OtherPropertiesActionSpec extends CommonPlaySpec with WithCommonFakeApplic
 
         val target = setupTarget(None)
         lazy val result = target.otherProperties(fakeRequestWithSession)
-        lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+        lazy val document = Jsoup.parse(contentAsString(result))
 
         "return a 200" in {
           status(result) shouldBe 200
@@ -159,7 +151,7 @@ class OtherPropertiesActionSpec extends CommonPlaySpec with WithCommonFakeApplic
       }
 
       "return to the other properties page" in {
-        Jsoup.parse(bodyOf(result)(materializer, ec)).select("title").text shouldEqual s"""Error: $pageTitle"""
+        Jsoup.parse(contentAsString(result)).title shouldEqual s"""Error: $pageTitle"""
       }
     }
   }

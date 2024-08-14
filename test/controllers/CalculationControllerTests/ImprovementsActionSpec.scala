@@ -16,15 +16,14 @@
 
 package controllers.CalculationControllerTests
 
-import org.apache.pekko.stream.Materializer
 import assets.MessageLookup.{NonResident => commonMessages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import config.ApplicationConfig
 import connectors.CalculatorConnector
 import constructors.AnswersConstructor
-import controllers.helpers.FakeRequestHelper
 import controllers.ImprovementsController
+import controllers.helpers.FakeRequestHelper
 import models._
 import org.jsoup._
 import org.mockito.ArgumentMatchers
@@ -33,18 +32,15 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
 import services.SessionCacheService
-import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-import views.html.calculation.{improvementsRebased, improvements, isClaimingImprovements}
+import views.html.calculation.{improvements, improvementsRebased, isClaimingImprovements}
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class ImprovementsActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val hc: HeaderCarrier = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
 
-  val materializer: Materializer = mock[Materializer]
-  val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp: DefaultHttpClient =mock[DefaultHttpClient]
   val mockCalcConnector: CalculatorConnector =mock[CalculatorConnector]
   val mockAnswersConstructor: AnswersConstructor = mock[AnswersConstructor]
@@ -66,7 +62,7 @@ class ImprovementsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
       improvementsView,
       improvementsRebasedView,
       isClaimingImprovementsView
-    )(ec)
+    )
   }
 
   def setupTarget(
@@ -114,7 +110,7 @@ class ImprovementsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
       improvementsView,
       improvementsRebasedView,
       isClaimingImprovementsView
-    )(ec)
+    )
   }
 
   "In CalculationController calling the .improvements action " when {
@@ -130,7 +126,7 @@ class ImprovementsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
           Some(RebasedValueModel(1000))
         )
         lazy val result = target.improvements(fakeRequestWithSession)
-        lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+        lazy val document = Jsoup.parse(contentAsString(result))
 
         "return a 200" in {
           status(result) shouldBe 200
@@ -179,7 +175,7 @@ class ImprovementsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
       val target = setupTarget(IsClaimingImprovementsModel(true), ImprovementsModel(), Some(DateModel(1, 1, 2016)))
       lazy val request = fakeRequestToPOSTWithSession("improvementsAmt" -> "fhu39awd8").withMethod("POST")
       lazy val result = target.submitImprovements(request)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+      lazy val document = Jsoup.parse(contentAsString(result))
 
       "return a 400" in {
         status(result) shouldBe 400

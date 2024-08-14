@@ -16,7 +16,6 @@
 
 package controllers.CalculationControllerTests
 
-import org.apache.pekko.stream.Materializer
 import assets.MessageLookup.NonResident.{RebasedValue => messages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
@@ -31,20 +30,17 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
 import services.SessionCacheService
-import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.rebasedValue
 
 import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class RebasedValueActionSpec @Inject()(rebasedValueController: RebasedValueController)
   extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val hc: HeaderCarrier = new HeaderCarrier()
   val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  lazy val materializer: Materializer = mock[Materializer]
-  val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockMessagesControllerComponents: MessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val rebasedValueView: rebasedValue = fakeApplication.injector.instanceOf[rebasedValue]
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
@@ -64,7 +60,7 @@ class RebasedValueActionSpec @Inject()(rebasedValueController: RebasedValueContr
       .thenReturn(Future.successful(("", "")))
 
     new RebasedValueController(http = mock[DefaultHttpClient],
-      mockSessionCacheService, mockMessagesControllerComponents, rebasedValueView)(ec)
+      mockSessionCacheService, mockMessagesControllerComponents, rebasedValueView)
   }
 
   //GET tests
@@ -88,7 +84,7 @@ class RebasedValueActionSpec @Inject()(rebasedValueController: RebasedValueContr
 
       val target = setupTarget(None)
       lazy val result = target.rebasedValue(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+      lazy val document = Jsoup.parse(contentAsString(result))
 
       "return a 200" in {
         status(result) shouldBe 200
@@ -102,7 +98,7 @@ class RebasedValueActionSpec @Inject()(rebasedValueController: RebasedValueContr
     "supplied with a pre-existing stored model" should {
       val target = setupTarget(Some(RebasedValueModel(1000)))
       lazy val result = target.rebasedValue(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+      lazy val document = Jsoup.parse(contentAsString(result))
 
       "return a 200" in {
         status(result) shouldBe 200
@@ -136,7 +132,7 @@ class RebasedValueActionSpec @Inject()(rebasedValueController: RebasedValueContr
 
       lazy val request = fakeRequestToPOSTWithSession(("rebasedValueAmt", "")).withMethod("POST")
       lazy val result = target.submitRebasedValue(request)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+      lazy val document = Jsoup.parse(contentAsString(result))
 
       "return a 400" in {
         status(result) shouldBe 400

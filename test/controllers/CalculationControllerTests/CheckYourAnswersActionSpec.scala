@@ -16,7 +16,6 @@
 
 package controllers.CalculationControllerTests
 
-import org.apache.pekko.stream.Materializer
 import assets.MessageLookup.NonResident.{CheckYourAnswers => messages}
 import assets.MessageLookup.{NonResident => commonMessages}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
@@ -33,19 +32,15 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
 import services.SessionCacheService
-import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.checkYourAnswers
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class CheckYourAnswersActionSpec
   extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val hc: HeaderCarrier = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
-
-  val materializer: Materializer = mock[Materializer]
-  val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp: DefaultHttpClient =mock[DefaultHttpClient]
   val mockCalcConnector: CalculatorConnector =mock[CalculatorConnector]
   val mockAnswersConstructor: AnswersConstructor = mock[AnswersConstructor]
@@ -64,7 +59,7 @@ class CheckYourAnswersActionSpec
       mockAnswersConstructor,
       mockMessagesControllerComponents,
       checkYourAnswersView
-    )(ec)
+    )
   }
 
   def setupTarget(totalGainAnswersModel: TotalGainAnswersModel,
@@ -84,12 +79,12 @@ class CheckYourAnswersActionSpec
     when(mockCalcConnector.calculateTotalGain(ArgumentMatchers.any())(ArgumentMatchers.any())).thenReturn(Future.successful(Some(totalGainResultsModel)))
 
     when(mockSessionCacheService.fetchAndGetFormData[PrivateResidenceReliefModel](ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(privateResidenceReliefModel)
+      .thenReturn(Future.successful(privateResidenceReliefModel))
 
     when(mockCalcConnector.calculateTotalGain(ArgumentMatchers.any())(ArgumentMatchers.any()))
-      .thenReturn(totalGainsModel)
+      .thenReturn(Future.successful(totalGainsModel))
 
-    new CheckYourAnswersController(mockHttp, mockCalcConnector, mockSessionCacheService, mockAnswersConstructor, mockMessagesControllerComponents, checkYourAnswersView)(ec)
+    new CheckYourAnswersController(mockHttp, mockCalcConnector, mockSessionCacheService, mockAnswersConstructor, mockMessagesControllerComponents, checkYourAnswersView)
   }
 
   val modelWithMultipleGains: TotalGainAnswersModel = TotalGainAnswersModel(DateModel(5, 10, 2016),
@@ -143,7 +138,7 @@ class CheckYourAnswersActionSpec
 
       lazy val target = setupTarget(modelWithOnlyFlat, Some(totalGainResultsModel))
       lazy val result = target.checkYourAnswers(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+      lazy val document = Jsoup.parse(contentAsString(result))
 
       "return a status of 200" in {
         status(result) shouldBe 200
@@ -175,7 +170,7 @@ class CheckYourAnswersActionSpec
     "provided with a valid session when eligible for prr and a total gain value" should {
       lazy val target = setupTarget(modelWithMultipleGains, Some(totalGainWithValueResultsModel))
       lazy val result = target.checkYourAnswers(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+      lazy val document = Jsoup.parse(contentAsString(result))
 
       "return a status of 200" in {
         status(result) shouldBe 200
@@ -194,7 +189,7 @@ class CheckYourAnswersActionSpec
 
       lazy val target = setupTarget(modelWithOnlyFlat, Some(totalGainWithValueResultsModel), None, Some(personalDetailsModel))
       lazy val result = target.checkYourAnswers(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+      lazy val document = Jsoup.parse(contentAsString(result))
 
       "return a status of 200" in {
         status(result) shouldBe 200

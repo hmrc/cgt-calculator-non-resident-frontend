@@ -16,7 +16,6 @@
 
 package controllers.CalculationControllerTests
 
-import org.apache.pekko.stream.Materializer
 import assets.MessageLookup.NonResident.{Summary => messages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.nonresident.Flat
@@ -34,18 +33,15 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
 import services.SessionCacheService
-import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.summary
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class SummaryActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val hc: HeaderCarrier = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
   val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  val materializer: Materializer = mock[Materializer]
-  val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp: DefaultHttpClient =mock[DefaultHttpClient]
   val mockCalcConnector: CalculatorConnector =mock[CalculatorConnector]
   val mockAnswersConstructor: AnswersConstructor = mock[AnswersConstructor]
@@ -60,7 +56,7 @@ class SummaryActionSpec extends CommonPlaySpec with WithCommonFakeApplication wi
       mockAnswersConstructor,
       mockMessagesControllerComponents,
       summaryView
-    )(ec)
+    )
   }
 
   def setupTarget(summary: TotalGainAnswersModel,
@@ -93,7 +89,7 @@ class SummaryActionSpec extends CommonPlaySpec with WithCommonFakeApplication wi
 
     when(mockSessionCacheService.fetchAndGetFormData[PrivateResidenceReliefModel](
       ArgumentMatchers.eq(KeystoreKeys.privateResidenceRelief))(ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(privateResidenceReliefModel)
+      .thenReturn(Future.successful(privateResidenceReliefModel))
 
     when(mockCalcConnector.getFullAEA(ArgumentMatchers.any())(ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(BigDecimal(11000))))
@@ -122,7 +118,7 @@ class SummaryActionSpec extends CommonPlaySpec with WithCommonFakeApplication wi
       (ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(PropertyLivedInModel(true))))
 
-    new SummaryController(mockCalcConnector, mockSessionCacheService, mockAnswersConstructor, mockMessagesControllerComponents, summaryView)(ec)
+    new SummaryController(mockCalcConnector, mockSessionCacheService, mockAnswersConstructor, mockMessagesControllerComponents, summaryView)
   }
 
   lazy val answerModel: TotalGainAnswersModel = TotalGainAnswersModel(
@@ -168,7 +164,7 @@ class SummaryActionSpec extends CommonPlaySpec with WithCommonFakeApplication wi
       )
 
       lazy val result = target.summary()(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+      lazy val document = Jsoup.parse(contentAsString(result))
 
       "return a 200" in {
         status(result) shouldBe 200
@@ -194,7 +190,7 @@ class SummaryActionSpec extends CommonPlaySpec with WithCommonFakeApplication wi
         Some(TestModels.calculationResultsModelWithRebased)
       )
       lazy val result = target.summary()(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+      lazy val document = Jsoup.parse(contentAsString(result))
 
       "return a 200" in {
         status(result) shouldBe 200

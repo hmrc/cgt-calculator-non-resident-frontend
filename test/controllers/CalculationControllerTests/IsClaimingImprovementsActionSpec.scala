@@ -16,7 +16,6 @@
 
 package controllers.CalculationControllerTests
 
-import org.apache.pekko.stream.Materializer
 import assets.MessageLookup.{NonResident => commonMessages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
 import common.{CommonPlaySpec, WithCommonFakeApplication}
@@ -33,18 +32,14 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
 import services.SessionCacheService
-import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.{improvements, improvementsRebased, isClaimingImprovements}
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class IsClaimingImprovementsActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val hc: HeaderCarrier = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
-
-  val materializer: Materializer = mock[Materializer]
-  val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp: DefaultHttpClient =mock[DefaultHttpClient]
   val mockCalcConnector: CalculatorConnector =mock[CalculatorConnector]
   val mockAnswersConstructor: AnswersConstructor = mock[AnswersConstructor]
@@ -67,7 +62,7 @@ class IsClaimingImprovementsActionSpec extends CommonPlaySpec with WithCommonFak
       improvementsView,
       improvementsRebasedView,
       isClaimingImprovementsView
-    )(ec)
+    )
   }
 
   def setupTarget(getData: Option[IsClaimingImprovementsModel],
@@ -96,7 +91,7 @@ class IsClaimingImprovementsActionSpec extends CommonPlaySpec with WithCommonFak
     when(mockSessionCacheService.saveFormData[IsClaimingImprovementsModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(("", "")))
 
-    new ImprovementsController(mockCalcConnector, mockSessionCacheService, mockAnswersConstructor, mockMessagesControllerComponents, improvementsView, improvementsRebasedView, isClaimingImprovementsView)(ec)
+    new ImprovementsController(mockCalcConnector, mockSessionCacheService, mockAnswersConstructor, mockMessagesControllerComponents, improvementsView, improvementsRebasedView, isClaimingImprovementsView)
   }
 
   "In CalculationController calling the .getIsClaimingImprovements action " when {
@@ -107,7 +102,7 @@ class IsClaimingImprovementsActionSpec extends CommonPlaySpec with WithCommonFak
 
         lazy val target = setupTarget(None, Some(DateModel(1, 1, 2017)), Some(RebasedValueModel(1000)))
         lazy val result = target.getIsClaimingImprovements(fakeRequestWithSession)
-        lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+        lazy val document = Jsoup.parse(contentAsString(result))
 
         "return a 200" in {
           status(result) shouldBe 200
@@ -133,7 +128,7 @@ class IsClaimingImprovementsActionSpec extends CommonPlaySpec with WithCommonFak
           Some(RebasedValueModel(500))
         )
         lazy val result = target.getIsClaimingImprovements(fakeRequestWithSession)
-        lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+        lazy val document = Jsoup.parse(contentAsString(result))
 
         s"have the title $pageTitleBeforeLegislation" in {
           document.title shouldEqual pageTitleBeforeLegislation
@@ -186,7 +181,7 @@ class IsClaimingImprovementsActionSpec extends CommonPlaySpec with WithCommonFak
       val target = setupTarget(None, Some(DateModel(1, 1, 1974)))
       lazy val request = fakeRequestToPOSTWithSession("isClaimingImprovements" -> "testData123").withMethod("POST")
       lazy val result = target.submitIsClaimingImprovements(request)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+      lazy val document = Jsoup.parse(contentAsString(result))
 
       "return a 400" in {
         status(result) shouldBe 400

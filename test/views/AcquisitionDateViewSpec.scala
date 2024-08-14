@@ -57,7 +57,7 @@ class AcquisitionDateViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
       }
 
       s"have a home link to '${controllers.routes.DisposalDateController.disposalDate.url}'" in {
-        document.getElementsByClass("hmrc-header__service-name hmrc-header__service-name--linked").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate.url
+        document.getElementsByClass("govuk-header__link govuk-header__service-name").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate.url
       }
 
       s"have a heading of '${messages.AcquisitionDate.question}'" in {

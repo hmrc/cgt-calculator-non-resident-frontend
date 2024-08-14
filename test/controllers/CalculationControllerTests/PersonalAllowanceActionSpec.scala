@@ -16,7 +16,6 @@
 
 package controllers.CalculationControllerTests
 
-import org.apache.pekko.stream.Materializer
 import assets.MessageLookup.NonResident.{PersonalAllowance => messages}
 import assets.MessageLookup.{NonResident => commonMessages}
 import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
@@ -33,18 +32,14 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
 import services.SessionCacheService
-import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.personalAllowance
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class PersonalAllowanceActionSpec extends CommonPlaySpec with WithCommonFakeApplication with MockitoSugar with FakeRequestHelper {
 
-  implicit val hc: HeaderCarrier = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
-
-  val materializer: Materializer = mock[Materializer]
-  val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp: DefaultHttpClient =mock[DefaultHttpClient]
   val mockCalcConnector: CalculatorConnector =mock[CalculatorConnector]
   val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
@@ -60,7 +55,7 @@ class PersonalAllowanceActionSpec extends CommonPlaySpec with WithCommonFakeAppl
       mockSessionCacheService,
       mockMessagesControllerComponents,
       personalAllowanceView
-    )(ec)
+    )
   }
 
 
@@ -75,15 +70,15 @@ class PersonalAllowanceActionSpec extends CommonPlaySpec with WithCommonFakeAppl
       .thenReturn(Future.successful(Some(DateModel(6, 5, 2016))))
 
     when(mockCalcConnector.getTaxYear(ArgumentMatchers.anyString())(ArgumentMatchers.any()))
-      .thenReturn(Some(TaxYearModel("2016-5-6", isValidYear = true, "2016/17")))
+      .thenReturn(Future.successful(Some(TaxYearModel("2016-5-6", isValidYear = true, "2016/17"))))
 
     when(mockCalcConnector.getPA(ArgumentMatchers.anyInt(), ArgumentMatchers.anyBoolean())(ArgumentMatchers.any()))
-      .thenReturn(Some(BigDecimal(11000)))
+      .thenReturn(Future.successful(Some(BigDecimal(11000))))
 
     when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(("", "")))
 
-    new PersonalAllowanceController(mockHttp, mockCalcConnector, mockSessionCacheService, mockMessagesControllerComponents, personalAllowanceView)(ec)
+    new PersonalAllowanceController(mockHttp, mockCalcConnector, mockSessionCacheService, mockMessagesControllerComponents, personalAllowanceView)
   }
 
   // GET Tests
@@ -106,7 +101,7 @@ class PersonalAllowanceActionSpec extends CommonPlaySpec with WithCommonFakeAppl
 
       lazy val target = setupTarget(None)
       lazy val result = target.personalAllowance(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+      lazy val document = Jsoup.parse(contentAsString(result))
 
       "return a 200" in {
         status(result) shouldBe 200
@@ -121,7 +116,7 @@ class PersonalAllowanceActionSpec extends CommonPlaySpec with WithCommonFakeAppl
 
       lazy val target = setupTarget(Some(PersonalAllowanceModel(10000)))
       lazy val result = target.personalAllowance(fakeRequestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+      lazy val document = Jsoup.parse(contentAsString(result))
 
       "return a 200" in {
         status(result) shouldBe 200
@@ -157,7 +152,7 @@ class PersonalAllowanceActionSpec extends CommonPlaySpec with WithCommonFakeAppl
       lazy val target = setupTarget(None)
       lazy val request = fakeRequestToPOSTWithSession(("personalAllowance", "-12139"))
       lazy val result = target.submitPersonalAllowance(request)
-      lazy val document = Jsoup.parse(bodyOf(result)(materializer, ec))
+      lazy val document = Jsoup.parse(contentAsString(result))
 
       "return a 400" in {
         status(result) shouldBe 400

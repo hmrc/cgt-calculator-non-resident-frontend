@@ -16,8 +16,6 @@
 
 package controllers.CalculationControllerTests
 
-import org.apache.pekko.stream.Materializer
-import org.apache.pekko.util.Timeout
 import assets.MessageLookup
 import assets.MessageLookup.{NoTaxToPay => messages}
 import common.KeystoreKeys.{NonResidentKeys => keystoreKeys}
@@ -27,6 +25,7 @@ import connectors.CalculatorConnector
 import controllers.WhoDidYouGiveItToController
 import controllers.helpers.FakeRequestHelper
 import models.WhoDidYouGiveItToModel
+import org.apache.pekko.util.Timeout
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
@@ -34,19 +33,16 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
 import services.SessionCacheService
-import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import views.html.calculation.{noTaxToPay, whoDidYouGiveItTo}
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 
 class WhoDidYouGiveItToControllerSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper with MockitoSugar {
 
-  implicit val hc: HeaderCarrier = new HeaderCarrier(sessionId = Some(SessionId("SessionId")))
   val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
-  val materializer: Materializer = mock[Materializer]
-  val ec: ExecutionContext = fakeApplication.injector.instanceOf[ExecutionContext]
   val mockHttp: DefaultHttpClient =mock[DefaultHttpClient]
   val mockCalcConnector: CalculatorConnector =mock[CalculatorConnector]
   val mockMessagesControllerComponents: MessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
@@ -58,7 +54,7 @@ class WhoDidYouGiveItToControllerSpec extends CommonPlaySpec with WithCommonFake
       mockHttp,
       mockSessionCacheService,
       mockMessagesControllerComponents,
-       noTaxToPayView, whoDidYouGiveItToView)(ec)
+       noTaxToPayView, whoDidYouGiveItToView)
   }
 
   def setupTarget(getData: Option[WhoDidYouGiveItToModel]): WhoDidYouGiveItToController = {
@@ -69,7 +65,7 @@ class WhoDidYouGiveItToControllerSpec extends CommonPlaySpec with WithCommonFake
     when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(("", "")))
 
-    new WhoDidYouGiveItToController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, noTaxToPayView, whoDidYouGiveItToView)(ec)
+    new WhoDidYouGiveItToController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, noTaxToPayView, whoDidYouGiveItToView)
   }
 
 
@@ -83,7 +79,7 @@ class WhoDidYouGiveItToControllerSpec extends CommonPlaySpec with WithCommonFake
       }
 
       s"return some html with title of ${MessageLookup.WhoDidYouGiveItTo.title}" in {
-        Jsoup.parse(bodyOf(result)(materializer, ec)).select("h1").text shouldEqual MessageLookup.WhoDidYouGiveItTo.title
+        Jsoup.parse(contentAsString(result)).select("h1").text shouldEqual MessageLookup.WhoDidYouGiveItTo.title
       }
     }
 
@@ -96,7 +92,7 @@ class WhoDidYouGiveItToControllerSpec extends CommonPlaySpec with WithCommonFake
       }
 
       s"return some html with title of ${MessageLookup.WhoDidYouGiveItTo.title}" in {
-        Jsoup.parse(bodyOf(result)(materializer, ec)).select("h1").text shouldEqual MessageLookup.WhoDidYouGiveItTo.title
+        Jsoup.parse(contentAsString(result)).select("h1").text shouldEqual MessageLookup.WhoDidYouGiveItTo.title
       }
     }
   }
@@ -153,7 +149,7 @@ class WhoDidYouGiveItToControllerSpec extends CommonPlaySpec with WithCommonFake
     "A valid session is provided when gifted to charity" should {
       lazy val target = setupTarget(Some(WhoDidYouGiveItToModel("Charity")))
       lazy val result = target.noTaxToPay(fakeRequestWithSession)
-      lazy val doc = Jsoup.parse(bodyOf(result)(materializer, ec))
+      lazy val doc = Jsoup.parse(contentAsString(result))
 
       "return a status of 200" in {
         status(result) shouldBe 200
@@ -170,7 +166,7 @@ class WhoDidYouGiveItToControllerSpec extends CommonPlaySpec with WithCommonFake
       "A valid session is provided when gifted to a spouse" should {
         lazy val target = setupTarget(Some(WhoDidYouGiveItToModel("Spouse")))
         lazy val result = target.noTaxToPay(fakeRequestWithSession)
-        lazy val doc = Jsoup.parse(bodyOf(result)(materializer, ec))
+        lazy val doc = Jsoup.parse(contentAsString(result))
 
         "return a status of 200" in {
           status(result) shouldBe 200

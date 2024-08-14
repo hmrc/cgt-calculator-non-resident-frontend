@@ -55,7 +55,7 @@ class PropertyLivedInViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
         }
 
         "have the govuk-label--xl class" in {
-          heading.hasClass("govuk-fieldset__legend govuk-label--xl") shouldBe true
+          heading.hasClass("govuk-fieldset__legend govuk-fieldset__legend--xl") shouldBe true
         }
       }
 
