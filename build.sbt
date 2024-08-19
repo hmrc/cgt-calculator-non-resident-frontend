@@ -20,6 +20,7 @@ lazy val appName = "cgt-calculator-non-resident-frontend"
 lazy val appDependencies : Seq[ModuleID] = Seq.empty
 lazy val plugins : Seq[Plugins] = Seq(play.sbt.PlayScala)
 lazy val playSettings : Seq[Setting[_]] = Seq.empty
+lazy val ItTest = config("it") extend Test
 
 lazy val microservice = Project(appName, file("."))
   .enablePlugins(Seq(play.sbt.PlayScala, SbtDistributablesPlugin) ++ plugins : _*)
@@ -41,8 +42,8 @@ lazy val microservice = Project(appName, file("."))
     scalacOptions.+=("-Wconf:src=html/.*:s"), //suppresses warnings in twirl files and routes.
     scalacOptions.+=("-Wconf:src=routes/.*:s"), //these warnings are loud and inconsequential.
   )
-  .configs(IntegrationTest)
-  .settings(inConfig(IntegrationTest)(Defaults.itSettings): _*)
+  .configs(ItTest)
+  .settings(inConfig(ItTest)(Defaults.testSettings): _*)
   .settings(resolvers += Resolver.jcenterRepo)
   .settings(TwirlKeys.templateImports ++= Seq(
     "uk.gov.hmrc.govukfrontend.views.html.components._",
