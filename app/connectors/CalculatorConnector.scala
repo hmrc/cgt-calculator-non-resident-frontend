@@ -43,7 +43,7 @@ class CalculatorConnector @Inject()(val httpProvider: HttpClientV2Provider,
                         (implicit hc: HeaderCarrier): Future[Option[TotalGainResultsModel]] =
     http.post(url"$serviceUrl/capital-gains-calculator/non-resident/calculate-total-gain")
       .withBody(Json.toJson(totalGainAnswersModel))
-      .setHeader("Coontent-Type" -> "application/json")
+      .setHeader("Content-Type" -> "application/json")
       .execute[Option[TotalGainResultsModel]]
 
   def calculateTaxableGainAfterPRR(totalGainAnswersModel: TotalGainAnswersModel,
