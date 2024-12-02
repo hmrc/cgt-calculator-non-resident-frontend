@@ -47,13 +47,15 @@
             name = Some("action"),
             value = Some(value),
             classes = "govuk-!-margin-top-2",
-            content = Text(messages("calc.checkYourAnswers.change"))
+            content = Text(messages("calc.checkYourAnswers.change")),
+            attributes = Map("data-prevent-double-click" -> "true")
         ))
     } else {
         @govukButton(Button(
             name = Some("action"),
             value = Some(value),
-            content = Text(messages("calc.calculationElection.otherRelief"))
+            content = Text(messages("calc.calculationElection.otherRelief")),
+            attributes = Map("data-prevent-double-click" -> "true")
         ))
     }
 }
