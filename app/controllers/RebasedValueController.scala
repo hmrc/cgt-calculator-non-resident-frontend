@@ -34,7 +34,7 @@ import java.time.LocalDate
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
-class RebasedValueController @Inject()(http: DefaultHttpClient,
+class RebasedValueController @Inject()(val http: DefaultHttpClient,
                                        sessionCacheService: SessionCacheService,
                                        mcc: MessagesControllerComponents,
                                        rebasedValueView: rebasedValue

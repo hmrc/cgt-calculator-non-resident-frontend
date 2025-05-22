@@ -33,7 +33,7 @@ class PersonalAllowanceViewSpec extends CommonPlaySpec with WithCommonFakeApplic
   val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   lazy val personalAllowanceView: personalAllowance = fakeApplication.injector.instanceOf[personalAllowance]
-  lazy val pageTitle = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
+  lazy val pageTitle: String = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
 
   "The Personal Allowance View" should {
 

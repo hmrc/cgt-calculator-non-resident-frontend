@@ -30,7 +30,7 @@ class DateModelSpec extends CommonPlaySpec {
         month = 11,
         year = 2018)
       val date = LocalDate.of(2018, 11, 27)
-      DateModel.createDate(dateModel) shouldBe Some(date)
+      DateModel.given_Conversion_DateModel_Option(dateModel) shouldBe Some(date)
     }
 
     "return an empty option from a invalid model" in {
@@ -38,7 +38,7 @@ class DateModelSpec extends CommonPlaySpec {
         day = 27,
         month = 30,
         year = 2018)
-      DateModel.createDate(dateModel) shouldBe None
+      DateModel.given_Conversion_DateModel_Option(dateModel) shouldBe None
     }
 
     "should return json" in {

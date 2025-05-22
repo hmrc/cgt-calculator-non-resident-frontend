@@ -45,7 +45,7 @@ class WorthWhenGiftedToActionSpec extends CommonPlaySpec with WithCommonFakeAppl
   val mockCalcConnector: CalculatorConnector =mock[CalculatorConnector]
   val mockMessagesControllerComponents: MessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val worthWhenGiftedToView: worthWhenGiftedTo = fakeApplication.injector.instanceOf[worthWhenGiftedTo]
-  val pageTitle = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
+  val pageTitle: String = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
   class Setup {
     val controller = new WorthWhenGiftedToController(

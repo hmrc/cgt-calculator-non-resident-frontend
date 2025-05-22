@@ -47,7 +47,7 @@ class SoldOrGivenAwayActionSpec extends CommonPlaySpec with WithCommonFakeApplic
   val mockAnswersConstructor: AnswersConstructor = mock[AnswersConstructor]
   val mockMessagesControllerComponents: MessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val soldOrGivenAwayView: soldOrGivenAway = fakeApplication.injector.instanceOf[soldOrGivenAway]
-  lazy val pageTitle = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
+  lazy val pageTitle: String = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
 
   class Setup {

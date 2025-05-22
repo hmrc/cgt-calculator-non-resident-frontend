@@ -32,7 +32,7 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 
-class WhoDidYouGiveItToController @Inject()(http: DefaultHttpClient,
+class WhoDidYouGiveItToController @Inject()(val http: DefaultHttpClient,
                                             sessionCacheService: SessionCacheService,
                                             mcc: MessagesControllerComponents,
                                             noTaxToPayView: noTaxToPay,

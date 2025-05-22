@@ -30,7 +30,7 @@ import views.html.calculation.soldOrGivenAway
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class SoldOrGivenAwayController @Inject()(http: DefaultHttpClient,
+class SoldOrGivenAwayController @Inject()(val http: DefaultHttpClient,
                                           sessionCacheService: SessionCacheService,
                                           mcc: MessagesControllerComponents,
                                           soldOrGivenAwayView: soldOrGivenAway)

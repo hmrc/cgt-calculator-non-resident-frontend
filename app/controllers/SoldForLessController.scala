@@ -32,7 +32,7 @@ import views.html.calculation.soldForLess
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class SoldForLessController @Inject()(http: DefaultHttpClient,
+class SoldForLessController @Inject()(val http: DefaultHttpClient,
                                       sessionCacheService: SessionCacheService,
                                       mcc: MessagesControllerComponents,
                                       soldForLessView: soldForLess)

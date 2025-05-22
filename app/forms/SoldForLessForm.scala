@@ -31,6 +31,6 @@ object SoldForLessForm {
         .verifying("calc.nonResident.soldForLess.errors.required", mandatoryCheck)
         .verifying("calc.nonResident.soldForLess.errors.required", yesNoCheck)
         .transform[Boolean](stringToBoolean, booleanToString)
-    )(SoldForLessModel.apply)(SoldForLessModel.unapply)
+    )(SoldForLessModel.apply)(o=> Some(o.soldForLess))
   )
 }

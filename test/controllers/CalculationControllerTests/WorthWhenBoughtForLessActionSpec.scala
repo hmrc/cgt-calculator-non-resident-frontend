@@ -46,7 +46,7 @@ class WorthWhenBoughtForLessActionSpec extends CommonPlaySpec with WithCommonFak
   val mockMessagesControllerComponents: MessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val worthWhenBoughtForLessView: worthWhenBoughtForLess = fakeApplication.injector.instanceOf[worthWhenBoughtForLess]
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
-  lazy val pageTitle = s"""${messages.question} - ${messages.pageHeading} - GOV.UK"""
+  lazy val pageTitle: String = s"""${messages.question} - ${messages.pageHeading} - GOV.UK"""
 
   class Setup {
     val controller = new WorthWhenBoughtForLessController(

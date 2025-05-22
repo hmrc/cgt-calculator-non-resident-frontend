@@ -22,7 +22,7 @@ import models._
 
 class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeApplication with AssertHelpers {
 
-  val noneOtherReliefs = TotalGainAnswersModel(
+  val noneOtherReliefs: TotalGainAnswersModel = TotalGainAnswersModel(
     DateModel(10, 10, 2010),
     SoldOrGivenAwayModel(false),
     None,
@@ -31,7 +31,7 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
     Some(HowBecameOwnerModel("Gifted")),
     None,
     AcquisitionValueModel(5000),
-    AcquisitionCostsModel(200),
+    Some(AcquisitionCostsModel(200)),
     DateModel(1, 1, 2009),
     None,
     None,
@@ -40,7 +40,7 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
     None
   )
 
-  val noOtherReliefs = TotalGainAnswersModel(
+  val noOtherReliefs: TotalGainAnswersModel = TotalGainAnswersModel(
     DateModel(10, 10, 2010),
     SoldOrGivenAwayModel(false),
     None,
@@ -49,7 +49,7 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
     Some(HowBecameOwnerModel("Gifted")),
     None,
     AcquisitionValueModel(5000),
-    AcquisitionCostsModel(200),
+    Some(AcquisitionCostsModel(200)),
     DateModel(1, 1, 2009),
     None,
     None,
@@ -58,7 +58,7 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
     Some(OtherReliefsModel(0))
   )
 
-  val yesOtherReliefs = TotalGainAnswersModel(
+  val yesOtherReliefs: TotalGainAnswersModel = TotalGainAnswersModel(
     DateModel(10, 10, 2018),
     SoldOrGivenAwayModel(false),
     None,
@@ -67,7 +67,7 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
     Some(HowBecameOwnerModel("Gifted")),
     None,
     AcquisitionValueModel(5000),
-    AcquisitionCostsModel(200),
+    Some(AcquisitionCostsModel(200)),
     DateModel(1, 1, 2016),
     Some(RebasedValueModel(1)),
     Some(RebasedCostsModel("No", None)),
@@ -76,7 +76,7 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
     Some(OtherReliefsModel(1450))
   )
 
-  val within18Months = TotalGainAnswersModel(
+  val within18Months: TotalGainAnswersModel = TotalGainAnswersModel(
     DateModel(10, 10, 2016),
     SoldOrGivenAwayModel(false),
     None,
@@ -85,7 +85,7 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
     Some(HowBecameOwnerModel("Gifted")),
     None,
     AcquisitionValueModel(5000),
-    AcquisitionCostsModel(200),
+    Some(AcquisitionCostsModel(200)),
     DateModel(10, 4, 2015),
     None,
     None,
@@ -94,7 +94,7 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
     Some(OtherReliefsModel(1450))
   )
 
-  val validDates = TotalGainAnswersModel(
+  val validDates: TotalGainAnswersModel = TotalGainAnswersModel(
     DateModel(10, 10, 2016),
     SoldOrGivenAwayModel(false),
     None,
@@ -103,7 +103,7 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
     Some(HowBecameOwnerModel("Gifted")),
     None,
     AcquisitionValueModel(5000),
-    AcquisitionCostsModel(200),
+    Some(AcquisitionCostsModel(200)),
     DateModel(10, 2, 2015),
     None,
     None,
@@ -112,7 +112,7 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
     Some(OtherReliefsModel(1450))
   )
 
-  val edgeDatesJustDaysBefore = TotalGainAnswersModel(
+  val edgeDatesJustDaysBefore: TotalGainAnswersModel = TotalGainAnswersModel(
     DateModel(2, 3, 2017),
     SoldOrGivenAwayModel(false),
     None,
@@ -121,7 +121,7 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
     Some(HowBecameOwnerModel("Gifted")),
     None,
     AcquisitionValueModel(5000),
-    AcquisitionCostsModel(200),
+    Some(AcquisitionCostsModel(200)),
     DateModel(10, 4, 2015),
     None,
     None,
@@ -130,7 +130,7 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
     Some(OtherReliefsModel(1450))
   )
 
-  val acquisitionDateAfterStart = TotalGainAnswersModel(
+  val acquisitionDateAfterStart: TotalGainAnswersModel = TotalGainAnswersModel(
     DateModel(10, 10, 2018),
     SoldOrGivenAwayModel(false),
     None,
@@ -139,7 +139,7 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
     Some(HowBecameOwnerModel("Gifted")),
     None,
     AcquisitionValueModel(5000),
-    AcquisitionCostsModel(200),
+    Some(AcquisitionCostsModel(200)),
     DateModel(10, 2, 2016),
     None,
     None,
@@ -148,7 +148,7 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
     Some(OtherReliefsModel(1450))
   )
 
-  val disposalDateWithin18Months = TotalGainAnswersModel(
+  val disposalDateWithin18Months: TotalGainAnswersModel = TotalGainAnswersModel(
     DateModel(10, 4, 2016),
     SoldOrGivenAwayModel(false),
     None,
@@ -157,7 +157,7 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
     Some(HowBecameOwnerModel("Gifted")),
     None,
     AcquisitionValueModel(5000),
-    AcquisitionCostsModel(200),
+    Some(AcquisitionCostsModel(200)),
     DateModel(10, 2, 1990),
     None,
     None,
@@ -166,9 +166,9 @@ class DeductionDetailsConstructorSpec extends CommonPlaySpec with WithCommonFake
     Some(OtherReliefsModel(1450))
   )
 
-  val yesPRRModel = PrivateResidenceReliefModel("Yes", Some(2))
+  val yesPRRModel: PrivateResidenceReliefModel = PrivateResidenceReliefModel("Yes", Some(2))
 
-  private def assertExpectedResult[T](option: Option[T])(test: T => Unit) = assertOption("expected option is None")(option)(test)
+  private def assertExpectedResult[T](option: Option[T])(test: T => Unit): Unit = assertOption("expected option is None")(option)(test)
 
   "Calling .deductionDetailsRows" when {
 

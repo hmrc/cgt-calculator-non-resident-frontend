@@ -32,7 +32,7 @@ import views.html.calculation.broughtForwardLosses
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class BroughtForwardLossesController @Inject()(calcConnector: CalculatorConnector,
+class BroughtForwardLossesController @Inject()(val calcConnector: CalculatorConnector,
                                                sessionCacheService: SessionCacheService,
                                                mcc: MessagesControllerComponents,
                                                broughtForwardLossesView: broughtForwardLosses)(implicit ec: ExecutionContext)

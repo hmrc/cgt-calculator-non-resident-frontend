@@ -42,7 +42,7 @@ object PrivateResidenceReliefForm {
   )
 
   def isClaimingPrrForm: Form[ClaimingPrrModel] =
-      Form(mapping(isClaimingPRR)(ClaimingPrrModel.apply)(ClaimingPrrModel.unapply))
+      Form(mapping(isClaimingPRR)(ClaimingPrrModel.apply)(o=>Some(o.isClaimingPRR)))
 
-  def privateResidenceReliefForm: Form[PrivateResidenceReliefModel] = Form(mapping(isClaimingPRR, prrClaimed)(PrivateResidenceReliefModel.apply)(PrivateResidenceReliefModel.unapply))
+  def privateResidenceReliefForm: Form[PrivateResidenceReliefModel] = Form(mapping(isClaimingPRR, prrClaimed)(PrivateResidenceReliefModel.apply)(o=>Some(o.isClaimingPRR, o.prrClaimed)))
 }

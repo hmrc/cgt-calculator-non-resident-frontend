@@ -33,7 +33,7 @@ class SoldForLessViewSpec extends CommonPlaySpec with WithCommonFakeApplication 
   val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   lazy val soldForLessView: soldForLess = fakeApplication.injector.instanceOf[soldForLess]
-  lazy val pageTitle = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
+  lazy val pageTitle: String = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
 
   "The Sold for Less view spec" when {
 

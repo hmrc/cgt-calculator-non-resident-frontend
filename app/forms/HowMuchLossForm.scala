@@ -34,6 +34,6 @@ object HowMuchLossForm {
         .verifying("calc.howMuchLoss.errorNegative", isPositive)
         .verifying("calc.howMuchLoss.errorDecimal", decimalPlacesCheck)
         .verifying("calc.howMuchLoss.errorMax", maxCheck)
-    )(HowMuchLossModel.apply)(HowMuchLossModel.unapply)
+    )(HowMuchLossModel.apply)(o=>Some(o.loss))
   )
 }

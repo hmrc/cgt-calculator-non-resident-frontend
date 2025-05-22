@@ -27,35 +27,35 @@ import java.time.format.DateTimeFormatter
 class DateFormatterSpec extends CommonPlaySpec with WithCommonFakeApplication with FakeRequestHelper {
 
   object Errors {
-    val dateRequiredError = s"$testKey.error.required"
-    val dayRequiredError = s"$testKey.error.required.day"
-    val dayMonthRequiredError = s"$testKey.error.required.dayMonth"
-    val dayYearRequiredError = s"$testKey.error.required.dayYear"
-    val monthRequiredError = s"$testKey.error.required.month"
-    val monthYearRequiredError = s"$testKey.error.required.monthYear"
-    val yearRequiredError = s"$testKey.error.required.year"
+    val dateRequiredError: String = s"$testKey.error.required"
+    val dayRequiredError: String = s"$testKey.error.required.day"
+    val dayMonthRequiredError: String = s"$testKey.error.required.dayMonth"
+    val dayYearRequiredError: String = s"$testKey.error.required.dayYear"
+    val monthRequiredError: String = s"$testKey.error.required.month"
+    val monthYearRequiredError: String = s"$testKey.error.required.monthYear"
+    val yearRequiredError: String = s"$testKey.error.required.year"
 
-    val dateInvalidError = s"$testKey.error.invalid"
-    val dayInvalidError = s"$testKey.error.invalid.day"
-    val dayMonthInvalidError = s"$testKey.error.invalid.dayMonth"
-    val dayYearInvalidError = s"$testKey.error.invalid.dayYear"
-    val monthInvalidError = s"$testKey.error.invalid.month"
-    val monthYearInvalidError = s"$testKey.error.invalid.monthYear"
-    val yearInvalidError = s"$testKey.error.invalid.year"
+    val dateInvalidError: String = s"$testKey.error.invalid"
+    val dayInvalidError: String = s"$testKey.error.invalid.day"
+    val dayMonthInvalidError: String = s"$testKey.error.invalid.dayMonth"
+    val dayYearInvalidError: String = s"$testKey.error.invalid.dayYear"
+    val monthInvalidError: String = s"$testKey.error.invalid.month"
+    val monthYearInvalidError: String = s"$testKey.error.invalid.monthYear"
+    val yearInvalidError: String = s"$testKey.error.invalid.year"
 
-    val dateNotRealError = s"$testKey.error.notReal"
-    val dayNotRealError = s"$testKey.error.notReal.day"
-    val monthNotRealError = s"$testKey.error.notReal.month"
-    val yearNotRealError = s"$testKey.error.notReal.year"
+    val dateNotRealError: String = s"$testKey.error.notReal"
+    val dayNotRealError: String = s"$testKey.error.notReal.day"
+    val monthNotRealError: String = s"$testKey.error.notReal.month"
+    val yearNotRealError: String = s"$testKey.error.notReal.year"
 
-    val dateMinError = s"$testKey.error.range.min"
-    val dateMaxError = s"$testKey.error.range.max"
+    val dateMinError: String = s"$testKey.error.range.min"
+    val dateMaxError: String = s"$testKey.error.range.max"
   }
 
   val testKey = "testKey"
-  val dayKey = s"$testKey.day"
-  val monthKey = s"$testKey.month"
-  val yearKey = s"$testKey.year"
+  val dayKey: String = s"$testKey.day"
+  val monthKey: String = s"$testKey.month"
+  val yearKey: String = s"$testKey.year"
 
   val testDate: LocalDate = LocalDate.of(2000, 2, 1)
   val testMinDate: LocalDate = testDate.minusYears(1)

@@ -31,7 +31,7 @@ import views.html.calculation.howBecameOwner
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class HowBecameOwnerController @Inject()(http: DefaultHttpClient,
+class HowBecameOwnerController @Inject()(val http: DefaultHttpClient,
                                          sessionCacheService: SessionCacheService,
                                          mcc: MessagesControllerComponents,
                                          howBecameOwnerView: howBecameOwner)(implicit ec: ExecutionContext)

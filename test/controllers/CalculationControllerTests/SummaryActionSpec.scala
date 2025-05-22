@@ -130,7 +130,7 @@ class SummaryActionSpec extends CommonPlaySpec with WithCommonFakeApplication wi
     Some(HowBecameOwnerModel("Gifted")),
     None,
     AcquisitionValueModel(5000),
-    AcquisitionCostsModel(200),
+    Some(AcquisitionCostsModel(200)),
     DateModel(1, 1, 2016),
     None,
     None,

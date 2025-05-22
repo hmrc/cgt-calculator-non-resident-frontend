@@ -32,7 +32,7 @@ class WhoDidYouGiveItToViewSpec extends CommonPlaySpec with WithCommonFakeApplic
   val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   val whoDidYouGiveItToView: whoDidYouGiveItTo = fakeApplication.injector.instanceOf[whoDidYouGiveItTo]
-  val pageTitle = s"""${messages.title} - ${commonMessages.serviceName} - GOV.UK"""
+  val pageTitle: String = s"""${messages.title} - ${commonMessages.serviceName} - GOV.UK"""
 
   "Property Recipient view" should {
 

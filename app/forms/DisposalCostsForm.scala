@@ -33,6 +33,6 @@ object DisposalCostsForm {
         .verifying("calc.disposalCosts.errorNegativeNumber", costs => isPositive(costs))
         .verifying("calc.disposalCosts.errorDecimalPlaces", costs => decimalPlacesCheck(costs))
         .verifying("calc.disposalCosts.errorMax", maxCheck)
-    )(DisposalCostsModel.apply)(DisposalCostsModel.unapply)
+    )(DisposalCostsModel.apply)(o=>Some(o.disposalCosts))
   )
 }

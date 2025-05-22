@@ -44,6 +44,6 @@ object CostsAtLegislationStartForm {
             )
           )
       )
-    )(CostsAtLegislationStartModel.apply)(CostsAtLegislationStartModel.unapply)
+    )(CostsAtLegislationStartModel.apply)(o=>Some(o.hasCosts, o.costs))
   )
 }

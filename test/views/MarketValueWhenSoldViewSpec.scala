@@ -34,7 +34,7 @@ class MarketValueWhenSoldViewSpec extends CommonPlaySpec with WithCommonFakeAppl
   val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   lazy val marketValueSoldView: marketValueSold = fakeApplication.injector.instanceOf[marketValueSold]
-  lazy val pageTitle = s"""${MarketValueMessages.disposalSoldQuestion} - ${commonMessages.serviceName} - GOV.UK"""
+  lazy val pageTitle: String = s"""${MarketValueMessages.disposalSoldQuestion} - ${commonMessages.serviceName} - GOV.UK"""
 
 
 

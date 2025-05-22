@@ -22,7 +22,6 @@ import models._
 import play.api.Logging
 import play.api.mvc.Request
 import services.SessionCacheService
-
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 

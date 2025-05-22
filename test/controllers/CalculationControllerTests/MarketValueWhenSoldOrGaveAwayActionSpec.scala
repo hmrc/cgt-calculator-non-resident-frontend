@@ -47,7 +47,7 @@ class MarketValueWhenSoldOrGaveAwayActionSpec extends CommonPlaySpec with WithCo
   val mockMessagesControllerComponents: MessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val marketValueSoldView: marketValueSold = fakeApplication.injector.instanceOf[marketValueSold]
   val marketValueGaveAwayView: marketValueGaveAway = fakeApplication.injector.instanceOf[marketValueGaveAway]
-  val pageTitle = s"""${marketValueMessages.disposalSoldQuestion} - ${commonMessages.serviceName} - GOV.UK"""
+  val pageTitle: String = s"""${marketValueMessages.disposalSoldQuestion} - ${commonMessages.serviceName} - GOV.UK"""
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
 
   class Setup {

@@ -32,7 +32,7 @@ import views.html.calculation.previousLossOrGain
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class PreviousGainOrLossController @Inject()(http: DefaultHttpClient,
+class PreviousGainOrLossController @Inject()(val http: DefaultHttpClient,
                                              sessionCacheService: SessionCacheService,
                                              mcc: MessagesControllerComponents,
                                              previousLossOrGainView: previousLossOrGain)

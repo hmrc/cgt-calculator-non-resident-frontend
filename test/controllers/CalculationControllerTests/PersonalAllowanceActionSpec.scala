@@ -46,7 +46,7 @@ class PersonalAllowanceActionSpec extends CommonPlaySpec with WithCommonFakeAppl
   val mockMessagesControllerComponents: MessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val personalAllowanceView: personalAllowance = fakeApplication.injector.instanceOf[personalAllowance]
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
-  lazy val pageTitle = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
+  lazy val pageTitle: String = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
 
   class Setup {
     val controller = new PersonalAllowanceController(

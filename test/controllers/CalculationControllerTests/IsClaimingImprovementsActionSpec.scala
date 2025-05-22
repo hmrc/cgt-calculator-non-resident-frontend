@@ -48,8 +48,8 @@ class IsClaimingImprovementsActionSpec extends CommonPlaySpec with WithCommonFak
   val improvementsView: improvements = fakeApplication.injector.instanceOf[improvements]
   val improvementsRebasedView: improvementsRebased = fakeApplication.injector.instanceOf[improvementsRebased]
   val isClaimingImprovementsView: isClaimingImprovements = fakeApplication.injector.instanceOf[isClaimingImprovements]
-  lazy val pageTitle = s"""${commonMessages.IsClaimingImprovements.title} - ${commonMessages.serviceName} - GOV.UK"""
-  lazy val pageTitleBeforeLegislation =
+  lazy val pageTitle: String = s"""${commonMessages.IsClaimingImprovements.title} - ${commonMessages.serviceName} - GOV.UK"""
+  lazy val pageTitleBeforeLegislation: String =
     s"${commonMessages.IsClaimingImprovements.ownerBeforeLegislationStartQuestion} - ${commonMessages.serviceName} - GOV.UK"
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
 

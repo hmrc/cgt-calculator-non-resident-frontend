@@ -59,7 +59,7 @@ class WhatNextControllerSpec extends CommonPlaySpec with WithCommonFakeApplicati
     None,
     None,
     AcquisitionValueModel(0),
-    AcquisitionCostsModel(0),
+    Some(AcquisitionCostsModel(0)),
     DateModel(7, 4, 2020),
     None,
     None,

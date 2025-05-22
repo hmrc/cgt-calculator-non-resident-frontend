@@ -45,7 +45,7 @@ class OtherPropertiesActionSpec extends CommonPlaySpec with WithCommonFakeApplic
   val mockMessagesControllerComponents: MessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val otherPropertiesView: otherProperties = fakeApplication.injector.instanceOf[otherProperties]
   val sessionTimeoutView: sessionTimeout = fakeApplication.injector.instanceOf[sessionTimeout]
-  lazy val pageTitle = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
+  lazy val pageTitle: String = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
 
   class Setup {

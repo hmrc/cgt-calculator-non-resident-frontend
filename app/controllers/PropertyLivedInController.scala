@@ -32,7 +32,7 @@ import views.html.calculation.propertyLivedIn
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class PropertyLivedInController @Inject()(http: DefaultHttpClient,
+class PropertyLivedInController @Inject()(val http: DefaultHttpClient,
                                           sessionCacheService: SessionCacheService,
                                           mcc: MessagesControllerComponents,
                                           propertyLivedInView: propertyLivedIn)

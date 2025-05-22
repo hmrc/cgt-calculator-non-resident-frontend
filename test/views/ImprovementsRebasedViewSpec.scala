@@ -35,7 +35,7 @@ class ImprovementsRebasedViewSpec extends CommonPlaySpec with WithCommonFakeAppl
   val mockMessagesApi: MessagesApi = mock[MessagesApi]
   lazy val improvementsRebasedView: improvementsRebased = fakeApplication.injector.instanceOf[improvementsRebased]
   lazy val pageHeading: String = messages.ImprovementsRebased.title
-  lazy val pageTitle = s"$pageHeading - ${messages.serviceName} - GOV.UK"
+  lazy val pageTitle: String = s"$pageHeading - ${messages.serviceName} - GOV.UK"
 
   "Improvements view" should {
 

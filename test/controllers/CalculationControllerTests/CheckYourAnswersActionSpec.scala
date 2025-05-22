@@ -48,7 +48,7 @@ class CheckYourAnswersActionSpec
   val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents: MessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val checkYourAnswersView: checkYourAnswers = fakeApplication.injector.instanceOf[checkYourAnswers]
-  val pageTitle = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
+  val pageTitle: String = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
 
   class Setup {
@@ -95,7 +95,7 @@ class CheckYourAnswersActionSpec
     Some(HowBecameOwnerModel("Gifted")),
     Some(BoughtForLessModel(false)),
     AcquisitionValueModel(2000),
-    AcquisitionCostsModel(200),
+    Some(AcquisitionCostsModel(200)),
     DateModel(4, 10, 2013),
     Some(RebasedValueModel(3000)),
     Some(RebasedCostsModel("Yes", Some(300))),
@@ -114,7 +114,7 @@ class CheckYourAnswersActionSpec
     Some(HowBecameOwnerModel("Gifted")),
     Some(BoughtForLessModel(false)),
     AcquisitionValueModel(2000),
-    AcquisitionCostsModel(200),
+    Some(AcquisitionCostsModel(200)),
     DateModel(4, 10, 2016),
     None,
     None,

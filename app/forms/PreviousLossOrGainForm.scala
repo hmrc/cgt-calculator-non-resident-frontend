@@ -30,6 +30,6 @@ object PreviousLossOrGainForm {
       "previousLossOrGain" -> text("calc.previousLossOrGain.errors.required")
         .verifying("calc.previousLossOrGain.errors.required", mandatoryCheck)
         .verifying("calc.previousLossOrGain.errors.required", previousLossOrGainCheck)
-    )(PreviousLossOrGainModel.apply)(PreviousLossOrGainModel.unapply)
+    )(PreviousLossOrGainModel.apply)(o=>Some(o.previousLossOrGain))
   )
 }

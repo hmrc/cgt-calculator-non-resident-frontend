@@ -31,7 +31,7 @@ import views.html.calculation.claimingReliefs
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class ClaimingReliefsController @Inject()(http: DefaultHttpClient,
+class ClaimingReliefsController @Inject()(val http: DefaultHttpClient,
                                           sessionCacheService: SessionCacheService,
                                           mcc: MessagesControllerComponents,
                                           claimingReliefsView: claimingReliefs)(implicit ec: ExecutionContext)

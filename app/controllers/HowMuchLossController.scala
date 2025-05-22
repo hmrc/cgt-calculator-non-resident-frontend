@@ -31,7 +31,7 @@ import views.html.calculation.howMuchLoss
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class HowMuchLossController @Inject()(http: DefaultHttpClient,
+class HowMuchLossController @Inject()(val http: DefaultHttpClient,
                                       sessionCacheService: SessionCacheService,
                                       mcc: MessagesControllerComponents,
                                       howMuchLossView: howMuchLoss)(implicit ec: ExecutionContext)

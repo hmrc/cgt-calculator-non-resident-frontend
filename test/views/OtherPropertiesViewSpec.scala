@@ -33,7 +33,7 @@ class OtherPropertiesViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
   val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   lazy val otherPropertiesView: otherProperties = fakeApplication.injector.instanceOf[otherProperties]
-  lazy val pageTitle = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
+  lazy val pageTitle: String = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
 
   "The other properties view" should {
 

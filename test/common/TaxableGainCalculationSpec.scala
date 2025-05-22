@@ -51,7 +51,7 @@ class TaxableGainCalculationSpec extends CommonPlaySpec with GuiceOneAppPerSuite
     Some(AnnualExemptAmountModel(0)),
     BroughtForwardLossesModel(isClaiming = false, None)
   )
-  val totalGainAnswersModel = TotalGainAnswersModel(
+  val totalGainAnswersModel: TotalGainAnswersModel = TotalGainAnswersModel(
     DateModel(5, 6, 2015),
     SoldOrGivenAwayModel(true),
     Some(SoldForLessModel(true)),
@@ -60,7 +60,7 @@ class TaxableGainCalculationSpec extends CommonPlaySpec with GuiceOneAppPerSuite
     Some(HowBecameOwnerModel("Bought")),
     Some(BoughtForLessModel(false)),
     AcquisitionValueModel(1250000),
-    AcquisitionCostsModel(20000),
+    Some(AcquisitionCostsModel(20000)),
     DateModel(10, 10, 2001),
     Some(RebasedValueModel(950000)),
     Some(RebasedCostsModel("No", None)),
@@ -68,12 +68,12 @@ class TaxableGainCalculationSpec extends CommonPlaySpec with GuiceOneAppPerSuite
     None,
     Some(OtherReliefsModel(0))
   )
-  val calculationResultsModel = CalculationResultsWithTaxOwedModel(
+  val calculationResultsModel: CalculationResultsWithTaxOwedModel = CalculationResultsWithTaxOwedModel(
     TotalTaxOwedModel(100, 100, 20, None, None, 200, 100, None, None, None, None, 0, None, None, None, None, None, None, None),
     None,
     None
   )
-  val propertyLivedIn = PropertyLivedInModel(true)
+  val propertyLivedIn: PropertyLivedInModel = PropertyLivedInModel(true)
 
   when(mockSessionCacheService.fetchAndGetFormData[PrivateResidenceReliefModel](ArgumentMatchers.eq(KeystoreKeys.NonResidentKeys.privateResidenceRelief))
     (ArgumentMatchers.any(), ArgumentMatchers.any()))

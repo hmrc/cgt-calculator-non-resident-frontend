@@ -35,6 +35,6 @@ object OtherReliefsForm {
           .verifying("calc.otherReliefs.errorNegative", isPositive)
           .verifying("calc.otherReliefs.errorDecimal", decimalPlacesCheck)
           .verifying("calc.otherReliefs.errorMax", maxCheck)
-      )(OtherReliefsModel.apply)(OtherReliefsModel.unapply)
+      )(OtherReliefsModel.apply)(o=>Some(o.otherReliefs))
     )
 }

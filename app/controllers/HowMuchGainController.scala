@@ -31,7 +31,7 @@ import views.html.calculation.howMuchGain
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class HowMuchGainController @Inject()(http: DefaultHttpClient,
+class HowMuchGainController @Inject()(val http: DefaultHttpClient,
                                       sessionCacheService: SessionCacheService,
                                       mcc: MessagesControllerComponents,
                                       howMuchGainView: howMuchGain)(implicit ec: ExecutionContext)

@@ -34,6 +34,6 @@ object PersonalAllowanceForm {
         .verifying("calc.personalAllowance.errorNegative", isPositive)
         .verifying("calc.personalAllowance.errorDecimalPlaces", decimalPlacesCheckNoDecimal)
         .verifying(maxMonetaryValueConstraint(maxPA, "calc.personalAllowance.errorMaxLimit"))
-    )(PersonalAllowanceModel.apply)(PersonalAllowanceModel.unapply)
+    )(PersonalAllowanceModel.apply)(o=>Some(o.personalAllowanceAmt))
   )
 }

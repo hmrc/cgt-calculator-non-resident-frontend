@@ -30,6 +30,6 @@ object OtherPropertiesForm {
       "otherProperties" -> text("calc.otherProperties.errors.required")
         .verifying("calc.otherProperties.errors.required", mandatoryCheck)
         .verifying("calc.otherProperties.errors.required", yesNoCheck)
-    )(OtherPropertiesModel.apply)(OtherPropertiesModel.unapply)
+    )(OtherPropertiesModel.apply)(o=>Some(o.otherProperties))
   )
 }

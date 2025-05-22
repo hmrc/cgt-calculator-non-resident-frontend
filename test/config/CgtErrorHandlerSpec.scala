@@ -40,10 +40,10 @@ class CgtErrorHandlerSpec extends CommonPlaySpec with WithCommonFakeApplication 
       case GET(p"/ok") => actionBuilder.async { request =>
         Future.successful(Results.Ok("OK"))
       }
-      case GET(p"/application-exception") => actionBuilder.async { request =>
-        throw new ApplicationException(Redirect(controllers.utils.routes.TimeoutController.timeout), "Test exception thrown")
+      case GET(p"/application-exception") => actionBuilder.async { _ =>
+        throw ApplicationException(Redirect(controllers.utils.routes.TimeoutController.timeout()), "Test exception thrown")
       }
-      case GET(p"/other-error") => actionBuilder.async { request =>
+      case GET(p"/other-error") => actionBuilder.async { _ =>
         throw new IllegalArgumentException("Other exception thrown")
       }
     }
@@ -75,7 +75,7 @@ class CgtErrorHandlerSpec extends CommonPlaySpec with WithCommonFakeApplication 
     val request = FakeRequest("GET", "/application-exception")
     val response = routeWithError(app, request).get
     status(response) must equal(SEE_OTHER)
-    redirectLocation(response) shouldBe Some(controllers.utils.routes.TimeoutController.timeout.url)
+    redirectLocation(response) shouldBe Some(controllers.utils.routes.TimeoutController.timeout().url)
   }
 
   "Application throws other exception and logs error" in {

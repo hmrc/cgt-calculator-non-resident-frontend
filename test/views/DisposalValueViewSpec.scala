@@ -33,7 +33,7 @@ class DisposalValueViewSpec extends CommonPlaySpec with WithCommonFakeApplicatio
   val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   lazy val disposalValueView: disposalValue = fakeApplication.injector.instanceOf[disposalValue]
-  lazy val pageTitle = s"${messages.question} - ${commonMessages.serviceName} - GOV.UK"
+  lazy val pageTitle: String = s"${messages.question} - ${commonMessages.serviceName} - GOV.UK"
 
   "Disposal value view" when {
 

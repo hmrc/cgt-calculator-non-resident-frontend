@@ -57,13 +57,13 @@ class CalculatorConnectorSpec extends CommonPlaySpec with WithCommonFakeApplicat
 
   private val con = fakeApplication.injector.instanceOf[CalculatorConnector]
 
-  override def beforeEach: Unit = {
+  override def beforeEach(): Unit = {
     wireMockServer.start()
     wireMockServer.resetAll()
     WireMock.configureFor(Host, Port)
   }
 
-  override def afterEach: Unit = {
+  override def afterEach(): Unit = {
     wireMockServer.stop()
   }
 

@@ -38,7 +38,7 @@ class DisposalDateViewSpec extends CommonPlaySpec with WithCommonFakeApplication
   lazy val cyMockMessage: Messages = api.preferred(Seq(
     welshLanguage
   ))
-  lazy val pageTitle = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
+  lazy val pageTitle: String = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
 
   "The Disposal Date View" should {
 

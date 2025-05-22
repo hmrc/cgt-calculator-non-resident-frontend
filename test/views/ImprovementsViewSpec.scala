@@ -35,7 +35,7 @@ class ImprovementsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
   val mockMessagesApi: MessagesApi = mock[MessagesApi]
   lazy val improvementsView: improvements = fakeApplication.injector.instanceOf[improvements]
   lazy val pageHeading: String = messages.Improvements.title
-  lazy val pageTitle = s"$pageHeading - ${messages.serviceName} - GOV.UK"
+  lazy val pageTitle: String = s"$pageHeading - ${messages.serviceName} - GOV.UK"
 
   "Improvements view" should {
 

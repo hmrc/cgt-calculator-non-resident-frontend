@@ -48,7 +48,7 @@ class ImprovementsRebasedActionSpec extends CommonPlaySpec with WithCommonFakeAp
   val improvementsView: improvements = fakeApplication.injector.instanceOf[improvements]
   val improvementsRebasedView: improvementsRebased = fakeApplication.injector.instanceOf[improvementsRebased]
   val isClaimingImprovementsView: isClaimingImprovements = fakeApplication.injector.instanceOf[isClaimingImprovements]
-  lazy val pageTitle = s"${commonMessages.ImprovementsRebased.title} - ${commonMessages.serviceName} - GOV.UK"
+  lazy val pageTitle: String = s"${commonMessages.ImprovementsRebased.title} - ${commonMessages.serviceName} - GOV.UK"
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
 
   class Setup {

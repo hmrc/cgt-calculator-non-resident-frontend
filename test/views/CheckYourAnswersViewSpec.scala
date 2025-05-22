@@ -37,7 +37,7 @@ class CheckYourAnswersViewSpec extends CommonPlaySpec with WithCommonFakeApplica
   lazy val lang: Lang = Lang("cy")
   implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   lazy val checkYourAnswersView: checkYourAnswers = fakeApplication.injector.instanceOf[checkYourAnswers]
-  lazy val pageTitle = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
+  lazy val pageTitle: String = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
   val mockMessagesApi: MessagesApi = mock[MessagesApi]
 
 

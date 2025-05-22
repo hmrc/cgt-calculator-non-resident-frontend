@@ -58,5 +58,6 @@ object TotalGainAnswersModel {
        __.writeNullable[ImprovementsModel](ImprovementsModel.postWrites(model.rebasedValueModel, model.acquisitionDateModel)) and
       ignore and
       ignore
-    ) (unlift(TotalGainAnswersModel.unapply))
+    ) (o => Tuple.fromProductTyped(o))
+
 }

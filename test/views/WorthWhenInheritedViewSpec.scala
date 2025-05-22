@@ -33,7 +33,7 @@ class WorthWhenInheritedViewSpec extends CommonPlaySpec with WithCommonFakeAppli
   val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   lazy val worthWhenInheritedView: worthWhenInherited = fakeApplication.injector.instanceOf[worthWhenInherited]
-  lazy val pageTitle = s"""${WorthWhenInherited.question} - ${commonMessages.serviceName} - GOV.UK"""
+  lazy val pageTitle: String = s"""${WorthWhenInherited.question} - ${commonMessages.serviceName} - GOV.UK"""
 
   "The Worth When Inherited To view spec" when {
 

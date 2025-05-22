@@ -31,7 +31,7 @@ import views.html.calculation.disposalValue
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class DisposalValueController @Inject()(http: DefaultHttpClient,
+class DisposalValueController @Inject()(val http: DefaultHttpClient,
                                         sessionCacheService: SessionCacheService,
                                         mcc: MessagesControllerComponents,
                                         disposalValueView: disposalValue)(implicit ec: ExecutionContext)

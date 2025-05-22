@@ -47,7 +47,7 @@ class BoughtForLessActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
   val boughtForLessView: boughtForLess = fakeApplication.injector.instanceOf[boughtForLess]
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
 
-  lazy val pageTitle = s"""${messages.BoughtForLess.question} - ${messages.serviceName} - GOV.UK"""
+  lazy val pageTitle: String = s"""${messages.BoughtForLess.question} - ${messages.serviceName} - GOV.UK"""
 
   class Setup {
     val controller = new BoughtForLessController(

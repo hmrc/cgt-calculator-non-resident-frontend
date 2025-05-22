@@ -34,7 +34,7 @@ import views.html.calculation.personalAllowance
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class PersonalAllowanceController @Inject()(http: DefaultHttpClient,
+class PersonalAllowanceController @Inject()(val http: DefaultHttpClient,
                                             calcConnector: CalculatorConnector,
                                             sessionCacheService: SessionCacheService,
                                             mcc: MessagesControllerComponents,
