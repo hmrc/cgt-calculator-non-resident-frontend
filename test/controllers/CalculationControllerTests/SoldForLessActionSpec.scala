@@ -57,10 +57,10 @@ class SoldForLessActionSpec extends CommonPlaySpec with WithCommonFakeApplicatio
 
   def setupTarget(getData: Option[SoldForLessModel]): SoldForLessController = {
 
-    when(mockSessionCacheService.fetchAndGetFormData[SoldForLessModel](ArgumentMatchers.eq(keyStoreKeys.soldForLess))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.fetchAndGetFormData[SoldForLessModel](ArgumentMatchers.eq(keyStoreKeys.soldForLess))(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    when(mockSessionCacheService.saveFormData[SoldForLessModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.saveFormData[SoldForLessModel](ArgumentMatchers.any(), ArgumentMatchers.any())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(("", "")))
 
     new SoldForLessController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, soldForLessView)

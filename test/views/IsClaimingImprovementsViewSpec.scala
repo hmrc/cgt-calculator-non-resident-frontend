@@ -43,7 +43,7 @@ class IsClaimingImprovementsViewSpec extends CommonPlaySpec with WithCommonFakeA
 
     "render with no errors when is owner after legislation start" should {
 
-      lazy val view = isClaimingImprovementsView(isClaimingImprovementsForm, ownerBeforeLegislationStart = false)(fakeRequest, mockMessage)
+      lazy val view = isClaimingImprovementsView(isClaimingImprovementsForm, ownerBeforeLegislationStart = false)(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "return some HTML that" should {
@@ -117,7 +117,7 @@ class IsClaimingImprovementsViewSpec extends CommonPlaySpec with WithCommonFakeA
 
     "render with no errors when is owner before legislation start" should {
 
-      lazy val view = isClaimingImprovementsView(isClaimingImprovementsForm, ownerBeforeLegislationStart = true)(fakeRequest, mockMessage)
+      lazy val view = isClaimingImprovementsView(isClaimingImprovementsForm, ownerBeforeLegislationStart = true)(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "return some HTML that" should {
@@ -152,7 +152,7 @@ class IsClaimingImprovementsViewSpec extends CommonPlaySpec with WithCommonFakeA
 
     "supplied with errors" should {
       lazy val form = isClaimingImprovementsForm.bind(Map("isClaimingImprovements" -> ""))
-      lazy val view = isClaimingImprovementsView(form, ownerBeforeLegislationStart = true)(fakeRequest, mockMessage)
+      lazy val view = isClaimingImprovementsView(form, ownerBeforeLegislationStart = true)(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

@@ -41,7 +41,7 @@ class ImprovementsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
 
     "supplied with no errors and is owner after legislation start" should {
 
-      lazy val view = improvementsView(improvementsForm(true))(fakeRequest, mockMessage, mockMessagesApi)
+      lazy val view = improvementsView(improvementsForm(true))(using fakeRequest, mockMessage, mockMessagesApi)
       lazy val document = Jsoup.parse(view.body)
 
       "return some HTML that" should {
@@ -116,7 +116,7 @@ class ImprovementsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
 
     "supplied with errors" should {
       lazy val form = improvementsForm(true).bind(Map("improvementsAmt" -> "testData"))
-      lazy val view = improvementsView(form)(fakeRequest, mockMessage, mockMessagesApi)
+      lazy val view = improvementsView(form)(using fakeRequest, mockMessage, mockMessagesApi)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

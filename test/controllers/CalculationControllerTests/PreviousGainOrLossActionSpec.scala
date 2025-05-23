@@ -56,11 +56,11 @@ class PreviousGainOrLossActionSpec extends CommonPlaySpec with WithCommonFakeApp
 
   def setupTarget(getData: Option[PreviousLossOrGainModel]): PreviousGainOrLossController = {
     when(mockSessionCacheService.fetchAndGetFormData[PreviousLossOrGainModel](
-      ArgumentMatchers.eq(keystoreKeys.previousLossOrGain))(ArgumentMatchers.any(), ArgumentMatchers.any())).
+      ArgumentMatchers.eq(keystoreKeys.previousLossOrGain))(using ArgumentMatchers.any(), ArgumentMatchers.any())).
       thenReturn(Future.successful(getData))
 
     when(mockSessionCacheService.saveFormData[PreviousLossOrGainModel](
-      ArgumentMatchers.eq(keystoreKeys.previousLossOrGain), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any())).
+      ArgumentMatchers.eq(keystoreKeys.previousLossOrGain), ArgumentMatchers.any())(using ArgumentMatchers.any(), ArgumentMatchers.any())).
       thenReturn(Future.successful("", ""))
 
     new PreviousGainOrLossController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, previousLossOrGainView)

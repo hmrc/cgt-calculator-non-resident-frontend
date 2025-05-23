@@ -38,7 +38,7 @@ class SummaryPartialDeductionsSectionViewSpec extends CommonPlaySpec with WithCo
       inYearLossesUsed = 10,
       broughtForwardLossesUsed = 20,
       totalDeductions = 21030
-    )(fakeRequestWithSession, mockMessage)
+    )(using fakeRequestWithSession, mockMessage)
     lazy val doc = Jsoup.parse(view.body)
 
     s"have the h3 heading ${messages.deductionsSectionHeading}" in {
@@ -104,7 +104,7 @@ class SummaryPartialDeductionsSectionViewSpec extends CommonPlaySpec with WithCo
       inYearLossesUsed = 0,
       broughtForwardLossesUsed = 0,
       totalDeductions = 21030
-    )(fakeRequestWithSession, mockMessage)
+    )(using fakeRequestWithSession, mockMessage)
     lazy val doc = Jsoup.parse(view.body)
 
     s"have the h3 heading ${messages.deductionsSectionHeading}" in {

@@ -59,22 +59,22 @@ class AcquisitionCostsActionSpec extends CommonPlaySpec with WithCommonFakeAppli
                   boughtForLessData: Option[BoughtForLessModel] = None): AcquisitionCostsController = {
 
     when(mockSessionCacheService.fetchAndGetFormData[AcquisitionCostsModel](
-      ArgumentMatchers.eq(KeystoreKeys.acquisitionCosts))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      ArgumentMatchers.eq(KeystoreKeys.acquisitionCosts))(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
     when(mockSessionCacheService.fetchAndGetFormData[DateModel](
-      ArgumentMatchers.eq(KeystoreKeys.acquisitionDate))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      ArgumentMatchers.eq(KeystoreKeys.acquisitionDate))(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(acquisitionDateData))
 
     when(mockSessionCacheService.fetchAndGetFormData[HowBecameOwnerModel](
-      ArgumentMatchers.eq(KeystoreKeys.howBecameOwner))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      ArgumentMatchers.eq(KeystoreKeys.howBecameOwner))(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(howBecameOwnerData))
 
     when(mockSessionCacheService.fetchAndGetFormData[BoughtForLessModel](
-      ArgumentMatchers.eq(KeystoreKeys.boughtForLess))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      ArgumentMatchers.eq(KeystoreKeys.boughtForLess))(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(boughtForLessData))
 
-    when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(("", "")))
 
     new AcquisitionCostsController(mockSessionCacheService, mockMessagesControllerComponents, acquisitionCostsView)

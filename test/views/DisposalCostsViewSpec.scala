@@ -38,7 +38,7 @@ class DisposalCostsViewSpec extends CommonPlaySpec with WithCommonFakeApplicatio
   "Disposal Costs view" when {
 
     "supplied with no errors" should {
-      lazy val view = disposalCostsView(disposalCostsForm, "back-link")(fakeRequest, mockMessage)
+      lazy val view = disposalCostsView(disposalCostsForm, "back-link")(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '$pageTitle'" in {
@@ -144,7 +144,7 @@ class DisposalCostsViewSpec extends CommonPlaySpec with WithCommonFakeApplicatio
 
     "supplied with errors" should {
       lazy val form = disposalCostsForm.bind(Map("disposalCosts" -> "a"))
-      lazy val view = disposalCostsView(form, "back-link")(fakeRequest, mockMessage)
+      lazy val view = disposalCostsView(form, "back-link")(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

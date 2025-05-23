@@ -48,7 +48,7 @@ class OtherReliefsFlatViewSpec
         hasExistingReliefAmount = false,
         BigDecimal(2000),
         BigDecimal(2500)
-      )(fakeRequest, mockMessage)
+      )(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have a back link" which {
@@ -176,7 +176,7 @@ class OtherReliefsFlatViewSpec
         hasExistingReliefAmount = true,
         BigDecimal(-1000),
         BigDecimal(2000)
-      )(fakeRequest, mockMessage)
+      )(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "has a list entry with the loss carried forward message and value" in {
@@ -209,7 +209,7 @@ class OtherReliefsFlatViewSpec
         hasExistingReliefAmount = true,
         BigDecimal(2000),
         BigDecimal(2000)
-      )(fakeRequest, mockMessage)
+      )(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

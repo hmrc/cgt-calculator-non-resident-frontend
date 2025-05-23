@@ -40,7 +40,7 @@ class CalculationElectionViewSpec extends CommonPlaySpec with WithCommonFakeAppl
     lazy val form = calculationElectionForm
     lazy val seq: Seq[(String, String, String, String, Option[String], Option[BigDecimal])] =
       Seq(("flat", "2000", Messages("calc.calculationElection.message.flat"), Messages("calc.calculationElection.description.flat"), None, None))
-    lazy val view = calculationElectionView(form, seq)(fakeRequest,mockMessage)
+    lazy val view = calculationElectionView(form, seq)(using fakeRequest,mockMessage)
     lazy val doc = Jsoup.parse(view.body)
 
     s"have a title of '${messages.heading}" in {

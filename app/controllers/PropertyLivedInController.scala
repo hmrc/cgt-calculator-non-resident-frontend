@@ -60,7 +60,7 @@ class PropertyLivedInController @Inject()(val http: DefaultHttpClient,
 
     def successAction(model: PropertyLivedInModel) = {
       (for {
-        save <- sessionCacheService.saveFormData(keystoreKeys.propertyLivedIn, model)
+        _ <- sessionCacheService.saveFormData(keystoreKeys.propertyLivedIn, model)
         route <- routeRequest(model)
       } yield route).recoverToStart
     }

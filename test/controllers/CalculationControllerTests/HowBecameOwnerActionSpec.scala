@@ -58,11 +58,11 @@ class HowBecameOwnerActionSpec extends CommonPlaySpec with WithCommonFakeApplica
 
   def setupTarget(getData: Option[HowBecameOwnerModel]): HowBecameOwnerController = {
 
-    when(mockSessionCacheService.fetchAndGetFormData[HowBecameOwnerModel](ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.fetchAndGetFormData[HowBecameOwnerModel](ArgumentMatchers.any())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
     when(mockSessionCacheService.saveFormData[HowBecameOwnerModel](
-      ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      ArgumentMatchers.any(), ArgumentMatchers.any())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful("", ""))
 
     new HowBecameOwnerController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, howBecameOwnerView)

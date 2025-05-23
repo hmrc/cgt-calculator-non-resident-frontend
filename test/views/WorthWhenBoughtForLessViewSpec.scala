@@ -38,7 +38,7 @@ class WorthWhenBoughtForLessViewSpec extends CommonPlaySpec with WithCommonFakeA
 
     "supplied with no errors" should {
 
-      lazy val view = worthWhenBoughtForLessView(worthWhenBoughtForLessForm)(fakeRequest, mockMessage)
+      lazy val view = worthWhenBoughtForLessView(worthWhenBoughtForLessForm)(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${WorthWhenBoughtForLess.question}'" in {
@@ -134,7 +134,7 @@ class WorthWhenBoughtForLessViewSpec extends CommonPlaySpec with WithCommonFakeA
     "supplied with a form with errors" should {
 
       lazy val form = worthWhenBoughtForLessForm.bind(Map("acquisitionMarketValue" -> "a"))
-      lazy val view = worthWhenBoughtForLessView(form)(fakeRequest, mockMessage)
+      lazy val view = worthWhenBoughtForLessView(form)(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

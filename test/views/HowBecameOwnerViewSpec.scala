@@ -39,7 +39,7 @@ class HowBecameOwnerViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
 
     "supplied with no errors" should {
 
-      lazy val view = howBecameOwnerView(howBecameOwnerForm)(fakeRequest, mockMessage)
+      lazy val view = howBecameOwnerView(howBecameOwnerForm)(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '$pageTitle'" in {
@@ -125,7 +125,7 @@ class HowBecameOwnerViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
     "supplied with a form with errors" should {
 
       lazy val form = howBecameOwnerForm.bind(Map("gainedBy" -> "a"))
-      lazy val view = howBecameOwnerView(form)(fakeRequest, mockMessage)
+      lazy val view = howBecameOwnerView(form)(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

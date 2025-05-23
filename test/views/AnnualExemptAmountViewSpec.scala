@@ -39,7 +39,7 @@ class AnnualExemptAmountViewSpec extends CommonPlaySpec with WithCommonFakeAppli
   "Annual exempt amount view" when {
 
     "supplied with no errors" should {
-      lazy val view = annualExemptAmountView(annualExemptAmountForm(BigDecimal(10000)), 11100, "back-url")(fakeRequest,mockMessage)
+      lazy val view = annualExemptAmountView(annualExemptAmountForm(BigDecimal(10000)), 11100, "back-url")(using fakeRequest,mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${messages.question}'" in {
@@ -113,7 +113,7 @@ class AnnualExemptAmountViewSpec extends CommonPlaySpec with WithCommonFakeAppli
 
     "supplied with errors" should {
       lazy val form = annualExemptAmountForm(BigDecimal(10000)).bind(Map("annualExemptAmount" -> "15000"))
-      lazy val view = annualExemptAmountView(form, 11100, "back-url")(fakeRequest,mockMessage)
+      lazy val view = annualExemptAmountView(form, 11100, "back-url")(using fakeRequest,mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

@@ -62,7 +62,7 @@ class CalculationElectionController @Inject()(calcConnector: CalculatorConnector
     }
   }
 
-  private def determineClaimingReliefs(totalGainResultsModel: TotalGainResultsModel)(implicit request: Request[_]): Future[Boolean] = {
+  private def determineClaimingReliefs(totalGainResultsModel: TotalGainResultsModel)(implicit request: Request[?]): Future[Boolean] = {
     val optionSeq = Seq(totalGainResultsModel.rebasedGain, totalGainResultsModel.timeApportionedGain).flatten
     val finalSeq = Seq(totalGainResultsModel.flatGain) ++ optionSeq
     if (finalSeq.exists(_ > 0)) sessionCacheService.fetchAndGetFormData[ClaimingReliefsModel](KeystoreKeys.claimingReliefs).map {
@@ -99,7 +99,7 @@ class CalculationElectionController @Inject()(calcConnector: CalculatorConnector
   }
 
   private def getAllOtherReliefs(totalGainResultsModel: TotalGainResultsModel)
-                                (implicit request: Request[_]): Future[Option[AllOtherReliefsModel]] = {
+                                (implicit request: Request[?]): Future[Option[AllOtherReliefsModel]] = {
     val results = Seq(totalGainResultsModel.flatGain) ++ Seq(totalGainResultsModel.rebasedGain, totalGainResultsModel.timeApportionedGain).flatten
 
     if (results.exists(_ > 0)) {

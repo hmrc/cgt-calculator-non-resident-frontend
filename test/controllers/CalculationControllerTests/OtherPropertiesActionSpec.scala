@@ -60,10 +60,10 @@ class OtherPropertiesActionSpec extends CommonPlaySpec with WithCommonFakeApplic
   def setupTarget(getData: Option[OtherPropertiesModel]): OtherPropertiesController = {
     SharedMetricRegistries.clear()
 
-    when(mockSessionCacheService.fetchAndGetFormData[OtherPropertiesModel](ArgumentMatchers.anyString())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.fetchAndGetFormData[OtherPropertiesModel](ArgumentMatchers.anyString())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    when(mockSessionCacheService.saveFormData[OtherPropertiesModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.saveFormData[OtherPropertiesModel](ArgumentMatchers.any(), ArgumentMatchers.any())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful("", ""))
 
     new OtherPropertiesController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, otherPropertiesView)

@@ -59,15 +59,15 @@ class OtherReliefsFlatController @Inject()(calcConnector: CalculatorConnector,
     }
 
     (for {
-      answers <- answersConstructor.getNRTotalGainAnswers(request)
-      gain <- calcConnector.calculateTotalGain(answers)(hc)
+      answers <- answersConstructor.getNRTotalGainAnswers(using request)
+      gain <- calcConnector.calculateTotalGain(answers)(using hc)
       gainExists <- checkGainExists(gain.get)
       propertyLivedIn <- getPropertyLivedInResponse(gainExists, sessionCacheService)
       prrAnswers <- getPrrResponse(propertyLivedIn, sessionCacheService)
-      totalGainWithPRR <- getPrrIfApplicable(answers, prrAnswers, propertyLivedIn, calcConnector)(hc)
+      totalGainWithPRR <- getPrrIfApplicable(answers, prrAnswers, propertyLivedIn, calcConnector)(using hc)
       allAnswers <- getFinalSectionsAnswers(gain.get, totalGainWithPRR, answersConstructor)
-      taxYear <- getTaxYear(answers, calcConnector)(hc)
-      maxAEA <- getMaxAEA(taxYear, calcConnector)(hc)
+      taxYear <- getTaxYear(answers, calcConnector)(using hc)
+      maxAEA <- getMaxAEA(taxYear, calcConnector)(using hc)
       chargeableGainResult <- getChargeableGain(answers, prrAnswers, propertyLivedIn, allAnswers, maxAEA.get, calcConnector)
       reliefs <- sessionCacheService.fetchAndGetFormData[OtherReliefsModel](KeystoreKeys.otherReliefsFlat)
     } yield routeRequest(reliefs, gain, chargeableGainResult)).recoverToStart
@@ -77,15 +77,15 @@ class OtherReliefsFlatController @Inject()(calcConnector: CalculatorConnector,
 
     def errorAction(form: Form[OtherReliefsModel]) = {
       (for {
-        answers <- answersConstructor.getNRTotalGainAnswers(request)
-        gain <- calcConnector.calculateTotalGain(answers)(hc)
+        answers <- answersConstructor.getNRTotalGainAnswers(using request)
+        gain <- calcConnector.calculateTotalGain(answers)(using hc)
         gainExists <- checkGainExists(gain.get)
         propertyLivedIn <- getPropertyLivedInResponse(gainExists, sessionCacheService)
         prrAnswers <- getPrrResponse(propertyLivedIn, sessionCacheService)
-        totalGainWithPRR <- getPrrIfApplicable(answers, prrAnswers, propertyLivedIn, calcConnector)(hc)
+        totalGainWithPRR <- getPrrIfApplicable(answers, prrAnswers, propertyLivedIn, calcConnector)(using hc)
         allAnswers <- getFinalSectionsAnswers(gain.get, totalGainWithPRR, answersConstructor)
-        taxYear <- getTaxYear(answers, calcConnector)(hc)
-        maxAEA <- getMaxAEA(taxYear, calcConnector)(hc)
+        taxYear <- getTaxYear(answers, calcConnector)(using hc)
+        maxAEA <- getMaxAEA(taxYear, calcConnector)(using hc)
         chargeableGainResult <- getChargeableGain(answers, prrAnswers, propertyLivedIn, allAnswers, maxAEA.get, calcConnector)
         route <- errorRoute(gain, chargeableGainResult, form)
       } yield route).recoverToStart

@@ -62,10 +62,10 @@ class SoldOrGivenAwayActionSpec extends CommonPlaySpec with WithCommonFakeApplic
   def setUpTarget(getData: Option[SoldOrGivenAwayModel]): SoldOrGivenAwayController = {
 
     when(mockSessionCacheService.fetchAndGetFormData[SoldOrGivenAwayModel](
-      ArgumentMatchers.eq(KeystoreKeys.soldOrGivenAway))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      ArgumentMatchers.eq(KeystoreKeys.soldOrGivenAway))(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(("", "")))
 
     new SoldOrGivenAwayController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, soldOrGivenAwayView)

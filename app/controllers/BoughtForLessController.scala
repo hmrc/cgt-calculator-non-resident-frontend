@@ -59,7 +59,7 @@ class BoughtForLessController @Inject()(val http: DefaultHttpClient,
 
     def successAction(model: BoughtForLessModel) = {
       (for {
-        save <- sessionCacheService.saveFormData(KeystoreKeys.boughtForLess, model)
+        _ <- sessionCacheService.saveFormData(KeystoreKeys.boughtForLess, model)
         route <- routeRequest(model)
       } yield route).recoverToStart
     }

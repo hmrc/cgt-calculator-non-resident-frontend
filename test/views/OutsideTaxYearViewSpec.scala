@@ -38,7 +38,7 @@ class OutsideTaxYearViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
 
     "using a disposal date of 2018/19 " should {
       lazy val taxYear = TaxYearModel("2018/19", isValidYear = false, "2017/18")
-      lazy val view = outsideTaxYearView(taxYear)(fakeRequestWithSession, mockMessage)
+      lazy val view = outsideTaxYearView(taxYear)(using fakeRequestWithSession, mockMessage)
       lazy val doc = Jsoup.parse(view.body)
 
       "have charset UTF-8" in {

@@ -40,7 +40,7 @@ class ClaimingReliefsViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
 
     "supplied with no errors" should {
       lazy val form = ClaimingReliefsForm.claimingReliefsForm
-      lazy val view = claimingReliefsView(form)(fakeRequest, mockMessage)
+      lazy val view = claimingReliefsView(form)(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       s"have the title ${messages.title}" in {
@@ -108,7 +108,7 @@ class ClaimingReliefsViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
 
     "supplied with form errors" should {
       lazy val form = ClaimingReliefsForm.claimingReliefsForm.bind(Map("isClaimingReliefs" -> "abc"))
-      lazy val view = claimingReliefsView(form)(fakeRequest, mockMessage)
+      lazy val view = claimingReliefsView(form)(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

@@ -95,7 +95,7 @@ class SummaryController @Inject()(calcConnector: CalculatorConnector,
     val showUserResearchPanel = setURPanelFlag
 
     (for {
-      answers <- answersConstructor.getNRTotalGainAnswers(request)
+      answers <- answersConstructor.getNRTotalGainAnswers(using request)
       totalGainResultsModel <- calcConnector.calculateTotalGain(answers)
       gainExists <- checkGainExists(totalGainResultsModel.get)
       propertyLivedIn <- getPropertyLivedInResponse(gainExists, sessionCacheService)

@@ -58,10 +58,10 @@ class HowMuchGainActionSpec extends CommonPlaySpec with WithCommonFakeApplicatio
 
   def setupTarget(getData: Option[HowMuchGainModel]): HowMuchGainController = {
 
-    when(mockSessionCacheService.fetchAndGetFormData[HowMuchGainModel](ArgumentMatchers.anyString())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.fetchAndGetFormData[HowMuchGainModel](ArgumentMatchers.anyString())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(("", "")))
 
     new HowMuchGainController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, howMuchGainView)

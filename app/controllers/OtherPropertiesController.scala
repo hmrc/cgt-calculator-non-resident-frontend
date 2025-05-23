@@ -53,7 +53,7 @@ class OtherPropertiesController @Inject()(val http: DefaultHttpClient,
 
     def successAction(model: OtherPropertiesModel) = {
       for {
-        save <- sessionCacheService.saveFormData[OtherPropertiesModel](KeystoreKeys.otherProperties, model)
+        _ <- sessionCacheService.saveFormData[OtherPropertiesModel](KeystoreKeys.otherProperties, model)
         route <- routeRequest(model)
       } yield route
     }

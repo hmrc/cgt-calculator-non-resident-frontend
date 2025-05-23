@@ -68,20 +68,20 @@ class CheckYourAnswersActionSpec
                   totalPersonalDetailsModel: Option[TotalPersonalDetailsCalculationModel] = None,
                   calculationResultsWithPRRModel: Option[CalculationResultsWithPRRModel] = None): CheckYourAnswersController = {
 
-    when(mockAnswersConstructor.getNRTotalGainAnswers(ArgumentMatchers.any())).thenReturn(Future.successful(totalGainAnswersModel))
+    when(mockAnswersConstructor.getNRTotalGainAnswers(using ArgumentMatchers.any())).thenReturn(Future.successful(totalGainAnswersModel))
 
     when(mockAnswersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers(
-      ArgumentMatchers.any())).thenReturn(Future.successful(totalPersonalDetailsModel))
+      using ArgumentMatchers.any())).thenReturn(Future.successful(totalPersonalDetailsModel))
 
-    when(mockCalcConnector.calculateTaxableGainAfterPRR(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any()))
+    when(mockCalcConnector.calculateTaxableGainAfterPRR(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any())(using ArgumentMatchers.any()))
       .thenReturn(Future.successful(calculationResultsWithPRRModel))
 
-    when(mockCalcConnector.calculateTotalGain(ArgumentMatchers.any())(ArgumentMatchers.any())).thenReturn(Future.successful(Some(totalGainResultsModel)))
+    when(mockCalcConnector.calculateTotalGain(ArgumentMatchers.any())(using ArgumentMatchers.any())).thenReturn(Future.successful(Some(totalGainResultsModel)))
 
-    when(mockSessionCacheService.fetchAndGetFormData[PrivateResidenceReliefModel](ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.fetchAndGetFormData[PrivateResidenceReliefModel](ArgumentMatchers.any())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(privateResidenceReliefModel))
 
-    when(mockCalcConnector.calculateTotalGain(ArgumentMatchers.any())(ArgumentMatchers.any()))
+    when(mockCalcConnector.calculateTotalGain(ArgumentMatchers.any())(using ArgumentMatchers.any()))
       .thenReturn(Future.successful(totalGainsModel))
 
     new CheckYourAnswersController(mockHttp, mockCalcConnector, mockSessionCacheService, mockAnswersConstructor, mockMessagesControllerComponents, checkYourAnswersView)

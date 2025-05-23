@@ -37,7 +37,7 @@ class AcquisitionValueViewSpec extends CommonPlaySpec with WithCommonFakeApplica
 
   "the Acquisition Value View" should {
 
-    lazy val view = acquisitionValueView(acquisitionValueForm)(fakeRequest,mockMessage)
+    lazy val view = acquisitionValueView(acquisitionValueForm)(using fakeRequest,mockMessage)
     lazy val document = Jsoup.parse(view.body)
 
     "have a h1 tag that" should {
@@ -119,7 +119,7 @@ class AcquisitionValueViewSpec extends CommonPlaySpec with WithCommonFakeApplica
 
     "supplied with errors" should {
       lazy val form = acquisitionValueForm.bind(Map("acquisitionValue" -> "a"))
-      lazy val view = acquisitionValueView(form)(fakeRequest,mockMessage)
+      lazy val view = acquisitionValueView(form)(using fakeRequest,mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

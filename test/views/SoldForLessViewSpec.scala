@@ -39,7 +39,7 @@ class SoldForLessViewSpec extends CommonPlaySpec with WithCommonFakeApplication 
 
     "supplied with no errors" should {
 
-      lazy val view = soldForLessView(soldForLessForm)(fakeRequest, mockMessage)
+      lazy val view = soldForLessView(soldForLessForm)(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${messages.question}'" in {
@@ -121,7 +121,7 @@ class SoldForLessViewSpec extends CommonPlaySpec with WithCommonFakeApplication 
     "supplied with a form with errors" should {
 
       lazy val form = soldForLessForm.bind(Map("soldForLess" -> "a"))
-      lazy val view = soldForLessView(form)(fakeRequest, mockMessage)
+      lazy val view = soldForLessView(form)(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

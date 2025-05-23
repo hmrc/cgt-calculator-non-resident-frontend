@@ -48,11 +48,11 @@ class DisposalCostsController @Inject()(sessionCacheService: SessionCacheService
     case (_, _) => Future.successful(missingDataRoute)
   }
 
-  private def fetchSoldOrGivenAway(implicit request: Request[_]): Future[Option[SoldOrGivenAwayModel]] = {
+  private def fetchSoldOrGivenAway(implicit request: Request[?]): Future[Option[SoldOrGivenAwayModel]] = {
     sessionCacheService.fetchAndGetFormData[SoldOrGivenAwayModel](KeystoreKeys.soldOrGivenAway)
   }
 
-  private def fetchSoldForLess(implicit request: Request[_]): Future[Option[SoldForLessModel]] = {
+  private def fetchSoldForLess(implicit request: Request[?]): Future[Option[SoldForLessModel]] = {
     sessionCacheService.fetchAndGetFormData[SoldForLessModel](KeystoreKeys.soldForLess)
   }
 

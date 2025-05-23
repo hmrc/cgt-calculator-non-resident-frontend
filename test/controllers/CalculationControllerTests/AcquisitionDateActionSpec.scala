@@ -63,10 +63,10 @@ class AcquisitionDateActionSpec extends CommonPlaySpec with WithCommonFakeApplic
   def setupTarget(getData: Option[DateModel]
                  ): AcquisitionDateController = {
 
-    when(mockSessionCacheService.fetchAndGetFormData[DateModel](ArgumentMatchers.anyString())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.fetchAndGetFormData[DateModel](ArgumentMatchers.anyString())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(("", "")))
 
     new AcquisitionDateController(mockHttp, mockSessionCacheService, mockDefaultCalcElecConstructor, mockMessagesControllerComponents, acquisitionCostsView) {

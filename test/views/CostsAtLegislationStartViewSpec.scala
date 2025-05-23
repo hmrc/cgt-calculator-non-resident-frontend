@@ -36,7 +36,7 @@ class CostsAtLegislationStartViewSpec extends CommonPlaySpec with WithCommonFake
   "The costs at legislation start date view" when {
 
     "not supplied with a pre-existing stored model" should {
-      lazy val view = costsAtLegislationStartView(costsAtLegislationStartForm)(fakeRequest, mockMessage)
+      lazy val view = costsAtLegislationStartView(costsAtLegislationStartForm)(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       s"Have the title ${messages.CostsAtLegislationStart.title}" in {
@@ -122,7 +122,7 @@ class CostsAtLegislationStartViewSpec extends CommonPlaySpec with WithCommonFake
         "hasCosts" -> "Yes",
         "costs" -> ""
       ))
-      lazy val view = costsAtLegislationStartView(form)(fakeRequest, mockMessage)
+      lazy val view = costsAtLegislationStartView(form)(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

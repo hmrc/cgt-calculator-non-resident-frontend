@@ -60,10 +60,10 @@ class DisposalValueActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
   def setupTarget(getData: Option[DisposalValueModel]): DisposalValueController = {
 
 
-    when(mockSessionCacheService.fetchAndGetFormData[DisposalValueModel](ArgumentMatchers.anyString())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.fetchAndGetFormData[DisposalValueModel](ArgumentMatchers.anyString())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(("", "")))
 
     new DisposalValueController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, disposalValueView)

@@ -46,29 +46,29 @@ class AnnualExemptAmountController @Inject()(calcConnector: CalculatorConnector,
     calcConnector.getFullAEA(taxYear)
   }
 
-  private def fetchAnnualExemptAmount(implicit request: Request[_]): Future[Option[AnnualExemptAmountModel]] = {
+  private def fetchAnnualExemptAmount(implicit request: Request[?]): Future[Option[AnnualExemptAmountModel]] = {
     sessionCacheService.fetchAndGetFormData[AnnualExemptAmountModel](KeystoreKeys.annualExemptAmount)
   }
 
-  private def fetchPreviousGainOrLoss(implicit request: Request[_]): Future[Option[PreviousLossOrGainModel]] = {
+  private def fetchPreviousGainOrLoss(implicit request: Request[?]): Future[Option[PreviousLossOrGainModel]] = {
     sessionCacheService.fetchAndGetFormData[PreviousLossOrGainModel](KeystoreKeys.previousLossOrGain)
   }
 
-  private def fetchPreviousLossAmount(gainOrLoss: String)(implicit request: Request[_]): Future[Option[HowMuchLossModel]] = {
+  private def fetchPreviousLossAmount(gainOrLoss: String)(implicit request: Request[?]): Future[Option[HowMuchLossModel]] = {
     gainOrLoss match {
       case "Loss" => sessionCacheService.fetchAndGetFormData[HowMuchLossModel](KeystoreKeys.howMuchLoss)
       case _ => Future.successful(None)
     }
   }
 
-  private def fetchPreviousGainAmount(gainOrLoss: String)(implicit request: Request[_]): Future[Option[HowMuchGainModel]] = {
+  private def fetchPreviousGainAmount(gainOrLoss: String)(implicit request: Request[?]): Future[Option[HowMuchGainModel]] = {
     gainOrLoss match {
       case "Gain" => sessionCacheService.fetchAndGetFormData[HowMuchGainModel](KeystoreKeys.howMuchGain)
       case _ => Future.successful(None)
     }
   }
 
-  private def fetchDisposalDate(implicit request: Request[_]): Future[Option[DateModel]] = {
+  private def fetchDisposalDate(implicit request: Request[?]): Future[Option[DateModel]] = {
     sessionCacheService.fetchAndGetFormData[DateModel](KeystoreKeys.disposalDate)
   }
 
@@ -104,13 +104,13 @@ class AnnualExemptAmountController @Inject()(calcConnector: CalculatorConnector,
     }
 
     (for {
-      disposalDate <- fetchDisposalDate(request)
+      disposalDate <- fetchDisposalDate(using request)
       date <- formatDisposalDate(disposalDate)
       closestTaxYear <- calcConnector.getTaxYear(date)
       taxYear <- getTaxYear(closestTaxYear)
       maxAEA <- fetchAEA(taxYear)
-      annualExemptAmount <- fetchAnnualExemptAmount(request)
-      previousLossOrGain <- fetchPreviousGainOrLoss(request)
+      annualExemptAmount <- fetchAnnualExemptAmount(using request)
+      previousLossOrGain <- fetchPreviousGainOrLoss(using request)
       gainAmount <- fetchPreviousGainAmount(previousLossOrGain.get.previousLossOrGain)
       lossAmount <- fetchPreviousLossAmount(previousLossOrGain.get.previousLossOrGain)
       backUrl <- backUrl(previousLossOrGain.get, gainAmount, lossAmount)
@@ -136,12 +136,12 @@ class AnnualExemptAmountController @Inject()(calcConnector: CalculatorConnector,
     }
 
     (for {
-      disposalDate <- fetchDisposalDate(request)
+      disposalDate <- fetchDisposalDate(using request)
       date <- formatDisposalDate(disposalDate)
       closestTaxYear <- calcConnector.getTaxYear(date)
       taxYear <- getTaxYear(closestTaxYear)
       maxAEA <- fetchAEA(taxYear)
-      previousLossOrGain <- fetchPreviousGainOrLoss(request)
+      previousLossOrGain <- fetchPreviousGainOrLoss(using request)
       gainAmount <- fetchPreviousGainAmount(previousLossOrGain.get.previousLossOrGain)
       lossAmount <- fetchPreviousLossAmount(previousLossOrGain.get.previousLossOrGain)
       backUrl <- backUrl(previousLossOrGain.get, gainAmount, lossAmount)

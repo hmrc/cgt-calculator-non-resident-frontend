@@ -38,7 +38,7 @@ class BroughtForwardLossesViewSpec extends CommonPlaySpec with WithCommonFakeApp
   "Brought forward losses view" when {
 
     "provided with no errors" should {
-      lazy val view = broughtForwardLossesView(broughtForwardLossesForm, "back-link")(fakeRequest,mockMessage)
+      lazy val view = broughtForwardLossesView(broughtForwardLossesForm, "back-link")(using fakeRequest,mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of $pageTitle" in {
@@ -112,7 +112,7 @@ class BroughtForwardLossesViewSpec extends CommonPlaySpec with WithCommonFakeApp
       }
 
       s"have a hidden question of ${messages.BroughtForwardLosses.inputQuestion}" in {
-        document.select("#conditional-broughtForwardLoss > div > label").text() startsWith messages.BroughtForwardLosses.inputQuestion
+        document.select("#conditional-broughtForwardLoss > div > label").text() `startsWith` messages.BroughtForwardLosses.inputQuestion
       }
 
       "have an input id of 'broughtForwardLoss'" in {
@@ -134,7 +134,7 @@ class BroughtForwardLossesViewSpec extends CommonPlaySpec with WithCommonFakeApp
 
     "provided with errors" should {
       lazy val form = broughtForwardLossesForm.bind(Map("isClaiming" -> "Yes", "broughtForwardLoss" -> ""))
-      lazy val view = broughtForwardLossesView(form, "back-link")(fakeRequest,mockMessage)
+      lazy val view = broughtForwardLossesView(form, "back-link")(using fakeRequest,mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

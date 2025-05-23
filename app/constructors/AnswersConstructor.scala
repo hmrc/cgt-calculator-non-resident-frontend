@@ -27,7 +27,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class AnswersConstructor @Inject()(sessionCacheService: SessionCacheService)(implicit ec: ExecutionContext) extends Logging {
 
-  def getNRTotalGainAnswers(implicit request: Request[_]): Future[TotalGainAnswersModel] = {
+  def getNRTotalGainAnswers(implicit request: Request[?]): Future[TotalGainAnswersModel] = {
     val disposalDate = sessionCacheService.fetchAndGetFormData[DateModel](KeystoreKeys.disposalDate).map(data => {
       logger.info("Getting disposalDate as : " + data)
       data.get
@@ -95,7 +95,7 @@ class AnswersConstructor @Inject()(sessionCacheService: SessionCacheService)(imp
       rebasedValue, rebasedCosts, isClaimingImprovements.getOrElse(IsClaimingImprovementsModel(false)), improvements, otherReliefsFlat, costsBeforeLegislationStart)
   }
 
-  def getPersonalDetailsAndPreviousCapitalGainsAnswers(implicit request: Request[_]): Future[Option[TotalPersonalDetailsCalculationModel]] = {
+  def getPersonalDetailsAndPreviousCapitalGainsAnswers(implicit request: Request[?]): Future[Option[TotalPersonalDetailsCalculationModel]] = {
     val currentIncome = sessionCacheService.fetchAndGetFormData[CurrentIncomeModel](KeystoreKeys.currentIncome)
       .map(_.getOrElse(throw new Exception("No value for current income found")))
     val personalAllowance = sessionCacheService.fetchAndGetFormData[PersonalAllowanceModel](KeystoreKeys.personalAllowance)

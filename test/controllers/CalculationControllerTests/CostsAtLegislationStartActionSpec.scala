@@ -57,12 +57,12 @@ class CostsAtLegislationStartActionSpec extends CommonPlaySpec with WithCommonFa
   def setupTarget(getData: Option[CostsAtLegislationStartModel]): CostsAtLegislationStartController = {
 
     when(mockSessionCacheService.fetchAndGetFormData[CostsAtLegislationStartModel](
-      ArgumentMatchers.eq(KeystoreKeys.costAtLegislationStart))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      ArgumentMatchers.eq(KeystoreKeys.costAtLegislationStart))(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
     val successfulSave = Future.successful(("", ""))
     when(mockSessionCacheService.saveFormData[CostsAtLegislationStartModel](
-      ArgumentMatchers.eq(KeystoreKeys.costAtLegislationStart), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      ArgumentMatchers.eq(KeystoreKeys.costAtLegislationStart), ArgumentMatchers.any())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(successfulSave)
 
     new CostsAtLegislationStartController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, costsAtLegislationStartView)

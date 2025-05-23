@@ -47,7 +47,7 @@ class CalculationElectionNoReliefsViewSpec extends CommonPlaySpec with WithCommo
 
     "supplied with no errors and lowest tax owed is rebased method" should {
 
-      lazy val view = calculationElectionNoReliefsView(calculationElectionForm, rebasedLowestTaxOwed)(fakeRequest, mockMessage)
+      lazy val view = calculationElectionNoReliefsView(calculationElectionForm, rebasedLowestTaxOwed)(using fakeRequest, mockMessage)
       lazy val doc = Jsoup.parse(view.body)
 
       "have a heading" which {
@@ -129,7 +129,7 @@ class CalculationElectionNoReliefsViewSpec extends CommonPlaySpec with WithCommo
           ("timeApportioned", "2000", "description", Messages("calc.calculationElection.description.time"), None, None)
         )
 
-      lazy val view = calculationElectionNoReliefsView(calculationElectionForm, flatLowestTaxOwed)(fakeRequest, mockMessage)
+      lazy val view = calculationElectionNoReliefsView(calculationElectionForm, flatLowestTaxOwed)(using fakeRequest, mockMessage)
       lazy val doc = Jsoup.parse(view.body)
 
       "have text in a paragraph" which {

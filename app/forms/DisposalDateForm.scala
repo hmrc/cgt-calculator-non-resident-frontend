@@ -30,7 +30,7 @@ object DisposalDateForm {
 
   def disposalDateForm(implicit messages: Messages): Form[DateModel] = Form(
     mapping(
-      key -> of(DateFormatter(
+      key -> of(using DateFormatter(
         key
       ))
     )(date => DateModel(date.getDayOfMonth, date.getMonthValue, date.getYear))(model => Some(LocalDate.of(model.year, model.month, model.day)))

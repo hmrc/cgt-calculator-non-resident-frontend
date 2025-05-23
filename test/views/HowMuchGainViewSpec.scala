@@ -36,7 +36,7 @@ class HowMuchGainViewSpec extends CommonPlaySpec with WithCommonFakeApplication 
   "How Much Gain view" should {
 
     "supplied with no errors" when {
-      lazy val view = howMuchGainView(howMuchGainForm)(fakeRequest, mockMessage)
+      lazy val view = howMuchGainView(howMuchGainForm)(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
       val pageTitle = s"""${messages.HowMuchGain.question} - ${messages.serviceName} - GOV.UK"""
 
@@ -116,7 +116,7 @@ class HowMuchGainViewSpec extends CommonPlaySpec with WithCommonFakeApplication 
 
     "supplied with a form with errors" should {
       lazy val form = howMuchGainForm.bind(Map("howMuchGain" -> "testData"))
-      lazy val view = howMuchGainView(form)(fakeRequest, mockMessage)
+      lazy val view = howMuchGainView(form)(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

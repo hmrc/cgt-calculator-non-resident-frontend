@@ -36,7 +36,7 @@ class OtherReliefsTAViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
   "The Other Reliefs TA view" when {
 
     "not supplied with a pre-existing stored value and a taxable gain" should {
-      lazy val view = otherReliefsTAView(otherReliefsForm, hasExistingReliefAmount = false, 1000, 100)(fakeRequest, mockMessage)
+      lazy val view = otherReliefsTAView(otherReliefsForm, hasExistingReliefAmount = false, 1000, 100)(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have a back link" which {
@@ -86,7 +86,7 @@ class OtherReliefsTAViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
           label.text shouldBe messages.OtherReliefs.question
         }
         "has the class 'govuk-visually-hidden'" in {
-          label.attr("class") contains "govuk-visually-hidden"
+          label.attr("class") `contains` "govuk-visually-hidden"
         }
       }
 
@@ -137,7 +137,7 @@ class OtherReliefsTAViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
 
     "supplied with a pre-existing stored value and a negative taxable gain" should {
       val map = Map("otherReliefs" -> "1000")
-      lazy val view = otherReliefsTAView(otherReliefsForm.bind(map), hasExistingReliefAmount = true, -1000, 100)(fakeRequest, mockMessage)
+      lazy val view = otherReliefsTAView(otherReliefsForm.bind(map), hasExistingReliefAmount = true, -1000, 100)(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "has a list entry with the loss carried forward message and value" in {
@@ -163,7 +163,7 @@ class OtherReliefsTAViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
 
     "supplied with an invalid map" should {
       val map = Map("otherReliefs" -> "-1000")
-      lazy val view = otherReliefsTAView(otherReliefsForm.bind(map), hasExistingReliefAmount = true, 1000, 100)(fakeRequest, mockMessage)
+      lazy val view = otherReliefsTAView(otherReliefsForm.bind(map), hasExistingReliefAmount = true, 1000, 100)(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

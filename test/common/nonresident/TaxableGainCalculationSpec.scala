@@ -76,24 +76,24 @@ class TaxableGainCalculationSpec extends CommonPlaySpec with GuiceOneAppPerSuite
   val propertyLivedIn: PropertyLivedInModel = PropertyLivedInModel(true)
 
   when(mockSessionCacheService.fetchAndGetFormData[PrivateResidenceReliefModel](ArgumentMatchers.eq(KeystoreKeys.NonResidentKeys.privateResidenceRelief))
-    (ArgumentMatchers.any(), ArgumentMatchers.any()))
+    (using ArgumentMatchers.any(), ArgumentMatchers.any()))
     .thenReturn(Future.successful(Some(prrModel)))
 
-  when(mockCalcConnector.calculateTaxableGainAfterPRR(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any()))
+  when(mockCalcConnector.calculateTaxableGainAfterPRR(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any())(using ArgumentMatchers.any()))
     .thenReturn(Future.successful(Some(calculationResultsWithPRRModel)))
 
-  when(mockAnswersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers(ArgumentMatchers.any()))
+  when(mockAnswersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers(using ArgumentMatchers.any()))
     .thenReturn(Future.successful(Some(personalDetailsModel)))
 
-  when(mockCalcConnector.getFullAEA(ArgumentMatchers.any())(ArgumentMatchers.any()))
+  when(mockCalcConnector.getFullAEA(ArgumentMatchers.any())(using ArgumentMatchers.any()))
     .thenReturn(Future.successful(Some(BigDecimal(11000))))
 
-  when(mockCalcConnector.getTaxYear(ArgumentMatchers.any())(ArgumentMatchers.any()))
+  when(mockCalcConnector.getTaxYear(ArgumentMatchers.any())(using ArgumentMatchers.any()))
     .thenReturn(Future.successful(Some(TaxYearModel("2015/16", isValidYear = true, "2015/16"))))
 
   when(mockCalcConnector.calculateNRCGTTotalTax(
     ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any(),
-    ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any()))
+    ArgumentMatchers.any(), ArgumentMatchers.any())(using ArgumentMatchers.any()))
     .thenReturn(Future.successful(Some(calculationResultsModel)))
 
   "Calling .getPrrResponse" should {

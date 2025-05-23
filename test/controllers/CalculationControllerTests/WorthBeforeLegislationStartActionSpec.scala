@@ -58,10 +58,10 @@ class WorthBeforeLegislationStartActionSpec extends CommonPlaySpec with WithComm
 
   def setUpTarget(getData: Option[WorthBeforeLegislationStartModel]): WorthBeforeLegislationStartController = {
 
-    when(mockSessionCacheService.fetchAndGetFormData[WorthBeforeLegislationStartModel](ArgumentMatchers.anyString())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.fetchAndGetFormData[WorthBeforeLegislationStartModel](ArgumentMatchers.anyString())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(("", "")))
 
     new WorthBeforeLegislationStartController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, worthBeforeLegislationStartView)

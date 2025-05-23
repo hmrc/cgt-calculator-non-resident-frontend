@@ -61,11 +61,11 @@ class BoughtForLessActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
 
   def setupTarget(getData: Option[BoughtForLessModel]): BoughtForLessController = {
 
-    when(mockSessionCacheService.fetchAndGetFormData[BoughtForLessModel](ArgumentMatchers.anyString())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.fetchAndGetFormData[BoughtForLessModel](ArgumentMatchers.anyString())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
     when(mockSessionCacheService.saveFormData[BoughtForLessModel](
-      ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      ArgumentMatchers.any(), ArgumentMatchers.any())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(("", "")))
 
     new BoughtForLessController(mockHttp, mockSessionCacheService, mockDefaultCalElecConstructor, mockMessagesControllerComponents, boughtForLessView) {

@@ -54,7 +54,7 @@ class PreviousGainOrLossController @Inject()(val http: DefaultHttpClient,
       }
       def successAction(model: PreviousLossOrGainModel) = {
         (for {
-          save <- sessionCacheService.saveFormData[PreviousLossOrGainModel](KeystoreKeys.previousLossOrGain, model)
+          _ <- sessionCacheService.saveFormData[PreviousLossOrGainModel](KeystoreKeys.previousLossOrGain, model)
           route <- routeRequest(model)
         } yield route).recoverToStart
       }

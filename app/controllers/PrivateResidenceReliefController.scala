@@ -48,10 +48,10 @@ class PrivateResidenceReliefController @Inject()(calcConnector: CalculatorConnec
 
   private def modelToDate(model: DateModel) = Dates.constructDate(model.day, model.month, model.year)
 
-  def getAcquisitionDate(implicit request: Request[_]): Future[Option[LocalDate]] =
+  def getAcquisitionDate(implicit request: Request[?]): Future[Option[LocalDate]] =
     sessionCacheService.fetchAndGetFormData[DateModel](KeystoreKeys.acquisitionDate).map(_.map(modelToDate))
 
-  def getDisposalDate(implicit request: Request[_]): Future[Option[LocalDate]] =
+  def getDisposalDate(implicit request: Request[?]): Future[Option[LocalDate]] =
     sessionCacheService.fetchAndGetFormData[DateModel](KeystoreKeys.disposalDate).map(_.map(modelToDate))
 
   def displayAfterQuestion(disposalDate: Option[LocalDate], acquisitionDate: Option[LocalDate]): Boolean =
@@ -91,7 +91,7 @@ class PrivateResidenceReliefController @Inject()(calcConnector: CalculatorConnec
     Future.successful(finalSeq.forall(_.taxableGain <= 0))
   }
 
-  private def saveAndRedirect(model: PrivateResidenceReliefModel)(implicit request: Request[_]) = {
+  private def saveAndRedirect(model: PrivateResidenceReliefModel)(implicit request: Request[?]) = {
     for {
       _ <- sessionCacheService.saveFormData(KeystoreKeys.privateResidenceRelief, model)
       answers <- answersConstructor.getNRTotalGainAnswers

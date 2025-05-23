@@ -40,7 +40,7 @@ class MarketValueWhenSoldViewSpec extends CommonPlaySpec with WithCommonFakeAppl
 
   "The market value when gave away page" should {
 
-    lazy val view = marketValueSoldView(marketValueForm)(fakeRequest, mockMessage)
+    lazy val view = marketValueSoldView(marketValueForm)(using fakeRequest, mockMessage)
     lazy val document = Jsoup.parse(view.body)
 
     "supplied with no errors" should {
@@ -130,7 +130,7 @@ class MarketValueWhenSoldViewSpec extends CommonPlaySpec with WithCommonFakeAppl
 
     "supplied with a form with errors" should {
       lazy val form = marketValueForm.bind(Map("disposalValue" -> "testData"))
-      lazy val view = marketValueSoldView(form)(fakeRequest, mockMessage)
+      lazy val view = marketValueSoldView(form)(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

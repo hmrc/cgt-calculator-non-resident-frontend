@@ -50,7 +50,7 @@ class HowBecameOwnerController @Inject()(val http: DefaultHttpClient,
 
     def successAction(model: HowBecameOwnerModel) = {
       for {
-        save <- sessionCacheService.saveFormData[HowBecameOwnerModel](KeystoreKeys.howBecameOwner, model)
+        _ <- sessionCacheService.saveFormData[HowBecameOwnerModel](KeystoreKeys.howBecameOwner, model)
         route <- routeRequest(model)
       } yield route
     }
