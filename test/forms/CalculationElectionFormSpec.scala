@@ -27,11 +27,11 @@ class CalculationElectionFormSpec extends CommonPlaySpec with WithCommonFakeAppl
 
       lazy val form = calculationElectionForm.bind(Map("calculationElection" -> "flat"))
 
-    "return a form with 0 errors" in {
+      "return a form with 0 errors" in {
       form.errors.size shouldBe 0
     }
 
-    "return a form with the data specified in the model" in {
+      "return a form with the data specified in the model" in {
       form.value.map(_.calculationType) shouldBe Some(Flat)
     }
   }

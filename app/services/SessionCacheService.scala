@@ -28,25 +28,25 @@ import scala.concurrent.{ExecutionContext, Future}
 class SessionCacheService @Inject()(
   sessionRepository: SessionRepository
 )(implicit ec: ExecutionContext) {
-  def saveFormData[T](key: String, data: T)(implicit request: Request[_], formats: Format[T]): Future[(String, String)] = {
+  def saveFormData[T](key: String, data: T)(implicit request: Request[?], formats: Format[T]): Future[(String, String)] = {
     preservingMdc {
       sessionRepository.putSession(DataKey(key), data)
     }
   }
 
-  def unsetData[T](key: String)(implicit request: Request[_]): Future[Unit] = {
+  def unsetData[T](key: String)(implicit request: Request[?]): Future[Unit] = {
       preservingMdc {
         sessionRepository.deleteFromSession(DataKey(key))
       }
   }
 
-  def fetchAndGetFormData[T](key: String)(implicit request: Request[_], formats: Format[T]): Future[Option[T]] = {
+  def fetchAndGetFormData[T](key: String)(implicit request: Request[?], formats: Format[T]): Future[Option[T]] = {
     preservingMdc {
       sessionRepository.getFromSession[T](DataKey(key))
     }
   }
 
-  def clearSession(implicit request: Request[_]): Future[Unit] = {
+  def clearSession(implicit request: Request[?]): Future[Unit] = {
       sessionRepository.clear
   }
 }

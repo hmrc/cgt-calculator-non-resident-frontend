@@ -34,7 +34,7 @@ import views.html.calculation.checkYourAnswers
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class CheckYourAnswersController @Inject()(http: DefaultHttpClient,
+class CheckYourAnswersController @Inject()(val http: DefaultHttpClient,
                                            calculatorConnector: CalculatorConnector,
                                            sessionCacheService: SessionCacheService,
                                            answersConstructor: AnswersConstructor,

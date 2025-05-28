@@ -44,7 +44,7 @@ class HowBecameOwnerActionSpec extends CommonPlaySpec with WithCommonFakeApplica
   val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents: MessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val howBecameOwnerView: howBecameOwner = fakeApplication.injector.instanceOf[howBecameOwner]
-  val pageTitle = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
+  val pageTitle: String = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
 
   class Setup {
@@ -58,11 +58,11 @@ class HowBecameOwnerActionSpec extends CommonPlaySpec with WithCommonFakeApplica
 
   def setupTarget(getData: Option[HowBecameOwnerModel]): HowBecameOwnerController = {
 
-    when(mockSessionCacheService.fetchAndGetFormData[HowBecameOwnerModel](ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.fetchAndGetFormData[HowBecameOwnerModel](ArgumentMatchers.any())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
     when(mockSessionCacheService.saveFormData[HowBecameOwnerModel](
-      ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      ArgumentMatchers.any(), ArgumentMatchers.any())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful("", ""))
 
     new HowBecameOwnerController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, howBecameOwnerView)

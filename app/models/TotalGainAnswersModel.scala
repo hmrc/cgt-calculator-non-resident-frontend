@@ -42,21 +42,22 @@ object TotalGainAnswersModel {
   implicit val postWrites: Writes[TotalGainAnswersModel] = (o: TotalGainAnswersModel) => postWrites(o).writes(o)
 
   private def postWrites(model: TotalGainAnswersModel): Writes[TotalGainAnswersModel] = (
-    (__ \ "disposalDate").write[DateModel](DateModel.postWrites) and
+    (__ \ "disposalDate").write[DateModel](using DateModel.postWrites) and
       ignore and
       ignore and
-      (__ \ "disposalValue").write[DisposalValueModel](DisposalValueModel.postWrites) and
-      (__ \ "disposalCosts").write[DisposalCostsModel](DisposalCostsModel.postWrites) and
+      (__ \ "disposalValue").write[DisposalValueModel](using DisposalValueModel.postWrites) and
+      (__ \ "disposalCosts").write[DisposalCostsModel](using DisposalCostsModel.postWrites) and
       ignore and
       ignore and
-      (__ \ "acquisitionValue").write[AcquisitionValueModel](AcquisitionValueModel.postWrites) and
-      __.write[Option[AcquisitionCostsModel]](AcquisitionCostsModel.postWrites(model.costsAtLegislationStart, model.acquisitionDateModel)) and
-      (__ \ "acquisitionDate").write[DateModel](DateModel.postWrites) and
-       __.writeNullable[RebasedValueModel](RebasedValueModel.postWrites(model.acquisitionDateModel)) and
-       __.writeNullable[RebasedCostsModel](RebasedCostsModel.postWrites(model.rebasedValueModel, model.acquisitionDateModel)) and
-       __.write[IsClaimingImprovementsModel](IsClaimingImprovementsModel.postWrites) and
-       __.writeNullable[ImprovementsModel](ImprovementsModel.postWrites(model.rebasedValueModel, model.acquisitionDateModel)) and
+      (__ \ "acquisitionValue").write[AcquisitionValueModel](using AcquisitionValueModel.postWrites) and
+      __.write[Option[AcquisitionCostsModel]](using AcquisitionCostsModel.postWrites(model.costsAtLegislationStart, model.acquisitionDateModel)) and
+      (__ \ "acquisitionDate").write[DateModel](using DateModel.postWrites) and
+       __.writeNullable[RebasedValueModel](using RebasedValueModel.postWrites(model.acquisitionDateModel)) and
+       __.writeNullable[RebasedCostsModel](using RebasedCostsModel.postWrites(model.rebasedValueModel, model.acquisitionDateModel)) and
+       __.write[IsClaimingImprovementsModel](using IsClaimingImprovementsModel.postWrites) and
+       __.writeNullable[ImprovementsModel](using ImprovementsModel.postWrites(model.rebasedValueModel, model.acquisitionDateModel)) and
       ignore and
       ignore
-    ) (unlift(TotalGainAnswersModel.unapply))
+    ) (o => Tuple.fromProductTyped(o))
+
 }

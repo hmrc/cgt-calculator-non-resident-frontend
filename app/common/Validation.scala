@@ -24,7 +24,7 @@ import scala.util.{Failure, Success, Try}
 
 object Validation {
 
-  def stopOnFirstFail[T](constraints: Constraint[T]*): Constraint[T] = Constraint { field: T =>
+  def stopOnFirstFail[T](constraints: Constraint[T]*): Constraint[T] = Constraint { (field: T) =>
     constraints.toList.dropWhile(constraint => constraint(field) == Valid) match {
       case Nil => Valid
       case constraint :: _ => constraint(field)

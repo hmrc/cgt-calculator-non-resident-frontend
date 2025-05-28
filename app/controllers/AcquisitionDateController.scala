@@ -33,9 +33,9 @@ import views.html.calculation.acquisitionDate
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class  AcquisitionDateController @Inject()(http: DefaultHttpClient,
+class  AcquisitionDateController @Inject()(val http: DefaultHttpClient,
                                            sessionCacheService: SessionCacheService,
-                                           calcElectionConstructor: DefaultCalculationElectionConstructor,
+                                           val calcElectionConstructor: DefaultCalculationElectionConstructor,
                                            mcc: MessagesControllerComponents,
                                            acquisitionDateView: acquisitionDate)
                                           (implicit ec: ExecutionContext)

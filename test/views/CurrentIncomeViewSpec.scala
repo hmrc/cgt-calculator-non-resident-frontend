@@ -33,13 +33,13 @@ class CurrentIncomeViewSpec extends CommonPlaySpec with WithCommonFakeApplicatio
   val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   val currentIncomeView: currentIncome = fakeApplication.injector.instanceOf[currentIncome]
-  val pageTitle = s"${messages.question} - ${commonMessages.serviceName} - GOV.UK"
+  val pageTitle: String = s"${messages.question} - ${commonMessages.serviceName} - GOV.UK"
 
 
   "Current Income view" when {
 
     "supplied with no errors" should {
-      lazy val view = currentIncomeView(currentIncomeForm)(fakeRequest, mockMessage)
+      lazy val view = currentIncomeView(currentIncomeForm)(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       s"have the correct title" in {
@@ -97,7 +97,7 @@ class CurrentIncomeViewSpec extends CommonPlaySpec with WithCommonFakeApplicatio
 
     "supplied with errors" should {
       lazy val form = currentIncomeForm.bind(Map("currentIncome" -> "a"))
-      lazy val view = currentIncomeView(form)(fakeRequest, mockMessage)
+      lazy val view = currentIncomeView(form)(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

@@ -37,7 +37,7 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 
-class DisposalDateController @Inject()(http: DefaultHttpClient,
+class DisposalDateController @Inject()(val http: DefaultHttpClient,
                                        calcConnector: CalculatorConnector,
                                        sessionCacheService: SessionCacheService,
                                        mcc: MessagesControllerComponents,

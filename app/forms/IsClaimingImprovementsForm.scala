@@ -31,6 +31,6 @@ object IsClaimingImprovementsForm {
         .verifying("calc.improvements.errors.required", mandatoryCheck)
         .verifying("calc.calc.improvements.errors.required", yesNoCheck)
         .transform[Boolean](stringToBoolean, booleanToString)
-    )(IsClaimingImprovementsModel.apply)(IsClaimingImprovementsModel.unapply)
+    )(IsClaimingImprovementsModel.apply)(o=>Some(o.isClaimingImprovements))
   )
 }

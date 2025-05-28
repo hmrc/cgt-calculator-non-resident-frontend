@@ -465,7 +465,7 @@ object MessageLookup {
 
     object Summary {
 
-      def title(taxYear: String) = s"Capital Gains Tax to pay for $taxYear tax year - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
+      def title(taxYear: String): String = s"Capital Gains Tax to pay for $taxYear tax year - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
       val secondaryHeading = "You owe"
       val amountOwed = "Amount you owe"
       val calculationDetailsTitle = "Calculation details"
@@ -627,7 +627,7 @@ object MessageLookup {
       //############ Sell For Less messages.en #################//
       object SellForLess {
         val title = "Did you sell the shares for less than they were worth to help the buyer?"
-        val errorSelect = s"Tell us if you sold the shares for less than they were worth to help the buyer."
+        val errorSelect: String = s"Tell us if you sold the shares for less than they were worth to help the buyer."
       }
 
       //############ Worth When Inherited messages.en #################//
@@ -807,15 +807,15 @@ object MessageLookup {
   object Reliefs {
     val title = "Do you want to claim any other tax reliefs?"
     val questionSummary = "Do you want to claim any other tax reliefs?"
-    val question = s"Do you want to claim any other tax reliefs?"
+    val question: String = s"Do you want to claim any other tax reliefs?"
     val help = "For example, lettings relief"
     val helpOne = "Capital Gains Tax reliefs can lower the amount of tax you owe. For example, you might be able to claim"
     val helpLinkOne = "Private Residence Relief"
-    val errorSelect = s"Tell us if you want to claim any other tax reliefs"
-    def errorSelectNoPrr(value: String) = s"Tell us if you want to claim any Capital Gains Tax reliefs on your total gain of £$value"
+    val errorSelect: String = s"Tell us if you want to claim any other tax reliefs"
+    def errorSelectNoPrr(value: String): String = s"Tell us if you want to claim any Capital Gains Tax reliefs on your total gain of £$value"
     val titleNoPrr = "Do you want to claim any Capital Gains Tax reliefs on your total gain of £10,000?"
     val questionSummaryNoPrr = "Do you want to claim any Capital Gains Tax reliefs on your total gain of £50,000?"
-    def questionNoPrr(input: String = "100") = s"Do you want to claim any Capital Gains Tax reliefs on your total gain of £$input?"
+    def questionNoPrr(input: String = "100"): String = s"Do you want to claim any Capital Gains Tax reliefs on your total gain of £$input?"
     val helpButton = "What are Capital Gains Tax reliefs?"
     val helpNoPrr = "For example, Private Residence Relief"
   }
@@ -830,8 +830,8 @@ object MessageLookup {
 
   //Lettings Relief Value messages.en
   object LettingsReliefValue {
-    val title = s"How much Letting Relief are you entitled to?"
-    val question = s"How much Letting Relief are you entitled to?"
+    val title: String = s"How much Letting Relief are you entitled to?"
+    val question: String = s"How much Letting Relief are you entitled to?"
     def additionalContent(input: String): String = s"We've calculated that you've made a gain of £$input on your property. " +
       s"You'll need this figure to calculate your Letting Relief."
     val maxLettingsReliefExceeded: String = "The Letting Relief you've entered is more than the maximum amount of £" + MoneyPounds(Constants.maxLettingsRelief,0).quantity

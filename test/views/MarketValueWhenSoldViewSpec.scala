@@ -34,13 +34,13 @@ class MarketValueWhenSoldViewSpec extends CommonPlaySpec with WithCommonFakeAppl
   val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   lazy val marketValueSoldView: marketValueSold = fakeApplication.injector.instanceOf[marketValueSold]
-  lazy val pageTitle = s"""${MarketValueMessages.disposalSoldQuestion} - ${commonMessages.serviceName} - GOV.UK"""
+  lazy val pageTitle: String = s"""${MarketValueMessages.disposalSoldQuestion} - ${commonMessages.serviceName} - GOV.UK"""
 
 
 
   "The market value when gave away page" should {
 
-    lazy val view = marketValueSoldView(marketValueForm)(fakeRequest, mockMessage)
+    lazy val view = marketValueSoldView(marketValueForm)(using fakeRequest, mockMessage)
     lazy val document = Jsoup.parse(view.body)
 
     "supplied with no errors" should {
@@ -130,7 +130,7 @@ class MarketValueWhenSoldViewSpec extends CommonPlaySpec with WithCommonFakeAppl
 
     "supplied with a form with errors" should {
       lazy val form = marketValueForm.bind(Map("disposalValue" -> "testData"))
-      lazy val view = marketValueSoldView(form)(fakeRequest, mockMessage)
+      lazy val view = marketValueSoldView(form)(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

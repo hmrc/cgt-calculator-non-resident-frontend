@@ -53,7 +53,7 @@ object ImprovementsForm {
                 )
 
           )
-        )(ImprovementsModel.apply)(ImprovementsModel.unapply))
+        )(ImprovementsModel.apply)(o=>Some(o.improvementsAmt, o.improvementsAmtAfter)))
     } else {
       Form(mapping(
           "improvementsAmt" ->
@@ -69,6 +69,6 @@ object ImprovementsForm {
                 )
           ),
         "improvementsAmtAfter" -> optional(text).transform(optionalStringToOptionalBigDecimal, optionalBigDecimalToOptionalString)
-        )(ImprovementsModel.apply)(ImprovementsModel.unapply))
+        )(ImprovementsModel.apply)(o=>Some(o.improvementsAmt, o.improvementsAmtAfter)))
     }
 }

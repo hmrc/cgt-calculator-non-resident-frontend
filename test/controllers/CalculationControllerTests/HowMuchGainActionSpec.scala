@@ -44,7 +44,7 @@ class HowMuchGainActionSpec extends CommonPlaySpec with WithCommonFakeApplicatio
   val mockCalcConnector: CalculatorConnector =mock[CalculatorConnector]
   val mockMessagesControllerComponents: MessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val howMuchGainView: howMuchGain = fakeApplication.injector.instanceOf[howMuchGain]
-  val pageTitle = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
+  val pageTitle: String = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
 
   class Setup {
@@ -58,10 +58,10 @@ class HowMuchGainActionSpec extends CommonPlaySpec with WithCommonFakeApplicatio
 
   def setupTarget(getData: Option[HowMuchGainModel]): HowMuchGainController = {
 
-    when(mockSessionCacheService.fetchAndGetFormData[HowMuchGainModel](ArgumentMatchers.anyString())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.fetchAndGetFormData[HowMuchGainModel](ArgumentMatchers.anyString())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(("", "")))
 
     new HowMuchGainController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, howMuchGainView)

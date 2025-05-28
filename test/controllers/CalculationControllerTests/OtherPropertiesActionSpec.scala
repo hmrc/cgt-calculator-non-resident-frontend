@@ -45,7 +45,7 @@ class OtherPropertiesActionSpec extends CommonPlaySpec with WithCommonFakeApplic
   val mockMessagesControllerComponents: MessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val otherPropertiesView: otherProperties = fakeApplication.injector.instanceOf[otherProperties]
   val sessionTimeoutView: sessionTimeout = fakeApplication.injector.instanceOf[sessionTimeout]
-  lazy val pageTitle = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
+  lazy val pageTitle: String = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
 
   class Setup {
@@ -60,10 +60,10 @@ class OtherPropertiesActionSpec extends CommonPlaySpec with WithCommonFakeApplic
   def setupTarget(getData: Option[OtherPropertiesModel]): OtherPropertiesController = {
     SharedMetricRegistries.clear()
 
-    when(mockSessionCacheService.fetchAndGetFormData[OtherPropertiesModel](ArgumentMatchers.anyString())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.fetchAndGetFormData[OtherPropertiesModel](ArgumentMatchers.anyString())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    when(mockSessionCacheService.saveFormData[OtherPropertiesModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.saveFormData[OtherPropertiesModel](ArgumentMatchers.any(), ArgumentMatchers.any())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful("", ""))
 
     new OtherPropertiesController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, otherPropertiesView)

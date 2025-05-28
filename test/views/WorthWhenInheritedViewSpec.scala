@@ -33,13 +33,13 @@ class WorthWhenInheritedViewSpec extends CommonPlaySpec with WithCommonFakeAppli
   val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   lazy val worthWhenInheritedView: worthWhenInherited = fakeApplication.injector.instanceOf[worthWhenInherited]
-  lazy val pageTitle = s"""${WorthWhenInherited.question} - ${commonMessages.serviceName} - GOV.UK"""
+  lazy val pageTitle: String = s"""${WorthWhenInherited.question} - ${commonMessages.serviceName} - GOV.UK"""
 
   "The Worth When Inherited To view spec" when {
 
     "supplied with no errors" should {
 
-      lazy val view = worthWhenInheritedView(worthWhenInheritedForm)(fakeRequest, mockMessage)
+      lazy val view = worthWhenInheritedView(worthWhenInheritedForm)(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '$pageTitle'" in {
@@ -126,7 +126,7 @@ class WorthWhenInheritedViewSpec extends CommonPlaySpec with WithCommonFakeAppli
     "supplied with a form with errors" should {
 
       lazy val form = worthWhenInheritedForm.bind(Map("acquisitionMarketValue" -> "a"))
-      lazy val view = worthWhenInheritedView(form)(fakeRequest, mockMessage)
+      lazy val view = worthWhenInheritedView(form)(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

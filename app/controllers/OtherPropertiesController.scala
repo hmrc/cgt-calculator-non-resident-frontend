@@ -31,7 +31,7 @@ import views.html.calculation.otherProperties
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class OtherPropertiesController @Inject()(http: DefaultHttpClient,
+class OtherPropertiesController @Inject()(val http: DefaultHttpClient,
                                           sessionCacheService: SessionCacheService,
                                           mcc: MessagesControllerComponents,
                                           otherPropertiesView: otherProperties)
@@ -53,7 +53,7 @@ class OtherPropertiesController @Inject()(http: DefaultHttpClient,
 
     def successAction(model: OtherPropertiesModel) = {
       for {
-        save <- sessionCacheService.saveFormData[OtherPropertiesModel](KeystoreKeys.otherProperties, model)
+        _ <- sessionCacheService.saveFormData[OtherPropertiesModel](KeystoreKeys.otherProperties, model)
         route <- routeRequest(model)
       } yield route
     }

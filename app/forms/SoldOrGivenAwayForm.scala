@@ -31,6 +31,6 @@ object SoldOrGivenAwayForm {
         .verifying("calc.soldOrGivenAway.errors.required", mandatoryCheck)
         .verifying("calc.soldOrGivenAway.errors.required", yesNoCheck)
         .transform[Boolean](stringToBoolean, booleanToString)
-    )(SoldOrGivenAwayModel.apply)(SoldOrGivenAwayModel.unapply)
+    )(SoldOrGivenAwayModel.apply)(o=>Some(o.soldIt))
   )
 }

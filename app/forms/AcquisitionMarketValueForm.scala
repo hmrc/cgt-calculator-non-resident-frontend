@@ -38,6 +38,6 @@ trait AcquisitionMarketValueForm {
         .verifying(errorNegative, isPositive)
         .verifying(errorDecimalPlaces, decimalPlacesCheck)
         .verifying(errorMax, maxCheck)
-    }(AcquisitionValueModel.apply)(AcquisitionValueModel.unapply)
+    }(AcquisitionValueModel.apply)(o=>Some(o.acquisitionValueAmt))
   )
 }

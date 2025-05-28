@@ -25,6 +25,6 @@ object CalculationElectionForm {
   val calculationElectionForm: Form[CalculationElectionModel] = Form(
     mapping(
       "calculationElection" -> Forms.of[CalculationType]
-    )(CalculationElectionModel.apply)(CalculationElectionModel.unapply)
+    )(CalculationElectionModel.apply)(o=>Some(o.calculationType))
   )
 }

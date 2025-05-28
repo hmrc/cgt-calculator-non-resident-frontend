@@ -45,15 +45,15 @@ class ImprovementsController @Inject()(calcConnector: CalculatorConnector,
                                       )(implicit ec: ExecutionContext)
                                         extends FrontendController(mcc) with ValidActiveSession with I18nSupport{
 
-  private def fetchAcquisitionDate(implicit request: Request[_]): Future[Option[DateModel]] = {
+  private def fetchAcquisitionDate(implicit request: Request[?]): Future[Option[DateModel]] = {
     sessionCacheService.fetchAndGetFormData[DateModel](KeystoreKeys.acquisitionDate)
   }
 
-  private def fetchIsClaimingImprovements(implicit request: Request[_]): Future[Option[IsClaimingImprovementsModel]] = {
+  private def fetchIsClaimingImprovements(implicit request: Request[?]): Future[Option[IsClaimingImprovementsModel]] = {
     sessionCacheService.fetchAndGetFormData[IsClaimingImprovementsModel](KeystoreKeys.isClaimingImprovements)
   }
 
-  private def fetchImprovements(implicit request: Request[_]): Future[Option[ImprovementsModel]] = {
+  private def fetchImprovements(implicit request: Request[?]): Future[Option[ImprovementsModel]] = {
     sessionCacheService.fetchAndGetFormData[ImprovementsModel](KeystoreKeys.improvements)
   }
 
@@ -81,8 +81,8 @@ class ImprovementsController @Inject()(calcConnector: CalculatorConnector,
     }
 
     (for {
-      acquisitionDate <- fetchAcquisitionDate(request)
-      isClaimingImprovements <- fetchIsClaimingImprovements(request)
+      acquisitionDate <- fetchAcquisitionDate(using request)
+      isClaimingImprovements <- fetchIsClaimingImprovements(using request)
       ownerBeforeLegislationStart <- ownerBeforeLegislationStartCheck(acquisitionDate)
       route <- routeRequest(isClaimingImprovements, ownerBeforeLegislationStart)
     } yield route).recoverToStart
@@ -115,7 +115,7 @@ class ImprovementsController @Inject()(calcConnector: CalculatorConnector,
     }
 
     for {
-      acquisitionDate <- fetchAcquisitionDate(request)
+      acquisitionDate <- fetchAcquisitionDate(using request)
       ownerBeforeLegislationStart <- ownerBeforeLegislationStartCheck(acquisitionDate)
       route <- isClaimingImprovementsForm.bindFromRequest().fold(
         errors => errorAction(errors, ownerBeforeLegislationStart),
@@ -136,7 +136,7 @@ class ImprovementsController @Inject()(calcConnector: CalculatorConnector,
     }
 
     (for {
-      improvements <- fetchImprovements(request)
+      improvements <- fetchImprovements(using request)
       route <- routeRequest(improvements)
     } yield route).recoverToStart
   }
@@ -172,7 +172,7 @@ class ImprovementsController @Inject()(calcConnector: CalculatorConnector,
     }
 
     (for {
-      improvements <- fetchImprovements(request)
+      improvements <- fetchImprovements(using request)
       route <- routeRequest(improvements)
     } yield route).recoverToStart
   }

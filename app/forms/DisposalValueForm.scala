@@ -34,6 +34,6 @@ object DisposalValueForm {
         .verifying("calc.disposalValue.errorNegative", isPositive)
         .verifying("calc.disposalValue.errorDecimalPlaces", decimalPlacesCheck)
         .verifying("calc.disposalValue.errorMax", maxCheck)
-    )(DisposalValueModel.apply)(DisposalValueModel.unapply)
+    )(DisposalValueModel.apply)(o=>Some(o.disposalValue))
   )
 }

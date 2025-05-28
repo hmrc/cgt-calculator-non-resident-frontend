@@ -38,13 +38,13 @@ class AcquisitionCostsController @Inject()(sessionCacheService: SessionCacheServ
                                            )(implicit ec: ExecutionContext)
   extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
-  private def isOwnerBeforeLegislationStart(implicit request: Request[_]): Future[Boolean] = {
+  private def isOwnerBeforeLegislationStart(implicit request: Request[?]): Future[Boolean] = {
     sessionCacheService.fetchAndGetFormData[DateModel](KeystoreKeys.acquisitionDate).map { date =>
       TaxDates.dateBeforeLegislationStart(date.get.get)
     }
   }
 
-  def getBackLink(implicit request: Request[_]): Future[String] = {
+  def getBackLink(implicit request: Request[?]): Future[String] = {
     val getAcquisitionDate = sessionCacheService.fetchAndGetFormData[DateModel](KeystoreKeys.acquisitionDate)
     val getHowBecameOwner = sessionCacheService.fetchAndGetFormData[HowBecameOwnerModel](KeystoreKeys.howBecameOwner)
     val getBoughtForLess = sessionCacheService.fetchAndGetFormData[BoughtForLessModel](KeystoreKeys.boughtForLess)

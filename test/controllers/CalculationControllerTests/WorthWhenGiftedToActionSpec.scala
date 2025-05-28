@@ -45,7 +45,7 @@ class WorthWhenGiftedToActionSpec extends CommonPlaySpec with WithCommonFakeAppl
   val mockCalcConnector: CalculatorConnector =mock[CalculatorConnector]
   val mockMessagesControllerComponents: MessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val worthWhenGiftedToView: worthWhenGiftedTo = fakeApplication.injector.instanceOf[worthWhenGiftedTo]
-  val pageTitle = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
+  val pageTitle: String = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
   class Setup {
     val controller = new WorthWhenGiftedToController(
@@ -59,10 +59,10 @@ class WorthWhenGiftedToActionSpec extends CommonPlaySpec with WithCommonFakeAppl
   def setupTarget(getData: Option[AcquisitionValueModel]): WorthWhenGiftedToController = {
 
     when(mockSessionCacheService.fetchAndGetFormData[AcquisitionValueModel](
-      ArgumentMatchers.eq(KeystoreKeys.acquisitionMarketValue))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      ArgumentMatchers.eq(KeystoreKeys.acquisitionMarketValue))(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    when(mockSessionCacheService.saveFormData[AcquisitionValueModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.saveFormData[AcquisitionValueModel](ArgumentMatchers.any(), ArgumentMatchers.any())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(("", "")))
 
     new WorthWhenGiftedToController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, worthWhenGiftedToView)

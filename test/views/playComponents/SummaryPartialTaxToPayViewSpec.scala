@@ -43,7 +43,7 @@ class SummaryPartialTaxToPayViewSpec extends CommonPlaySpec with WithCommonFakeA
         taxAtBandTwo = 50,
         taxRateOne = 18,
         taxRateTwo = 28
-      )(fakeRequestWithSession, mockMessage)
+      )(using fakeRequestWithSession, mockMessage)
       lazy val doc = Jsoup.parse(view.body)
 
       s"have the text ${messages.yourTaxRate}" in {
@@ -97,7 +97,7 @@ class SummaryPartialTaxToPayViewSpec extends CommonPlaySpec with WithCommonFakeA
         taxAtBandTwo = 0,
         taxRateOne = 10,
         taxRateTwo = 0
-      )(fakeRequestWithSession, mockMessage)
+      )(using fakeRequestWithSession, mockMessage)
       lazy val doc = Jsoup.parse(view.body)
 
       s"have the text ${messages.yourTaxRate}" in {
@@ -119,7 +119,7 @@ class SummaryPartialTaxToPayViewSpec extends CommonPlaySpec with WithCommonFakeA
         taxAtBandTwo = 200,
         taxRateOne = 0,
         taxRateTwo = 20
-      )(fakeRequestWithSession, mockMessage)
+      )(using fakeRequestWithSession, mockMessage)
       lazy val doc = Jsoup.parse(view.body)
 
       s"have the text ${messages.yourTaxRate}" in {
@@ -141,7 +141,7 @@ class SummaryPartialTaxToPayViewSpec extends CommonPlaySpec with WithCommonFakeA
         taxAtBandTwo = 10,
         taxRateOne = 10,
         taxRateTwo = 10
-      )(fakeRequestWithSession, mockMessage)
+      )(using fakeRequestWithSession, mockMessage)
       lazy val doc = Jsoup.parse(view.body)
 
       s"does not have the text ${messages.yourTaxRate}" in {

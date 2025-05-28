@@ -32,6 +32,6 @@ object PropertyLivedInForm {
           .verifying("calc.propertyLivedIn.errors.required", mandatoryCheck)
           .verifying("calc.propertyLivedIn.errors.required", yesNoCheck)
           .transform(stringToBoolean, booleanToString)
-      )(PropertyLivedInModel.apply)(PropertyLivedInModel.unapply)
+      )(PropertyLivedInModel.apply)(o=>Some(o.propertyLivedIn))
     )
 }

@@ -35,13 +35,13 @@ class ImprovementsRebasedViewSpec extends CommonPlaySpec with WithCommonFakeAppl
   val mockMessagesApi: MessagesApi = mock[MessagesApi]
   lazy val improvementsRebasedView: improvementsRebased = fakeApplication.injector.instanceOf[improvementsRebased]
   lazy val pageHeading: String = messages.ImprovementsRebased.title
-  lazy val pageTitle = s"$pageHeading - ${messages.serviceName} - GOV.UK"
+  lazy val pageTitle: String = s"$pageHeading - ${messages.serviceName} - GOV.UK"
 
   "Improvements view" should {
 
     "supplied with no errors, improvementsOptions = true and is owner after legislation start" should {
 
-      lazy val view = improvementsRebasedView(improvementsForm(true))(fakeRequest, mockMessage, mockMessagesApi)
+      lazy val view = improvementsRebasedView(improvementsForm(true))(using fakeRequest, mockMessage, mockMessagesApi)
       lazy val document = Jsoup.parse(view.body)
 
       "return some HTML that" should {
@@ -130,7 +130,7 @@ class ImprovementsRebasedViewSpec extends CommonPlaySpec with WithCommonFakeAppl
 
     "supplied with errors" should {
       lazy val form = improvementsForm(true).bind(Map("improvementsAmt" -> "testData"))
-      lazy val view = improvementsRebasedView(form)(fakeRequest, mockMessage, mockMessagesApi)
+      lazy val view = improvementsRebasedView(form)(using fakeRequest, mockMessage, mockMessagesApi)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

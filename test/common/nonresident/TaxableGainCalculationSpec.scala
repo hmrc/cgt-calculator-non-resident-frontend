@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package common
+package common.nonresident
 
-import common.nonresident.TaxableGainCalculation
+import common.{CommonPlaySpec, KeystoreKeys}
 import connectors.CalculatorConnector
 import constructors.AnswersConstructor
 import controllers.helpers.FakeRequestHelper
-import models._
+import models.*
 import org.mockito.ArgumentMatchers
-import org.mockito.Mockito._
+import org.mockito.Mockito.*
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
@@ -51,7 +51,7 @@ class TaxableGainCalculationSpec extends CommonPlaySpec with GuiceOneAppPerSuite
     Some(AnnualExemptAmountModel(0)),
     BroughtForwardLossesModel(isClaiming = false, None)
   )
-  val totalGainAnswersModel = TotalGainAnswersModel(
+  val totalGainAnswersModel: TotalGainAnswersModel = TotalGainAnswersModel(
     DateModel(5, 6, 2015),
     SoldOrGivenAwayModel(true),
     Some(SoldForLessModel(true)),
@@ -60,7 +60,7 @@ class TaxableGainCalculationSpec extends CommonPlaySpec with GuiceOneAppPerSuite
     Some(HowBecameOwnerModel("Bought")),
     Some(BoughtForLessModel(false)),
     AcquisitionValueModel(1250000),
-    AcquisitionCostsModel(20000),
+    Some(AcquisitionCostsModel(20000)),
     DateModel(10, 10, 2001),
     Some(RebasedValueModel(950000)),
     Some(RebasedCostsModel("No", None)),
@@ -68,32 +68,32 @@ class TaxableGainCalculationSpec extends CommonPlaySpec with GuiceOneAppPerSuite
     None,
     Some(OtherReliefsModel(0))
   )
-  val calculationResultsModel = CalculationResultsWithTaxOwedModel(
+  val calculationResultsModel: CalculationResultsWithTaxOwedModel = CalculationResultsWithTaxOwedModel(
     TotalTaxOwedModel(100, 100, 20, None, None, 200, 100, None, None, None, None, 0, None, None, None, None, None, None, None),
     None,
     None
   )
-  val propertyLivedIn = PropertyLivedInModel(true)
+  val propertyLivedIn: PropertyLivedInModel = PropertyLivedInModel(true)
 
   when(mockSessionCacheService.fetchAndGetFormData[PrivateResidenceReliefModel](ArgumentMatchers.eq(KeystoreKeys.NonResidentKeys.privateResidenceRelief))
-    (ArgumentMatchers.any(), ArgumentMatchers.any()))
+    (using ArgumentMatchers.any(), ArgumentMatchers.any()))
     .thenReturn(Future.successful(Some(prrModel)))
 
-  when(mockCalcConnector.calculateTaxableGainAfterPRR(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any()))
+  when(mockCalcConnector.calculateTaxableGainAfterPRR(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any())(using ArgumentMatchers.any()))
     .thenReturn(Future.successful(Some(calculationResultsWithPRRModel)))
 
-  when(mockAnswersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers(ArgumentMatchers.any()))
+  when(mockAnswersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers(using ArgumentMatchers.any()))
     .thenReturn(Future.successful(Some(personalDetailsModel)))
 
-  when(mockCalcConnector.getFullAEA(ArgumentMatchers.any())(ArgumentMatchers.any()))
+  when(mockCalcConnector.getFullAEA(ArgumentMatchers.any())(using ArgumentMatchers.any()))
     .thenReturn(Future.successful(Some(BigDecimal(11000))))
 
-  when(mockCalcConnector.getTaxYear(ArgumentMatchers.any())(ArgumentMatchers.any()))
+  when(mockCalcConnector.getTaxYear(ArgumentMatchers.any())(using ArgumentMatchers.any()))
     .thenReturn(Future.successful(Some(TaxYearModel("2015/16", isValidYear = true, "2015/16"))))
 
   when(mockCalcConnector.calculateNRCGTTotalTax(
     ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any(),
-    ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any()))
+    ArgumentMatchers.any(), ArgumentMatchers.any())(using ArgumentMatchers.any()))
     .thenReturn(Future.successful(Some(calculationResultsModel)))
 
   "Calling .getPrrResponse" should {

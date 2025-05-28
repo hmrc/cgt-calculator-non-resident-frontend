@@ -24,7 +24,7 @@ import play.api.{Application, Play}
 trait WithCommonFakeApplication extends BeforeAndAfterAll {
   this: Suite =>
 
-  lazy val fakeApplication: Application = new GuiceApplicationBuilder().bindings(bindModules:_*).configure(
+  lazy val fakeApplication: Application = new GuiceApplicationBuilder().bindings(bindModules*).configure(
     "microservice.services.capital-gains-calculator.port" -> "11119"
   ).build()
 

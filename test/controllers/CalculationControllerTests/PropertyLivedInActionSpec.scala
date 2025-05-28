@@ -59,10 +59,10 @@ class PropertyLivedInActionSpec extends CommonPlaySpec with WithCommonFakeApplic
   def setupTarget(getData: Option[PropertyLivedInModel]): PropertyLivedInController= {
 
     when(mockSessionCacheService.fetchAndGetFormData[PropertyLivedInModel](ArgumentMatchers.eq(keyStoreKeys.propertyLivedIn))
-      (ArgumentMatchers.any(), ArgumentMatchers.any()))
+      (using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    when(mockSessionCacheService.saveFormData[PropertyLivedInModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.saveFormData[PropertyLivedInModel](ArgumentMatchers.any(), ArgumentMatchers.any())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(("", "")))
 
     new PropertyLivedInController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, propertyLivedInView)

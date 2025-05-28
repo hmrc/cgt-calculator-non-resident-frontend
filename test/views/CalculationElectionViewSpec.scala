@@ -33,14 +33,14 @@ class CalculationElectionViewSpec extends CommonPlaySpec with WithCommonFakeAppl
   val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   lazy val calculationElectionView: calculationElection = fakeApplication.injector.instanceOf[calculationElection]
-  lazy val pageTitle = s"""${messages.heading} - ${commonMessages.serviceName} - GOV.UK"""
+  lazy val pageTitle: String = s"""${messages.heading} - ${commonMessages.serviceName} - GOV.UK"""
 
   "The Calculation Election View" should {
 
     lazy val form = calculationElectionForm
     lazy val seq: Seq[(String, String, String, String, Option[String], Option[BigDecimal])] =
       Seq(("flat", "2000", Messages("calc.calculationElection.message.flat"), Messages("calc.calculationElection.description.flat"), None, None))
-    lazy val view = calculationElectionView(form, seq)(fakeRequest,mockMessage)
+    lazy val view = calculationElectionView(form, seq)(using fakeRequest,mockMessage)
     lazy val doc = Jsoup.parse(view.body)
 
     s"have a title of '${messages.heading}" in {

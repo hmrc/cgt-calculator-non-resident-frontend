@@ -30,7 +30,7 @@ import views.html.calculation.acquisitionValue
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class AcquisitionValueController @Inject()(http: DefaultHttpClient,
+class AcquisitionValueController @Inject()(val http: DefaultHttpClient,
                                            sessionCacheService: SessionCacheService,
                                            mcc: MessagesControllerComponents,
                                            acquisitionValueView: acquisitionValue

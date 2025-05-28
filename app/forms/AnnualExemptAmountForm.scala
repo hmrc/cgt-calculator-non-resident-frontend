@@ -34,6 +34,6 @@ object AnnualExemptAmountForm {
         .verifying(maxMonetaryValueConstraint(maxAEA, "calc.annualExemptAmount.errorMax"))
         .verifying("calc.annualExemptAmount.errorNegative", annualExemptAmount => isPositive(annualExemptAmount))
         .verifying("calc.annualExemptAmount.errorDecimalPlaces", annualExemptAmount => decimalPlacesCheck(annualExemptAmount))
-    )(AnnualExemptAmountModel.apply)(AnnualExemptAmountModel.unapply)
+    )(AnnualExemptAmountModel.apply)(o=>Some(o.annualExemptAmount))
   )
 }

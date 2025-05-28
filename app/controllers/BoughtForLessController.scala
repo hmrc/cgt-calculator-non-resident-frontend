@@ -33,9 +33,9 @@ import views.html.calculation.boughtForLess
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class BoughtForLessController @Inject()(http: DefaultHttpClient,
+class BoughtForLessController @Inject()(val http: DefaultHttpClient,
                                         sessionCacheService: SessionCacheService,
-                                        calcElectionConstructor: DefaultCalculationElectionConstructor,
+                                        val calcElectionConstructor: DefaultCalculationElectionConstructor,
                                         mcc: MessagesControllerComponents,
                                         boughtForLessView: boughtForLess)(implicit ec: ExecutionContext)
                                           extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
@@ -59,7 +59,7 @@ class BoughtForLessController @Inject()(http: DefaultHttpClient,
 
     def successAction(model: BoughtForLessModel) = {
       (for {
-        save <- sessionCacheService.saveFormData(KeystoreKeys.boughtForLess, model)
+        _ <- sessionCacheService.saveFormData(KeystoreKeys.boughtForLess, model)
         route <- routeRequest(model)
       } yield route).recoverToStart
     }

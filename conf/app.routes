@@ -5,7 +5,7 @@
 GET         /assets/*file           @controllers.Assets.versioned(path="/public", file: Asset)
 
 #Session Timeout route
-GET         /session-timeout        @controllers.utils.TimeoutController.timeout
+GET         /session-timeout        @controllers.utils.TimeoutController.timeout()
 
 #Language Controller
 GET         /language/:lang         @controllers.CgtLanguageController.switchToLanguage(lang: String)
@@ -187,7 +187,7 @@ POST        /costs-at-legislation-start         @controllers.CostsAtLegislationS
 #Summary screen route
 ########################################################
 GET         /summary                            @controllers.SummaryController.summary
-GET         /restart                            @controllers.SummaryController.restart
+GET         /restart                            @controllers.SummaryController.restart()
 ########################################################
 
 #WhatNext route

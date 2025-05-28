@@ -33,13 +33,13 @@ class WorthWhenGiftedToViewSpec extends CommonPlaySpec with WithCommonFakeApplic
   val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   val worthWhenGiftedToView: worthWhenGiftedTo = fakeApplication.injector.instanceOf[worthWhenGiftedTo]
-  lazy val pageTitle = s"""${WorthWhenGiftedTo.question} - ${commonMessages.serviceName} - GOV.UK"""
+  lazy val pageTitle: String = s"""${WorthWhenGiftedTo.question} - ${commonMessages.serviceName} - GOV.UK"""
 
   "The Worth When Gifted To view spec" when {
 
     "supplied with no errors" should {
 
-      lazy val view = worthWhenGiftedToView(worthWhenGiftedToForm)(fakeRequest, mockMessage)
+      lazy val view = worthWhenGiftedToView(worthWhenGiftedToForm)(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '$pageTitle'" in {
@@ -119,7 +119,7 @@ class WorthWhenGiftedToViewSpec extends CommonPlaySpec with WithCommonFakeApplic
     "supplied with a form with errors" should {
 
       lazy val form = worthWhenGiftedToForm.bind(Map("acquisitionMarketValue" -> "a"))
-      lazy val view = worthWhenGiftedToView(form)(fakeRequest, mockMessage)
+      lazy val view = worthWhenGiftedToView(form)(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

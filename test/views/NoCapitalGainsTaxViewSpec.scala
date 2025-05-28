@@ -37,7 +37,7 @@ class NoCapitalGainsTaxViewSpec extends CommonPlaySpec with WithCommonFakeApplic
   "No Capital Gains Tax view" when {
 
     "supplied with a date of 5-4-2014" should {
-      lazy val view = noCapitalGainsTaxView(DateModel(5, 4, 2014))(fakeRequest, mockMessage, Lang("en"))
+      lazy val view = noCapitalGainsTaxView(DateModel(5, 4, 2014))(using fakeRequest, mockMessage, Lang("en"))
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${messages.NoCapitalGainsTax.title}'" in {
@@ -117,7 +117,7 @@ class NoCapitalGainsTaxViewSpec extends CommonPlaySpec with WithCommonFakeApplic
     }
 
     "supplied with a date of 12-11-2013" should {
-      lazy val view = noCapitalGainsTaxView(DateModel(12, 11, 2013))(fakeRequest, mockMessage, Lang("en"))
+      lazy val view = noCapitalGainsTaxView(DateModel(12, 11, 2013))(using fakeRequest, mockMessage, Lang("en"))
       lazy val document = Jsoup.parse(view.body)
 
       "has the date 12-11-2013" in {

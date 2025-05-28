@@ -48,15 +48,15 @@ class RebasedValueActionSpec @Inject()(rebasedValueController: RebasedValueContr
                   acquisitionDateModel: Option[DateModel] = Some(DateModel(10, 10, 2015))): RebasedValueController = {
 
     when(mockSessionCacheService.fetchAndGetFormData[RebasedValueModel](
-      ArgumentMatchers.eq(KeystoreKeys.rebasedValue))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      ArgumentMatchers.eq(KeystoreKeys.rebasedValue))(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
     when(mockSessionCacheService.fetchAndGetFormData[DateModel](
-      ArgumentMatchers.eq(KeystoreKeys.acquisitionDate))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      ArgumentMatchers.eq(KeystoreKeys.acquisitionDate))(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(acquisitionDateModel))
 
     when(mockSessionCacheService.saveFormData[RebasedValueModel](
-      ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      ArgumentMatchers.any(), ArgumentMatchers.any())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(("", "")))
 
     new RebasedValueController(http = mock[DefaultHttpClient],

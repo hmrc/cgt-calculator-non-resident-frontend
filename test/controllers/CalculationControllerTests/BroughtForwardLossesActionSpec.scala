@@ -46,7 +46,7 @@ class BroughtForwardLossesActionSpec extends CommonPlaySpec with WithCommonFakeA
   val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents: MessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val broughtForwardLossesView: broughtForwardLosses = fakeApplication.injector.instanceOf[broughtForwardLosses]
-  lazy val pageTitle = s"""${messages.BroughtForwardLosses.question} - ${messages.serviceName} - GOV.UK"""
+  lazy val pageTitle: String = s"""${messages.BroughtForwardLosses.question} - ${messages.serviceName} - GOV.UK"""
 
   class Setup {
     val controller = new BroughtForwardLossesController(
@@ -65,24 +65,24 @@ class BroughtForwardLossesActionSpec extends CommonPlaySpec with WithCommonFakeA
                   howMuchLossModel: Option[HowMuchLossModel] = None): BroughtForwardLossesController = {
 
     when(mockSessionCacheService.fetchAndGetFormData[BroughtForwardLossesModel](
-      ArgumentMatchers.eq(KeystoreKeys.broughtForwardLosses))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      ArgumentMatchers.eq(KeystoreKeys.broughtForwardLosses))(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
     when(mockSessionCacheService.fetchAndGetFormData[OtherPropertiesModel](
-      ArgumentMatchers.eq(KeystoreKeys.otherProperties))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      ArgumentMatchers.eq(KeystoreKeys.otherProperties))(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(otherPropertiesModel))
 
     when(mockSessionCacheService.fetchAndGetFormData[PreviousLossOrGainModel]
-      (ArgumentMatchers.eq(KeystoreKeys.previousLossOrGain))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      (ArgumentMatchers.eq(KeystoreKeys.previousLossOrGain))(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(previousLossOrGainModel))
 
-    when(mockSessionCacheService.fetchAndGetFormData[HowMuchGainModel](ArgumentMatchers.eq(KeystoreKeys.howMuchGain))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.fetchAndGetFormData[HowMuchGainModel](ArgumentMatchers.eq(KeystoreKeys.howMuchGain))(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(howMuchGainModel))
 
-    when(mockSessionCacheService.fetchAndGetFormData[HowMuchLossModel](ArgumentMatchers.eq(KeystoreKeys.howMuchLoss))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.fetchAndGetFormData[HowMuchLossModel](ArgumentMatchers.eq(KeystoreKeys.howMuchLoss))(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(howMuchLossModel))
 
-    when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(("", "")))
 
     new BroughtForwardLossesController(mockCalcConnector, mockSessionCacheService, mockMessagesControllerComponents, broughtForwardLossesView) {

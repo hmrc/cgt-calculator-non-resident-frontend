@@ -66,7 +66,7 @@ class SummaryPartialViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
         100.00,
         100.00,
         0
-      )(fakeRequestWithSession, mockMessage)
+      )(using fakeRequestWithSession, mockMessage)
       lazy val doc = Jsoup.parse(view.body)
 
       "the header" should {
@@ -166,7 +166,7 @@ class SummaryPartialViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
         100.00,
         100.00,
         0
-      )(fakeRequestWithSession, mockMessage)
+      )(using fakeRequestWithSession, mockMessage)
       lazy val doc = Jsoup.parse(view.body)
 
       "the header" should {

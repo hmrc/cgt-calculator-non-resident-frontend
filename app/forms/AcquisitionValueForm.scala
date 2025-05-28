@@ -34,6 +34,6 @@ object AcquisitionValueForm {
         .verifying("calc.acquisitionValue.errorNegative", isPositive)
         .verifying("calc.acquisitionValue.errorDecimalPlaces", decimalPlacesCheck)
         .verifying("calc.acquisitionValue.errorMax", maxCheck)
-    )(AcquisitionValueModel.apply)(AcquisitionValueModel.unapply)
+    )(AcquisitionValueModel.apply)(o=>Some(o.acquisitionValueAmt))
   )
 }

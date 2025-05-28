@@ -34,6 +34,6 @@ object CurrentIncomeForm {
         .verifying("calc.currentIncome.errorNegative", isPositive)
         .verifying("calc.currentIncome.errorDecimalPlaces", decimalPlacesCheck)
         .verifying("calc.currentIncome.errorMax", maxCheck)
-    )(CurrentIncomeModel.apply)(CurrentIncomeModel.unapply)
+    )(CurrentIncomeModel.apply)(o=>Some(o.currentIncome))
   )
 }

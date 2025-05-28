@@ -32,12 +32,12 @@ class HowMuchLossViewSpec extends CommonPlaySpec with WithCommonFakeApplication 
   val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   lazy val howMuchLossView: howMuchLoss = fakeApplication.injector.instanceOf[howMuchLoss]
-  val pageTitle = s"""${messages.HowMuchLoss.question} - ${messages.serviceName} - GOV.UK"""
+  val pageTitle: String = s"""${messages.HowMuchLoss.question} - ${messages.serviceName} - GOV.UK"""
 
   "Previous Loss view" when {
 
     "provided with no errors" should {
-      lazy val view = howMuchLossView(howMuchLossForm)(fakeRequest, mockMessage)
+      lazy val view = howMuchLossView(howMuchLossForm)(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of $pageTitle" in {
@@ -116,7 +116,7 @@ class HowMuchLossViewSpec extends CommonPlaySpec with WithCommonFakeApplication 
 
     "provided with some errors" should {
       lazy val form = howMuchLossForm.bind(Map("loss" -> ""))
-      lazy val view = howMuchLossView(form)(fakeRequest, mockMessage)
+      lazy val view = howMuchLossView(form)(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

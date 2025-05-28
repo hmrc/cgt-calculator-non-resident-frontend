@@ -49,8 +49,8 @@ class ImprovementsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
   val improvementsView: improvements = fakeApplication.injector.instanceOf[improvements]
   val improvementsRebasedView: improvementsRebased = fakeApplication.injector.instanceOf[improvementsRebased]
   val isClaimingImprovementsView: isClaimingImprovements = fakeApplication.injector.instanceOf[isClaimingImprovements]
-  lazy val pageTitle = s"""${commonMessages.Improvements.title} - ${commonMessages.serviceName} - GOV.UK"""
-  lazy val pageTitleBeforeTax = s"""${commonMessages.ImprovementsRebased.title} - ${commonMessages.serviceName} - GOV.UK"""
+  lazy val pageTitle: String = s"""${commonMessages.Improvements.title} - ${commonMessages.serviceName} - GOV.UK"""
+  lazy val pageTitleBeforeTax: String = s"""${commonMessages.ImprovementsRebased.title} - ${commonMessages.serviceName} - GOV.UK"""
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
 
   class Setup {
@@ -74,32 +74,32 @@ class ImprovementsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
                  ): ImprovementsController = {
 
     when(mockSessionCacheService.fetchAndGetFormData[IsClaimingImprovementsModel](
-      ArgumentMatchers.eq(KeystoreKeys.isClaimingImprovements))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      ArgumentMatchers.eq(KeystoreKeys.isClaimingImprovements))(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(isClaimingImprovementsData)))
 
-    when(mockSessionCacheService.fetchAndGetFormData[ImprovementsModel](ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.fetchAndGetFormData[ImprovementsModel](ArgumentMatchers.any())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(getData)))
 
     when(mockSessionCacheService.fetchAndGetFormData[RebasedValueModel](
-      ArgumentMatchers.eq(KeystoreKeys.rebasedValue))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      ArgumentMatchers.eq(KeystoreKeys.rebasedValue))(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(rebasedValueData))
 
     when(mockSessionCacheService.fetchAndGetFormData[DateModel](
-      ArgumentMatchers.eq(KeystoreKeys.acquisitionDate))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      ArgumentMatchers.eq(KeystoreKeys.acquisitionDate))(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(acquisitionDateData))
 
-    when(mockAnswersConstructor.getNRTotalGainAnswers(ArgumentMatchers.any()))
+    when(mockAnswersConstructor.getNRTotalGainAnswers(using ArgumentMatchers.any()))
       .thenReturn(Future.successful(mock[TotalGainAnswersModel]))
 
-    when(mockCalcConnector.calculateTotalGain(ArgumentMatchers.any())(ArgumentMatchers.any()))
+    when(mockCalcConnector.calculateTotalGain(ArgumentMatchers.any())(using ArgumentMatchers.any()))
       .thenReturn(Future.successful(totalGainResultsModel))
 
     when(mockSessionCacheService.saveFormData[IsClaimingImprovementsModel]
-      (ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      (ArgumentMatchers.any(), ArgumentMatchers.any())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(("", "")))
 
     when(mockSessionCacheService.saveFormData[ImprovementsModel]
-      (ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      (ArgumentMatchers.any(), ArgumentMatchers.any())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(("", "")))
 
     new ImprovementsController(

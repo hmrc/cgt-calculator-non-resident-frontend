@@ -29,7 +29,7 @@ class YourAnswersConstructorSpec extends CommonPlaySpec with WithCommonFakeAppli
     Some(HowBecameOwnerModel("Gifted")),
     Some(BoughtForLessModel(false)),
     AcquisitionValueModel(2000),
-    AcquisitionCostsModel(200),
+    Some(AcquisitionCostsModel(200)),
     DateModel(4, 10, 2013),
     Some(RebasedValueModel(3000)),
     Some(RebasedCostsModel("Yes", Some(300))),

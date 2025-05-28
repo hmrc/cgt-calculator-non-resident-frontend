@@ -31,7 +31,7 @@ import views.html.calculation.worthBeforeLegislationStart
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class WorthBeforeLegislationStartController @Inject()(http: DefaultHttpClient,
+class WorthBeforeLegislationStartController @Inject()(val http: DefaultHttpClient,
                                                       sessionCacheService: SessionCacheService,
                                                       mcc: MessagesControllerComponents,
                                                       worthBeforeLegislationStartView: worthBeforeLegislationStart)

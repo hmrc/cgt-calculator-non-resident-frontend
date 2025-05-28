@@ -46,7 +46,7 @@ class WorthWhenBoughtForLessActionSpec extends CommonPlaySpec with WithCommonFak
   val mockMessagesControllerComponents: MessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val worthWhenBoughtForLessView: worthWhenBoughtForLess = fakeApplication.injector.instanceOf[worthWhenBoughtForLess]
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
-  lazy val pageTitle = s"""${messages.question} - ${messages.pageHeading} - GOV.UK"""
+  lazy val pageTitle: String = s"""${messages.question} - ${messages.pageHeading} - GOV.UK"""
 
   class Setup {
     val controller = new WorthWhenBoughtForLessController(
@@ -60,10 +60,10 @@ class WorthWhenBoughtForLessActionSpec extends CommonPlaySpec with WithCommonFak
   def setupTarget(getData: Option[AcquisitionValueModel]): WorthWhenBoughtForLessController = {
 
     when(mockSessionCacheService.fetchAndGetFormData[AcquisitionValueModel](
-      ArgumentMatchers.eq(KeystoreKeys.acquisitionMarketValue))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      ArgumentMatchers.eq(KeystoreKeys.acquisitionMarketValue))(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    when(mockSessionCacheService.saveFormData[AcquisitionValueModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.saveFormData[AcquisitionValueModel](ArgumentMatchers.any(), ArgumentMatchers.any())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(("", "")))
 
     new WorthWhenBoughtForLessController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, worthWhenBoughtForLessView)

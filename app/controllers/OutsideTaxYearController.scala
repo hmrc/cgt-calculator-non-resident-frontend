@@ -31,7 +31,7 @@ import views.html.calculation.outsideTaxYear
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
-class OutsideTaxYearController @Inject()(http: DefaultHttpClient,
+class OutsideTaxYearController @Inject()(val http: DefaultHttpClient,
                                          calcConnector: CalculatorConnector,
                                          sessionCacheService: SessionCacheService,
                                          mcc: MessagesControllerComponents,

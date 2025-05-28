@@ -37,7 +37,7 @@ class SoldOrGivenAwayViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
   "The Sold Or Given Away View" when {
 
     "not supplied with a pre-existing model" should {
-      lazy val view = soldOrGivenAwayView(soldOrGivenAwayForm)(fakeRequest, mockMessage)
+      lazy val view = soldOrGivenAwayView(soldOrGivenAwayForm)(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have a 'back-link' that" should {
@@ -121,7 +121,7 @@ class SoldOrGivenAwayViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
 
     "provided with errors" should {
       lazy val form = soldOrGivenAwayForm.bind(Map("soldIt" -> "999"))
-      lazy val view = soldOrGivenAwayView(form)(fakeRequest, mockMessage)
+      lazy val view = soldOrGivenAwayView(form)(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

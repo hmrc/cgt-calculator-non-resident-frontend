@@ -34,13 +34,13 @@ class ClaimingReliefsViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
   implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   lazy val claimingReliefsView: claimingReliefs = fakeApplication.injector.instanceOf[claimingReliefs]
 
-  lazy val pageTitle = s"""${messages.title} - ${commonMessages.serviceName} - GOV.UK"""
+  lazy val pageTitle: String = s"""${messages.title} - ${commonMessages.serviceName} - GOV.UK"""
 
   "ClaimingReliefs view" when {
 
     "supplied with no errors" should {
       lazy val form = ClaimingReliefsForm.claimingReliefsForm
-      lazy val view = claimingReliefsView(form)(fakeRequest, mockMessage)
+      lazy val view = claimingReliefsView(form)(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       s"have the title ${messages.title}" in {
@@ -108,7 +108,7 @@ class ClaimingReliefsViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
 
     "supplied with form errors" should {
       lazy val form = ClaimingReliefsForm.claimingReliefsForm.bind(Map("isClaimingReliefs" -> "abc"))
-      lazy val view = claimingReliefsView(form)(fakeRequest, mockMessage)
+      lazy val view = claimingReliefsView(form)(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

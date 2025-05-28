@@ -38,7 +38,7 @@ class SummaryPartialTaxableGainViewSpec extends CommonPlaySpec with WithCommonFa
         gain = 3000,
         totalDeductions = 2000,
         taxableGain = 1000
-      )(fakeRequestWithSession, mockMessage)
+      )(using fakeRequestWithSession, mockMessage)
       lazy val doc = Jsoup.parse(view.body)
 
       s"have the text ${messages.yourTaxableGain}" in {

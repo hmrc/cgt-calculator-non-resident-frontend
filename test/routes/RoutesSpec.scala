@@ -560,7 +560,7 @@ class RoutesSpec extends CommonPlaySpec with WithCommonFakeApplication with Matc
 
   "The URL for the restart Action" should {
     "be equal to /calculate-your-capital-gains/non-resident/restart" in {
-      val path = controllers.routes.SummaryController.restart.url
+      val path = controllers.routes.SummaryController.restart().url
       path shouldEqual "/calculate-your-capital-gains/non-resident/restart"
     }
   }

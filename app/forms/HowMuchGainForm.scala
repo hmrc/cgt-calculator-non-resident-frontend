@@ -34,6 +34,6 @@ object HowMuchGainForm {
         .verifying("calc.howMuchGain.errorNegative", isPositive)
         .verifying("calc.howMuchGain.errorDecimalPlaces", decimalPlacesCheck)
         .verifying("calc.howMuchGain.errorMax", maxCheck)
-    )(HowMuchGainModel.apply)(HowMuchGainModel.unapply)
+    )(HowMuchGainModel.apply)(o=>Some(o.howMuchGain))
   )
 }
