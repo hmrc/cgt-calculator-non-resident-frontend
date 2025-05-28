@@ -44,7 +44,7 @@ class HowMuchLossActionSpec extends CommonPlaySpec with WithCommonFakeApplicatio
   val mockCalcConnector: CalculatorConnector =mock[CalculatorConnector]
   val mockMessagesControllerComponents: MessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val howMuchLossView: howMuchLoss = fakeApplication.injector.instanceOf[howMuchLoss]
-  val pageTitle = s"""${messages.HowMuchLoss.question} - ${messages.serviceName} - GOV.UK"""
+  val pageTitle: String = s"""${messages.HowMuchLoss.question} - ${messages.serviceName} - GOV.UK"""
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
 
   class Setup {
@@ -58,10 +58,10 @@ class HowMuchLossActionSpec extends CommonPlaySpec with WithCommonFakeApplicatio
 
   def setupTarget(getData: Option[HowMuchLossModel]): HowMuchLossController = {
 
-    when(mockSessionCacheService.fetchAndGetFormData[HowMuchLossModel](ArgumentMatchers.eq(KeystoreKeys.howMuchLoss))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.fetchAndGetFormData[HowMuchLossModel](ArgumentMatchers.eq(KeystoreKeys.howMuchLoss))(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(("", "")))
 
     new HowMuchLossController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, howMuchLossView)

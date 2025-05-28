@@ -31,7 +31,7 @@ import views.html.calculation.worthWhenInherited
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class WorthWhenInheritedController @Inject()(http: DefaultHttpClient,
+class WorthWhenInheritedController @Inject()(val http: DefaultHttpClient,
                                              sessionCacheService: SessionCacheService,
                                              mcc: MessagesControllerComponents,
                                              worthWhenInheritedView: worthWhenInherited

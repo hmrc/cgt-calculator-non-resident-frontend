@@ -41,7 +41,7 @@ class SummaryPartialWorkingOutSectionViewSpec extends CommonPlaySpec with WithCo
         acquisitionValue = 20000,
         totalCosts = 4000,
         totalGain = 50000
-      )(fakeRequestWithSession, mockMessage)
+      )(using fakeRequestWithSession, mockMessage)
       lazy val doc = Jsoup.parse(view.body)
 
       s"have the h2 heading ${messages.workingOutSectionHeading}" in {
@@ -113,7 +113,7 @@ class SummaryPartialWorkingOutSectionViewSpec extends CommonPlaySpec with WithCo
         acquisitionValue = 120000,
         totalCosts = 4000,
         totalGain = -20000
-      )(fakeRequestWithSession, mockMessage)
+      )(using fakeRequestWithSession, mockMessage)
       lazy val doc = Jsoup.parse(view.body)
 
       s"have the h2 heading ${messages.workingOutSectionHeading}" in {
@@ -185,7 +185,7 @@ class SummaryPartialWorkingOutSectionViewSpec extends CommonPlaySpec with WithCo
         acquisitionValue = 20000,
         totalCosts = 4000,
         percentageOfGain = 50
-      )(fakeRequestWithSession, mockMessage)
+      )(using fakeRequestWithSession, mockMessage)
       lazy val doc = Jsoup.parse(view.body)
 
       s"have the h2 heading ${messages.workingOutSectionHeading}" in {
@@ -270,7 +270,7 @@ class SummaryPartialWorkingOutSectionViewSpec extends CommonPlaySpec with WithCo
         totalCosts = 4000,
         totalGain = -20000,
         percentageOfGain = 50
-      )(fakeRequestWithSession, mockMessage)
+      )(using fakeRequestWithSession, mockMessage)
       lazy val doc = Jsoup.parse(view.body)
 
       "has a row for the loss made on the property" which {

@@ -58,7 +58,7 @@ object BroughtForwardLossesForm {
           .verifying("calc.broughtForwardLosses.errorNegative", isPositive)
           .verifying(maxMonetaryValueConstraint(Constants.maxNumeric, "calc.broughtForwardLosses.error.tooHigh"))
       )
-    )(BroughtForwardLossesModel.apply)(BroughtForwardLossesModel.unapply)
+    )(BroughtForwardLossesModel.apply)(o=>Some(o.isClaiming,o.broughtForwardLoss))
 
   )
 }

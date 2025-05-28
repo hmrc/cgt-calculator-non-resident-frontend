@@ -32,6 +32,6 @@ object BoughtForLessForm {
           .verifying("calc.boughtForLess.errors.required", mandatoryCheck)
           .verifying("calc.boughtForLess.errors.required", yesNoCheck)
           .transform(stringToBoolean, booleanToString)
-      )(BoughtForLessModel.apply)(BoughtForLessModel.unapply)
+      )(BoughtForLessModel.apply)(o=>Some(o.boughtForLess))
     )
 }

@@ -47,7 +47,7 @@ class SoldOrGivenAwayActionSpec extends CommonPlaySpec with WithCommonFakeApplic
   val mockAnswersConstructor: AnswersConstructor = mock[AnswersConstructor]
   val mockMessagesControllerComponents: MessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val soldOrGivenAwayView: soldOrGivenAway = fakeApplication.injector.instanceOf[soldOrGivenAway]
-  lazy val pageTitle = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
+  lazy val pageTitle: String = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
 
   class Setup {
@@ -62,10 +62,10 @@ class SoldOrGivenAwayActionSpec extends CommonPlaySpec with WithCommonFakeApplic
   def setUpTarget(getData: Option[SoldOrGivenAwayModel]): SoldOrGivenAwayController = {
 
     when(mockSessionCacheService.fetchAndGetFormData[SoldOrGivenAwayModel](
-      ArgumentMatchers.eq(KeystoreKeys.soldOrGivenAway))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      ArgumentMatchers.eq(KeystoreKeys.soldOrGivenAway))(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(("", "")))
 
     new SoldOrGivenAwayController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, soldOrGivenAwayView)

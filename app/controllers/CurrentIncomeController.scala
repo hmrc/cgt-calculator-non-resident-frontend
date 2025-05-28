@@ -37,7 +37,7 @@ class CurrentIncomeController @Inject()(sessionCacheService: SessionCacheService
                                        (implicit ec: ExecutionContext)
                                           extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
-  def getBackLink(implicit request: Request[_]): Future[String] = {
+  def getBackLink(implicit request: Request[?]): Future[String] = {
     sessionCacheService.fetchAndGetFormData[PropertyLivedInModel](KeystoreKeys.propertyLivedIn).map {
       case Some(PropertyLivedInModel(true)) => routes.PrivateResidenceReliefController.privateResidenceRelief.url
       case _ => routes.PropertyLivedInController.propertyLivedIn.url
@@ -54,7 +54,7 @@ class CurrentIncomeController @Inject()(sessionCacheService: SessionCacheService
     }
 
     (for {
-      backLink <- getBackLink
+      _ <- getBackLink
       form <- getForm
     } yield Ok(currentIncomeView(form))).recoverToStart
   }

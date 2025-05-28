@@ -33,13 +33,13 @@ class PersonalAllowanceViewSpec extends CommonPlaySpec with WithCommonFakeApplic
   val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   lazy val personalAllowanceView: personalAllowance = fakeApplication.injector.instanceOf[personalAllowance]
-  lazy val pageTitle = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
+  lazy val pageTitle: String = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
 
   "The Personal Allowance View" should {
 
     "return some HTML" which {
 
-      lazy val view = personalAllowanceView(personalAllowanceForm(11000))(fakeRequest, mockMessage)
+      lazy val view = personalAllowanceView(personalAllowanceForm(11000))(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       s"has the title $pageTitle" in {
@@ -143,7 +143,7 @@ class PersonalAllowanceViewSpec extends CommonPlaySpec with WithCommonFakeApplic
     "when supplied with a form with errors" should {
 
       lazy val form = personalAllowanceForm(11000).bind(Map("personalAllowance" -> "132891"))
-      lazy val view = personalAllowanceView(form)(fakeRequest, mockMessage)
+      lazy val view = personalAllowanceView(form)(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

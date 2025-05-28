@@ -46,7 +46,7 @@ class PersonalAllowanceActionSpec extends CommonPlaySpec with WithCommonFakeAppl
   val mockMessagesControllerComponents: MessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val personalAllowanceView: personalAllowance = fakeApplication.injector.instanceOf[personalAllowance]
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
-  lazy val pageTitle = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
+  lazy val pageTitle: String = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
 
   class Setup {
     val controller = new PersonalAllowanceController(
@@ -62,20 +62,20 @@ class PersonalAllowanceActionSpec extends CommonPlaySpec with WithCommonFakeAppl
   def setupTarget(getData: Option[PersonalAllowanceModel]): PersonalAllowanceController = {
 
     when(mockSessionCacheService.fetchAndGetFormData[PersonalAllowanceModel](
-      ArgumentMatchers.eq(KeystoreKeys.personalAllowance))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      ArgumentMatchers.eq(KeystoreKeys.personalAllowance))(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
     when(mockSessionCacheService.fetchAndGetFormData[DateModel](
-      ArgumentMatchers.eq(KeystoreKeys.disposalDate))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      ArgumentMatchers.eq(KeystoreKeys.disposalDate))(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(DateModel(6, 5, 2016))))
 
-    when(mockCalcConnector.getTaxYear(ArgumentMatchers.anyString())(ArgumentMatchers.any()))
+    when(mockCalcConnector.getTaxYear(ArgumentMatchers.anyString())(using ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(TaxYearModel("2016-5-6", isValidYear = true, "2016/17"))))
 
-    when(mockCalcConnector.getPA(ArgumentMatchers.anyInt(), ArgumentMatchers.anyBoolean())(ArgumentMatchers.any()))
+    when(mockCalcConnector.getPA(ArgumentMatchers.anyInt(), ArgumentMatchers.anyBoolean())(using ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(BigDecimal(11000))))
 
-    when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(("", "")))
 
     new PersonalAllowanceController(mockHttp, mockCalcConnector, mockSessionCacheService, mockMessagesControllerComponents, personalAllowanceView)

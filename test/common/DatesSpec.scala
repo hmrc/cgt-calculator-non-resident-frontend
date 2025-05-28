@@ -110,7 +110,7 @@ class DatesSpec extends CommonPlaySpec with GuiceOneAppPerSuite with MockitoSuga
     }
     "format a Welsh date" in {
       val date = LocalDate.of(2014, 11, 22)
-      date.localFormat("d MMMM yyyy")(cyMockMessages) shouldBe "22 Tachwedd 2014"
+      date.localFormat("d MMMM yyyy")(using cyMockMessages) shouldBe "22 Tachwedd 2014"
     }
   }
 }

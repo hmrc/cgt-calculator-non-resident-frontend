@@ -37,14 +37,14 @@ object TaxableGainCalculation {
   }
 
   def getPropertyLivedInResponse(gainExists: Boolean, sessionCacheService: SessionCacheService)
-                                (implicit request: Request[_], ec: ExecutionContext): Future[Option[PropertyLivedInModel]] = {
+                                (implicit request: Request[?], ec: ExecutionContext): Future[Option[PropertyLivedInModel]] = {
     if (gainExists) {
       sessionCacheService.fetchAndGetFormData[PropertyLivedInModel](KeystoreKeys.propertyLivedIn)
     } else Future(None)
   }
 
   def getPrrResponse(propertyLivedInResponse: Option[PropertyLivedInModel],
-                     sessionCacheService: SessionCacheService)(implicit request: Request[_], ec: ExecutionContext):
+                     sessionCacheService: SessionCacheService)(implicit request: Request[?], ec: ExecutionContext):
   Future[Option[PrivateResidenceReliefModel]] = {
     propertyLivedInResponse match {
       case Some(data) if data.propertyLivedIn =>
@@ -70,7 +70,7 @@ object TaxableGainCalculation {
 
   def getFinalSectionsAnswers(totalGainResultsModel: TotalGainResultsModel,
                               calculationResultsWithPRRModel: Option[CalculationResultsWithPRRModel],
-                              answersConstructor: AnswersConstructor)(implicit request: Request[_], ec: ExecutionContext):
+                              answersConstructor: AnswersConstructor)(implicit request: Request[?], ec: ExecutionContext):
   Future[Option[TotalPersonalDetailsCalculationModel]] = {
     calculationResultsWithPRRModel match {
 

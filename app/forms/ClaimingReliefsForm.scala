@@ -31,6 +31,6 @@ object ClaimingReliefsForm {
         .verifying("calc.claimingReliefs.errorMandatory", mandatoryCheck)
         .verifying("calc.claimingReliefs.errorMandatory", yesNoCheck)
         .transform(stringToBoolean, booleanToString)
-    )(ClaimingReliefsModel.apply)(ClaimingReliefsModel.unapply)
+    )(ClaimingReliefsModel.apply)(o=>Some(o.isClaimingReliefs))
   )
 }

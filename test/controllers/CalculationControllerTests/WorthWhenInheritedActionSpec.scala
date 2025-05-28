@@ -48,7 +48,7 @@ class WorthWhenInheritedActionSpec extends CommonPlaySpec with WithCommonFakeApp
   val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents: MessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val worthWhenInheritedView: worthWhenInherited = fakeApplication.injector.instanceOf[worthWhenInherited]
-  val pageTitle = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
+  val pageTitle: String = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
 
   class Setup {
     val controller = new WorthWhenInheritedController(
@@ -63,10 +63,10 @@ class WorthWhenInheritedActionSpec extends CommonPlaySpec with WithCommonFakeApp
 
 
     when(mockSessionCacheService.fetchAndGetFormData[AcquisitionValueModel](
-      ArgumentMatchers.eq(KeystoreKeys.acquisitionMarketValue))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      ArgumentMatchers.eq(KeystoreKeys.acquisitionMarketValue))(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    when(mockSessionCacheService.saveFormData[AcquisitionValueModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.saveFormData[AcquisitionValueModel](ArgumentMatchers.any(), ArgumentMatchers.any())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(("", "")))
 
     new WorthWhenInheritedController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, worthWhenInheritedView)

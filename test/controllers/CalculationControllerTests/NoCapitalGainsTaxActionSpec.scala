@@ -58,7 +58,7 @@ class NoCapitalGainsTaxActionSpec extends CommonPlaySpec with WithCommonFakeAppl
   def setupTarget(getData: Option[DateModel]): NoCapitalGainsTaxController = {
 
     when(mockSessionCacheService.fetchAndGetFormData[DateModel](
-      ArgumentMatchers.eq(KeystoreKeys.disposalDate))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      ArgumentMatchers.eq(KeystoreKeys.disposalDate))(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
     new NoCapitalGainsTaxController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, noCapitalGainsTaxView)

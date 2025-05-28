@@ -30,7 +30,7 @@ object AcquisitionDateForm {
 
   def acquisitionDateForm(implicit messages: Messages): Form[DateModel] = Form(
     mapping(
-      key -> of(DateFormatter(
+      key -> of(using DateFormatter(
         key,
         optMaxDate = Some(LocalDate.now)
       ))

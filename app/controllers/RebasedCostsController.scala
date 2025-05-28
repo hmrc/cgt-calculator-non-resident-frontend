@@ -31,7 +31,7 @@ import views.html.calculation.rebasedCosts
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class RebasedCostsController @Inject()(http: DefaultHttpClient,
+class RebasedCostsController @Inject()(val http: DefaultHttpClient,
                                        sessionCacheService: SessionCacheService,
                                        mcc: MessagesControllerComponents,
                                        rebasedCostsView: rebasedCosts)

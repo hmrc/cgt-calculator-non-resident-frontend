@@ -33,12 +33,12 @@ class DisposalCostsViewSpec extends CommonPlaySpec with WithCommonFakeApplicatio
   val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   lazy val disposalCostsView: disposalCosts = fakeApplication.injector.instanceOf[disposalCosts]
-  lazy val pageTitle = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
+  lazy val pageTitle: String = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
 
   "Disposal Costs view" when {
 
     "supplied with no errors" should {
-      lazy val view = disposalCostsView(disposalCostsForm, "back-link")(fakeRequest, mockMessage)
+      lazy val view = disposalCostsView(disposalCostsForm, "back-link")(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '$pageTitle'" in {
@@ -144,7 +144,7 @@ class DisposalCostsViewSpec extends CommonPlaySpec with WithCommonFakeApplicatio
 
     "supplied with errors" should {
       lazy val form = disposalCostsForm.bind(Map("disposalCosts" -> "a"))
-      lazy val view = disposalCostsView(form, "back-link")(fakeRequest, mockMessage)
+      lazy val view = disposalCostsView(form, "back-link")(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

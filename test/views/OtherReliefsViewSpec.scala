@@ -38,7 +38,7 @@ class OtherReliefsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
     "not supplied with a pre-existing stored value and a taxable gain" should {
       val totalGain = 1234
       val totalChargeableGain = 4321
-      lazy val view = otherReliefsView(otherReliefsForm, totalChargeableGain, totalGain)(fakeRequest, mockMessage)
+      lazy val view = otherReliefsView(otherReliefsForm, totalChargeableGain, totalGain)(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of ${messages.OtherReliefs.question}" in {
@@ -131,7 +131,7 @@ class OtherReliefsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
       val totalGain = -1234
       val totalChargeableGain = -4321
 
-      lazy val view = otherReliefsView(otherReliefsForm, totalChargeableGain, totalGain)(fakeRequest, mockMessage)
+      lazy val view = otherReliefsView(otherReliefsForm, totalChargeableGain, totalGain)(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have the correct additional body text" in {
@@ -150,7 +150,7 @@ class OtherReliefsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
 
     "supplied with an invalid map" should {
       val map = Map("otherReliefs" -> "-1000")
-      lazy val view = otherReliefsView(otherReliefsForm.bind(map), 0, 0)(fakeRequest, mockMessage)
+      lazy val view = otherReliefsView(otherReliefsForm.bind(map), 0, 0)(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

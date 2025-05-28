@@ -69,41 +69,41 @@ class OtherReliefsRebasedActionSpec extends CommonPlaySpec with WithCommonFakeAp
                   totalGainResultModel: TotalGainResultsModel = TotalGainResultsModel(200, Some(500), None),
                   calculationResultsWithPRRModel: Option[CalculationResultsWithPRRModel] = None
                  ): OngoingStubbing[Future[(String, String)]] = {
-    when(mockSessionCacheService.fetchAndGetFormData[OtherReliefsModel](ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.fetchAndGetFormData[OtherReliefsModel](ArgumentMatchers.any())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
     when(mockSessionCacheService.fetchAndGetFormData[PrivateResidenceReliefModel](
-      ArgumentMatchers.eq(KeystoreKeys.privateResidenceRelief))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      ArgumentMatchers.eq(KeystoreKeys.privateResidenceRelief))(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(PrivateResidenceReliefModel("No", None))))
 
-    when(mockAnswerConstuctor.getNRTotalGainAnswers(ArgumentMatchers.any()))
+    when(mockAnswerConstuctor.getNRTotalGainAnswers(using ArgumentMatchers.any()))
       .thenReturn(Future.successful(gainAnswers))
 
-    when(mockCalcConnector.calculateTotalGain(ArgumentMatchers.any())(ArgumentMatchers.any()))
+    when(mockCalcConnector.calculateTotalGain(ArgumentMatchers.any())(using ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(totalGainResultModel)))
 
-    when(mockAnswerConstuctor.getPersonalDetailsAndPreviousCapitalGainsAnswers(ArgumentMatchers.any()))
+    when(mockAnswerConstuctor.getPersonalDetailsAndPreviousCapitalGainsAnswers(using ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(personalDetailsModel)))
 
-    when(mockCalcConnector.calculateTaxableGainAfterPRR(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any()))
+    when(mockCalcConnector.calculateTaxableGainAfterPRR(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any())(using ArgumentMatchers.any()))
       .thenReturn(Future.successful(calculationResultsWithPRRModel))
 
-    when(mockCalcConnector.getFullAEA(ArgumentMatchers.any())(ArgumentMatchers.any()))
+    when(mockCalcConnector.getFullAEA(ArgumentMatchers.any())(using ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(BigDecimal(11000))))
 
     when(mockCalcConnector.calculateNRCGTTotalTax(
       ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any(),
-      ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any()))
+      ArgumentMatchers.any(), ArgumentMatchers.any())(using ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(TestModels.calculationResultsModelWithRebased)))
 
-    when(mockCalcConnector.getTaxYear(ArgumentMatchers.any())(ArgumentMatchers.any()))
+    when(mockCalcConnector.getTaxYear(ArgumentMatchers.any())(using ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(TaxYearModel("2015/16", isValidYear = true, "2015/16"))))
 
     when(mockSessionCacheService.fetchAndGetFormData[PropertyLivedInModel](ArgumentMatchers.eq(KeystoreKeys.propertyLivedIn))
-      (ArgumentMatchers.any(), ArgumentMatchers.any()))
+      (using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(PropertyLivedInModel(true))))
 
-    when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(("", "")))
   }
 

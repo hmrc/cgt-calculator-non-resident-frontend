@@ -71,36 +71,36 @@ class PrivateResidenceReliefActionSpec
     val totalGainResultsModel = TotalGainResultsModel(1, Some(0), Some(0))
 
     when(mockSessionCacheService.saveFormData[PrivateResidenceReliefModel](
-      ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      ArgumentMatchers.any(), ArgumentMatchers.any())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful("", ""))
 
     when(mockSessionCacheService.fetchAndGetFormData[PrivateResidenceReliefModel](
-      ArgumentMatchers.eq(KeystoreKeys.privateResidenceRelief))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      ArgumentMatchers.eq(KeystoreKeys.privateResidenceRelief))(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
     when(mockSessionCacheService.fetchAndGetFormData[DateModel](
-      ArgumentMatchers.eq(KeystoreKeys.disposalDate))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      ArgumentMatchers.eq(KeystoreKeys.disposalDate))(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(disposalDateData))
 
     when(mockSessionCacheService.fetchAndGetFormData[DateModel]
-      (ArgumentMatchers.eq(KeystoreKeys.acquisitionDate))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      (ArgumentMatchers.eq(KeystoreKeys.acquisitionDate))(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(acquisitionDateData))
 
     when(mockSessionCacheService.fetchAndGetFormData[RebasedValueModel](
-      ArgumentMatchers.eq(KeystoreKeys.rebasedValue))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      ArgumentMatchers.eq(KeystoreKeys.rebasedValue))(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(rebasedValueData))
 
-    when(mockCalcConnector.calculateTaxableGainAfterPRR(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any()))
+    when(mockCalcConnector.calculateTaxableGainAfterPRR(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any())(using ArgumentMatchers.any()))
       .thenReturn(Future.successful(calculationResultsWithPRRModel))
 
-    when(mockAnswersConstructor.getNRTotalGainAnswers(ArgumentMatchers.any()))
+    when(mockAnswersConstructor.getNRTotalGainAnswers(using ArgumentMatchers.any()))
       .thenReturn(Future.successful(mock[TotalGainAnswersModel]))
 
     when(mockSessionCacheService.fetchAndGetFormData[PropertyLivedInModel](ArgumentMatchers.eq(KeystoreKeys.propertyLivedIn))
-      (ArgumentMatchers.any(), ArgumentMatchers.any()))
+      (using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(PropertyLivedInModel(true))))
 
-    when(mockCalcConnector.calculateTotalGain(ArgumentMatchers.any())(ArgumentMatchers.any()))
+    when(mockCalcConnector.calculateTotalGain(ArgumentMatchers.any())(using ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(totalGainResultsModel)))
 
 
@@ -111,14 +111,14 @@ class PrivateResidenceReliefActionSpec
 
     "return a valid date when one is found with an answer of yes" in {
       val target = setupTarget(None, acquisitionDateData = Some(DateModel(10, 5, 2015)))
-      val result = target.getAcquisitionDate(FakeRequest())
+      val result = target.getAcquisitionDate(using FakeRequest())
 
       await(result) shouldBe Some(LocalDate.parse("2015-05-10"))
     }
 
     "return a None when no date is found" in {
       val target = setupTarget(None)
-      val result = target.getAcquisitionDate(FakeRequest())
+      val result = target.getAcquisitionDate(using FakeRequest())
 
       await(result) shouldBe None
     }
@@ -128,14 +128,14 @@ class PrivateResidenceReliefActionSpec
 
     "return a valid date when one is found" in {
       val target = setupTarget(None, disposalDateData = Some(DateModel(10, 5, 2015)))
-      val result = target.getDisposalDate(FakeRequest())
+      val result = target.getDisposalDate(using FakeRequest())
 
       await(result) shouldBe Some(LocalDate.parse("2015-05-10"))
     }
 
     "return a None when no date is found" in {
       val target = setupTarget(None)
-      val result = target.getDisposalDate(FakeRequest())
+      val result = target.getDisposalDate(using FakeRequest())
 
       await(result) shouldBe None
     }

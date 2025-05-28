@@ -57,10 +57,10 @@ class AcquisitionValueActionSpec extends CommonPlaySpec with WithCommonFakeAppli
   def setupTarget(getData: Option[AcquisitionValueModel]): AcquisitionValueController = {
 
     when(mockSessionCacheService.fetchAndGetFormData[AcquisitionValueModel](
-      ArgumentMatchers.eq(KeystoreKeys.acquisitionValue))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      ArgumentMatchers.eq(KeystoreKeys.acquisitionValue))(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(("", "")))
 
     new AcquisitionValueController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, acquisitionValueView) {

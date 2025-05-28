@@ -48,7 +48,7 @@ class CheckYourAnswersActionSpec
   val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents: MessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val checkYourAnswersView: checkYourAnswers = fakeApplication.injector.instanceOf[checkYourAnswers]
-  val pageTitle = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
+  val pageTitle: String = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
 
   class Setup {
@@ -68,20 +68,20 @@ class CheckYourAnswersActionSpec
                   totalPersonalDetailsModel: Option[TotalPersonalDetailsCalculationModel] = None,
                   calculationResultsWithPRRModel: Option[CalculationResultsWithPRRModel] = None): CheckYourAnswersController = {
 
-    when(mockAnswersConstructor.getNRTotalGainAnswers(ArgumentMatchers.any())).thenReturn(Future.successful(totalGainAnswersModel))
+    when(mockAnswersConstructor.getNRTotalGainAnswers(using ArgumentMatchers.any())).thenReturn(Future.successful(totalGainAnswersModel))
 
     when(mockAnswersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers(
-      ArgumentMatchers.any())).thenReturn(Future.successful(totalPersonalDetailsModel))
+      using ArgumentMatchers.any())).thenReturn(Future.successful(totalPersonalDetailsModel))
 
-    when(mockCalcConnector.calculateTaxableGainAfterPRR(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any()))
+    when(mockCalcConnector.calculateTaxableGainAfterPRR(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any())(using ArgumentMatchers.any()))
       .thenReturn(Future.successful(calculationResultsWithPRRModel))
 
-    when(mockCalcConnector.calculateTotalGain(ArgumentMatchers.any())(ArgumentMatchers.any())).thenReturn(Future.successful(Some(totalGainResultsModel)))
+    when(mockCalcConnector.calculateTotalGain(ArgumentMatchers.any())(using ArgumentMatchers.any())).thenReturn(Future.successful(Some(totalGainResultsModel)))
 
-    when(mockSessionCacheService.fetchAndGetFormData[PrivateResidenceReliefModel](ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.fetchAndGetFormData[PrivateResidenceReliefModel](ArgumentMatchers.any())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(privateResidenceReliefModel))
 
-    when(mockCalcConnector.calculateTotalGain(ArgumentMatchers.any())(ArgumentMatchers.any()))
+    when(mockCalcConnector.calculateTotalGain(ArgumentMatchers.any())(using ArgumentMatchers.any()))
       .thenReturn(Future.successful(totalGainsModel))
 
     new CheckYourAnswersController(mockHttp, mockCalcConnector, mockSessionCacheService, mockAnswersConstructor, mockMessagesControllerComponents, checkYourAnswersView)
@@ -95,7 +95,7 @@ class CheckYourAnswersActionSpec
     Some(HowBecameOwnerModel("Gifted")),
     Some(BoughtForLessModel(false)),
     AcquisitionValueModel(2000),
-    AcquisitionCostsModel(200),
+    Some(AcquisitionCostsModel(200)),
     DateModel(4, 10, 2013),
     Some(RebasedValueModel(3000)),
     Some(RebasedCostsModel("Yes", Some(300))),
@@ -114,7 +114,7 @@ class CheckYourAnswersActionSpec
     Some(HowBecameOwnerModel("Gifted")),
     Some(BoughtForLessModel(false)),
     AcquisitionValueModel(2000),
-    AcquisitionCostsModel(200),
+    Some(AcquisitionCostsModel(200)),
     DateModel(4, 10, 2016),
     None,
     None,

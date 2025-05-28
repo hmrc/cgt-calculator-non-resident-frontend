@@ -44,6 +44,6 @@ object RebasedCostsForm {
             )
           )
       )
-    )(RebasedCostsModel.apply)(RebasedCostsModel.unapply)
+    )(RebasedCostsModel.apply)(o=>Some(o.hasRebasedCosts, o.rebasedCosts))
   )
 }

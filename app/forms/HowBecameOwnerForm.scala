@@ -29,6 +29,6 @@ object HowBecameOwnerForm {
       "gainedBy" -> text("calc.howBecameOwner.errors.required")
         .verifying("calc.howBecameOwner.errors.required", mandatoryCheck)
         .verifying("calc.howBecameOwner.errors.required", howBecameOwnerCheck)
-    )(HowBecameOwnerModel.apply)(HowBecameOwnerModel.unapply)
+    )(HowBecameOwnerModel.apply)(o=>Some(o.gainedBy))
   )
 }

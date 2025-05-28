@@ -25,7 +25,7 @@ class PrivateResidenceReliefRequestConstructorSpec extends CommonPlaySpec{
 
   import PrivateResidenceReliefRequestConstructor._
 
-  val modelDatesWithin18Months = TotalGainAnswersModel(
+  val modelDatesWithin18Months: TotalGainAnswersModel = TotalGainAnswersModel(
     DateModel(7, 7, 2016),
     SoldOrGivenAwayModel(false),
     None,
@@ -34,7 +34,7 @@ class PrivateResidenceReliefRequestConstructorSpec extends CommonPlaySpec{
     Some(HowBecameOwnerModel("Gifted")),
     None,
     AcquisitionValueModel(5000),
-    AcquisitionCostsModel(200),
+    Some(AcquisitionCostsModel(200)),
     DateModel(7, 1, 2015),
     None,
     None,
@@ -43,7 +43,7 @@ class PrivateResidenceReliefRequestConstructorSpec extends CommonPlaySpec{
     None
   )
 
-  val modelDatesAcquisitionDateAfterStart = TotalGainAnswersModel(
+  val modelDatesAcquisitionDateAfterStart: TotalGainAnswersModel = TotalGainAnswersModel(
     DateModel(10, 10, 2016),
     SoldOrGivenAwayModel(false),
     None,
@@ -52,7 +52,7 @@ class PrivateResidenceReliefRequestConstructorSpec extends CommonPlaySpec{
     Some(HowBecameOwnerModel("Gifted")),
     None,
     AcquisitionValueModel(5000),
-    AcquisitionCostsModel(200),
+    Some(AcquisitionCostsModel(200)),
     DateModel(10, 10, 2015),
     None,
     None,
@@ -61,7 +61,7 @@ class PrivateResidenceReliefRequestConstructorSpec extends CommonPlaySpec{
     None
   )
 
-  val modelWithValidDates = TotalGainAnswersModel(
+  val modelWithValidDates: TotalGainAnswersModel = TotalGainAnswersModel(
     DateModel(10, 10, 2016),
     SoldOrGivenAwayModel(false),
     None,
@@ -70,7 +70,7 @@ class PrivateResidenceReliefRequestConstructorSpec extends CommonPlaySpec{
     Some(HowBecameOwnerModel("Gifted")),
     None,
     AcquisitionValueModel(5000),
-    AcquisitionCostsModel(200),
+    Some(AcquisitionCostsModel(200)),
     DateModel(10, 10, 2000),
     None,
     None,
@@ -79,7 +79,7 @@ class PrivateResidenceReliefRequestConstructorSpec extends CommonPlaySpec{
     None
   )
 
-  val modelWithRebasedValue = TotalGainAnswersModel(
+  val modelWithRebasedValue: TotalGainAnswersModel = TotalGainAnswersModel(
     DateModel(10, 10, 2016),
     SoldOrGivenAwayModel(false),
     None,
@@ -88,7 +88,7 @@ class PrivateResidenceReliefRequestConstructorSpec extends CommonPlaySpec{
     Some(HowBecameOwnerModel("Gifted")),
     None,
     AcquisitionValueModel(5000),
-    AcquisitionCostsModel(200),
+    Some(AcquisitionCostsModel(200)),
     DateModel(10, 10, 2000),
     Some(RebasedValueModel(1000)),
     None,

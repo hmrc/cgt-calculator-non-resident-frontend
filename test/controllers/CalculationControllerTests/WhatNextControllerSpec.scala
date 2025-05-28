@@ -44,7 +44,7 @@ class WhatNextControllerSpec extends CommonPlaySpec with WithCommonFakeApplicati
   val whatNextView: whatNext = fakeApplication.injector.instanceOf[whatNext]
 
   def setupTarget(summary: TotalGainAnswersModel): WhatNextController = {
-    when(mockAnswersConstructor.getNRTotalGainAnswers(ArgumentMatchers.any()))
+    when(mockAnswersConstructor.getNRTotalGainAnswers(using ArgumentMatchers.any()))
       .thenReturn(Future.successful(summary))
 
     new WhatNextController(mockAnswersConstructor, mockMessagesControllerComponents, whatNextView)
@@ -59,7 +59,7 @@ class WhatNextControllerSpec extends CommonPlaySpec with WithCommonFakeApplicati
     None,
     None,
     AcquisitionValueModel(0),
-    AcquisitionCostsModel(0),
+    Some(AcquisitionCostsModel(0)),
     DateModel(7, 4, 2020),
     None,
     None,

@@ -31,7 +31,7 @@ import views.html.calculation.howBecameOwner
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class HowBecameOwnerController @Inject()(http: DefaultHttpClient,
+class HowBecameOwnerController @Inject()(val http: DefaultHttpClient,
                                          sessionCacheService: SessionCacheService,
                                          mcc: MessagesControllerComponents,
                                          howBecameOwnerView: howBecameOwner)(implicit ec: ExecutionContext)
@@ -50,7 +50,7 @@ class HowBecameOwnerController @Inject()(http: DefaultHttpClient,
 
     def successAction(model: HowBecameOwnerModel) = {
       for {
-        save <- sessionCacheService.saveFormData[HowBecameOwnerModel](KeystoreKeys.howBecameOwner, model)
+        _ <- sessionCacheService.saveFormData[HowBecameOwnerModel](KeystoreKeys.howBecameOwner, model)
         route <- routeRequest(model)
       } yield route
     }

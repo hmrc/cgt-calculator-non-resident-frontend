@@ -39,6 +39,6 @@ trait MarketDisposalValueForm {
         .verifying(errorNegative, isPositive)
         .verifying(errorDecimalPlaces, decimalPlacesCheck)
         .verifying(errorMax, maxCheck)
-    )(DisposalValueModel.apply)(DisposalValueModel.unapply)
+    )(DisposalValueModel.apply)(o=>Some(o.disposalValue))
     )
 }

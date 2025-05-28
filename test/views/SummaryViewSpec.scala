@@ -41,7 +41,7 @@ class SummaryViewSpec extends CommonPlaySpec with WithCommonFakeApplication with
     "supplied with a disposal date within the valid tax years" should {
       val totalTaxOwedModel = TotalTaxOwedModel(100000, 500, 20, None, None, 500, 500, None, None, None, None, 0, None, None, None, None, None, None, None)
       val taxYearModel: TaxYearModel = TaxYearModel("2016/17", isValidYear = true, "2016/17")
-      lazy val view = summaryView(totalTaxOwedModel, taxYearModel, Flat, 1000.0, 100, 100, "back-link", showUserResearchPanel = false, questionsForPrint = seqQuestionAnswers)(fakeRequest, mockMessage)
+      lazy val view = summaryView(totalTaxOwedModel, taxYearModel, Flat, 1000.0, 100, 100, "back-link", showUserResearchPanel = false, questionsForPrint = seqQuestionAnswers)(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of '${messages.Summary.title("2016 to 2017")}'" in {
@@ -122,7 +122,7 @@ class SummaryViewSpec extends CommonPlaySpec with WithCommonFakeApplication with
       }
 
       "should produce the same output when render and apply are called" in {
-        summaryView(totalTaxOwedModel, taxYearModel, Flat, 1000.0, 100, 100, "back-link", Some(BigDecimal(100.1)), BigDecimal(10000.0), showUserResearchPanel = false, questionsForPrint = seqQuestionAnswers)(fakeRequest, mockMessage) shouldBe
+        summaryView(totalTaxOwedModel, taxYearModel, Flat, 1000.0, 100, 100, "back-link", Some(BigDecimal(100.1)), BigDecimal(10000.0), showUserResearchPanel = false, questionsForPrint = seqQuestionAnswers)(using fakeRequest, mockMessage) shouldBe
           summaryView.render(totalTaxOwedModel, taxYearModel, Flat, 1000.0, 100, 100, "back-link", Some(BigDecimal(100.1)), BigDecimal(10000.0), showUserResearchPanel = false, questionsForPrint = seqQuestionAnswers, fakeRequest, mockMessage)
       }
     }
@@ -130,7 +130,7 @@ class SummaryViewSpec extends CommonPlaySpec with WithCommonFakeApplication with
     "supplied with a disposal date not within the valid tax years" should {
       val totalTaxOwedModel = TotalTaxOwedModel(500, 500, 20, None, None, 500, 500, None, None, None, None, 0, None, None, None, None, None, None, None)
       val taxYearModel: TaxYearModel = TaxYearModel("2018/19", isValidYear = false, "2017/18")
-      lazy val view = summaryView(totalTaxOwedModel, taxYearModel, Flat, 1000.0, 100, 100, "back-url", showUserResearchPanel = true, questionsForPrint = seqQuestionAnswers)(fakeRequest, mockMessage)
+      lazy val view = summaryView(totalTaxOwedModel, taxYearModel, Flat, 1000.0, 100, 100, "back-url", showUserResearchPanel = true, questionsForPrint = seqQuestionAnswers)(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "display a tax year warning" in {

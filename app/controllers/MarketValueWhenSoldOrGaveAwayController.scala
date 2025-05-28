@@ -33,8 +33,8 @@ import views.html.calculation.{marketValueGaveAway, marketValueSold}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class MarketValueWhenSoldOrGaveAwayController @Inject()(environment: Environment,
-                                                        http: DefaultHttpClient,
+class MarketValueWhenSoldOrGaveAwayController @Inject()(val environment: Environment,
+                                                        val http: DefaultHttpClient,
                                                         sessionCacheService: SessionCacheService,
                                                         mcc: MessagesControllerComponents,
                                                         marketValueSoldView: marketValueSold,

@@ -44,7 +44,7 @@ class CurrentIncomeActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
   val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents: MessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val currentIncomeView: currentIncome = fakeApplication.injector.instanceOf[currentIncome]
-  val pageTitle = s"${messages.question} - ${commonMessages.serviceName} - GOV.UK"
+  val pageTitle: String = s"${messages.question} - ${commonMessages.serviceName} - GOV.UK"
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
   class Setup {
     val controller = new CurrentIncomeController(
@@ -56,13 +56,13 @@ class CurrentIncomeActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
 
   def setupTarget(getData: Option[CurrentIncomeModel], getPropertyLivedIn: Option[PropertyLivedInModel] = None): CurrentIncomeController = {
 
-    when(mockSessionCacheService.fetchAndGetFormData[CurrentIncomeModel](ArgumentMatchers.anyString())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.fetchAndGetFormData[CurrentIncomeModel](ArgumentMatchers.anyString())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    when(mockSessionCacheService.fetchAndGetFormData[PropertyLivedInModel](ArgumentMatchers.anyString())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.fetchAndGetFormData[PropertyLivedInModel](ArgumentMatchers.anyString())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getPropertyLivedIn))
 
-    when(mockSessionCacheService.saveFormData[CurrentIncomeModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.saveFormData[CurrentIncomeModel](ArgumentMatchers.any(), ArgumentMatchers.any())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful("", ""))
 
     new CurrentIncomeController(mockSessionCacheService, mockMessagesControllerComponents, currentIncomeView)

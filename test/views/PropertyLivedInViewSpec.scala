@@ -39,7 +39,7 @@ class PropertyLivedInViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
 
     "supplied with no errors" should {
       lazy val form = PropertyLivedInForm.propertyLivedInForm
-      lazy val view = propertyLivedInView(form)(fakeRequest, mockMessage)
+      lazy val view = propertyLivedInView(form)(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       s"have a title of ${messages.title}" in {
@@ -170,7 +170,7 @@ class PropertyLivedInViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
     }
 
     "supplied with a filled form of 'Yes'" which {
-      lazy val view = propertyLivedInView(propertyLivedInForm.fill(PropertyLivedInModel(true)))(fakeRequest, mockMessage)
+      lazy val view = propertyLivedInView(propertyLivedInForm.fill(PropertyLivedInModel(true)))(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "for the option 'Yes'" should {
@@ -186,7 +186,7 @@ class PropertyLivedInViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
     "Property Lived In view with form errors" should {
 
       lazy val form = propertyLivedInForm.bind(Map("propertyLivedIn" -> ""))
-      lazy val view = propertyLivedInView(form)(fakeRequest, mockMessage)
+      lazy val view = propertyLivedInView(form)(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" which {

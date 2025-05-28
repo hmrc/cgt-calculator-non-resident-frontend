@@ -30,7 +30,7 @@ import views.html.calculation.noCapitalGainsTax
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
-class NoCapitalGainsTaxController @Inject()(http: DefaultHttpClient,
+class NoCapitalGainsTaxController @Inject()(val http: DefaultHttpClient,
                                             sessionCacheService: SessionCacheService,
                                             mcc: MessagesControllerComponents,
                                             noCapitalGainsTaxView: noCapitalGainsTax)

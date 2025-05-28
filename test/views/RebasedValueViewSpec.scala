@@ -33,13 +33,13 @@ class RebasedValueViewSpec extends CommonPlaySpec with WithCommonFakeApplication
   val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   lazy val rebasedValueView: rebasedValue = fakeApplication.injector.instanceOf[rebasedValue]
-  val pageTitle = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
+  val pageTitle: String = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
 
   "The rebased value view" when {
 
     "not supplied with a pre-existing stored model" should {
 
-      lazy val view = rebasedValueView(rebasedValueForm, "google.com")(fakeRequest, mockMessage)
+      lazy val view = rebasedValueView(rebasedValueForm, "google.com")(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       s"Have the title $pageTitle" in {
@@ -137,7 +137,7 @@ class RebasedValueViewSpec extends CommonPlaySpec with WithCommonFakeApplication
     "supplied with a form with errors" should {
 
       lazy val form = rebasedValueForm.bind(Map("rebasedValueAmt" -> ""))
-      lazy val view = rebasedValueView(form, "google.com")(fakeRequest, mockMessage)
+      lazy val view = rebasedValueView(form, "google.com")(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

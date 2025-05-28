@@ -16,14 +16,24 @@
 
 package common.nonresident
 
-import julienrf.json.derived
 import play.api.data.FormError
 import play.api.data.format.Formatter
-import play.api.libs.json.OFormat
+import play.api.libs.json._
 
 
 object CalculationType {
-  implicit val jsonFormat: OFormat[CalculationType] = derived.oformat[CalculationType]()
+
+  implicit val jsonFormat: Format[CalculationType] = new Format[CalculationType] {
+    override def reads(json: JsValue): JsResult[CalculationType] = json match {
+      case JsString("flat")               => JsSuccess(Flat)
+      case JsString("rebased")             => JsSuccess(Rebased)
+      case JsString("timeApportioned") => JsSuccess(TimeApportioned)
+      case _                                    => JsError("Invalid Calculation type")
+    }
+
+    override def writes(o: CalculationType): JsValue = JsString(o.toString)
+  }
+
 
   implicit val formatter: Formatter[CalculationType] = new Formatter[CalculationType] {
 

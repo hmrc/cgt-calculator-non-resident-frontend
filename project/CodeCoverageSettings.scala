@@ -33,7 +33,8 @@ object CodeCoverageSettings {
     "controllers.SessionCacheController",
     "com.kenshoo.play.*",
     "controllers.utils.javascript.*",
-    "controllers.javascript.*"
+    "controllers.javascript.*",
+    ".*models.*"
   )
   
   val settings: Seq[Def.Setting[_ >: String with Double with Boolean]] = Seq(

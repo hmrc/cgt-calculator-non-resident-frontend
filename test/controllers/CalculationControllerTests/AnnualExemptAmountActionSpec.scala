@@ -70,29 +70,29 @@ class AnnualExemptAmountActionSpec extends CommonPlaySpec with WithCommonFakeApp
                  ): AnnualExemptAmountController = {
 
     when(mockSessionCacheService.fetchAndGetFormData[DateModel](
-      ArgumentMatchers.eq(KeystoreKeys.disposalDate))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      ArgumentMatchers.eq(KeystoreKeys.disposalDate))(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(disposalDate))
 
     when(mockSessionCacheService.fetchAndGetFormData[AnnualExemptAmountModel](
-      ArgumentMatchers.eq(KeystoreKeys.annualExemptAmount))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      ArgumentMatchers.eq(KeystoreKeys.annualExemptAmount))(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
     when(mockSessionCacheService.fetchAndGetFormData[PreviousLossOrGainModel](ArgumentMatchers.eq(KeystoreKeys.previousLossOrGain))
-      (ArgumentMatchers.any(), ArgumentMatchers.any())).thenReturn(Future.successful(previousLossOrGain))
+      (using ArgumentMatchers.any(), ArgumentMatchers.any())).thenReturn(Future.successful(previousLossOrGain))
 
-    when(mockSessionCacheService.fetchAndGetFormData[HowMuchGainModel](ArgumentMatchers.eq(KeystoreKeys.howMuchGain))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.fetchAndGetFormData[HowMuchGainModel](ArgumentMatchers.eq(KeystoreKeys.howMuchGain))(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(howMuchGain))
 
-    when(mockSessionCacheService.fetchAndGetFormData[HowMuchLossModel](ArgumentMatchers.eq(KeystoreKeys.howMuchLoss))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.fetchAndGetFormData[HowMuchLossModel](ArgumentMatchers.eq(KeystoreKeys.howMuchLoss))(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(howMuchLoss))
 
-    when(mockCalcConnector.getFullAEA(ArgumentMatchers.anyInt())(ArgumentMatchers.any()))
+    when(mockCalcConnector.getFullAEA(ArgumentMatchers.anyInt())(using ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(BigDecimal(11100))))
 
-    when(mockCalcConnector.getTaxYear(ArgumentMatchers.anyString())(ArgumentMatchers.any()))
+    when(mockCalcConnector.getTaxYear(ArgumentMatchers.anyString())(using ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(TaxYearModel("2016-5-6", isValidYear = true, "2016/17"))))
 
-    when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(("", "")))
 
     new AnnualExemptAmountController(mockCalcConnector, mockSessionCacheService, mockMessagesControllerComponents, annualExemptAmountView) {

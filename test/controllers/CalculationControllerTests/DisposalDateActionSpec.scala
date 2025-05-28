@@ -44,7 +44,7 @@ class DisposalDateActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
   val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents: MessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val disposalDateView: disposalDate = fakeApplication.injector.instanceOf[disposalDate]
-  val pageTitle = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
+  val pageTitle: String = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
 
   class Setup {
@@ -59,13 +59,13 @@ class DisposalDateActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
 
   def setupTarget(getData: Option[DateModel], taxYearModel: Option[TaxYearModel] = None): DisposalDateController = {
 
-    when(mockSessionCacheService.fetchAndGetFormData[DateModel](ArgumentMatchers.anyString())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.fetchAndGetFormData[DateModel](ArgumentMatchers.anyString())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    when(mockSessionCacheService.saveFormData[DateModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.saveFormData[DateModel](ArgumentMatchers.any(), ArgumentMatchers.any())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(("", "")))
 
-    when(mockCalcConnector.getTaxYear(ArgumentMatchers.any())(ArgumentMatchers.any()))
+    when(mockCalcConnector.getTaxYear(ArgumentMatchers.any())(using ArgumentMatchers.any()))
       .thenReturn(Future.successful(taxYearModel))
 
     new DisposalDateController(mockHttp, mockCalcConnector, mockSessionCacheService, mockMessagesControllerComponents, disposalDateView)

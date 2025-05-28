@@ -34,6 +34,6 @@ object RebasedValueForm {
         .verifying("calc.nonResident.rebasedValue.errorNegative", data => isPositive(data))
         .verifying("calc.nonResident.rebasedValue.errorDecimalPlaces", data => decimalPlacesCheck(data))
         .verifying("calc.nonResident.rebasedValue.errorMax", maxCheck)
-    )(RebasedValueModel.apply)(RebasedValueModel.unapply)
+    )(RebasedValueModel.apply)(o=>Some(o.rebasedValueAmt))
   )
 }

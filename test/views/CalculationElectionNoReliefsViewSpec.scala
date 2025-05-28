@@ -33,7 +33,7 @@ class CalculationElectionNoReliefsViewSpec extends CommonPlaySpec with WithCommo
   val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   lazy val calculationElectionNoReliefsView: calculationElectionNoReliefs = fakeApplication.injector.instanceOf[calculationElectionNoReliefs]
-  lazy val pageTitle = s"""${messages.title} - ${commonMessages.serviceName} - GOV.UK"""
+  lazy val pageTitle: String = s"""${messages.title} - ${commonMessages.serviceName} - GOV.UK"""
 
 
   "Calculation Election No Reliefs View" when {
@@ -47,7 +47,7 @@ class CalculationElectionNoReliefsViewSpec extends CommonPlaySpec with WithCommo
 
     "supplied with no errors and lowest tax owed is rebased method" should {
 
-      lazy val view = calculationElectionNoReliefsView(calculationElectionForm, rebasedLowestTaxOwed)(fakeRequest, mockMessage)
+      lazy val view = calculationElectionNoReliefsView(calculationElectionForm, rebasedLowestTaxOwed)(using fakeRequest, mockMessage)
       lazy val doc = Jsoup.parse(view.body)
 
       "have a heading" which {
@@ -129,7 +129,7 @@ class CalculationElectionNoReliefsViewSpec extends CommonPlaySpec with WithCommo
           ("timeApportioned", "2000", "description", Messages("calc.calculationElection.description.time"), None, None)
         )
 
-      lazy val view = calculationElectionNoReliefsView(calculationElectionForm, flatLowestTaxOwed)(fakeRequest, mockMessage)
+      lazy val view = calculationElectionNoReliefsView(calculationElectionForm, flatLowestTaxOwed)(using fakeRequest, mockMessage)
       lazy val doc = Jsoup.parse(view.body)
 
       "have text in a paragraph" which {

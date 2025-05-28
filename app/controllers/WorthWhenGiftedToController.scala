@@ -31,7 +31,7 @@ import views.html.calculation.worthWhenGiftedTo
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class WorthWhenGiftedToController @Inject()(http: DefaultHttpClient,
+class WorthWhenGiftedToController @Inject()(val http: DefaultHttpClient,
                                             sessionCacheService: SessionCacheService,
                                             mcc: MessagesControllerComponents,
                                             worthWhenGiftedToView: worthWhenGiftedTo)(implicit ec: ExecutionContext)

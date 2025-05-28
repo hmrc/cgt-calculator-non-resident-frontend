@@ -33,7 +33,7 @@ class NoTaxToPayViewSpec extends CommonPlaySpec with WithCommonFakeApplication w
   lazy val noTaxToPayView: noTaxToPay = fakeApplication.injector.instanceOf[noTaxToPay]
 
   "No Tax to Pay View when gifted to spouse" should {
-    lazy val view = noTaxToPayView(forCharity = false)(fakeRequest, mockMessage)
+    lazy val view = noTaxToPayView(forCharity = false)(using fakeRequest, mockMessage)
     lazy val doc = Jsoup.parse(view.body)
 
     "have a charset of UTF-8" in {
@@ -73,7 +73,7 @@ class NoTaxToPayViewSpec extends CommonPlaySpec with WithCommonFakeApplication w
   }
 
   "No Tax to Pay View when gifted to charity" should {
-    lazy val view = noTaxToPayView(forCharity = true)(fakeRequest, mockMessage)
+    lazy val view = noTaxToPayView(forCharity = true)(using fakeRequest, mockMessage)
     lazy val doc = Jsoup.parse(view.body)
 
     "have text explaining why tax is not owed" in {

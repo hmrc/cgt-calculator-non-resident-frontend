@@ -22,14 +22,14 @@ import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import javax.inject.Inject
 
 trait AppConfig {
-  val assetsPrefix: String
-  val contactFormServiceIdentifier: String
-  val reportAProblemPartialUrl: String
-  val reportAProblemNonJSUrl: String
-  val nrIFormLink: String
-  val govUkLink: String
-  val urBannerLink: String
-  val isWelshTranslationAvailable: Boolean
+  lazy val assetsPrefix: String
+  lazy val contactFormServiceIdentifier: String
+  lazy val reportAProblemPartialUrl: String
+  lazy val reportAProblemNonJSUrl: String
+  lazy val nrIFormLink: String
+  lazy val govUkLink: String
+  lazy val urBannerLink: String
+  lazy val isWelshTranslationAvailable: Boolean
 }
 
 class ApplicationConfig @Inject()(val servicesConfig: ServicesConfig,
@@ -41,8 +41,8 @@ class ApplicationConfig @Inject()(val servicesConfig: ServicesConfig,
   lazy val assetsPrefix: String = loadConfig("assets.url") + loadConfig("assets.version")
 
   lazy val contactFormServiceIdentifier = "CGT"
-  lazy val reportAProblemPartialUrl = s"$contactFrontendService/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
-  lazy val reportAProblemNonJSUrl = s"$contactFrontendService/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
+  lazy val reportAProblemPartialUrl: String = s"$contactFrontendService/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
+  lazy val reportAProblemNonJSUrl: String = s"$contactFrontendService/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
 
   lazy val nrIFormLink: String = loadConfig("links.non-resident-iForm")
   lazy val nrReportServiceLink: String = loadConfig("links.non-resident-report-service")

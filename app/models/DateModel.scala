@@ -17,36 +17,31 @@
 package models
 
 import common.Dates
-import play.api.libs.json.{JsValue, Json, OFormat, Writes}
-
+import play.api.libs.json.{Json, JsValue, OFormat, Writes}
 import java.time.LocalDate
-import scala.util.{Success, Try}
+import scala.util.{Try, Success}
 
 case class DateModel(day: Int, month: Int, year: Int) {
 
-  def isDateAfter(referenceDate: DateModel): Boolean = {
+  def isDateAfter(referenceDate: DateModel): Boolean =
     (year > referenceDate.year) ||
-    (year == referenceDate.year && month > referenceDate.month) ||
-    (year == referenceDate.year && month == referenceDate.month && day > referenceDate.day)
-  }
+      (year == referenceDate.year && month > referenceDate.month) ||
+      (year == referenceDate.year && month == referenceDate.month && day > referenceDate.day)
 }
 
 object DateModel {
-  implicit val format: OFormat[DateModel] = Json.format[DateModel]
+  given OFormat[DateModel] = Json.format[DateModel]
 
-  implicit val createDate: DateModel => Option[LocalDate] = model => {
-    val dateFormatter = Dates.formatter
-    Try {
-      LocalDate.parse(s"${model.day}/${model.month}/${model.year}", dateFormatter)
-    } match {
-      case Success(date) => Some(date)
-      case _ => None
-    }
-  }
+  val postWrites: Writes[DateModel] = (model: DateModel) => Json.toJson(LocalDate.of(model.year, model.month, model.day))
 
-  val postWrites: Writes[DateModel] = new Writes[DateModel] {
-    override def writes(model: DateModel): JsValue = {
-      Json.toJson(LocalDate.of(model.year, model.month, model.day))
-    }
-  }
+  given Conversion[DateModel, Option[LocalDate]] with
+    def apply(model: DateModel): Option[LocalDate] =
+      val dateFormatter = Dates.formatter
+      Try {
+        LocalDate.parse(s"${model.day}/${model.month}/${model.year}", dateFormatter)
+      } match {
+        case Success(date) => Some(date)
+        case _ => None
+
+      }
 }

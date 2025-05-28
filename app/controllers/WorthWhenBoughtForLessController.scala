@@ -31,7 +31,7 @@ import views.html.calculation.worthWhenBoughtForLess
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class WorthWhenBoughtForLessController @Inject()(http: DefaultHttpClient,
+class WorthWhenBoughtForLessController @Inject()(val http: DefaultHttpClient,
                                                  sessionCacheService: SessionCacheService,
                                                  mcc: MessagesControllerComponents,
                                                  worthWhenBoughtForLessView: worthWhenBoughtForLess)(implicit ec: ExecutionContext)

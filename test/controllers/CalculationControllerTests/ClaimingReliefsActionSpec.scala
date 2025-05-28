@@ -45,7 +45,7 @@ class ClaimingReliefsActionSpec extends CommonPlaySpec with WithCommonFakeApplic
   val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents: MessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val claimingReliefsView: claimingReliefs = fakeApplication.injector.instanceOf[claimingReliefs]
-  lazy val pageTitle = s"""${messages.title} - ${commonMessages.serviceName} - GOV.UK"""
+  lazy val pageTitle: String = s"""${messages.title} - ${commonMessages.serviceName} - GOV.UK"""
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
   class Setup {
     val controller = new ClaimingReliefsController(
@@ -58,13 +58,13 @@ class ClaimingReliefsActionSpec extends CommonPlaySpec with WithCommonFakeApplic
   def setupTarget(model: Option[ClaimingReliefsModel]): ClaimingReliefsController = {
 
     when(mockSessionCacheService.fetchAndGetFormData[ClaimingReliefsModel](ArgumentMatchers.eq(NonResidentKeys.claimingReliefs))
-      (ArgumentMatchers.any(), ArgumentMatchers.any()))
+      (using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(model))
 
-    when(mockSessionCacheService.saveFormData[ClaimingReliefsModel](ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.saveFormData[ClaimingReliefsModel](ArgumentMatchers.any(), ArgumentMatchers.any())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(("", "")))
 
-    when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(("", "")))
 
     new ClaimingReliefsController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, claimingReliefsView) {

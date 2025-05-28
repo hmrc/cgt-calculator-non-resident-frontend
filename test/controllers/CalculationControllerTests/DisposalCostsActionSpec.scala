@@ -43,7 +43,7 @@ class DisposalCostsActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
   val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents: MessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val disposalCostsView: disposalCosts = fakeApplication.injector.instanceOf[disposalCosts]
-  val pageTitle = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
+  val pageTitle: String = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
 
   class Setup {
     val controller = new DisposalCostsController(
@@ -57,17 +57,17 @@ class DisposalCostsActionSpec extends CommonPlaySpec with WithCommonFakeApplicat
                   soldOrGivenModel: Option[SoldOrGivenAwayModel],
                   soldForLessModel: Option[SoldForLessModel]): DisposalCostsController = {
 
-    when(mockSessionCacheService.fetchAndGetFormData[DisposalCostsModel](ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.fetchAndGetFormData[DisposalCostsModel](ArgumentMatchers.any())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
     when(mockSessionCacheService.fetchAndGetFormData[SoldOrGivenAwayModel](
-      ArgumentMatchers.eq(KeystoreKeys.soldOrGivenAway))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      ArgumentMatchers.eq(KeystoreKeys.soldOrGivenAway))(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(soldOrGivenModel))
 
-    when(mockSessionCacheService.fetchAndGetFormData[SoldForLessModel](ArgumentMatchers.eq(KeystoreKeys.soldForLess))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.fetchAndGetFormData[SoldForLessModel](ArgumentMatchers.eq(KeystoreKeys.soldForLess))(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(soldForLessModel))
 
-    when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(("", "")))
 
     new DisposalCostsController(mockSessionCacheService, mockMessagesControllerComponents, disposalCostsView)

@@ -32,11 +32,11 @@ class WhoDidYouGiveItToViewSpec extends CommonPlaySpec with WithCommonFakeApplic
   val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   val whoDidYouGiveItToView: whoDidYouGiveItTo = fakeApplication.injector.instanceOf[whoDidYouGiveItTo]
-  val pageTitle = s"""${messages.title} - ${commonMessages.serviceName} - GOV.UK"""
+  val pageTitle: String = s"""${messages.title} - ${commonMessages.serviceName} - GOV.UK"""
 
   "Property Recipient view" should {
 
-    lazy val view = whoDidYouGiveItToView(whoDidYouGiveItToForm)(fakeRequest, mockMessage)
+    lazy val view = whoDidYouGiveItToView(whoDidYouGiveItToForm)(using fakeRequest, mockMessage)
     lazy val doc = Jsoup.parse(view.body)
 
     "have a charset of UTF-8" in {
@@ -120,7 +120,7 @@ class WhoDidYouGiveItToViewSpec extends CommonPlaySpec with WithCommonFakeApplic
 
   "WhoDidYouGiveItToView with form with errors" should {
     lazy val form = whoDidYouGiveItToForm.bind(Map("whoDidYouGiveItTo" -> ""))
-    lazy val view = whoDidYouGiveItToView(form)(fakeRequest, mockMessage)
+    lazy val view = whoDidYouGiveItToView(form)(using fakeRequest, mockMessage)
     lazy val doc = Jsoup.parse(view.body)
 
     "display an error summary message regarding incorrect value being inputted" in {

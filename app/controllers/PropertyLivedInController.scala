@@ -32,7 +32,7 @@ import views.html.calculation.propertyLivedIn
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class PropertyLivedInController @Inject()(http: DefaultHttpClient,
+class PropertyLivedInController @Inject()(val http: DefaultHttpClient,
                                           sessionCacheService: SessionCacheService,
                                           mcc: MessagesControllerComponents,
                                           propertyLivedInView: propertyLivedIn)
@@ -60,7 +60,7 @@ class PropertyLivedInController @Inject()(http: DefaultHttpClient,
 
     def successAction(model: PropertyLivedInModel) = {
       (for {
-        save <- sessionCacheService.saveFormData(keystoreKeys.propertyLivedIn, model)
+        _ <- sessionCacheService.saveFormData(keystoreKeys.propertyLivedIn, model)
         route <- routeRequest(model)
       } yield route).recoverToStart
     }

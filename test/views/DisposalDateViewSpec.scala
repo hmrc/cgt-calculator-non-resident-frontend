@@ -38,16 +38,16 @@ class DisposalDateViewSpec extends CommonPlaySpec with WithCommonFakeApplication
   lazy val cyMockMessage: Messages = api.preferred(Seq(
     welshLanguage
   ))
-  lazy val pageTitle = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
+  lazy val pageTitle: String = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
 
   "The Disposal Date View" should {
 
     "return some HTML" which {
 
-      lazy val view = disposalDateView(disposalDateForm)(fakeRequest, mockMessage, Lang("en"))
+      lazy val view = disposalDateView(disposalDateForm)(using fakeRequest, mockMessage, Lang("en"))
       lazy val document = Jsoup.parse(view.body)
 
-      lazy val welshView = disposalDateView(disposalDateForm)(fakeRequest, cyMockMessage, welshLanguage)
+      lazy val welshView = disposalDateView(disposalDateForm)(using fakeRequest, cyMockMessage, welshLanguage)
       lazy val welshDocument = Jsoup.parse(welshView.body)
 
       s"have the title '$pageTitle" in {
@@ -109,7 +109,7 @@ class DisposalDateViewSpec extends CommonPlaySpec with WithCommonFakeApplication
 
     "supplied with errors" should {
       lazy val form = disposalDateForm.bind(Map("disposalDateDay" -> "a"))
-      lazy val view = disposalDateView(form)(fakeRequest, mockMessage, Lang("en"))
+      lazy val view = disposalDateView(form)(using fakeRequest, mockMessage, Lang("en"))
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

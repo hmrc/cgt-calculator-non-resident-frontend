@@ -27,7 +27,7 @@ object AcquisitionCostsModel {
 
 
   def postWrites(oCostsAtLegislationStartModel: Option[CostsAtLegislationStartModel], acquisitionDateModel: DateModel):
-    Writes[Option[AcquisitionCostsModel]] = (o: Option[AcquisitionCostsModel]) => {
+    Writes[Option[AcquisitionCostsModel]] = (o: Option[AcquisitionCostsModel] )=> {
     (o, oCostsAtLegislationStartModel) match {
       case (_, Some(value)) if includeLegislationCosts(value, acquisitionDateModel) =>
         Json.obj(("acquisitionCosts", value.costs.get))

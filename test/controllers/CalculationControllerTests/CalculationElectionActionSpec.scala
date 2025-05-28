@@ -52,8 +52,8 @@ class CalculationElectionActionSpec
   val mockMessagesControllerComponents: MessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val calculationElectionView: calculationElection = fakeApplication.injector.instanceOf[calculationElection]
   val calculationElectionNoReliefsView: calculationElectionNoReliefs = fakeApplication.injector.instanceOf[calculationElectionNoReliefs]
-  val calculationElectionPageTitle = s"""${messages.heading} - ${commonMessages.serviceName} - GOV.UK"""
-  val calculationElectionNoReliefsPageTitle = s"""${nRMessages.title} - ${commonMessages.serviceName} - GOV.UK"""
+  val calculationElectionPageTitle: String = s"""${messages.heading} - ${commonMessages.serviceName} - GOV.UK"""
+  val calculationElectionNoReliefsPageTitle: String = s"""${nRMessages.title} - ${commonMessages.serviceName} - GOV.UK"""
 
   class Setup {
     val controller = new CalculationElectionController(
@@ -77,49 +77,49 @@ class CalculationElectionActionSpec
                   claimingReliefs: Boolean = true
                  ): CalculationElectionController = {
 
-    when(mockSessionCacheService.fetchAndGetFormData[OtherReliefsModel](ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.fetchAndGetFormData[OtherReliefsModel](ArgumentMatchers.any())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(OtherReliefsModel(1000))))
 
     when(mockSessionCacheService.fetchAndGetFormData[CalculationElectionModel](
-      ArgumentMatchers.eq(KeystoreKeys.calculationElection))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      ArgumentMatchers.eq(KeystoreKeys.calculationElection))(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    when(mockAnswersConstructor.getNRTotalGainAnswers(ArgumentMatchers.any()))
+    when(mockAnswersConstructor.getNRTotalGainAnswers(using ArgumentMatchers.any()))
       .thenReturn(Future.successful(TestModels.businessScenarioFiveModel))
 
-    when(mockCalcConnector.calculateTotalGain(ArgumentMatchers.any())(ArgumentMatchers.any()))
+    when(mockCalcConnector.calculateTotalGain(ArgumentMatchers.any())(using ArgumentMatchers.any()))
       .thenReturn(Future.successful(totalGainResultsModel))
 
     when(mockDefaultCalElecConstructor.generateElection(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(contentElements))
 
-    when(mockAnswersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers(ArgumentMatchers.any()))
+    when(mockAnswersConstructor.getPersonalDetailsAndPreviousCapitalGainsAnswers(using ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(finalSummaryModel)))
 
-    when(mockCalcConnector.getFullAEA(ArgumentMatchers.any())(ArgumentMatchers.any()))
+    when(mockCalcConnector.getFullAEA(ArgumentMatchers.any())(using ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(BigDecimal(11000))))
 
     when(mockCalcConnector.calculateNRCGTTotalTax(
       ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any(),
-      ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any()))
+      ArgumentMatchers.any(), ArgumentMatchers.any())(using ArgumentMatchers.any()))
       .thenReturn(Future.successful(taxOwedResult))
 
-    when(mockCalcConnector.getTaxYear(ArgumentMatchers.any())(ArgumentMatchers.any()))
+    when(mockCalcConnector.getTaxYear(ArgumentMatchers.any())(using ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(TaxYearModel("2015/16", isValidYear = true, "2015/16"))))
 
     when(mockSessionCacheService.fetchAndGetFormData[ClaimingReliefsModel](
-      ArgumentMatchers.eq(KeystoreKeys.claimingReliefs))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      ArgumentMatchers.eq(KeystoreKeys.claimingReliefs))(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(ClaimingReliefsModel(claimingReliefs))))
 
     when(mockSessionCacheService.fetchAndGetFormData[PrivateResidenceReliefModel](
-      ArgumentMatchers.eq(KeystoreKeys.privateResidenceRelief))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      ArgumentMatchers.eq(KeystoreKeys.privateResidenceRelief))(using ArgumentMatchers.any(), ArgumentMatchers.any()))
     .thenReturn(Future.successful(Some(PrivateResidenceReliefModel("Yes", Some(0)))))
 
-    when(mockCalcConnector.calculateTaxableGainAfterPRR(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any()))
+    when(mockCalcConnector.calculateTaxableGainAfterPRR(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any())(using ArgumentMatchers.any()))
     .thenReturn(Future.successful(Some(CalculationResultsWithPRRModel(GainsAfterPRRModel(0, 0, 0), None, None))))
 
     when(mockSessionCacheService.fetchAndGetFormData[PropertyLivedInModel](ArgumentMatchers.eq(KeystoreKeys.propertyLivedIn))
-      (ArgumentMatchers.any(), ArgumentMatchers.any()))
+      (using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(PropertyLivedInModel(true))))
 
     new CalculationElectionController(mockCalcConnector, mockSessionCacheService, mockAnswersConstructor, mockDefaultCalElecConstructor, mockMessagesControllerComponents,

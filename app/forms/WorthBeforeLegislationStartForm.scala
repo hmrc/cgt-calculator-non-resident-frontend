@@ -34,7 +34,7 @@ object WorthBeforeLegislationStartForm {
         .verifying("calc.worthBeforeLegislationStart.errorNegative", isPositive)
         .verifying("calc.worthBeforeLegislationStart.errorDecimalPlaces", decimalPlacesCheck)
         .verifying("calc.worthBeforeLegislationStart.errorMax", maxCheck)
-    )(WorthBeforeLegislationStartModel.apply)(WorthBeforeLegislationStartModel.unapply)
+    )(WorthBeforeLegislationStartModel.apply)(o=>Some(o.worthBeforeLegislationStart))
   )
 
 }

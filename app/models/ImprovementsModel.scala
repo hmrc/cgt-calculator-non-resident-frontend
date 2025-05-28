@@ -30,12 +30,10 @@ object ImprovementsModel {
   }
 
   private def improvementsAftWrites(oRebasedValueModel: Option[RebasedValueModel], acquisitionDateModel: DateModel):
-    Writes[ImprovementsModel] = (o: ImprovementsModel) => {
-    o match {
-      case ImprovementsModel(_, Some(value)) if includeRebasedValuesInCalculation(oRebasedValueModel, acquisitionDateModel) =>
-        Json.obj(("improvementsAfterTaxStarted", value))
-      case _ => Json.obj()
-    }
+    Writes[ImprovementsModel] = {
+    case ImprovementsModel(_, Some(value)) if includeRebasedValuesInCalculation(oRebasedValueModel, acquisitionDateModel) =>
+      Json.obj(("improvementsAfterTaxStarted", value))
+    case _ => Json.obj()
   }
 
   private val improvementsWrites = new Writes[ImprovementsModel] {

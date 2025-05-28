@@ -23,7 +23,7 @@ import play.api.data.{FieldMapping, FormError}
 object Formatters {
 
   def text(errorKey: String = "error.required", optional: Boolean = false): FieldMapping[String] =
-    of(stringFormatter(errorKey, optional))
+    of(using stringFormatter(errorKey, optional))
 
   private def stringFormatter(errorKey: String, optional: Boolean): Formatter[String] = new Formatter[String] {
 

@@ -57,10 +57,10 @@ class RebasedCostsActionSpec extends CommonPlaySpec with WithCommonFakeApplicati
   def setupTarget(getData: Option[RebasedCostsModel]): RebasedCostsController = {
 
     when(mockSessionCacheService.fetchAndGetFormData[RebasedCostsModel](
-      ArgumentMatchers.eq(KeystoreKeys.rebasedCosts))(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      ArgumentMatchers.eq(KeystoreKeys.rebasedCosts))(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(getData))
 
-    when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(("", "")))
 
     new RebasedCostsController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, rebasedCostsView)

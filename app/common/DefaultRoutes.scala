@@ -21,7 +21,7 @@ import controllers.routes
 object DefaultRoutes {
 
   val homeUrl: String = routes.DisposalDateController.disposalDate.url
-  val restartUrl: String = routes.SummaryController.restart.url
+  val restartUrl: String = routes.SummaryController.restart().url
   val missingDataRoute: String = homeUrl
 
 }

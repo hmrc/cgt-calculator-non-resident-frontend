@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package common
+package common.nonresident
 
-import common.nonresident.CustomerTypeKeys
+import common.CommonPlaySpec
 
 class CustomerTypeKeysSpec extends CommonPlaySpec {
   "CustomerTypeKeys" should {

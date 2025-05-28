@@ -37,7 +37,7 @@ class RecoverableFutureSpec extends AnyWordSpec with ScalaFutures with Matchers 
       implicit val request: Request[AnyContent] = FakeRequest()
 
       val future: Future[Result] = Future.failed(new NoSuchElementException("test message")).recoverToStart
-      val url = controllers.utils.routes.TimeoutController.timeout.url
+      val url = controllers.utils.routes.TimeoutController.timeout().url
 
       whenReady(future.failed) {
         case ApplicationException(result, message) =>

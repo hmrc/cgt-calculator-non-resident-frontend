@@ -38,21 +38,21 @@ class AcquisitionCostsModelSpec extends CommonPlaySpec {
        val value = CostsAtLegislationStartModel("Yes", Some(100))
        val model = AcquisitionCostsModel(1000)
 
-         AcquisitionCostsModel.postWrites(Some(value), beforeLegislationDate).writes(model) shouldBe
+         AcquisitionCostsModel.postWrites(Some(value), beforeLegislationDate).writes(Some(model)) shouldBe
           Json.obj(("acquisitionCosts", 100))
       }
       "AcquisitionCostsModel has acquisitionCostsAmt defined" in {
         val value = CostsAtLegislationStartModel("No", Some(100))
         val model = AcquisitionCostsModel(1000)
 
-        AcquisitionCostsModel.postWrites(Some(value), beforeLegislationDate).writes(model) shouldBe
+        AcquisitionCostsModel.postWrites(Some(value), beforeLegislationDate).writes(Some(model)) shouldBe
           Json.obj(("acquisitionCosts", 0))
       }
       "AcquisitionCostsModel has costsLegislation = 'No' and acquisitionCostsAmt defined" in {
         val value = CostsAtLegislationStartModel("No", Some(100))
         val model = AcquisitionCostsModel(1000)
 
-        AcquisitionCostsModel.postWrites(Some(value), afterLegislationDate).writes(model) shouldBe
+        AcquisitionCostsModel.postWrites(Some(value), afterLegislationDate).writes(Some(model)) shouldBe
           Json.obj(("acquisitionCosts", 1000))
       }
 
@@ -80,13 +80,13 @@ class AcquisitionCostsModelSpec extends CommonPlaySpec {
       "costsLegislation not defined and acquisitionCostModel is defined and date is before legislation date" in {
         val model = AcquisitionCostsModel(1000)
 
-        AcquisitionCostsModel.postWrites(None, beforeLegislationDate).writes(model) shouldBe
+        AcquisitionCostsModel.postWrites(None, beforeLegislationDate).writes(Some(model)) shouldBe
           Json.obj(("acquisitionCosts", 0))
       }
       "costsLegislation not defined and acquisitionCostModel is defined and date is after legislation date" in {
         val model = AcquisitionCostsModel(1000)
 
-        AcquisitionCostsModel.postWrites(None, afterLegislationDate).writes(model) shouldBe
+        AcquisitionCostsModel.postWrites(None, afterLegislationDate).writes(Some(model)) shouldBe
           Json.obj(("acquisitionCosts", 1000))
       }
       "costsLegislation not defined and acquisitionCostModel is not defined" in {

@@ -60,9 +60,9 @@ class WhoDidYouGiveItToControllerSpec extends CommonPlaySpec with WithCommonFake
   def setupTarget(getData: Option[WhoDidYouGiveItToModel]): WhoDidYouGiveItToController = {
 
     when(mockSessionCacheService.fetchAndGetFormData[WhoDidYouGiveItToModel](ArgumentMatchers.eq(keystoreKeys.whoDidYouGiveItTo))
-    (ArgumentMatchers.any(), ArgumentMatchers.any())).thenReturn(Future.successful(getData))
+    (using ArgumentMatchers.any(), ArgumentMatchers.any())).thenReturn(Future.successful(getData))
 
-    when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+    when(mockSessionCacheService.saveFormData(ArgumentMatchers.anyString(), ArgumentMatchers.any())(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(("", "")))
 
     new WhoDidYouGiveItToController(mockHttp, mockSessionCacheService, mockMessagesControllerComponents, noTaxToPayView, whoDidYouGiveItToView)
@@ -190,7 +190,7 @@ class WhoDidYouGiveItToControllerSpec extends CommonPlaySpec with WithCommonFake
         }
 
         "return you to the session timeout page" in {
-          redirectLocation(result)(timeout = mock[Timeout]).get should include ("/calculate-your-capital-gains/non-resident/session-timeout")
+          redirectLocation(result)(using timeout = mock[Timeout]).get should include ("/calculate-your-capital-gains/non-resident/session-timeout")
         }
       }
     }

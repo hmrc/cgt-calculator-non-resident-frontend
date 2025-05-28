@@ -35,7 +35,7 @@ class RebasedCostsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
   "The rebased value view" when {
 
     "not supplied with a pre-existing stored model" should {
-      lazy val view = rebasedCostsView(rebasedCostsForm)(fakeRequest, mockMessage)
+      lazy val view = rebasedCostsView(rebasedCostsForm)(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       s"Have the title ${messages.RebasedCosts.question}" in {
@@ -128,7 +128,7 @@ class RebasedCostsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
         "hasRebasedCosts" -> "Yes",
         "rebasedCosts" -> ""
       ))
-      lazy val view = rebasedCostsView(form)(fakeRequest, mockMessage)
+      lazy val view = rebasedCostsView(form)(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {

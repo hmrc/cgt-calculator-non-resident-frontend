@@ -33,13 +33,13 @@ class OtherPropertiesViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
   val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   lazy val otherPropertiesView: otherProperties = fakeApplication.injector.instanceOf[otherProperties]
-  lazy val pageTitle = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
+  lazy val pageTitle: String = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
 
   "The other properties view" should {
 
     "return some HTML that, when the hidden question is displayed" should {
 
-      lazy val view = otherPropertiesView(otherPropertiesForm)(fakeRequest, mockMessage)
+      lazy val view = otherPropertiesView(otherPropertiesForm)(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       s"have the title '$pageTitle'" in {
@@ -88,7 +88,7 @@ class OtherPropertiesViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
 
     "return some HTML that, when the hidden question is not displayed" should {
 
-      lazy val view = otherPropertiesView(otherPropertiesForm)(fakeRequest, mockMessage)
+      lazy val view = otherPropertiesView(otherPropertiesForm)(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       s"have the title '$pageTitle'" in {
@@ -107,7 +107,7 @@ class OtherPropertiesViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
     "when passed a form with errors" should {
 
       lazy val form = otherPropertiesForm.bind(Map("otherProperties" -> "bad-data"))
-      lazy val view = otherPropertiesView(form)(fakeRequest, mockMessage)
+      lazy val view = otherPropertiesView(form)(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
       "have an error summary" in {
