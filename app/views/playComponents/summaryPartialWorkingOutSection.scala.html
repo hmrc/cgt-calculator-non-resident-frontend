@@ -42,11 +42,11 @@ percentageTotalGain: BigDecimal = 0, percentageOfGain: Int = 0)(implicit request
     @summaryNumericRow("disposalValue",Messages("calc.summaryPartial.valueWhenSold"), disposalValue)
 
     @if(calculationType == Flat || calculationType == TimeApportioned) {
-      (@summaryNumericRow("acquisitionValue", Messages("calc.summaryPartial.valueWhenAcquired"), acquisitionValue))
+      @summaryNumericRow("acquisitionValue", Messages("calc.summaryPartial.valueWhenAcquired"), acquisitionValue)
     }
 
     @if(calculationType == Rebased){
-        (@summaryNumericRow("acquisitionValue", Messages("calc.summaryPartial.valueAtTaxStart"), acquisitionValue))
+        @summaryNumericRow("acquisitionValue", Messages("calc.summaryPartial.valueAtTaxStart"), acquisitionValue)
     }
 
     @summaryNumericRow("totalCosts", Messages("calc.summaryPartial.totalCosts"), totalCosts)
@@ -76,9 +76,9 @@ percentageTotalGain: BigDecimal = 0, percentageOfGain: Int = 0)(implicit request
 
     @if(calculationType == Flat || calculationType == Rebased){
         @if(totalGain >= 0) {
-                             (@summaryNumericRow("totalGain", Messages("calc.summaryPartial.totalGain"), totalGain, isTotal = true))
+                             @summaryNumericRow("totalGain", Messages("calc.summaryPartial.totalGain"), totalGain, isTotal = true)
                             } else {
-                              (@summaryNumericRow("totalGain", Messages("calc.summaryPartial.totalLoss"), totalGain, isTotal = true))
+                              @summaryNumericRow("totalGain", Messages("calc.summaryPartial.totalLoss"), totalGain, isTotal = true)
                             }
     }
         </tbody>

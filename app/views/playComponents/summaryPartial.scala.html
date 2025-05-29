@@ -43,25 +43,25 @@ disposalValue: BigDecimal, acquisitionValue: BigDecimal, totalCosts: BigDecimal,
     </div>
 
     @if(!taxYearModel.isValidYear) {
-        (@govukWarningText(WarningText(
+        @govukWarningText(WarningText(
             iconFallbackText = Some("Warning"),
             content = Text(Messages("calc.summaryPartial.noticeSummary"))
-        )))
+        ))
         }
 
 
     @if(calculationType == Flat || calculationType == Rebased){
-        (@summaryPartialWorkingOutSection(
+        @summaryPartialWorkingOutSection(
             calculationType,
             disposalValue,
             acquisitionValue,
             totalCosts,
             calculationResult.totalGain
-        ))
+        )
     }
 
     @if(calculationType == TimeApportioned){
-        (@summaryPartialWorkingOutSection(
+        @summaryPartialWorkingOutSection(
             calculationType,
             disposalValue,
             acquisitionValue,
@@ -69,7 +69,7 @@ disposalValue: BigDecimal, acquisitionValue: BigDecimal, totalCosts: BigDecimal,
             flatGain.get,
             calculationResult.totalGain,
             TimeApportionmentUtilities.percentageOfTotalGain(flatGain.get, calculationResult.totalGain)
-        ))
+        )
     }
 
     @summaryPartialDeductionsSection(
