@@ -17,6 +17,7 @@
 package controllers.utils
 
 import common.WithCommonFakeApplication
+import constructors.SessionExpiredException
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
@@ -48,6 +49,24 @@ class RecoverableFutureSpec extends AnyWordSpec with ScalaFutures with Matchers 
           fail(s"Unexpected exception: $other")
       }
     }
+
+    "convert a `SessionExpiredException` into an `ApplicationException`" in {
+
+      implicit val request: Request[AnyContent] = FakeRequest()
+
+      val future: Future[Result] = Future.failed(SessionExpiredException("test message")).recoverToStart
+      val url = controllers.utils.routes.TimeoutController.timeout().url
+
+      whenReady(future.failed) {
+        case ApplicationException(result, message) =>
+          result.header.headers should contain("Location" -> url)
+          result.header.status shouldBe SEE_OTHER
+          message should equal("test message")
+        case other: Throwable =>
+          fail(s"Unexpected exception: $other")
+      }
+    }
+
 
     "not convert any other exception into an `ApplicationException`" in {
 

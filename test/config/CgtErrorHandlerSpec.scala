@@ -17,15 +17,16 @@
 package config
 
 import common.{CommonPlaySpec, WithCommonFakeApplication}
-import org.scalatest.matchers.must.Matchers._
+import constructors.SessionExpiredException
+import org.scalatest.matchers.must.Matchers.*
 import play.api.Application
 import play.api.http.Writeable
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.mvc.Results._
+import play.api.mvc.Results.*
 import play.api.mvc.{DefaultActionBuilder, Request, Result, Results}
 import play.api.routing.Router
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import uk.gov.hmrc.play.bootstrap.frontend.http.ApplicationException
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -77,7 +78,6 @@ class CgtErrorHandlerSpec extends CommonPlaySpec with WithCommonFakeApplication 
     status(response) must equal(SEE_OTHER)
     redirectLocation(response) shouldBe Some(controllers.utils.routes.TimeoutController.timeout().url)
   }
-
   "Application throws other exception and logs error" in {
     val request = FakeRequest("GET", "/other-error")
     val response = routeWithError(app, request).get
