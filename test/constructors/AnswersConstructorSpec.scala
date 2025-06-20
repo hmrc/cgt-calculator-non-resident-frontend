@@ -16,12 +16,13 @@
 
 package constructors
 
-import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import common.KeystoreKeys.NonResidentKeys as KeystoreKeys
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import connectors.CalculatorConnector
-import models._
+import models.*
 import org.mockito.ArgumentMatchers
-import org.mockito.Mockito._
+import org.mockito.ArgumentMatchers.isNotNull
+import org.mockito.Mockito.*
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
@@ -118,8 +119,15 @@ class AnswersConstructorSpec extends CommonPlaySpec with MockitoSugar with WithC
 
   def setupMockedFinalAnswersConstructor(totalPersonalDetailsCalculationModel: TotalPersonalDetailsCalculationModel): AnswersConstructor = {
 
-    when(mockSessionCacheService.fetchAndGetFormData[CurrentIncomeModel](ArgumentMatchers.eq(KeystoreKeys.currentIncome))(using ArgumentMatchers.any(), ArgumentMatchers.any()))
-      .thenReturn(Future.successful(Some(totalPersonalDetailsCalculationModel.currentIncomeModel)))
+    if(totalPersonalDetailsCalculationModel.currentIncomeModel.currentIncome != null){
+      when(mockSessionCacheService.fetchAndGetFormData[CurrentIncomeModel](ArgumentMatchers.eq(KeystoreKeys.currentIncome))(using ArgumentMatchers.any(), ArgumentMatchers.any()))
+        .thenReturn(Future.successful(Some(totalPersonalDetailsCalculationModel.currentIncomeModel)))
+    }
+    else{
+      when(mockSessionCacheService.fetchAndGetFormData[CurrentIncomeModel](ArgumentMatchers.eq(KeystoreKeys.currentIncome))(using ArgumentMatchers.any(), ArgumentMatchers.any()))
+        .thenThrow(SessionExpiredException("Session for current income field is missing or expired."))
+    }
+
 
     when(mockSessionCacheService.fetchAndGetFormData[PersonalAllowanceModel](
       ArgumentMatchers.eq(KeystoreKeys.personalAllowance))(using ArgumentMatchers.any(), ArgumentMatchers.any()))
@@ -317,10 +325,19 @@ class AnswersConstructorSpec extends CommonPlaySpec with MockitoSugar with WithC
       BroughtForwardLossesModel(isClaiming = true, Some(1000))
     )
 
+    val modelWithError =  model.copy(currentIncomeModel=CurrentIncomeModel(null))
+
     val constructor = setupMockedFinalAnswersConstructor(model)
 
     "when called with the model with all options return all options" in {
       await(constructor.getPersonalDetailsAndPreviousCapitalGainsAnswers(using FakeRequest())) shouldEqual Some(model)
+    }
+
+    "when called model with null current income it throws exception" in{
+      intercept[SessionExpiredException](
+        setupMockedFinalAnswersConstructor(modelWithError).
+          getPersonalDetailsAndPreviousCapitalGainsAnswers(using FakeRequest())
+      )
     }
   }
 }
