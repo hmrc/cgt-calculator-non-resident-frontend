@@ -17,7 +17,6 @@
 package config
 
 import common.{CommonPlaySpec, WithCommonFakeApplication}
-import constructors.SessionExpiredException
 import org.scalatest.matchers.must.Matchers.*
 import play.api.Application
 import play.api.http.Writeable
@@ -78,6 +77,7 @@ class CgtErrorHandlerSpec extends CommonPlaySpec with WithCommonFakeApplication 
     status(response) must equal(SEE_OTHER)
     redirectLocation(response) shouldBe Some(controllers.utils.routes.TimeoutController.timeout().url)
   }
+
   "Application throws other exception and logs error" in {
     val request = FakeRequest("GET", "/other-error")
     val response = routeWithError(app, request).get

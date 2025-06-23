@@ -21,12 +21,11 @@ import common.{TaxDates, YesNoKeys}
 import models.*
 import play.api.Logging
 import play.api.mvc.Request
-import play.api.mvc.Results.Redirect
 import services.SessionCacheService
-import uk.gov.hmrc.play.bootstrap.frontend.http.ApplicationException
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+
 case class SessionExpiredException(message: String)
   extends RuntimeException(message)
 

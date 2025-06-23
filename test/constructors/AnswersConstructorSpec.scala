@@ -16,17 +16,17 @@
 
 package constructors
 
-import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import common.KeystoreKeys.NonResidentKeys as KeystoreKeys
 import common.{CommonPlaySpec, WithCommonFakeApplication}
 import connectors.CalculatorConnector
-import models._
+import models.*
 import org.mockito.ArgumentMatchers
-import org.mockito.Mockito._
+import org.mockito.Mockito.*
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import services.SessionCacheService
-
+import constructors.SessionExpiredException
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -118,9 +118,14 @@ class AnswersConstructorSpec extends CommonPlaySpec with MockitoSugar with WithC
 
   def setupMockedFinalAnswersConstructor(totalPersonalDetailsCalculationModel: TotalPersonalDetailsCalculationModel): AnswersConstructor = {
 
+    if(totalPersonalDetailsCalculationModel.currentIncomeModel.currentIncome != null){
     when(mockSessionCacheService.fetchAndGetFormData[CurrentIncomeModel](ArgumentMatchers.eq(KeystoreKeys.currentIncome))(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(Some(totalPersonalDetailsCalculationModel.currentIncomeModel)))
-
+    }
+    else{
+      when(mockSessionCacheService.fetchAndGetFormData[CurrentIncomeModel](ArgumentMatchers.eq(KeystoreKeys.currentIncome))(using ArgumentMatchers.any(), ArgumentMatchers.any()))
+        .thenReturn(Future.successful(Option.empty))
+    }
     when(mockSessionCacheService.fetchAndGetFormData[PersonalAllowanceModel](
       ArgumentMatchers.eq(KeystoreKeys.personalAllowance))(using ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(totalPersonalDetailsCalculationModel.personalAllowanceModel))
@@ -317,10 +322,22 @@ class AnswersConstructorSpec extends CommonPlaySpec with MockitoSugar with WithC
       BroughtForwardLossesModel(isClaiming = true, Some(1000))
     )
 
+    val modelWithError = model.copy(
+      CurrentIncomeModel(null)
+    )
+
     val constructor = setupMockedFinalAnswersConstructor(model)
 
     "when called with the model with all options return all options" in {
       await(constructor.getPersonalDetailsAndPreviousCapitalGainsAnswers(using FakeRequest())) shouldEqual Some(model)
+    }
+
+    "when called model with null current income it throws exception" in {
+      intercept[SessionExpiredException](
+        await(setupMockedFinalAnswersConstructor(modelWithError).
+          getPersonalDetailsAndPreviousCapitalGainsAnswers(using FakeRequest())
+        )
+      )
     }
   }
 }
