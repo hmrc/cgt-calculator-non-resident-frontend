@@ -16,14 +16,18 @@
 
 package constructors
 
-import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import common.KeystoreKeys.NonResidentKeys as KeystoreKeys
 import common.{TaxDates, YesNoKeys}
-import models._
+import models.*
 import play.api.Logging
 import play.api.mvc.Request
 import services.SessionCacheService
+
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+
+case class SessionExpiredException(message: String)
+  extends RuntimeException(message)
 
 class AnswersConstructor @Inject()(sessionCacheService: SessionCacheService)(implicit ec: ExecutionContext) extends Logging {
 
@@ -96,8 +100,10 @@ class AnswersConstructor @Inject()(sessionCacheService: SessionCacheService)(imp
   }
 
   def getPersonalDetailsAndPreviousCapitalGainsAnswers(implicit request: Request[?]): Future[Option[TotalPersonalDetailsCalculationModel]] = {
-    val currentIncome = sessionCacheService.fetchAndGetFormData[CurrentIncomeModel](KeystoreKeys.currentIncome)
-      .map(_.getOrElse(throw new Exception("No value for current income found")))
+    val currentIncome = sessionCacheService.fetchAndGetFormData[CurrentIncomeModel](KeystoreKeys.currentIncome).map{
+        case Some(value) => value
+        case _ => throw SessionExpiredException("Session for current income field is missing or expired.")
+      }
     val personalAllowance = sessionCacheService.fetchAndGetFormData[PersonalAllowanceModel](KeystoreKeys.personalAllowance)
     val otherProperties = sessionCacheService.fetchAndGetFormData[OtherPropertiesModel](KeystoreKeys.otherProperties)
       .map(data => data.getOrElse(OtherPropertiesModel(YesNoKeys.no)))

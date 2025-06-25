@@ -16,8 +16,9 @@
 
 package controllers
 
+import constructors.SessionExpiredException
 import play.api.Logging
-import play.api.mvc.Results._
+import play.api.mvc.Results.*
 import play.api.mvc.{Request, Result}
 import uk.gov.hmrc.play.bootstrap.frontend.http.ApplicationException
 
@@ -35,7 +36,7 @@ package object utils {
 
     def recoverToStart(implicit request: Request[?], ec: ExecutionContext): Future[Result] =
       future.recover {
-        case e: NoSuchElementException =>
+        case e: (NoSuchElementException | SessionExpiredException)  =>
           logger.warn(s"${request.uri} resulted in None.get, user redirected to start")
           throw ApplicationException(
             Redirect(controllers.utils.routes.TimeoutController.timeout()),

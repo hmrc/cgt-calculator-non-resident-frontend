@@ -17,15 +17,15 @@
 package config
 
 import common.{CommonPlaySpec, WithCommonFakeApplication}
-import org.scalatest.matchers.must.Matchers._
+import org.scalatest.matchers.must.Matchers.*
 import play.api.Application
 import play.api.http.Writeable
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.mvc.Results._
+import play.api.mvc.Results.*
 import play.api.mvc.{DefaultActionBuilder, Request, Result, Results}
 import play.api.routing.Router
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import uk.gov.hmrc.play.bootstrap.frontend.http.ApplicationException
 
 import scala.concurrent.{ExecutionContext, Future}
