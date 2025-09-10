@@ -61,7 +61,6 @@ class OtherReliefsFlatActionSpec extends CommonPlaySpec with WithCommonFakeAppli
   def setupTarget(
                    getData: Option[OtherReliefsModel],
                    gainAnswers: TotalGainAnswersModel,
-                   calculationResultsModel: CalculationResultsWithTaxOwedModel,
                    personalDetailsModel: TotalPersonalDetailsCalculationModel,
                    totalGainResultModel: TotalGainResultsModel = TotalGainResultsModel(200, Some(100), None),
                    calculationResultsWithPRRModel: Option[CalculationResultsWithPRRModel] = None
@@ -115,7 +114,6 @@ class OtherReliefsFlatActionSpec extends CommonPlaySpec with WithCommonFakeAppli
       val target = setupTarget(
         None,
         TestModels.totalGainAnswersModelWithRebasedTA,
-        TestModels.calculationResultsModelWithRebased,
         TestModels.personalDetailsCalculationModel)
       lazy val result = target.otherReliefsFlat(fakeRequestWithSession)
       lazy val document = Jsoup.parse(contentAsString(result))
@@ -142,7 +140,6 @@ class OtherReliefsFlatActionSpec extends CommonPlaySpec with WithCommonFakeAppli
       val target = setupTarget(
         Some(testOtherReliefsModel),
         TestModels.totalGainAnswersModelWithRebasedTA,
-        TestModels.calculationResultsModelWithRebased,
         TestModels.personalDetailsCalculationModel)
       lazy val result = target.otherReliefsFlat(fakeRequestWithSession)
       lazy val document = Jsoup.parse(contentAsString(result))
@@ -160,7 +157,6 @@ class OtherReliefsFlatActionSpec extends CommonPlaySpec with WithCommonFakeAppli
       val target = setupTarget(
         None,
         TestModels.totalGainAnswersModelWithRebasedTA,
-        TestModels.calculationResultsModelWithRebased,
         TestModels.personalDetailsCalculationModel)
       lazy val result = target.otherReliefsFlat(fakeRequest)
 
@@ -180,7 +176,6 @@ class OtherReliefsFlatActionSpec extends CommonPlaySpec with WithCommonFakeAppli
       val target = setupTarget(
         None,
         TestModels.totalGainAnswersModelWithRebasedTA,
-        TestModels.calculationResultsModelWithRebased,
         TestModels.personalDetailsCalculationModel)
       lazy val request = fakeRequestToPOSTWithSession(("isClaimingOtherReliefs", "Yes"), ("otherReliefs", "1000")).withMethod("POST")
       lazy val result = target.submitOtherReliefsFlat(request)
@@ -198,7 +193,6 @@ class OtherReliefsFlatActionSpec extends CommonPlaySpec with WithCommonFakeAppli
       val target = setupTarget(
         None,
         TestModels.totalGainAnswersModelWithRebasedTA,
-        TestModels.calculationResultsModelWithRebased,
         TestModels.personalDetailsCalculationModel)
       lazy val request = fakeRequestToPOSTWithSession(("isClaimingOtherReliefs", "Yes"), ("otherReliefs", "-1000"))
       lazy val result = target.submitOtherReliefsFlat(request)

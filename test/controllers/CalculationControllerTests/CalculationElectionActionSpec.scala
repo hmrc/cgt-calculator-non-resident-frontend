@@ -69,7 +69,6 @@ class CalculationElectionActionSpec
 
 
   def setupTarget(getData: Option[CalculationElectionModel],
-                  postData: Option[CalculationElectionModel],
                   totalGainResultsModel: Option[TotalGainResultsModel],
                   contentElements: Seq[(String, String, String, String, Option[String], Option[BigDecimal])],
                   finalSummaryModel: TotalPersonalDetailsCalculationModel,
@@ -147,7 +146,6 @@ class CalculationElectionActionSpec
 
       lazy val target = setupTarget(
         None,
-        None,
         Some(TotalGainResultsModel(0, Some(0), Some(0))),
         seq,
         finalAnswersModel
@@ -166,7 +164,6 @@ class CalculationElectionActionSpec
     "supplied with no pre-existing data" should {
 
       lazy val target = setupTarget(
-        None,
         None,
         Some(TotalGainResultsModel(0, Some(0), Some(0))),
         seq,
@@ -187,7 +184,6 @@ class CalculationElectionActionSpec
     "supplied with a pre-existing model with tax owed" which {
       lazy val target = setupTarget(
         Some(CalculationElectionModel(Flat)),
-        None,
         Some(TotalGainResultsModel(200, None, None)),
         seq,
         finalAnswersModel
@@ -211,7 +207,6 @@ class CalculationElectionActionSpec
     "supplied with a pre-existing model with no tax owed" which {
       lazy val target = setupTarget(
         Some(CalculationElectionModel(Flat)),
-        None,
         Some(TotalGainResultsModel(0, Some(0), Some(0))),
         seq,
         finalAnswersModel
@@ -235,7 +230,6 @@ class CalculationElectionActionSpec
     "supplied with a pre-existing model and not claiming reliefs" which {
       lazy val target = setupTarget(
         Some(CalculationElectionModel(Flat)),
-        None,
         Some(TotalGainResultsModel(1000, Some(0), Some(0))),
         seq,
         finalAnswersModel,
@@ -267,7 +261,6 @@ class CalculationElectionActionSpec
       lazy val request = fakeRequestToPOSTWithSession(("calculationElection", "flat"))
       lazy val target = setupTarget(
         None,
-        None,
         Some(TotalGainResultsModel(0, Some(0), Some(0))),
         seq,
         finalAnswersModel
@@ -286,7 +279,6 @@ class CalculationElectionActionSpec
     "submitting a valid calculation election using the flat reliefs button" should {
       lazy val request = fakeRequestToPOSTWithSession(("calculationElection", "flat"), ("action", "flat"))
       lazy val target = setupTarget(
-        None,
         None,
         Some(TotalGainResultsModel(0, Some(0), Some(0))),
         seq,
@@ -307,7 +299,6 @@ class CalculationElectionActionSpec
       lazy val request = fakeRequestToPOSTWithSession(("calculationElection", "rebased"), ("action", "rebased"))
       lazy val target = setupTarget(
         None,
-        None,
         Some(TotalGainResultsModel(0, Some(0), Some(0))),
         seq,
         finalAnswersModel
@@ -327,7 +318,6 @@ class CalculationElectionActionSpec
 
       lazy val request = fakeRequestToPOSTWithSession(("calculationElection", "something"))
       lazy val target = setupTarget(
-        None,
         None,
         Some(TotalGainResultsModel(0, Some(0), Some(0))),
         seq,
@@ -369,7 +359,6 @@ class CalculationElectionActionSpec
 
       lazy val target = setupTarget(
         None,
-        None,
         Some(TotalGainResultsModel(0, Some(0), Some(0))),
         Seq.empty,
         finalAnswersModel
@@ -379,7 +368,6 @@ class CalculationElectionActionSpec
 
     "return the ordered sequence if claiming reliefs" in {
       lazy val target = setupTarget(
-        None,
         None,
         Some(TotalGainResultsModel(0, Some(0), Some(0))),
         Seq.empty,

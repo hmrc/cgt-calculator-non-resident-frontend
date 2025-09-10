@@ -25,7 +25,7 @@ class CalculationResultModelSpec  extends CommonPlaySpec{
         val model = CalculationResultModel(BigDecimal(1.00), BigDecimal(1.00), BigDecimal(1.00), 1, BigDecimal(1.00), Some(BigDecimal(1.00)), None, None)
         val qModel = Seq(QuestionAnswerModel[String]("", "", "", None))
 
-        model.calculationDetailsRows("a") shouldBe qModel
+        model.calculationDetailsRows() shouldBe qModel
     }
   }
 }

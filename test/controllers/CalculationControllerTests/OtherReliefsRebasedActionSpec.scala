@@ -64,7 +64,6 @@ class OtherReliefsRebasedActionSpec extends CommonPlaySpec with WithCommonFakeAp
 
   def setupTarget(getData: Option[OtherReliefsModel],
                   gainAnswers: TotalGainAnswersModel,
-                  calculationResultsModel: CalculationResultsWithTaxOwedModel,
                   personalDetailsModel: TotalPersonalDetailsCalculationModel,
                   totalGainResultModel: TotalGainResultsModel = TotalGainResultsModel(200, Some(500), None),
                   calculationResultsWithPRRModel: Option[CalculationResultsWithPRRModel] = None
@@ -117,7 +116,6 @@ class OtherReliefsRebasedActionSpec extends CommonPlaySpec with WithCommonFakeAp
       def setupMocks() = setupTarget(
         None,
         gainAnswers,
-        TestModels.calculationResultsModelWithRebased,
         TestModels.personalDetailsCalculationModel
       )
 
@@ -151,7 +149,6 @@ class OtherReliefsRebasedActionSpec extends CommonPlaySpec with WithCommonFakeAp
       def setupStubs() = setupTarget(
         Some(testOtherReliefsModel),
         TestModels.totalGainAnswersModelWithRebasedTA,
-        TestModels.calculationResultsModelWithRebased,
         TestModels.personalDetailsCalculationModel
       )
 
@@ -173,7 +170,6 @@ class OtherReliefsRebasedActionSpec extends CommonPlaySpec with WithCommonFakeAp
       def setupStubs = setupTarget(
         None,
         TestModels.totalGainAnswersModelWithRebasedTA,
-        TestModels.calculationResultsModelWithRebased,
         TestModels.personalDetailsCalculationModel
       )
 
@@ -197,7 +193,6 @@ class OtherReliefsRebasedActionSpec extends CommonPlaySpec with WithCommonFakeAp
       def setupStubs = setupTarget(
         None,
         TestModels.totalGainAnswersModelWithRebasedTA,
-        TestModels.calculationResultsModelWithRebased,
         TestModels.personalDetailsCalculationModel
       )
 
@@ -221,7 +216,6 @@ class OtherReliefsRebasedActionSpec extends CommonPlaySpec with WithCommonFakeAp
       def setupStubs = setupTarget(
         None,
         TestModels.totalGainAnswersModelWithRebasedTA,
-        TestModels.calculationResultsModelWithRebased,
         TestModels.personalDetailsCalculationModel
       )
 

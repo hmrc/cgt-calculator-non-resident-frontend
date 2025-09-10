@@ -59,7 +59,6 @@ class OtherReliefsTAActionSpec extends CommonPlaySpec with WithCommonFakeApplica
   def setupTarget(
                    getData: Option[OtherReliefsModel],
                    gainAnswers: TotalGainAnswersModel,
-                   calculationResultsModel: CalculationResultsWithTaxOwedModel,
                    personalDetailsModel: TotalPersonalDetailsCalculationModel,
                    totalGainResultModel: TotalGainResultsModel = TotalGainResultsModel(200, Some(100), Some(200)),
                    calculationResultsWithPRRModel: Option[CalculationResultsWithPRRModel] = None
@@ -113,7 +112,6 @@ class OtherReliefsTAActionSpec extends CommonPlaySpec with WithCommonFakeApplica
       val target = setupTarget(
         None,
         TestModels.totalGainAnswersModelWithRebasedTA,
-        TestModels.calculationResultsModelWithTA,
         TestModels.personalDetailsCalculationModel
       )
       lazy val result = target.otherReliefsTA(fakeRequestWithSession)
@@ -141,7 +139,6 @@ class OtherReliefsTAActionSpec extends CommonPlaySpec with WithCommonFakeApplica
       val target = setupTarget(
         Some(testOtherReliefsModel),
         TestModels.totalGainAnswersModelWithRebasedTA,
-        TestModels.calculationResultsModelWithTA,
         TestModels.personalDetailsCalculationModel
       )
       lazy val result = target.otherReliefsTA(fakeRequestWithSession)
@@ -160,7 +157,6 @@ class OtherReliefsTAActionSpec extends CommonPlaySpec with WithCommonFakeApplica
       val target = setupTarget(
         None,
         TestModels.totalGainAnswersModelWithRebasedTA,
-        TestModels.calculationResultsModelWithTA,
         TestModels.personalDetailsCalculationModel
       )
       lazy val result = target.otherReliefsTA(fakeRequest)
@@ -181,7 +177,6 @@ class OtherReliefsTAActionSpec extends CommonPlaySpec with WithCommonFakeApplica
       val target = setupTarget(
         None,
         TestModels.totalGainAnswersModelWithRebasedTA,
-        TestModels.calculationResultsModelWithTA,
         TestModels.personalDetailsCalculationModel
       )
       lazy val request = fakeRequestToPOSTWithSession(("isClaimingOtherReliefs", "Yes"), ("otherReliefs", "1000")).withMethod("POST")
@@ -200,7 +195,6 @@ class OtherReliefsTAActionSpec extends CommonPlaySpec with WithCommonFakeApplica
       val target = setupTarget(
         None,
         TestModels.totalGainAnswersModelWithRebasedTA,
-        TestModels.calculationResultsModelWithTA,
         TestModels.personalDetailsCalculationModel
       )
       lazy val request = fakeRequestToPOSTWithSession(("isClaimingOtherReliefs", "Yes"), ("otherReliefs", "-1000"))

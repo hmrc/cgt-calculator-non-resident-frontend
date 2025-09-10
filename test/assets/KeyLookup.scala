@@ -32,7 +32,7 @@ object KeyLookup {
     val numericPlayErrorOverride = "error.number"
     val optionReqError = "calc.base.optionReqError"
 
-    def maximumError(value: String): String = s"calc.common.error.maxNumericExceeded"
+    def maximumError(): String = s"calc.common.error.maxNumericExceeded"
   }
 
   object NonResident extends Common {

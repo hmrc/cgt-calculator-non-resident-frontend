@@ -37,7 +37,7 @@ class CgtErrorHandlerSpec extends CommonPlaySpec with WithCommonFakeApplication 
     import play.api.routing.sird._
 
     Router.from {
-      case GET(p"/ok") => actionBuilder.async { request =>
+      case GET(p"/ok") => actionBuilder.async {
         Future.successful(Results.Ok("OK"))
       }
       case GET(p"/application-exception") => actionBuilder.async { _ =>
