@@ -43,7 +43,6 @@ class CheckYourAnswersController @Inject()(val http: DefaultHttpClient,
                                               extends FrontendController(mcc) with ValidActiveSession with I18nSupport {
 
   def getBackLink(totalGainResultsModel: TotalGainResultsModel,
-                  acquisitionDateController: DateModel,
                   totalTaxOwedAnswers: Option[TotalPersonalDetailsCalculationModel]): Future[String] = totalTaxOwedAnswers match {
 
     case Some(_) =>
@@ -78,7 +77,7 @@ class CheckYourAnswersController @Inject()(val http: DefaultHttpClient,
       totalGainWithPRRResult <- getPrrIfApplicable(model, prrModel, propertyLivedIn, calculatorConnector)
       finalAnswers <- getFinalSectionsAnswers(totalGainResult.get, totalGainWithPRRResult, answersConstructor)
       answers <- Future.successful(YourAnswersConstructor.fetchYourAnswers(model, prrModel, finalAnswers, propertyLivedIn))
-      backLink <- getBackLink(totalGainResult.get, model.acquisitionDateModel, finalAnswers)
+      backLink <- getBackLink(totalGainResult.get, finalAnswers)
     } yield {
       Ok(checkYourAnswersView(answers, backLink))
     }).recoverToStart

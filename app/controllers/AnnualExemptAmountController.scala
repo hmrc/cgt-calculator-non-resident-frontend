@@ -46,10 +46,6 @@ class AnnualExemptAmountController @Inject()(calcConnector: CalculatorConnector,
     calcConnector.getFullAEA(taxYear)
   }
 
-  private def fetchAnnualExemptAmount(implicit request: Request[?]): Future[Option[AnnualExemptAmountModel]] = {
-    sessionCacheService.fetchAndGetFormData[AnnualExemptAmountModel](KeystoreKeys.annualExemptAmount)
-  }
-
   private def fetchPreviousGainOrLoss(implicit request: Request[?]): Future[Option[PreviousLossOrGainModel]] = {
     sessionCacheService.fetchAndGetFormData[PreviousLossOrGainModel](KeystoreKeys.previousLossOrGain)
   }
@@ -96,7 +92,7 @@ class AnnualExemptAmountController @Inject()(calcConnector: CalculatorConnector,
 
   val annualExemptAmount: Action[AnyContent] = ValidateSession.async { implicit request =>
 
-    def routeRequest(model: Option[AnnualExemptAmountModel], maxAEA: BigDecimal, backUrl: String): Future[Result] = {
+    def routeRequest(maxAEA: BigDecimal, backUrl: String): Future[Result] = {
       sessionCacheService.fetchAndGetFormData[AnnualExemptAmountModel](KeystoreKeys.annualExemptAmount).map {
         case Some(data) => Ok(annualExemptAmountView(annualExemptAmountForm().fill(data), maxAEA, backUrl))
         case None => Ok(annualExemptAmountView(annualExemptAmountForm(), maxAEA, backUrl))
@@ -109,12 +105,11 @@ class AnnualExemptAmountController @Inject()(calcConnector: CalculatorConnector,
       closestTaxYear <- calcConnector.getTaxYear(date)
       taxYear <- getTaxYear(closestTaxYear)
       maxAEA <- fetchAEA(taxYear)
-      annualExemptAmount <- fetchAnnualExemptAmount(using request)
       previousLossOrGain <- fetchPreviousGainOrLoss(using request)
       gainAmount <- fetchPreviousGainAmount(previousLossOrGain.get.previousLossOrGain)
       lossAmount <- fetchPreviousLossAmount(previousLossOrGain.get.previousLossOrGain)
       backUrl <- backUrl(previousLossOrGain.get, gainAmount, lossAmount)
-      finalResult <- routeRequest(annualExemptAmount, maxAEA.get, backUrl)
+      finalResult <- routeRequest(maxAEA.get, backUrl)
     } yield finalResult).recoverToStart
   }
 

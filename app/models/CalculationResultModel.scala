@@ -29,7 +29,7 @@ case class CalculationResultModel(taxOwed: BigDecimal,
 
   val taxableGain: BigDecimal = baseTaxGain + upperTaxGain.getOrElse(0)
 
-  def calculationDetailsRows(calculationType: String): Seq[QuestionAnswerModel[Any]] =
+  def calculationDetailsRows(): Seq[QuestionAnswerModel[Any]] =
     Seq(QuestionAnswerModel[String]("", "", "", None))
 }
 

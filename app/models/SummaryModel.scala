@@ -51,6 +51,6 @@ case class SummaryModel(
   val purchaseDetailsRows: Seq[QuestionAnswerModel[Any]] = Seq(QuestionAnswerModel[String]("", "", "", None))
   val propertyDetailsRows: Seq[QuestionAnswerModel[Any]] = Seq(QuestionAnswerModel[String]("", "", "", None))
 
-  def deductionsDetailsRows(result: CalculationResultModel): Seq[QuestionAnswerModel[Any]] =
+  def deductionsDetailsRows(): Seq[QuestionAnswerModel[Any]] =
     Seq(QuestionAnswerModel[String]("", "", "", None))
 }

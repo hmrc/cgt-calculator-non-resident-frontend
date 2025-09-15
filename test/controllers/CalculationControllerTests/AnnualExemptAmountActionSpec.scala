@@ -62,7 +62,6 @@ class AnnualExemptAmountActionSpec extends CommonPlaySpec with WithCommonFakeApp
 
   def setupTarget(
                    getData: Option[AnnualExemptAmountModel],
-                   disabledTrustee: String = "",
                    disposalDate: Option[DateModel] = Some(DateModel(12, 12, 2016)),
                    previousLossOrGain: Option[PreviousLossOrGainModel] = Some(PreviousLossOrGainModel("Neither")),
                    howMuchLoss: Option[HowMuchLossModel] = None,
@@ -121,13 +120,13 @@ class AnnualExemptAmountActionSpec extends CommonPlaySpec with WithCommonFakeApp
     "supplied with a 2016/17 tax year date" should {
 
       "return a 200" in {
-        val target = setupTarget(None, "Yes", disposalDate = Some(DateModel(12, 12, 2016)))
+        val target = setupTarget(None, disposalDate = Some(DateModel(12, 12, 2016)))
         lazy val result = target.annualExemptAmount(fakeRequestWithSession)
         status(result) shouldBe 200
       }
 
       s"have the help text '${messages.hint("11,100")}'" in {
-        val target = setupTarget(None, "Yes", disposalDate = Some(DateModel(12, 12, 2016)))
+        val target = setupTarget(None, disposalDate = Some(DateModel(12, 12, 2016)))
         lazy val result = target.annualExemptAmount(fakeRequestWithSession)
         lazy val document = Jsoup.parse(contentAsString(result))
         document.select("#input-hint").text() shouldBe messages.hint("11,100")
@@ -235,14 +234,14 @@ class AnnualExemptAmountActionSpec extends CommonPlaySpec with WithCommonFakeApp
     "submitting an invalid form" should {
 
       "return a 400" in {
-        val target = setupTarget(None, "Yes")
+        val target = setupTarget(None)
         lazy val request = fakeRequestToPOSTWithSession(("annualExemptAmount", "1000000"))
         lazy val result = target.submitAnnualExemptAmount(request)
         status(result) shouldBe 400
       }
 
       "return to the Annual Exempt Amount page" in {
-        val target = setupTarget(None, "Yes")
+        val target = setupTarget(None)
         lazy val request = fakeRequestToPOSTWithSession(("annualExemptAmount", "1000000"))
         lazy val result = target.submitAnnualExemptAmount(request)
         lazy val document = Jsoup.parse(contentAsString(result))

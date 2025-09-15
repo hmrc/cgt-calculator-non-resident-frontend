@@ -129,9 +129,8 @@ class SummaryModelSpec extends CommonPlaySpec{
         privateResidenceReliefModel = None)
 
       val qModel = Seq(QuestionAnswerModel[String]("", "", "", None))
-      val calcmodel = CalculationResultModel(BigDecimal(0), BigDecimal(0), BigDecimal(0), 1, BigDecimal(0), None, None, None)
 
-      model.deductionsDetailsRows(calcmodel) shouldBe qModel
+      model.deductionsDetailsRows() shouldBe qModel
     }
   }
 }

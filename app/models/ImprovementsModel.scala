@@ -40,7 +40,7 @@ object ImprovementsModel {
     override def writes(o: ImprovementsModel): JsValue = {
       o match {
         case ImprovementsModel(value, _) => Json.obj(("improvements", value))
-        case _ => Json.obj()
+        case null => Json.obj()
       }
     }
   }
