@@ -46,7 +46,7 @@ class WorthWhenBoughtForLessActionSpec extends CommonPlaySpec with WithCommonFak
   val mockMessagesControllerComponents: MessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val worthWhenBoughtForLessView: worthWhenBoughtForLess = fakeApplication.injector.instanceOf[worthWhenBoughtForLess]
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
-  lazy val pageTitle: String = s"""${messages.question} - ${messages.pageHeading} - GOV.UK"""
+  lazy val pageTitle: String = s"""${messages.h1} - ${messages.pageHeading} - GOV.UK"""
 
   class Setup {
     val controller = new WorthWhenBoughtForLessController(
@@ -80,9 +80,9 @@ class WorthWhenBoughtForLessActionSpec extends CommonPlaySpec with WithCommonFak
         status(result) shouldBe 200
       }
 
-      s"return some html with title of ${messages.question}" in {
+      s"return some html with title of ${messages.h1}" in {
         contentType(result) shouldBe Some("text/html")
-        Jsoup.parse(contentAsString(result)).select("h1").text shouldEqual messages.question
+        Jsoup.parse(contentAsString(result)).select("h1").text shouldEqual messages.h1
       }
     }
 
@@ -95,9 +95,9 @@ class WorthWhenBoughtForLessActionSpec extends CommonPlaySpec with WithCommonFak
         status(result) shouldBe 200
       }
 
-      s"return some html with title of ${messages.question}" in {
+      s"return some html with title of ${messages.h1}" in {
         contentType(result) shouldBe Some("text/html")
-        Jsoup.parse(contentAsString(result)).select("h1").text shouldEqual messages.question
+        Jsoup.parse(contentAsString(result)).select("h1").text shouldEqual messages.h1
       }
     }
 

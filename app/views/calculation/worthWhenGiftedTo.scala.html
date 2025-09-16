@@ -28,14 +28,14 @@
 @(acquisitionMarketValueForm : Form[AcquisitionValueModel])(implicit request: Request[_], messages: Messages)
 
 @title = @{
-    if(acquisitionMarketValueForm.errors.nonEmpty) messages("site.title.error", Messages("calc.worthWhenGiftedTo.question")) else Messages("calc.worthWhenGiftedTo.question")
+    if(acquisitionMarketValueForm.errors.nonEmpty) messages("site.title.error", Messages("calc.worthWhenGiftedTo.h1")) else Messages("calc.worthWhenGiftedTo.h1")
 }
 @layout(
     pageTitle = title
 ) {
 
     @errorSummary(acquisitionMarketValueForm.errors)
-    <h1 class="govuk-heading-xl" for="disposal-value">@Messages("calc.worthWhenGiftedTo.question")</h1>
+    <h1 class="govuk-heading-xl" for="disposal-value">@Messages("calc.worthWhenGiftedTo.h1")</h1>
     <p class="govuk-body">@Messages("calc.worthWhenGiftedTo.help")</p>
 
     @form(action = controllers.routes.WorthWhenGiftedToController.submitWorthWhenGiftedTo) {

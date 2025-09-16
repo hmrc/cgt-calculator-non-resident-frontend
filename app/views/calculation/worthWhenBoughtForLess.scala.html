@@ -29,7 +29,7 @@
 @(acquisitionMarketValue : Form[AcquisitionValueModel])(implicit request: Request[_], messages: Messages)
 
 @title = @{
-    if(acquisitionMarketValue.errors.nonEmpty) messages("site.title.error", Messages("calc.worthWhenBoughtForLess.question")) else Messages("calc.worthWhenBoughtForLess.question")
+    if(acquisitionMarketValue.errors.nonEmpty) messages("site.title.error", Messages("calc.worthWhenBoughtForLess.h1")) else Messages("calc.worthWhenBoughtForLess.h1")
 }
 
 @layout(
@@ -38,7 +38,7 @@
 
     @errorSummary(acquisitionMarketValue.errors)
 
-    <h1 class="govuk-heading-xl">@Messages("calc.worthWhenBoughtForLess.question")</h1>
+    <h1 class="govuk-heading-xl">@Messages("calc.worthWhenBoughtForLess.h1")</h1>
 
     <p class="govuk-body" class="form-hint">@Messages("calc.worthWhenBoughtForLess.hint")</p>
 

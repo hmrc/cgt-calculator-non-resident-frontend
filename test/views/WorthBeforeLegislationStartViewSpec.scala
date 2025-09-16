@@ -73,8 +73,8 @@ class WorthBeforeLegislationStartViewSpec extends CommonPlaySpec with WithCommon
           heading.attr("class") shouldBe "govuk-heading-xl"
         }
 
-        s"has the text '${WorthBeforeLegislationStart.question}'" in {
-          heading.text shouldBe WorthBeforeLegislationStart.question
+        s"has the text '${WorthBeforeLegislationStart.h1}'" in {
+          heading.text shouldBe WorthBeforeLegislationStart.h1
         }
       }
 
