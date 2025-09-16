@@ -34,7 +34,7 @@ class MarketValueWhenSoldViewSpec extends CommonPlaySpec with WithCommonFakeAppl
   val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   lazy val marketValueSoldView: marketValueSold = fakeApplication.injector.instanceOf[marketValueSold]
-  lazy val pageTitle: String = s"""${MarketValueMessages.disposalSoldQuestion} - ${commonMessages.serviceName} - GOV.UK"""
+  lazy val pageTitle: String = s"""${MarketValueMessages.disposalSoldH1} - ${commonMessages.serviceName} - GOV.UK"""
 
 
 
@@ -50,8 +50,8 @@ class MarketValueWhenSoldViewSpec extends CommonPlaySpec with WithCommonFakeAppl
 
       s"have a header" which {
         lazy val header = document.select("h1")
-        s"has the text '${MarketValueMessages.disposalSoldQuestion}'" in {
-          header.text() shouldBe MarketValueMessages.disposalSoldQuestion
+        s"has the text '${MarketValueMessages.disposalSoldH1}'" in {
+          header.text() shouldBe MarketValueMessages.disposalSoldH1
         }
 
         s"has the class 'head-xlarge'" in {
@@ -94,8 +94,8 @@ class MarketValueWhenSoldViewSpec extends CommonPlaySpec with WithCommonFakeAppl
           form.attr("action") shouldBe controllers.routes.MarketValueWhenSoldOrGaveAwayController.submitMarketValueWhenSold.url
         }
 
-        s"has the hidden text ${MessageLookup.NonResident.MarketValue.disposalSoldQuestion}" in {
-          document.getElementsByClass("govuk-heading-xl").text() shouldBe MessageLookup.NonResident.MarketValue.disposalSoldQuestion
+        s"has the hidden text ${MessageLookup.NonResident.MarketValue.disposalSoldH1}" in {
+          document.getElementsByClass("govuk-heading-xl").text() shouldBe MessageLookup.NonResident.MarketValue.disposalSoldH1
         }
 
         s"has the input ID disposalValue" in {

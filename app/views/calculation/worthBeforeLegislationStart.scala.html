@@ -28,7 +28,7 @@
 @(worthBeforeLegislationStart : Form[WorthBeforeLegislationStartModel])(implicit request: Request[_], messages: Messages)
 
 @title = @{
-    if(worthBeforeLegislationStart.errors.nonEmpty) messages("site.title.error", Messages("calc.worthBeforeLegislationStart.question")) else Messages("calc.worthBeforeLegislationStart.question")
+    if(worthBeforeLegislationStart.errors.nonEmpty) messages("site.title.error", Messages("calc.worthBeforeLegislationStart.h1")) else Messages("calc.worthBeforeLegislationStart.h1")
 }
 
 @layout(
@@ -37,7 +37,7 @@
 
     @errorSummary(worthBeforeLegislationStart.errors)
 
-    <h1 class="govuk-heading-xl">@Messages("calc.worthBeforeLegislationStart.question")</h1>
+    <h1 class="govuk-heading-xl">@Messages("calc.worthBeforeLegislationStart.h1")</h1>
 
     <p class="govuk-body">@Messages("calc.worthBeforeLegislationStart.information")</p>
 

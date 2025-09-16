@@ -47,7 +47,7 @@ class MarketValueWhenSoldOrGaveAwayActionSpec extends CommonPlaySpec with WithCo
   val mockMessagesControllerComponents: MessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val marketValueSoldView: marketValueSold = fakeApplication.injector.instanceOf[marketValueSold]
   val marketValueGaveAwayView: marketValueGaveAway = fakeApplication.injector.instanceOf[marketValueGaveAway]
-  val pageTitle: String = s"""${marketValueMessages.disposalSoldQuestion} - ${commonMessages.serviceName} - GOV.UK"""
+  val pageTitle: String = s"""${marketValueMessages.disposalSoldH1} - ${commonMessages.serviceName} - GOV.UK"""
   val mockSessionCacheService: SessionCacheService = mock[SessionCacheService]
 
   class Setup {
@@ -83,7 +83,7 @@ class MarketValueWhenSoldOrGaveAwayActionSpec extends CommonPlaySpec with WithCo
       }
 
       "load the market value page" in {
-        document.title shouldBe s"${marketValueMessages.disposalGaveAwayQuestion} - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
+        document.title shouldBe s"${marketValueMessages.disposalGaveAwayH1} - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
       }
     }
 
@@ -97,7 +97,7 @@ class MarketValueWhenSoldOrGaveAwayActionSpec extends CommonPlaySpec with WithCo
       }
 
       "load the market value page" in {
-        document.title shouldBe s"${marketValueMessages.disposalGaveAwayQuestion} - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
+        document.title shouldBe s"${marketValueMessages.disposalGaveAwayH1} - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
       }
     }
 
@@ -216,7 +216,7 @@ class MarketValueWhenSoldOrGaveAwayActionSpec extends CommonPlaySpec with WithCo
       }
 
       s"and lead to the current page reloading and return some HTML with title of ${marketValueMessages.disposalGaveAwayQuestion}" in {
-        document.title shouldEqual s"Error: ${marketValueMessages.disposalGaveAwayQuestion} - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
+        document.title shouldEqual s"Error: ${marketValueMessages.disposalGaveAwayH1} - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
       }
     }
   }

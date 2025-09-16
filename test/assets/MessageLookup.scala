@@ -303,7 +303,9 @@ object MessageLookup {
     }
 
     object MarketValue {
+      val disposalGaveAwayH1 = "Value of the property when you gave it away"
       val disposalGaveAwayQuestion = "What was the property worth when you gave it away?"
+      val disposalSoldH1 = "Market value of property when you sold it"
       val disposalSoldQuestion = "What was the market value of the property when you sold it?"
 
       val disposalHelpText: String = "You can use a valuation from a surveyor. " +
@@ -375,6 +377,7 @@ object MessageLookup {
     }
 
     object RebasedValue {
+      val h1 = "Market value of the property on 5 April 2015"
       val question = "What was the market value of the property on 5 April 2015?"
 
       val questionOptionalText = "Only tell us if you owned the property on that date"
@@ -412,7 +415,8 @@ object MessageLookup {
     }
 
     object WorthBeforeLegislationStart {
-      val title = "What was the market value of the property on 31 March 1982? - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
+      val title = "Market value of the property on 31 March 1982 - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
+      val h1 = "Market value of the property on 31 March 1982"
       val question = "What was the market value of the property on 31 March 1982?"
       val information = "If you had your property before 31 March 1982, use the market value on 31 March 1982 to work out your Capital Gains Tax. After this date, use the original cost."
       val hintText: String = "If you don't know the exact value, you must provide a realistic estimate. " +
@@ -422,6 +426,7 @@ object MessageLookup {
 
     //Worth When Inherited messages.en
     object WorthWhenInherited {
+      val h1 = "Market value of property when you inherited it"
       val question = "What was the market value of the property when you inherited it?"
       val hint = "This is the value of the property on the date the previous owner died."
       val helpText = "If you owned the property with someone else, only enter your share of the property value."
@@ -429,6 +434,7 @@ object MessageLookup {
 
     //Worth When Gifted To messages.en
     object WorthWhenGiftedTo {
+      val h1 = "Market value of the property when you got it as a gift"
       val question = "What was the market value of the property when you got it as a gift?"
       val estimate: String = "If you don't know the exact value, you must provide a realistic estimate. " +
         "You might have to pay more if we think your estimate is unrealistic."
@@ -438,6 +444,7 @@ object MessageLookup {
     //Worth When Bought for Less messages.en
     object WorthWhenBoughtForLess {
       val question = "What was the market value of the property when you bought it?"
+      val h1 = "Market value of the property when you bought it"
       val hintOne = "You can use a valuation from a surveyor. If you don't know the exact value, you must provide a realistic estimate. You might have to pay more if we think your estimate is unrealistic."
       val helpText = "If you owned the property with someone else, only enter your share of the property value."
       val pageHeading = "Calculate your Non-Resident Capital Gains Tax"
@@ -550,7 +557,7 @@ object MessageLookup {
       }
 
       object PropertiesWorthWhenGaveAway {
-        val title = "What was the property worth when you gave it away?"
+        val title = "Value of the property when you gave it away"
         val helpMessage = "You can use a valuation from a surveyor or a property website."
       }
 

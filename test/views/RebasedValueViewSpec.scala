@@ -33,7 +33,7 @@ class RebasedValueViewSpec extends CommonPlaySpec with WithCommonFakeApplication
   val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   lazy val rebasedValueView: rebasedValue = fakeApplication.injector.instanceOf[rebasedValue]
-  val pageTitle: String = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
+  val pageTitle: String = s"""${messages.h1} - ${commonMessages.serviceName} - GOV.UK"""
 
   "The rebased value view" when {
 
@@ -53,8 +53,8 @@ class RebasedValueViewSpec extends CommonPlaySpec with WithCommonFakeApplication
           heading.attr("class") shouldBe "govuk-heading-xl"
         }
 
-        s"has the text '${messages.question}'" in {
-          heading.text shouldBe messages.question
+        s"has the text '${messages.h1}'" in {
+          heading.text shouldBe messages.h1
         }
       }
 

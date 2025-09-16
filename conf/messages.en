@@ -146,6 +146,7 @@ calc.nonresident.outsideTaxYears.message = You can continue to use it, but we''l
 ## Rebased Value ##
 calc.nonResident.rebasedValue.question = What was the market value of the property on
 calc.nonResident.rebasedValue.date = 5 April 2015?
+calc.nonResident.rebasedValue.titleAndDate = Market value of the property on 5 April 2015
 calc.nonResident.rebasedValue.questionAndDate = What was the market value of the property on 5 April 2015?
 calc.nonResident.rebasedValue.helpText = If you''re not a UK resident, you only have to report UK property you''ve sold or given away since 5 April 2015.
 calc.nonResident.rebasedValue.helpHidden.title = Why we''re asking for this
@@ -284,7 +285,9 @@ calc.disposalCosts.errorDecimalPlaces = How much you paid in costs when you stop
 calc.disposalCosts.jointOwnership = If you owned the property with someone else, only enter your share of the costs, as agreed with your co-owner.
 
 ## Market Value ##
+calc.marketValue.gaveItAway.h1 = Value of the property when you gave it away
 calc.marketValue.gaveItAway.question = What was the property worth when you gave it away?
+calc.marketValue.sold.h1 = Market value of property when you sold it
 calc.marketValue.sold.question = What was the market value of the property when you sold it?
 calc.marketValue.error.gaveItAway.required = Enter what the property was worth when you gave it away
 calc.marketValue.error.gaveItAway.errorReal = What the property was worth when you gave it away must be an amount of money in pounds
@@ -419,6 +422,7 @@ calc.acquisitionMarketValue.errorDecimalPlaces = The market value of the propert
 calc.acquisitionMarketValue.errorNegative = Enter a positive number for the market value of the property
 
 ## Worth When Gifted To ##
+calc.worthWhenGiftedTo.h1 = Market value of the property when you got it as a gift
 calc.worthWhenGiftedTo.question = What was the market value of the property when you got it as a gift?
 calc.worthWhenGiftedTo.help = If you don''t know the exact value, you must provide a realistic estimate. You might have to pay more if we think your estimate is unrealistic.
 calc.worthWhenGiftedTo.jointOwnership = If you owned the property with someone else, only enter your share of the property value.
@@ -429,6 +433,7 @@ calc.worthWhenGiftedTo.errorNegative = The market value of the property when you
 calc.worthWhenGiftedTo.errorDecimalPlaces = The market value of the property when you got it as a gift has too many numbers after the decimial point
 
 ## Worth When Inherited ##
+calc.worthWhenInherited.h1 = Market value of property when you inherited it
 calc.worthWhenInherited.question = What was the market value of the property when you inherited it?
 calc.worthWhenInherited.hint = This is the value of the property on the date the previous owner died.
 calc.worthWhenInherited.error.required = Enter the market value of the property when you inherited it
@@ -438,6 +443,7 @@ calc.worthWhenInherited.errorNegative = The market value of the property when yo
 calc.worthWhenInherited.errorDecimalPlaces = The market value of the property when you inherited it has too many numbers after the decimal point
 
 ## Worth When Bought For Less ##
+calc.worthWhenBoughtForLess.h1 = Market value of the property when you bought it
 calc.worthWhenBoughtForLess.question = What was the market value of the property when you bought it?
 calc.worthWhenBoughtForLess.hint = You can use a valuation from a surveyor. If you don''t know the exact value, you must provide a realistic estimate. You might have to pay more if we think your estimate is unrealistic.
 calc.worthWhenBoughtForLess.helpText = If you owned the property with someone else, only enter your share of the property value.
@@ -449,6 +455,7 @@ calc.worthWhenBoughtForLess.errorDecimalPlaces = The market value of the propert
 
 
 ## Worth Before Legislation Start ##
+calc.worthBeforeLegislationStart.h1 = Market value of the property on 31 March 1982
 calc.worthBeforeLegislationStart.question = What was the market value of the property on 31 March 1982?
 calc.worthBeforeLegislationStart.information = If you had your property before 31 March 1982, use the market value on 31 March 1982 to work out your Capital Gains Tax. After this date, use the original cost.
 calc.worthBeforeLegislationStart.help = If you don''t know the exact value, you must provide a realistic estimate. You might have to pay more if we think your estimate is unrealistic.

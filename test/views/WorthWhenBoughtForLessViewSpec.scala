@@ -41,8 +41,8 @@ class WorthWhenBoughtForLessViewSpec extends CommonPlaySpec with WithCommonFakeA
       lazy val view = worthWhenBoughtForLessView(worthWhenBoughtForLessForm)(using fakeRequest, mockMessage)
       lazy val document = Jsoup.parse(view.body)
 
-      s"have a title of '${WorthWhenBoughtForLess.question}'" in {
-        document.title() shouldBe WorthWhenBoughtForLess.question + " - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
+      s"have a title of '${WorthWhenBoughtForLess.h1}'" in {
+        document.title() shouldBe WorthWhenBoughtForLess.h1 + " - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
 
       }
 
@@ -75,8 +75,8 @@ class WorthWhenBoughtForLessViewSpec extends CommonPlaySpec with WithCommonFakeA
           heading.attr("class") shouldBe "govuk-heading-xl"
         }
 
-        s"has the text '${WorthWhenBoughtForLess.question}'" in {
-          heading.text shouldBe WorthWhenBoughtForLess.question
+        s"has the text '${WorthWhenBoughtForLess.h1}'" in {
+          heading.text shouldBe WorthWhenBoughtForLess.h1
         }
       }
 

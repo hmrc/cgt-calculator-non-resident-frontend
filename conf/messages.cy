@@ -274,10 +274,12 @@ calc.marketValue.error.sold.errorReal = Mae’n rhaid i werth marchnadol yr eidd
 calc.marketValue.error.sold.errorMax = Mae’r rhaid i ''Beth oedd gwerth marchnadol yr eiddo pan wnaethoch ei werthu?'' fod yn £1,000,000,000 neu lai
 calc.marketValue.error.sold.decimalPlaces = Mae ''Beth oedd gwerth marchnadol yr eiddo pan wnaethoch ei werthu?'' yn cynnwys gormod o rifau ar ôl y pwynt degol
 calc.marketValue.error.sold.negative = Mae’n rhaid i ''Beth oedd gwerth marchnadol yr eiddo pan wnaethoch ei werthu?'' fod yn £0 neu fwy
+calc.marketValue.gaveItAway.h1 = Gwerth yr eiddo pan wnaethoch ei roi i ffwrdd
 calc.marketValue.gaveItAway.question = Beth oedd gwerth yr eiddo pan roddoch e i ffwrdd?
 calc.marketValue.helpText = Gallwch ddefnyddio prisiad gan syrfëwr. Os nad ydych yn gwybod yr union werth, mae’n rhaid i chi roi amcangyfrif realistig.
 calc.marketValue.helpTextAdditional = Efallai y bydd yn rhaid i chi dalu rhagor os ydym o’r farn nad yw’ch amcangyfrif yn realistig.
 calc.marketValue.jointOwnership = Os oeddech yn berchen ar yr eiddo gyda rhywun arall, dylech ond nodi’ch cyfran chi o werth yr eiddo.
+calc.marketValue.sold.h1 = Gwerth marchnadol yr eiddo pan wnaethoch ei werthu
 calc.marketValue.sold.question = Beth oedd gwerth marchnadol yr eiddo pan wnaethoch ei werthu?
 
 calc.nonresident.outsideTaxYears.message = Gallwch barhau i’w defnyddio, ond byddwn yn defnyddio’r cyfraddau treth o’r flwyddyn dreth {0}.
@@ -293,6 +295,7 @@ calc.nonResident.rebasedValue.helpText = Os nad ydych yn breswylydd y DU, dim on
 calc.nonResident.rebasedValue.hintText = Os nad ydych yn gwybod yr union werth, mae’n rhaid i chi roi amcangyfrif realistig. Efallai y bydd yn rhaid i chi dalu rhagor os ydym o’r farn nad yw’ch amcangyfrif yn realistig.
 calc.nonResident.rebasedValue.jointOwnership = Os oeddech yn berchen ar yr eiddo gyda rhywun arall, dylech ond nodi’ch cyfran chi o werth yr eiddo.
 calc.nonResident.rebasedValue.question = Beth oedd gwerth marchnadol yr eiddo ar
+calc.nonResident.rebasedValue.titleAndDate = Gwerth marchnadol yr eiddo ar 5 Ebrill 2015
 calc.nonResident.rebasedValue.questionAndDate = Beth oedd gwerth marchnadol yr eiddo ar 5 Ebrill 2015?
 
 calc.nonResident.soldForLess.question = A wnaethoch werthu’r eiddo am lai na’i werth er mwyn helpu’r prynwr?
@@ -478,6 +481,7 @@ calc.whoDidYouGiveThePropertyTo.title = I bwy y gwnaethoch roi’r eiddo?
 calc.worthBeforeLegislationStart.help = Os nad ydych yn gwybod yr union werth, mae’n rhaid i chi roi amcangyfrif realistig. Efallai y bydd yn rhaid i chi dalu rhagor os ydym o’r farn nad yw’ch amcangyfrif yn realistig.
 calc.worthBeforeLegislationStart.information = Os cawsoch eich eiddo cyn 31 Mawrth 1982, defnyddiwch y gwerth marchnadol ar 31 Mawrth 1982 i gyfrifo’ch Treth Enillion Cyfalaf. Ar ôl y dyddiad hwn, defnyddiwch y gost wreiddiol.
 calc.worthBeforeLegislationStart.jointOwnership = Os oeddech yn berchen ar yr eiddo gyda rhywun arall, dylech ond nodi’ch cyfran chi o werth yr eiddo.
+calc.worthBeforeLegislationStart.h1 = Gwerth marchnadol yr eiddo ar 31 Mawrth 1982
 calc.worthBeforeLegislationStart.question = Beth oedd gwerth marchnadol yr eiddo ar 31 Mawrth 1982?
 calc.worthBeforeLegislationStart.error.required = Nodwch werth marchnadol yr eiddo ar 31 Mawrth 1982
 calc.worthBeforeLegislationStart.errorReal = Mae’n rhaid i werth marchnadol yr eiddo ar 31 Mawrth 1982 fod yn swm o arian mewn punnoedd
@@ -487,6 +491,7 @@ calc.worthBeforeLegislationStart.errorDecimalPlaces = Mae ‘Beth oedd gwerth ma
 
 calc.worthWhenBoughtForLess.helpText = Os oeddech yn berchen ar yr eiddo gyda rhywun arall, dylech ond nodi’ch cyfran chi o werth yr eiddo.
 calc.worthWhenBoughtForLess.hint = Gallwch ddefnyddio prisiad gan syrfëwr. Os nad ydych yn gwybod yr union werth, mae’n rhaid i chi roi amcangyfrif realistig. Efallai y bydd yn rhaid i chi dalu rhagor os ydym o’r farn nad yw’ch amcangyfrif yn realistig.
+calc.worthWhenBoughtForLess.h1 = Gwerth marchnadol yr eiddo pan wnaethoch ei brynu
 calc.worthWhenBoughtForLess.question = Beth oedd gwerth marchnadol yr eiddo pan wnaethoch ei brynu?
 calc.worthWhenBoughtForLess.error.required = Nodwch werth marchnadol yr eiddo pan wnaethoch ei brynu
 calc.worthWhenBoughtForLess.errorReal = Mae’n rhaid i werth marchnadol yr eiddo pan wnaethoch ei brynu fod yn swm o arian mewn punnoedd
@@ -496,6 +501,7 @@ calc.worthWhenBoughtForLess.errorDecimalPlaces = Mae ''Beth oedd gwerth marchnad
 
 calc.worthWhenGiftedTo.help = Os nad ydych yn gwybod yr union werth, mae’n rhaid i chi roi amcangyfrif realistig. Efallai y bydd yn rhaid i chi dalu rhagor os ydym o’r farn nad yw’ch amcangyfrif yn realistig.
 calc.worthWhenGiftedTo.jointOwnership = Os oeddech yn berchen ar yr eiddo gyda rhywun arall, dylech ond nodi’ch cyfran chi o werth yr eiddo.
+calc.worthWhenGiftedTo.h1 = Gwerth marchnadol yr eiddo pan gawsoch ef yn rhodd
 calc.worthWhenGiftedTo.question = Beth oedd gwerth marchnadol yr eiddo pan gawsoch e fel rhodd?
 calc.worthWhenGiftedTo.error.required = Nodwch werth marchnadol yr eiddo pan gawsoch ef fel rhodd
 calc.worthWhenGiftedTo.errorReal = Mae’n rhaid i werth marchnadol yr eiddo pan gawsoch ef fel rhodd fod yn swm o arian mewn punnoedd
@@ -504,6 +510,7 @@ calc.worthWhenGiftedTo.errorNegative = Mae’n rhaid i ''Beth oedd gwerth marchn
 calc.worthWhenGiftedTo.errorDecimalPlaces = Mae ''Beth oedd gwerth marchnadol yr eiddo pan gawsoch ef fel rhodd?'' yn cynnwys gormod o rifau ar ôl y pwynt degol
 
 calc.worthWhenInherited.hint = Dyma werth yr eiddo ar y dyddiad y bu’r perchennog blaenorol farw.
+calc.worthWhenInherited.h1 = Gwerth marchnadol yr eiddo pan wnaethoch ei etifeddu
 calc.worthWhenInherited.question = Beth oedd gwerth marchnadol yr eiddo pan wnaethoch ei etifeddu?
 calc.worthWhenInherited.error.required = Nodwch werth marchnadol yr eiddo pan wnaethoch ei etifeddu
 calc.worthWhenInherited.errorReal = Mae’n rhaid i werth marchnadol yr eiddo pan wnaethoch ei etifeddu fod yn swm o arian mewn punnoedd

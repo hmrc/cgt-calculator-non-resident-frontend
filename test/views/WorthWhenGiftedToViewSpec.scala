@@ -33,7 +33,7 @@ class WorthWhenGiftedToViewSpec extends CommonPlaySpec with WithCommonFakeApplic
   val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   val worthWhenGiftedToView: worthWhenGiftedTo = fakeApplication.injector.instanceOf[worthWhenGiftedTo]
-  lazy val pageTitle: String = s"""${WorthWhenGiftedTo.question} - ${commonMessages.serviceName} - GOV.UK"""
+  lazy val pageTitle: String = s"""${WorthWhenGiftedTo.h1} - ${commonMessages.serviceName} - GOV.UK"""
 
   "The Worth When Gifted To view spec" when {
 
@@ -71,7 +71,7 @@ class WorthWhenGiftedToViewSpec extends CommonPlaySpec with WithCommonFakeApplic
         }
 
         s"has the text '${WorthWhenGiftedTo.question}'" in {
-          heading.text shouldBe WorthWhenGiftedTo.question
+          heading.text shouldBe WorthWhenGiftedTo.h1
         }
       }
 

@@ -28,7 +28,7 @@
 @(rebasedValueForm: Form[RebasedValueModel], backLink: String)(implicit request: Request[_], messages: Messages)
 
 @title = @{
-    if(rebasedValueForm.errors.nonEmpty) messages("site.title.error", Messages("calc.nonResident.rebasedValue.questionAndDate")) else Messages("calc.nonResident.rebasedValue.questionAndDate")
+    if(rebasedValueForm.errors.nonEmpty) messages("site.title.error", Messages("calc.nonResident.rebasedValue.titleAndDate")) else Messages("calc.nonResident.rebasedValue.titleAndDate")
 }
 
 @layout(
@@ -36,7 +36,7 @@
 ) {
 
     @errorSummary(rebasedValueForm.errors)
-    <h1 class="govuk-heading-xl">@Messages("calc.nonResident.rebasedValue.question") <span class="no-wrap">@Messages("calc.nonResident.rebasedValue.date")</span></h1>
+    <h1 class="govuk-heading-xl">@Messages("calc.nonResident.rebasedValue.titleAndDate")</h1>
     <p class="govuk-body">@Messages("calc.nonResident.rebasedValue.hintText")</p>
 
     @form(action = controllers.routes.RebasedValueController.submitRebasedValue) {

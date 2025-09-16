@@ -41,14 +41,14 @@ class MarketValueGaveAwayViewSpec extends CommonPlaySpec with WithCommonFakeAppl
     lazy val document = Jsoup.parse(view.body)
 
     "supplied with no errors" should {
-      s"have a title of ${MarketValueMessages.disposalGaveAwayQuestion}" in {
-        document.title() shouldBe s"${MarketValueMessages.disposalGaveAwayQuestion} - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
+      s"have a title of ${MarketValueMessages.disposalGaveAwayH1}" in {
+        document.title() shouldBe s"${MarketValueMessages.disposalGaveAwayH1} - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
       }
 
       s"have a header" which {
         lazy val header = document.select("h1")
-        s"has the text '${MarketValueMessages.disposalGaveAwayQuestion}'" in {
-          header.text() shouldBe MarketValueMessages.disposalGaveAwayQuestion
+        s"has the text '${MarketValueMessages.disposalGaveAwayH1}'" in {
+          header.text() shouldBe MarketValueMessages.disposalGaveAwayH1
         }
 
         s"has the class 'head-xlarge'" in {
@@ -94,8 +94,8 @@ class MarketValueGaveAwayViewSpec extends CommonPlaySpec with WithCommonFakeAppl
           form.attr("action") shouldBe controllers.routes.MarketValueWhenSoldOrGaveAwayController.submitMarketValueWhenGaveAway.url
         }
 
-        s"has the hidden text ${MessageLookup.NonResident.MarketValue.disposalGaveAwayQuestion}" in {
-          document.getElementsByClass("govuk-heading-xl").text() shouldBe MessageLookup.NonResident.MarketValue.disposalGaveAwayQuestion
+        s"has the hidden text ${MessageLookup.NonResident.MarketValue.disposalGaveAwayH1}" in {
+          document.getElementsByClass("govuk-heading-xl").text() shouldBe MessageLookup.NonResident.MarketValue.disposalGaveAwayH1
         }
 
         s"has the input ID disposalValue" in {
