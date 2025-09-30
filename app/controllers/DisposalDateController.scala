@@ -16,11 +16,11 @@
 
 package controllers
 
-import common.KeystoreKeys.{NonResidentKeys => KeystoreKeys}
+import common.KeystoreKeys.NonResidentKeys as KeystoreKeys
 import common.TaxDates
 import connectors.CalculatorConnector
 import controllers.predicates.ValidActiveSession
-import forms.DisposalDateForm._
+import forms.DisposalDateForm.*
 import models.DateModel
 import play.api.Logging
 import play.api.data.Form
@@ -47,12 +47,20 @@ class DisposalDateController @Inject()(val http: DefaultHttpClient,
 
   val disposalDate: Action[AnyContent] = Action.async { implicit request =>
     implicit val lang: Lang = mcc.messagesApi.preferred(request).lang
-    if (request.session.get(SessionKeys.sessionId).isEmpty) {
-      val sessionId = UUID.randomUUID.toString
-      Future.successful(Ok(disposalDateView(disposalDateForm)).withSession(request.session +
-        (SessionKeys.sessionId -> s"session-$sessionId")))
-    }
-    else {
+
+    if (request.session.get(SessionKeys.portalState).isEmpty) {
+      val sessionId = request.session.get(SessionKeys.sessionId).getOrElse {
+        s"session-${UUID.randomUUID.toString}"
+      }
+      val updatedSession = request.session +
+        (SessionKeys.portalState -> "OnBoarding") +
+        (SessionKeys.sessionId -> sessionId)
+
+      Future.successful(
+        Ok(disposalDateView(disposalDateForm))
+          .withSession(updatedSession)
+      )
+    } else {
       sessionCacheService.fetchAndGetFormData[DateModel](KeystoreKeys.disposalDate).map {
         case Some(data) => Ok(disposalDateView(disposalDateForm.fill(data)))
         case None => Ok(disposalDateView(disposalDateForm))

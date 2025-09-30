@@ -22,7 +22,7 @@ import uk.gov.hmrc.http.SessionKeys
 
 trait FakeRequestHelper {
   lazy implicit val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
-  lazy val fakeRequestWithSession: FakeRequest[AnyContentAsEmpty.type] = fakeRequest.withSession((SessionKeys.sessionId, ""))
+  lazy val fakeRequestWithSession: FakeRequest[AnyContentAsEmpty.type] = fakeRequest.withSession((SessionKeys.sessionId, "") , (SessionKeys.portalState, ""))
 
   def fakeRequestToPOSTWithSession (input: (String, String)*): FakeRequest[AnyContentAsFormUrlEncoded] =
     fakeRequestWithSession.withFormUrlEncodedBody(input*)
