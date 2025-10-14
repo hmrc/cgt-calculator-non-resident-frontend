@@ -66,6 +66,9 @@ class NoCapitalGainsTaxViewSpec extends CommonPlaySpec with WithCommonFakeApplic
         s"has the text '${messages.NoCapitalGainsTax.title}'" in {
           heading.text shouldBe messages.NoCapitalGainsTax.title
         }
+        "has a heading with class" in {
+          heading.hasClass("govuk-heading-l") shouldBe true
+        }
       }
 
       "contain a paragraph with the first paragraph text" in {

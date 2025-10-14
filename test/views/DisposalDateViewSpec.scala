@@ -58,6 +58,10 @@ class DisposalDateViewSpec extends CommonPlaySpec with WithCommonFakeApplication
         document.body.getElementsByTag("h1").text shouldEqual messages.question
       }
 
+      "has a class of heading-large" in {
+        document.body.getElementsByTag("h1").attr("class") shouldBe "govuk-fieldset__heading"
+      }
+
       s"have the Welsh language option on the first page" in {
         document.body.select("body > div > nav > ul > li:nth-child(2) > a").attr("href") shouldEqual "/calculate-your-capital-gains/non-resident/hmrc-frontend/language/cy"
       }

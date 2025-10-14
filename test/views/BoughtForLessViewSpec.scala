@@ -86,7 +86,17 @@ class BoughtForLessViewSpec extends CommonPlaySpec with WithCommonFakeApplicatio
           assertHTML(header)(_.attr("class") shouldBe "govuk-fieldset__heading")
         }
       }
+      "have a legend" which {
+        lazy val legend = document.select("legend")
 
+        s"has the text of ${messages.BoughtForLess.question}" in {
+          assertHTML(legend)(_.text() shouldBe messages.BoughtForLess.question)
+        }
+
+        "has the class" in {
+          assertHTML(legend)(_.attr("class") shouldBe "govuk-fieldset__legend govuk-fieldset__legend--l")
+        }
+      }
       "have a form" which {
         lazy val form = document.body().select("form")
 

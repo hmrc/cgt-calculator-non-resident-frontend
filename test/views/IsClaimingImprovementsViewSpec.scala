@@ -56,6 +56,10 @@ class IsClaimingImprovementsViewSpec extends CommonPlaySpec with WithCommonFakeA
           document.body().getElementsByTag("h1").first().text shouldBe headingAfterLegislationStart
         }
 
+        "has a class of govuk-heading-l" in {
+          document.body().getElementsByTag("h1").hasClass("govuk-heading-l") shouldBe true
+        }
+
         s"has paragraph content above the form" in {
           document.body().select("#main-content p.govuk-body").first().text shouldBe
             messages.IsClaimingImprovements.helpOne + " " + messages.IsClaimingImprovements.helpTwo

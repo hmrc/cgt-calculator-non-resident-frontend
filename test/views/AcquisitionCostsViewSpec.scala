@@ -65,7 +65,7 @@ class AcquisitionCostsViewSpec extends CommonPlaySpec with WithCommonFakeApplica
         lazy val heading = document.body().select("h1")
 
         "has a class of heading-large" in {
-          heading.attr("class") shouldBe "govuk-heading-xl"
+          heading.attr("class") shouldBe "govuk-heading-l"
         }
 
         s"has the text '${messages.AcquisitionCosts.question}'" in {
@@ -74,7 +74,7 @@ class AcquisitionCostsViewSpec extends CommonPlaySpec with WithCommonFakeApplica
       }
 
       s"have the question '${messages.AcquisitionCosts.question}'" in {
-        document.getElementsByClass("govuk-heading-xl").text shouldBe messages.AcquisitionCosts.question
+        document.getElementsByClass("govuk-heading-l").text shouldBe messages.AcquisitionCosts.question
       }
       s"have a paragraph that has the text '${messages.AcquisitionCosts.bulletTitle}" in {
         document.body.select("p#bullet-list-title").text() shouldBe messages.AcquisitionCosts.bulletTitle

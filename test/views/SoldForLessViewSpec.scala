@@ -83,6 +83,9 @@ class SoldForLessViewSpec extends CommonPlaySpec with WithCommonFakeApplication 
           legend.text shouldEqual messages.question
         }
 
+        "has a class" in{
+          document.body().select("legend").attr("class") shouldBe "govuk-fieldset__legend govuk-fieldset__legend--l"
+        }
       }
 
       "have inputs containing the id 'soldForLess'" in {

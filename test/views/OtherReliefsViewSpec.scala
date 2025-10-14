@@ -64,8 +64,8 @@ class OtherReliefsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
       "have a heading" which {
         lazy val heading = document.body().select("h1")
 
-        "has a class of heading-xlarge" in {
-          heading.attr("class") shouldBe "govuk-heading-xl"
+        "has a class of heading-large" in {
+          heading.attr("class") shouldBe "govuk-heading-l"
         }
 
         s"has the text '${messages.OtherReliefs.question}'" in {

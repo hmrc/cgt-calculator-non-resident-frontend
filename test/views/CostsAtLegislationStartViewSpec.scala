@@ -57,13 +57,19 @@ class CostsAtLegislationStartViewSpec extends CommonPlaySpec with WithCommonFake
 
       "have a heading" which {
         lazy val heading = document.select("h1")
-
-        "has a class of heading-xlarge" in {
+        "has a class of heading-large" in {
           heading.attr("class") shouldBe "govuk-fieldset__heading"
         }
 
         s"has the text '${messages.CostsAtLegislationStart.heading}'" in {
           heading.text shouldBe messages.CostsAtLegislationStart.heading
+        }
+      }
+      "have a legend tag" which{
+
+        lazy val legend = document.select("legend")
+        "has a class of heading-large" in {
+          legend.attr("class") shouldBe "govuk-fieldset__legend govuk-fieldset__legend--l"
         }
       }
 

@@ -62,6 +62,9 @@ class CalculationElectionNoReliefsViewSpec extends CommonPlaySpec with WithCommo
         s"has the text ${messages.title}" in {
           doc.select("h1").text shouldBe messages.title
         }
+        "has a class" in{
+          doc.select("h1").hasClass("govuk-heading-l") shouldBe true
+        }
       }
 
       "have a back link" which {

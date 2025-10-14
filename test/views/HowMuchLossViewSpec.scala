@@ -61,10 +61,10 @@ class HowMuchLossViewSpec extends CommonPlaySpec with WithCommonFakeApplication 
       }
 
       "have a heading" which {
-        lazy val heading = document.body().select("h1>label")
+        lazy val heading = document.body().select("h1 > label")
 
-        "has a class of govuk-label--xl" in {
-          heading.attr("class") shouldBe "govuk-label govuk-label--xl"
+        "has a class of govuk-label--l" in {
+          heading.hasClass("govuk-label govuk-label--l") shouldBe  true
         }
 
         s"has the text '${messages.HowMuchLoss.question}'" in {

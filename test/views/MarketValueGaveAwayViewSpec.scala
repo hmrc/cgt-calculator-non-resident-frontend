@@ -51,8 +51,8 @@ class MarketValueGaveAwayViewSpec extends CommonPlaySpec with WithCommonFakeAppl
           header.text() shouldBe MarketValueMessages.disposalGaveAwayH1
         }
 
-        s"has the class 'head-xlarge'" in {
-          header.attr("class") shouldBe "govuk-heading-xl"
+        s"has the class 'head-large'" in {
+          header.attr("class") shouldBe "govuk-heading-l"
         }
       }
 
@@ -95,7 +95,7 @@ class MarketValueGaveAwayViewSpec extends CommonPlaySpec with WithCommonFakeAppl
         }
 
         s"has the hidden text ${MessageLookup.NonResident.MarketValue.disposalGaveAwayH1}" in {
-          document.getElementsByClass("govuk-heading-xl").text() shouldBe MessageLookup.NonResident.MarketValue.disposalGaveAwayH1
+          document.getElementsByClass("govuk-heading-l").text() shouldBe MessageLookup.NonResident.MarketValue.disposalGaveAwayH1
         }
 
         s"has the input ID disposalValue" in {

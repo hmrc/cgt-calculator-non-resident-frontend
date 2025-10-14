@@ -53,8 +53,8 @@ class CalculationElectionViewSpec extends CommonPlaySpec with WithCommonFakeAppl
         doc.select("h1").text() shouldBe messages.heading
       }
 
-      "have the govuk-heading-xl class" in {
-        doc.select("h1").hasClass("govuk-heading-xl") shouldBe true
+      "have the govuk-heading-l class" in {
+        doc.select("h1").hasClass("govuk-heading-l") shouldBe true
       }
     }
 
