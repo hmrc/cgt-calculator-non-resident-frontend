@@ -48,7 +48,7 @@
 ) {
     @errorSummary(privateResidenceReliefForm.errors, Some("prrClaimed"))
 
-    <h1 class="govuk-heading-xl">@messages("calc.privateResidenceReliefValue.title")</h1>
+    <h1 class="govuk-heading-l">@messages("calc.privateResidenceReliefValue.title")</h1>
 
     @form(action = controllers.routes.PrivateResidenceReliefController.submitprivateResidenceReliefValue) {
       @hiddenYesHtml

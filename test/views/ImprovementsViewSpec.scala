@@ -50,9 +50,19 @@ class ImprovementsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
           document.title shouldBe pageTitle
         }
 
+        "has a label" which {
+          lazy val label = document.select("h1 > label")
+
+          "label has large label class" in {
+            label.attr("class") shouldBe "govuk-label govuk-label--l"
+          }
+        }
+        
         s"has the heading of $pageHeading" in {
           document.body().getElementsByTag("h1").first().text shouldBe pageHeading
         }
+
+
 
         "have a back link" which {
 

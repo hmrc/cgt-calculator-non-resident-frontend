@@ -66,7 +66,7 @@ class AnnualExemptAmountViewSpec extends CommonPlaySpec with WithCommonFakeAppli
         lazy val heading = document.body().select("h1")
 
         "has a class of heading-large" in {
-          heading.attr("class") shouldBe "govuk-heading-xl"
+          heading.attr("class") shouldBe "govuk-heading-l"
         }
 
         s"has the text '${messages.question}'" in {

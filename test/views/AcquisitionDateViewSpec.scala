@@ -37,6 +37,21 @@ class AcquisitionDateViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
 
   "Acquisition date view" when {
 
+
+    "have a heading" which {
+      lazy val view = acquisitionCostsView(acquisitionDateForm)(using fakeRequest,mockMessage)
+      lazy val document = Jsoup.parse(view.body)
+      lazy val heading = document.body().select("h1")
+
+      "has a class of heading-large" in {
+        heading.attr("class") shouldBe "govuk-heading-l"
+      }
+
+      s"has the text '${messages.AcquisitionDate.question}'" in {
+        heading.text shouldBe messages.AcquisitionDate.question
+      }
+    }
+
     "supplied with no errors" should {
       lazy val view = acquisitionCostsView(acquisitionDateForm)(using fakeRequest,mockMessage)
       lazy val document = Jsoup.parse(view.body)

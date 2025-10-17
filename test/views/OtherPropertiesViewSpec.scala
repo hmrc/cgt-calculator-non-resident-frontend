@@ -49,6 +49,10 @@ class OtherPropertiesViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
       s"have the heading ${messages.question}" in {
         document.body.getElementsByTag("h1").text shouldEqual messages.question
       }
+      "should have a legend element" in{
+        lazy val legend = document.body.select("legend")
+        legend.hasClass("govuk-fieldset__legend govuk-fieldset__legend--l") shouldBe true
+      }
 
       s"have a 'Back' link to ${controllers.routes.PersonalAllowanceController.personalAllowance.url}" which {
 

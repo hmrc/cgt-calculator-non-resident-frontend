@@ -50,8 +50,8 @@ class AcquisitionValueViewSpec extends CommonPlaySpec with WithCommonFakeApplica
         document.select("h1").hasClass("govuk-label-wrapper") shouldBe true
       }
 
-      "contains an extra large label" in {
-        document.select("h1 > label").hasClass("govuk-label--xl")
+      "contains an large label" in {
+        document.select("h1 > label").hasClass("govuk-label--l")
       }
     }
 

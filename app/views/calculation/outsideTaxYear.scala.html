@@ -29,7 +29,7 @@
 @layout(
     pageTitle = title
 ) {
-    <h1 class="govuk-heading-xl">@Messages("calc.nonresident.outsideTaxYears.title")</h1>
+    <h1 class="govuk-heading-l">@Messages("calc.nonresident.outsideTaxYears.title")</h1>
     <p class="govuk-body">@Messages("calc.nonresident.outsideTaxYears.message", taxYear.calculationTaxYear)</p>
     <p><a class="govuk-button" href="@controllers.routes.SoldOrGivenAwayController.soldOrGivenAway" id="submit">@Messages("calc.base.continue")</a></p>
 }

@@ -77,6 +77,10 @@ class DisposalValueViewSpec extends CommonPlaySpec with WithCommonFakeApplicatio
           label.text shouldBe messages.question
         }
 
+        "has a class of govuk-label-l" in {
+          label.hasClass("govuk-label govuk-label--l") shouldBe true
+        }
+
       }
 
       "have an input with the id 'disposalValue" in {

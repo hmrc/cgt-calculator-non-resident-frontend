@@ -73,6 +73,17 @@ class BroughtForwardLossesViewSpec extends CommonPlaySpec with WithCommonFakeApp
         }
       }
 
+      "have a legend" which {
+        lazy val legend = document.select("legend")
+
+        s"has the text of ${messages.BroughtForwardLosses.question}" in {
+          assertHTML(legend)(_.text() shouldBe messages.BroughtForwardLosses.question)
+        }
+
+        "has the class" in {
+          assertHTML(legend)(_.attr("class") shouldBe "govuk-fieldset__legend govuk-fieldset__legend--l")
+        }
+      }
       "have a form" which {
         lazy val form = document.select("form")
 

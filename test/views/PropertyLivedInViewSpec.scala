@@ -54,8 +54,8 @@ class PropertyLivedInViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
           heading.text shouldBe s"${messages.title}"
         }
 
-        "have the govuk-label--xl class" in {
-          heading.hasClass("govuk-fieldset__legend govuk-fieldset__legend--xl") shouldBe true
+        "have the govuk-label--l class" in {
+          heading.hasClass("govuk-fieldset__legend govuk-fieldset__legend--l") shouldBe true
         }
       }
 

@@ -37,6 +37,19 @@ class CurrentIncomeViewSpec extends CommonPlaySpec with WithCommonFakeApplicatio
 
 
   "Current Income view" when {
+    "have a heading" which {
+      lazy val view = currentIncomeView(currentIncomeForm)(using fakeRequest, mockMessage)
+      lazy val document = Jsoup.parse(view.body)
+      lazy val h1Tag = document.select("h1")
+
+      s"has the text '${messages.question}'" in {
+        h1Tag.text shouldBe messages.question
+      }
+      "has a class of heading-large" in {
+        h1Tag.attr("class") shouldBe "govuk-heading-l"
+      }
+
+    }
 
     "supplied with no errors" should {
       lazy val view = currentIncomeView(currentIncomeForm)(using fakeRequest, mockMessage)

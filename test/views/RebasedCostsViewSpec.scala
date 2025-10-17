@@ -61,8 +61,11 @@ class RebasedCostsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
       "have a heading" which {
         lazy val heading = document.body().select("h1")
 
-        "has a class of heading-xlarge" in {
+        "has a class of heading" in {
           heading.attr("class") shouldBe "govuk-fieldset__heading"
+        }
+        "has a class - legend " in {
+          document.body().select("legend").attr("class") shouldBe "govuk-fieldset__legend govuk-fieldset__legend--l"
         }
 
         s"has the text '${messages.RebasedCosts.question}'" in {

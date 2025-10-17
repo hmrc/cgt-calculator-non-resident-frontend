@@ -66,6 +66,9 @@ class ClaimingReliefsViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
         s"has the text '${messages.title}'" in {
           h1Tag.text shouldBe messages.title
         }
+        "has a class of heading-large" in {
+          h1Tag.attr("class") shouldBe "govuk-heading-l"
+        }
       }
 
       s"have a p with text ${messages.helpText}" in {

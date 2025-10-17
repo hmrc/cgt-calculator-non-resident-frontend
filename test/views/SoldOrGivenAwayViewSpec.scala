@@ -67,6 +67,18 @@ class SoldOrGivenAwayViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
           heading.text shouldBe messages.question
         }
       }
+      s"have the legend" which {
+
+        lazy val legend = document.select("legend")
+
+        s"has the question ${messages.question}" in {
+          legend.text shouldEqual messages.question
+        }
+
+        "has a class" in {
+          document.body().select("legend").attr("class") shouldBe "govuk-fieldset__legend govuk-fieldset__legend--l"
+        }
+      }
 
       s"have a home link to '${controllers.routes.DisposalDateController.disposalDate.url}'" in {
         document.select("body > header > div > div > div.govuk-header__content > a")

@@ -36,7 +36,7 @@
     pageTitle = title
 ) {
     @errorSummary(isClaimingImprovementsForm.errors)
-    <h1 class="govuk-heading-xl">@heading</h1>
+    <h1 class="govuk-heading-l">@heading</h1>
     <p class="govuk-body">@messages("calc.improvements.helpOne") @messages("calc.improvements.helpTwo")</p>
     <p class="govuk-body">@messages("calc.improvements.exampleOne") @messages("calc.improvements.exampleTwo")</p>
     @form(action = controllers.routes.ImprovementsController.submitIsClaimingImprovements) {

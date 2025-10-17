@@ -64,8 +64,8 @@ class DisposalCostsViewSpec extends CommonPlaySpec with WithCommonFakeApplicatio
       "have a heading" which {
         lazy val heading = document.body().select("h1")
 
-        "has a class of heading-xlarge" in {
-          heading.attr("class") shouldBe "govuk-heading-xl"
+        "has a class of heading-large" in {
+          heading.attr("class") shouldBe "govuk-heading-l"
         }
 
         s"has the text '${messages.question}'" in {
@@ -118,7 +118,7 @@ class DisposalCostsViewSpec extends CommonPlaySpec with WithCommonFakeApplicatio
       }
 
       s"have the question ${messages.question}" in {
-        document.getElementsByClass("govuk-heading-xl").first.text shouldBe messages.question
+        document.getElementsByClass("govuk-heading-l").first.text shouldBe messages.question
       }
 
       "have an input with the id 'disposalCosts" in {

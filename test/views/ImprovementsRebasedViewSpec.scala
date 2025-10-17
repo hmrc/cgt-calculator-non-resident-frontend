@@ -54,6 +54,10 @@ class ImprovementsRebasedViewSpec extends CommonPlaySpec with WithCommonFakeAppl
           document.body().getElementsByTag("h1").first().text shouldBe pageHeading
         }
 
+        "has a class of govuk-heading-l" in {
+          document.body().getElementsByTag("h1").hasClass("govuk-heading-l") shouldBe true
+        }
+
         "contains 2 inputs for before and after" in {
           document.body.select("input.govuk-input").first().attr("id") shouldBe "improvementsAmt"
           document.body.select("input.govuk-input").last().attr("id") shouldBe "improvementsAmtAfter"

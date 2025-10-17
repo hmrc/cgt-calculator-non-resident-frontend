@@ -73,6 +73,18 @@ class WhoDidYouGiveItToViewSpec extends CommonPlaySpec with WithCommonFakeApplic
         heading.hasClass("govuk-fieldset__heading") shouldBe true
       }
     }
+    s"have the legend" which {
+
+      lazy val legend = doc.select("legend")
+
+      s"has the question ${messages.title}" in {
+        legend.text shouldEqual messages.title
+      }
+
+      "has a class" in {
+        doc.body().select("legend").attr("class") shouldBe "govuk-fieldset__legend govuk-fieldset__legend--l"
+      }
+    }
 
     "have a form" which {
       lazy val form = doc.getElementsByTag("form")

@@ -52,7 +52,9 @@ class OutsideTaxYearViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
       s"have a heading of ${messages.title}" in {
         doc.select("h1").text() shouldBe messages.title
       }
-
+      "have large text class for heading" in {
+        doc.select("h1").attr("class") shouldBe "govuk-heading-l"
+      }
       s"have a message of ${messages.content("2017/18")}" in {
         doc.select("p.govuk-body").text() shouldBe messages.content("2017/18")
       }

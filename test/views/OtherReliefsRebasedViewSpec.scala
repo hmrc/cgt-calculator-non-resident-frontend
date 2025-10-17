@@ -59,8 +59,8 @@ class OtherReliefsRebasedViewSpec extends CommonPlaySpec with WithCommonFakeAppl
       "have a heading" which {
         lazy val heading = document.body().select("h1")
 
-        "has a class of govuk-heading-xl" in {
-          heading.attr("class") shouldBe "govuk-heading-xl"
+        "has a class of govuk-heading-l" in {
+          heading.attr("class") shouldBe "govuk-heading-l"
         }
 
         s"has the text '${messages.serviceName}'" in {

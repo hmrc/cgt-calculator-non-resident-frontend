@@ -56,6 +56,9 @@ class WhatNextViewSpec extends CommonPlaySpec with WithCommonFakeApplication wit
     s"have a header of ${messages.title}" in {
       doc.select("h1").text() shouldBe messages.heading
     }
+    "has a class - header" in{
+      doc.select("h1").hasClass("govuk-heading-l") shouldBe true
+    }
 
     s"have a list title of ${messages.listTitle}" in {
       doc.select("#list-title").text() shouldBe messages.listTitle

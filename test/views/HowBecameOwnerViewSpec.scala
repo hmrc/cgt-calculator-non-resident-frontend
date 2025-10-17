@@ -87,6 +87,9 @@ class HowBecameOwnerViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
         s"has the question ${messages.question}" in {
           legend.text shouldEqual messages.question
         }
+        "has the class" in{
+          legend.attr("class") shouldBe "govuk-fieldset__legend govuk-fieldset__legend--l"
+        }
       }
 
       "have inputs containing the id 'gainedBy'" in {

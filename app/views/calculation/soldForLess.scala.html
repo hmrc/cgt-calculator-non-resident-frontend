@@ -37,6 +37,7 @@
     @form(action = controllers.routes.SoldForLessController.submitSoldForLess) {
         @inputYesNo(
             legend = Messages("calc.nonResident.soldForLess.question"),
+
             field = soldForLessForm("soldForLess")
         )
         <input type="hidden" name="option" value="" />
