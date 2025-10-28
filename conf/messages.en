@@ -392,6 +392,7 @@ calc.calculationElectionNoReliefs.helpTextMethodPartTwo = gives you the lowest a
 calc.calculationElectionNoReliefs.helpTextChooseMethod = You''re free to choose another method if you wish.
 
 ## Other Reliefs ##
+calc.otherReliefs.heading = Claiming extra tax relief on property
 calc.otherReliefs.question = How much extra tax relief are you claiming?
 calc.otherReliefs.totalGain = Total gain
 calc.otherReliefs.totalLoss = Total loss
@@ -404,7 +405,7 @@ calc.otherReliefs.errorMax = How much extra tax relief you are claiming must be 
 calc.otherReliefs.errorNegative = How much extra tax relief you are claiming must be £0 or more
 calc.otherReliefs.errorDecimal = How much extra tax relief you are claiming has too many numbers after the decimal point
 calc.otherReliefs.help = For example, lettings relief.
-calc.otherReliefs.helpTwo = Don''t include any Private Residence Relief.
+calc.otherReliefs.helpTwo = Do not include any Private Residence Relief.
 calc.otherReliefs.gainInfo.part1 = We''ve calculated that you''ve made a taxable gain of
 calc.otherReliefs.gainInfo.part1.loss = We''ve calculated that you''ve made an allowable loss of
 calc.otherReliefs.gainInfo.part2 = and a total gain of

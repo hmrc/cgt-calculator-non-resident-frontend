@@ -68,8 +68,8 @@ class OtherReliefsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
           heading.attr("class") shouldBe "govuk-heading-l"
         }
 
-        s"has the text '${messages.OtherReliefs.question}'" in {
-          heading.text shouldBe messages.OtherReliefs.question
+        s"has the text '${messages.OtherReliefs.heading}'" in {
+          heading.text shouldBe messages.OtherReliefs.heading
         }
       }
 
