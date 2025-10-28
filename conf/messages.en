@@ -127,7 +127,7 @@ acquisitionDate.error.invalid.year       = Enter a number, in digits, for the ye
 acquisitionDate.error.notReal            = Enter a real date for when you signed the contract to become the owner
 acquisitionDate.error.notReal.day        = Enter a real day for when you signed the contract to become the owner
 acquisitionDate.error.notReal.month      = Enter a real month for when you signed the contract to become the owner
-acquisitionDate.error.notReal.year       = Enter a real year for when you signed the contract to become the owner
+acquisitionDate.error.notReal.year       = The year you signed the contract must be a 4-digit year
 acquisitionDate.error.range.max          = The date you signed the contract to become the owner must be in the past, before today
 
 ## Acquisition Value ##

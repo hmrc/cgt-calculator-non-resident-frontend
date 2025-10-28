@@ -60,7 +60,7 @@ acquisitionDate.error.invalid.year       = Nodwch rif, mewn digidau, ar gyfer y 
 acquisitionDate.error.notReal            = Nodwch ddyddiad go iawn ar gyfer y dyddiad y gwnaethoch lofnodi’r contract i ddod yn berchennog
 acquisitionDate.error.notReal.day        = Nodwch ddiwrnod go iawn ar gyfer y dyddiad y gwnaethoch lofnodi’r contract i ddod yn berchennog
 acquisitionDate.error.notReal.month      = Nodwch fis go iawn ar gyfer y dyddiad y gwnaethoch lofnodi’r contract i ddod yn berchennog
-acquisitionDate.error.notReal.year       = Nodwch flwyddyn go iawn ar gyfer y dyddiad y gwnaethoch lofnodi’r contract i ddod yn berchennog
+acquisitionDate.error.notReal.year       = Mae’n rhaid i’r flwyddyn y gwnaethoch lofnodi’r contract fod yn 4 digid o hyd
 acquisitionDate.error.range.max          = Mae’n rhaid i’r dyddiad y gwnaethoch lofnodi’r contract i ddod yn berchennog fod yn y gorffennol, cyn heddiw
 
 calc.acquisitionMarketValue.errorDecimalPlaces = Mae gormod o rifau ar ôl y pwynt degol ar gyfer gwerth marchnadol yr eiddo
