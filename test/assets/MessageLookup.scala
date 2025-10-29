@@ -278,6 +278,7 @@ object MessageLookup {
       val title = "How much extra tax relief are you claiming? - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
       val help = "For example, lettings relief."
       val question = "How much extra tax relief are you claiming?"
+      val heading  = "Claiming extra tax relief on property"
       val totalGain = "Total gain"
       val taxableGain = "Taxable gain"
       val lossCarriedForward = "Loss carried forward"
@@ -285,7 +286,7 @@ object MessageLookup {
       val updateRelief = "Update relief"
       val errorDecimal = "There are too many numbers after the decimal point in your other reliefs"
       val errorNegative = "Enter a positive number for your other reliefs"
-      val helpTwo = "Don't include any Private Residence Relief."
+      val helpTwo = "Do not include any Private Residence Relief."
       def additionalHelp(gain: Int, chargeableGain: Int): String = {
         val locale = new java.util.Locale("en", "EN")
         val amount = java.text.NumberFormat.getIntegerInstance(locale)
