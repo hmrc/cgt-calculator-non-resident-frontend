@@ -89,8 +89,8 @@ class ImprovementsViewSpec extends CommonPlaySpec with WithCommonFakeApplication
 
           lazy val helpText = document.getElementsByClass("govuk-hint")
 
-          s"should have hint text ${messages.Improvements.jointOwnership} For example, £10,000.50" in {
-            helpText.text() shouldBe(messages.Improvements.jointOwnership + " For example, £10,000.50")
+          s"should have hint text ${messages.Improvements.jointOwnership} Enter the amount in pounds. For example, £10,000.50" in {
+            helpText.text() shouldBe(messages.Improvements.jointOwnership + " Enter the amount in pounds. For example, £10,000.50")
           }
         }
 
