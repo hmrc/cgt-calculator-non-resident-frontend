@@ -22,7 +22,7 @@ calc.month.10 = Hydref
 calc.month.11 = Tachwedd
 calc.month.12 = Rhagfyr
 
-calc.currencyHint = Er enghraifft, {0}
+calc.currencyHint = Nodwch y swm mewn punnoedd. Er enghraifft, {0}
 
 calc.common.date.invalidDayError = Nodwch ddiwrnod
 calc.common.date.invalidMonthError = Nodwch fis
