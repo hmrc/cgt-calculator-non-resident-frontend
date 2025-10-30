@@ -220,7 +220,7 @@ disposalDate.error.invalid.year       = Enter a number, in digits, for the year 
 disposalDate.error.notReal            = Enter a real date for when you signed the contract that made someone else the owner
 disposalDate.error.notReal.day        = Enter a real day for when you signed the contract that made someone else the owner
 disposalDate.error.notReal.month      = Enter a real month for when you signed the contract that made someone else the owner
-disposalDate.error.notReal.year       = Enter a real year for when you signed the contract that made someone else the owner
+disposalDate.error.notReal.year       = The year you signed the contract must be a 4-digit year
 
 ## No Capital Gains Tax ##
 nocgt.invaliddate.title = You have no tax to pay
