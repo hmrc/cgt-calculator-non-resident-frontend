@@ -22,7 +22,7 @@ calc.base.home = Home
 messages.back = Back
 site.title.error = Error: {0}
 
-calc.currencyHint = For example, {0}
+calc.currencyHint = Enter the amount in pounds. For example, {0}
 
 ## Sign out banner
 signOut.title = For your security
