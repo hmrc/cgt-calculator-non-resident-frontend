@@ -70,7 +70,7 @@ calc.acquisitionValue.errorReal = Mae’n rhaid i faint y gwnaethoch ei dalu am 
 calc.acquisitionValue.errorMax = Mae’n rhaid i ''Faint y gwnaethoch ei dalu am yr eiddo?'' fod yn £1,000,000,000 neu lai
 calc.acquisitionValue.errorDecimalPlaces = Mae ''Faint y gwnaethoch ei dalu am yr eiddo?'' yn cynnwys gormod o rifau ar ôl y pwynt degol
 calc.acquisitionValue.errorNegative = Mae’n rhaid i ''Faint y gwnaethoch ei dalu am yr eiddo?'' fod yn £0 neu fwy
-calc.acquisitionValue.helpText = Os oeddech yn berchen ar yr eiddo gyda rhywun arall, dylech ond nodi’ch cyfran chi o’r pryniant. Er enghraifft, £150,000
+calc.acquisitionValue.helpText = Os oeddech yn berchen ar yr eiddo gyda rhywun arall, dylech ond nodi’ch cyfran chi o’r pryniant.Nodwch y swm mewn punnoedd.Er enghraifft, £150,000
 calc.acquisitionValue.question = Faint y gwnaethoch ei dalu am yr eiddo?
 calc.annualExemptAmount.error.required = Nodwch faint o’ch lwfans Treth Enillion Cyfalaf sy’n weddill gennych
 calc.annualExemptAmount.errorReal = Mae’n rhaid i faint o’r lwfans Treth Enillion Cyfalaf sy’n weddill gennych fod yn swm o arian mewn punnoedd
@@ -161,7 +161,7 @@ calc.costsAtLegislationStart.error.tooHigh = Mae’n rhaid i’r gost o brisio�
 calc.costsAtLegislationStart.errorDecimalPlaces = Mae''r gost o brisio’r eiddo yn cynnwys gormod o rifau ar ôl y pwynt degol
 calc.costsAtLegislationStart.errorNegative = Mae’n rhaid i’r gost o brisio’r eiddo fod yn £0 neu fwy
 calc.costsAtLegislationStart.errors.required = Dewiswch ''Iawn'' os gwnaethoch dalu i gael yr eiddo wedi’i brisio ar 31 Mawrth 1982
-calc.costsAtLegislationStart.helpText = Os oeddech yn berchen ar yr eiddo gyda rhywun arall, dylech ond nodi’ch cyfran chi o’r costau, fel y cytunwyd gyda''ch cydberchennog. Er enghraifft, £10,000.50
+calc.costsAtLegislationStart.helpText = Os oeddech yn berchen ar yr eiddo gyda rhywun arall, dylech ond nodi’ch cyfran chi o’r costau, fel y cytunwyd gyda''ch cydberchennog.Nodwch y swm mewn punnoedd.Er enghraifft, £10,000.50
 calc.costsAtLegislationStart.howMuch = Beth oedd y gost o brisio’r eiddo?
 calc.costsAtLegislationStart.title = A wnaethoch dalu i gael prisio’r eiddo ar 31 Mawrth 1982?
 calc.currentIncome.error.required = Nodwch gyfanswm eich incwm yn y flwyddyn dreth pan wnaethoch roi’r gorau i fod yn berchen ar yr eiddo
@@ -208,7 +208,7 @@ calc.disposalValue.errorDecimalPlaces = Mae ''Am faint y gwnaethoch werthu’r e
 calc.disposalValue.errorNegative = Mae’n rhaid i ''Am faint y gwnaethoch werthu’r eiddo?'' fod yn £0 neu fwy
 calc.disposalValue.errorReal = Mae’n rhaid i faint y gwnaethoch werthu’r eiddo amdano fod yn swm o arian mewn punnoedd
 calc.disposalValue.errorMax = Mae’n rhaid i ''Am faint y gwnaethoch werthu''r eiddo?'' fod yn £1,000,000,000 neu lai
-calc.disposalValue.jointOwnership = Os oeddech yn berchen ar yr eiddo gyda rhywun arall, dylech ond nodi’ch cyfran chi o’r pris gwerthu. Er enghraifft, £250,000
+calc.disposalValue.jointOwnership = Os oeddech yn berchen ar yr eiddo gyda rhywun arall, dylech ond nodi’ch cyfran chi o’r pris gwerthu.Nodwch y swm mewn punnoedd.Er enghraifft, £250,000
 calc.disposalValue.question = Am faint y gwnaethoch werthu’r eiddo?
 
 calc.error.summary.heading = Mae gwallau ar y dudalen hon
@@ -356,7 +356,7 @@ calc.privateResidenceRelief.question = Ydych chi’n hawlio Rhyddhad Preswylfan 
 
 ## Private Residence Relief Value ##
 calc.privateResidenceReliefValue.title = Faint o Ryddhad Preswylfan Preifat sydd gennych hawl iddo?
-calc.privateResidenceReliefValue.hint = Er enghraifft, £10,000.50
+calc.privateResidenceReliefValue.hint = Nodwch y swm mewn punnoedd.Er enghraifft, £10,000.50
 calc.privateResidenceReliefValue.helpTextBeforeAfter = Pam y dyddiadau penodol hyn?
 calc.privateResidenceReliefValue.helpTextJustBefore = Pam y dyddiad hwn?
 calc.privateResidenceReliefValue.daysBeforeHelpText = 6 Ebrill 2015 yw pan ddaeth y rheolau Treth Enillion Cyfalaf ar gyfer rhai nad ydynt yn breswyl yn y DU i rym
@@ -378,7 +378,7 @@ calc.rebasedCosts.error.invalid = Mae’n rhaid i’r gost o brisio’r eiddo fo
 calc.rebasedCosts.error.tooHigh = Mae’n rhaid i’r gost o brisio’r eiddo fod yn £1,000,000,000 neu lai
 calc.rebasedCosts.errorDecimalPlaces = Mae''r gost o brisio’r eiddo yn cynnwys gormod o rifau ar ôl y pwynt degol
 calc.rebasedCosts.errorNegative = Mae’n rhaid i’r gost o brisio’r eiddo fod yn �0 neu fwy
-calc.rebasedCosts.jointOwnership = Os oeddech yn berchen ar yr eiddo gyda rhywun arall, dylech ond nodi’ch cyfran chi o’r gost, fel y cytunwyd gyda''ch cydberchennog. Er enghraifft, £10,000.50
+calc.rebasedCosts.jointOwnership = Os oeddech yn berchen ar yr eiddo gyda rhywun arall, dylech ond nodi’ch cyfran chi o’r gost, fel y cytunwyd gyda''ch cydberchennog.Nodwch y swm mewn punnoedd.Er enghraifft, £10,000.50
 calc.rebasedCosts.question = A wnaethoch dalu i gael prisio’r eiddo ar 5 Ebrill 2015?
 calc.rebasedCosts.questionTwo = Beth oedd y gost o brisio’r eiddo?
 
