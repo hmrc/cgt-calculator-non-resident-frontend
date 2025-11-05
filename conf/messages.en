@@ -132,7 +132,7 @@ acquisitionDate.error.range.max          = The date you signed the contract to b
 
 ## Acquisition Value ##
 calc.acquisitionValue.question = How much did you pay for the property?
-calc.acquisitionValue.helpText = If you owned the property with someone else, only enter your share of the purchase.Enter the amount in pounds.For example, £150,000
+calc.acquisitionValue.helpText = If you owned the property with someone else, only enter your share of the purchase. Enter the amount in pounds.For example, £150,000
 calc.acquisitionValue.error.required = Enter how much you paid for the property
 calc.acquisitionValue.errorReal = How much you paid for the property must be an amount of money in pounds
 calc.acquisitionValue.errorMax = How much you paid for the property must be £1,000,000,000 or less
@@ -161,7 +161,7 @@ calc.nonResident.rebasedValue.errorMax = The market value of the property on 5 A
 ## Rebased Costs ##
 calc.rebasedCosts.question = Did you pay to have the property valued at 5 April 2015?
 calc.rebasedCosts.questionTwo = How much did it cost to get the property valued?
-calc.rebasedCosts.jointOwnership = If you owned the property with someone else, only enter your share of the cost, as agreed with your co-owner.Enter the amount in pounds.For example, £10,000.50
+calc.rebasedCosts.jointOwnership = If you owned the property with someone else, only enter your share of the cost, as agreed with your co-owner. Enter the amount in pounds.For example, £10,000.50
 calc.rebasedCosts.errors.required = Select yes if you paid to have the property valued at 5 April 2015
 calc.rebasedCosts.errorNegative = How much it cost to get the property valued must be £0 or more
 calc.rebasedCosts.error.required = Enter how much it cost to get the property valued
@@ -242,7 +242,7 @@ calc.disposalValue.errorNegative = How much you sold the property for must be £
 calc.disposalValue.errorDecimalPlaces = How much you sold the property for has too many numbers after the decimal point
 calc.disposalValue.errorReal = How much you sold the property for must be an amount of money in pounds
 calc.disposalValue.errorMax = How much you sold the property for must be £1,000,000,000 or less
-calc.disposalValue.jointOwnership = If you owned the property with someone else, only enter your share of the sale value.Enter the amount in pounds.For example, £250,000
+calc.disposalValue.jointOwnership = If you owned the property with someone else, only enter your share of the sale value. Enter the amount in pounds.For example, £250,000
 
 ## How Much Gain ##
 calc.howMuchGain.question = What was your taxable gain?
@@ -474,7 +474,7 @@ calc.propertyLivedIn.errors.required = Select yes if you have ever lived in the 
 ## Cost At Legislation Start ##
 calc.costsAtLegislationStart.title = Did you pay to have the property valued at 31 March 1982?
 calc.costsAtLegislationStart.howMuch = How much did it cost to get the property valued?
-calc.costsAtLegislationStart.helpText = If you owned the property with someone else, only enter your share of the costs, as agreed with your co-owner.Enter the amount in pounds.For example, £10,000.50
+calc.costsAtLegislationStart.helpText = If you owned the property with someone else, only enter your share of the costs, as agreed with your co-owner. Enter the amount in pounds.For example, £10,000.50
 calc.costsAtLegislationStart.errors.required = Select yes if you paid to have the property valued at 31 March 1982
 calc.costsAtLegislationStart.errorNegative = How much it cost to get the property valued must be £0 or more
 calc.costsAtLegislationStart.error.required = Enter how much it cost to get the property valued
