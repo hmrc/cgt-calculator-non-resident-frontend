@@ -83,7 +83,7 @@ object MessageLookup {
 
     object AcquisitionValue {
       val question = "How much did you pay for the property?"
-      val helpText = "If you owned the property with someone else, only enter your share of the purchase. For example, £150,000"
+      val helpText = "If you owned the property with someone else, only enter your share of the purchase. Enter the amount in pounds. For example, £150,000"
       val bulletTitle = "Put the market value of the property instead if you:"
       val bulletOne = "inherited it"
       val bulletTwo = "got it as a gift"
@@ -203,7 +203,7 @@ object MessageLookup {
       val bulletTwo = "sold it to a relative, business partner or"
       val bulletTwoLink = "someone else you're connected to"
       val bulletThree = "sold it for less than it's worth to help the buyer"
-      val jointOwnership = "If you owned the property with someone else, only enter your share of the sale value. For example, £250,000"
+      val jointOwnership = "If you owned the property with someone else, only enter your share of the sale value. Enter the amount in pounds. For example, £250,000"
       def errorMaximum(value: String): String = s"Enter an amount that's £$value or less"
     }
 
@@ -369,7 +369,7 @@ object MessageLookup {
       val errorTitle = "Error: Did you pay to have the property valued at 5 April 2015? - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
       val question = "Did you pay to have the property valued at 5 April 2015?"
       val inputQuestion = "How much did it cost to get the property valued?"
-      val jointOwnership = "If you owned the property with someone else, only enter your share of the cost, as agreed with your co-owner. For example, £10,000.50"
+      val jointOwnership = "If you owned the property with someone else, only enter your share of the cost, as agreed with your co-owner. Enter the amount in pounds. For example, £10,000.50"
       val errorNegative = "Enter a positive number for your costs"
       val errorNoValue = "Enter the value for your costs"
       val errorDecimalPlaces = "There are too many numbers after the decimal point in your costs"
@@ -531,7 +531,7 @@ object MessageLookup {
       val title = "Did you pay to have the property valued at 31 March 1982? - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
       val heading = "Did you pay to have the property valued at 31 March 1982?"
       val howMuch = "How much did it cost to get the property valued?"
-      val helpText = "If you owned the property with someone else, only enter your share of the costs, as agreed with your co-owner. For example, £10,000.50"
+      val helpText = "If you owned the property with someone else, only enter your share of the costs, as agreed with your co-owner. Enter the amount in pounds. For example, £10,000.50"
       val errorNegative = "Enter a positive number for your costs"
       val errorNoValue = "Enter the value for your costs"
       val errorDecimalPlaces = "There are too many numbers after the decimal point in your costs"
