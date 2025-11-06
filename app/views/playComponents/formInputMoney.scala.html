@@ -37,6 +37,8 @@
     classes = "govuk-input--width-10",
     spellcheck = Some(false),
     prefix = if(showCurrency) Some(PrefixOrSuffix(
-        content = Text("£")
-    )) else None
+        content = Text("£"),
+        attributes = Map("id" -> "personalAllowance-prefix")
+    )) else None,
+    attributes = Map("aria-labelledby" -> "personalAllowance-label personalAllowance-prefix")
 ).withFormField(field))
