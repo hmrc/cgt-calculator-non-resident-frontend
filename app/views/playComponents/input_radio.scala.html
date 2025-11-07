@@ -14,6 +14,7 @@
  * limitations under the License.
  *@
 
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.FormGroup
 @this(govukRadios : GovukRadios)
 
 @(
@@ -34,6 +35,7 @@
             ))
         )),
         hint = hint.map(hintString => Hint(content = Text(hintString))),
+        formGroup = FormGroup(classes = Some("govuk-!-margin-top-6")),
         items = items
     ).withFormField(field)
 )
