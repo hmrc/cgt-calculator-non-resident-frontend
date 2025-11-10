@@ -16,13 +16,14 @@
 
 @import models.PreviousLossOrGainModel
 @import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.FormGroup
 
 @this(
     errorSummary: playComponents.errorSummary,
     layout: Layout,
     form: FormWithCSRF,
     submitButton: playComponents.submitButton,
-    inputRadio: playComponents.input_radio
+    govukRadios : GovukRadios
 )
 
 @(previousLossOrGainForm: Form[PreviousLossOrGainModel])(implicit request: Request[_], messages: Messages)
@@ -37,21 +38,36 @@
     @errorSummary(previousLossOrGainForm.errors)
     <h1 class="govuk-heading-l">@Messages("calc.previousLossOrGain.question")</h1>
     <div class="govuk-body">
-        <p>@Messages("calc.previousLossOrGain.hintOne")</p>
-
-        <p>@Messages("calc.previousLossOrGain.hintTwo")</p>
+        <span id="previousLossOrGain-hint" class="govuk-hint">
+            <p>@Messages("calc.previousLossOrGain.hintOne")</p>
+            <p>@Messages("calc.previousLossOrGain.hintTwo")</p>
+        </span>
     </div>
     @form(action = controllers.routes.PreviousGainOrLossController.submitPreviousGainOrLoss) {
-        @inputRadio(
-            legend = Messages("calc.previousLossOrGain.question"),
-            legendClass = Some("govuk-visually-hidden"),
-            items = Seq(
-                RadioItem(content = Text(Messages("calc.previousLossOrGain.loss")), value = Option("Loss")),
-                RadioItem(content = Text(Messages("calc.previousLossOrGain.gain")), value = Option("Gain")),
-                RadioItem(content = Text(Messages("calc.previousLossOrGain.neither")), value = Option("Neither"))
-            ),
-            field = previousLossOrGainForm("previousLossOrGain"),
-            isPageHeading = false
+        @govukRadios(
+            Radios(
+                fieldset = Some(Fieldset(
+                    legend = Some(Legend(
+                    classes = "govuk-visually-hidden",
+                    content = Text(Messages("calc.previousLossOrGain.question")),
+                    isPageHeading = false
+                    ))
+                )),
+                 items = Seq(
+                        RadioItem(
+                        content = Text(Messages("calc.previousLossOrGain.loss")), value = Option("Loss"),
+                        attributes = Map("aria-describedby" -> "previousLossOrGain-hint") ),
+
+                        RadioItem(
+                        content = Text(Messages("calc.previousLossOrGain.gain")), value = Option("Gain"),
+                        attributes = Map("aria-describedby" -> "previousLossOrGain-hint") ),
+
+                        RadioItem(
+                        content = Text(Messages("calc.previousLossOrGain.neither")), value = Option("Neither"),
+                        attributes = Map("aria-describedby" -> "previousLossOrGain-hint") )
+                ),
+                formGroup = FormGroup(classes = Some("govuk-!-margin-top-6"))
+            ).withFormField(previousLossOrGainForm("previousLossOrGain"))
         )
         @submitButton()
     }
