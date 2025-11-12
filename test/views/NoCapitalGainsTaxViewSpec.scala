@@ -57,7 +57,7 @@ class NoCapitalGainsTaxViewSpec extends CommonPlaySpec with WithCommonFakeApplic
       }
 
       s"have a home link to '${controllers.routes.DisposalDateController.disposalDate.url}'" in {
-        document.getElementsByClass("govuk-header__link govuk-header__service-name").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate.url
+        document.body.select("body > header > section > div > div > span > a").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate.url
       }
 
       "have a heading" which {

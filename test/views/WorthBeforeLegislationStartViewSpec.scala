@@ -62,7 +62,7 @@ class WorthBeforeLegislationStartViewSpec extends CommonPlaySpec with WithCommon
       }
 
       s"have a home link to '${controllers.routes.DisposalDateController.disposalDate.url}'" in {
-        document.getElementsByClass("govuk-header__link govuk-header__service-name").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate.url
+        document.getElementsByClass("govuk-service-navigation__link").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate.url
       }
 
       "have a heading" which {

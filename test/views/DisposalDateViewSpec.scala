@@ -63,19 +63,19 @@ class DisposalDateViewSpec extends CommonPlaySpec with WithCommonFakeApplication
       }
 
       s"have the Welsh language option on the first page" in {
-        document.body.select("body > div > nav > ul > li:nth-child(2) > a").attr("href") shouldEqual "/calculate-your-capital-gains/non-resident/hmrc-frontend/language/cy"
+        document.body.select("body > header > section > div > nav > ul > li:nth-child(2) > a").attr("href") shouldEqual "/calculate-your-capital-gains/non-resident/hmrc-frontend/language/cy"
       }
 
       s"have the English language option selected on the first page" in {
-        document.body.select("body > div > nav > ul > li:nth-child(1) > span").text() should include("English")
+        document.body.select("body > header > section > div > nav > ul > li:nth-child(1) > span").text() should include("ENG")
       }
 
       s"have the English language option on the first page when viewed in Welsh" in {
-        welshDocument.body.select("body > div > nav > ul > li:nth-child(1) > a").attr("href") shouldEqual "/calculate-your-capital-gains/non-resident/hmrc-frontend/language/en"
+        welshDocument.body.select("body > header > section > div > nav > ul > li:nth-child(1) > a").attr("href") shouldEqual "/calculate-your-capital-gains/non-resident/hmrc-frontend/language/en"
       }
 
       s"have the Welsh language option selected on the first page when viewed in Welsh" in {
-        welshDocument.body.select("body > div > nav > ul > li:nth-child(2) > span").text() should include("Cymraeg")
+        welshDocument.body.select("body > header > section > div > nav > ul > li:nth-child(2) > span").text() should include("CYM")
       }
 
       s"have the question '${messages.question}'" in {
@@ -87,7 +87,7 @@ class DisposalDateViewSpec extends CommonPlaySpec with WithCommonFakeApplication
       }
 
       s"have a home link to '${controllers.routes.DisposalDateController.disposalDate.url}'" in {
-        document.select("body > header > div > div > div.govuk-header__content > a").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate.url
+        document.select("body > header > section > div > div > span.govuk-service-navigation__service-name > a").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate.url
       }
 
       "have a button" which {
