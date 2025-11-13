@@ -81,7 +81,7 @@ class SoldOrGivenAwayViewSpec extends CommonPlaySpec with WithCommonFakeApplicat
       }
 
       s"have a home link to '${controllers.routes.DisposalDateController.disposalDate.url}'" in {
-        document.select("body > header > div > div > div.govuk-header__content > a")
+        document.select("body > header > section > div > div > span.govuk-service-navigation__service-name > a")
           .attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate.url
       }
 

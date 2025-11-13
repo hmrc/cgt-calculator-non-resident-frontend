@@ -74,7 +74,7 @@ class CostsAtLegislationStartViewSpec extends CommonPlaySpec with WithCommonFake
       }
 
       s"have a home link to '${controllers.routes.DisposalDateController.disposalDate.url}'" in {
-        document.select("body > header > div > div > div.govuk-header__content > a").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate.url
+        document.getElementsByClass("govuk-service-navigation__link").attr("href") shouldEqual controllers.routes.DisposalDateController.disposalDate.url
       }
 
       "have a form" which {
