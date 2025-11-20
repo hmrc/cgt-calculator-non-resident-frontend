@@ -23,9 +23,13 @@ totalDeductions: BigDecimal)(implicit request: Request[_], messages: Messages, m
 
     <h3 class="govuk-heading-m">@Messages("calc.summaryPartial.deductionsSectionHeading")</h3>
 
-    <table class="govuk-table">
-        <caption class="govuk-table__caption govuk-table__caption--m govuk-visually-hidden">@Messages("calc.summaryPartial.deductionsSectionHeading")</caption>
-        <tbody class="govuk-table__body">
+    <div class="govuk-summary-list">
+        <div class="govuk-summary-list-row">
+            <h2 class="govuk-heading-m govuk-visually-hidden">
+                @Messages("calc.summaryPartial.deductionsSectionHeading")
+            </h2>
+        </div>
+        <dl class="govuk-summary-list">
             @if(reliefsUsed > 0) {
                 @summaryNumericRow("reliefsUsed", Messages("calc.summaryPartial.reliefsUsed"), reliefsUsed)
             }
@@ -41,6 +45,6 @@ totalDeductions: BigDecimal)(implicit request: Request[_], messages: Messages, m
             @summaryNumericRow("aeaUsed",Messages("calc.summaryPartial.aeaUsed"), aeaUsed)
 
             @summaryNumericRow("totalDeductions",Messages("calc.summaryPartial.totalDeductions"), totalDeductions, isTotal = true)
-        </tbody>
-    </table>
+        </dl>
+    </div>
 </div>

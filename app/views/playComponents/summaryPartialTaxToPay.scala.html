@@ -24,10 +24,13 @@
 
         <p class="govuk-body">@Messages("calc.summaryPartial.incomeBandInfo")</p>
     }
-<table class="govuk-table">
-    <caption class="govuk-table__caption govuk-table__caption--m govuk-visually-hidden">@Messages("calc.summaryPartial.yourTaxRate")</caption>
-
-    <tbody class="govuk-table__body">
+<div class="govuk-summary-list">
+    <div class="govuk-summary-list-row">
+        <h2 class="govuk-heading-m govuk-visually-hidden">
+            @Messages("calc.summaryPartial.yourTaxRate")
+        </h2>
+    </div>
+    <dl class="govuk-summary-list">
 
         @if(taxToPay > 0) {
 
@@ -40,7 +43,7 @@
             }
         }
         @summaryNumericRow("taxToPay", Messages("calc.summaryPartial.taxToPay"), taxToPay, isTotal = true)
-</tbody>
-</table>
+    </dl>
+</div>
 
 </div>

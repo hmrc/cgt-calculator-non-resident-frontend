@@ -45,7 +45,7 @@ class SummaryPartialWorkingOutSectionViewSpec extends CommonPlaySpec with WithCo
       lazy val doc = Jsoup.parse(view.body)
 
       s"have the h2 heading ${messages.workingOutSectionHeading}" in {
-        doc.select("h2").text shouldBe messages.workingOutSectionHeading
+        doc.select("#workedOutSection > h2").text shouldBe messages.workingOutSectionHeading
       }
 
       s"have the message for a flat calculation type ${messages.flatCalculationSummary}" in {
@@ -117,7 +117,7 @@ class SummaryPartialWorkingOutSectionViewSpec extends CommonPlaySpec with WithCo
       lazy val doc = Jsoup.parse(view.body)
 
       s"have the h2 heading ${messages.workingOutSectionHeading}" in {
-        doc.select("h2").text shouldBe messages.workingOutSectionHeading
+        doc.select("#workedOutSection > h2").text shouldBe messages.workingOutSectionHeading
       }
 
       s"have the message for a rebased calculation type ${messages.rebasedCalculationSummary} ${messages.rebasedCalculationSummaryDate}" in {
@@ -189,7 +189,7 @@ class SummaryPartialWorkingOutSectionViewSpec extends CommonPlaySpec with WithCo
       lazy val doc = Jsoup.parse(view.body)
 
       s"have the h2 heading ${messages.workingOutSectionHeading}" in {
-        doc.select("h2").text shouldBe messages.workingOutSectionHeading
+        doc.select("#workedOutSection > h2").text shouldBe messages.workingOutSectionHeading
       }
 
       s"have the message for a time calculation type ${messages.timeCalculationSummary} ${messages.timeCalculationSummaryDate}" in {

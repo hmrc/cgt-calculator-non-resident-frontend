@@ -118,7 +118,7 @@ class SummaryViewSpec extends CommonPlaySpec with WithCommonFakeApplication with
       }
 
       "have a 'You've told us' section that" in {
-        document.select("caption").text should include(messages.Summary.yourAnswers)
+        document.select("div > h2").text should include(messages.Summary.yourAnswers)
       }
 
       "should produce the same output when render and apply are called" in {

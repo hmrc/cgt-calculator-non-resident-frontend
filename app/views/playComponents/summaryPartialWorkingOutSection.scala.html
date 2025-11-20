@@ -35,10 +35,13 @@ percentageTotalGain: BigDecimal = 0, percentageOfGain: Int = 0)(implicit request
 
     <h3 class="govuk-heading-m">@if(totalGain >= 0){@Messages("calc.summaryPartial.yourTotalGain")}else{@Messages("calc.summaryPartial.yourTotalLoss")}</h3>
 
-    <table class="govuk-table">
-        <caption class="govuk-table__caption govuk-table__caption--m govuk-visually-hidden">@if(totalGain >= 0){@Messages("calc.summaryPartial.yourTotalGain")}else{@Messages("calc.summaryPartial.yourTotalLoss")}</caption>
-
-        <tbody class="govuk-table__body">
+    <div class="govuk-summary-list">
+        <div class="govuk-summary-list-row">
+            <h2 class="govuk-heading-m govuk-visually-hidden">
+                @Messages("calc.summaryPartial.yourTaxRate")
+            </h2>
+        </div>
+        <dl class="govuk-summary-list">
     @summaryNumericRow("disposalValue",Messages("calc.summaryPartial.valueWhenSold"), disposalValue)
 
     @if(calculationType == Flat || calculationType == TimeApportioned) {
@@ -81,7 +84,6 @@ percentageTotalGain: BigDecimal = 0, percentageOfGain: Int = 0)(implicit request
                               @summaryNumericRow("totalGain", Messages("calc.summaryPartial.totalLoss"), totalGain, isTotal = true)
                             }
     }
-        </tbody>
-    </table>
-
+        </dl>
+    </div>
 </div>
