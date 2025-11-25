@@ -23,7 +23,7 @@
     backLinkEnabled = false,
     timeoutEnabled = false
 ) {
-    <h1 class="govuk-heading-l">@Messages("session.timeout.message")</h1>
+    <h1 class="govuk-heading-l" role="alert" aria-live="assertive">@Messages("session.timeout.message")</h1>
     <div>
         @button(
             href = common.DefaultRoutes.restartUrl,
