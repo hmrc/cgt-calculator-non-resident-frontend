@@ -28,7 +28,7 @@
 @(acquisitionCostsForm: Form[AcquisitionCostsModel], backLink: String, ownerBeforeLegislation: Boolean)(implicit request: Request[_], messages: Messages)
 
 @title = @{
-    if(acquisitionCostsForm.errors.nonEmpty) messages("site.title.error", Messages("calc.acquisitionCosts.question")) else Messages("calc.acquisitionCosts.question")
+    if(acquisitionCostsForm.errors.nonEmpty) messages("site.title.error", Messages("calc.acquisitionCosts.headingText")) else Messages("calc.acquisitionCosts.headingText")
 }
 
 @layout(
@@ -36,7 +36,7 @@
 ) {
 
     @errorSummary(acquisitionCostsForm.errors)
-    <h1 class="govuk-heading-l">@messages("calc.acquisitionCosts.question")</h1>
+    <h1 class="govuk-heading-l">@messages("calc.acquisitionCosts.headingText")</h1>
     <div id="input-hint">
         <p id="bullet-list-title" class="govuk-body">@messages("calc.acquisitionCosts.bulletTitle") </p>
         <ul class="govuk-list govuk-list--bullet">

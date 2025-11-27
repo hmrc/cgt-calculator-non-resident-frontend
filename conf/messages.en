@@ -257,6 +257,7 @@ calc.nonResident.soldForLess.question = Did you sell the property for less than 
 calc.nonResident.soldForLess.errors.required = Select yes if you sold the property for less than it was worth
 
 ## Acquisition Costs ##
+calc.acquisitionCosts.headingText = Costs paid when you became the property owner
 calc.acquisitionCosts.question = How much did you pay in costs when you became the property owner?
 calc.acquisitionCosts.error.required = Enter how much you paid in costs when you became the property owner
 calc.acquisitionCosts.error.invalid = How much you paid in costs when you became the owner must be an amount of money in pounds
