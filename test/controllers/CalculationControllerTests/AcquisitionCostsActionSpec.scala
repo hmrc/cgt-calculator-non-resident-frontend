@@ -43,7 +43,7 @@ class AcquisitionCostsActionSpec extends CommonPlaySpec with WithCommonFakeAppli
   val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   val mockMessagesControllerComponents: MessagesControllerComponents = fakeApplication.injector.instanceOf[MessagesControllerComponents]
   val acquisitionCostsView: acquisitionCosts = fakeApplication.injector.instanceOf[acquisitionCosts]
-  lazy val pageTitle: String = s"""${messages.question} - ${commonMessages.serviceName} - GOV.UK"""
+  lazy val pageTitle: String = s"""${messages.headingText} - ${commonMessages.serviceName} - GOV.UK"""
 
   class Setup {
     val controller = new AcquisitionCostsController(

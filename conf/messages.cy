@@ -39,6 +39,7 @@ calc.acquisitionCosts.errorDecimalPlaces = Mae faint y gwnaethoch ei dalu o ran 
 calc.acquisitionCosts.errorNegative = Mae’n rhaid i faint y gwnaethoch ei dalu o ran costau pan ddaethoch yn berchennog fod yn £0 neu lai
 calc.acquisitionCosts.hint = Os oeddech yn berchen ar yr eiddo gyda rhywun arall, dylech ond nodi’ch cyfran chi o’r costau, fel y cytunwyd gyda’ch cydberchennog.
 calc.acquisitionCosts.question = Faint y gwnaethoch ei dalu o ran costau pan ddaethoch yn berchennog yr eiddo?
+calc.acquisitionCosts.headingText = Costau a dalwyd pan ddaethoch yn berchennog ar yr eiddo
 
 calc.acquisitionDate.hintText            = Os ydych wedi etifeddu’r eiddo, dyma’r dyddiad y bu farw’r perchennog blaenorol.
 calc.acquisitionDate.question            = Ar ba ddyddiad y gwnaethoch lofnodi’r contract i ddod yn berchennog?

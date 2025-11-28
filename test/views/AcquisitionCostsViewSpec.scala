@@ -33,7 +33,7 @@ class AcquisitionCostsViewSpec extends CommonPlaySpec with WithCommonFakeApplica
   val mockConfig: ApplicationConfig = fakeApplication.injector.instanceOf[ApplicationConfig]
   implicit lazy val mockMessage: Messages = fakeApplication.injector.instanceOf[MessagesControllerComponents].messagesApi.preferred(fakeRequest)
   lazy val acquisitionCostsView: acquisitionCosts = fakeApplication.injector.instanceOf[acquisitionCosts]
-  lazy val pageTitle: String = s"""${messages.AcquisitionCosts.question} - ${messages.serviceName} - GOV.UK"""
+  lazy val pageTitle: String = s"""${messages.AcquisitionCosts.headingText} - ${messages.serviceName} - GOV.UK"""
 
   "Acquisition costs view" when {
 
@@ -68,13 +68,13 @@ class AcquisitionCostsViewSpec extends CommonPlaySpec with WithCommonFakeApplica
           heading.attr("class") shouldBe "govuk-heading-l"
         }
 
-        s"has the text '${messages.AcquisitionCosts.question}'" in {
-          heading.text shouldBe messages.AcquisitionCosts.question
+        s"has the text '${messages.AcquisitionCosts.headingText}'" in {
+          heading.text shouldBe messages.AcquisitionCosts.headingText
         }
       }
 
       s"have the question '${messages.AcquisitionCosts.question}'" in {
-        document.getElementsByClass("govuk-heading-l").text shouldBe messages.AcquisitionCosts.question
+        document.getElementsByClass("govuk-label govuk-label--m").text shouldBe messages.AcquisitionCosts.question
       }
       s"have a paragraph that has the text '${messages.AcquisitionCosts.bulletTitle}" in {
         document.body.select("p#bullet-list-title").text() shouldBe messages.AcquisitionCosts.bulletTitle
