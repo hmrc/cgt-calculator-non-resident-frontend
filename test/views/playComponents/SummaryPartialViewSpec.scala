@@ -200,7 +200,7 @@ class SummaryPartialViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
       "have a section for the deductions remaining" should {
 
         s"have the heading ${messages.remainingDeductions}" in {
-          doc.select("div#remainingDeductions h2").text shouldBe messages.remainingDeductions
+          doc.select("div#remainingDeductions h3").text shouldBe messages.remainingDeductions
         }
 
         "not display a row for in Year Losses" in {
