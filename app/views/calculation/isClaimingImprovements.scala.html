@@ -21,7 +21,7 @@
     form: FormWithCSRF,
     layout: Layout,
     submitButton: playComponents.submitButton,
-    inputYesNo: playComponents.input_yes_no,
+    inputRadio: playComponents.input_radio,
     errorSummary: playComponents.errorSummary
 )
 
@@ -40,10 +40,14 @@
     <p class="govuk-body">@messages("calc.improvements.helpOne") @messages("calc.improvements.helpTwo")</p>
     <p class="govuk-body">@messages("calc.improvements.exampleOne") @messages("calc.improvements.exampleTwo")</p>
     @form(action = controllers.routes.ImprovementsController.submitIsClaimingImprovements) {
-        @inputYesNo(
+    @inputRadio(
             isPageHeading = false,
             legend = heading,
             legendClass = Some("govuk-visually-hidden"),
+            items = Seq(
+            RadioItem(content = Text(Messages("calc.improvements.yes")), value = Option("Yes")),
+            RadioItem(content = Text(Messages("calc.improvements.no")), value = Option("No"))
+            ),
             field = isClaimingImprovementsForm("isClaimingImprovements")
         )
         @submitButton()

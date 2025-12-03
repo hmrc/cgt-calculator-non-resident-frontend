@@ -262,6 +262,8 @@ calc.improvements.question = A wnaethoch welliannau i’r eiddo?
 calc.improvements.questionFour = Faint ydych wedi’i wario ar welliannau ers 6 Ebrill 2015?
 calc.improvements.questionThree = Faint y gwnaethoch ei wario ar welliannau cyn 6 Ebrill 2015?
 calc.improvements.questionTwo = Beth oedd cost y gwelliannau?
+calc.improvements.yes = ‘Iawn’, mi wnes i welliannau i’r eiddo
+calc.improvements.no = ‘Na’, ni wnes unrhyw welliannau i’r eiddo
 
 calc.improvementsAmountRebased.title = Costau gwella
 

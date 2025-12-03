@@ -138,8 +138,8 @@ class IsClaimingImprovementsViewSpec extends CommonPlaySpec with WithCommonFakeA
 
           s"has yes/no radio inputs" in {
             lazy val labels = document.body().select("label.govuk-label")
-            labels.first().text shouldBe "Yes"
-            labels.last().text shouldBe "No"
+            labels.first().text shouldBe "Yes, I made improvements to the property"
+            labels.last().text shouldBe "No, I did not make any improvements to the property"
           }
 
           "have a legend that is visually hidden" should {
