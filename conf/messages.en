@@ -181,6 +181,8 @@ calc.improvements.questionTwo = How much did the improvements cost?
 calc.improvements.questionThree = How much did you spend on improvements before 6 April 2015?
 calc.improvements.questionFour = How much have you spent on improvements since 6 April 2015?
 calc.improvements.errors.required = Select yes if you made any improvements to the property
+calc.improvements.yes = Yes, I made improvements to the property
+calc.improvements.no = No, I did not make any improvements to the property
 
 calc.improvementsAmountRebased.title = Improvement costs
 
