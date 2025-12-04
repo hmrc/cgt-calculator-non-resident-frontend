@@ -58,26 +58,32 @@
     <hr class="govuk-section-break govuk-section-break--l cgt-for-print">
 
     <!--Print only CYA-->
-    <table class="govuk-table cgt-for-print">
-        <caption class="govuk-table__caption govuk-table__caption--m">@messages("calc.checkYourAnswers.tableHeading")</caption>
-        <tbody class="govuk-table__body">
+    <div class="govuk-summary-list cgt-for-print">
+        <div class="govuk-summary-list-row">
+            <h2 class="govuk-heading-m">
+                @messages("calc.checkYourAnswers.tableHeading")
+            </h2>
+        </div>
+        <dl class="govuk-summary-list">
         @questionsForPrint.map { question =>
-            <tr id="@question.id" class="govuk-table__row">
-                <th id="@{question.id}-question" scope="row" class="govuk-table__header">@messages(question.question, question.oDate.map(_.localFormat("d MMMM yyyy")).getOrElse(""))</th>
-                <td id="@{question.id}-amount" class="govuk-table__cell">
-                @{question.data match {
-                    case string: String => messages(checkIfBooleanAsString(string))
-                    case int: Int => int.toString
-                    case bigDecimal: BigDecimal => s"£${MoneyPounds(bigDecimal, 2).quantity}"
-                    case date: LocalDate => date.localFormat("d MMMM yyyy")
-                    case boolean: Boolean => messages(booleanToMessageString(boolean))
-                    case _ => ""
-                }}
-                </td>
-            </tr>
+            <div id="@question.id" class="govuk-summary-list__row">
+                <dt id="@{question.id}-question" class="govuk-summary-list__key" style="width: 70%;">
+                    @messages(question.question, question.oDate.map(_.localFormat("d MMMM yyyy")).getOrElse(""))
+                </dt>
+                <dd id="@{question.id}-amount" class="govuk-summary-list__value">
+                    @{question.data match {
+                        case string: String => messages(checkIfBooleanAsString(string))
+                        case int: Int => int.toString
+                        case bigDecimal: BigDecimal => s"£${MoneyPounds(bigDecimal, 2).quantity}"
+                        case date: LocalDate => date.localFormat("d MMMM yyyy")
+                        case boolean: Boolean => messages(booleanToMessageString(boolean))
+                        case _ => ""
+                    }}
+                </dd>
+            </div>
         }
-        </tbody>
-    </table>
+        </dl>
+    </div>
 
     <div id="whatToDoNext" class="govuk-!-display-none-print">
         <h3 class="govuk-heading-m">@Messages("calc.common.next.actions.heading")</h3>

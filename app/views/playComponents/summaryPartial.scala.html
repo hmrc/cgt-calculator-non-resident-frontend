@@ -100,10 +100,13 @@ disposalValue: BigDecimal, acquisitionValue: BigDecimal, totalCosts: BigDecimal,
     <div id="remainingDeductions">
 
         <h3 class="govuk-heading-m">@Messages("calc.summaryPartial.remainingDeductions")</h3>
-        <table class="govuk-table">
-            <caption class="govuk-table__caption govuk-table__caption--m govuk-visually-hidden">@Messages("calc.summaryPartial.remainingDeductions")</caption>
-
-            <tbody class="govuk-table__body">
+        <div class="govuk-summary-list">
+            <div class="govuk-summary-list-row">
+                <h2 class="govuk-heading-m govuk-visually-hidden">
+                    @Messages("calc.summaryPartial.remainingDeductions")
+                </h2>
+            </div>
+            <dl class="govuk-summary-list">
                 @if(calculationResult.allowableLossesRemaining.isDefined) {
                     @summaryNumericRow("inYearLossesRemaining", Messages("calc.summaryPartial.inYearLossesRemaining", TaxYearModel.convertToSummaryFormat(taxYearModel.taxYearSupplied)), calculationResult.allowableLossesRemaining.get, hintText = false)
                 }
@@ -113,7 +116,8 @@ disposalValue: BigDecimal, acquisitionValue: BigDecimal, totalCosts: BigDecimal,
                 @if(calculationResult.broughtForwardLossesRemaining.isDefined) {
                     @summaryNumericRow("broughtForwardLossesRemaining", Messages("calc.summaryPartial.broughtForwardLossesRemaining", TaxYearModel.convertToSummaryFormat(taxYearModel.taxYearSupplied)), calculationResult.broughtForwardLossesRemaining.get, hintText = false)
                 }
-            </tbody>
-        </table>
+            </dl>
 
+
+        </div>
     </div>
