@@ -76,7 +76,7 @@ class SummaryViewSpec extends CommonPlaySpec with WithCommonFakeApplication with
         lazy val whatToDoNext = document.select("#whatToDoNext")
 
         "has the heading 'What to do next'" in {
-          whatToDoNext.select("h2").text() shouldBe messages.Summary.whatToDoNextText
+          whatToDoNext.select("h3").text() shouldBe messages.Summary.whatToDoNextText
         }
 
         "should have the text describing what to do next" in {
