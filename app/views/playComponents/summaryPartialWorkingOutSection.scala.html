@@ -35,53 +35,57 @@ percentageTotalGain: BigDecimal = 0, percentageOfGain: Int = 0)(implicit request
 
     <h3 class="govuk-heading-m">@if(totalGain >= 0){@Messages("calc.summaryPartial.yourTotalGain")}else{@Messages("calc.summaryPartial.yourTotalLoss")}</h3>
 
-    <table class="govuk-table">
-        <caption class="govuk-table__caption govuk-table__caption--m govuk-visually-hidden">@if(totalGain >= 0){@Messages("calc.summaryPartial.yourTotalGain")}else{@Messages("calc.summaryPartial.yourTotalLoss")}</caption>
+    <div class="govuk-summary-list">
 
-        <tbody class="govuk-table__body">
-    @summaryNumericRow("disposalValue",Messages("calc.summaryPartial.valueWhenSold"), disposalValue)
-
-    @if(calculationType == Flat || calculationType == TimeApportioned) {
-      @summaryNumericRow("acquisitionValue", Messages("calc.summaryPartial.valueWhenAcquired"), acquisitionValue)
-    }
-
-    @if(calculationType == Rebased){
-        @summaryNumericRow("acquisitionValue", Messages("calc.summaryPartial.valueAtTaxStart"), acquisitionValue)
-    }
-
-    @summaryNumericRow("totalCosts", Messages("calc.summaryPartial.totalCosts"), totalCosts)
-
-    @if(calculationType == TimeApportioned) {
-        @summaryNumericRow("totalGain",
-            if (totalGain >= 0) Messages("calc.summaryPartial.gainMadeOnProperty")
-            else Messages("calc.summaryPartial.lossMadeOnProperty"),
-            totalGain)
-
-        <div id="percentageOfGain">
-            <div id="percentageOfGain-text">
-                @{if (totalGain >= 0) Messages("calc.summaryPartial.percentageOfGain")
-                else Messages("calc.summaryPartial.percentageOfLoss")}
-            </div>
-
-            <div id="percentageOfGain-value">
-                @percentageOfGain&percnt;
-            </div>
+        <div class="govuk-summary-list-row">
+            <h2 class="govuk-heading-m govuk-visually-hidden">
+                @if(totalGain >= 0){@Messages("calc.summaryPartial.yourTotalGain")}else{@Messages("calc.summaryPartial.yourTotalLoss")}
+            </h2>
         </div>
+        <dl class="govuk-summary-list">
+             @if(calculationType == TimeApportioned) {
+                <div id="percentageOfGain" class="govuk-summary-list__row">
+                    <dt id="percentageOfGain-text" class="govuk-summary-list__key" style="width: 70%;">
+                        @{if (totalGain >= 0) Messages("calc.summaryPartial.percentageOfGain")
+                        else Messages("calc.summaryPartial.percentageOfLoss")}
+                    </dt>
+                    <dd id="percentageOfGain-value" class="govuk-summary-list__value">
+                        @percentageOfGain&percnt;
+                    </dd>
+                </div>
 
-        @{
-            if(percentageTotalGain >= 0) summaryNumericRow("percentageTotalGain", Messages("calc.summaryPartial.totalGain"), percentageTotalGain, isTotal = true)
-            else summaryNumericRow("percentageTotalGain", Messages("calc.summaryPartial.totalLoss"), percentageTotalGain, isTotal = true)
-        }
-    }
+            }
+            @summaryNumericRow("disposalValue",Messages("calc.summaryPartial.valueWhenSold"), disposalValue)
 
-    @if(calculationType == Flat || calculationType == Rebased){
-        @if(totalGain >= 0) {
-                             @summaryNumericRow("totalGain", Messages("calc.summaryPartial.totalGain"), totalGain, isTotal = true)
-                            } else {
-                              @summaryNumericRow("totalGain", Messages("calc.summaryPartial.totalLoss"), totalGain, isTotal = true)
-                            }
-    }
-        </tbody>
-    </table>
+            @if(calculationType == Flat || calculationType == TimeApportioned) {
+              @summaryNumericRow("acquisitionValue", Messages("calc.summaryPartial.valueWhenAcquired"), acquisitionValue)
+            }
 
+            @if(calculationType == Rebased){
+                @summaryNumericRow("acquisitionValue", Messages("calc.summaryPartial.valueAtTaxStart"), acquisitionValue)
+            }
+
+            @summaryNumericRow("totalCosts", Messages("calc.summaryPartial.totalCosts"), totalCosts)
+
+            @if(calculationType == TimeApportioned) {
+                @summaryNumericRow("totalGain",
+                    if (totalGain >= 0) Messages("calc.summaryPartial.gainMadeOnProperty")
+                    else Messages("calc.summaryPartial.lossMadeOnProperty"),
+                    totalGain)
+
+                @{
+                    if(percentageTotalGain >= 0) summaryNumericRow("percentageTotalGain", Messages("calc.summaryPartial.totalGain"), percentageTotalGain, isTotal = true)
+                    else summaryNumericRow("percentageTotalGain", Messages("calc.summaryPartial.totalLoss"), percentageTotalGain, isTotal = true)
+                }
+            }
+
+            @if(calculationType == Flat || calculationType == Rebased){
+                @if(totalGain >= 0) {
+                                     @summaryNumericRow("totalGain", Messages("calc.summaryPartial.totalGain"), totalGain, isTotal = true)
+                                    } else {
+                                      @summaryNumericRow("totalGain", Messages("calc.summaryPartial.totalLoss"), totalGain, isTotal = true)
+                                    }
+            }
+        </dl>
+    </div>
 </div>

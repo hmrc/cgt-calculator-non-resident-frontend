@@ -22,9 +22,13 @@
     @if(gain > 0) {
         <h3 class="govuk-heading-m">@Messages("calc.summaryPartial.yourTaxableGain")</h3>
     }
-    <table class="govuk-table">
-        <caption class="govuk-table__caption govuk-table__caption--m govuk-visually-hidden">@Messages("calc.summaryPartial.yourTaxableGain")</caption>
-        <tbody class="govuk-table__body">
+    <div class="govuk-summary-list">
+        <div class="govuk-summary-list-row">
+            <h2 class="govuk-heading-m govuk-visually-hidden">
+                @Messages("calc.summaryPartial.yourTaxableGain")
+            </h2>
+        </div>
+        <dl class="govuk-summary-list">
             @if(gain > 0){
                 @summaryNumericRow("gain", Messages("calc.summaryPartial.totalGain"), gain)
                 @summaryNumericRow("minusDeductions", Messages("calc.summaryPartial.minusDeductions"), totalDeductions)
@@ -32,7 +36,7 @@
             }else{
                 @summaryNumericRow("taxableGain", Messages("calc.summaryPartial.taxableGain"), taxableGain, isTotal = true)
             }
-        </tbody>
-    </table>
+        </dl>
+    </div>
 
 </div>
