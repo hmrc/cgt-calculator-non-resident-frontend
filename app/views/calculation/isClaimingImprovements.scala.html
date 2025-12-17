@@ -37,16 +37,18 @@
 ) {
     @errorSummary(isClaimingImprovementsForm.errors)
     <h1 class="govuk-heading-l">@heading</h1>
-    <p class="govuk-body">@messages("calc.improvements.helpOne") @messages("calc.improvements.helpTwo")</p>
-    <p class="govuk-body">@messages("calc.improvements.exampleOne") @messages("calc.improvements.exampleTwo")</p>
+    <span id="improvements-hint" class="govuk-hint">
+        <p class="govuk-body">@messages("calc.improvements.helpOne") @messages("calc.improvements.helpTwo")</p>
+        <p class="govuk-body">@messages("calc.improvements.exampleOne") @messages("calc.improvements.exampleTwo")</p>
+    </span>
     @form(action = controllers.routes.ImprovementsController.submitIsClaimingImprovements) {
     @inputRadio(
             isPageHeading = false,
             legend = heading,
             legendClass = Some("govuk-visually-hidden"),
             items = Seq(
-            RadioItem(content = Text(Messages("calc.improvements.yes")), value = Option("Yes")),
-            RadioItem(content = Text(Messages("calc.improvements.no")), value = Option("No"))
+            RadioItem(content = Text(Messages("calc.improvements.yes")), value = Option("Yes"), attributes = Map("aria-describedby" -> "improvements-hint")),
+            RadioItem(content = Text(Messages("calc.improvements.no")), value = Option("No"), attributes = Map("aria-describedby" -> "improvements-hint"))
             ),
             field = isClaimingImprovementsForm("isClaimingImprovements")
         )
