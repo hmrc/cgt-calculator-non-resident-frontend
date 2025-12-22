@@ -38,7 +38,7 @@
     spellcheck = Some(false),
     prefix = if(showCurrency) Some(PrefixOrSuffix(
         content = Text("£"),
-        attributes = Map("id" -> "personalAllowance-prefix")
+        attributes = Map("id" -> "currency-prefix")
     )) else None,
-    attributes = Map("aria-labelledby" -> "personalAllowance-label personalAllowance-prefix")
+    attributes = Map("aria-labelledby" -> "currency-prefix")
 ).withFormField(field))

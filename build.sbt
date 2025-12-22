@@ -29,7 +29,9 @@ lazy val microservice = Project(appName, file("."))
   .settings(
     scalacOptions.+=("-Wconf:src=html/.*:s"), //suppresses warnings in twirl files and routes.
     scalacOptions.+=("-Wconf:src=routes/.*:s"),
-    scalacOptions += "-Wconf:msg=Flag.*repeatedly:s"
+    scalacOptions += "-Wconf:msg=Flag.*repeatedly:s",
+    scalacOptions += "-feature",
+    scalacOptions += "-language:implicitConversions"
   )
   .settings(TwirlKeys.templateImports ++= Seq(
     "uk.gov.hmrc.govukfrontend.views.html.components._",
