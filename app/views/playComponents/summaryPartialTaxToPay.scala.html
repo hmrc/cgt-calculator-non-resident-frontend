@@ -24,26 +24,22 @@
 
         <p class="govuk-body">@Messages("calc.summaryPartial.incomeBandInfo")</p>
     }
-<div class="govuk-summary-list">
-    <div class="govuk-summary-list-row">
-        <h2 class="govuk-heading-m govuk-visually-hidden">
-            @Messages("calc.summaryPartial.yourTaxRate")
-        </h2>
+    <div class="govuk-summary-list">
+        <div class="govuk-summary-list-row">
+            <h2 class="govuk-heading-m govuk-visually-hidden">
+                @Messages("calc.summaryPartial.yourTaxRate")
+            </h2>
+        </div>
+        <dl class="govuk-summary-list">
+            @if(taxToPay > 0) {
+                @if(gainAtBandOne > 0) {
+                    @summaryNumericRow("taxBandOne", Messages("calc.summaryPartial.taxRate", gainAtBandOne, taxRateOne), taxAtBandOne)
+                }
+                @if(gainAtBandTwo > 0) {
+                    @summaryNumericRow("taxBandTwo", Messages("calc.summaryPartial.taxRate", gainAtBandTwo, taxRateTwo), taxAtBandTwo)
+                }
+                @summaryNumericRow("taxToPay", Messages("calc.summaryPartial.taxToPay"), taxToPay, isTotal = true)
+            }
+        </dl>
     </div>
-    <dl class="govuk-summary-list">
-
-        @if(taxToPay > 0) {
-
-            @if(gainAtBandOne > 0) {
-                @summaryNumericRow("taxBandOne", Messages("calc.summaryPartial.taxRate", gainAtBandOne, taxRateOne), taxAtBandOne)
-            }
-
-            @if(gainAtBandTwo > 0) {
-                @summaryNumericRow("taxBandTwo", Messages("calc.summaryPartial.taxRate", gainAtBandTwo, taxRateTwo), taxAtBandTwo)
-            }
-        }
-        @summaryNumericRow("taxToPay", Messages("calc.summaryPartial.taxToPay"), taxToPay, isTotal = true)
-    </dl>
-</div>
-
 </div>

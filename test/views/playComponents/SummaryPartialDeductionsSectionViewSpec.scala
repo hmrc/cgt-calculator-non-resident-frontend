@@ -37,7 +37,10 @@ class SummaryPartialDeductionsSectionViewSpec extends CommonPlaySpec with WithCo
       aeaUsed = 11000,
       inYearLossesUsed = 10,
       broughtForwardLossesUsed = 20,
-      totalDeductions = 21030
+      totalDeductions = 21030,
+      totalGain = 0,
+      taxableGain =0,
+      taxToPay = 0
     )(using fakeRequestWithSession, mockMessage)
     lazy val doc = Jsoup.parse(view.body)
 
@@ -94,6 +97,26 @@ class SummaryPartialDeductionsSectionViewSpec extends CommonPlaySpec with WithCo
         doc.select("#totalDeductions-amount").text shouldBe "£21,030"
       }
     }
+
+    "has a row for taxable gain" which {
+      s"has the text '${messages.taxableGain}'" in {
+        doc.select("#taxableGain-text").text shouldBe messages.taxableGain
+      }
+
+      "has the value '£0'" in {
+        doc.select("#taxableGain-amount").text shouldBe "£0"
+      }
+    }
+
+    "has a row for tax to pay" which {
+      s"has the text '${messages.taxToPay}'" in {
+        doc.select("#taxToPay-text").text shouldBe messages.taxToPay
+      }
+
+      "has the value '£0'" in {
+        doc.select("#taxToPay-amount").text shouldBe "£0"
+      }
+    }
   }
 
   "The deductions section with no options supplied" should {
@@ -103,7 +126,10 @@ class SummaryPartialDeductionsSectionViewSpec extends CommonPlaySpec with WithCo
       aeaUsed = 11000,
       inYearLossesUsed = 0,
       broughtForwardLossesUsed = 0,
-      totalDeductions = 21030
+      totalDeductions = 21030,
+      totalGain = 100,
+      taxableGain =100,
+      taxToPay = 260
     )(using fakeRequestWithSession, mockMessage)
     lazy val doc = Jsoup.parse(view.body)
 
@@ -122,5 +148,6 @@ class SummaryPartialDeductionsSectionViewSpec extends CommonPlaySpec with WithCo
     "does not have a row for brought forward losses used" in {
       doc.select("#broughtForwardLossesUsed-text").isEmpty shouldBe true
     }
+
   }
 }

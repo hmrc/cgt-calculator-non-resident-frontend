@@ -17,7 +17,7 @@
 @this(summaryNumericRow: summaryNumericRow)
 
 @(reliefsUsed: BigDecimal, aeaUsed: BigDecimal, inYearLossesUsed: BigDecimal, broughtForwardLossesUsed: BigDecimal,
-totalDeductions: BigDecimal)(implicit request: Request[_], messages: Messages, messagesApi: Option[MessagesApi] = None)
+totalDeductions: BigDecimal,totalGain: BigDecimal, taxableGain :BigDecimal, taxToPay : BigDecimal )(implicit request: Request[_], messages: Messages, messagesApi: Option[MessagesApi] = None)
 
 <div id="deductionsSection">
 
@@ -45,6 +45,12 @@ totalDeductions: BigDecimal)(implicit request: Request[_], messages: Messages, m
             @summaryNumericRow("aeaUsed",Messages("calc.summaryPartial.aeaUsed"), aeaUsed)
 
             @summaryNumericRow("totalDeductions",Messages("calc.summaryPartial.totalDeductions"), totalDeductions, isTotal = true)
-        </dl>
-    </div>
+
+            @if(totalGain <= 0 ){
+                @summaryNumericRow("taxableGain", Messages("calc.summaryPartial.taxableGain"), taxableGain, isTotal = true)
+            }
+            @if(taxToPay <= 0){
+                @summaryNumericRow("taxToPay", Messages("calc.summaryPartial.taxToPay"), taxToPay, isTotal = true)
+            }
+    </dl>
 </div>

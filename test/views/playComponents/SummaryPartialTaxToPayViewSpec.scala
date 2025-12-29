@@ -159,16 +159,6 @@ class SummaryPartialTaxToPayViewSpec extends CommonPlaySpec with WithCommonFakeA
       "does not have a row for tax band two" in {
         doc.select("#taxBandTwo-text").isEmpty shouldBe true
       }
-
-      "has a row for tax to pay" which {
-        s"has the text '${messages.taxToPay}'" in {
-          doc.select("#taxToPay-text").text shouldBe messages.taxToPay
-        }
-
-        "has the value '£0'" in {
-          doc.select("#taxToPay-amount").text shouldBe "£0"
-        }
-      }
     }
   }
 }
