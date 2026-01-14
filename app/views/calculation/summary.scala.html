@@ -67,7 +67,7 @@
         <dl class="govuk-summary-list">
         @questionsForPrint.map { question =>
             <div id="@question.id" class="govuk-summary-list__row">
-                <dt id="@{question.id}-question" class="govuk-summary-list__key" style="width: 70%;">
+                <dt id="@{question.id}-question" class="govuk-summary-list__key" style="width: 75%;">
                     @messages(question.question, question.oDate.map(_.localFormat("d MMMM yyyy")).getOrElse(""))
                 </dt>
                 <dd id="@{question.id}-amount" class="govuk-summary-list__value">

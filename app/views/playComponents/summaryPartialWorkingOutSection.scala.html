@@ -45,7 +45,7 @@ percentageTotalGain: BigDecimal = 0, percentageOfGain: Int = 0)(implicit request
         <dl class="govuk-summary-list">
              @if(calculationType == TimeApportioned) {
                 <div id="percentageOfGain" class="govuk-summary-list__row">
-                    <dt id="percentageOfGain-text" class="govuk-summary-list__key" style="width: 70%;">
+                    <dt id="percentageOfGain-text" class="govuk-summary-list__key" style="width: 75%;">
                         @{if (totalGain >= 0) Messages("calc.summaryPartial.percentageOfGain")
                         else Messages("calc.summaryPartial.percentageOfLoss")}
                     </dt>

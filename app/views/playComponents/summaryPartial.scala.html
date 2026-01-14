@@ -77,25 +77,30 @@ disposalValue: BigDecimal, acquisitionValue: BigDecimal, totalCosts: BigDecimal,
         calculationResult.aeaUsed.getOrElse(0),
         calculationResult.allowableLossesUsed.getOrElse(0),
         calculationResult.broughtForwardLossesUsed.getOrElse(0),
-        calculationResult.totalDeductions.getOrElse(0)
+        calculationResult.totalDeductions.getOrElse(0),
+        calculationResult.totalGain,
+        if(calculationResult.taxableGain < 0) BigDecimal(0) else calculationResult.taxableGain,
+        calculationResult.taxOwed
     )
-
-    @{summaryPartialTaxableGain(
+    @if(calculationResult.taxableGain > 0){
+        @summaryPartialTaxableGain(
         calculationResult.totalGain,
         calculationResult.totalDeductions.getOrElse(0),
         if(calculationResult.taxableGain < 0) BigDecimal(0) else calculationResult.taxableGain
-    )}
+        )
+    }
 
-    @summaryPartialTaxToPay(
-        calculationResult.taxOwed,
-        calculationResult.taxGain,
-        calculationResult.upperTaxGain.getOrElse(0),
-        calculationResult.taxOwedAtBaseRate.getOrElse(0),
-        calculationResult.taxOwedAtUpperRate.getOrElse(0),
-        calculationResult.taxRate,
-        calculationResult.upperTaxRate.getOrElse(0)
-    )
-
+    @if(calculationResult.taxOwed >0){
+        @summaryPartialTaxToPay(
+            calculationResult.taxOwed,
+            calculationResult.taxGain,
+            calculationResult.upperTaxGain.getOrElse(0),
+            calculationResult.taxOwedAtBaseRate.getOrElse(0),
+            calculationResult.taxOwedAtUpperRate.getOrElse(0),
+            calculationResult.taxRate,
+            calculationResult.upperTaxRate.getOrElse(0)
+        )
+    }
 
     <div id="remainingDeductions">
 
