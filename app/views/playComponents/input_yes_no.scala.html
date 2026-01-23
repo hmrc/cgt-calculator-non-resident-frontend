@@ -14,6 +14,7 @@
  * limitations under the License.
  *@
 
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.FormGroup
 @this(govukRadios : GovukRadios)
 
 @(
@@ -35,9 +36,10 @@
             ))
         )),
         hint = hint.map(hintString => Hint(content = Text(hintString))),
+        formGroup = FormGroup(classes = Some("govuk-!-margin-top-6")),
         items = Seq(
-            RadioItem(content = Text(Messages("calc.base.yes")), value = Option("Yes"), conditionalHtml = conditionalYesHtml),
-            RadioItem(content = Text(Messages("calc.base.no")), value = Option("No"))
+            RadioItem(content = Text(Messages("calc.base.yes")), value = Option("Yes"), conditionalHtml = conditionalYesHtml, attributes = Map("aria-describedby" -> "claiming-reliefs-hint")),
+            RadioItem(content = Text(Messages("calc.base.no")), value = Option("No"), attributes = Map("aria-describedby" -> "claiming-reliefs-hint"))
         ),
         classes = if(conditionalYesHtml.isEmpty) "govuk-radios--inline" else ""
     ).withFormField(field)
