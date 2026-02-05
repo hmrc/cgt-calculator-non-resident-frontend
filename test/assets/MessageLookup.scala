@@ -505,7 +505,7 @@ object MessageLookup {
       val lossesCarriedForward = "Loss carried forward"
       val taxYearWarning = "Your total might be less accurate because you didn't sell or give away your property in this tax year"
       val print = "Print your Capital Gains Tax calculation"
-      val yourAnswers = "You've told us"
+      val yourAnswers = "Your answers"
       val newNoticeSummary: String = "Warning Your result may be inaccurate because the calculator does not support the date of sale you entered. " +
         "Do not use these figures to report your Capital Gains Tax."
       val whoOwnedIt = "Who owned the property?"

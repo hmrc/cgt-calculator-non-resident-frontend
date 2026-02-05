@@ -517,7 +517,7 @@ calc.report.logoText = HM Revenue & Customs
 
 ## Check Your Answers ##
 calc.checkYourAnswers.title = Check your answers
-calc.checkYourAnswers.tableHeading = You''ve told us
+calc.checkYourAnswers.tableHeading = Your answers
 calc.checkYourAnswers.change = Change
 calc.checkYourAnswers.hidden.text =  your response to the question
 
