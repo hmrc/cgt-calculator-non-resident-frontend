@@ -55,22 +55,22 @@
 
     @summaryPartial(calculationResult, taxYearModel, calculationType, disposalValue, acquisitionValue, totalCosts, flatGain, reliefsUsed)
 
-    <hr class="govuk-section-break govuk-section-break--l cgt-for-print">
+    <hr class="govuk-section-break govuk-section-break--l">
 
-    <!--Print only CYA-->
-    <div class="govuk-summary-list cgt-for-print">
-        <div class="govuk-summary-list-row">
-            <h2 class="govuk-heading-m">
-                @messages("calc.checkYourAnswers.tableHeading")
-            </h2>
-        </div>
-        <dl class="govuk-summary-list">
-        @questionsForPrint.map { question =>
-            <div id="@question.id" class="govuk-summary-list__row">
-                <dt id="@{question.id}-question" class="govuk-summary-list__key" style="width: 75%;">
+    <details class="govuk-details">
+        <summary class="govuk-details__summary">
+            <span class="govuk-details__summary-text">
+            @messages("calc.checkYourAnswers.tableHeading")
+            </span>
+        </summary>
+        <div class="govuk-details__text">
+            <dl class="govuk-summary-list">
+            @questionsForPrint.map { question =>
+                <div id="@question.id" class="govuk-summary-list__row">
+                    <dt id="@{question.id}-question" class="govuk-summary-list__key" style="width: 75%;">
                     @messages(question.question, question.oDate.map(_.localFormat("d MMMM yyyy")).getOrElse(""))
-                </dt>
-                <dd id="@{question.id}-amount" class="govuk-summary-list__value">
+                    </dt>
+                    <dd id="@{question.id}-amount" class="govuk-summary-list__value">
                     @{question.data match {
                         case string: String => messages(checkIfBooleanAsString(string))
                         case int: Int => int.toString
@@ -79,11 +79,12 @@
                         case boolean: Boolean => messages(booleanToMessageString(boolean))
                         case _ => ""
                     }}
-                </dd>
-            </div>
-        }
-        </dl>
-    </div>
+                    </dd>
+                </div>
+            }
+            </dl>
+        </div>
+    </details>
 
     <div id="whatToDoNext" class="govuk-!-display-none-print">
         <h3 class="govuk-heading-m">@Messages("calc.common.next.actions.heading")</h3>

@@ -117,8 +117,11 @@ class SummaryViewSpec extends CommonPlaySpec with WithCommonFakeApplication with
         document.select("div#ur-panel").size() shouldBe 0
       }
 
-      "have a 'You've told us' section that" in {
-        document.select("div > h2").text should include(messages.Summary.yourAnswers)
+      "have a 'Your answers' details section" in {
+        document.select("details.govuk-details").size() shouldBe 1
+
+        val summaryText = document.select("summary.govuk-details__summary span.govuk-details__summary-text").text()
+        summaryText should include(messages.Summary.yourAnswers)
       }
 
       "should produce the same output when render and apply are called" in {

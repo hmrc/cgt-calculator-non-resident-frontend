@@ -138,7 +138,7 @@ calc.calculationElectionNoReliefs.title = Eich opsiynau cyfrifo
 
 calc.checkYourAnswers.change = Newid
 calc.checkYourAnswers.hidden.text = eich ateb i’r cwestiwn
-calc.checkYourAnswers.tableHeading = Rydych wedi rhoi gwybod i ni am:
+calc.checkYourAnswers.tableHeading = eich atebion
 calc.checkYourAnswers.title = Gwirio’ch atebion
 
 calc.claimingReliefs.errorMandatory = Dewiswch ''Iawn'' os oes gennych hawl i unrhyw ryddhad arall
