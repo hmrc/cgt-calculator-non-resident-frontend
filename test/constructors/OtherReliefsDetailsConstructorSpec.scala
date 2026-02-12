@@ -206,7 +206,7 @@ class OtherReliefsDetailsConstructorSpec extends CommonPlaySpec with AssertHelpe
         val model = OtherReliefsModel(BigDecimal(100))
         val result = target.getOtherReliefsSection(Some(model), Flat)
 
-        result shouldBe List(QuestionAnswerModel("nr:otherReliefsFlat",100,"How much extra tax relief are you claiming?",None,None))
+        result shouldBe List(QuestionAnswerModel("nr:otherReliefsFlat",100,"Amount of extra tax relief claim on property",None,None))
       }
 
 
@@ -214,14 +214,14 @@ class OtherReliefsDetailsConstructorSpec extends CommonPlaySpec with AssertHelpe
         val model = OtherReliefsModel(BigDecimal(100))
         val result = target.getOtherReliefsSection(Some(model), Rebased)
 
-        result shouldBe List(QuestionAnswerModel("nr:otherReliefsRebased",100,"How much extra tax relief are you claiming?",None,None))
+        result shouldBe List(QuestionAnswerModel("nr:otherReliefsRebased",100,"Amount of extra tax relief claim on property",None,None))
       }
 
       "return a list with otherReliefsTA" in {
         val model = OtherReliefsModel(BigDecimal(100))
         val result = target.getOtherReliefsSection(Some(model), TimeApportioned)
 
-        result shouldBe List(QuestionAnswerModel("nr:otherReliefsTA",100,"How much extra tax relief are you claiming?",None,None))
+        result shouldBe List(QuestionAnswerModel("nr:otherReliefsTA",100,"Amount of extra tax relief claim on property",None,None))
       }
 
     }

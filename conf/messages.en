@@ -73,7 +73,7 @@ calc.common.error.mandatoryAmount = Enter an amount
 error.required = This field is required
 
 ## Current Income ##
-calc.currentIncome.question = What was your total UK income in the tax year when you stopped owning the property?
+calc.currentIncome.question = Total UK income in the tax year when you stopped owning the property
 calc.currentIncome.helpText.line1 = Give a realistic estimate if this was in the current tax year.
 calc.currentIncome.helpText.line2 = Include your UK salary before tax, and anything else you pay UK income tax on. Do not include the money you made from selling the property.
 calc.currentIncome.error.required = Enter your total income in the tax year when you stopped owning the property
@@ -83,7 +83,7 @@ calc.currentIncome.errorNegative = Your total UK income in the tax year when you
 calc.currentIncome.errorDecimalPlaces = Your total UK income in the tax year when you stopped owning the property has too many numbers after the decimal point
 
 ## Personal Allowance ##
-calc.personalAllowance.question = What was your UK Personal Allowance in the tax year when you stopped owning the property?
+calc.personalAllowance.question = Personal Allowance in the tax year when you stopped owning the property
 calc.personalAllowance.help = This is the amount of your income that you don''t pay tax on. Find out more about
 calc.personalAllowance.link = Personal Allowances
 calc.personalAllowance.error.required = Enter your UK Personal Allowance in the tax year when you stopped owning the property
@@ -273,7 +273,7 @@ calc.acquisitionCosts.bulletThree = any professional help to value the property,
 calc.acquisitionCosts.hint = If you owned the property with someone else, only enter your share of the costs, as agreed with your co-owner.
 
 ## Disposal Costs ##
-calc.disposalCosts.question = How much did you pay in costs when you stopped owning the property?
+calc.disposalCosts.question = Cost paid when you stopped owning the property
 calc.disposalCosts.helpTitle = This is what you paid for:
 calc.disposalCosts.helpBulletOne = estate agents or auctioneers
 calc.disposalCosts.helpBulletTwo = solicitors or conveyancers
@@ -396,7 +396,7 @@ calc.calculationElectionNoReliefs.helpTextChooseMethod = You''re free to choose 
 
 ## Other Reliefs ##
 calc.otherReliefs.heading = Claiming extra tax relief on property
-calc.otherReliefs.question = How much extra tax relief are you claiming?
+calc.otherReliefs.question = Amount of extra tax relief claim on property
 calc.otherReliefs.totalGain = Total gain
 calc.otherReliefs.totalLoss = Total loss
 calc.otherReliefs.taxableGain = Taxable gain

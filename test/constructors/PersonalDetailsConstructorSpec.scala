@@ -624,8 +624,8 @@ class PersonalDetailsConstructorSpec extends CommonPlaySpec with WithCommonFakeA
           broughtForwardLossesModel = BroughtForwardLossesModel(isClaiming = false, None))
         val result = target.getPersonalDetailsSection(Some(model))
 
-        result.head shouldBe QuestionAnswerModel("nr:currentIncome", 100, "What was your total UK income in the tax year when you stopped owning the property?", Some("/calculate-your-capital-gains/non-resident/current-income"), None)
-        result(1) shouldBe QuestionAnswerModel("nr:personalAllowance",200,"What was your UK Personal Allowance in the tax year when you stopped owning the property?",Some("/calculate-your-capital-gains/non-resident/personal-allowance"),None)
+        result.head shouldBe QuestionAnswerModel("nr:currentIncome", 100, "Total UK income in the tax year when you stopped owning the property", Some("/calculate-your-capital-gains/non-resident/current-income"), None)
+        result(1) shouldBe QuestionAnswerModel("nr:personalAllowance",200,"Personal Allowance in the tax year when you stopped owning the property",Some("/calculate-your-capital-gains/non-resident/personal-allowance"),None)
         result(2) shouldBe QuestionAnswerModel("nr:otherProperties","","Did you sell or give away other UK residential properties in the tax year when you stopped owning the property?",Some("/calculate-your-capital-gains/non-resident/other-properties"),None)
         result(3) shouldBe QuestionAnswerModel("nr:broughtForwardLosses-question",false,"Do you have losses you want to bring forward from previous tax years?",Some("/calculate-your-capital-gains/non-resident/brought-forward-losses"),None)
       }

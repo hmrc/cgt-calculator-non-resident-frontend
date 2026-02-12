@@ -142,7 +142,7 @@ object MessageLookup {
     }
 
     object CurrentIncome {
-      val question = "What was your total UK income in the tax year when you stopped owning the property?"
+      val question = "Total UK income in the tax year when you stopped owning the property"
       val linkOne = "Income Tax"
       val linkTwo = "Previous tax years"
       val helpText = "Give a realistic estimate if this was in the current tax year. Include your UK salary before tax, and anything else you pay UK income tax on. Do not include the money you made from selling the property."
@@ -168,7 +168,7 @@ object MessageLookup {
 
     object DisposalCosts {
 
-      val question = "How much did you pay in costs when you stopped owning the property?"
+      val question = "Cost paid when you stopped owning the property"
 
       val helpTitle = "This is what you paid for:"
       val helpBulletOne = "estate agents or auctioneers"
@@ -276,9 +276,9 @@ object MessageLookup {
     }
 
     object OtherReliefs {
-      val title = "How much extra tax relief are you claiming? - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
+      val title = "Amount of extra tax relief claim on property - Calculate your Non-Resident Capital Gains Tax - GOV.UK"
       val help = "For example, lettings relief."
-      val question = "How much extra tax relief are you claiming?"
+      val question = "Amount of extra tax relief claim on property"
       val heading  = "Claiming extra tax relief on property"
       val totalGain = "Total gain"
       val taxableGain = "Taxable gain"
@@ -326,7 +326,7 @@ object MessageLookup {
     }
 
     object PersonalAllowance {
-      val question = "What was your UK Personal Allowance in the tax year when you stopped owning the property?"
+      val question = "Personal Allowance in the tax year when you stopped owning the property"
       val link = "Personal Allowances"
       val help = "This the amount of your income that you don’t pay tax on. Find out more about"
       val errorNegative = "Enter a positive number for your Personal Allowance"
