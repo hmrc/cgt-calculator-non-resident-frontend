@@ -122,7 +122,7 @@ class OtherReliefsTAActionSpec extends CommonPlaySpec with WithCommonFakeApplica
       }
 
       "load the otherReliefs TA page" in {
-        document.title() shouldBe messages.title
+        document.title() shouldBe messages.titleTaDoc
       }
 
       s"have a total gain message with text '${messages.totalGain}' £200" in {
@@ -149,7 +149,7 @@ class OtherReliefsTAActionSpec extends CommonPlaySpec with WithCommonFakeApplica
       }
 
       "load the otherReliefs TA page" in {
-        document.title() shouldBe messages.title
+        document.title() shouldBe messages.titleTaDoc
       }
     }
 
@@ -206,7 +206,7 @@ class OtherReliefsTAActionSpec extends CommonPlaySpec with WithCommonFakeApplica
       }
 
       "return to the other reliefs TA page" in {
-        document.title() shouldBe s"Error: ${messages.title}"
+        document.title() shouldBe s"Error: ${messages.titleTaDoc}"
       }
     }
   }

@@ -28,7 +28,7 @@
 @(otherReliefsForm: Form[OtherReliefsModel], hasExistingReliefAmount: Boolean, chargeableGain: BigDecimal, gain: BigDecimal)(implicit request: Request[_], messages: Messages)
 
 @title = @{
-    if(otherReliefsForm.errors.nonEmpty) messages("site.title.error", messages("calc.otherReliefs.question")) else messages("calc.otherReliefs.question")
+    if(otherReliefsForm.errors.nonEmpty) messages("site.title.error", messages("calc.otherReliefsTa.title")) else messages("calc.otherReliefsTa.title")
 }
 @bigDecimalToPounds(decimal: BigDecimal) = @{
     Html(s"&pound;%,d".format(decimal.setScale(0, BigDecimal.RoundingMode.FLOOR).abs.toInt))
@@ -38,7 +38,7 @@
     pageTitle = title
 ) {
     @errorSummary(otherReliefsForm.errors)
-    <h1 class="govuk-heading-l">@Messages("calc.otherReliefs.question")</h1>
+    <h1 class="govuk-heading-l">@Messages("calc.otherReliefsTa.title")</h1>
     <span class="govuk-hint">@Messages("calc.otherReliefs.help")</span>
     <div class="govuk-inset-text">
         <ul class="govuk-list">

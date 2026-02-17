@@ -42,8 +42,8 @@ class CurrentIncomeViewSpec extends CommonPlaySpec with WithCommonFakeApplicatio
       lazy val document = Jsoup.parse(view.body)
       lazy val h1Tag = document.select("h1")
 
-      s"has the text '${messages.question}'" in {
-        h1Tag.text shouldBe messages.question
+      s"has the text '${messages.title}'" in {
+        h1Tag.text shouldBe messages.title
       }
       "has a class of heading-large" in {
         h1Tag.attr("class") shouldBe "govuk-heading-l"
@@ -84,7 +84,7 @@ class CurrentIncomeViewSpec extends CommonPlaySpec with WithCommonFakeApplicatio
       }
 
       s"have the correct question" in {
-        document.body.select("h1").first().text shouldBe messages.question
+        document.body.select("h1").first().text shouldBe messages.title
       }
 
       s"have the correct body text" in {

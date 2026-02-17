@@ -64,7 +64,7 @@ class OtherReliefsTAViewSpec extends CommonPlaySpec with WithCommonFakeApplicati
         }
 
         s"has the text '${messages.serviceName}'" in {
-          heading.text shouldBe messages.OtherReliefs.question
+          heading.text shouldBe messages.OtherReliefs.titleTa
         }
       }
 
