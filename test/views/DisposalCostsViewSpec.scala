@@ -68,8 +68,8 @@ class DisposalCostsViewSpec extends CommonPlaySpec with WithCommonFakeApplicatio
           heading.attr("class") shouldBe "govuk-heading-l"
         }
 
-        s"has the text '${messages.question}'" in {
-          heading.text shouldBe messages.question
+        s"has the text '${messages.title}'" in {
+          heading.text shouldBe messages.title
         }
       }
 
@@ -117,8 +117,8 @@ class DisposalCostsViewSpec extends CommonPlaySpec with WithCommonFakeApplicatio
         }
       }
 
-      s"have the question ${messages.question}" in {
-        document.getElementsByClass("govuk-heading-l").first.text shouldBe messages.question
+      s"have the question ${messages.title}" in {
+        document.getElementsByClass("govuk-heading-l").first.text shouldBe messages.title
       }
 
       "have an input with the id 'disposalCosts" in {
