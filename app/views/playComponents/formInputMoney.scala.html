@@ -39,6 +39,5 @@
     prefix = if(showCurrency) Some(PrefixOrSuffix(
         content = Text("£"),
         attributes = Map("id" -> "currency-prefix")
-    )) else None,
-    attributes = Map("aria-labelledby" -> "currency-prefix")
+    )) else None
 ).withFormField(field))
