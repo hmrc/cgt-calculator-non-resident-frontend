@@ -87,7 +87,7 @@ class WorthBeforeLegislationStartViewSpec extends CommonPlaySpec with WithCommon
       }
 
       s"has the joint ownership text ${WorthBeforeLegislationStart.jointOwnership}" in {
-        document.select(".govuk-inset-text").text shouldEqual WorthBeforeLegislationStart.jointOwnership
+        document.select(".govuk-body").eq(2).text shouldEqual WorthBeforeLegislationStart.jointOwnership
       }
 
 

@@ -95,7 +95,7 @@ class AcquisitionCostsViewSpec extends CommonPlaySpec with WithCommonFakeApplica
         }
 
         s"has the joint ownership text ${messages.AcquisitionCosts.hint}" in {
-          document.getElementsByClass("govuk-inset-text").text shouldEqual messages.AcquisitionCosts.hint
+          document.getElementsByClass("govuk-body").eq(1).text shouldEqual messages.AcquisitionCosts.hint
         }
 
       }
