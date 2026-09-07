@@ -39,7 +39,7 @@
     <p class="govuk-body">@Messages("calc.worthWhenGiftedTo.help")</p>
 
     @form(action = controllers.routes.WorthWhenGiftedToController.submitWorthWhenGiftedTo) {
-        <p class="govuk-inset-text">@Messages("calc.worthWhenGiftedTo.jointOwnership")</p>
+        <p class="govuk-body">@Messages("calc.worthWhenGiftedTo.jointOwnership")</p>
         @formInputMoney(
             field = acquisitionMarketValueForm("acquisitionMarketValue"),
             question = messages("calc.worthWhenGiftedTo.question"),

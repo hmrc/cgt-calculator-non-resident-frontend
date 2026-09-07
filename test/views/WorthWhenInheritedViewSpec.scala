@@ -77,7 +77,7 @@ class WorthWhenInheritedViewSpec extends CommonPlaySpec with WithCommonFakeAppli
 
       "have help text" which {
 
-        lazy val helpText = document.body().select(".govuk-inset-text")
+        lazy val helpText = document.body().select(".govuk-body")
         lazy val hintText = document.body().select(".govuk-hint")
 
 

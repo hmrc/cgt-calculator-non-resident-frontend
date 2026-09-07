@@ -45,7 +45,7 @@
             <li>@messages("calc.disposalCosts.helpBulletFour")</li>
         </ul>
     </div>
-    <p class="govuk-inset-text">@messages("calc.disposalCosts.jointOwnership")</p>
+    <p class="govuk-body">@messages("calc.disposalCosts.jointOwnership")</p>
     @form(action = controllers.routes.DisposalCostsController.submitDisposalCosts) {
         @formInputMoney(
             field = disposalCostsForm("disposalCosts"),

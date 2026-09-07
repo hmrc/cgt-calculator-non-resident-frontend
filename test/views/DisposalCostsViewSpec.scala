@@ -113,7 +113,7 @@ class DisposalCostsViewSpec extends CommonPlaySpec with WithCommonFakeApplicatio
         }
 
         s"have a paragraph with the text ${messages.jointOwnership}" in {
-          document.getElementsByClass("govuk-inset-text").text shouldBe messages.jointOwnership
+          document.getElementsByClass("govuk-body").eq(1).text shouldBe messages.jointOwnership
         }
       }
 

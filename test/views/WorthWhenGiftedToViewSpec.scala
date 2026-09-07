@@ -76,11 +76,11 @@ class WorthWhenGiftedToViewSpec extends CommonPlaySpec with WithCommonFakeApplic
       }
 
       s"has the hint text ${WorthWhenGiftedTo.estimate}" in {
-        document.getElementsByClass("govuk-body").text() shouldEqual WorthWhenGiftedTo.estimate
+        document.getElementsByClass("govuk-body").eq(0).text() shouldEqual WorthWhenGiftedTo.estimate
       }
 
       s"has the joint ownership text ${WorthWhenGiftedTo.jointOwnership}" in {
-        document.getElementsByClass("govuk-inset-text").text shouldEqual WorthWhenGiftedTo.jointOwnership
+        document.getElementsByClass("govuk-body").eq(1).text shouldEqual WorthWhenGiftedTo.jointOwnership
       }
 
       "have input containing the id 'acquisitionMarketValue'" in {

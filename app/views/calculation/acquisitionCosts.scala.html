@@ -45,7 +45,7 @@
             <li>@messages("calc.acquisitionCosts.bulletThree")</li>
         </ul>
     </div>
-    <p class="govuk-inset-text">@messages("calc.acquisitionCosts.hint")</p>
+    <p class="govuk-body">@messages("calc.acquisitionCosts.hint")</p>
     @form(action = controllers.routes.AcquisitionCostsController.submitAcquisitionCosts) {
         @formInputMoney(
             field = acquisitionCostsForm("acquisitionCosts"),

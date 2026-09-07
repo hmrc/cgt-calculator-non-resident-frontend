@@ -60,7 +60,7 @@ class MarketValueWhenSoldViewSpec extends CommonPlaySpec with WithCommonFakeAppl
       }
 
       s"have a paragraph" which {
-        lazy val bodyText = document.select("p.govuk-body")
+        lazy val bodyText = document.select("p.govuk-body").eq(0)
         s"has the body text'${MarketValueMessages.disposalHelpText}'" in {
           bodyText.html() shouldBe MarketValueMessages.disposalHelpText +
             " " + MarketValueMessages.disposalHelpTextAdditional
@@ -103,7 +103,7 @@ class MarketValueWhenSoldViewSpec extends CommonPlaySpec with WithCommonFakeAppl
         }
 
         s"that has a paragraph with the text ${MarketValueMessages.jointOwnership}" in {
-          document.getElementsByClass("govuk-inset-text").text shouldBe MarketValueMessages.jointOwnership
+          document.getElementsByClass("govuk-body").eq(1).text shouldBe MarketValueMessages.jointOwnership
         }
       }
 

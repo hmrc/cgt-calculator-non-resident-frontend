@@ -82,12 +82,12 @@ class RebasedValueViewSpec extends CommonPlaySpec with WithCommonFakeApplication
         lazy val bodyText = document.getElementsByClass("govuk-body")
 
         s"should have the text ${messages.inputHintText}" in {
-          bodyText.text shouldEqual messages.inputHintText
+          bodyText.eq(0).text shouldEqual messages.inputHintText
         }
       }
 
       s"have a joint ownership section with the text ${messages.jointOwnership}" in {
-        document.getElementsByClass("govuk-inset-text").first().text() shouldBe messages.jointOwnership
+        document.getElementsByClass("govuk-body").eq(1).text() shouldBe messages.jointOwnership
       }
 
       s"Have a hidden help section" which {
