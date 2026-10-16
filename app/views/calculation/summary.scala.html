@@ -18,6 +18,7 @@
 @import common.Transformers.{booleanToMessageString, checkIfBooleanAsString}
 @import common.nonresident.{CalculationType, MoneyPounds}
 @import models._
+@import views.html.helper.CSPNonce
 
 @import java.time.LocalDate
 
@@ -42,7 +43,7 @@
 )(implicit request: Request[_], messages: Messages)
 
 @scripts = {
-    <script src='@controllers.routes.Assets.versioned("javascripts/print.js")'></script>
+    <script @CSPNonce.attr src='@controllers.routes.Assets.versioned("javascripts/print.js")'></script>
 }
 
 @layout(
